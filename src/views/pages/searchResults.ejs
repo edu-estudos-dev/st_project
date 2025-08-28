@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title: 'Resultados da Pesquisa' }) %>
+
+<body class="bg-light">
+    <%- include('../../partials/header') %>
+    <div class="container mt-5">
+        <div>&nbsp;</div>
+
+        <div class="cabecalho">
+            <h1 class="mb-0">Resultados da Pesquisa</h1>
+        </div>
+
+        <main class="mb-5">
+            <h2>Estabelecimentos</h2>
+            <% if (estabelecimentos.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Responsável</th>
+                            <th>Bairro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% estabelecimentos.forEach(estabelecimento => { %>
+                            <tr>
+                                <td><%= estabelecimento.estabelecimento %></td>
+                                <td><%= estabelecimento.responsavel_nome %></td>
+                                <td><%= estabelecimento.bairro %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>Nenhum estabelecimento encontrado.</p>
+            <% } %>
+
+            <h2>Lançamentos</h2>
+            <% if (lancamentos.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Lançamento</th>
+                            <th>Descrição</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% lancamentos.forEach(lancamento => { %>
+                            <tr>
+                                <td><%= lancamento.tipo_de_lancamento %></td>
+                                <td><%= lancamento.descricao %></td>
+                                <td><%= lancamento.data %></td>
+                                <td><%= lancamento.valor %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>Nenhum lançamento encontrado.</p>
+            <% } %>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+<%- include('../../partials/footer') %>
+</html>

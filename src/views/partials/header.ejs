@@ -1,0 +1,190 @@
+<nav class="navbar navbar-expand-lg bg-primary fixed-top px-3 border-bottom border-warning">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-2" href="/painel">
+            <img class="img-logo" src="/images/logo-ST.png" alt="SuperToys Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mx-auto">
+                <!-- Administrativo Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-header fs-5" href="#" id="navbarDropdownAdministrativo" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Administrativo
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdministrativo">
+                        <!-- Estabelecimentos Submenu -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownEstabelecimentos"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Estabelecimentos</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownEstabelecimentos">
+                                <li><a class="dropdown-item" href="/estabelecimentos">Estabelecimentos Cadastrados</a></li>
+                                <li><a class="dropdown-item" href="/estabelecimentos/add">Cadastrar Estabelecimento</a></li>
+                            </ul>
+                        </li>
+                        <!-- Financeiro Submenu -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownFinanceiro"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Financeiro</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
+                                <li><a class="dropdown-item" href="/lancamentos">Lançamentos Cadastrados</a></li>
+                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer Lançamento</a></li>
+                                <li><a class="dropdown-item" href="/fluxo-de-caixa">Fluxo de Caixa</a></li>
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownReceitas"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Receitas</a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
+                                        <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
+                                        <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Figurinhas</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Operacional Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-header fs-5" href="#" id="navbarDropdownOperacional" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">Operacional
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
+                        <!-- Bolinhas Submenu -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownBolinhas"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Bolinhas</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de Receita</a></li>
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de Vendas</a></li>
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle Geral</a></li>
+                            </ul>
+                        </li>
+                        <!-- Figurinhas Submenu -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownFigurinhas"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Figurinhas</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de Receita</a></li>
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de Vendas</a></li>
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle Geral</a></li>
+                            </ul>
+                        </li>
+                        <!-- Pelúcias Submenu -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownPelucias"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Pelúcias</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
+                                <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de Receita</a></li>
+                                <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de Vendas</a></li>
+                                <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle Geral</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="d-flex">
+                <form action="/search" class="d-flex" role="search" method="POST" novalidate>
+                    <input name="termo" class="form-control me-2" type="search" placeholder="Pesquisar..."
+                        aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Pesquisar</button>
+                </form>
+                <a class="btn btn-danger text-white ms-3 px-3" href="/logout">Sair</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Estilos para submenus -->
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+    .dropdown-submenu .dropdown-menu {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+    }
+    .dropdown-submenu:hover .dropdown-menu,
+    .dropdown-submenu.show .dropdown-menu {
+        display: block;
+    }
+    .dropdown-toggle::after {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: .255em;
+        vertical-align: .255em;
+        content: "";
+        border-top: .3em solid;
+        border-right: .3em solid transparent;
+        border-bottom: 0;
+        border-left: .3em solid transparent;
+    }
+    .dropdown-submenu:hover > .dropdown-toggle::after,
+    .dropdown-submenu.show > .dropdown-toggle::after {
+        border-top: 0;
+        border-bottom: .3em solid;
+    }
+    .menu-active {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+    }
+</style>
+
+
+
+<!-- Script personalizado para gerenciar submenus -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var dropdowns = document.querySelectorAll('.dropdown-submenu');
+        var links = document.querySelectorAll('.dropdown-item');
+
+        // Atribuir evento de clique aos links
+        links.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (this.href && this.href !== '#') {
+                    window.location.href = this.href;
+                } else {
+                    e.preventDefault();
+                }
+
+                var activeLink = document.querySelector('.dropdown-item.menu-active');
+                if (activeLink) {
+                    activeLink.classList.remove('menu-active');
+                }
+                this.classList.add('menu-active');
+
+                var parentSubmenu = this.closest('.dropdown-submenu');
+                while (parentSubmenu) {
+                    parentSubmenu.classList.add('show');
+                    parentSubmenu.querySelector('.dropdown-toggle').classList.add('menu-active');
+                    parentSubmenu = parentSubmenu.parentElement.closest('.dropdown-submenu');
+                }
+            });
+        });
+
+        // Atribuir evento de clique aos submenus
+        dropdowns.forEach(function (dropdown) {
+            dropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+                this.classList.toggle('show');
+            });
+        });
+
+        // Fechar submenus ao clicar fora
+        document.addEventListener('click', function (e) {
+            if (!e.target.matches('.dropdown-toggle, .dropdown-item')) {
+                dropdowns.forEach(function (dropdown) {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+    });
+</script>
