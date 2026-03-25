@@ -7,7 +7,6 @@
     <div class="container w-75 mt-5">
         <div>&nbsp;</div>
 
-        <!-- breadcrumb -->
         <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Figurinhas' }) %>
 
         <div class="cabecalho-figurinhas">
@@ -31,36 +30,61 @@
                         <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
                     </div>
                     <div class="mb-3 col-3 text-center">
-                        <label for="ultima_visita" class="form-label mb-1 fs-5 fw-bold">Última Visita</label>
-                        <input type="date" class="form-control text-center" id="ultima_visita" name="ultima_visita" readonly disabled>
-                    </div>
-             
-                </div>
-                <div class="row">
-                    <div class="mb-3 col-3 text-center">
-                        <label for="qtde_vendido" class="form-label mb-1 fs-5 fw-bold">Qtde. Vendida</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" value="" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3 col-3 text-center">
-                        <label for="abastecido" class="form-label mb-1 fs-5 fw-bold">Abastecido</label>
-                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
-                    </div>
-
-                    <div class="mb-3 col-3 text-center">
-                        <label for="qtde_deixada" class="form-label mb-1 fs-5 fw-bold">Quantidade Deixada</label>
-                        <input type="number" class="form-control text-center" id="qtde_deixada" name="qtde_deixada" readonly>
-                    </div>
-                  
-             
-                    <div class="mb-3 col-3 text-center">
                         <label for="tipo_pagamento" class="form-label mb-1 fs-5 fw-bold">Tipo de Pagamento</label>
                         <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
                             <option value="especie">Espécie</option>
                             <option value="pix">PIX</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-3 text-center">
+                        <label for="valor_apurado" class="form-label mb-1 fs-5 fw-bold">Valor Apurado</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required oninput="calculateValues()">
+                        </div>
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="comissao" class="form-label mb-1 fs-5 fw-bold">Comissão (%)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">%</span>
+                            <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required oninput="calculateValues()">
+                        </div>
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="valor_comerciante" class="form-label mb-1 fs-5 fw-bold">Valor do Comerciante</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" step="0.01" class="form-control text-center" id="valor_comerciante" name="valor_comerciante" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="valor_liquido" class="form-label mb-1 fs-5 fw-bold">Valor Líquido</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" step="0.01" class="form-control text-center" id="valor_liquido" name="valor_liquido" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-3 text-center">
+                        <label for="qtde_vendido" class="form-label mb-1 fs-5 fw-bold">Qtde. Vendida</label>
+                        <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" required oninput="calculateQuantidadeDeixada()">
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="abastecido" class="form-label mb-1 fs-5 fw-bold">Abastecido</label>
+                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required oninput="calculateQuantidadeDeixada()">
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="estoque" class="form-label mb-1 fs-5 fw-bold">Estoque</label>
+                        <input type="number" class="form-control text-center" id="estoque" name="estoque" required oninput="calculateQuantidadeDeixada()">
+                    </div>
+                    <div class="mb-3 col-3 text-center">
+                        <label for="qtde_deixada" class="form-label mb-1 fs-5 fw-bold">Quantidade Deixada</label>
+                        <input type="number" class="form-control text-center" id="qtde_deixada" name="qtde_deixada" readonly>
                     </div>
                 </div>
 
@@ -83,18 +107,27 @@
     </script>
 
     <script>
+        function calculateValues() {
+            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
+            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
+            const valorDaComissao = valorApurado * (comissao / 100);
+            const valorComerciante = valorDaComissao;
+            const valorLiquido = valorApurado - valorComerciante;
+            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
+            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
+        }
 
         function calculateQuantidadeDeixada() {
             const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
             const estoque = parseFloat(document.getElementById('estoque').value) || 0;
-            const qtdeDeixada = abastecido + estoque;
-            document.getElementById('qtde_deixada').value = qtdeDeixada;
+            document.getElementById('qtde_deixada').value = abastecido + estoque;
         }
 
-        document.getElementById('abastecido').addEventListener('input', calculateQuantidadeDeixada);
-        document.getElementById('estoque').addEventListener('input', calculateQuantidadeDeixada);
-        document.getElementById('valor_apurado').addEventListener('input', calculateValues);
-        document.getElementById('comissao').addEventListener('input', calculateValues);
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
+            calculateValues();
+            calculateQuantidadeDeixada();
+        });
     </script>
 </body>
 </html>

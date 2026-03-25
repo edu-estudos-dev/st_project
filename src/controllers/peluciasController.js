@@ -3,7 +3,7 @@ import peluciasModel from '../models/peluciasModel.js';
 class PeluciasController {
 
     addSangriaForm = async (req, res) => {
-        const usuario = req.session?.user || null;
+        const usuario = req.user || null;
         try {
             console.log('Chamando addSangriaForm');
             const estabelecimentos = await peluciasModel.getEstabelecimentos();
@@ -71,7 +71,7 @@ class PeluciasController {
     };
 
     index = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando index');
             const sangrias = await peluciasModel.getSangrias();
@@ -89,7 +89,7 @@ class PeluciasController {
     };
 
     editSangriaForm = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando editSangriaForm');
             const id = req.params.id;
@@ -163,7 +163,7 @@ class PeluciasController {
     };
 
     viewSangria = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando viewSangria');
             const id = req.params.id;
@@ -181,7 +181,7 @@ class PeluciasController {
     };
 
     getReceitaPelucias = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando getReceitaPelucias');
             const receita = await peluciasModel.getMonthlyRevenue();
@@ -196,7 +196,7 @@ class PeluciasController {
     };
 
     renderControleGeralPelucias = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando renderControleGeralPelucias');
             const dadosControleGeral = await peluciasModel.getLatestSangriaForAllEstabelecimentos();
@@ -212,7 +212,7 @@ class PeluciasController {
     };
 
     controleGeral = async (req, res) => {
-        const usuario = req.session?.user || null;
+        const usuario = req.user || null;
         try {
             console.log('Chamando controleGeral');
             const estabelecimentos = await peluciasModel.getAllSangrias();
@@ -241,4 +241,5 @@ class PeluciasController {
 }
 
 export default new PeluciasController();
+
 

@@ -5,7 +5,7 @@ class SearchController {
     // Método para buscar em estabelecimentos e lançamentos
     search = async (req, res) => {
         const { termo } = req.body;
-        const usuario = req.session.user;
+        const usuario = req.user;
         if (!termo || termo.trim() === '') {
             console.error('Erro: O termo de pesquisa não pode ser vazio.');
             return res.status(400).render('pages/estabelecimentos/tabelaEstabelecimentos', {
@@ -57,3 +57,4 @@ class SearchController {
 }
 
 export default new SearchController();
+

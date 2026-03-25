@@ -1,10 +1,12 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
 import dotenv from 'dotenv';
-import isAuthenticated from './src/middleware/isAuthenticated.js';
+import isAuthenticated, { attachAuthenticatedUser } from './src/middleware/isAuthenticated.js';
+import { attachCsrfToken, requireCsrfProtection } from './src/middleware/csrfMiddleware.js';
+import { disableAuthenticatedCache, securityHeaders } from './src/middleware/securityMiddleware.js';
 
 import loginLogoutRoutes from './src/routes/loginLogoutRoutes.js';
 import homepageRoutes from './src/routes/homepageRoutes.js';
@@ -28,25 +30,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.disable('x-powered-by');
 
 const viewsDir = path.join(__dirname, 'src/views');
 app.set('views', viewsDir);
 app.set('view engine', 'ejs');
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false,
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: 1000 * 60 * 60 * 8
-    }
-}));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(securityHeaders);
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
+app.use(cookieParser());
+app.use(attachAuthenticatedUser);
+app.use(attachCsrfToken);
+app.use(requireCsrfProtection);
+app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 app.use('/vendor/sweetalert2', express.static(path.join(__dirname, 'node_modules', 'sweetalert2', 'dist')));
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -67,7 +64,6 @@ app.use('/bolinhas/sangrias', isAuthenticated, bolinhasSangriaRoutes);
 app.use('/figurinhas/sangrias', isAuthenticated, figurinhasRoutes); 
 
 app.use('/pelucias', isAuthenticated, receitaPeluciaRoutes);
-app.use('/figurinhas', isAuthenticated, receitaFigurinhaRoutes);
 app.use('/pelucias', isAuthenticated, peluciasRoutes);
 
 app.use((req, res, next) => {

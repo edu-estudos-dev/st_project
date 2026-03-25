@@ -57,8 +57,7 @@ class FluxoDeCaixaController {
     
             const { dadosEntradas, dadosSaidas, totaisEntradas, totaisSaidas, somaMensal, somaTotalAnual } = this.calcularTotais(fluxoDeCaixa, tiposEntradas, tiposSaidas, tipos);
     
-            // Supondo que você tenha as informações do usuário no req.session
-            const usuario = req.session.user;
+            const usuario = req.user;
     
             res.render('pages/fluxoDeCaixa', { 
                 dadosEntradas, 
@@ -88,3 +87,4 @@ class FluxoDeCaixaController {
 }
 
 export default new FluxoDeCaixaController();
+

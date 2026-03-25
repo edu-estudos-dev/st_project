@@ -3,7 +3,7 @@ import figurinhasModel from '../models/figurinhasModel.js';
 class FigurinhasController {
 
     addSangriaForm = async (req, res) => {
-        const usuario = req.session?.user || null;
+        const usuario = req.user || null;
         try {
             const estabelecimentos = await figurinhasModel.getEstabelecimentos();
             res.render('pages/figurinhas/cadastrarSangriaFigurinha', {
@@ -55,7 +55,7 @@ class FigurinhasController {
     };
 
     index = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const sangrias = await figurinhasModel.getSangrias();
             const { success, error } = req.query;
@@ -72,7 +72,7 @@ class FigurinhasController {
     };
 
     editSangriaForm = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id;
             const estabelecimentos = await figurinhasModel.getEstabelecimentos();
@@ -146,7 +146,7 @@ class FigurinhasController {
     };
 
     viewSangria = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id;
             const sangria = await figurinhasModel.getSangriaById(id);
@@ -163,7 +163,7 @@ class FigurinhasController {
     };
 
     getReceitaFigurinhas = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando getReceitaFigurinhas');
             const receita = await figurinhasModel.getMonthlyRevenue();
@@ -179,7 +179,7 @@ class FigurinhasController {
     
 
     renderControleGeralFigurinhas = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             console.log('Chamando renderControleGeralFigurinhas');
             const dadosControleGeral = await figurinhasModel.getLatestSangriaForAllEstabelecimentos();
@@ -197,7 +197,7 @@ class FigurinhasController {
     
 
     controleGeral = async (req, res) => {
-        const usuario = req.session?.user || null;
+        const usuario = req.user || null;
         try {
             const estabelecimentos = await figurinhasModel.getAllSangrias();
 
@@ -213,3 +213,4 @@ class FigurinhasController {
 };
 
 export default new FigurinhasController();
+

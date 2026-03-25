@@ -6,7 +6,7 @@ class LancamentoController {
     // Método para listar todos os lançamentos
     index = async (req, res) => {
         try {
-            const usuario = req.session.user;
+            const usuario = req.user;
             const lancamentos = await LancamentoModel.findAll();
             res.status(200).render('pages/lancamentos/tabelaLancamento', {
                 title: 'Lançamentos Cadastrados',
@@ -37,7 +37,7 @@ class LancamentoController {
 
     // Método para exibir o formulário de adicionar lançamento
     addLancamentoForm = (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         res.render('pages/lancamentos/cadastrarLancamentos', {
             title: 'Adicionar Lançamento',
             usuario,
@@ -50,7 +50,7 @@ class LancamentoController {
 
     // Método para adicionar um novo lançamento
     addLancamento = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         const { entrada_saida,
             data,
             tipo_de_lancamento,
@@ -116,7 +116,7 @@ class LancamentoController {
 
     // Método para exibir o formulário de edição de lançamento
     editLancamentoForm = async (req, res) => {
-        const usuario = req.session.user; 
+        const usuario = req.user; 
         const { id } = req.params;
         try {
             const lancamento = await LancamentoModel.findById(id);
@@ -139,7 +139,7 @@ class LancamentoController {
 
     // Método para atualizar um lançamento existente
     editLancamento = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         const { id } = req.params;
         const { entrada_saida,
             data,
@@ -213,7 +213,7 @@ class LancamentoController {
 
     // Método para visualizar um lançamento
     viewLancamento = async (req, res) => {
-        const usuario = req.session.user; 
+        const usuario = req.user; 
         const { id } = req.params;
 
         try {
@@ -243,7 +243,7 @@ class LancamentoController {
     // Método para buscar lançamentos com base em um termo de pesquisa
     search = async (req, res) => {
         const { termo } = req.body;
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const lancamentos = await LancamentoModel.search(termo);
             res.status(200).render('pages/lancamentos/tabelaLancamento', {
@@ -260,4 +260,5 @@ class LancamentoController {
 }
 
 export default new LancamentoController();
+
 

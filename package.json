@@ -10,12 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
-    "express-session": "^1.18.1",
+    "express-rate-limit": "^8.3.1",
+    "helmet": "^8.1.0",
     "inputmask": "^5.0.9",
+    "jsonwebtoken": "^9.0.3",
     "method-override": "^3.0.0",
     "mysql2": "^3.11.4",
     "sweetalert2": "^11.26.24"

@@ -8,3 +8,4 @@ class HomepageController {
 }
 
 export default new HomepageController();
+

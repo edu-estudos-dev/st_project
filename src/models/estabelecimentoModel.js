@@ -83,8 +83,8 @@ class EstabelecimentoModel {
     // Método para buscar todos os bairros dos estabelecimentos que tenham o produto 'BOLINHAS'
     getBairrosByProduto = async (produto) => {
         try {
-            const SQL = 'SELECT DISTINCT bairro FROM estabelecimentos WHERE produto = ?';
-            const [result] = await connection.execute(SQL, [produto]);
+            const SQL = 'SELECT DISTINCT bairro FROM estabelecimentos WHERE UPPER(produto) LIKE ? AND status = "ativo"';
+            const [result] = await connection.execute(SQL, [`%${produto.toUpperCase()}%`]);
             return result;
         } catch (error) {
             console.error('Erro ao buscar bairros:', error);

@@ -5,7 +5,7 @@ class EstabelecimentoController {
 
     // Renderiza a tabela de estabelecimentos
     index = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             // Busca todos os estabelecimentos ativos
             let estabelecimentos = await EstabelecimentoModel.findAll();
@@ -31,7 +31,7 @@ class EstabelecimentoController {
 
     // Processa a pesquisa de estabelecimentos
     find = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const query = req.body.estabelecimento; // Obtém o termo de pesquisa
             // Busca os estabelecimentos que correspondem ao termo de pesquisa e estão ativos
@@ -50,7 +50,7 @@ class EstabelecimentoController {
 
     // Adiciona um novo estabelecimento
     addEstabelecimento = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         if (req.method === "GET") {
             res.render('pages/estabelecimentos/cadastrarEstabelecimento', {
                 title: 'Cadastrar Estabelecimento', // Define o título da página
@@ -106,7 +106,7 @@ class EstabelecimentoController {
 
     // Atualiza um estabelecimento existente
     editEstabelecimento = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id; // Obtém o ID do estabelecimento
             let produtos = req.body.produto;
@@ -150,7 +150,7 @@ class EstabelecimentoController {
 
     // Renderiza o formulário de edição de estabelecimento
     editEstabelecimentoForm = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id; // Obtém o ID do estabelecimento
             const estabelecimento = await EstabelecimentoModel.findById(id); // Busca o estabelecimento pelo ID
@@ -173,7 +173,7 @@ class EstabelecimentoController {
 
     // Método para visualizar um estabelecimento
     viewEstabelecimento = async (req, res) => {
-        const usuario = req.session.user; // Obtém o usuário da sessão
+        const usuario = req.user; // Obtém o usuário da sessão
         const { id } = req.params;
 
         try {
@@ -214,7 +214,7 @@ class EstabelecimentoController {
     // Processa a pesquisa de estabelecimentos
     search = async (req, res) => {
         const { termo } = req.body;
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             // Pesquisar estabelecimentos que estejam ativos
             const estabelecimentos = await EstabelecimentoModel.search(termo, { where: { status: 'ativo' } });
@@ -234,3 +234,4 @@ class EstabelecimentoController {
 
 // Exporta uma instância da classe EstabelecimentoController
 export default new EstabelecimentoController();
+

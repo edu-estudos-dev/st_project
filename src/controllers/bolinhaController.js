@@ -5,7 +5,7 @@ class BolinhasController {
 
     // Método para exibir o formulário
     addSangriaForm = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos();
             res.render('pages/bolinhas/cadastrarSangriaBolinha', { estabelecimentos, usuario });
@@ -50,7 +50,7 @@ class BolinhasController {
 
     // Método para listar todas as sangrias
     index = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
 
         try {
             const sangrias = await BolinhasSangriaModel.getSangrias({ orderBy: 'data_sangria', order: 'ASC' });
@@ -70,7 +70,7 @@ class BolinhasController {
 
     // Método para exibir o formulário de edição
     editSangriaForm = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id;
             const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos();
@@ -140,7 +140,7 @@ class BolinhasController {
 
     // Método para exibir os detalhes de uma sangria
     viewSangria = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const id = req.params.id;
             const sangria = await BolinhasSangriaModel.getSangriaById(id);
@@ -161,7 +161,7 @@ class BolinhasController {
 
     // Método para obter a receita agrupada por mês e ano
     getReceitaBolinhas = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const receita = await BolinhasSangriaModel.getMonthlyRevenue();
             res.render('pages/bolinhas/receitaBolinha', {
@@ -176,7 +176,7 @@ class BolinhasController {
 
     // Método para renderizar o controle geral
     renderControleGeral = async (req, res) => {
-        const usuario = req.session.user;
+        const usuario = req.user;
         try {
             const dadosControleGeral = await BolinhasSangriaModel.getControleGeral();
             const bairros = await EstabelecimentoModel.getBairrosByProduto('BOLINHAS');
@@ -193,3 +193,4 @@ class BolinhasController {
 };
 
 export default new BolinhasController();
+
