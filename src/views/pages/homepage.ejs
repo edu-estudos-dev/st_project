@@ -150,17 +150,17 @@
                const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
                if (!nome) {
-                  alert('Por favor, insira seu nome.');
+                  window.AppAlerts.warning('Por favor, insira seu nome.');
                   return;
                }
 
                if (!telefone || telefone.length !== 11) {
-                  alert('Por favor, insira um telefone válido com 11 dígitos (DDD + número).');
+                  window.AppAlerts.warning('Por favor, insira um telefone valido com 11 digitos (DDD + numero).');
                   return;
                }
 
                if (!isChecked) {
-                  alert('Por favor, marque pelo menos um produto.');
+                  window.AppAlerts.warning('Por favor, marque pelo menos um produto.');
                   return;
                }
 
@@ -178,14 +178,14 @@
 
                   if (response.ok) {
                      const result = await response.json();
-                     alert(result.message); // Exibe a mensagem de sucesso
+                     window.AppAlerts.success(result.message);
                      this.reset(); // Limpa o formulário após submissão bem-sucedida
                   } else {
                      const result = await response.json();
-                     alert(result.message); // Exibe a mensagem de erro retornada pelo backend
+                     window.AppAlerts.error(result.message);
                   }
                } catch (error) {
-                  alert('Erro ao enviar as informações.');
+                  window.AppAlerts.error('Erro ao enviar as informacoes.');
                }
             });
          });

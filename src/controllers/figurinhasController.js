@@ -47,10 +47,10 @@ class FigurinhasController {
                 observacoes
             });
 
-            res.redirect('/figurinhas/sangrias');
+            res.redirect('/figurinhas/sangrias?success=Sangria adicionada com sucesso');
         } catch (error) {
             console.error('Erro ao adicionar sangria:', error);
-            res.status(500).send('Erro ao adicionar sangria.');
+            res.redirect('/figurinhas/sangrias?error=Erro ao adicionar sangria');
         }
     };
 

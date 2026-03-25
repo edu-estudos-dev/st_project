@@ -27,10 +27,10 @@ class LancamentoController {
         const { vencimento } = req.body;
         try {
             await LancamentoModel.updateVencimento(id, vencimento);
-            res.status(200).redirect('/lancamentos');
+            res.redirect('/lancamentos?success=Vencimento atualizado com sucesso');
         } catch (error) {
             console.error('Erro ao atualizar vencimento:', error);
-            res.status(500).send('Erro ao atualizar vencimento.');
+            res.redirect('/lancamentos?error=Erro ao atualizar vencimento');
         }
     };
 
@@ -203,7 +203,7 @@ class LancamentoController {
         const { id } = req.params;
         try {
             await LancamentoModel.delete(id);
-            res.redirect('/lancamentos');
+            res.redirect('/lancamentos?success=Lancamento excluido com sucesso');
         } catch (error) {
             console.error('Erro ao deletar lançamento:', error);
             res.status(500).send('Erro ao deletar lançamento.');
@@ -260,3 +260,4 @@ class LancamentoController {
 }
 
 export default new LancamentoController();
+

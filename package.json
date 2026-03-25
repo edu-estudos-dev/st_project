@@ -17,7 +17,8 @@
     "express-session": "^1.18.1",
     "inputmask": "^5.0.9",
     "method-override": "^3.0.0",
-    "mysql2": "^3.11.4"
+    "mysql2": "^3.11.4",
+    "sweetalert2": "^11.26.24"
   },
   "description": ""
 }

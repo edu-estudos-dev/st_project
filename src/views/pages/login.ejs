@@ -9,6 +9,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script defer src="/js/appAlerts.js"></script>
 </head>
 
 <body>
@@ -18,11 +20,6 @@
 
             <hr>
 
-            <% if (erro) { %>
-                <div class="alert alert-danger">
-                    <%= erro %>
-                </div>
-                <% } %>
                     <form action="/login" method="POST">
                         <div class="form-group mb-3">
                             <label for="user" class="form-label">Usuário</label>
@@ -50,6 +47,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <% if (erro) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.AppAlerts?.error("<%- erro.replace(/"/g, '&quot;') %>", 'Falha no login');
+            });
+        </script>
+    <% } %>
 </body>
 
 </html>

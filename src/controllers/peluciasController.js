@@ -40,7 +40,7 @@ class PeluciasController {
             const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(estabelecimento_id);
 
             if (new Date(data_sangria) <= new Date(ultimaDataSangria.data_sangria)) {
-                return res.status(400).send('Erro: A data do novo cadastro não pode ser anterior ou igual à data da última sangria cadastrada.');
+                return res.redirect('/pelucias/sangrias?error=A data do novo cadastro nao pode ser anterior ou igual a data da ultima sangria cadastrada.');
             }
 
             const qtdeVendido = (ultimaLeitura.ultima_leitura === 0) ? 0 : leitura_atual - (ultimaLeitura.ultima_leitura || 0);
@@ -63,10 +63,10 @@ class PeluciasController {
                 estoque
             });
 
-            res.redirect('/pelucias/sangrias');
+            res.redirect('/pelucias/sangrias?success=Sangria adicionada com sucesso');
         } catch (error) {
             console.error('Erro ao adicionar sangria:', error);
-            res.status(500).send('Erro ao adicionar sangria.');
+            res.redirect('/pelucias/sangrias?error=Erro ao adicionar sangria');
         }
     };
 
@@ -241,3 +241,4 @@ class PeluciasController {
 }
 
 export default new PeluciasController();
+
