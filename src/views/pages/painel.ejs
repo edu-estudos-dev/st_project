@@ -3,6 +3,7 @@
 <%- include('../partials/head', { title }) %>
 
 <body>
+   <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
    <div class="container-principal">
       <div class="container-painel">
          <h1 class="text-center text-white w-100 bg-dark p-3 fs-1 fw-bold">Painel de Controle</h1>
@@ -12,7 +13,6 @@
 
          <div class="row border p-3 area-painel border-dark g-0">
             <div class="col">
-               <!-- Div Administrativo -->
                <div class="administrativo rounded border border-dark p-3">
                   <h2 class="text-center text-primary fw-bold">Administrativo</h2>
 
@@ -39,17 +39,25 @@
                      </div>
                   </div>
 
-                  <div class="row m-0">
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/bolinhas/receita-bolinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Bolinhas</button></a>
+                  <% if (navProducts.hasAny) { %>
+                     <div class="row m-0">
+                        <% if (navProducts.bolinhas) { %>
+                           <div class="col-md-4 g-2 m-0">
+                              <a href="/bolinhas/receita-bolinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Bolinhas</button></a>
+                           </div>
+                        <% } %>
+                        <% if (navProducts.figurinhas) { %>
+                           <div class="col-md-4 g-2 m-0">
+                              <a href="/figurinhas/receita-figurinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Figurinhas</button></a>
+                           </div>
+                        <% } %>
+                        <% if (navProducts.pelucias) { %>
+                           <div class="col-md-4 g-2 m-0">
+                              <a href="/pelucias/receita-pelucia"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Pelúcias</button></a>
+                           </div>
+                        <% } %>
                      </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/figurinhas/receita-figurinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Figurinhas</button></a>
-                     </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/pelucias/receita-pelucia"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Pelúcias</button></a>
-                     </div>
-                  </div>
+                  <% } %>
 
                   <div class="row m-0">
                      <div class="col-12 g-2 m-0">
@@ -60,44 +68,56 @@
             </div>
 
             <div class="col">
-               <!-- Div Operacional -->
                <div class="operacional rounded border border-dark p-3">
                   <h2 class="text-center text-warning fw-bold">Operacional</h2>
-                  <div class="row m-0">
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/bolinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Bolinhas</button></a>
-                     </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/bolinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Bolinhas</button></a>
-                     </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/bolinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Bolinhas</button></a>
-                     </div>
-                  </div>
 
-                  <div class="row m-0">
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/figurinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Figurinhas</button></a>
+                  <% if (navProducts.bolinhas) { %>
+                     <div class="row m-0">
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/bolinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Bolinhas</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/bolinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Bolinhas</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/bolinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Bolinhas</button></a>
+                        </div>
                      </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/figurinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Figurinhas</button></a>
-                     </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/figurinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Figurinhas</button></a>
-                     </div>
-                  </div>
+                  <% } %>
 
-                  <div class="row m-0">
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/pelucias/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Pelúcias</button></a>
+                  <% if (navProducts.figurinhas) { %>
+                     <div class="row m-0">
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/figurinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Figurinhas</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/figurinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Figurinhas</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/figurinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Figurinhas</button></a>
+                        </div>
                      </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/pelucias/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro  de Pelúcias</button></a>
+                  <% } %>
+
+                  <% if (navProducts.pelucias) { %>
+                     <div class="row m-0">
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Pelúcias</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro  de Pelúcias</button></a>
+                        </div>
+                        <div class="col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Pelúcias</button></a>
+                        </div>
                      </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/pelucias/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Pelúcias</button></a>
+                  <% } %>
+
+                  <% if (!navProducts.hasAny) { %>
+                     <div class="text-center text-muted small border rounded p-3 mb-0">
+                        Nenhum produto operacional está disponível no momento.
                      </div>
-                  </div>
+                  <% } %>
                </div>
             </div>
          </div>

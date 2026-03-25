@@ -6,6 +6,8 @@ import methodOverride from 'method-override';
 import dotenv from 'dotenv';
 import isAuthenticated, { attachAuthenticatedUser } from './src/middleware/isAuthenticated.js';
 import { attachCsrfToken, requireCsrfProtection } from './src/middleware/csrfMiddleware.js';
+import { attachNavigationContext } from './src/middleware/navigationContext.js';
+import { requireProductAvailable } from './src/middleware/productAvailability.js';
 import { disableAuthenticatedCache, securityHeaders } from './src/middleware/securityMiddleware.js';
 
 import loginLogoutRoutes from './src/routes/loginLogoutRoutes.js';
@@ -43,6 +45,7 @@ app.use(cookieParser());
 app.use(attachAuthenticatedUser);
 app.use(attachCsrfToken);
 app.use(requireCsrfProtection);
+app.use(attachNavigationContext);
 app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 app.use('/vendor/sweetalert2', express.static(path.join(__dirname, 'node_modules', 'sweetalert2', 'dist')));
@@ -58,13 +61,13 @@ app.use('/estabelecimentos', isAuthenticated, estabelecimentoRoutes);
 app.use('/lancamentos', isAuthenticated, lancamentoRoutes);
 app.use('/painel', isAuthenticated, painelRoutes);
 app.use('/fluxo-de-caixa', isAuthenticated, fluxoDeCaixaRoutes);
-app.use('/bolinhas', isAuthenticated, receitaBolinhaRoutes);
-app.use('/figurinhas', isAuthenticated, receitaFigurinhaRoutes);
-app.use('/bolinhas/sangrias', isAuthenticated, bolinhasSangriaRoutes);
-app.use('/figurinhas/sangrias', isAuthenticated, figurinhasRoutes); 
+app.use('/bolinhas', isAuthenticated, requireProductAvailable('bolinhas'), receitaBolinhaRoutes);
+app.use('/figurinhas', isAuthenticated, requireProductAvailable('figurinhas'), receitaFigurinhaRoutes);
+app.use('/bolinhas/sangrias', isAuthenticated, requireProductAvailable('bolinhas'), bolinhasSangriaRoutes);
+app.use('/figurinhas/sangrias', isAuthenticated, requireProductAvailable('figurinhas'), figurinhasRoutes); 
 
-app.use('/pelucias', isAuthenticated, receitaPeluciaRoutes);
-app.use('/pelucias', isAuthenticated, peluciasRoutes);
+app.use('/pelucias', isAuthenticated, requireProductAvailable('pelucias'), receitaPeluciaRoutes);
+app.use('/pelucias', isAuthenticated, requireProductAvailable('pelucias'), peluciasRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('pages/404');

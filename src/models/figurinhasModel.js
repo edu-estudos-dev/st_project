@@ -84,7 +84,7 @@ class FigurinhasModel {
     };
 
     getEstabelecimentos = async () => {
-        const query = 'SELECT * FROM estabelecimentos WHERE UPPER(produto) LIKE \'%FIGURINHAS%\'';
+        const query = 'SELECT * FROM estabelecimentos WHERE UPPER(produto) LIKE \'%FIGURINHAS%\' AND status = \'ativo\'';
         try {
             const [results] = await connection.execute(query);
             return results;

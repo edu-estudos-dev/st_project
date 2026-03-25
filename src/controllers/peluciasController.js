@@ -1,20 +1,16 @@
 import peluciasModel from '../models/peluciasModel.js';
 
 class PeluciasController {
-
     addSangriaForm = async (req, res) => {
         const usuario = req.user || null;
         try {
-            console.log('Chamando addSangriaForm');
             const estabelecimentos = await peluciasModel.getEstabelecimentos();
-            const ultimaLeitura = estabelecimentos.length > 0 ? await peluciasModel.getUltimaLeitura(estabelecimentos[0].id) : { ultima_leitura: 0 };
-            const ultimoEstoque = estabelecimentos.length > 0 ? await peluciasModel.getUltimoEstoque(estabelecimentos[0].id) : { estoque: 0 };
 
             res.render('pages/pelucias/cadastrarSangriaPelucia', {
                 estabelecimentos,
                 usuario,
-                ultimaLeitura: ultimaLeitura.ultima_leitura,
-                ultimoEstoque: ultimoEstoque.estoque
+                ultimaLeitura: '',
+                ultimoEstoque: ''
             });
         } catch (error) {
             console.error('Erro ao carregar o formulário de sangria:', error);
@@ -23,41 +19,49 @@ class PeluciasController {
     };
 
     addSangria = async (req, res) => {
-        const { estabelecimento_id,
+        const {
+            estabelecimento_id,
             data_sangria,
             leitura_atual,
             abastecido,
             valor_apurado,
             comissao,
-            valor_comerciante,
-            valor_liquido,
             tipo_pagamento,
-            observacoes } = req.body;
+            observacoes
+        } = req.body;
+
         try {
-            console.log('Chamando addSangria');
-            const ultimaLeitura = await peluciasModel.getUltimaLeitura(estabelecimento_id);
-            const ultimoEstoque = await peluciasModel.getUltimoEstoque(estabelecimento_id);
+            const ultimoRegistro = await peluciasModel.getUltimosDados(estabelecimento_id);
             const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(estabelecimento_id);
+
+            const leituraAnterior = Number(ultimoRegistro.ultima_leitura || 0);
+            const leituraAtual = Number(leitura_atual || 0);
+            const quantidadeAbastecida = Number(abastecido || 0);
 
             if (new Date(data_sangria) <= new Date(ultimaDataSangria.data_sangria)) {
                 return res.redirect('/pelucias/sangrias?error=A data do novo cadastro nao pode ser anterior ou igual a data da ultima sangria cadastrada.');
             }
 
-            const qtdeVendido = (ultimaLeitura.ultima_leitura === 0) ? 0 : leitura_atual - (ultimaLeitura.ultima_leitura || 0);
-            const estoque = (ultimoEstoque.estoque || 0) - qtdeVendido + parseInt(abastecido, 10);
+            if (leituraAtual < leituraAnterior) {
+                return res.redirect('/pelucias/sangrias/add?error=A leitura atual nao pode ser menor que a ultima leitura registrada.');
+            }
 
-            await peluciasModel.updateUltimaLeitura(estabelecimento_id, leitura_atual);
+            const qtdeVendido = leituraAtual - leituraAnterior;
+            const estoque = Number(ultimoRegistro.estoque || 0) - qtdeVendido + quantidadeAbastecida;
+            const valorDaComissao = Number(valor_apurado || 0) * (Number(comissao || 0) / 100);
+            const valorLiquido = Number(valor_apurado || 0) - valorDaComissao;
+
             await peluciasModel.createSangria({
                 estabelecimento_id,
                 data_sangria,
-                leitura_atual,
-                ultima_leitura: leitura_atual,
-                abastecido,
+                leitura_atual: leituraAtual,
+                ultima_leitura: leituraAnterior,
+                abastecido: quantidadeAbastecida,
                 qtde_vendido: qtdeVendido,
                 valor_apurado,
                 comissao,
-                valor_comerciante,
-                valor_liquido,
+                valor_comerciante: valorDaComissao,
+                valor_liquido: valorLiquido,
                 tipo_pagamento,
                 observacoes,
                 estoque
@@ -73,7 +77,6 @@ class PeluciasController {
     index = async (req, res) => {
         const usuario = req.user;
         try {
-            console.log('Chamando index');
             const sangrias = await peluciasModel.getSangrias();
             const { success, error } = req.query;
             res.render('pages/pelucias/tabelaPelucia', {
@@ -91,7 +94,6 @@ class PeluciasController {
     editSangriaForm = async (req, res) => {
         const usuario = req.user;
         try {
-            console.log('Chamando editSangriaForm');
             const id = req.params.id;
             const estabelecimentos = await peluciasModel.getEstabelecimentos();
             const sangria = await peluciasModel.getSangriaById(id);
@@ -113,8 +115,8 @@ class PeluciasController {
 
     updateSangria = async (req, res) => {
         try {
-            console.log('Chamando updateSangria');
-            const { id,
+            const {
+                id,
                 estabelecimento_id,
                 data_sangria,
                 valor_apurado,
@@ -123,11 +125,11 @@ class PeluciasController {
                 observacoes,
                 leitura_atual,
                 abastecido,
-                qtde_vendido } = req.body;
-            const valor_da_comissao = valor_apurado * (comissao / 100);
-            const valor_liquido = valor_apurado - valor_da_comissao;
+                qtde_vendido
+            } = req.body;
 
-            const qtdeVendidoAtualizado = qtde_vendido ? qtde_vendido : null;
+            const valorDaComissao = valor_apurado * (comissao / 100);
+            const valorLiquido = valor_apurado - valorDaComissao;
 
             await peluciasModel.updateSangria({
                 id,
@@ -135,14 +137,15 @@ class PeluciasController {
                 data_sangria,
                 valor_apurado,
                 comissao: parseFloat(comissao),
-                valor_comerciante: valor_da_comissao,
-                valor_liquido,
+                valor_comerciante: valorDaComissao,
+                valor_liquido: valorLiquido,
                 tipo_pagamento,
                 observacoes,
                 leitura_atual,
                 abastecido,
-                qtde_vendido: qtdeVendidoAtualizado
+                qtde_vendido: qtde_vendido ? Number(qtde_vendido) : null
             });
+
             res.redirect('/pelucias/sangrias?success=Sangria atualizada com sucesso');
         } catch (error) {
             console.error('Erro ao atualizar sangria:', error);
@@ -152,7 +155,6 @@ class PeluciasController {
 
     deleteSangria = async (req, res) => {
         try {
-            console.log('Chamando deleteSangria');
             const id = req.params.id;
             await peluciasModel.deleteSangria(id);
             res.status(200).json({ success: true, message: 'Sangria excluída com sucesso' });
@@ -165,7 +167,6 @@ class PeluciasController {
     viewSangria = async (req, res) => {
         const usuario = req.user;
         try {
-            console.log('Chamando viewSangria');
             const id = req.params.id;
             const sangria = await peluciasModel.getSangriaById(id);
 
@@ -183,7 +184,6 @@ class PeluciasController {
     getReceitaPelucias = async (req, res) => {
         const usuario = req.user;
         try {
-            console.log('Chamando getReceitaPelucias');
             const receita = await peluciasModel.getMonthlyRevenue();
             res.render('pages/pelucias/receitaPelucia', {
                 receita,
@@ -198,7 +198,6 @@ class PeluciasController {
     renderControleGeralPelucias = async (req, res) => {
         const usuario = req.user;
         try {
-            console.log('Chamando renderControleGeralPelucias');
             const dadosControleGeral = await peluciasModel.getLatestSangriaForAllEstabelecimentos();
 
             res.render('pages/pelucias/controleGeralPelucias', {
@@ -214,7 +213,6 @@ class PeluciasController {
     controleGeral = async (req, res) => {
         const usuario = req.user || null;
         try {
-            console.log('Chamando controleGeral');
             const estabelecimentos = await peluciasModel.getAllSangrias();
 
             res.render('pages/pelucias/controleGeralPelucias', {
@@ -227,19 +225,19 @@ class PeluciasController {
         }
     };
 
-    getUltimaLeitura = async (req, res) => {
+    getUltimosDados = async (req, res) => {
         const { estabelecimentoId } = req.params;
         try {
-            console.log('Chamando getUltimaLeitura');
-            const ultimaLeitura = await peluciasModel.getUltimaLeitura(estabelecimentoId);
-            res.json({ ultima_leitura: ultimaLeitura.ultima_leitura });
+            const dados = await peluciasModel.getUltimosDados(estabelecimentoId);
+            res.json({
+                ultima_leitura: Number(dados.ultima_leitura || 0),
+                estoque: Number(dados.estoque || 0)
+            });
         } catch (error) {
-            console.error('Erro ao buscar a última leitura:', error);
-            res.status(500).json({ error: 'Erro ao buscar a última leitura' });
+            console.error('Erro ao buscar os últimos dados:', error);
+            res.status(500).json({ error: 'Erro ao buscar os últimos dados' });
         }
     };
 }
 
 export default new PeluciasController();
-
-

@@ -171,7 +171,7 @@ class BolinhasModel {
 
     // Busca todos os estabelecimentos com o produto "Bolinha"
     getEstabelecimentos = async () => {
-        const query = 'SELECT * FROM estabelecimentos WHERE UPPER(produto) LIKE \'%BOLINHAS%\'';
+        const query = 'SELECT * FROM estabelecimentos WHERE UPPER(produto) LIKE \'%BOLINHAS%\' AND status = \'ativo\'';
 
         try {
             const [results] = await connection.execute(query);

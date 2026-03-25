@@ -20,18 +20,18 @@ class FigurinhasController {
         const {
             estabelecimento_id,
             data_sangria,
-            qtde_deixada,
             abastecido,
             estoque,
             qtde_vendido,
             valor_apurado,
             comissao,
-            valor_comerciante,
-            valor_liquido,
             tipo_pagamento,
             observacoes
         } = req.body;
         try {
+            const valor_da_comissao = valor_apurado * (comissao / 100);
+            const valor_liquido = valor_apurado - valor_da_comissao;
+
             await figurinhasModel.createSangria({
                 estabelecimento_id,
                 data_sangria,
@@ -41,7 +41,7 @@ class FigurinhasController {
                 qtde_vendido,
                 valor_apurado,
                 comissao,
-                valor_comerciante,
+                valor_comerciante: valor_da_comissao,
                 valor_liquido,
                 tipo_pagamento,
                 observacoes

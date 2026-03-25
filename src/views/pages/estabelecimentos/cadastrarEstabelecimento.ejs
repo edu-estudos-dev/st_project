@@ -5,31 +5,12 @@
 <body class="bg-light">
     <%- include('../../partials/header') %>
     <div class="container mt-5 w-75">
-
         <div>&nbsp;</div>
-
-        <!-- breadcrumb -->
         <%- include('../../partials/breadcrumb', { pageTitle: 'Cadastrar' }) %>
 
         <div class="cabecalho-geral">
-            <h1 class="mb-0" >Cadastrar Estabelecimento</h1>
+            <h1 class="mb-0">Cadastrar Estabelecimento</h1>
         </div>
-
-        <!-- Mensagens de Sucesso/Falha -->
-        <% if (success) { %>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> <%= success %>
-                <a href="/estabelecimentos">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </a>
-            </div>
-        <% } %>
-        <% if (error) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error!</strong> <%= error %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <% } %>
 
         <main class="mb-5 geral">
             <form id="cadastroForm" class="p-0" action="/estabelecimentos/add" method="POST">
@@ -46,15 +27,7 @@
                         <label class="mb-1 fw-bold fs-5" for="telefone_contato">Contato</label>
                         <input type="tel" class="form-control mb-2 text-center" id="telefone_contato" name="telefone_contato" required>
                     </div>
-                    <!-- <div class="col-md-2">
-                        <label class="mb-1 fw-bold fs-5" for="status">Status</label>
-                        <select class="form-control" id="status" name="status">
-                            <option value="ATIVO">ATIVO</option>
-                            <option value="INATIVO">INATIVO</option>
-                        </select>
-                    </div> -->
                 </div>
-
                 <div class="row">
                     <div class="col-md-5">
                         <label class="mb-1 fw-bold fs-5" for="endereco">Endereço</label>
@@ -73,30 +46,18 @@
                         <input type="text" class="form-control mb-2 text-center" id="maquina" name="maquina">
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-2">
                         <label class="mb-1 fw-bold fs-5 ms-4">Produto</label>
-                        <div class="form-check">
-                            <input class="form-check-input ms-1" type="checkbox" id="produto1" name="produto" value="BOLINHAS">
-                            <label class="form-check-label ms-2" for="produto1">BOLINHAS</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input ms-1" type="checkbox" id="produto2" name="produto" value="FIGURINHAS">
-                            <label class="form-check-label ms-2" for="produto2">FIGURINHAS</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input ms-1" type="checkbox" id="produto3" name="produto" value="PELÚCIAS">
-                            <label class="form-check-label ms-2" for="produto3">PELÚCIAS</label>
-                        </div>
+                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto1" name="produto" value="BOLINHAS"><label class="form-check-label ms-2" for="produto1">BOLINHAS</label></div>
+                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto2" name="produto" value="FIGURINHAS"><label class="form-check-label ms-2" for="produto2">FIGURINHAS</label></div>
+                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto3" name="produto" value="PELUCIAS"><label class="form-check-label ms-2" for="produto3">PELÚCIAS</label></div>
                     </div>
-
                     <div class="col-md-10">
                         <label class="mb-1 fw-bold fs-5" for="observacoes">Comentários</label>
                         <textarea class="form-control mb-2" id="observacoes" name="observacoes" rows="3" maxlength="255"></textarea>
                     </div>
                 </div>
-
                 <div class="d-flex justify-content-center my-3">
                     <a href="/estabelecimentos"><button type="button" class="btn btn-warning px-5 me-3 fs-5">Cancelar</button></a>
                     <button type="submit" class="btn btn-primary ms-3 px-5 fs-5">Cadastrar</button>
@@ -104,38 +65,28 @@
             </form>
         </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const telefoneInput = document.getElementById('telefone_contato');
-            
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
                 if (value.length > 11) value = value.slice(0, 11);
-    
                 if (value.length > 0) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
                 if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
                 if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
-    
                 e.target.value = value;
             });
-
-            const form = document.getElementById('cadastroForm');
-            form.addEventListener('submit', (e) => {
-                const checkboxes = document.querySelectorAll('input[name="produto"]');
-                const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-
+            document.getElementById('cadastroForm').addEventListener('submit', (e) => {
+                const isChecked = Array.from(document.querySelectorAll('input[name="produto"]')).some((checkbox) => checkbox.checked);
                 if (!isChecked) {
                     e.preventDefault();
-                    alert('Por favor, marque pelo menos um produto.');
+                    window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
                 }
             });
+            <% if (success) { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>
+            <% if (error) { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
         });
     </script>
-
 </body>
-<!-- <%- include('../../partials/footer') %> -->
 </html>

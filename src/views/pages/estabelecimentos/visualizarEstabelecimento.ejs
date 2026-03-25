@@ -38,7 +38,7 @@
                             <hr>
 
                             <div class="col-md-6">
-                                <p>Produtos:<strong> <%= estabelecimento.produto.toUpperCase() %></p></strong></p>
+                                <p>Produtos:<strong> <%= (estabelecimento.produtoFormatado || estabelecimento.produto).toUpperCase() %></p></strong></p>
                                 <p>Responsável:<strong> <%= estabelecimento.responsavel_nome.toUpperCase() %></p></strong></p>
                                 <p>Endereço:<strong> <%= estabelecimento.endereco.toUpperCase() %></p></strong></p>
                                 <p>Bairro:<strong> <%= estabelecimento.bairro.toUpperCase() %></p></strong></p>

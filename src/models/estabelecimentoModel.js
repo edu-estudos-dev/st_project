@@ -1,48 +1,42 @@
-import connection from '../db_config/connection.js'; // Importa a configuração da conexão com o banco de dados
+import connection from '../db_config/connection.js';
+import { hasProduto } from '../utilities/produtoUtils.js';
 
 class EstabelecimentoModel {
-
-    // Método para buscar todos os estabelecimentos ativos
     findAll = async () => {
         try {
             const SQL = 'SELECT * FROM estabelecimentos WHERE status = "ativo"';
-            // Query SQL para buscar todos os estabelecimentos ativo
-            const [result] = await connection.execute(SQL); // Executa a query
-            return result; // Retorna os resultados
+            const [result] = await connection.execute(SQL);
+            return result;
         } catch (error) {
             console.error('Erro ao executar a query:', error);
             throw new Error('Erro ao buscar estabelecimentos ativos.');
         }
-    }
+    };
 
-    // Método para buscar estabelecimentos baseado em um termo de pesquisa
     search = async (query) => {
         try {
-            // Query SQL para buscar estabelecimentos ativos baseado em um termo de pesquisa
             const SQL = 'SELECT * FROM estabelecimentos WHERE (estabelecimento LIKE ? OR responsavel_nome LIKE ? OR bairro LIKE ?) AND status = "ativo"';
-            const [result] = await connection.execute(SQL, [`%${query}%`, `%${query}%`, `%${query}%`]); // Executa a query com o termo de pesquisa
+            const [result] = await connection.execute(SQL, [`%${query}%`, `%${query}%`, `%${query}%`]);
             return result;
         } catch (error) {
             console.error('Erro ao executar a query de busca:', error);
             throw new Error('Erro ao buscar estabelecimentos.');
         }
-    }
+    };
 
-    // Método para criar um novo estabelecimento
     create = async ({ estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes }) => {
         try {
             const SQL = `INSERT INTO estabelecimentos 
                         (estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, data_criacao, status) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            const dateISO = new Date().toISOString(); // Obtém a data atual no formato ISO
-            await connection.execute(SQL, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, 'ativo']); // Executa a query com os dados fornecidos
+            const dateISO = new Date().toISOString();
+            await connection.execute(SQL, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, 'ativo']);
         } catch (error) {
             console.error('Erro ao criar novo estabelecimento:', error);
             throw new Error('Erro ao criar novo estabelecimento.');
         }
     };
 
-    // Método para atualizar um estabelecimento existente
     update = async (id, { estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes }) => {
         const sql = `UPDATE estabelecimentos SET
             estabelecimento = ?,
@@ -54,33 +48,30 @@ class EstabelecimentoModel {
             responsavel_nome = ?,
             telefone_contato = ?,
             observacoes = ?,
-            data_atualizacao = ? WHERE id = ?`; // Query SQL para atualizar um estabelecimento
-        const dateISO = new Date().toISOString(); // Obtém a data atual no formato ISO
-        const [result] = await connection.execute(sql, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, id]); // Executa a query com os dados fornecidos
-        return result; // Retorna o resultado da operação
+            data_atualizacao = ? WHERE id = ?`;
+        const dateISO = new Date().toISOString();
+        const [result] = await connection.execute(sql, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, id]);
+        return result;
     };
 
-    // Método para buscar um estabelecimento por ID
     findById = async (id) => {
-        const sql = 'SELECT * FROM estabelecimentos WHERE id = ?'; // Query SQL para buscar estabelecimento por ID
-        const [result] = await connection.execute(sql, [id]); // Executa a query com o ID fornecido
-        return result[0]; // Retorna o primeiro (e único) resultado
-    }
+        const sql = 'SELECT * FROM estabelecimentos WHERE id = ?';
+        const [result] = await connection.execute(sql, [id]);
+        return result[0];
+    };
 
-    // Método para "deletar" um estabelecimento por ID (alterando o status para inativo)
     destroy = async (id) => {
         try {
-            const sql = 'UPDATE estabelecimentos SET status = "inativo", data_encerramento = ? WHERE id = ?'; // Query SQL para alterar o status e definir a data de encerramento
-            const dataEncerramento = new Date().toISOString(); // Captura a data e hora atuais no formato ISO
-            const [result] = await connection.execute(sql, [dataEncerramento, id]); // Executa a query com o ID fornecido e a data de encerramento
+            const sql = 'UPDATE estabelecimentos SET status = "inativo", data_encerramento = ? WHERE id = ?';
+            const dataEncerramento = new Date().toISOString();
+            const [result] = await connection.execute(sql, [dataEncerramento, id]);
             console.log('Estabelecimento marcado como inativo:', result);
         } catch (error) {
             console.error('Erro ao deletar o estabelecimento:', error);
             throw new Error('Erro ao deletar o estabelecimento.');
         }
-    }
+    };
 
-    // Método para buscar todos os bairros dos estabelecimentos que tenham o produto 'BOLINHAS'
     getBairrosByProduto = async (produto) => {
         try {
             const SQL = 'SELECT DISTINCT bairro FROM estabelecimentos WHERE UPPER(produto) LIKE ? AND status = "ativo"';
@@ -90,7 +81,45 @@ class EstabelecimentoModel {
             console.error('Erro ao buscar bairros:', error);
             throw new Error('Erro ao buscar bairros.');
         }
-    }
+    };
+
+    getMenuProdutosDisponiveis = async () => {
+        try {
+            const SQL = 'SELECT produto FROM estabelecimentos WHERE status = "ativo" AND produto IS NOT NULL AND produto <> ""';
+            const [result] = await connection.execute(SQL);
+
+            const disponibilidade = {
+                bolinhas: false,
+                figurinhas: false,
+                pelucias: false
+            };
+
+            for (const row of result) {
+                if (!disponibilidade.bolinhas && hasProduto(row.produto, 'BOLINHAS')) {
+                    disponibilidade.bolinhas = true;
+                }
+
+                if (!disponibilidade.figurinhas && hasProduto(row.produto, 'FIGURINHAS')) {
+                    disponibilidade.figurinhas = true;
+                }
+
+                if (!disponibilidade.pelucias && hasProduto(row.produto, 'PELUCIAS')) {
+                    disponibilidade.pelucias = true;
+                }
+            }
+
+            disponibilidade.hasAny = disponibilidade.bolinhas || disponibilidade.figurinhas || disponibilidade.pelucias;
+            return disponibilidade;
+        } catch (error) {
+            console.error('Erro ao carregar produtos disponíveis para o menu:', error);
+            return {
+                bolinhas: true,
+                figurinhas: true,
+                pelucias: true,
+                hasAny: true
+            };
+        }
+    };
 }
 
-export default new EstabelecimentoModel(); // Exporta uma instância da classe EstabelecimentoModel
+export default new EstabelecimentoModel();
