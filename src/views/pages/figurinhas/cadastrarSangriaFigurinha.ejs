@@ -2,132 +2,143 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Registrar Sangria de Figurinhas' }) %>
 
-<body class="bg-light">
-    <%- include('../../partials/header') %>
-    <div class="container w-75 mt-5">
-        <div>&nbsp;</div>
+    <body class="bg-light">
+        <%- include('../../partials/header') %>
 
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Figurinhas' }) %>
+            <div class="container w-75 mt-5">
+                <div>&nbsp;</div>
 
-        <div class="cabecalho-figurinhas">
-            <h1 class="mb-0">Registrar Sangria de Figurinhas</h1>
-        </div>
-        
-        <main class="figurinhas">
-            <form action="/figurinhas/sangrias/add" method="POST">
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="estabelecimento" class="form-labe mb-1 fs-5 fw-bold">Estabelecimento</label>
-                        <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                            <option value="" selected disabled hidden>Selecione um Estabelecimento</option>
-                            <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="data_sangria" class="form-label mb-1 fs-5 fw-bold">Data da Visita</label>
-                        <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="tipo_pagamento" class="form-label mb-1 fs-5 fw-bold">Tipo de Pagamento</label>
-                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                            <option value="especie">Espécie</option>
-                            <option value="pix">PIX</option>
-                        </select>
-                    </div>
-                </div>
+                <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Figurinhas' }) %>
 
-                <div class="row">
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_apurado" class="form-label mb-1 fs-5 fw-bold">Valor Apurado</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required oninput="calculateValues()">
-                        </div>
+                    <div class="cabecalho-figurinhas">
+                        <h1 class="mb-0">Registrar Sangria de Figurinhas</h1>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="comissao" class="form-label mb-1 fs-5 fw-bold">Comissão (%)</label>
-                        <div class="input-group">
-                            <span class="input-group-text">%</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required oninput="calculateValues()">
-                        </div>
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_comerciante" class="form-label mb-1 fs-5 fw-bold">Valor do Comerciante</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" readonly disabled>
-                        </div>
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_liquido" class="form-label mb-1 fs-5 fw-bold">Valor Líquido</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="mb-3 col-3 text-center">
-                        <label for="qtde_vendido" class="form-label mb-1 fs-5 fw-bold">Qtde. Vendido</label>
-                        <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" required oninput="calculateQuantidadeDeixada()">
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="abastecido" class="form-label mb-1 fs-5 fw-bold">Abastecido</label>
-                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required oninput="calculateQuantidadeDeixada()">
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="estoque" class="form-label mb-1 fs-5 fw-bold">Estoque</label>
-                        <input type="number" class="form-control text-center" id="estoque" name="estoque" required oninput="calculateQuantidadeDeixada()">
-                    </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="qtde_deixada" class="form-label mb-1 fs-5 fw-bold">Quantidade Deixada</label>
-                        <input type="number" class="form-control text-center readonly-input" id="qtde_deixada" name="qtde_deixada" readonly disabled>
-                    </div>
-                </div>
+                    <main class="figurinhas">
+                        <form action="/figurinhas/sangrias/add" method="POST">
 
-                <div class="row">
-                    <div class="mb-3 col-12">
-                        <label for="observacoes" class="form-label mb-1 fs-5 fw-bold">Observações</label>
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center my-3">
-                    <a href="/figurinhas/sangrias"><button type="button" class="btn btn-warning px-5 me-3 fs-5">Cancelar</button></a>
-                    <button type="submit" class="btn btn-primary ms-3 px-5 fs-5">Registrar</button>
-                </div>
-            </form>
-        </main>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous">
-    </script>
+                            <div class="row">
+                                <div class="mb-3 col-9">
+                                    <label class="form-label fs-5 fw-bold">Estabelecimento</label>
+                                    <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
+                                        <option value="" selected disabled hidden>Selecione um Estabelecimento</option>
+                                        <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                            <option value="<%= estabelecimento.id %>">
+                                                <%= estabelecimento.estabelecimento %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
 
-    <script>
-        function calculateValues() {
-            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-            const valorDaComissao = valorApurado * (comissao / 100);
-            const valorComerciante = valorDaComissao;
-            const valorLiquido = valorApurado - valorComerciante;
-            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-        }
+                                <div class="mb-3 col-3 text-center">
+                                    <label class="form-label fs-5 fw-bold">Data da Visita</label>
+                                    <input type="date" class="form-control text-center" id="data_sangria"
+                                        name="data_sangria" required>
+                                </div>
 
-        function calculateQuantidadeDeixada() {
-            const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
-            const estoque = parseFloat(document.getElementById('estoque').value) || 0;
-            document.getElementById('qtde_deixada').value = abastecido + estoque;
-        }
+                            </div>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
-            calculateValues();
-            calculateQuantidadeDeixada();
-        });
-    </script>
-</body>
+                            <div class="row">
+
+                                  <div class="mb-3 col-4">
+                                    <label class="form-label fs-5 fw-bold">Valor Apurado</label>
+                                    <input type="number" step="0.01" class="form-control" name="valor_apurado" required>
+                                </div>
+                                <div class="mb-3 col-4 text-center">
+                                    <label class="form-label fs-5 fw-bold">Qtde. Vendido</label>
+                                    <input type="number" class="form-control text-center" id="qtde_vendido"
+                                        name="qtde_vendido" required oninput="calculateQuantidadeDeixada()">
+                                </div>
+
+                                <div class="mb-3 col-4 text-center">
+                                    <label class="form-label fs-5 fw-bold">Abastecido</label>
+                                    <input type="number" class="form-control text-center" id="abastecido"
+                                        name="abastecido" required oninput="calculateQuantidadeDeixada()">
+                                </div>
+
+                                    <div class="mb-3 col-4 text-center">
+                                    <label class="form-label fs-5 fw-bold">Quantidade Deixada</label>
+                                    <input type="number" class="form-control text-center" id="qtde_deixada" readonly
+                                        disabled>
+                                </div>
+
+                                <div class="mb-3 col-4 text-center">
+                                    <label class="form-label fs-5 fw-bold">Tipo de Pagamento</label>
+                                    <select class="form-select" name="tipo_pagamento" required>
+                                        <option value="especie">Espécie</option>
+                                        <option value="pix">PIX</option>
+                                    </select>
+                                </div>
+
+                                  <div class="mb-3 col-4 text-center">
+                                    <label class="form-label fs-5 fw-bold">Última Visita</label>
+                                    <input type="date" class="form-control text-center" id="ultima_visita" readonly
+                                        disabled>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-12">
+                                    <label class="form-label fs-5 fw-bold">Observações</label>
+                                    <textarea class="form-control" name="observacoes"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center my-3">
+                                <a href="/figurinhas/sangrias">
+                                    <button type="button" class="btn btn-warning px-5 me-3 fs-5">Cancelar</button>
+                                </a>
+                                <button type="submit" class="btn btn-primary ms-3 px-5 fs-5">Registrar</button>
+                            </div>
+
+                        </form>
+                    </main>
+            </div>
+
+            <script>
+                window.estoqueAnterior = 0;
+
+                document.getElementById('estabelecimento').addEventListener('change', async function () {
+                    const id = this.value;
+
+                    try {
+                        const response = await fetch(`/figurinhas/sangrias/ultima-sangria/${id}`);
+                        const data = await response.json();
+
+                        if (data.data) {
+                            document.getElementById('ultima_visita').value = data.data.split('T')[0];
+                        } else {
+                            document.getElementById('ultima_visita').value = '';
+                        }
+
+                        window.estoqueAnterior = data.estoque || 0;
+
+                        calculateQuantidadeDeixada();
+
+                    } catch (error) {
+                        console.error(error);
+                    }
+                });
+
+                function calculateQuantidadeDeixada() {
+                    const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
+                    const vendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
+
+                    const resultado = window.estoqueAnterior - vendido + abastecido;
+
+                    document.getElementById('qtde_deixada').value = resultado;
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.getElementById('data_sangria').value =
+                        new Date().toISOString().split('T')[0];
+                });
+            </script>
+
+    </body>
+
 </html>

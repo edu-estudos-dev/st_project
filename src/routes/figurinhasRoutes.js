@@ -12,5 +12,6 @@ router.post('/delete/:id', figurinhasController.deleteSangria);
 router.get('/view/:id', figurinhasController.viewSangria);
 router.get('/controle-geral', figurinhasController.renderControleGeralFigurinhas);
 router.get('/receita-figurinha', figurinhasController.getReceitaFigurinhas);
+router.get('/ultima-sangria/:id', figurinhasController.getUltimaSangria);
 
 export default router;

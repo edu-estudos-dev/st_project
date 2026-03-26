@@ -1,216 +1,260 @@
 import figurinhasModel from '../models/figurinhasModel.js';
 
 class FigurinhasController {
+  addSangriaForm = async (req, res) => {
+    const usuario = req.user || null;
+    try {
+      const estabelecimentos = await figurinhasModel.getEstabelecimentos();
+      res.render('pages/figurinhas/cadastrarSangriaFigurinha', {
+        estabelecimentos,
+        usuario
+      });
+    } catch (error) {
+      console.error('Erro ao carregar formulário:', error);
+      res.status(500).send('Erro ao carregar formulário.');
+    }
+  };
 
-    addSangriaForm = async (req, res) => {
-        const usuario = req.user || null;
-        try {
-            const estabelecimentos = await figurinhasModel.getEstabelecimentos();
-            res.render('pages/figurinhas/cadastrarSangriaFigurinha', {
-                estabelecimentos,
-                usuario
-            });
-        } catch (error) {
-            console.error('Erro ao carregar o formulário de sangria:', error);
-            res.status(500).send('Erro ao carregar o formulário de sangria.');
-        }
-    };
+  addSangria = async (req, res) => {
+    try {
+      const {
+        estabelecimento_id,
+        data_sangria,
+        abastecido,
+        qtde_vendido,
+        valor_apurado,
+        tipo_pagamento,
+        observacoes
+      } = req.body;
 
-    addSangria = async (req, res) => {
-        const {
-            estabelecimento_id,
-            data_sangria,
-            abastecido,
-            estoque,
-            qtde_vendido,
-            valor_apurado,
-            comissao,
-            tipo_pagamento,
-            observacoes
-        } = req.body;
-        try {
-            const valor_da_comissao = valor_apurado * (comissao / 100);
-            const valor_liquido = valor_apurado - valor_da_comissao;
+      if (!estabelecimento_id || !data_sangria) {
+        throw new Error('Dados obrigatórios faltando');
+      }
 
-            await figurinhasModel.createSangria({
-                estabelecimento_id,
-                data_sangria,
-                qtde_deixada: parseInt(abastecido) + parseInt(estoque),
-                abastecido,
-                estoque,
-                qtde_vendido,
-                valor_apurado,
-                comissao,
-                valor_comerciante: valor_da_comissao,
-                valor_liquido,
-                tipo_pagamento,
-                observacoes
-            });
+      // 🔥 BUSCA ÚLTIMA SANGRIA
+      const ultimaSangria =
+        await figurinhasModel.getUltimaSangria(estabelecimento_id);
 
-            res.redirect('/figurinhas/sangrias?success=Sangria adicionada com sucesso');
-        } catch (error) {
-            console.error('Erro ao adicionar sangria:', error);
-            res.redirect('/figurinhas/sangrias?error=Erro ao adicionar sangria');
-        }
-    };
+      const estoqueAnterior =
+        ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada) : 0;
 
-    index = async (req, res) => {
-        const usuario = req.user;
-        try {
-            const sangrias = await figurinhasModel.getSangrias();
-            const { success, error } = req.query;
-            res.render('pages/figurinhas/tabelaFigurinha', {
-                sangrias,
-                usuario,
-                success,
-                error
-            });
-        } catch (error) {
-            console.error('Erro ao listar sangrias:', error);
-            res.status(500).send('Erro ao listar sangrias.');
-        }
-    };
+      // 🔥 CÁLCULO CORRETO
+      const qtde_deixada =
+        estoqueAnterior -
+        parseInt(qtde_vendido || 0) +
+        parseInt(abastecido || 0);
 
-    editSangriaForm = async (req, res) => {
-        const usuario = req.user;
-        try {
-            const id = req.params.id;
-            const estabelecimentos = await figurinhasModel.getEstabelecimentos();
-            const sangria = await figurinhasModel.getSangriaById(id);
+      if (qtde_deixada < 0) {
+        throw new Error('Estoque não pode ser negativo');
+      }
 
-            if (!sangria) {
-                return res.status(404).send('Sangria não encontrada.');
-            }
+      await figurinhasModel.createSangria({
+        estabelecimento_id,
+        data_sangria,
+        qtde_deixada,
+        abastecido: parseInt(abastecido || 0),
+        estoque: estoqueAnterior,
+        qtde_vendido: parseInt(qtde_vendido || 0),
+        valor_apurado: parseFloat(valor_apurado || 0),
+        tipo_pagamento,
+        observacoes: observacoes || ''
+      });
 
-            res.render('pages/figurinhas/editarSangriaFigurinha', {
-                estabelecimentos,
-                sangria,
-                usuario
-            });
-        } catch (error) {
-            console.error('Erro ao carregar o formulário de edição de sangria:', error);
-            res.status(500).send('Erro ao carregar o formulário de edição de sangria.');
-        }
-    };
+      res.redirect(
+        '/figurinhas/sangrias?success=Sangria adicionada com sucesso'
+      );
+    } catch (error) {
+      console.error('Erro ao adicionar:', error);
+      res.redirect(
+        '/figurinhas/sangrias?error=' + encodeURIComponent(error.message)
+      );
+    }
+  };
 
-    updateSangria = async (req, res) => {
-        try {
-            const {
-                id,
-                estabelecimento_id,
-                data_sangria,
-                qtde_deixada,
-                abastecido,
-                estoque,
-                qtde_vendido,
-                valor_apurado,
-                comissao,
-                tipo_pagamento,
-                observacoes
-            } = req.body;
+  index = async (req, res) => {
+    const usuario = req.user;
+    try {
+      const sangrias = await figurinhasModel.getSangrias();
+      const { success, error } = req.query;
 
-            const valor_da_comissao = valor_apurado * (comissao / 100);
-            const valor_liquido = valor_apurado - valor_da_comissao;
+      res.render('pages/figurinhas/tabelaFigurinha', {
+        sangrias,
+        usuario,
+        success,
+        error
+      });
+    } catch (error) {
+      console.error('Erro ao listar:', error);
+      res.status(500).send('Erro ao listar.');
+    }
+  };
 
-            await figurinhasModel.updateSangria({
-                id,
-                estabelecimento_id,
-                data_sangria,
-                qtde_deixada: parseInt(abastecido) + parseInt(estoque),
-                abastecido,
-                estoque,
-                qtde_vendido,
-                valor_apurado,
-                comissao: parseFloat(comissao),
-                valor_comerciante: valor_da_comissao,
-                valor_liquido,
-                tipo_pagamento,
-                observacoes
-            });
-            res.redirect('/figurinhas/sangrias?success=Sangria atualizada com sucesso');
-        } catch (error) {
-            console.error('Erro ao atualizar sangria:', error);
-            res.redirect('/figurinhas/sangrias?error=Erro ao atualizar sangria');
-        }
-    };
+  editSangriaForm = async (req, res) => {
+    const usuario = req.user;
+    try {
+      const id = req.params.id;
 
-    deleteSangria = async (req, res) => {
-        try {
-            const id = req.params.id;
-            await figurinhasModel.deleteSangria(id);
-            res.status(200).json({ success: true, message: 'Sangria excluída com sucesso' });
-        } catch (error) {
-            console.error('Erro ao deletar sangria:', error);
-            res.status(500).json({ success: false, message: 'Erro ao excluir sangria' });
-        }
-    };
+      const estabelecimentos = await figurinhasModel.getEstabelecimentos();
+      const sangria = await figurinhasModel.getSangriaById(id);
 
-    viewSangria = async (req, res) => {
-        const usuario = req.user;
-        try {
-            const id = req.params.id;
-            const sangria = await figurinhasModel.getSangriaById(id);
+      if (!sangria) {
+        return res.status(404).send('Sangria não encontrada.');
+      }
 
-            if (!sangria) {
-                return res.status(404).send('Sangria não encontrada.');
-            }
+      res.render('pages/figurinhas/editarSangriaFigurinha', {
+        estabelecimentos,
+        sangria,
+        usuario
+      });
+    } catch (error) {
+      console.error('Erro ao carregar edição:', error);
+      res.status(500).send('Erro ao carregar edição.');
+    }
+  };
 
-            res.render('pages/figurinhas/visualizarDadosFigurinha', { sangria, usuario });
-        } catch (error) {
-            console.error('Erro ao carregar os detalhes da sangria:', error);
-            res.status(500).send('Erro ao carregar os detalhes da sangria.');
-        }
-    };
+  updateSangria = async (req, res) => {
+    try {
+      const {
+        id,
+        estabelecimento_id,
+        data_sangria,
+        abastecido,
+        qtde_vendido,
+        valor_apurado,
+        tipo_pagamento,
+        observacoes
+      } = req.body;
 
-    getReceitaFigurinhas = async (req, res) => {
-        const usuario = req.user;
-        try {
-            console.log('Chamando getReceitaFigurinhas');
-            const receita = await figurinhasModel.getMonthlyRevenue();
-            res.render('pages/figurinhas/receitaFigurinha', {
-                receita,
-                usuario
-            });
-        } catch (error) {
-            console.error('Erro ao obter receita de figurinhas:', error);
-            res.status(500).json({ message: 'Erro ao obter receita de figurinhas.' });
-        }
-    };
-    
+      const ultimaSangria =
+        await figurinhasModel.getUltimaSangria(estabelecimento_id);
 
-    renderControleGeralFigurinhas = async (req, res) => {
-        const usuario = req.user;
-        try {
-            console.log('Chamando renderControleGeralFigurinhas');
-            const dadosControleGeral = await figurinhasModel.getLatestSangriaForAllEstabelecimentos();
-    
-            res.render('pages/figurinhas/controleGeralFigurinhas', {
-                estabelecimentos: dadosControleGeral,
-                usuario
-            });
-        } catch (error) {
-            console.error('Erro ao carregar controle geral das figurinhas:', error);
-            res.status(500).send('Erro ao carregar controle geral das figurinhas.');
-        }
-    };
-    
-    
+      const estoqueAnterior =
+        ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada) : 0;
 
-    controleGeral = async (req, res) => {
-        const usuario = req.user || null;
-        try {
-            const estabelecimentos = await figurinhasModel.getAllSangrias();
+      const qtde_deixada =
+        estoqueAnterior -
+        parseInt(qtde_vendido || 0) +
+        parseInt(abastecido || 0);
 
-            res.render('pages/figurinhas/controleGeralFigurinhas', {
-                estabelecimentos,
-                usuario
-            });
-        } catch (error) {
-            console.error('Erro ao carregar o controle geral das figurinhas:', error);
-            res.status(500).send('Erro ao carregar o controle geral das figurinhas.');
-        }
-    };
-};
+      if (qtde_deixada < 0) {
+        throw new Error('Estoque não pode ser negativo');
+      }
+
+      await figurinhasModel.updateSangria({
+        id,
+        estabelecimento_id,
+        data_sangria,
+        qtde_deixada,
+        abastecido: parseInt(abastecido || 0),
+        estoque: estoqueAnterior,
+        qtde_vendido: parseInt(qtde_vendido || 0),
+        valor_apurado: parseFloat(valor_apurado || 0),
+        tipo_pagamento,
+        observacoes: observacoes || ''
+      });
+
+      res.redirect('/figurinhas/sangrias?success=Atualizado com sucesso');
+    } catch (error) {
+      console.error('Erro ao atualizar:', error);
+      res.redirect(
+        '/figurinhas/sangrias?error=' + encodeURIComponent(error.message)
+      );
+    }
+  };
+
+  deleteSangria = async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      await figurinhasModel.deleteSangria(id);
+
+      res.status(200).json({
+        success: true,
+        message: 'Excluído com sucesso'
+      });
+    } catch (error) {
+      console.error('Erro ao deletar:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao excluir'
+      });
+    }
+  };
+
+  viewSangria = async (req, res) => {
+    const usuario = req.user;
+    try {
+      const id = req.params.id;
+
+      const sangria = await figurinhasModel.getSangriaById(id);
+
+      if (!sangria) {
+        return res.status(404).send('Sangria não encontrada.');
+      }
+
+      res.render('pages/figurinhas/visualizarDadosFigurinha', {
+        sangria,
+        usuario
+      });
+    } catch (error) {
+      console.error('Erro ao visualizar:', error);
+      res.status(500).send('Erro ao visualizar.');
+    }
+  };
+
+  getReceitaFigurinhas = async (req, res) => {
+    const usuario = req.user;
+    try {
+      const receita = await figurinhasModel.getMonthlyRevenue();
+
+      res.render('pages/figurinhas/receitaFigurinha', {
+        receita,
+        usuario
+      });
+    } catch (error) {
+      console.error('Erro receita:', error);
+      res.status(500).send('Erro ao carregar receita.');
+    }
+  };
+
+  renderControleGeralFigurinhas = async (req, res) => {
+    const usuario = req.user;
+    try {
+      const dados =
+        await figurinhasModel.getLatestSangriaForAllEstabelecimentos();
+
+      res.render('pages/figurinhas/controleGeralFigurinhas', {
+        estabelecimentos: dados,
+        usuario
+      });
+    } catch (error) {
+      console.error('Erro controle geral:', error);
+      res.status(500).send('Erro no controle geral.');
+    }
+  };
+
+  getUltimaSangria = async (req, res) => {
+    try {
+      const estabelecimentoId = req.params.id;
+
+      const result = await figurinhasModel.getUltimaSangria(estabelecimentoId);
+
+      if (result.length === 0) {
+        return res.json({
+          estoque: 0,
+          data: null
+        });
+      }
+
+      res.json({
+        estoque: result[0].qtde_deixada,
+        data: result[0].data_sangria
+      });
+    } catch (error) {
+      console.error('Erro ao buscar última sangria:', error);
+      res.status(500).json({ error: 'Erro interno' });
+    }
+  };
+}
 
 export default new FigurinhasController();
-
