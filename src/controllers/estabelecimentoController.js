@@ -74,6 +74,7 @@ class EstabelecimentoController {
         'responsavel_nome',
         'telefone_contato'
       ];
+
       for (const field of requiredFields) {
         if (!req.body[field]) {
           throw new Error(`Campo obrigatório faltando: ${field}`);
@@ -101,21 +102,34 @@ class EstabelecimentoController {
           : ''
       };
 
+      // 🔥 salva no banco
       await EstabelecimentoModel.create(estabelecimento);
+
+      // 🔥 busca lista atualizada
+      let estabelecimentos = await EstabelecimentoModel.findAll();
+
+      estabelecimentos = estabelecimentos.map(est => {
+        est.telefone_contato = formatTelefone(est.telefone_contato);
+        est.produtoFormatado = formatProdutoList(est.produto);
+        return est;
+      });
+
+      // 🔥 renderiza a tabela com sucesso
       return res
-        .status(201)
-        .render('pages/estabelecimentos/cadastrarEstabelecimento', {
-          title: 'Cadastrar Estabelecimento',
-          estabelecimento,
-          success: 'Estabelecimento cadastrado com sucesso!',
-          error: null,
-          usuario
+        .status(200)
+        .render('pages/estabelecimentos/tabelaEstabelecimentos', {
+          title: 'Tabela Com os Estabelecimentos',
+          estabelecimentos,
+          search: false,
+          usuario,
+          success: 'Estabelecimento cadastrado com sucesso!'
         });
     } catch (error) {
       console.error(
         'Erro ao cadastrar novo estabelecimento. Detalhes do erro:',
         error
       );
+
       return res
         .status(500)
         .render('pages/estabelecimentos/cadastrarEstabelecimento', {
