@@ -27,8 +27,9 @@
                                 <% if (sangria) { %>
                                     <div class="row px-3">
 
+                                        <!-- HEADER -->
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <div class="col-md-11 d-flex ">
+                                            <div class="col-md-11 d-flex">
                                                 <p class="mt-1">Estabelecimento:</p>
                                                 <h4 class="ms-1"><strong>
                                                         <%= sangria.estabelecimento %>
@@ -43,28 +44,28 @@
 
                                         <hr>
 
+                                        <!-- COLUNA ESQUERDA -->
                                         <div class="col-md-6">
                                             <p>Data da Sangria:<strong>
                                                     <%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %>
                                                 </strong></p>
-                                            <p>Valor Apurado:<strong> R$ <%= Number(sangria.valor_apurado).toFixed(2) %>
+
+                                            <p>Valor Apurado:<strong>
+                                                    R$ <%= Number(sangria.valor_apurado).toFixed(2) %>
                                                 </strong></p>
-                                            <p>Observações:<strong>
-                                                    <%= sangria.observacoes %>
-                                                </strong></p>
-                                        </div>
-                                        <div class="col-md-6">
+
                                             <p>Tipo de Pagamento:<strong>
                                                     <%= sangria.tipo_pagamento==='pix' ? 'PIX' : 'Espécie' %>
                                                 </strong></p>
+
                                             <p>Última Edição:<strong>
                                                     <%= sangria.data_atualizacao ? new
                                                         Date(sangria.data_atualizacao).toLocaleDateString('pt-BR')
                                                         : 'N/A' %>
                                                 </strong></p>
-
                                         </div>
 
+                                        <!-- COLUNA DIREITA -->
                                         <div class="col-md-6">
                                             <p>Última Sangria Anterior:<strong>
                                                     <%= sangria.data_sangria_anterior ? new
@@ -80,10 +81,11 @@
                                                     <%= sangria.qtde_deixada ?? 'N/A' %>
                                                 </strong></p>
 
-                                            <p>Observações Anteriores:<strong>
-                                                    <%= sangria.observacoes_anteriores || 'N/A' %>
+                                            <p>Observações:<strong>
+                                                    <%= sangria.observacoes || 'N/A' %>
                                                 </strong></p>
                                         </div>
+
                                     </div>
                                     <% } else { %>
                                         <p>Sangria não encontrada.</p>
