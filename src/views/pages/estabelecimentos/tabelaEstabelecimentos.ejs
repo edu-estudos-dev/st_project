@@ -2,100 +2,137 @@
 <html lang="pt-br">
 <%- include('../../partials/head') %>
 
-    <body class="bg-light">
-        <%- include('../../partials/header') %>
-            <div class="container" style="padding-top: 2.9em;"></div>
-            <div>&nbsp;</div>
-            <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
-                <div class="container-fluid px-4">
-                    <div class="container-fluid px-4">
-                        <main class="mb-5 geral">
-                            <div class="row">
-                                <div class="col-6">
-                                    <h1 class="text-dark mb-3 fw-bold">Estabelecimentos Cadastrados</h1>
-                                </div>
-                                <div class="col-6 d-flex justify-content-end"><a type="button"
-                                        class="btn mb-3 btn-dark align-self-center" href="/estabelecimentos/add"><i
-                                            class="bi bi-person-add"></i> &nbsp;Novo Estabelecimento</a></div>
-                            </div>
-                            <div class="table-container">
-                                <table class="table table-striped table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Estabelecimento</th>
-                                            <th>Produto</th>
-                                            <th>Chave</th>
-                                            <th>Máquina</th>
-                                            <th>Endereço</th>
-                                            <th>Responsável</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% estabelecimentos.forEach((estabelecimento)=> { %><tr>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.estabelecimento %>
-                                                </td>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.produtoFormatado || estabelecimento.produto %>
-                                                </td>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.chave %>
-                                                </td>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.maquina %>
-                                                </td>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.endereco %>
-                                                </td>
-                                                <td class="py-0">
-                                                    <%= estabelecimento.responsavel_nome %>
-                                                </td>
-                                                <td class="py-0"><a type="button"
-                                                        class="btn btn-secondary btn-sm view-btn"
-                                                        data-id="<%= estabelecimento.id %>">Visualizar</a><a
-                                                        type="button" class="my-1 btn btn-warning btn-sm edit-btn mx-1"
-                                                        data-id="<%= estabelecimento.id %>">Editar</a><a type="button"
-                                                        class="btn btn-danger btn-sm delete-btn"
-                                                        data-id="<%= estabelecimento.id %>">Excluir</a></td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </main>
-                    </div>
-                    <% if (search) { %>
-                        <div class="d-flex justify-content-center pb-5"><a href="/estabelecimentos"
-                                class="btn btn-primary px-5 fs-5">Voltar</a></div>
-                        <% } %>
-                </div>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    crossorigin="anonymous"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        document.querySelectorAll('.view-btn').forEach((button) => button.addEventListener('click', function () { window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/view`; }));
-                        document.querySelectorAll('.edit-btn').forEach((button) => button.addEventListener('click', function () { window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/edit`; }));
-                        document.querySelectorAll('.delete-btn').forEach((button) => {
-                            button.addEventListener('click', async function () {
-                                const idEstabelecimento = this.getAttribute('data-id');
-                                const confirmed = await window.AppAlerts?.confirm({ title: 'Excluir estabelecimento', text: 'Tem certeza que deseja excluir este estabelecimento?', confirmButtonText: 'Excluir', cancelButtonText: 'Cancelar' });
-                                if (!confirmed) return;
-                                try {
-                                    const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, { method: 'DELETE' });
-                                    const data = await response.json();
-                                    if (!response.ok) throw new Error(data.message || 'Erro ao excluir estabelecimento');
-                                    await window.AppAlerts?.success(data.message || 'Estabelecimento excluído com sucesso');
-                                    window.location.reload();
-                                } catch (error) {
-                                    window.AppAlerts?.error(error.message || 'Erro ao excluir estabelecimento');
-                                }
-                            });
-                        });
-            <% if (typeof success !== 'undefined') { %> window.AppAlerts?.success("<%- success.replace(/" / g, '&quot;') %> ");<% } %>
-                            <% if (typeof error !== 'undefined') { %> window.AppAlerts?.error("<%- error.replace(/" / g, '&quot;') %> ");<% } %>
-                            });
-                </script>
-    </body>
+<body class="bg-light">
+    <%- include('../../partials/header') %>
 
+    <div class="container" style="padding-top: 2.9em;"></div>
+    <div>&nbsp;</div>
+
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
+
+    <div class="container-fluid px-4">
+        <main class="mb-5 geral">
+
+            <div class="row">
+                <div class="col-6">
+                    <h1 class="text-dark mb-3 fw-bold">Estabelecimentos Cadastrados</h1>
+                </div>
+
+                <div class="col-6 d-flex justify-content-end">
+                    <a type="button" class="btn mb-3 btn-dark align-self-center" href="/estabelecimentos/add">
+                        <i class="bi bi-person-add"></i> &nbsp;Novo Estabelecimento
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-striped table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Estabelecimento</th>
+                            <th>Produto</th>
+                            <th>Chave</th>
+                            <th>Máquina</th>
+                            <th>Endereço</th>
+                            <th>Responsável</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% estabelecimentos.forEach((estabelecimento) => { %>
+                            <tr>
+                                <td class="py-0"><%= estabelecimento.estabelecimento %></td>
+                                <td class="py-0"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></td>
+                                <td class="py-0"><%= estabelecimento.chave %></td>
+                                <td class="py-0"><%= estabelecimento.maquina %></td>
+                                <td class="py-0"><%= estabelecimento.endereco %></td>
+                                <td class="py-0"><%= estabelecimento.responsavel_nome %></td>
+                                <td class="py-0">
+                                    <a class="btn btn-secondary btn-sm view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
+                                    <a class="my-1 btn btn-warning btn-sm edit-btn mx-1" data-id="<%= estabelecimento.id %>">Editar</a>
+                                    <a class="btn btn-danger btn-sm delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <% if (search) { %>
+            <div class="d-flex justify-content-center pb-5">
+                <a href="/estabelecimentos" class="btn btn-primary px-5 fs-5">Voltar</a>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.querySelectorAll('.view-btn').forEach((button) => {
+                button.addEventListener('click', function () {
+                    window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/view`;
+                });
+            });
+
+            document.querySelectorAll('.edit-btn').forEach((button) => {
+                button.addEventListener('click', function () {
+                    window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/edit`;
+                });
+            });
+
+            document.querySelectorAll('.delete-btn').forEach((button) => {
+                button.addEventListener('click', async function () {
+                    const idEstabelecimento = this.getAttribute('data-id');
+
+                    const confirmed = await window.AppAlerts?.confirm({
+                        title: 'Excluir estabelecimento',
+                        text: 'Tem certeza que deseja excluir este estabelecimento?',
+                        confirmButtonText: 'Excluir',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (!confirmed) return;
+
+                    try {
+                        const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, {
+                            method: 'DELETE'
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Erro ao excluir estabelecimento');
+                        }
+
+                        await window.AppAlerts?.success(
+                            data.message || 'Estabelecimento excluído com sucesso'
+                        );
+
+                        window.location.reload();
+
+                    } catch (error) {
+                        window.AppAlerts?.error(
+                            error.message || 'Erro ao excluir estabelecimento'
+                        );
+                    }
+                });
+            });
+
+            <% if (typeof success !== 'undefined') { %>
+                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
+            <% } %>
+
+            <% if (typeof error !== 'undefined') { %>
+                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
+            <% } %>
+
+        });
+    </script>
+
+</body>
 </html>
