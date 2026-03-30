@@ -29,7 +29,10 @@ class EstabelecimentoModel {
             const SQL = `INSERT INTO estabelecimentos 
                         (estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, data_criacao, status) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            const dateISO = new Date().toISOString();
+            const dateISO = new Date()
+              .toISOString()
+              .slice(0, 19)
+              .replace('T', ' ');
             await connection.execute(SQL, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, 'ativo']);
         } catch (error) {
             console.error('Erro ao criar novo estabelecimento:', error);
@@ -49,7 +52,10 @@ class EstabelecimentoModel {
             telefone_contato = ?,
             observacoes = ?,
             data_atualizacao = ? WHERE id = ?`;
-        const dateISO = new Date().toISOString();
+        const dateISO = new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace('T', ' ');
         const [result] = await connection.execute(sql, [estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, dateISO, id]);
         return result;
     };
@@ -63,7 +69,10 @@ class EstabelecimentoModel {
     destroy = async (id) => {
         try {
             const sql = 'UPDATE estabelecimentos SET status = "inativo", data_encerramento = ? WHERE id = ?';
-            const dataEncerramento = new Date().toISOString();
+            const dataEncerramento = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', ' ');
             const [result] = await connection.execute(sql, [dataEncerramento, id]);
             console.log('Estabelecimento marcado como inativo:', result);
         } catch (error) {
