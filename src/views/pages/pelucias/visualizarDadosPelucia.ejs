@@ -49,7 +49,7 @@
                                     <p>Valor Líquido:<strong> R$ <%= Number(sangria.valor_liquido).toFixed(2) %> </strong></p>
                                     <p>Tipo de Pagamento:<strong> <%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %> </strong></p>                              
                                     <p>Última Edição:<strong> <%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %> </strong></p>
-                                    <p>Observações:<strong> <%= sangria.observacoes %> </strong></p>
+                                    <p>Observações:<strong> <%= sangria.observacoes || 'N/A' %> </strong></p>
                                 </div>
                             </div>
                         <% } else { %>

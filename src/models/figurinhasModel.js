@@ -68,12 +68,30 @@ class FigurinhasModel {
 
   getSangriaById = async id => {
     const query = `
-        SELECT s.*, e.estabelecimento 
-        FROM sangrias_figurinhas s
-        JOIN estabelecimentos e ON s.estabelecimento_id = e.id
-        WHERE s.id = ?
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
-        `;
+    SELECT 
+      s.*,
+      e.estabelecimento,
+
+      -- 🔥 DADOS DA SANGRIA ANTERIOR
+      prev.data_sangria AS data_sangria_anterior,
+      prev.qtde_deixada AS qtde_anterior,
+      prev.observacoes AS observacoes_anteriores
+
+    FROM sangrias_figurinhas s
+    JOIN estabelecimentos e 
+      ON s.estabelecimento_id = e.id
+
+    LEFT JOIN sangrias_figurinhas prev 
+      ON prev.estabelecimento_id = s.estabelecimento_id
+      AND prev.data_sangria < s.data_sangria
+
+    WHERE s.id = ?
+    AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+
+    ORDER BY prev.data_sangria DESC
+    LIMIT 1
+  `;
+
     const [results] = await connection.execute(query, [id]);
     return results.length ? results[0] : null;
   };
@@ -93,23 +111,20 @@ class FigurinhasModel {
     } = sangria;
 
     const query = `
-        UPDATE sangrias_figurinhas 
-        SET
-            estabelecimento_id = ?,
-            data_sangria = ?,
-            qtde_deixada = ?,
-            abastecido = ?,
-            estoque = ?,
-            qtde_vendido = ?,
-            valor_apurado = ?,
-            tipo_pagamento = ?,
-            observacoes = ?
-        WHERE id = ?
-        AND estabelecimento_id IN (
-            SELECT id FROM estabelecimentos 
-            WHERE UPPER(produto) LIKE '%FIGURINHAS%'
-        )
-        `;
+    UPDATE sangrias_figurinhas 
+    SET
+      estabelecimento_id = ?,
+      data_sangria = ?,
+      qtde_deixada = ?,
+      abastecido = ?,
+      estoque = ?,
+      qtde_vendido = ?,
+      valor_apurado = ?,
+      tipo_pagamento = ?,
+      observacoes = ?,
+      data_atualizacao = NOW() -- 🔥 AQUI A CORREÇÃO
+    WHERE id = ?
+  `;
 
     const [result] = await connection.execute(query, [
       estabelecimento_id,

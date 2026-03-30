@@ -64,6 +64,26 @@
                                                 </strong></p>
 
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <p>Última Sangria Anterior:<strong>
+                                                    <%= sangria.data_sangria_anterior ? new
+                                                        Date(sangria.data_sangria_anterior).toLocaleDateString('pt-BR')
+                                                        : 'N/A' %>
+                                                </strong></p>
+
+                                            <p>Quantidade Anterior:<strong>
+                                                    <%= sangria.qtde_anterior ?? 'N/A' %>
+                                                </strong></p>
+
+                                            <p>Nova Quantidade Deixada:<strong>
+                                                    <%= sangria.qtde_deixada ?? 'N/A' %>
+                                                </strong></p>
+
+                                            <p>Observações Anteriores:<strong>
+                                                    <%= sangria.observacoes_anteriores || 'N/A' %>
+                                                </strong></p>
+                                        </div>
                                     </div>
                                     <% } else { %>
                                         <p>Sangria não encontrada.</p>
