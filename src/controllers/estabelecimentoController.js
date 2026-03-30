@@ -104,7 +104,7 @@ class EstabelecimentoController {
       await EstabelecimentoModel.create(estabelecimento);
       return res
         .status(201)
-        .render('pages/estabelecimentos/tabelaEstabelecimentos', {
+        .render('pages/estabelecimentos/cadastrarEstabelecimento', {
           title: 'Cadastrar Estabelecimento',
           estabelecimento,
           success: 'Estabelecimento cadastrado com sucesso!',
