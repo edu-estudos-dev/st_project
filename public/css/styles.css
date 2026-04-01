@@ -675,6 +675,12 @@ figure {
    text-align: left !important;
 }
 
+.compact-field .form-control,
+.compact-field .form-select,
+.compact-field .input-group .form-control {
+   text-align: center !important;
+}
+
 .action-row {
    display: flex;
    flex-wrap: wrap;
