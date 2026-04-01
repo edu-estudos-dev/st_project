@@ -2,127 +2,92 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Editar Sangria de Figurinhas' }) %>
 
-    <body class="bg-light">
-        <%- include('../../partials/header') %>
-            <div class="container w-75 mt-5">
-                <div>&nbsp;</div>
+<body class="bg-light">
+    <%- include('../../partials/header') %>
 
-                <!-- breadcrumb -->
-                <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Figurinhas' }) %>
+    <div class="page-spacer"></div>
 
-                    <div class="cabecalho-figurinhas">
-                        <h1 class="mb-0">Editar Sangria de Figurinhas</h1>
+    <div class="form-shell py-3">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Figurinhas' }) %>
+
+        <div class="cabecalho-figurinhas">
+            <h1 class="mb-0">Editar Sangria de Figurinhas</h1>
+        </div>
+
+        <main class="figurinhas">
+            <form action="/figurinhas/sangrias/edit" method="POST">
+                <input type="hidden" name="id" value="<%= sangria.id %>">
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <label for="estabelecimento" class="form-label fw-bold">Estabelecimento</label>
+                        <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
+                            <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
+                            <% }); %>
+                        </select>
                     </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="data_sangria" class="form-label fw-bold">Data da Sangria</label>
+                        <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= sangria.data_sangria.toISOString().split('T')[0] %>" required>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="tipo_pagamento" class="form-label fw-bold">Tipo de Pagamento</label>
+                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
+                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                            <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
+                        </select>
+                    </div>
+                </div>
 
-                    <main class="figurinhas">
-                        <form action="/figurinhas/sangrias/edit" method="POST">
-                            <input type="hidden" name="id" value="<%= sangria.id %>">
-                            <div class="row">
-                                <div class="mb-3 col-6">
-                                    <label for="estabelecimento"
-                                        class="form-label mb-1 fs-5 fw-bold">Estabelecimento</label>
-                                    <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                                        <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                            <option value="<%= estabelecimento.id %>"
-                                                <%=estabelecimento.id===sangria.estabelecimento_id ? 'selected' : '' %>>
-                                                <%= estabelecimento.estabelecimento %>
-                                            </option>
-                                            <% }); %>
-                                    </select>
-                                </div>
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="data_sangria" class="form-label mb-1 fs-5 fw-bold">Data da
-                                        Sangria</label>
-                                    <input type="date" class="form-control text-center" id="data_sangria"
-                                        name="data_sangria"
-                                        value="<%= sangria.data_sangria.toISOString().split('T')[0] %>" required>
-                                </div>
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="tipo_pagamento" class="form-label mb-1 fs-5 fw-bold">Tipo de
-                                        Pagamento</label>
-                                    <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                        <option value="especie" <%=sangria.tipo_pagamento==='especie' ? 'selected' : ''
-                                            %>>Espécie</option>
-                                        <option value="pix" <%=sangria.tipo_pagamento==='pix' ? 'selected' : '' %>>PIX
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="valor_apurado" class="form-label mb-1 fs-5 fw-bold">Valor
-                                        Apurado</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="number" step="0.01" class="form-control text-center"
-                                            id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>"
-                                            required>
-                                    </div>
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="valor_apurado" class="form-label fw-bold">Valor Apurado</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="qtde_vendido" class="form-label fw-bold">Vendido</label>
+                        <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" value="<%= sangria.qtde_vendido %>" required>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="abastecido" class="form-label fw-bold">Abastecido</label>
+                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>" required>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="qtde_deixada" class="form-label fw-bold">Quantidade Deixada</label>
+                        <input type="number" class="form-control text-center readonly-input" id="qtde_deixada" name="qtde_deixada" value="<%= sangria.qtde_deixada %>" readonly disabled>
+                    </div>
+                </div>
 
-                                </div>
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="qtde_vendido" class="form-label mb-1 fs-5 fw-bold"> Vendido</label>
-                                    <input type="number" class="form-control text-center" id="qtde_vendido"
-                                        name="qtde_vendido" value="<%= sangria.qtde_vendido %>" required>
-                                </div>
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="abastecido" class="form-label mb-1 fs-5 fw-bold">Abastecido</label>
-                                    <input type="number" class="form-control text-center" id="abastecido"
-                                        name="abastecido" value="<%= sangria.abastecido %>" required>
-                                </div>
-                                <div class="mb-3 col-3 text-center">
-                                    <label for="qtde_deixada" class="form-label mb-1 fs-5 fw-bold">Quantidade
-                                        Deixada</label>
-                                    <input type="number" class="form-control text-center readonly-input"
-                                        id="qtde_deixada" name="qtde_deixada" value="<%= sangria.qtde_deixada %>"
-                                        readonly disabled>
-                                </div>
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label for="observacoes" class="form-label fw-bold">Observacoes</label>
+                        <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= sangria.observacoes %></textarea>
+                    </div>
+                </div>
 
-                            </div>
+                <div class="action-row mt-4">
+                    <a href="/figurinhas/sangrias" class="btn btn-warning">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </div>
+            </form>
+        </main>
+    </div>
 
-                            <div class="row">
-                                <div class="mb-3 col-12">
-                                    <label for="observacoes" class="form-label mb-1 fs-5 fw-bold">Observações</label>
-                                    <textarea class="form-control" id="observacoes" name="observacoes"
-                                        rows="3"><%= sangria.observacoes %></textarea>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center my-3">
-                                <a href="/figurinhas/sangrias"><button type="button"
-                                        class="btn btn-warning px-5 me-3 fs-5">Cancelar</button></a>
-                                <button type="submit" class="btn btn-primary ms-3 px-5 fs-5">Atualizar</button>
-                            </div>
-                        </form>
-                    </main>
-            </div>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                crossorigin="anonymous">
-                </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    function calculateQuantidadeDeixada() {
+        const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
+        const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
+        const qtdeDeixada = abastecido - qtdeVendido;
+        document.getElementById('qtde_deixada').value = qtdeDeixada;
+    }
 
-            <script>
-                function calculateValues() {
-                    const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-                    const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-                    const valorDaComissao = valorApurado * (comissao / 100);
-                    const valorComerciante = valorDaComissao;
-                    const valorLiquido = valorApurado - valorComerciante;
-                    document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-                    document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-                }
-
-                function calculateQuantidadeDeixada() {
-                    const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
-                    const estoque = parseFloat(document.getElementById('estoque').value) || 0;
-                    const qtdeDeixada = abastecido + estoque;
-                    document.getElementById('qtde_deixada').value = qtdeDeixada;
-                }
-
-                document.getElementById('abastecido').addEventListener('input', calculateQuantidadeDeixada);
-                document.getElementById('estoque').addEventListener('input', calculateQuantidadeDeixada);
-                document.getElementById('valor_apurado').addEventListener('input', calculateValues);
-                document.getElementById('comissao').addEventListener('input', calculateValues);
-            </script>
-    </body>
-
+    document.getElementById('abastecido').addEventListener('input', calculateQuantidadeDeixada);
+    document.getElementById('qtde_vendido').addEventListener('input', calculateQuantidadeDeixada);
+    </script>
+</body>
 </html>

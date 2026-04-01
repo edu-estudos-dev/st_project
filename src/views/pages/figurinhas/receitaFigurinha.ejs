@@ -5,17 +5,16 @@
 <body class="bg-light">
     <%- include('../../partials/header') %>
 
-    <div class="container" style="padding-top: 2.9em;"></div>
-    <div>&nbsp;</div>
+    <div class="page-spacer"></div>
 
-    <!-- breadcrumb -->
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Receita de Figurinhas', usuario: usuario }) %>
+    <div class="page-shell py-3">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Receita de Figurinhas', usuario: usuario }) %>
 
-    <div class="container px-4">
         <main class="figurinhas">
-            <div class="table-responsive">
-                <h1 class="text-dark-blue mb-3 fw-bold">Receita Consolidada das Figurinhas</h1>
-                <table class="table table-striped table-bordered mb-0">
+            <h1 class="text-dark-blue mb-3 fw-bold">Receita Consolidada das Figurinhas</h1>
+
+            <div class="table-container">
+                <table class="table table-striped table-bordered mb-0 align-middle">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col" class="equal-width">MESES</th>
@@ -30,14 +29,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']; %>
+                        <% const meses = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']; %>
                         <% meses.forEach((mes, index) => { %>
                             <tr>
                                 <td class="bg-dark-blue text-white fw-bold py-1 equal-width"><%= mes %></td>
                                 <% for (let ano = 2023; ano <= 2030; ano++) { %>
                                     <td class="py-1 equal-width">
-                                        <% 
-                                            const receitaMesAno = receita.find(r => r.ano === ano && r.mes === index + 1); 
+                                        <%
+                                            const receitaMesAno = receita.find(r => r.ano === ano && r.mes === index + 1);
                                             const valor = receitaMesAno ? `R$ ${Number(receitaMesAno.total).toFixed(2)}` : '';
                                         %>
                                         <%= valor %>
@@ -49,10 +48,10 @@
                             <td class="bg-danger text-white fw-bold fs-6 equal-width">TOTAL</td>
                             <% for (let ano = 2023; ano <= 2030; ano++) { %>
                                 <td class="bg-danger fw-bold text-white equal-width">
-                                    <% 
+                                    <%
                                         const totalAno = receita
                                             .filter(r => r.ano === ano)
-                                            .reduce((sum, r) => sum + Number(r.total), 0); // Convertendo para número
+                                            .reduce((sum, r) => sum + Number(r.total), 0);
                                         const valorTotal = totalAno ? `R$ ${totalAno.toFixed(2)}` : '';
                                     %>
                                     <%= valorTotal %>
@@ -65,8 +64,7 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <style>
         .equal-width {
             width: 11.11%;

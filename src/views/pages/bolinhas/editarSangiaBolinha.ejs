@@ -4,10 +4,10 @@
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
-    <div class="container w-75 mt-5">
-        <div>&nbsp;</div>
 
-        <!-- breadcrumb -->
+    <div class="page-spacer"></div>
+
+    <div class="form-shell py-3">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Bolinhas' }) %>
 
         <div class="cabecalho-bolinha">
@@ -15,84 +15,88 @@
         </div>
 
         <main class="bolinha">
-            <form action="/bolinhas/sangrias/edit" class="p-0" method="POST">
+            <form action="/bolinhas/sangrias/edit" method="POST">
                 <input type="hidden" name="id" value="<%= sangria.id %>">
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="estabelecimento" class="form-label mb-1 fs-5 fw-bold">Estabelecimento</label>
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <label for="estabelecimento" class="form-label fw-bold">Estabelecimento</label>
                         <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
                             <% estabelecimentos.forEach(function(estabelecimento) { %>
                                 <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
                             <% }); %>
                         </select>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="data_sangria" class="form-label mb-1 fs-5 fw-bold">Data da Sangria</label>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="data_sangria" class="form-label fw-bold">Data da Sangria</label>
                         <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= new Date(sangria.data_sangria).toISOString().substring(0, 10) %>" required>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="tipo_pagamento" class="form-label mb-1 fs-5 fw-bold">Tipo de Pagamento</label>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="tipo_pagamento" class="form-label fw-bold">Tipo de Pagamento</label>
                         <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
+                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
                             <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
                         </select>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_apurado" class="form-label mb-1 fs-5 fw-bold">Valor Apurado</label>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="valor_apurado" class="form-label fw-bold">Valor Apurado</label>
                         <div class="input-group">
                             <span class="input-group-text">R$</span>
                             <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required oninput="calculateValues()">
                         </div>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="comissao" class="form-label mb-1 fs-5 fw-bold">Comissão (%)</label>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="comissao" class="form-label fw-bold">Comissao (%)</label>
                         <div class="input-group">
                             <span class="input-group-text">%</span>
                             <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
                         </div>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_comerciante" class="form-label mb-1 fs-5 fw-bold">Valor do Comerciante</label>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="valor_comerciante" class="form-label fw-bold">Valor do Comerciante</label>
                         <div class="input-group">
                             <span class="input-group-text">R$</span>
                             <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" value="<%= sangria.valor_comerciante %>" readonly disabled>
                         </div>
                     </div>
-                    <div class="mb-3 col-3 text-center">
-                        <label for="valor_liquido" class="form-label mb-1 fs-5 fw-bold">Valor Líquido</label>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label for="valor_liquido" class="form-label fw-bold">Valor Liquido</label>
                         <div class="input-group">
                             <span class="input-group-text">R$</span>
                             <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-12">
-                        <label for="observacoes" class="form-label mb-1 fs-5 fw-bold">Observações</label>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label for="observacoes" class="form-label fw-bold">Observacoes</label>
                         <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= sangria.observacoes %></textarea>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center my-3">
-                    <a href="/bolinhas/sangrias"><button type="button" class="btn btn-warning px-5 me-3 fs-5">Cancelar</button></a>
-                    <button type="submit" class="btn btn-primary ms-3 px-5 fs-5">Atualizar</button>
+
+                <div class="action-row mt-4">
+                    <a href="/bolinhas/sangrias" class="btn btn-warning">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
                 </div>
             </form>
         </main>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        function calculateValues() {
-            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-            const valorDaComissao = valorApurado * (comissao / 100); // Garantindo que a comissão é tratada como percentual no cálculo
-            const valorComerciante = valorDaComissao;
-            const valorLiquido = valorApurado - valorComerciante;
-            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-        }
-
+    function calculateValues() {
+        const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
+        const comissao = parseFloat(document.getElementById('comissao').value) || 0;
+        const valorDaComissao = valorApurado * (comissao / 100);
+        const valorComerciante = valorDaComissao;
+        const valorLiquido = valorApurado - valorComerciante;
+        document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
+        document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
+    }
     </script>
 </body>
 </html>

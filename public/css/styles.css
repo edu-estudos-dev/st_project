@@ -665,6 +665,28 @@ figure {
    flex: 1 1 220px;
 }
 
+.filter-toolbar {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.75rem;
+   align-items: end;
+}
+
+.filter-toolbar > * {
+   flex: 1 1 220px;
+}
+
+.filter-toolbar .toolbar-actions {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.75rem;
+   justify-content: flex-end;
+}
+
+.filter-toolbar .toolbar-actions > * {
+   flex: 1 1 180px;
+}
+
 .table-container {
    width: 100%;
    overflow-x: auto;
@@ -695,6 +717,36 @@ figure {
    text-align: right;
    display: block;
    width: 100%;
+}
+
+.detail-card .card-body {
+   padding: 1.5rem;
+}
+
+.detail-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 1rem;
+   flex-wrap: wrap;
+}
+
+.detail-title {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+   align-items: baseline;
+}
+
+.detail-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 1rem 2rem;
+}
+
+.detail-stack p {
+   margin-bottom: 0.75rem;
+   word-break: break-word;
 }
 
 
@@ -1001,5 +1053,23 @@ figure {
 
    .action-row > * {
       flex: 1 1 100%;
+   }
+
+   .filter-toolbar > *,
+   .filter-toolbar .toolbar-actions > * {
+      flex: 1 1 100%;
+   }
+
+   .detail-card .card-body {
+      padding: 1rem;
+   }
+
+   .detail-grid {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+   }
+
+   .detail-header {
+      flex-direction: column;
    }
 }
