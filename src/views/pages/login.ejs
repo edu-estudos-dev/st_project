@@ -16,37 +16,37 @@
 </head>
 
 <body>
-    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
-        <div style="background-color: var(--secondary-light-1);" class=" border p-4 py-5 rounded shadow-lg">
+    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 auth-shell">
+        <div class="border p-4 py-4 p-md-5 rounded shadow-lg auth-card">
             <h1 class="text-center display-6 fw-bold mb-4">Login</h1>
 
             <hr>
 
-                    <form action="/login" method="POST">
-                        <div class="form-group mb-3">
-                            <label for="user" class="form-label">Usuário</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="user" name="user"
-                                    placeholder="Entre com o usuário" autocomplete="username">
-                            </div>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="senha" class="form-label">Senha</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                <input type="password" class="form-control" id="senha" name="senha"
-                                    placeholder="Sua Senha" autocomplete="current-password">
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary mt-4 w-100">Entrar</button>
-                        </div>
-                    </form>
-                    <p class="text-center mt-4 mb-0">
-                        Ainda não tem cadastro?
-                        <a href="/register" class="fw-semibold text-decoration-none">Criar usuario</a>
-                    </p>
+            <form action="/login" method="POST">
+                <div class="form-group mb-3">
+                    <label for="user" class="form-label">Usuario</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="user" name="user"
+                            placeholder="Entre com o usuario" autocomplete="username">
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="senha" class="form-label">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="senha" name="senha"
+                            placeholder="Sua Senha" autocomplete="current-password">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mt-4 w-100">Entrar</button>
+                </div>
+            </form>
+            <p class="text-center mt-4 mb-0">
+                Ainda nao tem cadastro?
+                <a href="/register" class="fw-semibold text-decoration-none">Criar usuario</a>
+            </p>
         </div>
     </div>
 
@@ -56,7 +56,7 @@
     <% if (erro) { %>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                window.AppAlerts?.error("<%- erro.replace(/"/g, '&quot;') %>", 'Falha no login');
+                window.AppAlerts?.error("<%- erro.replace(/\"/g, '&quot;') %>", 'Falha no login');
             });
         </script>
     <% } %>

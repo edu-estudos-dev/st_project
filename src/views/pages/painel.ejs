@@ -7,34 +7,34 @@
    <div class="container-principal">
       <div class="container-painel">
          <h1 class="text-center text-white w-100 bg-dark p-3 fs-1 fw-bold">Painel de Controle</h1>
-         <span class="usuario-info-painel me-5" style="color: #d1d1d1; text-align: right; display: block; width: 100%;">Usuário Ativo:
+         <span class="usuario-info-painel me-5">Usuario Ativo:
             <%= usuario.username %>
          </span>
 
-         <div class="row border p-3 area-painel border-dark g-0">
-            <div class="col">
+         <div class="row border p-3 area-painel border-dark g-0 w-100">
+            <div class="col-12 col-xl-6">
                <div class="administrativo rounded border border-dark p-3">
                   <h2 class="text-center text-primary fw-bold">Administrativo</h2>
 
                   <div class="row m-0">
-                     <div class="col-md-6 g-2 m-0">
+                     <div class="col-12 col-md-6 g-2 m-0">
                         <a href="/estabelecimentos"><button class="btn btn-primary w-100 btn-adm fw-bold">Estabelecimentos Cadastrados</button></a>
                      </div>
 
-                     <div class="col-md-6 g-2 m-0">
+                     <div class="col-12 col-md-6 g-2 m-0">
                         <a href="/estabelecimentos/add"><button class="btn btn-primary w-100 btn-adm fw-bold">Cadastrar Estabelecimentos</button></a>
                      </div>
                   </div>
 
                   <div class="row m-0">
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/lancamentos"><button class="btn btn-primary w-100 btn-adm fw-bold">Lançamentos Realizados</button></a>
+                     <div class="col-12 col-md-4 g-2 m-0">
+                        <a href="/lancamentos"><button class="btn btn-primary w-100 btn-adm fw-bold">Lancamentos Realizados</button></a>
                      </div>
-                     <div class="col-md-4 g-2 m-0">
-                        <a href="/lancamentos/add"><button class="btn btn-primary w-100 btn-adm fw-bold">Fazer Lançamento</button></a>
+                     <div class="col-12 col-md-4 g-2 m-0">
+                        <a href="/lancamentos/add"><button class="btn btn-primary w-100 btn-adm fw-bold">Fazer Lancamento</button></a>
                      </div>
 
-                     <div class="col-md-4 g-2 m-0">
+                     <div class="col-12 col-md-4 g-2 m-0">
                         <a href="/fluxo-de-caixa"><button class="btn btn-primary w-100 btn-adm fw-bold">Fluxo de Caixa</button></a>
                      </div>
                   </div>
@@ -42,18 +42,18 @@
                   <% if (navProducts.hasAny) { %>
                      <div class="row m-0">
                         <% if (navProducts.bolinhas) { %>
-                           <div class="col-md-4 g-2 m-0">
+                           <div class="col-12 col-md-4 g-2 m-0">
                               <a href="/bolinhas/receita-bolinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Bolinhas</button></a>
                            </div>
                         <% } %>
                         <% if (navProducts.figurinhas) { %>
-                           <div class="col-md-4 g-2 m-0">
+                           <div class="col-12 col-md-4 g-2 m-0">
                               <a href="/figurinhas/receita-figurinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Figurinhas</button></a>
                            </div>
                         <% } %>
                         <% if (navProducts.pelucias) { %>
-                           <div class="col-md-4 g-2 m-0">
-                              <a href="/pelucias/receita-pelucia"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Pelúcias</button></a>
+                           <div class="col-12 col-md-4 g-2 m-0">
+                              <a href="/pelucias/receita-pelucia"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Pelucias</button></a>
                            </div>
                         <% } %>
                      </div>
@@ -67,19 +67,19 @@
                </div>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-xl-6">
                <div class="operacional rounded border border-dark p-3">
                   <h2 class="text-center text-warning fw-bold">Operacional</h2>
 
                   <% if (navProducts.bolinhas) { %>
                      <div class="row m-0">
-                        <div class="col-md-4 g-2 m-0">
-                           <a href="/bolinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Bolinhas</button></a>
+                        <div class="col-12 col-md-4 g-2 m-0">
+                           <a href="/bolinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Bolinhas</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
+                        <div class="col-12 col-md-4 g-2 m-0">
                            <a href="/bolinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Bolinhas</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
+                        <div class="col-12 col-md-4 g-2 m-0">
                            <a href="/bolinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Bolinhas</button></a>
                         </div>
                      </div>
@@ -87,13 +87,13 @@
 
                   <% if (navProducts.figurinhas) { %>
                      <div class="row m-0">
-                        <div class="col-md-4 g-2 m-0">
-                           <a href="/figurinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Figurinhas</button></a>
+                        <div class="col-12 col-md-4 g-2 m-0">
+                           <a href="/figurinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Figurinhas</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
+                        <div class="col-12 col-md-4 g-2 m-0">
                            <a href="/figurinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Figurinhas</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
+                        <div class="col-12 col-md-4 g-2 m-0">
                            <a href="/figurinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Figurinhas</button></a>
                         </div>
                      </div>
@@ -101,21 +101,21 @@
 
                   <% if (navProducts.pelucias) { %>
                      <div class="row m-0">
-                        <div class="col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulário de Receita <br> de Pelúcias</button></a>
+                        <div class="col-12 col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Pelucias</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro  de Pelúcias</button></a>
+                        <div class="col-12 col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Pelucias</button></a>
                         </div>
-                        <div class="col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Pelúcias</button></a>
+                        <div class="col-12 col-md-4 g-2 m-0">
+                           <a href="/pelucias/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Pelucias</button></a>
                         </div>
                      </div>
                   <% } %>
 
                   <% if (!navProducts.hasAny) { %>
                      <div class="text-center text-muted small border rounded p-3 mb-0">
-                        Nenhum produto operacional está disponível no momento.
+                        Nenhum produto operacional esta disponivel no momento.
                      </div>
                   <% } %>
                </div>

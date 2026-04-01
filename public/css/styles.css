@@ -21,6 +21,10 @@
    font-family: 'Urbanist', sans-serif;
 }
 
+body {
+   overflow-x: hidden;
+}
+
 
 main {
    height: auto;
@@ -83,6 +87,7 @@ header li>a:hover {
 
 .img-logo {
    height: 50px;
+   width: auto;
 }
 
 .homepage h1 {
@@ -136,6 +141,7 @@ footer p {
    background-position: center;
    text-align: center;
    height: 100vh;
+   min-height: 680px;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -151,12 +157,13 @@ footer p {
    font-weight: 800;
    width: 80%;
    height: 50%;
+   min-height: 280px;
    display: flex;
    justify-content: center;
    align-items: center;
    flex-direction: column;
-   opacity: 0.6;
-   padding: 2rem auto;
+   opacity: 0.82;
+   padding: 2rem;
    box-shadow: 5px 10px 20px rgba(254, 254, 254, 1);
    border-radius: 20px;
 }
@@ -188,6 +195,7 @@ footer p {
    display: flex;
    flex-direction: row;
    justify-content: space-around;
+   gap: 2rem;
 }
 
 .servico {
@@ -622,6 +630,52 @@ figure {
    color: #f1f1f1;
 }
 
+.auth-shell {
+   padding: 1.25rem;
+}
+
+.auth-card {
+   background-color: var(--secondary-light-1);
+   width: 100%;
+   max-width: 480px;
+}
+
+.page-spacer {
+   height: 5.5rem;
+}
+
+.table-container {
+   width: 100%;
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+}
+
+.table-container table {
+   min-width: 720px;
+}
+
+.mobile-stack-actions {
+   gap: 0.75rem;
+}
+
+.homepage-header {
+   z-index: 10;
+}
+
+.contact-actions {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 1rem;
+}
+
+.usuario-info-painel {
+   color: #d1d1d1;
+   text-align: right;
+   display: block;
+   width: 100%;
+}
+
 
 /* fluxo de caixa */
 
@@ -725,4 +779,197 @@ figure {
    color: #495057 !important;
    cursor: not-allowed;
    opacity: 1;
+}
+
+@media (max-width: 991.98px) {
+   .navbar-nav {
+      gap: 0.5rem;
+   }
+
+   .navbar .d-flex {
+      flex-direction: column;
+      align-items: stretch !important;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1rem;
+   }
+
+   .navbar form.d-flex {
+      width: 100%;
+   }
+
+   .navbar form.d-flex .form-control,
+   .navbar form.d-flex .btn,
+   .navbar .btn-danger {
+      width: 100%;
+   }
+
+   .dropdown-submenu .dropdown-menu {
+      position: static !important;
+      left: auto !important;
+      top: auto !important;
+      margin-top: 0.5rem;
+      border: 0;
+      padding-left: 1rem;
+      box-shadow: none;
+      background: transparent;
+   }
+}
+
+@media (max-width: 767.98px) {
+   h1 {
+      font-size: 1.5rem;
+   }
+
+   main {
+      padding: 1rem 0.85rem;
+      margin-bottom: 1.25rem;
+   }
+
+   header {
+      height: auto;
+      padding: 1rem;
+      flex-direction: column;
+      gap: 0.75rem;
+   }
+
+   .hero {
+      min-height: 520px;
+      height: auto;
+      padding: 7rem 1rem 3rem;
+   }
+
+   .container-hero {
+      width: 100%;
+      min-height: auto;
+      height: auto;
+      padding: 1.5rem 1.25rem;
+   }
+
+   .container-hero h2 {
+      font-size: 1.75rem;
+   }
+
+   .container-hero p {
+      font-size: 1rem;
+   }
+
+   .servicos,
+   .entrar-em-contato,
+   .depoimentos {
+      padding: 2.5rem 1rem;
+      min-height: auto;
+   }
+
+   .titulo-servicos {
+      font-size: 2rem;
+      padding: 1rem 0;
+      text-align: center;
+   }
+
+   .servicos-container {
+      flex-direction: column;
+      gap: 2.5rem;
+   }
+
+   .servico {
+      width: 100%;
+      padding: 0;
+   }
+
+   figure {
+      width: 100%;
+      padding: 1.5rem 1.25rem;
+      margin: 1.5rem auto;
+   }
+
+   .entrar-em-contato h2 {
+      font-size: 1.75rem;
+   }
+
+   .entrar-em-contato h3 {
+      font-size: 1.25rem;
+   }
+
+   .entrar-em-contato form {
+      padding: 1.25rem;
+      font-size: 1rem;
+   }
+
+   .inputs {
+      flex-direction: column;
+      gap: 1.5rem;
+   }
+
+   .box-1,
+   .box-2 {
+      width: 100%;
+   }
+
+   .box-2 {
+      padding: 0 !important;
+   }
+
+   .checkbox-container,
+   .checkbox-item {
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      gap: 0.75rem;
+   }
+
+   .cabecalho,
+   .cabecalho-bolinha,
+   .cabecalho-figurinhas,
+   .cabecalho-pelucia,
+   .cabecalho-geral {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem;
+   }
+
+   .container-principal {
+      height: auto;
+      min-height: 100vh;
+      padding: 1rem 0.75rem;
+   }
+
+   .container-painel {
+      min-height: auto;
+      padding: 1rem;
+      border-radius: 16px;
+   }
+
+   .container-painel h1 {
+      font-size: 1.5rem !important;
+   }
+
+   .usuario-info-painel {
+      text-align: left !important;
+      margin-right: 0 !important;
+   }
+
+   .area-painel {
+      flex-direction: column;
+   }
+
+   .administrativo,
+   .operacional {
+      width: 100%;
+   }
+
+   .btn-adm,
+   .btn-op {
+      font-size: 1rem;
+      min-height: 56px;
+   }
+
+   .breadcrumb {
+      font-size: 0.95rem;
+   }
+
+   .table-container table {
+      min-width: 640px;
+   }
 }

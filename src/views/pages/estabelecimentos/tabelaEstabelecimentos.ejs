@@ -5,21 +5,20 @@
 <body class="bg-light">
     <%- include('../../partials/header') %>
 
-    <div class="container" style="padding-top: 2.9em;"></div>
-    <div>&nbsp;</div>
+    <div class="page-spacer"></div>
 
     <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
 
     <div class="container-fluid px-4">
         <main class="mb-5 geral">
 
-            <div class="row">
-                <div class="col-6">
+            <div class="row mobile-stack-actions align-items-center">
+                <div class="col-12 col-md-6">
                     <h1 class="text-dark mb-3 fw-bold">Estabelecimentos Cadastrados</h1>
                 </div>
 
-                <div class="col-6 d-flex justify-content-end">
-                    <a type="button" class="btn mb-3 btn-dark align-self-center" href="/estabelecimentos/add">
+                <div class="col-12 col-md-6 d-flex justify-content-md-end">
+                    <a type="button" class="btn mb-3 btn-dark align-self-center w-100 w-md-auto" href="/estabelecimentos/add">
                         <i class="bi bi-person-add"></i> &nbsp;Novo Estabelecimento
                     </a>
                 </div>
@@ -32,10 +31,10 @@
                             <th>Estabelecimento</th>
                             <th>Produto</th>
                             <th>Chave</th>
-                            <th>Máquina</th>
-                            <th>Endereço</th>
-                            <th>Responsável</th>
-                            <th>Ações</th>
+                            <th>Maquina</th>
+                            <th>Endereco</th>
+                            <th>Responsavel</th>
+                            <th>Acoes</th>
                         </tr>
                     </thead>
 
@@ -110,7 +109,7 @@
                         }
 
                         await window.AppAlerts?.success(
-                            data.message || 'Estabelecimento excluído com sucesso'
+                            data.message || 'Estabelecimento excluido com sucesso'
                         );
 
                         window.location.reload();

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-primary fixed-top px-3 border-bottom border-warning">
+<nav class="navbar navbar-expand-lg bg-primary fixed-top px-3 border-bottom border-warning shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand fs-2" href="/painel">
             <img class="img-logo" src="/images/logo-ST.png" alt="SuperToys Logo">
@@ -31,8 +31,8 @@
                             <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownFinanceiro"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">Financeiro</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                                <li><a class="dropdown-item" href="/lancamentos">Lançamentos Cadastrados</a></li>
-                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer Lançamento</a></li>
+                                <li><a class="dropdown-item" href="/lancamentos">Lancamentos Cadastrados</a></li>
+                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer Lancamento</a></li>
                                 <li><a class="dropdown-item" href="/fluxo-de-caixa">Fluxo de Caixa</a></li>
                                 <% if (navProducts.hasAny) { %>
                                     <li class="dropdown-submenu">
@@ -46,7 +46,7 @@
                                                 <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Figurinhas</a></li>
                                             <% } %>
                                             <% if (navProducts.pelucias) { %>
-                                                <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
+                                                <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelucias</a></li>
                                             <% } %>
                                         </ul>
                                     </li>
@@ -87,7 +87,7 @@
                             <% if (navProducts.pelucias) { %>
                                 <li class="dropdown-submenu">
                                     <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownPelucias"
-                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Pelúcias</a>
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Pelucias</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
                                         <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de Receita</a></li>
                                         <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de Vendas</a></li>
@@ -100,13 +100,13 @@
                 <% } %>
             </ul>
 
-            <div class="d-flex">
-                <form action="/search" class="d-flex" role="search" method="POST" novalidate>
+            <div class="d-flex align-items-center">
+                <form action="/search" class="d-flex flex-grow-1" role="search" method="POST" novalidate>
                     <input name="termo" class="form-control me-2" type="search" placeholder="Pesquisar..."
                         aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">Pesquisar</button>
                 </form>
-                <form action="/logout" method="POST" class="ms-3">
+                <form action="/logout" method="POST" class="ms-lg-3">
                     <button class="btn btn-danger text-white px-3" type="submit">Sair</button>
                 </form>
             </div>
@@ -118,16 +118,19 @@
     .dropdown-submenu {
         position: relative;
     }
+
     .dropdown-submenu .dropdown-menu {
         display: none;
         position: absolute;
         left: 100%;
         top: 0;
     }
+
     .dropdown-submenu:hover .dropdown-menu,
     .dropdown-submenu.show .dropdown-menu {
         display: block;
     }
+
     .dropdown-toggle::after {
         display: inline-block;
         width: 0;
@@ -140,14 +143,30 @@
         border-bottom: 0;
         border-left: .3em solid transparent;
     }
+
     .dropdown-submenu:hover > .dropdown-toggle::after,
     .dropdown-submenu.show > .dropdown-toggle::after {
         border-top: 0;
         border-bottom: .3em solid;
     }
+
     .menu-active {
         background-color: #ffc107 !important;
         color: #000 !important;
+    }
+
+    @media (max-width: 991.98px) {
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.35);
+        }
+
+        .navbar .dropdown-menu {
+            margin-top: 0.35rem;
+        }
     }
 </style>
 
