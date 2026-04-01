@@ -3,33 +3,36 @@
 <%- include('../../partials/head') %>
 <body class="bg-light">
     <%- include('../../partials/header') %>
-    <div class="container mt-5 w-75">
-        <div>&nbsp;</div>
+    <div class="page-spacer"></div>
+    <div class="form-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Estabelecimento' }) %>
         <div class="cabecalho-geral"><h1 class="mb-0">Editar Estabelecimento</h1></div>
         <main class="mb-5 geral">
             <form id="edicaoForm" class="p-0" action="/estabelecimentos/<%= estabelecimento.id %>?_method=PUT" method="POST">
-                <div class="row">
-                    <div class="col-md-8"><label for="estabelecimento" class="form-label mb-1 fw-bold fs-5">Estabelecimento</label><input type="text" class="form-control mb-2" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>"></div>
-                    <div class="col-md-2 text-center"><label for="responsavel_nome" class="form-label mb-1 fw-bold fs-5">Responsável</label><input type="text" class="form-control mb-2 text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>"></div>
-                    <div class="col-md-2"><label for="telefone_contato" class="form-label mb-1 text-center fw-bold fs-5">Contato</label><input type="text" class="form-control mb-2 text-center" id="telefone_contato" name="telefone_contato" value="<%= estabelecimento.telefone_contato %>"></div>
+                <div class="row g-3">
+                    <div class="col-12 col-lg-8"><label for="estabelecimento" class="form-label mb-1 fw-bold fs-5">Estabelecimento</label><input type="text" class="form-control" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>"></div>
+                    <div class="col-12 col-md-6 col-lg-2 text-center"><label for="responsavel_nome" class="form-label mb-1 fw-bold fs-5">Responsavel</label><input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>"></div>
+                    <div class="col-12 col-md-6 col-lg-2"><label for="telefone_contato" class="form-label mb-1 text-center fw-bold fs-5">Contato</label><input type="text" class="form-control text-center" id="telefone_contato" name="telefone_contato" value="<%= estabelecimento.telefone_contato %>"></div>
                 </div>
-                <div class="row">
-                    <div class="col-md-5"><label for="endereco" class="form-label fw-bold mb-1 fs-5">Endereço</label><input type="text" class="form-control mb-2" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>"></div>
-                    <div class="col-md-3 text-center"><label for="bairro" class="form-label fw-bold mb-1 fs-5">Bairro</label><input type="text" class="form-control mb-2 text-center" id="bairro" name="bairro" value="<%= estabelecimento.bairro %>"></div>
-                    <div class="col-md-2 text-center"><label for="chave" class="form-label fw-bold mb-1 fs-5">Chave</label><input type="text" class="form-control mb-2 text-center" id="chave" name="chave" value="<%= estabelecimento.chave %>"></div>
-                    <div class="col-md-2 text-center"><label for="maquina" class="form-label fw-bold mb-1 fs-5">Máquina</label><input type="text" class="form-control mb-2 text-center" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>"></div>
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-lg-5"><label for="endereco" class="form-label fw-bold mb-1 fs-5">Endereco</label><input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>"></div>
+                    <div class="col-12 col-md-4 col-lg-3 text-center"><label for="bairro" class="form-label fw-bold mb-1 fs-5">Bairro</label><input type="text" class="form-control text-center" id="bairro" name="bairro" value="<%= estabelecimento.bairro %>"></div>
+                    <div class="col-6 col-md-4 col-lg-2 text-center"><label for="chave" class="form-label fw-bold mb-1 fs-5">Chave</label><input type="text" class="form-control text-center" id="chave" name="chave" value="<%= estabelecimento.chave %>"></div>
+                    <div class="col-6 col-md-4 col-lg-2 text-center"><label for="maquina" class="form-label fw-bold mb-1 fs-5">Maquina</label><input type="text" class="form-control text-center" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>"></div>
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <label class="mb-1 ms-4 fw-bold fs-5">Produto</label>
-                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto1">BOLINHAS</label></div>
-                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto2">FIGURINHAS</label></div>
-                        <div class="form-check"><input class="form-check-input ms-1" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto3">PELÚCIAS</label></div>
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-lg-3">
+                        <label class="mb-1 fw-bold fs-5">Produto</label>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto1">BOLINHAS</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto2">FIGURINHAS</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>><label class="form-check-label fw-bold ms-2" for="produto3">PELUCIAS</label></div>
                     </div>
-                    <div class="col-md-10"><label class="mb-1 fw-bold fs-5" for="observacoes">Comentários</label><textarea class="form-control mb-2" id="observacoes" name="observacoes" rows="3" maxlength="255"><%= estabelecimento.observacoes %></textarea></div>
+                    <div class="col-12 col-lg-9"><label class="mb-1 fw-bold fs-5" for="observacoes">Comentarios</label><textarea class="form-control" id="observacoes" name="observacoes" rows="4" maxlength="255"><%= estabelecimento.observacoes %></textarea></div>
                 </div>
-                <div class="d-flex justify-content-center my-3"><a href="/estabelecimentos"><button type="button" class="btn btn-warning px-5 me-3 fs-5">Cancelar</button></a><button type="submit" class="btn btn-primary px-5 fs-5">Atualizar</button></div>
+                <div class="action-row my-4">
+                    <a href="/estabelecimentos" class="btn btn-warning fs-5">Cancelar</a>
+                    <button type="submit" class="btn btn-primary fs-5">Atualizar</button>
+                </div>
             </form>
         </main>
     </div>

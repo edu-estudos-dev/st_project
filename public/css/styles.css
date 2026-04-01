@@ -644,6 +644,27 @@ figure {
    height: 5.5rem;
 }
 
+.page-shell {
+   width: min(1100px, calc(100% - 1.5rem));
+   margin: 0 auto;
+}
+
+.form-shell {
+   width: min(980px, calc(100% - 1.5rem));
+   margin: 0 auto;
+}
+
+.action-row {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.75rem;
+   justify-content: center;
+}
+
+.action-row > * {
+   flex: 1 1 220px;
+}
+
 .table-container {
    width: 100%;
    overflow-x: auto;
@@ -971,5 +992,14 @@ figure {
 
    .table-container table {
       min-width: 640px;
+   }
+
+   .page-shell,
+   .form-shell {
+      width: calc(100% - 1rem);
+   }
+
+   .action-row > * {
+      flex: 1 1 100%;
    }
 }
