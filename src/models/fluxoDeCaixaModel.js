@@ -1,33 +1,32 @@
-import connection from '../db_config/connection.js'; // Importa a configuração da conexão com o banco de dados
+import connection from '../db_config/connection.js';
 
 class FluxoDeCaixaModel {
 
-    // Método para buscar todos os lançamentos
     findAll = async () => {
-        const SQL = 'SELECT * FROM lancamentos'; // Query SQL para buscar todos os lançamentos
-        const [result] = await connection.execute(SQL); // Executa a query
-        return result; // Retorna os resultados
+        const SQL = 'SELECT * FROM lancamentos';
+        const result = await connection.query(SQL);
+        return result.rows;
     }
 
-    // Função para criar o fluxo de caixa com ano como parâmetro
     criarFluxo = async (year) => {
         const SQL = `
             SELECT 
                 tipo_de_lancamento,
-                MONTH(data) as mes,
+                EXTRACT(MONTH FROM data) as mes,
                 SUM(valor) as total
             FROM 
                 lancamentos
             WHERE 
-                YEAR(data) = ?
+                EXTRACT(YEAR FROM data) = $1
             GROUP BY 
-                tipo_de_lancamento, MONTH(data)
+                tipo_de_lancamento, mes
             ORDER BY 
-                tipo_de_lancamento, MONTH(data)
+                tipo_de_lancamento, mes
         `;
+
         try {
-            const [result] = await connection.execute(SQL, [year]);
-            return result;
+            const result = await connection.query(SQL, [year]);
+            return result.rows;
         } catch (error) {
             console.error('Erro ao criar fluxo de caixa:', error);
             throw new Error('Erro ao criar fluxo de caixa');
@@ -35,5 +34,4 @@ class FluxoDeCaixaModel {
     }
 }
 
-export default new FluxoDeCaixaModel(); // Exporta uma instância da classe FluxoDeCaixaModel
-   
+export default new FluxoDeCaixaModel();

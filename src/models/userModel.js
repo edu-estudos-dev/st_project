@@ -4,9 +4,9 @@ import connection from '../db_config/connection.js';
 
 class UserModel {
     async verifyUser(username, password) {
-        const sql = 'SELECT * FROM users WHERE user = ? LIMIT 1';
-        const [result] = await connection.execute(sql, [username]);
-        const usuario = result[0];
+        const sql = 'SELECT * FROM users WHERE username = $1 LIMIT 1';
+        const result = await connection.query(sql, [username]);
+        const usuario = result.rows[0];
 
         if (!usuario) {
             return undefined;

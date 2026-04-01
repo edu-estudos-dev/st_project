@@ -1,4 +1,4 @@
-name: Deploy automático
+name: Deploy automatico
 
 on:
   push:
@@ -10,18 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🔑 Configurar SSH
+      - name: Configurar SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H 161.35.142.196 >> ~/.ssh/known_hosts
 
-      - name: 🚀 Deploy na VPS
+      - name: Deploy na VPS
         run: |
           ssh root@161.35.142.196 << 'EOF'
+            set -e
             cd /root/st_project
             git pull origin main
-            npm install
-            pm2 restart all
+            npm ci --omit=dev
+            pm2 restart all --update-env
           EOF

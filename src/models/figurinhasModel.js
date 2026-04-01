@@ -26,10 +26,10 @@ class FigurinhasModel {
             tipo_pagamento,
             observacoes
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    `;
 
-    const [result] = await connection.execute(query, [
+    const result = await connection.query(query, [
       estabelecimento_id,
       data_sangria,
       qtde_deixada,
@@ -51,9 +51,9 @@ class FigurinhasModel {
         JOIN estabelecimentos e ON s.estabelecimento_id = e.id
         WHERE UPPER(e.produto) LIKE '%FIGURINHAS%'
         ORDER BY s.data_sangria DESC
-        `;
-    const [results] = await connection.execute(query);
-    return results;
+    `;
+    const result = await connection.query(query);
+    return result.rows;
   };
 
   getEstabelecimentos = async () => {
@@ -61,9 +61,9 @@ class FigurinhasModel {
         SELECT * FROM estabelecimentos 
         WHERE UPPER(produto) LIKE '%FIGURINHAS%' 
         AND status = 'ativo'
-        `;
-    const [results] = await connection.execute(query);
-    return results;
+    `;
+    const result = await connection.query(query);
+    return result.rows;
   };
 
   getSangriaById = async id => {
@@ -71,29 +71,23 @@ class FigurinhasModel {
     SELECT 
       s.*,
       e.estabelecimento,
-
-      -- 🔥 DADOS DA SANGRIA ANTERIOR
       prev.data_sangria AS data_sangria_anterior,
       prev.qtde_deixada AS qtde_anterior,
       prev.observacoes AS observacoes_anteriores
-
     FROM sangrias_figurinhas s
     JOIN estabelecimentos e 
       ON s.estabelecimento_id = e.id
-
     LEFT JOIN sangrias_figurinhas prev 
       ON prev.estabelecimento_id = s.estabelecimento_id
       AND prev.data_sangria < s.data_sangria
-
-    WHERE s.id = ?
+    WHERE s.id = $1
     AND UPPER(e.produto) LIKE '%FIGURINHAS%'
-
     ORDER BY prev.data_sangria DESC
     LIMIT 1
   `;
 
-    const [results] = await connection.execute(query, [id]);
-    return results.length ? results[0] : null;
+    const result = await connection.query(query, [id]);
+    return result.rows.length ? result.rows[0] : null;
   };
 
   updateSangria = async sangria => {
@@ -113,20 +107,20 @@ class FigurinhasModel {
     const query = `
     UPDATE sangrias_figurinhas 
     SET
-      estabelecimento_id = ?,
-      data_sangria = ?,
-      qtde_deixada = ?,
-      abastecido = ?,
-      estoque = ?,
-      qtde_vendido = ?,
-      valor_apurado = ?,
-      tipo_pagamento = ?,
-      observacoes = ?,
-      data_atualizacao = NOW() -- 🔥 AQUI A CORREÇÃO
-    WHERE id = ?
+      estabelecimento_id = $1,
+      data_sangria = $2,
+      qtde_deixada = $3,
+      abastecido = $4,
+      estoque = $5,
+      qtde_vendido = $6,
+      valor_apurado = $7,
+      tipo_pagamento = $8,
+      observacoes = $9,
+      data_atualizacao = CURRENT_TIMESTAMP
+    WHERE id = $10
   `;
 
-    const [result] = await connection.execute(query, [
+    const result = await connection.query(query, [
       estabelecimento_id,
       data_sangria,
       qtde_deixada,
@@ -145,32 +139,32 @@ class FigurinhasModel {
   deleteSangria = async id => {
     const query = `
         DELETE FROM sangrias_figurinhas 
-        WHERE id = ?
+        WHERE id = $1
         AND estabelecimento_id IN (
             SELECT id FROM estabelecimentos 
             WHERE UPPER(produto) LIKE '%FIGURINHAS%'
         )
-        `;
-    const [result] = await connection.execute(query, [id]);
+    `;
+    const result = await connection.query(query, [id]);
     return result;
   };
 
   getUltimaSangria = async estabelecimentoId => {
     const query = `
         SELECT * FROM sangrias_figurinhas 
-        WHERE estabelecimento_id = ? 
+        WHERE estabelecimento_id = $1 
         ORDER BY data_sangria DESC 
         LIMIT 1
-        `;
-    const [results] = await connection.execute(query, [estabelecimentoId]);
-    return results;
+    `;
+    const result = await connection.query(query, [estabelecimentoId]);
+    return result.rows;
   };
 
   getMonthlyRevenue = async () => {
     const query = `
         SELECT 
-            YEAR(data_sangria) AS ano,
-            MONTH(data_sangria) AS mes,
+            EXTRACT(YEAR FROM data_sangria) AS ano,
+            EXTRACT(MONTH FROM data_sangria) AS mes,
             SUM(valor_apurado) AS total
         FROM sangrias_figurinhas
         WHERE estabelecimento_id IN (
@@ -179,9 +173,9 @@ class FigurinhasModel {
         )
         GROUP BY ano, mes
         ORDER BY ano, mes
-        `;
-    const [results] = await connection.execute(query);
-    return results;
+    `;
+    const result = await connection.query(query);
+    return result.rows;
   };
 
   getLatestSangriaForAllEstabelecimentos = async () => {
@@ -207,9 +201,9 @@ class FigurinhasModel {
             WHERE inner_sf.estabelecimento_id = e.id
         )
         ORDER BY sf.data_sangria DESC
-        `;
-    const [results] = await connection.execute(query);
-    return results;
+    `;
+    const result = await connection.query(query);
+    return result.rows;
   };
 }
 

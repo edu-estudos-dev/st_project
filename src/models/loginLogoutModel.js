@@ -1,127 +1,166 @@
-import crypto from 'crypto';
+// src/models/loginLogoutModel.js
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import connection from '../db_config/connection.js';
 
 class LoginLogout {
-   normalizeUser(user) {
-      return String(user ?? '').trim();
-   }
+  /**
+   * Normaliza username (remove espaços e converte para string)
+   */
+  normalizeUser(user) {
+    return String(user ?? '').trim();
+  }
 
-   normalizeEmail(email) {
-      return String(email ?? '').trim().toLowerCase();
-   }
+  /**
+   * Normaliza e-mail (trim + lowercase)
+   */
+  normalizeEmail(email) {
+    return String(email ?? '')
+      .trim()
+      .toLowerCase();
+  }
 
-   isBcryptHash(value) {
-      return /^\$2[aby]\$\d{2}\$/.test(String(value ?? ''));
-   }
+  /**
+   * Verifica se a senha está no formato bcrypt
+   */
+  isBcryptHash(value) {
+    return /^\$2[aby]\$\d{2}\$/.test(String(value ?? ''));
+  }
 
-   comparePlainText(a, b) {
-      const left = Buffer.from(String(a ?? ''), 'utf8');
-      const right = Buffer.from(String(b ?? ''), 'utf8');
+  /**
+   * Comparação segura de senhas em texto puro (legacy)
+   */
+  comparePlainText(a, b) {
+    const left = Buffer.from(String(a ?? ''), 'utf8');
+    const right = Buffer.from(String(b ?? ''), 'utf8');
 
-      if (left.length !== right.length) {
-         return false;
-      }
+    if (left.length !== right.length) return false;
+    return crypto.timingSafeEqual(left, right);
+  }
 
-      return crypto.timingSafeEqual(left, right);
-   }
+  /**
+   * Migra senha antiga (texto puro) para bcrypt
+   */
+  async migrateLegacyPassword(userId, senha) {
+    const senhaHash = await bcrypt.hash(String(senha), 12);
 
-   async migrateLegacyPassword(userId, senha) {
-      const senhaHash = await bcrypt.hash(String(senha), 12);
-      await connection.execute('UPDATE users SET senha = ? WHERE id = ?', [senhaHash, userId]);
+    await connection.query('UPDATE users SET senha = $1 WHERE id = $2', [
+      senhaHash,
+      userId
+    ]);
 
-      const [rows] = await connection.execute('SELECT LENGTH(senha) AS senha_len FROM users WHERE id = ? LIMIT 1', [userId]);
-      const senhaLen = Number(rows?.[0]?.senha_len || 0);
+    const result = await connection.query(
+      'SELECT LENGTH(senha) AS senha_len FROM users WHERE id = $1 LIMIT 1',
+      [userId]
+    );
 
-      if (senhaLen < 60) {
-         throw new Error('Falha ao salvar o hash completo da senha no banco de dados.');
-      }
-   }
+    const senhaLen = Number(result.rows?.[0]?.senha_len || 0);
 
-   async login(user, senha) {
-      const normalizedUser = this.normalizeUser(user);
-      if (!normalizedUser || !senha) throw new Error('User and password must be provided');
+    if (senhaLen < 60) {
+      throw new Error(
+        'Falha ao salvar o hash completo da senha no banco de dados.'
+      );
+    }
+  }
 
-      try {
-         const [result] = await connection.execute(
-            'SELECT id, user, senha FROM users WHERE user = ? LIMIT 1',
-            [normalizedUser]
-         );
+  /**
+   * LOGIN PRINCIPAL
+   */
+  async login(user, senha) {
+    const normalizedUser = this.normalizeUser(user);
+    if (!normalizedUser || !senha) {
+      throw new Error('User and password must be provided');
+    }
 
-         const usuario = result[0];
-         if (!usuario) {
-            return null;
-         }
-
-         const senhaSalva = String(usuario.senha ?? '');
-         let senhaValida = false;
-
-         if (this.isBcryptHash(senhaSalva) && senhaSalva.length >= 60) {
-            senhaValida = await bcrypt.compare(String(senha), senhaSalva);
-         } else if (this.isBcryptHash(senhaSalva)) {
-            return null;
-         } else {
-            senhaValida = this.comparePlainText(senhaSalva, senha);
-            if (senhaValida) {
-               await this.migrateLegacyPassword(usuario.id, senha);
-            }
-         }
-
-         if (!senhaValida) {
-            return null;
-         }
-
-         return {
-            id: usuario.id,
-            username: usuario.user
-         };
-      } catch (error) {
-         console.error('Erro ao executar a consulta SQL:', error);
-         throw error;
-      }
-   }
-
-   async findUserByUsernameOrEmail(user, email) {
-      const normalizedUser = this.normalizeUser(user);
-      const normalizedEmail = this.normalizeEmail(email);
-      const [rows] = await connection.execute(
-         'SELECT id, user, email FROM users WHERE user = ? OR email = ? LIMIT 1',
-         [normalizedUser, normalizedEmail]
+    try {
+      const result = await connection.query(
+        'SELECT id, username, senha FROM users WHERE username = $1 LIMIT 1',
+        [normalizedUser]
       );
 
-      return rows[0] || null;
-   }
+      const usuario = result.rows[0];
 
-   async createUser({ user, email, senha }) {
-      const normalizedUser = this.normalizeUser(user);
-      const normalizedEmail = this.normalizeEmail(email);
-      const normalizedPassword = String(senha ?? '');
+      if (!usuario) return null;
 
-      if (!normalizedUser || !normalizedEmail || !normalizedPassword) {
-         throw new Error('User, email and password must be provided');
+      const senhaSalva = String(usuario.senha ?? '');
+      let senhaValida = false;
+
+      if (this.isBcryptHash(senhaSalva) && senhaSalva.length >= 60) {
+        senhaValida = await bcrypt.compare(String(senha), senhaSalva);
+      } else if (this.isBcryptHash(senhaSalva)) {
+        return null; // hash bcrypt inválido (tamanho errado)
+      } else {
+        // Senha legacy (texto puro)
+        senhaValida = this.comparePlainText(senhaSalva, senha);
+        if (senhaValida) {
+          await this.migrateLegacyPassword(usuario.id, senha);
+        }
       }
 
-      const existingUser = await this.findUserByUsernameOrEmail(normalizedUser, normalizedEmail);
-      if (existingUser) {
-         if (existingUser.user === normalizedUser) {
-            return { error: 'Este nome de usuario ja esta em uso.' };
-         }
-
-         return { error: 'Este e-mail ja esta cadastrado.' };
-      }
-
-      const senhaHash = await bcrypt.hash(normalizedPassword, 12);
-      const [result] = await connection.execute(
-         'INSERT INTO users (user, email, senha) VALUES (?, ?, ?)',
-         [normalizedUser, normalizedEmail, senhaHash]
-      );
+      if (!senhaValida) return null;
 
       return {
-         id: result.insertId,
-         username: normalizedUser,
-         email: normalizedEmail
+        id: usuario.id,
+        username: usuario.username
       };
-   }
+    } catch (error) {
+      console.error('Erro ao executar a consulta SQL (login):', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Busca usuário por username OU e-mail
+   */
+  async findUserByUsernameOrEmail(user, email) {
+    const normalizedUser = this.normalizeUser(user);
+    const normalizedEmail = this.normalizeEmail(email);
+
+    const result = await connection.query(
+      'SELECT id, username, email FROM users WHERE username = $1 OR email = $2 LIMIT 1',
+      [normalizedUser, normalizedEmail]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  /**
+   * Cria novo usuário (com hash bcrypt)
+   */
+  async createUser({ user, email, senha }) {
+    const normalizedUser = this.normalizeUser(user);
+    const normalizedEmail = this.normalizeEmail(email);
+    const normalizedPassword = String(senha ?? '');
+
+    if (!normalizedUser || !normalizedEmail || !normalizedPassword) {
+      throw new Error('User, email and password must be provided');
+    }
+
+    const existingUser = await this.findUserByUsernameOrEmail(
+      normalizedUser,
+      normalizedEmail
+    );
+
+    if (existingUser) {
+      if (existingUser.username === normalizedUser) {
+        return { error: 'Este nome de usuario ja esta em uso.' };
+      }
+      return { error: 'Este e-mail ja esta cadastrado.' };
+    }
+
+    const senhaHash = await bcrypt.hash(normalizedPassword, 12);
+
+    const result = await connection.query(
+      'INSERT INTO users (username, email, senha) VALUES ($1, $2, $3) RETURNING id',
+      [normalizedUser, normalizedEmail, senhaHash]
+    );
+
+    return {
+      id: result.rows[0].id,
+      username: normalizedUser,
+      email: normalizedEmail
+    };
+  }
 }
 
 export default new LoginLogout();

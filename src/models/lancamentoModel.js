@@ -1,14 +1,14 @@
 import connection from '../db_config/connection.js';
 
-// Função para formatar texto removendo underscores e capitalizando palavras
+// Função para formatar texto
 const formatarTexto = (texto) => {
     return texto.replace(/_/g, ' ').replace(/\b\w/g, (letra) => letra.toUpperCase());
 };
 
 class LancamentoModel {
 
-    // Método para criar um novo lançamento
-    async create({ entrada_saida,
+    async create({
+        entrada_saida,
         data,
         tipo_de_lancamento,
         produto,
@@ -16,94 +16,78 @@ class LancamentoModel {
         qtde_de_parcelas,
         valor,
         descricao,
-        usuario }) {
+        usuario
+    }) {
 
-        const SQL = `INSERT INTO lancamentos (
-        entrada_saida,
-        data,
-        tipo_de_lancamento,
-        produto, forma_de_pagamento, 
-        qtde_de_parcelas, valor,
-        descricao,
-        usuario,
-        dia_do_cadastro)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+        const SQL = `
+        INSERT INTO lancamentos (
+            entrada_saida,
+            data,
+            tipo_de_lancamento,
+            produto,
+            forma_de_pagamento, 
+            qtde_de_parcelas,
+            valor,
+            descricao,
+            usuario,
+            dia_do_cadastro
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,CURRENT_TIMESTAMP)
+        `;
 
-        if ([entrada_saida,
+        if ([entrada_saida, data, tipo_de_lancamento, produto,
+            forma_de_pagamento, qtde_de_parcelas, valor,
+            descricao, usuario].some(param => param === undefined)) {
+            throw new Error("Parâmetros obrigatórios não podem ser undefined");
+        }
+
+        await connection.query(SQL, [
+            entrada_saida,
             data,
             tipo_de_lancamento,
             produto,
             forma_de_pagamento,
-            qtde_de_parcelas,
-            valor,
+            parseInt(qtde_de_parcelas),
+            parseFloat(valor),
             descricao,
-            usuario].some(param => param === undefined)) {
-            throw new Error("Parâmetros obrigatórios não podem ser undefined");
-        };
-
-        try {
-            await connection.execute(SQL, [
-                entrada_saida,
-                data,
-                tipo_de_lancamento,
-                produto,
-                forma_de_pagamento,
-                parseInt(qtde_de_parcelas),
-                parseFloat(valor),
-                descricao,
-                usuario.username
-            ]);
-        } catch (error) {
-            console.error('Erro ao adicionar lançamento:', error);
-            throw error;
-        }
+            usuario.username
+        ]);
     }
 
-
-    // Método para atualizar o vencimento
     async updateVencimento(id, vencimento) {
         const SQL = `
-        UPDATE
-            lancamentos
+        UPDATE lancamentos
         SET
-            vencimento = ?,
-            ultima_edicao = NOW()
-        WHERE id = ?
+            vencimento = $1,
+            ultima_edicao = CURRENT_TIMESTAMP
+        WHERE id = $2
         `;
 
-        try {
-            await connection.execute(SQL, [vencimento, id]);
-        }
-        catch (error) {
-            console.error('Erro ao atualizar vencimento:', error);
-            throw error;
-        }
+        await connection.query(SQL, [vencimento, id]);
     }
 
-
-    // Método para buscar todos os lançamentos
     findAll = async () => {
         const SQL = 'SELECT * FROM lancamentos';
-        const [result] = await connection.execute(SQL);
-        result.forEach(lancamento => {
+        const result = await connection.query(SQL);
+
+        result.rows.forEach(lancamento => {
             lancamento.tipo_de_lancamento = formatarTexto(lancamento.tipo_de_lancamento);
         });
-        return result;
+
+        return result.rows;
     };
 
-
-    // Método para buscar um lançamento por ID
     findById = async (id) => {
-        const SQL = 'SELECT * FROM lancamentos WHERE id = ?';
-        const [result] = await connection.execute(SQL, [id]);
-        if (result.length > 0) {
-            result[0].tipo_de_lancamento = formatarTexto(result[0].tipo_de_lancamento);
+        const SQL = 'SELECT * FROM lancamentos WHERE id = $1';
+        const result = await connection.query(SQL, [id]);
+
+        if (result.rows.length > 0) {
+            result.rows[0].tipo_de_lancamento = formatarTexto(result.rows[0].tipo_de_lancamento);
         }
-        return result[0];
+
+        return result.rows[0];
     };
 
-
-    // Método para atualizar um lançamento
     async update(id, {
         entrada_saida,
         data,
@@ -112,68 +96,58 @@ class LancamentoModel {
         forma_de_pagamento,
         qtde_de_parcelas,
         valor,
-        descricao }) {
+        descricao
+    }) {
+
         const SQL = `
-        UPDATE
-            lancamentos
+        UPDATE lancamentos
         SET
-            entrada_saida = ?,
-            data = ?,
-            tipo_de_lancamento = ?,
-            produto = ?,
-            forma_de_pagamento = ?,
-            qtde_de_parcelas = ?,
-            valor = ?,
-            descricao = ?,
-            ultima_edicao = NOW()
-        WHERE
-            id = ?
-            `;
-        try {
-            await connection.execute(SQL, [
-                entrada_saida,
-                data,
-                tipo_de_lancamento,
-                produto,
-                forma_de_pagamento,
-                qtde_de_parcelas,
-                parseFloat(valor),
-                descricao,
-                id
-            ]);
-        } catch (error) {
-            console.error('Erro ao editar lançamento:', error);
-            throw error;
-        }
+            entrada_saida = $1,
+            data = $2,
+            tipo_de_lancamento = $3,
+            produto = $4,
+            forma_de_pagamento = $5,
+            qtde_de_parcelas = $6,
+            valor = $7,
+            descricao = $8,
+            ultima_edicao = CURRENT_TIMESTAMP
+        WHERE id = $9
+        `;
+
+        await connection.query(SQL, [
+            entrada_saida,
+            data,
+            tipo_de_lancamento,
+            produto,
+            forma_de_pagamento,
+            qtde_de_parcelas,
+            parseFloat(valor),
+            descricao,
+            id
+        ]);
     }
 
-
-    // Método para deletar um lançamento
     delete = async (id) => {
-        const SQL = 'DELETE FROM lancamentos WHERE id = ?';
-        await connection.execute(SQL, [id]);
+        const SQL = 'DELETE FROM lancamentos WHERE id = $1';
+        await connection.query(SQL, [id]);
     };
 
-    
-    // Método para buscar lançamentos baseado em um termo de pesquisa
     search = async (query) => {
         const SQL = `
-        SELECT
-            *
-        FROM
-            lancamentos
-        WHERE
-            tipo_de_lancamento LIKE ?
-        OR
-            entrada_saida
-        LIKE ?
+        SELECT *
+        FROM lancamentos
+        WHERE tipo_de_lancamento ILIKE $1
+        OR entrada_saida ILIKE $2
         `;
-        const [result] = await connection.execute(SQL, [`%${query}%`, `%${query}%`]);
-        result.forEach(lancamento => {
+
+        const result = await connection.query(SQL, [`%${query}%`, `%${query}%`]);
+
+        result.rows.forEach(lancamento => {
             lancamento.tipo_de_lancamento = formatarTexto(lancamento.tipo_de_lancamento);
         });
-        return result;
-    }
+
+        return result.rows;
+    };
 }
 
 export default new LancamentoModel();
