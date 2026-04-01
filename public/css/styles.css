@@ -1091,7 +1091,8 @@ figure {
       text-align: center !important;
    }
 
-   .compact-control {
+   .form-shell form .compact-control,
+   .form-shell form .input-group .compact-control {
       text-align: center !important;
    }
 
