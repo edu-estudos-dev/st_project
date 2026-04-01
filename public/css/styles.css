@@ -668,6 +668,13 @@ figure {
    text-align: left;
 }
 
+.form-shell form .form-control,
+.form-shell form .form-select,
+.form-shell form textarea,
+.form-shell form .input-group .form-control {
+   text-align: left !important;
+}
+
 .action-row {
    display: flex;
    flex-wrap: wrap;
