@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Lista de Sangrias de Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Lista de Sangrias de Pelúcias' }) %>
 <body class="bg-light">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Pelucias' }) %>
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Pelúcias' }) %>
     <div class="container-fluid px-4">
         <main class="pelucia">
             <div class="table-container">
                 <div class="row mobile-stack-actions align-items-center">
                     <div class="col-12 col-md-6">
-                        <h1 class="text-purple mb-3 fw-bold">Registro Financeiro das Pelucias</h1>
+                        <h1 class="text-purple mb-3 fw-bold">Registro Financeiro das Pelúcias</h1>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
                         <a type="button" class="btn mb-3 btn-purple align-self-center w-100 w-md-auto" href="/pelucias/sangrias/add"><i class="bi bi-plus-circle"></i>&nbsp;Novo Registro</a>
@@ -23,12 +23,12 @@
                             <th>Estabelecimento</th>
                             <th>Data da Sangria</th>
                             <th>Valor Apurado</th>
-                            <th>Comissao</th>
+                            <th>Comissão</th>
                             <th>Valor do Comerciante</th>
-                            <th>Valor Liquido</th>
+                            <th>Valor Líquido</th>
                             <th>Tipo de Pagamento</th>
                             <th>Pix Confirmado</th>
-                            <th>Acoes</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,7 +42,7 @@
                                     <td class="py-1"><%= Number(sangria.comissao).toFixed(2) %> %</td>
                                     <td class="py-1">R$ <%= Number(sangria.valor_comerciante).toFixed(2) %></td>
                                     <td class="py-1">R$ <%= Number(sangria.valor_liquido).toFixed(2) %></td>
-                                    <td class="py-1"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Especie' %></td>
+                                    <td class="py-1"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></td>
                                     <td class="py-1"><select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select"><option value="" selected disabled>Selecione</option><option value="SIM" class="option-sim">SIM</option><option value="NAO" class="option-nao">NAO</option></select></td>
                                     <td class="py-1"><a href="/pelucias/sangrias/view/<%= sangria.id %>" class="btn btn-secondary btn-sm">Visualizar</a><a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="btn btn-warning btn-sm mx-1">Editar</a><button type="button" class="btn btn-danger btn-sm delete-btn" data-id="<%= sangria.id %>">Deletar</button></td>
                                 </tr>
@@ -70,7 +70,7 @@
                         const response = await fetch(`/pelucias/sangrias/delete/${idSangria}`, { method: 'POST' });
                         const data = await response.json();
                         if (!response.ok || !data.success) throw new Error(data.message || 'Erro ao excluir sangria');
-                        await window.AppAlerts?.success(data.message || 'Sangria excluida com sucesso');
+                        await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
                         window.history.replaceState({}, document.title, window.location.pathname);
                         window.location.reload();
                     } catch (error) {

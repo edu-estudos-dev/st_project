@@ -60,12 +60,12 @@
                             <th>ID</th>
                             <th>Estabelecimento</th>
                             <th>Chave</th>
-                            <th>Maquina</th>
-                            <th>Endereco</th>
+                            <th>Máquina</th>
+                            <th>Endereço</th>
                             <th>Bairro</th>
                             <th>Data</th>
                             <th>Dias Passados</th>
-                            <th>Situacao</th>
+                            <th>Situação</th>
                             <th>Telefone de Contato</th>
                         </tr>
                     </thead>
@@ -204,7 +204,7 @@
         doc.setFontSize(14);
         doc.text(`Rota de Sangria para os bairros: ${bairrosSelecionados}`, 20, 20);
         doc.autoTable({
-            head: [['Estabelecimento', 'Endereco', 'Chave', 'Maquina', 'Bairro', 'Telefone de Contato']],
+            head: [['Estabelecimento', 'Endereço', 'Chave', 'Máquina', 'Bairro', 'Telefone de Contato']],
             body: data,
             styles: { fontSize: 8, halign: 'center' },
             margin: { top: 30 },

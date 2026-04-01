@@ -28,7 +28,7 @@
                             <th>RESULTADO ATUAL</th>
                             <th>Janeiro</th>
                             <th>Fevereiro</th>
-                            <th>Marco</th>
+                            <th>Março</th>
                             <th>Abril</th>
                             <th>Maio</th>
                             <th>Junho</th>
@@ -72,7 +72,7 @@
                         <% } %>
 
                         <tr class="table-danger total-saidas">
-                            <td class="fw-bold">TOTAL SAIDAS</td>
+                            <td class="fw-bold">TOTAL SAÍDAS</td>
                             <% totaisSaidas.forEach(function(total) { %>
                                 <td class="currency text-danger bold"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
                             <% }) %>

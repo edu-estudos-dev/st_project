@@ -11,14 +11,14 @@
             <form id="edicaoForm" class="p-0" action="/estabelecimentos/<%= estabelecimento.id %>?_method=PUT" method="POST">
                 <div class="row g-3">
                     <div class="col-12 col-lg-8"><label for="estabelecimento" class="form-label mb-1 fw-bold fs-5">Estabelecimento</label><input type="text" class="form-control" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>"></div>
-                    <div class="col-12 col-md-6 col-lg-2"><label for="responsavel_nome" class="form-label mb-1 fw-bold fs-5">Responsavel</label><input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>"></div>
+                    <div class="col-12 col-md-6 col-lg-2"><label for="responsavel_nome" class="form-label mb-1 fw-bold fs-5">Responsável</label><input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>"></div>
                     <div class="col-12 col-md-6 col-lg-2"><label for="telefone_contato" class="form-label mb-1 fw-bold fs-5">Contato</label><input type="text" class="form-control text-center" id="telefone_contato" name="telefone_contato" value="<%= estabelecimento.telefone_contato %>"></div>
                 </div>
                 <div class="row g-3 mt-1">
-                    <div class="col-12 col-lg-5"><label for="endereco" class="form-label fw-bold mb-1 fs-5">Endereco</label><input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>"></div>
+                    <div class="col-12 col-lg-5"><label for="endereco" class="form-label fw-bold mb-1 fs-5">Endereço</label><input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>"></div>
                     <div class="col-12 col-md-4 col-lg-3"><label for="bairro" class="form-label fw-bold mb-1 fs-5">Bairro</label><input type="text" class="form-control text-center" id="bairro" name="bairro" value="<%= estabelecimento.bairro %>"></div>
                     <div class="col-6 col-md-4 col-lg-2 compact-field"><label for="chave" class="form-label fw-bold mb-1 fs-5 compact-label">Chave</label><input type="text" class="form-control compact-control" id="chave" name="chave" value="<%= estabelecimento.chave %>"></div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field"><label for="maquina" class="form-label fw-bold mb-1 fs-5 compact-label">Maquina</label><input type="text" class="form-control compact-control" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>"></div>
+                    <div class="col-6 col-md-4 col-lg-2 compact-field"><label for="maquina" class="form-label fw-bold mb-1 fs-5 compact-label">Máquina</label><input type="text" class="form-control compact-control" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>"></div>
                 </div>
                 <div class="row g-3 mt-1">
                     <div class="col-12 col-lg-3">

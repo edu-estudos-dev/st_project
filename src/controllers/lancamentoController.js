@@ -7,9 +7,9 @@ class LancamentoController {
       const usuario = req.user;
       const lancamentos = await LancamentoModel.findAll();
       res.status(200).render('pages/lancamentos/tabelaLancamento', {
-        title: 'Lancamentos Cadastrados',
+        title: 'Lançamentos Cadastrados',
         lancamentos,
-        pageTitle: 'Lancamentos Cadastrados',
+        pageTitle: 'Lançamentos Cadastrados',
         usuario
       });
     } catch (error) {

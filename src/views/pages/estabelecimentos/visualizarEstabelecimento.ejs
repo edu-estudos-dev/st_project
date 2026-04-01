@@ -31,17 +31,17 @@
                     <div class="detail-grid detail-stack">
                         <div>
                             <p>Produtos: <strong><%= (estabelecimento.produtoFormatado || estabelecimento.produto).toUpperCase() %></strong></p>
-                            <p>Responsavel: <strong><%= estabelecimento.responsavel_nome.toUpperCase() %></strong></p>
-                            <p>Endereco: <strong><%= estabelecimento.endereco.toUpperCase() %></strong></p>
+                            <p>Responsável: <strong><%= estabelecimento.responsavel_nome.toUpperCase() %></strong></p>
+                            <p>Endereço: <strong><%= estabelecimento.endereco.toUpperCase() %></strong></p>
                             <p>Bairro: <strong><%= estabelecimento.bairro.toUpperCase() %></strong></p>
-                            <p>Observacoes: <strong><%= estabelecimento.observacoes ? estabelecimento.observacoes.toUpperCase() : 'N/A' %></strong></p>
+                            <p>Observações: <strong><%= estabelecimento.observacoes ? estabelecimento.observacoes.toUpperCase() : 'N/A' %></strong></p>
                         </div>
                         <div>
                             <p>Telefone: <strong><%= estabelecimento.telefone_contato %></strong></p>
                             <p>Chave: <strong><%= estabelecimento.chave ? estabelecimento.chave.toUpperCase() : 'N/A' %></strong></p>
-                            <p>Maquina: <strong><%= estabelecimento.maquina ? estabelecimento.maquina.toUpperCase() : 'N/A' %></strong></p>
+                            <p>Máquina: <strong><%= estabelecimento.maquina ? estabelecimento.maquina.toUpperCase() : 'N/A' %></strong></p>
                             <p>Dia do Cadastro: <strong><%= new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') %></strong></p>
-                            <p>Ultima Edicao: <strong><%= data_atualizacao ? new Date(data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
+                            <p>Última Edição: <strong><%= data_atualizacao ? new Date(data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
                         </div>
                     </div>
                 </div>

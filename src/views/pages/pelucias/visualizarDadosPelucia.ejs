@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Visualizar Sangria Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Visualizar Sangria Pelúcias' }) %>
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
@@ -8,10 +8,10 @@
     <div class="page-spacer"></div>
 
     <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria Pelucias' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria Pelúcias' }) %>
 
         <div class="cabecalho-pelucia">
-            <h1 class="mb-0">Visualizar Sangria das Pelucias</h1>
+            <h1 class="mb-0">Visualizar Sangria das Pelúcias</h1>
             <a href="/pelucias/sangrias" class="btn btn-voltar">Voltar</a>
         </div>
 
@@ -33,14 +33,14 @@
                             <div>
                                 <p>Data da Sangria: <strong><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></strong></p>
                                 <p>Valor Apurado: <strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong></p>
-                                <p>Comissao: <strong><%= Number(sangria.comissao).toFixed(2) %> %</strong></p>
+                                <p>Comissão: <strong><%= Number(sangria.comissao).toFixed(2) %> %</strong></p>
                                 <p>Valor do Comerciante: <strong>R$ <%= Number(sangria.valor_comerciante).toFixed(2) %></strong></p>
                             </div>
                             <div>
-                                <p>Valor Liquido: <strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></p>
-                                <p>Tipo de Pagamento: <strong><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Especie' %></strong></p>
-                                <p>Ultima Edicao: <strong><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
-                                <p>Observacoes: <strong><%= sangria.observacoes || 'N/A' %></strong></p>
+                                <p>Valor Líquido: <strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></p>
+                                <p>Tipo de Pagamento: <strong><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></strong></p>
+                                <p>Última Edição: <strong><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
+                                <p>Observações: <strong><%= sangria.observacoes || 'N/A' %></strong></p>
                             </div>
                         </div>
                     <% } else { %>

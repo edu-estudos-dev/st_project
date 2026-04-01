@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Receita Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Receita Pelúcias' }) %>
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
@@ -8,10 +8,10 @@
     <div class="page-spacer"></div>
 
     <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Receita de Pelucias', usuario: usuario }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Receita de Pelúcias', usuario: usuario }) %>
 
         <main class="pelucia">
-            <h1 class="text-purple mb-3 fw-bold">Receita Consolidada das Pelucias</h1>
+            <h1 class="text-purple mb-3 fw-bold">Receita Consolidada das Pelúcias</h1>
 
             <div class="table-container">
                 <table class="table table-striped table-bordered mb-0 align-middle">
@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% const meses = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']; %>
+                        <% const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']; %>
                         <% meses.forEach((mes, index) => { %>
                             <tr>
                                 <td class="bg-purple text-white fw-bold py-1 equal-width"><%= mes %></td>

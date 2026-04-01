@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Lancamentos Cadastrados' }) %>
+<%- include('../../partials/head', { title: 'Lançamentos Cadastrados' }) %>
+
 <body class="bg-light">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Lancamentos Cadastrados' }) %>
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
+
     <div class="container-fluid px-4">
         <main class="mb-5 geral">
             <div class="table-container">
                 <div class="row mobile-stack-actions align-items-center">
                     <div class="col-12 col-md-6">
-                        <h1 class="text-dark mb-3 fw-bold">Lancamentos Cadastrados</h1>
+                        <h1 class="text-dark mb-3 fw-bold">Lançamentos Cadastrados</h1>
                     </div>
                     <div class="col-12 col-md-6 d-flex justify-content-md-end">
                         <a type="button" class="btn mb-3 btn-dark align-self-center w-100 w-md-auto" href="/lancamentos/add">
-                            <i class="bi bi-plus-circle"></i>&nbsp;Novo Lancamento
+                            <i class="bi bi-plus-circle"></i>&nbsp;Novo Lançamento
                         </a>
                     </div>
                 </div>
+
                 <table class="table table-striped table-hover mb-0">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Entrada/Saida</th>
+                            <th>Entrada/Saída</th>
                             <th>Data</th>
-                            <th>Tipo de Lancamento</th>
+                            <th>Tipo de Lançamento</th>
                             <th>Forma de Pagamento</th>
                             <th>Valor</th>
-                            <th>Descricao</th>
+                            <th>Descrição</th>
                             <th>Vencimentos</th>
-                            <th>Acoes</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody class="text-center align-middle">
@@ -64,6 +67,7 @@
             </div>
         </main>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -81,8 +85,8 @@
                 form.addEventListener('submit', async (event) => {
                     event.preventDefault();
                     const confirmed = await window.AppAlerts?.confirm({
-                        title: 'Excluir lancamento',
-                        text: 'Tem certeza que deseja deletar este lancamento?',
+                        title: 'Excluir lançamento',
+                        text: 'Tem certeza que deseja deletar este lançamento?',
                         confirmButtonText: 'Excluir',
                         cancelButtonText: 'Cancelar'
                     });
@@ -91,10 +95,10 @@
             });
 
             <% if (typeof success !== 'undefined') { %>
-                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
+                window.AppAlerts?.success("<%- success.replace(/\"/g, '&quot;') %>");
             <% } %>
             <% if (typeof error !== 'undefined') { %>
-                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
+                window.AppAlerts?.error("<%- error.replace(/\"/g, '&quot;') %>");
             <% } %>
         });
     </script>

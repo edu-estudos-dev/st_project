@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Visualizar Lancamento' }) %>
+<%- include('../../partials/head', { title: 'Visualizar Lançamento' }) %>
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
@@ -8,10 +8,10 @@
     <div class="page-spacer"></div>
 
     <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Lancamento' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Lançamento' }) %>
 
         <div class="cabecalho-geral">
-            <h1 class="mb-0">Visualizar Lancamento</h1>
+            <h1 class="mb-0">Visualizar Lançamento</h1>
             <a href="/lancamentos" class="btn btn-voltar">Voltar</a>
         </div>
 
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <div class="detail-header">
                         <div class="detail-title">
-                            <p class="mb-0">Tipo de Lancamento:</p>
+                            <p class="mb-0">Tipo de Lançamento:</p>
                             <h4 class="mb-0"><strong><%= lancamento.tipo_de_lancamento.toUpperCase().replace('RECEITA_DOSPONTOS', 'RECEITA DOS PONTOS') %></strong></h4>
                         </div>
                         <p class="mb-0"><strong>ID:</strong> <%= lancamento.id %></p>
@@ -30,24 +30,24 @@
 
                     <div class="detail-grid detail-stack">
                         <div>
-                            <p>Entrada/Saida: <strong><%= lancamento.entrada_saida.toUpperCase() %></strong></p>
+                            <p>Entrada/Saída: <strong><%= lancamento.entrada_saida.toUpperCase() %></strong></p>
                             <p>Data do Evento: <strong><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></strong></p>
                             <p>Valor: <strong>R$ <%= typeof lancamento.valor === 'number' ? lancamento.valor.toFixed(2) : lancamento.valor %></strong></p>
                             <p>Forma de Pagamento: <strong><%= lancamento.forma_de_pagamento.toUpperCase() %></strong></p>
                             <p>Dia do Cadastro: <strong><%= new Date(lancamento.dia_do_cadastro).toLocaleDateString('pt-BR') %></strong></p>
                         </div>
                         <div>
-                            <p>Usuario Responsavel: <strong><%= lancamento.usuario.toUpperCase() %></strong></p>
+                            <p>Usuário Responsável: <strong><%= lancamento.usuario.toUpperCase() %></strong></p>
                             <p>Produto: <strong><%= lancamento.produto.toUpperCase() %></strong></p>
                             <p>Quantidade de Parcelas: <strong><%= lancamento.qtde_de_parcelas %></strong></p>
                             <p>Valor das Parcelas: <strong>R$ <%= valor_da_parcela ? valor_da_parcela.toFixed(2) : 'N/A' %></strong></p>
-                            <p>Ultima Edicao: <strong><%= ultima_edicao ? new Date(ultima_edicao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
+                            <p>Última Edição: <strong><%= ultima_edicao ? new Date(ultima_edicao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
                         </div>
                     </div>
 
                     <hr>
 
-                    <p class="mb-0">Descricao: <strong><%= lancamento.descricao.toUpperCase() %></strong></p>
+                    <p class="mb-0">Descrição: <strong><%= lancamento.descricao.toUpperCase() %></strong></p>
                 </div>
             </div>
         </main>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Controle Geral das Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Controle Geral das Pelúcias' }) %>
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
@@ -8,10 +8,10 @@
     <div class="page-spacer"></div>
 
     <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Controle Geral das Pelucias', usuario: usuario }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Controle Geral das Pelúcias', usuario: usuario }) %>
 
         <div class="cabecalho-pelucia">
-            <h1 class="mb-0">Controle Geral das Pelucias</h1>
+            <h1 class="mb-0">Controle Geral das Pelúcias</h1>
         </div>
 
         <main class="pelucia">
@@ -60,12 +60,12 @@
                             <th>ID</th>
                             <th>Estabelecimento</th>
                             <th>Data da Sangria</th>
-                            <th>Maquina</th>
-                            <th>Ultima Leitura</th>
+                            <th>Máquina</th>
+                            <th>Última Leitura</th>
                             <th>Abastecido</th>
                             <th>Estoque</th>
                             <th>Dias Passados</th>
-                            <th>Situacao</th>
+                            <th>Situação</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaEstabelecimentos">
@@ -192,7 +192,7 @@
         doc.setFontSize(14);
         doc.text(`Rota de Sangria para os bairros: ${bairrosSelecionados}`, 20, 20);
         doc.autoTable({
-            head: [['Estabelecimento', 'Endereco', 'Bairro', 'Maquina', 'Telefone de Contato']],
+            head: [['Estabelecimento', 'Endereço', 'Bairro', 'Máquina', 'Telefone de Contato']],
             body: data,
             styles: { fontSize: 8, halign: 'center' },
             margin: { top: 30 },

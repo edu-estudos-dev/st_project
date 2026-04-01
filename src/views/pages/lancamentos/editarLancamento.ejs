@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Editar Lancamento' }) %>
+<%- include('../../partials/head', { title: 'Editar Lançamento' }) %>
 
 <body class="bg-light">
     <%- include('../../partials/header') %>
@@ -9,20 +9,20 @@
     <div class="page-spacer"></div>
 
     <div class="form-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Lancamento' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Lançamento' }) %>
 
         <div class="cabecalho-geral">
-            <h1 class="mb-0">Editar Lancamento</h1>
+            <h1 class="mb-0">Editar Lançamento</h1>
         </div>
 
         <main class="mb-5 geral">
             <form class="p-0" action="/lancamentos/<%= lancamento.id %>?_method=PUT" method="POST">
                 <div class="row g-3">
                     <div class="col-12 col-md-6 col-lg-3">
-                        <label class="mb-1 fs-5 fw-bold" for="entrada_saida">Entrada/Saida</label>
+                        <label class="mb-1 fs-5 fw-bold" for="entrada_saida">Entrada/Saída</label>
                         <select class="form-control text-center" id="entrada_saida" name="entrada_saida" required>
                             <option value="Entrada" <%= lancamento.entrada_saida === 'Entrada' ? 'selected' : '' %>>Entrada</option>
-                            <option value="Saida" <%= lancamento.entrada_saida === 'SaÃƒÂ­da' ? 'selected' : '' %>>Saida</option>
+                            <option value="Saida" <%= lancamento.entrada_saida === 'SaÃƒÂ­da' ? 'selected' : '' %>>Saída</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -30,7 +30,7 @@
                         <input type="date" class="form-control text-center" id="data" name="data" value="<%= new Date(lancamento.data).toISOString().split('T')[0] %>" required>
                     </div>
                     <div class="col-12 col-lg-3">
-                        <label class="mb-1 fs-5 fw-bold" for="tipo_de_lancamento">Tipo de Lancamento</label>
+                        <label class="mb-1 fs-5 fw-bold" for="tipo_de_lancamento">Tipo de Lançamento</label>
                         <select class="form-control text-center" id="tipo_de_lancamento" name="tipo_de_lancamento" required>
                             <option value="receita_dos_pontos" <%= lancamento.tipo_de_lancamento === 'receita_dos_pontos' ? 'selected' : '' %> class="tipo-entrada">Receita dos Pontos</option>
                             <option value="incremento_de_capital" <%= lancamento.tipo_de_lancamento === 'incremento_de_capital' ? 'selected' : '' %> class="tipo-entrada">Incremento de Capital</option>
@@ -53,16 +53,16 @@
                         <select class="form-control text-center" id="produto" name="produto" required>
                             <% if (navProducts.bolinhas || lancamento.produto === 'bolinhas') { %><option value="bolinhas" <%= lancamento.produto === 'bolinhas' ? 'selected' : '' %>>Bolinhas</option><% } %>
                             <% if (navProducts.figurinhas || lancamento.produto === 'figurinhas') { %><option value="figurinhas" <%= lancamento.produto === 'figurinhas' ? 'selected' : '' %>>Figurinhas</option><% } %>
-                            <% if (navProducts.pelucias || lancamento.produto === 'pelucias') { %><option value="pelucias" <%= lancamento.produto === 'pelucias' ? 'selected' : '' %>>Pelucias</option><% } %>
+                            <% if (navProducts.pelucias || lancamento.produto === 'pelucias') { %><option value="pelucias" <%= lancamento.produto === 'pelucias' ? 'selected' : '' %>>Pelúcias</option><% } %>
                         </select>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
                         <label class="mb-1 fs-5 fw-bold" for="forma_de_pagamento">Forma de Pagamento</label>
                         <select class="form-control text-center" id="forma_de_pagamento" name="forma_de_pagamento" required>
                             <option value="boleto" <%= lancamento.forma_de_pagamento === 'boleto' ? 'selected' : '' %>>Boleto</option>
-                            <option value="credito" <%= lancamento.forma_de_pagamento === 'credito' ? 'selected' : '' %>>Credito</option>
+                            <option value="credito" <%= lancamento.forma_de_pagamento === 'credito' ? 'selected' : '' %>>Crédito</option>
                             <option value="pix" <%= lancamento.forma_de_pagamento === 'pix' ? 'selected' : '' %>>Pix</option>
-                            <option value="especie" <%= lancamento.forma_de_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                            <option value="especie" <%= lancamento.forma_de_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
@@ -70,14 +70,14 @@
                         <input type="number" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="<%= lancamento.qtde_de_parcelas %>" required>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <label class="mb-1 fs-5 fw-bold" for="usuario">Usuario</label>
+                        <label class="mb-1 fs-5 fw-bold" for="usuario">Usuário</label>
                         <input disabled type="text" class="form-control text-center" id="usuario" name="usuario" value="<%= lancamento.usuario %>" readonly>
                     </div>
                 </div>
 
                 <div class="row g-3 mt-1">
                     <div class="col-12">
-                        <label class="mb-1 fs-5 fw-bold" for="descricao">Descricao</label>
+                        <label class="mb-1 fs-5 fw-bold" for="descricao">Descrição</label>
                         <textarea class="form-control" id="descricao" name="descricao" rows="4" required><%= lancamento.descricao %></textarea>
                     </div>
                 </div>

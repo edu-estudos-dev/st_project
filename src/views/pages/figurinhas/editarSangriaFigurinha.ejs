@@ -34,7 +34,7 @@
                     <div class="col-12 col-md-6 col-lg-3">
                         <label for="tipo_pagamento" class="form-label fw-bold">Tipo de Pagamento</label>
                         <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                             <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
                         </select>
                     </div>
@@ -64,7 +64,7 @@
 
                 <div class="row g-3 mt-1">
                     <div class="col-12">
-                        <label for="observacoes" class="form-label fw-bold">Observacoes</label>
+                        <label for="observacoes" class="form-label fw-bold">Observações</label>
                         <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= sangria.observacoes %></textarea>
                     </div>
                 </div>

@@ -1,128 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <%- include('../partials/head', { title }) %>
 
-<body>
+<body class="dashboard-body">
    <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
-   <div class="container-principal">
-      <div class="container-painel">
-         <h1 class="text-center text-white w-100 bg-dark p-3 fs-1 fw-bold">Painel de Controle</h1>
-         <span class="usuario-info-painel me-5">Usuario Ativo:
-            <%= usuario.username %>
-         </span>
+   <% const adminShortcuts = [
+      { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
+      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova m&aacute;quina com todos os dados operacionais.', tone: 'gold' },
+      { href: '/lancamentos', title: 'Lan&ccedil;amentos', description: 'Visualize entradas, sa&iacute;das e movimenta&ccedil;&otilde;es registradas.', tone: 'slate' },
+      { href: '/lancamentos/add', title: 'Novo lan&ccedil;amento', description: 'Registre uma movimenta&ccedil;&atilde;o financeira rapidamente.', tone: 'green' },
+      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do per&iacute;odo.', tone: 'violet' },
+      { href: '#', title: 'Financeiro consolidado', description: 'Espa&ccedil;o reservado para consolidar indicadores gerais do neg&oacute;cio.', tone: 'amber', disabled: true }
+   ]; %>
+   <% const revenueShortcuts = []; %>
+   <% if (navProducts.bolinhas) revenueShortcuts.push({ href: '/bolinhas/receita-bolinha', title: 'Receita das bolinhas', badge: 'Bolinhas', tone: 'green' }); %>
+   <% if (navProducts.figurinhas) revenueShortcuts.push({ href: '/figurinhas/receita-figurinha', title: 'Receita das figurinhas', badge: 'Figurinhas', tone: 'blue' }); %>
+   <% if (navProducts.pelucias) revenueShortcuts.push({ href: '/pelucias/receita-pelucia', title: 'Receita das pel&uacute;cias', badge: 'Pel&uacute;cias', tone: 'violet' }); %>
+   <% const operationGroups = []; %>
+   <% if (navProducts.bolinhas) operationGroups.push({
+      title: 'Bolinhas',
+      subtitle: 'Opera&ccedil;&atilde;o di&aacute;ria, registros e vis&atilde;o consolidada.',
+      accent: 'green',
+      actions: [
+         { href: '/bolinhas/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
+         { href: '/bolinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/bolinhas/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
+      ]
+   }); %>
+   <% if (navProducts.figurinhas) operationGroups.push({
+      title: 'Figurinhas',
+      subtitle: 'Acompanhe coletas, receitas e indicadores da opera&ccedil;&atilde;o.',
+      accent: 'blue',
+      actions: [
+         { href: '/figurinhas/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
+         { href: '/figurinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/figurinhas/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
+      ]
+   }); %>
+   <% if (navProducts.pelucias) operationGroups.push({
+      title: 'Pel&uacute;cias',
+      subtitle: 'Gerencie a rotina operacional e o controle consolidado.',
+      accent: 'violet',
+      actions: [
+         { href: '/pelucias/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
+         { href: '/pelucias/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/pelucias/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
+      ]
+   }); %>
+   <% const overviewStats = [
+      { value: adminShortcuts.length, label: 'atalhos administrativos' },
+      { value: revenueShortcuts.length, label: 'consolidados de receita' },
+      { value: operationGroups.length, label: 'frentes operacionais ativas' }
+   ]; %>
 
-         <div class="row border p-3 area-painel border-dark g-0 w-100">
-            <div class="col-12 col-xl-6">
-               <div class="administrativo rounded border border-dark p-3">
-                  <h2 class="text-center text-primary fw-bold">Administrativo</h2>
+   <main class="dashboard-shell">
+      <section class="dashboard-hero">
+         <div class="dashboard-hero-copy">
+            <span class="dashboard-kicker">Painel central</span>
+            <h1>Painel de Controle</h1>
+            <p>Organize a opera&ccedil;&atilde;o, consulte os dados principais e avance r&aacute;pido para as rotinas mais usadas do sistema.</p>
 
-                  <div class="row m-0">
-                     <div class="col-12 col-md-6 g-2 m-0">
-                        <a href="/estabelecimentos"><button class="btn btn-primary w-100 btn-adm fw-bold">Estabelecimentos Cadastrados</button></a>
-                     </div>
-
-                     <div class="col-12 col-md-6 g-2 m-0">
-                        <a href="/estabelecimentos/add"><button class="btn btn-primary w-100 btn-adm fw-bold">Cadastrar Estabelecimentos</button></a>
-                     </div>
+            <div class="dashboard-overview">
+               <% overviewStats.forEach((item) => { %>
+                  <div class="dashboard-overview-card">
+                     <strong><%= item.value %></strong>
+                     <span><%= item.label %></span>
                   </div>
-
-                  <div class="row m-0">
-                     <div class="col-12 col-md-4 g-2 m-0">
-                        <a href="/lancamentos"><button class="btn btn-primary w-100 btn-adm fw-bold">Lancamentos Realizados</button></a>
-                     </div>
-                     <div class="col-12 col-md-4 g-2 m-0">
-                        <a href="/lancamentos/add"><button class="btn btn-primary w-100 btn-adm fw-bold">Fazer Lancamento</button></a>
-                     </div>
-
-                     <div class="col-12 col-md-4 g-2 m-0">
-                        <a href="/fluxo-de-caixa"><button class="btn btn-primary w-100 btn-adm fw-bold">Fluxo de Caixa</button></a>
-                     </div>
-                  </div>
-
-                  <% if (navProducts.hasAny) { %>
-                     <div class="row m-0">
-                        <% if (navProducts.bolinhas) { %>
-                           <div class="col-12 col-md-4 g-2 m-0">
-                              <a href="/bolinhas/receita-bolinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Bolinhas</button></a>
-                           </div>
-                        <% } %>
-                        <% if (navProducts.figurinhas) { %>
-                           <div class="col-12 col-md-4 g-2 m-0">
-                              <a href="/figurinhas/receita-figurinha"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Figurinhas</button></a>
-                           </div>
-                        <% } %>
-                        <% if (navProducts.pelucias) { %>
-                           <div class="col-12 col-md-4 g-2 m-0">
-                              <a href="/pelucias/receita-pelucia"><button class="btn btn-primary w-100 btn-adm fw-bold">Receita das Pelucias</button></a>
-                           </div>
-                        <% } %>
-                     </div>
-                  <% } %>
-
-                  <div class="row m-0">
-                     <div class="col-12 g-2 m-0">
-                        <a href="#"><button class="btn btn-primary w-100 btn-adm fw-bold">Financeiro Consolidado</button></a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <div class="col-12 col-xl-6">
-               <div class="operacional rounded border border-dark p-3">
-                  <h2 class="text-center text-warning fw-bold">Operacional</h2>
-
-                  <% if (navProducts.bolinhas) { %>
-                     <div class="row m-0">
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/bolinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Bolinhas</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/bolinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Bolinhas</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/bolinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Bolinhas</button></a>
-                        </div>
-                     </div>
-                  <% } %>
-
-                  <% if (navProducts.figurinhas) { %>
-                     <div class="row m-0">
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/figurinhas/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Figurinhas</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/figurinhas/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Figurinhas</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/figurinhas/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Figurinhas</button></a>
-                        </div>
-                     </div>
-                  <% } %>
-
-                  <% if (navProducts.pelucias) { %>
-                     <div class="row m-0">
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias/add"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Formulario de Receita <br> de Pelucias</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Registro Financeiro de Pelucias</button></a>
-                        </div>
-                        <div class="col-12 col-md-4 g-2 m-0">
-                           <a href="/pelucias/sangrias/controle-geral"><button class="btn btn-warning text-white w-100 btn-op fw-bold">Controle de Pelucias</button></a>
-                        </div>
-                     </div>
-                  <% } %>
-
-                  <% if (!navProducts.hasAny) { %>
-                     <div class="text-center text-muted small border rounded p-3 mb-0">
-                        Nenhum produto operacional esta disponivel no momento.
-                     </div>
-                  <% } %>
-               </div>
+               <% }) %>
             </div>
          </div>
-      </div>
-   </div>
+
+         <div class="dashboard-user-card">
+            <span class="dashboard-user-label">Usu&aacute;rio ativo</span>
+            <strong><%= usuario.username %></strong>
+            <small>Ambiente pronto para gest&atilde;o administrativa e operacional.</small>
+            <div class="dashboard-user-meta">
+               <span>Vis&atilde;o centralizada</span>
+               <span>Navega&ccedil;&atilde;o r&aacute;pida</span>
+            </div>
+         </div>
+      </section>
+
+      <section class="dashboard-grid">
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Administrativo</span>
+                  <h2>Rotinas de gest&atilde;o</h2>
+               </div>
+               <p>Atalhos para cadastros, lan&ccedil;amentos e vis&atilde;o financeira.</p>
+            </div>
+
+            <div class="dashboard-shortcuts">
+               <% adminShortcuts.forEach((item) => { %>
+                  <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %><%= item.disabled ? ' is-disabled' : '' %>">
+                     <div class="dashboard-shortcut-top">
+                        <span class="dashboard-shortcut-pill"><%= item.disabled ? 'Em breve' : 'Acesso r&aacute;pido' %></span>
+                        <span class="dashboard-shortcut-arrow"><%= item.disabled ? '•' : '→' %></span>
+                     </div>
+                     <h3><%- item.title %></h3>
+                     <p><%- item.description %></p>
+                  </a>
+               <% }) %>
+            </div>
+
+            <% if (revenueShortcuts.length) { %>
+               <div class="dashboard-revenue-strip">
+                  <div class="dashboard-revenue-copy">
+                     <span class="dashboard-section-tag">Receitas</span>
+                     <h3>Consolidados por produto</h3>
+                  </div>
+                  <div class="dashboard-revenue-links">
+                     <% revenueShortcuts.forEach((item) => { %>
+                        <a href="<%= item.href %>" class="dashboard-mini-link dashboard-mini-link-<%= item.tone %>">
+                           <span><%- item.badge %></span>
+                           <strong><%- item.title %></strong>
+                        </a>
+                     <% }) %>
+                  </div>
+               </div>
+            <% } %>
+         </article>
+
+         <aside class="dashboard-panel dashboard-panel-secondary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Operacional</span>
+                  <h2>Fluxos do dia a dia</h2>
+               </div>
+               <p>Escolha o produto e siga para cadastro, hist&oacute;rico ou controle.</p>
+            </div>
+
+            <% if (operationGroups.length) { %>
+               <div class="dashboard-operations">
+                  <% operationGroups.forEach((group) => { %>
+                     <section class="dashboard-operation-card dashboard-operation-card-<%= group.accent %>">
+                        <div class="dashboard-operation-head">
+                           <div>
+                              <h3><%- group.title %></h3>
+                              <p><%- group.subtitle %></p>
+                           </div>
+                        </div>
+
+                        <div class="dashboard-operation-actions">
+                           <% group.actions.forEach((action) => { %>
+                              <a href="<%= action.href %>" class="dashboard-operation-link">
+                                 <strong><%- action.label %></strong>
+                                 <span><%- action.meta %></span>
+                                 <em>Abrir</em>
+                              </a>
+                           <% }) %>
+                        </div>
+                     </section>
+                  <% }) %>
+               </div>
+            <% } else { %>
+               <div class="dashboard-empty-state">
+                  <h3>Nenhum produto operacional dispon&iacute;vel</h3>
+                  <p>Assim que houver produtos habilitados, os atalhos operacionais aparecer&atilde;o aqui.</p>
+               </div>
+            <% } %>
+         </aside>
+      </section>
+   </main>
 </body>
 
 </html>

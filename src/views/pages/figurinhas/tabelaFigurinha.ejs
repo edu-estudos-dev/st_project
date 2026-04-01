@@ -27,7 +27,7 @@
                             <th>Valor Apurado</th>
                             <th>Tipo de Pagamento</th>
                             <th>Pix Confirmado</th>
-                            <th>Acoes</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,7 +38,7 @@
                                     <td class="py-1"><%= sangria.estabelecimento %></td>
                                     <td class="py-1"><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></td>
                                     <td class="py-1">R$ <%= Number(sangria.valor_apurado).toFixed(2) %></td>
-                                    <td class="py-1"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Especie' %></td>
+                                    <td class="py-1"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></td>
                                     <td class="py-1">
                                         <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select">
                                             <option value="" selected disabled>Selecione</option>

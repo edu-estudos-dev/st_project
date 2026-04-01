@@ -33,14 +33,14 @@
                             <div>
                                 <p>Data da Sangria: <strong><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></strong></p>
                                 <p>Valor Apurado: <strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong></p>
-                                <p>Tipo de Pagamento: <strong><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Especie' %></strong></p>
-                                <p>Ultima Edicao: <strong><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
+                                <p>Tipo de Pagamento: <strong><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></strong></p>
+                                <p>Última Edição: <strong><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
                             </div>
                             <div>
-                                <p>Ultima Sangria Anterior: <strong><%= sangria.data_sangria_anterior ? new Date(sangria.data_sangria_anterior).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
+                                <p>Última Sangria Anterior: <strong><%= sangria.data_sangria_anterior ? new Date(sangria.data_sangria_anterior).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
                                 <p>Quantidade Anterior: <strong><%= sangria.qtde_anterior ?? 'N/A' %></strong></p>
                                 <p>Nova Quantidade Deixada: <strong><%= sangria.qtde_deixada ?? 'N/A' %></strong></p>
-                                <p>Observacoes: <strong><%= sangria.observacoes || 'N/A' %></strong></p>
+                                <p>Observações: <strong><%= sangria.observacoes || 'N/A' %></strong></p>
                             </div>
                         </div>
                     <% } else { %>
