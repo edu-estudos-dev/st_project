@@ -1087,6 +1087,14 @@ figure {
       text-align: center !important;
    }
 
+   .compact-label {
+      text-align: center !important;
+   }
+
+   .compact-control {
+      text-align: center !important;
+   }
+
    .form-shell {
       padding-inline: 0;
    }
