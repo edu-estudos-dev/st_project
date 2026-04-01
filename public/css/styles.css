@@ -675,12 +675,6 @@ figure {
    text-align: left !important;
 }
 
-.compact-field .form-control,
-.compact-field .form-select,
-.compact-field .input-group .form-control {
-   text-align: center !important;
-}
-
 .action-row {
    display: flex;
    flex-wrap: wrap;
@@ -1076,6 +1070,21 @@ figure {
    .page-shell,
    .form-shell {
       width: calc(100% - 1rem);
+   }
+
+   .compact-field {
+      text-align: center !important;
+   }
+
+   .compact-field .form-label,
+   .compact-field label:not(.form-check-label) {
+      text-align: center !important;
+   }
+
+   .compact-field .form-control,
+   .compact-field .form-select,
+   .compact-field .input-group .form-control {
+      text-align: center !important;
    }
 
    .form-shell {
