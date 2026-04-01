@@ -1,25 +1,23 @@
 import LancamentoModel from '../models/lancamentoModel.js';
-import { addMonths } from 'date-fns'; // Adicionando a biblioteca para manipulação de datas
+import { addMonths } from 'date-fns';
 
 class LancamentoController {
-  // Método para listar todos os lançamentos
   index = async (req, res) => {
     try {
       const usuario = req.user;
       const lancamentos = await LancamentoModel.findAll();
       res.status(200).render('pages/lancamentos/tabelaLancamento', {
-        title: 'Lançamentos Cadastrados',
-        lancamentos: lancamentos,
-        pageTitle: 'Lançamentos Cadastrados',
-        usuario: usuario
+        title: 'Lancamentos Cadastrados',
+        lancamentos,
+        pageTitle: 'Lancamentos Cadastrados',
+        usuario
       });
     } catch (error) {
-      console.error('Erro ao listar lançamentos:', error);
-      res.status(500).send('Erro ao listar lançamentos.');
+      console.error('Erro ao listar lancamentos:', error);
+      res.status(500).send('Erro ao listar lancamentos.');
     }
   };
 
-  // Método para atualizar o venciment
   updateVencimento = async (req, res) => {
     const { id } = req.params;
     const { vencimento } = req.body;
@@ -32,19 +30,16 @@ class LancamentoController {
     }
   };
 
-  // Método para exibir o formulário de adicionar lançamento
   addLancamentoForm = (req, res) => {
     const usuario = req.user;
     res.render('pages/lancamentos/cadastrarLancamentos', {
-      title: 'Adicionar Lançamento',
+      title: 'Adicionar Lancamento',
       usuario,
       success: undefined,
-      error: undefined,
-      usuario
+      error: undefined
     });
   };
 
-  // Método para adicionar um novo lançamento
   addLancamento = async (req, res) => {
     const usuario = req.user;
     const {
@@ -58,7 +53,6 @@ class LancamentoController {
       descricao
     } = req.body;
 
-    // Verifica se todos os parâmetros estão definidos
     if (
       !entrada_saida ||
       !data ||
@@ -70,7 +64,7 @@ class LancamentoController {
       !descricao ||
       !usuario
     ) {
-      return res.status(400).send('Todos os campos são obrigatórios.');
+      return res.status(400).send('Todos os campos sao obrigatorios.');
     }
 
     try {
@@ -103,41 +97,39 @@ class LancamentoController {
           usuario
         });
       }
-      res.redirect('/lancamentos?success=Lançamento cadastrado com sucesso');
+      res.redirect('/lancamentos?success=Lancamento cadastrado com sucesso');
     } catch (error) {
-      console.error('Erro ao adicionar lançamento:', error);
+      console.error('Erro ao adicionar lancamento:', error);
       res.status(500).render('pages/lancamentos/cadastrarLancamentos', {
-        title: 'Adicionar Lançamento',
+        title: 'Adicionar Lancamento',
         success: null,
         usuario,
-        error: 'Erro ao cadastrar lançamento. Por favor, tente novamente.'
+        error: 'Erro ao cadastrar lancamento. Por favor, tente novamente.'
       });
     }
   };
 
-  // Método para exibir o formulário de edição de lançamento
   editLancamentoForm = async (req, res) => {
     const usuario = req.user;
     const { id } = req.params;
     try {
       const lancamento = await LancamentoModel.findById(id);
       if (!lancamento) {
-        return res.status(404).send('Lançamento não encontrado.');
+        return res.status(404).send('Lancamento nao encontrado.');
       }
       res.status(200).render('pages/lancamentos/editarLancamento', {
-        title: 'Editar Lançamento',
+        title: 'Editar Lancamento',
         lancamento,
         success: undefined,
         error: undefined,
-        usuario: usuario
+        usuario
       });
     } catch (error) {
-      console.error('Erro ao buscar lançamento:', error);
-      res.status(500).send('Erro ao buscar lançamento.');
+      console.error('Erro ao buscar lancamento:', error);
+      res.status(500).send('Erro ao buscar lancamento.');
     }
   };
 
-  // Método para atualizar um lançamento existente
   editLancamento = async (req, res) => {
     const usuario = req.user;
     const { id } = req.params;
@@ -152,7 +144,6 @@ class LancamentoController {
       descricao
     } = req.body;
 
-    // Verifica se todos os parâmetros estão definidos
     if (
       !entrada_saida ||
       !data ||
@@ -163,7 +154,7 @@ class LancamentoController {
       !valor ||
       !descricao
     ) {
-      return res.status(400).send('Todos os campos são obrigatórios.');
+      return res.status(400).send('Todos os campos sao obrigatorios.');
     }
 
     try {
@@ -179,7 +170,7 @@ class LancamentoController {
       });
 
       res.status(200).render('pages/lancamentos/editarLancamento', {
-        title: 'Editar Lançamento',
+        title: 'Editar Lancamento',
         lancamento: {
           id,
           entrada_saida,
@@ -191,35 +182,33 @@ class LancamentoController {
           valor,
           descricao
         },
-        success: 'Lançamento atualizado com sucesso!',
+        success: 'Lancamento atualizado com sucesso!',
         error: null,
         usuario
       });
     } catch (error) {
-      console.error('Erro ao editar lançamento:', error);
+      console.error('Erro ao editar lancamento:', error);
       res.status(500).render('pages/lancamentos/editarLancamento', {
-        title: 'Editar Lançamento',
+        title: 'Editar Lancamento',
         lancamento: req.body,
         success: null,
         usuario,
-        error: 'Erro ao editar lançamento. Por favor, tente novamente.'
+        error: 'Erro ao editar lancamento. Por favor, tente novamente.'
       });
     }
   };
 
-  // Método para deletar um lançamento
   deleteLancamento = async (req, res) => {
     const { id } = req.params;
     try {
       await LancamentoModel.delete(id);
       res.redirect('/lancamentos?success=Lancamento excluido com sucesso');
     } catch (error) {
-      console.error('Erro ao deletar lançamento:', error);
-      res.status(500).send('Erro ao deletar lançamento.');
+      console.error('Erro ao deletar lancamento:', error);
+      res.status(500).send('Erro ao deletar lancamento.');
     }
   };
 
-  // Método para visualizar um lançamento
   viewLancamento = async (req, res) => {
     const usuario = req.user;
     const { id } = req.params;
@@ -229,14 +218,14 @@ class LancamentoController {
       let valor_da_parcela = null;
 
       if (
-        lancamento.forma_de_pagamento !== 'Espécie' &&
+        lancamento.forma_de_pagamento !== 'Especie' &&
         lancamento.qtde_de_parcelas
       ) {
         valor_da_parcela = lancamento.valor / lancamento.qtde_de_parcelas;
       }
 
       res.status(200).render('pages/lancamentos/visualizarLancamento', {
-        title: 'Visualizar Lançamento',
+        title: 'Visualizar Lancamento',
         lancamento,
         success: undefined,
         error: undefined,
@@ -245,26 +234,25 @@ class LancamentoController {
         usuario
       });
     } catch (error) {
-      console.error('Erro ao buscar lançamento:', error);
-      res.status(500).send('Erro ao buscar lançamento.');
+      console.error('Erro ao buscar lancamento:', error);
+      res.status(500).send('Erro ao buscar lancamento.');
     }
   };
 
-  // Método para buscar lançamentos com base em um termo de pesquisa
   search = async (req, res) => {
     const { termo } = req.body;
     const usuario = req.user;
     try {
       const lancamentos = await LancamentoModel.search(termo);
       res.status(200).render('pages/lancamentos/tabelaLancamento', {
-        title: 'Resultados da Pesquisa - Lançamentos',
-        lancamentos: lancamentos,
+        title: 'Resultados da Pesquisa - Lancamentos',
+        lancamentos,
         search: true,
         usuario
       });
     } catch (error) {
-      console.error('Erro ao buscar lançamentos:', error);
-      res.status(500).send('Erro ao buscar lançamentos.');
+      console.error('Erro ao buscar lancamentos:', error);
+      res.status(500).send('Erro ao buscar lancamentos.');
     }
   };
 }

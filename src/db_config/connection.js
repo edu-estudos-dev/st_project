@@ -22,6 +22,7 @@ const testConnection = async () => {
   } catch (error) {
     console.error('Erro ao conectar no PostgreSQL.');
     console.error(error);
+    process.exit(1);
   }
 };
 

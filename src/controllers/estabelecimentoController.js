@@ -285,9 +285,7 @@ class EstabelecimentoController {
     const { termo } = req.body;
     const usuario = req.user;
     try {
-      const estabelecimentos = await EstabelecimentoModel.search(termo, {
-        where: { status: 'ativo' }
-      });
+      const estabelecimentos = await EstabelecimentoModel.search(termo);
       return res
         .status(200)
         .render('pages/estabelecimentos/tabelaEstabelecimentos', {
