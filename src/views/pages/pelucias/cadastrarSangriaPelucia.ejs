@@ -1,115 +1,215 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Registrar Sangria de Pelúcias' }) %>
+<%- include('../../partials/head', { title: 'Registrar Sangria de Pelucias' }) %>
 
-<body class="bg-light">
+<body class="form-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
-    <div class="form-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelúcias' }) %>
 
-        <div class="cabecalho-pelucia">
-            <h1 class="mb-0">Registrar Sangria de Pelúcias</h1>
-        </div>
+    <div class="form-shell form-shell-modern">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelucias' }) %>
 
-        <main class="pelucia">
-            <form action="/pelucias/sangrias/add" method="POST">
-                <div class="row g-3">
-                    <div class="col-12 col-lg-6">
-                        <label for="estabelecimento" class="form-labe mb-1 fs-5 fw-bold">Estabelecimento</label>
-                        <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                            <option value="" selected disabled hidden>Selecione um estabelecimento</option>
-                            <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="data_sangria" class="form-label mb-1 fs-5 fw-bold">Data da Sangria</label>
-                        <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="tipo_pagamento" class="form-label mb-1 fs-5 fw-bold">Tipo de Pagamento</label>
-                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                            <option value="especie">Espécie</option>
-                            <option value="pix">PIX</option>
-                        </select>
-                    </div>
+        <section class="form-hero form-hero-violet">
+            <div class="form-hero-content">
+                <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
+                <h1>Registrar sangria de pelucias</h1>
+                <p>Modernizei a tela para destacar coleta, leitura, estoque e previsao de saldo em uma interface mais clara, elegante e facil de conferir durante a visita.</p>
+            </div>
+
+            <div class="form-hero-side">
+                <div class="form-hero-stat">
+                    <strong>Produto</strong>
+                    <span>Pelucias</span>
                 </div>
-                <div class="row g-3 mt-1">
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="valor_apurado" class="form-label mb-1 fs-5 fw-bold">Valor Apurado</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
+                <div class="form-hero-stat">
+                    <strong>Destaque</strong>
+                    <span>Leitura, vendido e estoque previsto atualizados em tempo real</span>
+                </div>
+            </div>
+        </section>
+
+        <main class="form-stage">
+            <form action="/pelucias/sangrias/add" method="POST" class="modern-form">
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Visita</span>
+                            <h2>Dados da coleta</h2>
+                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avancar para os calculos.</p>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="comissao" class="form-label mb-1 fs-5 fw-bold">Comissão (%)</label>
-                        <div class="input-group">
-                            <span class="input-group-text">%</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="estabelecimento">Estabelecimento</label>
+                            <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
+                                <option value="" selected disabled hidden>Selecione um estabelecimento</option>
+                                <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                    <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="data_sangria">Data da sangria</label>
+                            <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="tipo_pagamento">Tipo de pagamento</label>
+                            <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
+                                <option value="especie">Especie</option>
+                                <option value="pix">PIX</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="valor_comerciante" class="form-label mb-1 fs-5 fw-bold">Valor do Comerciante</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" readonly disabled>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Financeiro</span>
+                            <h2>Apuracao e comissao</h2>
+                            <p>Preencha valor apurado e comissao para visualizar imediatamente a parte do comerciante e o valor liquido.</p>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="valor_liquido" class="form-label mb-1 fs-5 fw-bold">Valor Líquido</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="valor_apurado">Valor apurado</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="comissao">Comissao (%)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">%</span>
+                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="valor_comerciante">Valor do comerciante</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" readonly disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="valor_liquido">Valor liquido</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-3 mt-1">
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="leitura_atual" class="form-label mb-1 fs-5 fw-bold">Leitura Atual</label>
-                        <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Leituras</span>
+                            <h2>Controle operacional da maquina</h2>
+                            <p>Com a ultima leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="ultima_leitura" class="form-label mb-1 fs-5 fw-bold">Última Leitura</label>
-                        <input type="number" class="form-control text-center readonly-input" id="ultima_leitura" name="ultima_leitura" value="<%= ultimaLeitura %>" readonly disabled>
+
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="leitura_atual">Leitura atual</label>
+                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="ultima_leitura">Ultima leitura</label>
+                            <input type="number" class="form-control text-center readonly-input" id="ultima_leitura" name="ultima_leitura" value="<%= ultimaLeitura %>" readonly disabled>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="abastecido">Abastecido</label>
+                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="qtde_vendido">Vendido</label>
+                            <input type="number" class="form-control text-center readonly-input" id="qtde_vendido" name="qtde_vendido" readonly disabled>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="estoque_atual">Estoque atual</label>
+                            <input type="number" class="form-control text-center readonly-input" id="estoque_atual" value="<%= ultimoEstoque %>" readonly disabled>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="estoque_previsto">Estoque previsto</label>
+                            <input type="number" class="form-control text-center readonly-input" id="estoque_previsto" readonly disabled>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="abastecido" class="form-label mb-1 fs-5 fw-bold">Abastecido</label>
-                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
+
+                    <div class="form-summary-grid mt-4">
+                        <div class="form-summary-card">
+                            <strong>Ultima leitura</strong>
+                            <span id="ultimaLeituraResumo"><%= ultimaLeitura %></span>
+                        </div>
+                        <div class="form-summary-card">
+                            <strong>Estoque atual</strong>
+                            <span id="estoqueAtualResumo"><%= ultimoEstoque %></span>
+                        </div>
+                        <div class="form-summary-card">
+                            <strong>Qtde. vendida</strong>
+                            <span id="qtdeVendidaResumo">0</span>
+                        </div>
+                        <div class="form-summary-card">
+                            <strong>Estoque previsto</strong>
+                            <span id="estoquePrevistoResumo">0</span>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="qtde_vendido" class="form-label mb-1 fs-5 fw-bold">Vendido</label>
-                        <input type="number" class="form-control text-center readonly-input" id="qtde_vendido" name="qtde_vendido" readonly disabled>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Observacoes</span>
+                            <h2>Anotacoes complementares</h2>
+                            <p>Registre qualquer detalhe relevante para a proxima coleta, abastecimento ou conferencia do ponto.</p>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="estoque_atual" class="form-label mb-1 fs-5 fw-bold">Estoque Atual</label>
-                        <input type="number" class="form-control text-center readonly-input" id="estoque_atual" value="<%= ultimoEstoque %>" readonly disabled>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="observacoes">Observacoes</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: precisou de reposicao maior, leitura conferida com o ponto, saldo acima do esperado..."></textarea>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label for="estoque_previsto" class="form-label mb-1 fs-5 fw-bold">Estoque Previsto</label>
-                        <input type="number" class="form-control text-center readonly-input" id="estoque_previsto" readonly disabled>
+                </section>
+
+                <section class="form-actions-bar">
+                    <div class="form-actions-copy">
+                        <strong>Concluir registro</strong>
+                        <span>Revise a leitura atual, os valores financeiros e o estoque previsto antes de salvar.</span>
                     </div>
-                </div>
-                <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <label for="observacoes" class="form-label mb-1 fs-5 fw-bold">Observações</label>
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="4"></textarea>
+
+                    <div class="form-actions-buttons">
+                        <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn-modern">
+                            <i class="bi bi-save2"></i>
+                            <span>Registrar sangria</span>
+                        </button>
                     </div>
-                </div>
-                <div class="action-row my-4">
-                    <a href="/pelucias/sangrias" class="btn btn-warning fs-5">Cancelar</a>
-                    <button type="submit" class="btn btn-primary fs-5">Registrar</button>
-                </div>
+                </section>
             </form>
         </main>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
     <script>
+        function updateResumoOperacional() {
+            document.getElementById('ultimaLeituraResumo').textContent = document.getElementById('ultima_leitura').value || '0';
+            document.getElementById('estoqueAtualResumo').textContent = document.getElementById('estoque_atual').value || '0';
+            document.getElementById('qtdeVendidaResumo').textContent = document.getElementById('qtde_vendido').value || '0';
+            document.getElementById('estoquePrevistoResumo').textContent = document.getElementById('estoque_previsto').value || '0';
+        }
+
         function calculateValues() {
             const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
             const comissao = parseFloat(document.getElementById('comissao').value) || 0;
@@ -127,6 +227,7 @@
 
             if (!estabelecimentoId) {
                 estoquePrevistoInput.value = '';
+                updateResumoOperacional();
                 return;
             }
 
@@ -136,6 +237,7 @@
             const estoquePrevisto = estoqueAtual - qtdeVendido + abastecido;
 
             estoquePrevistoInput.value = estoquePrevisto;
+            updateResumoOperacional();
         }
 
         function calculateVendido() {
@@ -151,6 +253,7 @@
             const leituraAtual = parseFloat(document.getElementById('leitura_atual').value) || 0;
             const ultimaLeitura = parseFloat(document.getElementById('ultima_leitura').value) || 0;
             const qtdeVendido = leituraAtual >= ultimaLeitura ? leituraAtual - ultimaLeitura : 0;
+
             qtdeVendidoInput.value = qtdeVendido;
             calculateEstoquePrevisto();
         }
@@ -174,20 +277,22 @@
             try {
                 const response = await fetch(`/pelucias/sangrias/get-ultimos-dados/${estabelecimentoId}`);
                 if (!response.ok) {
-                    throw new Error('Falha ao consultar os últimos dados');
+                    throw new Error('Falha ao consultar os ultimos dados');
                 }
 
                 const data = await response.json();
                 ultimaLeituraInput.value = Number(data.ultima_leitura || 0);
                 estoqueAtualInput.value = Number(data.estoque || 0);
                 calculateVendido();
+                updateResumoOperacional();
             } catch (error) {
-                console.error('Erro ao buscar os últimos dados:', error);
+                console.error('Erro ao buscar os ultimos dados:', error);
                 ultimaLeituraInput.value = '';
                 estoqueAtualInput.value = '';
                 estoquePrevistoInput.value = '';
                 document.getElementById('qtde_vendido').value = '';
-                window.AppAlerts?.error('Não foi possível carregar a última leitura e o estoque deste estabelecimento.');
+                updateResumoOperacional();
+                window.AppAlerts?.error('Nao foi possivel carregar a ultima leitura e o estoque deste estabelecimento.');
             }
         }
 
@@ -207,11 +312,11 @@
             valorApuradoInput.addEventListener('input', calculateValues);
             comissaoInput.addEventListener('input', calculateValues);
 
-            const dataSangriaInput = document.getElementById('data_sangria');
-            dataSangriaInput.value = new Date().toISOString().split('T')[0];
+            document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
 
             calculateValues();
             calculateEstoquePrevisto();
+            updateResumoOperacional();
         });
     </script>
 </body>

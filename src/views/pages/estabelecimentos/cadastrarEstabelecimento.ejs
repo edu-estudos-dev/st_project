@@ -1,74 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head') %>
+<%- include('../../partials/head', { title: 'Cadastrar Estabelecimento' }) %>
 
-<body class="bg-light">
+<body class="form-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
-    <div class="form-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Cadastrar' }) %>
 
-        <div class="cabecalho-geral">
-            <h1 class="mb-0">Cadastrar Estabelecimento</h1>
-        </div>
+    <div class="form-shell form-shell-modern">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Cadastrar Estabelecimento' }) %>
 
-        <main class="mb-5 geral">
-            <form id="cadastroForm" class="p-0" action="/estabelecimentos/add" method="POST">
-                <div class="row g-3">
-                    <div class="col-12 col-lg-8">
-                        <label class="mb-1 fw-bold fs-5" for="estabelecimento">Nome do Estabelecimento</label>
-                        <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" required>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2">
-                        <label class="mb-1 fw-bold fs-5" for="responsavel_nome">Responsável</label>
-                        <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" required>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2">
-                        <label class="mb-1 fw-bold fs-5" for="telefone_contato">Contato</label>
-                        <input type="tel" class="form-control text-center" id="telefone_contato" name="telefone_contato" required>
-                    </div>
+        <section class="form-hero form-hero-neutral">
+            <div class="form-hero-content">
+                <span class="form-kicker"><i class="bi bi-shop-window"></i> Administrativo</span>
+                <h1>Cadastrar estabelecimento</h1>
+                <p>Monte a base operacional com uma tela mais clara, mais organizada e pronta para registrar contato, local, produtos ativos e observacoes do ponto.</p>
+            </div>
+
+            <div class="form-hero-side">
+                <div class="form-hero-stat">
+                    <strong>Fluxo</strong>
+                    <span>Cadastro completo do ponto</span>
                 </div>
-                <div class="row g-3 mt-1">
-                    <div class="col-12 col-lg-5">
-                        <label class="mb-1 fw-bold fs-5" for="endereco">Endereço</label>
-                        <input type="text" class="form-control" id="endereco" name="endereco" required>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <label class="mb-1 fw-bold fs-5" for="bairro">Bairro</label>
-                        <input type="text" class="form-control text-center" id="bairro" name="bairro" required>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label class="mb-1 fw-bold fs-5" for="chave">Chave</label>
-                        <input type="text" class="form-control text-center" id="chave" name="chave">
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2 compact-field">
-                        <label class="mb-1 fw-bold fs-5" for="maquina">Máquina</label>
-                        <input type="text" class="form-control text-center" id="maquina" name="maquina">
-                    </div>
+                <div class="form-hero-stat">
+                    <strong>Objetivo</strong>
+                    <span>Centralizar dados comerciais e operacionais</span>
                 </div>
-                <div class="row g-3 mt-1">
-                    <div class="col-12 col-lg-3">
-                        <label class="mb-1 fw-bold fs-5">Produto</label>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS"><label class="form-check-label ms-2" for="produto1">BOLINHAS</label></div>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS"><label class="form-check-label ms-2" for="produto2">FIGURINHAS</label></div>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS"><label class="form-check-label ms-2" for="produto3">PELUCIAS</label></div>
+            </div>
+        </section>
+
+        <main class="form-stage">
+            <form id="cadastroForm" class="modern-form" action="/estabelecimentos/add" method="POST">
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Identificacao</span>
+                            <h2>Dados principais do estabelecimento</h2>
+                            <p>Preencha o nome do ponto, responsavel e telefone para deixar o cadastro pronto para consultas futuras.</p>
+                        </div>
                     </div>
-                    <div class="col-12 col-lg-9">
-                        <label class="mb-1 fw-bold fs-5" for="observacoes">Comentarios</label>
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="4" maxlength="255"></textarea>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-8">
+                            <label for="estabelecimento">Nome do estabelecimento</label>
+                            <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" placeholder="Ex.: Supermercado Central" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2">
+                            <label for="responsavel_nome">Responsavel</label>
+                            <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" placeholder="Nome" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2">
+                            <label for="telefone_contato">Contato</label>
+                            <input type="tel" class="form-control text-center" id="telefone_contato" name="telefone_contato" placeholder="(00) 00000-0000" required>
+                        </div>
                     </div>
-                </div>
-                <div class="action-row my-4">
-                    <a href="/estabelecimentos" class="btn btn-warning fs-5">Cancelar</a>
-                    <button type="submit" class="btn btn-primary fs-5">Cadastrar</button>
-                </div>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Localizacao</span>
+                            <h2>Endereco e referencia interna</h2>
+                            <p>Guarde as informacoes de local e os codigos internos para encontrar o ponto com rapidez no dia a dia.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-5">
+                            <label for="endereco">Endereco</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua, numero e complemento" required>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-3">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" class="form-control text-center" id="bairro" name="bairro" placeholder="Bairro" required>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="chave">Chave</label>
+                            <input type="text" class="form-control text-center" id="chave" name="chave" placeholder="Codigo">
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                            <label for="maquina">Maquina</label>
+                            <input type="text" class="form-control text-center" id="maquina" name="maquina" placeholder="Numero">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Operacao</span>
+                            <h2>Produtos ativos e observacoes</h2>
+                            <p>Marque quais linhas estao ativas no estabelecimento e registre qualquer detalhe util para visitas, sangrias ou manutencao.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 align-items-start">
+                        <div class="col-12 col-lg-5">
+                            <label>Produtos vinculados</label>
+                            <div class="modern-checkbox-grid">
+                                <label class="modern-checkbox" for="produto1">
+                                    <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS">
+                                    <span>Bolinhas</span>
+                                </label>
+                                <label class="modern-checkbox" for="produto2">
+                                    <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS">
+                                    <span>Figurinhas</span>
+                                </label>
+                                <label class="modern-checkbox" for="produto3">
+                                    <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS">
+                                    <span>Pelucias</span>
+                                </label>
+                            </div>
+                            <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
+                        </div>
+
+                        <div class="col-12 col-lg-7">
+                            <label for="observacoes">Comentarios</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255" placeholder="Ex.: melhor horario para visita, pessoa de contato, detalhes do espaco..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-actions-bar">
+                    <div class="form-actions-copy">
+                        <strong>Pronto para salvar</strong>
+                        <span>Revise os dados principais e confirme o cadastro do estabelecimento.</span>
+                    </div>
+
+                    <div class="form-actions-buttons">
+                        <a href="/estabelecimentos" class="btn-modern-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn-modern">
+                            <i class="bi bi-check2-circle"></i>
+                            <span>Cadastrar estabelecimento</span>
+                        </button>
+                    </div>
+                </section>
             </form>
         </main>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const telefoneInput = document.getElementById('telefone_contato');
+
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
                 if (value.length > 11) value = value.slice(0, 11);
@@ -77,6 +154,7 @@
                 if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
                 e.target.value = value;
             });
+
             document.getElementById('cadastroForm').addEventListener('submit', (e) => {
                 const isChecked = Array.from(document.querySelectorAll('input[name="produto"]')).some((checkbox) => checkbox.checked);
                 if (!isChecked) {
@@ -84,6 +162,7 @@
                     window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
                 }
             });
+
             <% if (success) { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>
             <% if (error) { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
         });

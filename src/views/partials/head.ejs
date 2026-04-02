@@ -13,4 +13,44 @@
         <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
         <script defer src="/js/appAlerts.js"></script>
         <script defer src="/js/csrf.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
+
+                numericInputs.forEach((input) => {
+                    const step = input.getAttribute('step');
+                    const allowsDecimal = step && step !== '1';
+
+                    input.addEventListener('keydown', (event) => {
+                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+
+                        if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) return;
+                        if (/^\d$/.test(event.key)) return;
+
+                        if (allowsDecimal && (event.key === '.' || event.key === ',')) {
+                            if (input.value.includes('.') || input.value.includes(',')) event.preventDefault();
+                            return;
+                        }
+
+                        event.preventDefault();
+                    });
+
+                    input.addEventListener('input', () => {
+                        let value = input.value;
+
+                        if (allowsDecimal) {
+                            value = value.replace(',', '.').replace(/[^\d.]/g, '');
+                            const firstDotIndex = value.indexOf('.');
+                            if (firstDotIndex !== -1) {
+                                value = `${value.slice(0, firstDotIndex + 1)}${value.slice(firstDotIndex + 1).replace(/\./g, '')}`;
+                            }
+                        } else {
+                            value = value.replace(/\D/g, '');
+                        }
+
+                        if (input.value !== value) input.value = value;
+                    });
+                });
+            });
+        </script>
 </head>

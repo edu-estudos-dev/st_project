@@ -1,77 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head') %>
+<%- include('../../partials/head', { title: 'Estabelecimentos Cadastrados' }) %>
 
-<body class="bg-light">
+<body class="list-page-body">
     <%- include('../../partials/header') %>
-
     <div class="page-spacer"></div>
 
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
+    <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
 
-    <div class="container-fluid px-4">
-        <main class="mb-5 geral">
-
-            <div class="row mobile-stack-actions align-items-center">
-                <div class="col-12 col-md-6">
-                    <h1 class="text-dark mb-3 fw-bold">Estabelecimentos Cadastrados</h1>
+        <section class="list-hero list-hero-neutral">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-buildings"></i> Administrativo</span>
+                <h1>Estabelecimentos cadastrados</h1>
+                <p>Uma visão mais limpa da base de pontos para consultar produtos ativos, localizar responsáveis e agir rapidamente em visualizar, editar ou excluir.</p>
+            </div>
+            <div class="list-hero-side">
+                <div class="list-stat">
+                    <strong>Total</strong>
+                    <span><%= estabelecimentos.length %> registros</span>
                 </div>
+                <div class="list-stat">
+                    <strong>Ação rápida</strong>
+                    <span>Cadastrar e gerenciar pontos</span>
+                </div>
+            </div>
+        </section>
 
-                <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                    <a type="button" class="btn mb-3 btn-dark align-self-center w-100 w-md-auto" href="/estabelecimentos/add">
-                        <i class="bi bi-person-add"></i> &nbsp;Novo Estabelecimento
+        <main class="list-stage">
+            <section class="list-panel">
+                <div class="list-toolbar">
+                    <div class="list-toolbar-copy">
+                        <h2>Base de estabelecimentos</h2>
+                        <p>Consulte os principais dados da operação e use os atalhos para abrir a tela certa sem perder contexto.</p>
+                    </div>
+                    <a class="list-action" href="/estabelecimentos/add">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Novo estabelecimento</span>
                     </a>
                 </div>
-            </div>
 
-            <div class="table-container">
-                <table class="table table-striped table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>Estabelecimento</th>
-                            <th>Produto</th>
-                            <th>Chave</th>
-                            <th>Máquina</th>
-                            <th>Endereço</th>
-                            <th>Responsável</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
+                <div class="list-summary-grid">
+                    <div class="list-summary-card">
+                        <strong>Registros</strong>
+                        <span><%= estabelecimentos.length %> pontos</span>
+                    </div>
+                    <div class="list-summary-card">
+                        <strong>Modo</strong>
+                        <span><%= search ? 'Resultado filtrado' : 'Lista completa' %></span>
+                    </div>
+                    <div class="list-summary-card">
+                        <strong>Fluxo</strong>
+                        <span>Consultar, editar e visualizar</span>
+                    </div>
+                    <div class="list-summary-card">
+                        <strong>Contexto</strong>
+                        <span>Operação centralizada</span>
+                    </div>
+                </div>
 
-                    <tbody>
-                        <% estabelecimentos.forEach((estabelecimento) => { %>
-                            <tr>
-                                <td class="py-0"><%= estabelecimento.estabelecimento %></td>
-                                <td class="py-0"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></td>
-                                <td class="py-0"><%= estabelecimento.chave %></td>
-                                <td class="py-0"><%= estabelecimento.maquina %></td>
-                                <td class="py-0"><%= estabelecimento.endereco %></td>
-                                <td class="py-0"><%= estabelecimento.responsavel_nome %></td>
-                                <td class="py-0">
-                                    <a class="btn btn-secondary btn-sm view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
-                                    <a class="my-1 btn btn-warning btn-sm edit-btn mx-1" data-id="<%= estabelecimento.id %>">Editar</a>
-                                    <a class="btn btn-danger btn-sm delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Estabelecimento</th>
+                                    <th>Produto</th>
+                                    <th>Chave</th>
+                                    <th>Máquina</th>
+                                    <th>Endereço</th>
+                                    <th>Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% estabelecimentos.forEach((estabelecimento) => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="table-title-cell"><%= estabelecimento.estabelecimento %></div>
+                                        </td>
+                                        <td><span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span></td>
+                                        <td><%= estabelecimento.chave || '-' %></td>
+                                        <td><%= estabelecimento.maquina || '-' %></td>
+                                        <td><span class="table-muted"><%= estabelecimento.endereco %></span></td>
+                                        <td><%= estabelecimento.responsavel_nome %></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
+                                                <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">Editar</a>
+                                                <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
+            <% if (search) { %>
+                <section class="list-panel">
+                    <a href="/estabelecimentos" class="list-action">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Voltar para a lista completa</span>
+                    </a>
+                </section>
+            <% } %>
         </main>
-
-        <% if (search) { %>
-            <div class="d-flex justify-content-center pb-5">
-                <a href="/estabelecimentos" class="btn btn-primary px-5 fs-5">Voltar</a>
-            </div>
-        <% } %>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
             document.querySelectorAll('.view-btn').forEach((button) => {
                 button.addEventListener('click', function () {
                     window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/view`;
@@ -87,51 +128,29 @@
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async function () {
                     const idEstabelecimento = this.getAttribute('data-id');
-
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Excluir estabelecimento',
                         text: 'Tem certeza que deseja excluir este estabelecimento?',
                         confirmButtonText: 'Excluir',
                         cancelButtonText: 'Cancelar'
                     });
-
                     if (!confirmed) return;
 
                     try {
-                        const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, {
-                            method: 'DELETE'
-                        });
-
+                        const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, { method: 'DELETE' });
                         const data = await response.json();
-
-                        if (!response.ok) {
-                            throw new Error(data.message || 'Erro ao excluir estabelecimento');
-                        }
-
-                        await window.AppAlerts?.success(
-                            data.message || 'Estabelecimento excluido com sucesso'
-                        );
-
+                        if (!response.ok) throw new Error(data.message || 'Erro ao excluir estabelecimento');
+                        await window.AppAlerts?.success(data.message || 'Estabelecimento excluído com sucesso');
                         window.location.reload();
-
                     } catch (error) {
-                        window.AppAlerts?.error(
-                            error.message || 'Erro ao excluir estabelecimento'
-                        );
+                        window.AppAlerts?.error(error.message || 'Erro ao excluir estabelecimento');
                     }
                 });
             });
 
-            <% if (typeof success !== 'undefined') { %>
-                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
-            <% } %>
-
-            <% if (typeof error !== 'undefined') { %>
-                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
-            <% } %>
-
+            <% if (typeof success !== 'undefined') { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>
+            <% if (typeof error !== 'undefined') { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
         });
     </script>
-
 </body>
 </html>

@@ -2,92 +2,107 @@
 <html lang="pt-br">
 <%- include('../partials/head', { title: 'Fluxo de Caixa' }) %>
 
-<body class="bg-light">
+<body class="list-page-body">
     <%- include('../partials/header') %>
-
     <div class="page-spacer"></div>
 
-    <div class="page-shell py-3">
+    <div class="list-shell">
         <%- include('../partials/breadcrumb', { pageTitle: 'Fluxo de Caixa' }) %>
 
-        <main class="geral">
-            <div class="filter-toolbar mb-3">
-                <div>
-                    <h1 class="mb-0 fw-bold">Fluxo de Caixa Anual - <%= year %></h1>
-                </div>
-                <div>
-                    <label for="anoInput" class="form-label">Ano para a pesquisa</label>
-                    <input type="number" id="anoInput" class="form-control text-center" value="<%= year %>" onchange="atualizarAno()">
-                </div>
+        <section class="list-hero list-hero-neutral">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-graph-up-arrow"></i> Financeiro</span>
+                <h1>Fluxo de caixa anual</h1>
+                <p>Uma visao mais organizada do desempenho mensal, com resultados, entradas e saidas em uma tabela ampla, moderna e facil de ler.</p>
             </div>
-
-            <div class="table-container">
-                <table id="fluxoDeCaixaTable" class="table table-bordered table-hover m-0 align-middle">
-                    <thead>
-                        <tr>
-                            <th>RESULTADO ATUAL</th>
-                            <th>Janeiro</th>
-                            <th>Fevereiro</th>
-                            <th>Março</th>
-                            <th>Abril</th>
-                            <th>Maio</th>
-                            <th>Junho</th>
-                            <th>Julho</th>
-                            <th>Agosto</th>
-                            <th>Setembro</th>
-                            <th>Outubro</th>
-                            <th>Novembro</th>
-                            <th>Dezembro</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <%
-                            const currentMonth = new Date().getMonth();
-                            let somaTotalAnualCorrente = 0;
-                            for (let i = 0; i <= currentMonth; i++) {
-                                somaTotalAnualCorrente += somaMensal[i] || 0;
-                            }
-                            let className = somaTotalAnualCorrente >= 0 ? 'highlight-positive' : 'highlight-negative';
-                            %>
-                            <td class="currency <%= className %>"><%= somaTotalAnualCorrente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                            <% somaMensal.forEach(function(total) { %>
-                                <td class="currency <%= total > 0 ? 'text-success bold' : (total < 0 ? 'text-danger bold' : 'text-black') %>"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                            <% }) %>
-                        </tr>
-
-                        <tr class="table-success total-entradas">
-                            <td class="fw-bold">TOTAL ENTRADAS</td>
-                            <% totaisEntradas.forEach(function(total) { %>
-                                <td class="currency text-success bold"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                            <% }) %>
-                        </tr>
-                        <% for (let tipo in dadosEntradas) { %>
-                            <tr>
-                                <td><%= tipo %></td>
-                                <% for (let i = 0; i < 12; i++) { %>
-                                    <td class="currency text-success"><%= dadosEntradas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                                <% } %>
-                            </tr>
-                        <% } %>
-
-                        <tr class="table-danger total-saidas">
-                            <td class="fw-bold">TOTAL SAÍDAS</td>
-                            <% totaisSaidas.forEach(function(total) { %>
-                                <td class="currency text-danger bold"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                            <% }) %>
-                        </tr>
-                        <% for (let tipo in dadosSaidas) { %>
-                            <tr>
-                                <td><%= tipo %></td>
-                                <% for (let i = 0; i < 12; i++) { %>
-                                    <td class="currency text-danger"><%= dadosSaidas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                                <% } %>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
+            <div class="list-hero-side">
+                <div class="list-stat"><strong>Ano</strong><span><%= year %></span></div>
+                <div class="list-stat"><strong>Visao</strong><span>Consolidado mensal do negocio</span></div>
             </div>
+        </section>
+
+        <main class="list-stage">
+            <section class="list-panel">
+                <div class="list-toolbar">
+                    <div class="list-toolbar-copy">
+                        <h2>Resumo financeiro de <%= year %></h2>
+                        <p>Altere o ano para comparar rapidamente a evolucao mensal de entradas, saidas e resultado acumulado.</p>
+                    </div>
+                    <div style="min-width:220px;">
+                        <label for="anoInput" class="form-label">Ano para a pesquisa</label>
+                        <input type="number" id="anoInput" class="form-control text-center" value="<%= year %>" onchange="atualizarAno()">
+                    </div>
+                </div>
+
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table id="fluxoDeCaixaTable" class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Resultado atual</th>
+                                    <th>Janeiro</th>
+                                    <th>Fevereiro</th>
+                                    <th>Marco</th>
+                                    <th>Abril</th>
+                                    <th>Maio</th>
+                                    <th>Junho</th>
+                                    <th>Julho</th>
+                                    <th>Agosto</th>
+                                    <th>Setembro</th>
+                                    <th>Outubro</th>
+                                    <th>Novembro</th>
+                                    <th>Dezembro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <%
+                                    const currentMonth = new Date().getMonth();
+                                    let somaTotalAnualCorrente = 0;
+                                    for (let i = 0; i <= currentMonth; i++) {
+                                        somaTotalAnualCorrente += somaMensal[i] || 0;
+                                    }
+                                    %>
+                                    <td><span class="table-badge <%= somaTotalAnualCorrente >= 0 ? 'table-badge-green' : 'table-badge-danger' %>"><%= somaTotalAnualCorrente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span></td>
+                                    <% somaMensal.forEach(function(total) { %>
+                                        <td><strong style="color:<%= total > 0 ? '#15803d' : (total < 0 ? '#b91c1c' : '#0f172a') %>;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                    <% }) %>
+                                </tr>
+
+                                <tr>
+                                    <td class="table-title-cell">Total entradas</td>
+                                    <% totaisEntradas.forEach(function(total) { %>
+                                        <td><strong style="color:#15803d;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                    <% }) %>
+                                </tr>
+                                <% for (let tipo in dadosEntradas) { %>
+                                    <tr>
+                                        <td><span class="table-muted"><%= tipo %></span></td>
+                                        <% for (let i = 0; i < 12; i++) { %>
+                                            <td style="color:#16a34a;"><%= dadosEntradas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+
+                                <tr>
+                                    <td class="table-title-cell">Total saidas</td>
+                                    <% totaisSaidas.forEach(function(total) { %>
+                                        <td><strong style="color:#dc2626;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                    <% }) %>
+                                </tr>
+                                <% for (let tipo in dadosSaidas) { %>
+                                    <tr>
+                                        <td><span class="table-muted"><%= tipo %></span></td>
+                                        <% for (let i = 0; i < 12; i++) { %>
+                                            <td style="color:#dc2626;"><%= dadosSaidas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 

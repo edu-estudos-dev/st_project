@@ -2,69 +2,99 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Lançamentos Cadastrados' }) %>
 
-<body class="bg-light">
+<body class="list-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
 
-    <div class="container-fluid px-4">
-        <main class="mb-5 geral">
-            <div class="table-container">
-                <div class="row mobile-stack-actions align-items-center">
-                    <div class="col-12 col-md-6">
-                        <h1 class="text-dark mb-3 fw-bold">Lançamentos Cadastrados</h1>
+    <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
+
+        <section class="list-hero list-hero-blue">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-cash-stack"></i> Financeiro</span>
+                <h1>Lançamentos cadastrados</h1>
+                <p>Consulte entradas e saídas em uma tabela mais clara, com destaque para vencimentos, valores e ações de manutenção do fluxo financeiro.</p>
+            </div>
+            <div class="list-hero-side">
+                <div class="list-stat">
+                    <strong>Total</strong>
+                    <span><%= lancamentos.length %> lançamentos</span>
+                </div>
+                <div class="list-stat">
+                    <strong>Ação rápida</strong>
+                    <span>Novo registro financeiro</span>
+                </div>
+            </div>
+        </section>
+
+        <main class="list-stage">
+            <section class="list-panel">
+                <div class="list-toolbar">
+                    <div class="list-toolbar-copy">
+                        <h2>Painel de movimentações</h2>
+                        <p>Atualize vencimentos, revise categorias e navegue pelas ações de visualizar, editar e excluir sem perder legibilidade.</p>
                     </div>
-                    <div class="col-12 col-md-6 d-flex justify-content-md-end">
-                        <a type="button" class="btn mb-3 btn-dark align-self-center w-100 w-md-auto" href="/lancamentos/add">
-                            <i class="bi bi-plus-circle"></i>&nbsp;Novo Lançamento
-                        </a>
-                    </div>
+                    <a class="list-action" href="/lancamentos/add">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Novo lançamento</span>
+                    </a>
                 </div>
 
-                <table class="table table-striped table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Entrada/Saída</th>
-                            <th>Data</th>
-                            <th>Tipo de Lançamento</th>
-                            <th>Forma de Pagamento</th>
-                            <th>Valor</th>
-                            <th>Descrição</th>
-                            <th>Vencimentos</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center align-middle">
-                        <% lancamentos.reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
-                            <tr id="row-<%= lancamento.id %>">
-                                <td class="py-0"><%= lancamento.id %></td>
-                                <td class="py-0"><%= lancamento.entrada_saida.toUpperCase() %></td>
-                                <td class="py-0"><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
-                                <td class="py-0"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></td>
-                                <td class="py-0"><%= lancamento.forma_de_pagamento.toUpperCase() %></td>
-                                <td class="py-0">R$ <%= typeof lancamento.valor === 'number' ? 'R$ ' + lancamento.valor.toFixed(2) : lancamento.valor.toUpperCase() %></td>
-                                <td class="py-0"><%= lancamento.descricao.toUpperCase() %></td>
-                                <td class="py-0">
-                                    <form action="/lancamentos/<%= lancamento.id %>/updateVencimento" method="POST" class="d-inline">
-                                        <div class="d-flex align-items-center">
-                                            <input type="date" class="form-control form-control-sm me-2" name="vencimento" id="vencimento-<%= lancamento.id %>" value="<%= vencimentoDate %>">
-                                            <button type="submit" class="btn btn-success btn-sm">Salvar</button>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td class="py-0">
-                                    <a href="/lancamentos/<%= lancamento.id %>/view" class="btn btn-secondary btn-sm me-1">Visualizar</a>
-                                    <a href="/lancamentos/<%= lancamento.id %>/edit" class="btn btn-warning btn-sm my-1 me-1">Editar</a>
-                                    <form action="/lancamentos/<%= lancamento.id %>?_method=DELETE" method="POST" class="d-inline delete-form">
-                                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+                <div class="list-summary-grid">
+                    <div class="list-summary-card"><strong>Entradas e saídas</strong><span>Visão consolidada</span></div>
+                    <div class="list-summary-card"><strong>Vencimentos</strong><span>Edição inline</span></div>
+                    <div class="list-summary-card"><strong>Operação</strong><span>Gestão financeira</span></div>
+                    <div class="list-summary-card"><strong>Total</strong><span><%= lancamentos.length %> registros</span></div>
+                </div>
+
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tipo</th>
+                                    <th>Data</th>
+                                    <th>Categoria</th>
+                                    <th>Pagamento</th>
+                                    <th>Valor</th>
+                                    <th class="table-col-description">Descrição</th>
+                                    <th>Vencimento</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% lancamentos.reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
+                                    <tr id="row-<%= lancamento.id %>">
+                                        <td><span class="table-badge table-badge-neutral">#<%= lancamento.id %></span></td>
+                                        <td><span class="table-badge <%= lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger' %>"><%= lancamento.entrada_saida.toUpperCase() %></span></td>
+                                        <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
+                                        <td><div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div></td>
+                                        <td><%= lancamento.forma_de_pagamento.toUpperCase() %></td>
+                                        <td><strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                        <td class="table-cell-description"><span class="table-muted"><%= lancamento.descricao.toUpperCase() %></span></td>
+                                        <td>
+                                            <form action="/lancamentos/<%= lancamento.id %>/updateVencimento" method="POST" class="table-inline-form">
+                                                <input type="date" class="form-control form-control-sm" name="vencimento" id="vencimento-<%= lancamento.id %>" value="<%= vencimentoDate %>">
+                                                <button type="submit" class="table-btn table-btn-save">Salvar</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <div class="table-actions table-actions-launch">
+                                                <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+                                                <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                <form action="/lancamentos/<%= lancamento.id %>?_method=DELETE" method="POST" class="d-inline delete-form">
+                                                    <button type="submit" class="table-btn table-btn-delete">Deletar</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -74,11 +104,16 @@
             const rows = document.querySelectorAll('tr[id^="row-"]');
             const today = new Date();
 
-            rows.forEach(row => {
+            rows.forEach((row) => {
                 const vencimentoInput = row.querySelector('input[type="date"]');
+                if (!vencimentoInput.value) return;
                 const vencimentoDate = new Date(vencimentoInput.value);
                 const daysDifference = (vencimentoDate - today) / (1000 * 3600 * 24);
-                row.classList.toggle('table-danger', daysDifference <= 10 && daysDifference >= 0);
+                if (daysDifference <= 10 && daysDifference >= 0) {
+                    row.querySelectorAll('td').forEach((cell) => {
+                        cell.style.background = '#fff7ed';
+                    });
+                }
             });
 
             document.querySelectorAll('.delete-form').forEach((form) => {
@@ -94,12 +129,8 @@
                 });
             });
 
-            <% if (typeof success !== 'undefined') { %>
-                window.AppAlerts?.success("<%- success.replace(/\"/g, '&quot;') %>");
-            <% } %>
-            <% if (typeof error !== 'undefined') { %>
-                window.AppAlerts?.error("<%- error.replace(/\"/g, '&quot;') %>");
-            <% } %>
+            <% if (typeof success !== 'undefined') { %>window.AppAlerts?.success("<%- success.replace(/\"/g, '&quot;') %>");<% } %>
+            <% if (typeof error !== 'undefined') { %>window.AppAlerts?.error("<%- error.replace(/\"/g, '&quot;') %>");<% } %>
         });
     </script>
 </body>

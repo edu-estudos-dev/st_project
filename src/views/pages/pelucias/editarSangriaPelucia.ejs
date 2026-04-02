@@ -1,106 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Editar Sangria de Pelúcias' }) %>
+<%- include('../../partials/head', { title: 'Editar Sangria de Pelucias' }) %>
 
-<body class="bg-light">
+<body class="form-page-body">
     <%- include('../../partials/header') %>
 
     <div class="page-spacer"></div>
 
-    <div class="form-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Pelúcias' }) %>
+    <div class="form-shell form-shell-modern">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Pelucias' }) %>
 
-        <div class="cabecalho-pelucia">
-            <h1 class="mb-0">Editar Sangria de Pelúcias</h1>
-        </div>
+        <section class="form-hero form-hero-violet">
+            <div class="form-hero-content">
+                <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
+                <h1>Editar sangria de pelucias</h1>
+                <p>Atualizei a tela de edicao para seguir o mesmo padrao moderno do cadastro, destacando leituras, valores e observacoes em blocos mais claros.</p>
+            </div>
 
-        <main class="pelucia">
-            <form action="/pelucias/sangrias/edit" method="POST">
+            <div class="form-hero-side">
+                <div class="form-hero-stat">
+                    <strong>Produto</strong>
+                    <span>Pelucias</span>
+                </div>
+                <div class="form-hero-stat">
+                    <strong>Registro</strong>
+                    <span>ID <%= sangria.id %></span>
+                </div>
+            </div>
+        </section>
+
+        <main class="form-stage">
+            <form action="/pelucias/sangrias/edit" method="POST" class="modern-form">
                 <input type="hidden" name="id" value="<%= sangria.id %>">
 
-                <div class="row g-3">
-                    <div class="col-12 col-lg-6">
-                        <label for="estabelecimento" class="form-label fw-bold">Estabelecimento</label>
-                        <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                            <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="data_sangria" class="form-label fw-bold">Data da Sangria</label>
-                        <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= sangria.data_sangria.toISOString().split('T')[0] %>" required>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label for="tipo_pagamento" class="form-label fw-bold">Tipo de Pagamento</label>
-                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                            <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
-                            <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row g-3 mt-1">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="leitura_atual" class="form-label fw-bold">Leitura Atual</label>
-                        <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="ultima_leitura" class="form-label fw-bold">Última Leitura</label>
-                        <input class="form-control readonly-input text-center" id="ultima_leitura" name="ultima_leitura" value="<%= sangria.ultima_leitura %>" disabled readonly>
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="abastecido" class="form-label fw-bold">Abastecido</label>
-                        <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="vendido" class="form-label fw-bold">Vendido</label>
-                        <input class="form-control text-center readonly-input" id="vendido" name="vendido" value="<%= sangria.vendido %>" disabled readonly>
-                    </div>
-                </div>
-
-                <div class="row g-3 mt-1">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="valor_apurado" class="form-label fw-bold">Valor Apurado</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required oninput="calculateValues()">
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Visita</span>
+                            <h2>Informacoes da coleta</h2>
+                            <p>Atualize estabelecimento, data e forma de pagamento vinculados a este registro operacional.</p>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="comissao" class="form-label fw-bold">Comissão (%)</label>
-                        <div class="input-group">
-                            <span class="input-group-text">%</span>
-                            <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="valor_comerciante" class="form-label fw-bold">Valor do Comerciante</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" value="<%= sangria.valor_comerciante %>" readonly disabled>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label for="valor_liquido" class="form-label fw-bold">Valor Líquido</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <label for="observacoes" class="form-label fw-bold">Observações</label>
-                        <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= sangria.observacoes %></textarea>
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="estabelecimento">Estabelecimento</label>
+                            <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
+                                <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                    <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="data_sangria">Data da sangria</label>
+                            <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= sangria.data_sangria.toISOString().split('T')[0] %>" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="tipo_pagamento">Tipo de pagamento</label>
+                            <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
+                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                                <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="action-row mt-4">
-                    <a href="/pelucias/sangrias" class="btn btn-warning">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Atualizar</button>
-                </div>
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Leituras</span>
+                            <h2>Controle operacional</h2>
+                            <p>Revise leitura atual, abastecimento e vendido. Os valores financeiros continuam sendo recalculados automaticamente.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="leitura_atual">Leitura atual</label>
+                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="ultima_leitura">Ultima leitura</label>
+                            <input class="form-control readonly-input text-center" id="ultima_leitura" name="ultima_leitura" value="<%= sangria.ultima_leitura %>" disabled readonly>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="abastecido">Abastecido</label>
+                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="vendido">Vendido</label>
+                            <input class="form-control text-center readonly-input" id="vendido" name="vendido" value="<%= sangria.vendido %>" disabled readonly>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Financeiro</span>
+                            <h2>Apuracao e comissao</h2>
+                            <p>Altere valor apurado e comissao para atualizar automaticamente o valor do comerciante e o valor liquido.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="valor_apurado">Valor apurado</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required oninput="calculateValues()">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="comissao">Comissao (%)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">%</span>
+                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="valor_comerciante">Valor do comerciante</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" value="<%= sangria.valor_comerciante %>" readonly disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="valor_liquido">Valor liquido</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Observacoes</span>
+                            <h2>Anotacoes complementares</h2>
+                            <p>Atualize qualquer informacao relevante para a proxima coleta, conferencia ou abastecimento.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="observacoes">Observacoes</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5"><%= sangria.observacoes %></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-actions-bar">
+                    <div class="form-actions-copy">
+                        <strong>Salvar alteracoes</strong>
+                        <span>Revise leituras e valores antes de atualizar esta sangria de pelucias.</span>
+                    </div>
+
+                    <div class="form-actions-buttons">
+                        <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn-modern">
+                            <i class="bi bi-check2-circle"></i>
+                            <span>Atualizar sangria</span>
+                        </button>
+                    </div>
+                </section>
             </form>
         </main>
     </div>
