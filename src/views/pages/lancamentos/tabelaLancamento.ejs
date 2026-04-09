@@ -62,10 +62,9 @@
 
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table launch-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Tipo</th>
                                     <th>Data</th>
                                     <th class="table-col-category">Categoria</th>
@@ -76,10 +75,9 @@
                                     <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                                <tbody>
                                 <% lancamentos.slice().reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
                                     <tr id="row-<%= lancamento.id %>">
-                                        <td><span class="table-badge table-badge-neutral">#<%= lancamento.id %></span></td>
                                         <td><span class="table-badge <%= lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger' %>"><%= lancamento.entrada_saida.toUpperCase() %></span></td>
                                         <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
                                         <td class="table-col-category"><div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div></td>
@@ -148,6 +146,6 @@
             <% if (typeof error !== 'undefined') { %>window.AppAlerts?.error("<%- error.replace(/\"/g, '&quot;') %>");<% } %>
         });
     </script>
-    <%- include('../../partials/financialNotificationsPopup', { popupMode: 'finance-route' }) %>
+    <%- include('../../partials/financialNotificationsPopup', { popupMode: 'launch-once' }) %>
 </body>
 </html>

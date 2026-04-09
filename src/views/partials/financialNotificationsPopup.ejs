@@ -1,14 +1,27 @@
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
+        const waitForSwalToClose = async () => {
+            if (typeof Swal === 'undefined') return;
+
+            let guard = 0;
+            while (Swal.isVisible() && guard < 40) {
+                await new Promise((resolve) => window.setTimeout(resolve, 150));
+                guard += 1;
+            }
+        };
+
         const totalAlertas = <%= financialNotifications?.total || 0 %>;
         const proximos = <%= financialNotifications?.proximos?.length || 0 %>;
         const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
         const popupMode = '<%= popupMode %>';
-        const storageKey = 'ludix-financial-alerts-dashboard-shown';
+        const storageKey = popupMode === 'launch-once'
+            ? 'ludix-financial-alerts-launch-shown'
+            : 'ludix-financial-alerts-dashboard-shown';
 
         if (!totalAlertas) return;
 
-        if (popupMode === 'dashboard-once' && window.sessionStorage.getItem(storageKey) === 'true') {
+        if ((popupMode === 'dashboard-once' || popupMode === 'launch-once')
+            && window.sessionStorage.getItem(storageKey) === 'true') {
             return;
         }
 
@@ -16,9 +29,10 @@
         if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
         if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
 
-        if (popupMode === 'dashboard-once') {
+        if (popupMode === 'dashboard-once' || popupMode === 'launch-once') {
             window.sessionStorage.setItem(storageKey, 'true');
         }
+        await waitForSwalToClose();
 
         const confirmed = await window.AppAlerts?.confirm({
             title: 'Notificações financeiras',

@@ -28,6 +28,26 @@ export const registerRateLimiter = rateLimit({
     }
 });
 
+export const forgotPasswordRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 5,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    handler: (req, res) => {
+        return res.redirect('/forgot-password?error=Muitas tentativas. Aguarde alguns minutos e tente novamente.');
+    }
+});
+
+export const resetPasswordRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 8,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    handler: (req, res) => {
+        return res.redirect('/forgot-password?error=Muitas tentativas de redefinição. Aguarde alguns minutos e tente novamente.');
+    }
+});
+
 export const disableAuthenticatedCache = (req, res, next) => {
     if (req.user) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');

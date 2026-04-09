@@ -2291,22 +2291,30 @@ figure {
 }
 
 .launch-table {
-   min-width: 700px;
+   min-width: 620px;
 }
 
 .launch-table .table-col-category {
-   min-width: 108px;
+   min-width: 92px;
 }
 
 .launch-table .table-col-description,
 .launch-table .table-cell-description {
-   min-width: 160px;
-   max-width: 220px;
+   min-width: 150px;
+   max-width: 200px;
+   white-space: normal;
+}
+
+.launch-table .table-cell-description .table-muted {
+   display: block;
+   white-space: normal;
+   word-break: break-word;
+   line-height: 1.45;
 }
 
 .launch-table .table-inline-form {
-   grid-template-columns: minmax(108px, 1fr) auto;
-   min-width: 154px;
+   grid-template-columns: minmax(100px, 1fr) auto;
+   min-width: 146px;
    gap: 0.3rem;
 }
 
@@ -2322,18 +2330,18 @@ figure {
 }
 
 .launch-table .table-actions-launch {
-   min-width: 116px;
-   gap: 0.35rem;
+   min-width: 110px;
+   gap: 0.3rem;
 }
 
 .launch-table .table-btn {
    font-size: 0.78rem;
-   padding: 0.5rem 0.6rem;
+   padding: 0.46rem 0.52rem;
 }
 
 .launch-table thead th,
 .launch-table tbody td {
-   padding-inline: 0.7rem;
+   padding-inline: 0.55rem;
 }
 
 .table-cell-highlight {
