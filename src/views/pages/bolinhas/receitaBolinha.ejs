@@ -17,7 +17,7 @@
             </div>
             <div class="list-hero-side">
                 <div class="list-stat"><strong>Produto</strong><span>Bolinhas</span></div>
-                <div class="list-stat"><strong>Faixa</strong><span>2023 a 2030</span></div>
+                <div class="list-stat"><strong>Faixa</strong><span>2025 a 2035</span></div>
             </div>
         </section>
 
@@ -36,7 +36,7 @@
                             <thead>
                                 <tr>
                                     <th>Meses</th>
-                                    <% for (let ano = 2023; ano <= 2030; ano++) { %>
+                                    <% for (let ano = 2025; ano <= 2035; ano++) { %>
                                         <th><span class="revenue-year-chip"><%= ano %></span></th>
                                     <% } %>
                                 </tr>
@@ -46,7 +46,7 @@
                                 <% meses.forEach((mes, index) => { %>
                                     <tr>
                                         <td class="table-title-cell revenue-month-cell"><%= mes %></td>
-                                        <% for (let ano = 2023; ano <= 2030; ano++) { %>
+                                        <% for (let ano = 2025; ano <= 2035; ano++) { %>
                                             <td>
                                                 <%
                                                     const receitaMesAno = receita.find(r => Number(r.ano) === ano && Number(r.mes) === index + 1);
@@ -59,7 +59,7 @@
                                 <% }) %>
                                 <tr class="revenue-total-row">
                                     <td class="table-title-cell revenue-month-cell">Total</td>
-                                    <% for (let ano = 2023; ano <= 2030; ano++) { %>
+                                    <% for (let ano = 2025; ano <= 2035; ano++) { %>
                                         <td>
                                             <%
                                                 const totalAno = receita
