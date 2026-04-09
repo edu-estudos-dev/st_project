@@ -178,11 +178,16 @@
          const proximos = <%= financialNotifications?.proximos?.length || 0 %>;
          const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
 
+         const painelAlertStorageKey = 'ludix-financial-alerts-dashboard-shown';
+
          if (!totalAlertas) return;
+         if (window.sessionStorage.getItem(painelAlertStorageKey) === 'true') return;
 
          const partes = [];
          if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
          if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
+
+         window.sessionStorage.setItem(painelAlertStorageKey, 'true');
 
          const confirmed = await window.AppAlerts?.confirm({
             title: 'Notificações financeiras',

@@ -179,5 +179,6 @@
             <% if (error) { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
         });
     </script>
+    <%- include('../../partials/financialNotificationsPopup', { popupMode: 'finance-route' }) %>
 </body>
 </html>
