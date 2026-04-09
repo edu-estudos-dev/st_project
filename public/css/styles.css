@@ -3398,17 +3398,55 @@ figure {
       position: fixed;
       top: 0.75rem;
       width: calc(100% - 1rem);
-      padding: 0.85rem;
+      padding: 0.8rem 0.85rem;
+      border-radius: 20px;
+   }
+
+   .brand-mark-home {
+      font-size: 2rem;
+   }
+
+   .homepage-topbar nav {
+      width: 100%;
    }
 
    .homepage-topbar nav ul {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       justify-content: center;
-      gap: 0.65rem;
+      align-items: center;
+      gap: 0.35rem 0.55rem;
+      width: 100%;
+      padding: 0;
+      margin-top: 0.35rem;
+   }
+
+   .homepage-topbar nav li:last-child {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      margin-top: 0.05rem;
+   }
+
+   .homepage-topbar nav a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 34px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: center;
+   }
+
+   .homepage-login-link {
+      min-height: 42px;
+      min-width: 122px;
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
    }
 
    .ludix-hero {
-      padding: 8rem 1rem 3rem;
+      padding: 7.2rem 1rem 3rem;
    }
 
    .ludix-hero-card {
