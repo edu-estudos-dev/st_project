@@ -4,6 +4,7 @@ import LancamentoController from '../controllers/lancamentoController.js';
 const router = express.Router();
 
 router.get('/', LancamentoController.index);
+router.get('/vencimentos', LancamentoController.vencimentos);
 router.get('/add', LancamentoController.addLancamentoForm);
 router.post('/add', LancamentoController.addLancamento);
 router.get('/:id/edit', LancamentoController.editLancamentoForm);

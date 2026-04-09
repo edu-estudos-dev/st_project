@@ -267,6 +267,18 @@ class PeluciasModel {
     return result.rows[0] || { data_sangria: '1970-01-01' };
   };
 
+  hasSangria = async estabelecimentoId => {
+    const query = `
+      SELECT id
+      FROM sangrias_pelucias
+      WHERE estabelecimento_id = $1
+      LIMIT 1
+    `;
+
+    const result = await connection.query(query, [estabelecimentoId]);
+    return result.rows.length > 0;
+  };
+
   getAllSangrias = async () => {
     const query = `
       SELECT sp.id, e.estabelecimento,

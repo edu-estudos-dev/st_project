@@ -24,50 +24,69 @@ class FigurinhasController {
         qtde_vendido,
         valor_apurado,
         tipo_pagamento,
-        observacoes
+        observacoes,
+        abertura_inicial,
+        quantidade_inicial
       } = req.body;
 
       if (!estabelecimento_id || !data_sangria) {
-        throw new Error('Dados obrigatórios faltando');
+        throw new Error('Dados obrigatórios faltando.');
       }
 
-      // 🔥 BUSCA ÚLTIMA SANGRIA
-      const ultimaSangria =
-        await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const isAberturaInicial = abertura_inicial === 'on';
 
-      const estoqueAnterior =
-        ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada) : 0;
+      if (isAberturaInicial) {
+        if (ultimaSangria.length > 0) {
+          throw new Error('Este estabelecimento já possui histórico de figurinhas. Use o cadastro normal de visita.');
+        }
 
-      // 🔥 CÁLCULO CORRETO
-      const qtde_deixada =
+        const quantidadeInicial = parseInt(quantidade_inicial || 0, 10);
+        if (Number.isNaN(quantidadeInicial) || quantidadeInicial < 0) {
+          throw new Error('A quantidade inicial deve ser um número válido.');
+        }
+
+        await figurinhasModel.createSangria({
+          estabelecimento_id,
+          data_sangria,
+          qtde_deixada: quantidadeInicial,
+          abastecido: quantidadeInicial,
+          estoque: 0,
+          qtde_vendido: 0,
+          valor_apurado: 0,
+          tipo_pagamento: 'especie',
+          observacoes: `[ABERTURA INICIAL] ${observacoes || 'Ponto iniciado com estoque base.'}`.trim()
+        });
+
+        return res.redirect('/figurinhas/sangrias?success=Abertura inicial de figurinhas cadastrada com sucesso');
+      }
+
+      const estoqueAnterior = ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada, 10) : 0;
+      const qtdeDeixada =
         estoqueAnterior -
-        parseInt(qtde_vendido || 0) +
-        parseInt(abastecido || 0);
+        parseInt(qtde_vendido || 0, 10) +
+        parseInt(abastecido || 0, 10);
 
-      if (qtde_deixada < 0) {
-        throw new Error('Estoque não pode ser negativo');
+      if (qtdeDeixada < 0) {
+        throw new Error('O estoque não pode ficar negativo.');
       }
 
       await figurinhasModel.createSangria({
         estabelecimento_id,
         data_sangria,
-        qtde_deixada,
-        abastecido: parseInt(abastecido || 0),
+        qtde_deixada: qtdeDeixada,
+        abastecido: parseInt(abastecido || 0, 10),
         estoque: estoqueAnterior,
-        qtde_vendido: parseInt(qtde_vendido || 0),
+        qtde_vendido: parseInt(qtde_vendido || 0, 10),
         valor_apurado: parseFloat(valor_apurado || 0),
         tipo_pagamento,
         observacoes: observacoes || ''
       });
 
-      res.redirect(
-        '/figurinhas/sangrias?success=Sangria adicionada com sucesso'
-      );
+      res.redirect('/figurinhas/sangrias?success=Sangria adicionada com sucesso');
     } catch (error) {
-      console.error('Erro ao adicionar:', error);
-      res.redirect(
-        '/figurinhas/sangrias?error=' + encodeURIComponent(error.message)
-      );
+      console.error('Erro ao adicionar sangria de figurinhas:', error);
+      res.redirect(`/figurinhas/sangrias?error=${encodeURIComponent(error.message)}`);
     }
   };
 
@@ -84,7 +103,7 @@ class FigurinhasController {
         error
       });
     } catch (error) {
-      console.error('Erro ao listar:', error);
+      console.error('Erro ao listar figurinhas:', error);
       res.status(500).send('Erro ao listar.');
     }
   };
@@ -125,29 +144,26 @@ class FigurinhasController {
         observacoes
       } = req.body;
 
-      const ultimaSangria =
-        await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const estoqueAnterior = ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada, 10) : 0;
 
-      const estoqueAnterior =
-        ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada) : 0;
-
-      const qtde_deixada =
+      const qtdeDeixada =
         estoqueAnterior -
-        parseInt(qtde_vendido || 0) +
-        parseInt(abastecido || 0);
+        parseInt(qtde_vendido || 0, 10) +
+        parseInt(abastecido || 0, 10);
 
-      if (qtde_deixada < 0) {
-        throw new Error('Estoque não pode ser negativo');
+      if (qtdeDeixada < 0) {
+        throw new Error('O estoque não pode ficar negativo.');
       }
 
       await figurinhasModel.updateSangria({
         id,
         estabelecimento_id,
         data_sangria,
-        qtde_deixada,
-        abastecido: parseInt(abastecido || 0),
+        qtde_deixada: qtdeDeixada,
+        abastecido: parseInt(abastecido || 0, 10),
         estoque: estoqueAnterior,
-        qtde_vendido: parseInt(qtde_vendido || 0),
+        qtde_vendido: parseInt(qtde_vendido || 0, 10),
         valor_apurado: parseFloat(valor_apurado || 0),
         tipo_pagamento,
         observacoes: observacoes || ''
@@ -156,9 +172,7 @@ class FigurinhasController {
       res.redirect('/figurinhas/sangrias?success=Atualizado com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar:', error);
-      res.redirect(
-        '/figurinhas/sangrias?error=' + encodeURIComponent(error.message)
-      );
+      res.redirect(`/figurinhas/sangrias?error=${encodeURIComponent(error.message)}`);
     }
   };
 

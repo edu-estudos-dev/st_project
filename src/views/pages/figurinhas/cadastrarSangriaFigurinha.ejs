@@ -23,19 +23,19 @@
                 </div>
                 <div class="form-hero-stat">
                     <strong>Destaque</strong>
-                    <span>Ultima visita e quantidade deixada calculadas na tela</span>
+                    <span>Última visita e quantidade deixada calculadas na tela</span>
                 </div>
             </div>
         </section>
 
         <main class="form-stage">
-            <form action="/figurinhas/sangrias/add" method="POST" class="modern-form">
+            <form action="/figurinhas/sangrias/add" method="POST" class="modern-form" id="figurinhaForm">
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Visita</span>
                             <h2>Dados do atendimento</h2>
-                            <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a ultima visita desse ponto.</p>
+                            <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.</p>
                         </div>
                     </div>
 
@@ -55,10 +55,27 @@
                         </div>
                     </div>
 
+                    <div class="row g-3 mt-1">
+                        <div class="col-12">
+                            <label class="modern-checkbox modern-checkbox-blue" for="abertura_inicial">
+                                <input class="form-check-input" type="checkbox" id="abertura_inicial" name="abertura_inicial">
+                                <span>Este é um ponto novo e quero cadastrar a abertura inicial</span>
+                            </label>
+                            <small class="modern-note">Quando ativado, o formulário simplifica o cadastro para informar apenas a quantidade inicial deixada no ponto.</small>
+                        </div>
+                    </div>
+
+                    <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
+                        <div class="col-12 col-lg-4">
+                            <label for="quantidade_inicial">Quantidade inicial deixada</label>
+                            <input type="number" class="form-control text-center" id="quantidade_inicial" name="quantidade_inicial" min="0">
+                        </div>
+                    </div>
+
                     <div class="form-summary-grid mt-4">
                         <div class="form-summary-card">
-                            <strong>Ultima visita</strong>
-                            <span id="ultimaVisitaResumo">Aguardando selecao</span>
+                            <strong>Última visita</strong>
+                            <span id="ultimaVisitaResumo">Aguardando seleção</span>
                         </div>
                         <div class="form-summary-card">
                             <strong>Estoque anterior</strong>
@@ -70,17 +87,17 @@
                         </div>
                         <div class="form-summary-card">
                             <strong>Pagamento</strong>
-                            <span>Especie ou PIX</span>
+                            <span id="pagamentoResumo">Espécie ou PIX</span>
                         </div>
                     </div>
                 </section>
 
-                <section class="form-card">
+                <section class="form-card" id="movimentacaoCard">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Movimentacao</span>
+                            <span class="form-section-tag">Movimentação</span>
                             <h2>Venda, abastecimento e saldo</h2>
-                            <p>Preencha os numeros da visita e acompanhe a quantidade deixada e a ultima visita sem precisar sair da pagina.</p>
+                            <p>Preencha os números da visita e acompanhe a quantidade deixada e a última visita sem precisar sair da página.</p>
                         </div>
                     </div>
 
@@ -104,12 +121,12 @@
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie">Especie</option>
+                                <option value="especie">Espécie</option>
                                 <option value="pix">PIX</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-4">
-                            <label for="ultima_visita">Ultima visita</label>
+                            <label for="ultima_visita">Última visita</label>
                             <input type="date" class="form-control text-center readonly-input" id="ultima_visita" readonly disabled>
                         </div>
                     </div>
@@ -118,23 +135,23 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Observacoes</span>
-                            <h2>Anotacoes sobre o ponto</h2>
-                            <p>Deixe observacoes complementares para orientar a proxima visita e facilitar o acompanhamento da operacao.</p>
+                            <span class="form-section-tag">Observações</span>
+                            <h2>Anotações sobre o ponto</h2>
+                            <p>Deixe observações complementares para orientar a próxima visita e facilitar o acompanhamento da operação.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="observacoes">Observacoes</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: ponto vendeu bem, precisou de reposicao extra, comerciante pediu novo horario..."></textarea>
+                            <label for="observacoes">Observações</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: ponto vendeu bem, precisou de reposição extra, comerciante pediu novo horário..."></textarea>
                         </div>
                     </div>
                 </section>
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Revisao final</strong>
+                        <strong>Revisão final</strong>
                         <span>Confira data, quantidades e valor apurado antes de concluir o registro da visita.</span>
                     </div>
 
@@ -158,21 +175,46 @@
 
         function formatDateToBrazilian(dateString) {
             if (!dateString) return '';
-
             const parts = dateString.split('-');
             if (parts.length !== 3) return dateString;
-
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
         function updateResumoUltimaVisita(data, estoque) {
-            document.getElementById('ultimaVisitaResumo').textContent = data ? formatDateToBrazilian(data) : 'Sem historico';
+            document.getElementById('ultimaVisitaResumo').textContent = data ? formatDateToBrazilian(data) : 'Sem histórico';
             document.getElementById('estoqueAnteriorResumo').textContent = `${estoque || 0} unidades`;
         }
 
         function updateResumoQuantidade(resultado) {
             document.getElementById('qtde_deixada').value = resultado;
             document.getElementById('qtdeDeixadaResumo').textContent = `${resultado} unidades`;
+        }
+
+        function syncModoAberturaInicial() {
+            const isAbertura = document.getElementById('abertura_inicial').checked;
+            const aberturaBox = document.getElementById('aberturaInicialBox');
+            const quantidadeInicialInput = document.getElementById('quantidade_inicial');
+            const camposNormais = ['valor_apurado', 'qtde_vendido', 'abastecido', 'tipo_pagamento'];
+
+            aberturaBox.classList.toggle('d-none', !isAbertura);
+            quantidadeInicialInput.required = isAbertura;
+
+            camposNormais.forEach((id) => {
+                const field = document.getElementById(id);
+                field.required = !isAbertura;
+                if (isAbertura && field.tagName === 'INPUT') field.value = '';
+            });
+
+            document.getElementById('movimentacaoCard').classList.toggle('opacity-50', isAbertura);
+            document.getElementById('movimentacaoCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
+            document.getElementById('pagamentoResumo').textContent = isAbertura ? 'Abertura inicial' : 'Espécie ou PIX';
+
+            if (isAbertura) {
+                const qtdInicial = parseFloat(quantidadeInicialInput.value) || 0;
+                updateResumoQuantidade(qtdInicial);
+            } else {
+                calculateQuantidadeDeixada();
+            }
         }
 
         document.getElementById('estabelecimento').addEventListener('change', async function () {
@@ -192,7 +234,7 @@
                 }
 
                 window.estoqueAnterior = data.estoque || 0;
-                calculateQuantidadeDeixada();
+                syncModoAberturaInicial();
             } catch (error) {
                 console.error(error);
                 updateResumoUltimaVisita('', 0);
@@ -203,13 +245,16 @@
             const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
             const vendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
             const resultado = window.estoqueAnterior - vendido + abastecido;
-
             updateResumoQuantidade(resultado);
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
             updateResumoUltimaVisita('', 0);
+
+            document.getElementById('abertura_inicial').addEventListener('change', syncModoAberturaInicial);
+            document.getElementById('quantidade_inicial').addEventListener('input', syncModoAberturaInicial);
+            syncModoAberturaInicial();
         });
     </script>
 </body>

@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-lg bg-primary fixed-top px-3 border-bottom border-warning shadow-sm">
+<nav class="navbar navbar-expand-lg fixed-top app-nav">
     <div class="container-fluid">
-        <a class="navbar-brand fs-2" href="/painel">
+        <a class="navbar-brand fs-2" href="/painel" aria-label="Painel de controle">
             <img class="img-logo" src="/images/logo-ST.png" alt="SuperToys Logo">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Abrir menu de navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -14,30 +14,30 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn-header fs-5" href="#" id="navbarDropdownAdministrativo" role="button"
+                    <a class="nav-link dropdown-toggle btn-header fs-6" href="#" id="navbarDropdownAdministrativo" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Administrativo
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdministrativo">
                         <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownEstabelecimentos"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Estabelecimentos</a>
+                            <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownEstabelecimentos"
+                                role="button" aria-expanded="false">Estabelecimentos</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownEstabelecimentos">
-                                <li><a class="dropdown-item" href="/estabelecimentos">Estabelecimentos Cadastrados</a></li>
-                                <li><a class="dropdown-item" href="/estabelecimentos/add">Cadastrar Estabelecimento</a></li>
+                                <li><a class="dropdown-item" href="/estabelecimentos">Estabelecimentos cadastrados</a></li>
+                                <li><a class="dropdown-item" href="/estabelecimentos/add">Cadastrar estabelecimento</a></li>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownFinanceiro"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">Financeiro</a>
+                            <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownFinanceiro"
+                                role="button" aria-expanded="false">Financeiro</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                                <li><a class="dropdown-item" href="/lancamentos">Lançamentos Cadastrados</a></li>
-                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer Lançamento</a></li>
-                                <li><a class="dropdown-item" href="/fluxo-de-caixa">Fluxo de Caixa</a></li>
+                                <li><a class="dropdown-item" href="/lancamentos">Lançamentos cadastrados</a></li>
+                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer lançamento</a></li>
+                                <li><a class="dropdown-item" href="/fluxo-de-caixa">Fluxo de caixa</a></li>
                                 <% if (navProducts.hasAny) { %>
                                     <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownReceitas"
-                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">Receitas</a>
+                                        <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownReceitas"
+                                            role="button" aria-expanded="false">Receitas</a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
                                             <% if (navProducts.bolinhas) { %>
                                                 <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
@@ -58,40 +58,41 @@
 
                 <% if (navProducts.hasAny) { %>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle btn-header fs-5" href="#" id="navbarDropdownOperacional" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Operacional
+                        <a class="nav-link dropdown-toggle btn-header fs-6" href="#" id="navbarDropdownOperacional" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Operacional
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
                             <% if (navProducts.bolinhas) { %>
                                 <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownBolinhas"
-                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Bolinhas</a>
+                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownBolinhas"
+                                        role="button" aria-expanded="false">Bolinhas</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de Receita</a></li>
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de Vendas</a></li>
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle Geral</a></li>
+                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
+                                        <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
+                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
                                     </ul>
                                 </li>
                             <% } %>
                             <% if (navProducts.figurinhas) { %>
                                 <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownFigurinhas"
-                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Figurinhas</a>
+                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownFigurinhas"
+                                        role="button" aria-expanded="false">Figurinhas</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de Receita</a></li>
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de Vendas</a></li>
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle Geral</a></li>
+                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
+                                        <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
+                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
                                     </ul>
                                 </li>
                             <% } %>
                             <% if (navProducts.pelucias) { %>
                                 <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownPelucias"
-                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">Pelúcias</a>
+                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownPelucias"
+                                        role="button" aria-expanded="false">Pelúcias</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de Receita</a></li>
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de Vendas</a></li>
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle Geral</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
                                     </ul>
                                 </li>
                             <% } %>
@@ -100,13 +101,20 @@
                 <% } %>
             </ul>
 
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <a href="/lancamentos/vencimentos" class="nav-alert-link" title="Próximos vencimentos">
+                    <i class="bi bi-bell"></i>
+                    <span>Alertas</span>
+                    <% if (financialNotifications && financialNotifications.total > 0) { %>
+                        <span class="nav-alert-badge"><%= financialNotifications.total %></span>
+                    <% } %>
+                </a>
                 <form action="/search" class="d-flex flex-grow-1" role="search" method="POST" novalidate>
-                    <input name="termo" class="form-control me-2" type="search" placeholder="Pesquisar..."
-                        aria-label="Search">
+                    <input name="termo" class="form-control me-2" type="search" placeholder="Pesquisar no sistema"
+                        aria-label="Pesquisar no sistema">
                     <button class="btn btn-outline-light" type="submit">Pesquisar</button>
                 </form>
-                <form action="/logout" method="POST" class="ms-lg-3">
+                <form action="/logout" method="POST" class="ms-lg-1">
                     <button class="btn btn-danger text-white px-3" type="submit">Sair</button>
                 </form>
             </div>
@@ -126,8 +134,7 @@
         top: 0;
     }
 
-    .dropdown-submenu:hover .dropdown-menu,
-    .dropdown-submenu.show .dropdown-menu {
+    .dropdown-submenu.show > .dropdown-menu {
         display: block;
     }
 
@@ -144,71 +151,73 @@
         border-left: .3em solid transparent;
     }
 
-    .dropdown-submenu:hover > .dropdown-toggle::after,
     .dropdown-submenu.show > .dropdown-toggle::after {
         border-top: 0;
         border-bottom: .3em solid;
     }
 
     .menu-active {
-        background-color: #ffc107 !important;
-        color: #000 !important;
+        background-color: #dbeafe !important;
+        color: #0f172a !important;
+    }
+
+    @media (min-width: 992px) {
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
     }
 
     @media (max-width: 991.98px) {
         .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.45);
+            border-color: rgba(15, 23, 42, 0.18);
         }
 
         .navbar-toggler:focus {
-            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.35);
+            box-shadow: 0 0 0 0.2rem rgba(191, 219, 254, 0.35);
+        }
+
+        .app-nav .container-fluid {
+            padding: 0.7rem;
         }
 
         .navbar .dropdown-menu {
             margin-top: 0.35rem;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            margin-top: 0.45rem;
+            box-shadow: none;
+            border: 0;
+            padding-left: 0.75rem;
+            background: transparent;
         }
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var dropdowns = document.querySelectorAll('.dropdown-submenu');
-        var links = document.querySelectorAll('.dropdown-item');
+        var submenuToggles = document.querySelectorAll('.submenu-toggle');
 
-        links.forEach(function (link) {
-            link.addEventListener('click', function (e) {
-                if (this.href && this.href !== '#') {
-                    window.location.href = this.href;
-                } else {
-                    e.preventDefault();
-                }
-
-                var activeLink = document.querySelector('.dropdown-item.menu-active');
-                if (activeLink) {
-                    activeLink.classList.remove('menu-active');
-                }
-                this.classList.add('menu-active');
-
-                var parentSubmenu = this.closest('.dropdown-submenu');
-                while (parentSubmenu) {
-                    parentSubmenu.classList.add('show');
-                    parentSubmenu.querySelector('.dropdown-toggle').classList.add('menu-active');
-                    parentSubmenu = parentSubmenu.parentElement.closest('.dropdown-submenu');
-                }
-            });
-        });
-
-        dropdowns.forEach(function (dropdown) {
-            dropdown.addEventListener('click', function (e) {
+        submenuToggles.forEach(function (toggle) {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
                 e.stopPropagation();
-                this.classList.toggle('show');
+                var parent = this.closest('.dropdown-submenu');
+                parent.classList.toggle('show');
+                this.classList.toggle('menu-active');
             });
         });
 
         document.addEventListener('click', function (e) {
-            if (!e.target.matches('.dropdown-toggle, .dropdown-item')) {
-                dropdowns.forEach(function (dropdown) {
-                    dropdown.classList.remove('show');
+            if (!e.target.closest('.dropdown-submenu')) {
+                document.querySelectorAll('.dropdown-submenu.show').forEach(function (submenu) {
+                    submenu.classList.remove('show');
+                });
+                document.querySelectorAll('.submenu-toggle.menu-active').forEach(function (toggle) {
+                    toggle.classList.remove('menu-active');
                 });
             }
         });

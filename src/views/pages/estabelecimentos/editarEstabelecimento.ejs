@@ -13,7 +13,7 @@
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Administrativo</span>
                 <h1>Editar estabelecimento</h1>
-                <p>Atualize os dados do ponto com a mesma experiencia moderna do cadastro, mantendo contato, localizacao e produtos ativos sempre organizados.</p>
+                <p>Atualize os dados do ponto com a mesma experiência moderna do cadastro, mantendo contato, localização e produtos ativos sempre organizados.</p>
             </div>
 
             <div class="form-hero-side">
@@ -22,7 +22,7 @@
                     <span><%= estabelecimento.estabelecimento %></span>
                 </div>
                 <div class="form-hero-stat">
-                    <strong>Acao</strong>
+                    <strong>Ação</strong>
                     <span>Revisar e atualizar dados do ponto</span>
                 </div>
             </div>
@@ -33,9 +33,9 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Identificacao</span>
+                            <span class="form-section-tag">Identificação</span>
                             <h2>Dados principais do estabelecimento</h2>
-                            <p>Ajuste o nome do ponto, o responsavel e o telefone de contato para manter a base sempre atualizada.</p>
+                            <p>Ajuste o nome do ponto, o responsável e o telefone de contato para manter a base sempre atualizada.</p>
                         </div>
                     </div>
 
@@ -45,7 +45,7 @@
                             <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>">
                         </div>
                         <div class="col-12 col-md-6 col-lg-2">
-                            <label for="responsavel_nome">Responsavel</label>
+                            <label for="responsavel_nome">Responsável</label>
                             <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>">
                         </div>
                         <div class="col-12 col-md-6 col-lg-2">
@@ -58,15 +58,15 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Localizacao</span>
-                            <h2>Endereco e referencia interna</h2>
-                            <p>Revise endereco, bairro, chave e identificacao da maquina para manter a operacao alinhada com a realidade do ponto.</p>
+                            <span class="form-section-tag">Localização</span>
+                            <h2>Endereço e referência interna</h2>
+                            <p>Revise endereço, bairro, chave e identificação da máquina para manter a operação alinhada com a realidade do ponto.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-lg-5">
-                            <label for="endereco">Endereco</label>
+                            <label for="endereco">Endereço</label>
                             <input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>">
                         </div>
                         <div class="col-12 col-md-4 col-lg-3">
@@ -78,7 +78,7 @@
                             <input type="text" class="form-control text-center" id="chave" name="chave" value="<%= estabelecimento.chave %>">
                         </div>
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="maquina">Maquina</label>
+                            <label for="maquina">Máquina</label>
                             <input type="text" class="form-control text-center" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>">
                         </div>
                     </div>
@@ -87,9 +87,9 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Operacao</span>
-                            <h2>Produtos e observacoes</h2>
-                            <p>Atualize os produtos ativos no ponto e registre comentarios uteis para a equipe nas proximas visitas.</p>
+                            <span class="form-section-tag">Operação</span>
+                            <h2>Produtos e observações</h2>
+                            <p>Atualize os produtos ativos no ponto e registre comentários úteis para a equipe nas próximas visitas.</p>
                         </div>
                     </div>
 
@@ -97,24 +97,24 @@
                         <div class="col-12 col-lg-5">
                             <label>Produtos vinculados</label>
                             <div class="modern-checkbox-grid">
-                                <label class="modern-checkbox" for="produto1">
+                                <label class="modern-checkbox modern-checkbox-green" for="produto1">
                                     <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>>
                                     <span>Bolinhas</span>
                                 </label>
-                                <label class="modern-checkbox" for="produto2">
+                                <label class="modern-checkbox modern-checkbox-blue" for="produto2">
                                     <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>>
                                     <span>Figurinhas</span>
                                 </label>
-                                <label class="modern-checkbox" for="produto3">
+                                <label class="modern-checkbox modern-checkbox-violet" for="produto3">
                                     <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>>
-                                    <span>Pelucias</span>
+                                    <span>Pelúcias</span>
                                 </label>
                             </div>
-                            <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatorios coerentes com o ponto.</small>
+                            <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
                         </div>
 
                         <div class="col-12 col-lg-7">
-                            <label for="observacoes">Comentarios</label>
+                            <label for="observacoes">Comentários</label>
                             <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255"><%= estabelecimento.observacoes %></textarea>
                         </div>
                     </div>
@@ -122,8 +122,8 @@
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Atualizacao do cadastro</strong>
-                        <span>Revise os dados do estabelecimento antes de confirmar as alteracoes.</span>
+                        <strong>Atualização do cadastro</strong>
+                        <span>Revise os dados do estabelecimento antes de confirmar as alterações.</span>
                     </div>
 
                     <div class="form-actions-buttons">

@@ -6,44 +6,44 @@
    <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
    <% const adminShortcuts = [
       { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
-      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova m&aacute;quina com todos os dados operacionais.', tone: 'gold' },
-      { href: '/lancamentos', title: 'Lan&ccedil;amentos', description: 'Visualize entradas, sa&iacute;das e movimenta&ccedil;&otilde;es registradas.', tone: 'slate' },
-      { href: '/lancamentos/add', title: 'Novo lan&ccedil;amento', description: 'Registre uma movimenta&ccedil;&atilde;o financeira rapidamente.', tone: 'green' },
-      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do per&iacute;odo.', tone: 'violet' },
-      { href: '#', title: 'Financeiro consolidado', description: 'Espa&ccedil;o reservado para consolidar indicadores gerais do neg&oacute;cio.', tone: 'amber', disabled: true }
+      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova máquina com todos os dados operacionais.', tone: 'gold' },
+      { href: '/lancamentos', title: 'Lançamentos', description: 'Visualize entradas, saídas e movimentações registradas.', tone: 'slate' },
+      { href: '/lancamentos/add', title: 'Novo lançamento', description: 'Registre uma movimentação financeira rapidamente.', tone: 'green' },
+      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' },
+      { href: '#', title: 'Financeiro consolidado', description: 'Espaço reservado para consolidar indicadores gerais do negócio.', tone: 'amber', disabled: true }
    ]; %>
    <% const revenueShortcuts = []; %>
    <% if (navProducts.bolinhas) revenueShortcuts.push({ href: '/bolinhas/receita-bolinha', title: 'Receita das bolinhas', badge: 'Bolinhas', tone: 'green' }); %>
    <% if (navProducts.figurinhas) revenueShortcuts.push({ href: '/figurinhas/receita-figurinha', title: 'Receita das figurinhas', badge: 'Figurinhas', tone: 'blue' }); %>
-   <% if (navProducts.pelucias) revenueShortcuts.push({ href: '/pelucias/receita-pelucia', title: 'Receita das pel&uacute;cias', badge: 'Pel&uacute;cias', tone: 'violet' }); %>
+   <% if (navProducts.pelucias) revenueShortcuts.push({ href: '/pelucias/receita-pelucia', title: 'Receita das pelúcias', badge: 'Pelúcias', tone: 'violet' }); %>
    <% const operationGroups = []; %>
    <% if (navProducts.bolinhas) operationGroups.push({
       title: 'Bolinhas',
-      subtitle: 'Opera&ccedil;&atilde;o di&aacute;ria, registros e vis&atilde;o consolidada.',
+      subtitle: 'Operação diária, registros e visão consolidada.',
       accent: 'green',
       actions: [
-         { href: '/bolinhas/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
-         { href: '/bolinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/bolinhas/sangrias/add', label: 'Novo formulário', meta: 'Registrar receita' },
+         { href: '/bolinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lançamentos' },
          { href: '/bolinhas/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
       ]
    }); %>
    <% if (navProducts.figurinhas) operationGroups.push({
       title: 'Figurinhas',
-      subtitle: 'Acompanhe coletas, receitas e indicadores da opera&ccedil;&atilde;o.',
+      subtitle: 'Acompanhe coletas, receitas e indicadores da operação.',
       accent: 'blue',
       actions: [
-         { href: '/figurinhas/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
-         { href: '/figurinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/figurinhas/sangrias/add', label: 'Novo formulário', meta: 'Registrar receita' },
+         { href: '/figurinhas/sangrias', label: 'Registro financeiro', meta: 'Consultar lançamentos' },
          { href: '/figurinhas/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
       ]
    }); %>
    <% if (navProducts.pelucias) operationGroups.push({
-      title: 'Pel&uacute;cias',
+      title: 'Pelúcias',
       subtitle: 'Gerencie a rotina operacional e o controle consolidado.',
       accent: 'violet',
       actions: [
-         { href: '/pelucias/sangrias/add', label: 'Novo formul&aacute;rio', meta: 'Registrar receita' },
-         { href: '/pelucias/sangrias', label: 'Registro financeiro', meta: 'Consultar lan&ccedil;amentos' },
+         { href: '/pelucias/sangrias/add', label: 'Novo formulário', meta: 'Registrar receita' },
+         { href: '/pelucias/sangrias', label: 'Registro financeiro', meta: 'Consultar lançamentos' },
          { href: '/pelucias/sangrias/controle-geral', label: 'Controle geral', meta: 'Analisar desempenho' }
       ]
    }); %>
@@ -58,7 +58,7 @@
          <div class="dashboard-hero-copy">
             <span class="dashboard-kicker">Painel central</span>
             <h1>Painel de Controle</h1>
-            <p>Organize a opera&ccedil;&atilde;o, consulte os dados principais e avance r&aacute;pido para as rotinas mais usadas do sistema.</p>
+            <p>Organize a operação, consulte os dados principais e avance rápido para as rotinas mais usadas do sistema.</p>
 
             <div class="dashboard-overview">
                <% overviewStats.forEach((item) => { %>
@@ -71,12 +71,12 @@
          </div>
 
          <div class="dashboard-user-card">
-            <span class="dashboard-user-label">Usu&aacute;rio ativo</span>
+            <span class="dashboard-user-label">Usuário ativo</span>
             <strong><%= usuario.username %></strong>
-            <small>Ambiente pronto para gest&atilde;o administrativa e operacional.</small>
+            <small>Ambiente pronto para gestão administrativa e operacional.</small>
             <div class="dashboard-user-meta">
-               <span>Vis&atilde;o centralizada</span>
-               <span>Navega&ccedil;&atilde;o r&aacute;pida</span>
+               <span>Visão centralizada</span>
+               <span>Navegação rápida</span>
             </div>
          </div>
       </section>
@@ -86,17 +86,17 @@
             <div class="dashboard-panel-header">
                <div>
                   <span class="dashboard-section-tag">Administrativo</span>
-                  <h2>Rotinas de gest&atilde;o</h2>
+                  <h2>Rotinas de gestão</h2>
                </div>
-               <p>Atalhos para cadastros, lan&ccedil;amentos e vis&atilde;o financeira.</p>
+               <p>Atalhos para cadastros, lançamentos e visão financeira.</p>
             </div>
 
             <div class="dashboard-shortcuts">
                <% adminShortcuts.forEach((item) => { %>
                   <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %><%= item.disabled ? ' is-disabled' : '' %>">
                      <div class="dashboard-shortcut-top">
-                        <span class="dashboard-shortcut-pill"><%= item.disabled ? 'Em breve' : 'Acesso r&aacute;pido' %></span>
-                        <span class="dashboard-shortcut-arrow"><%= item.disabled ? '•' : '→' %></span>
+                        <span class="dashboard-shortcut-pill"><%- item.disabled ? 'Em breve' : 'Acesso rápido' %></span>
+                        <span class="dashboard-shortcut-arrow"><%- item.disabled ? '&bull;' : '&rarr;' %></span>
                      </div>
                      <h3><%- item.title %></h3>
                      <p><%- item.description %></p>
@@ -128,7 +128,7 @@
                   <span class="dashboard-section-tag">Operacional</span>
                   <h2>Fluxos do dia a dia</h2>
                </div>
-               <p>Escolha o produto e siga para cadastro, hist&oacute;rico ou controle.</p>
+               <p>Escolha o produto e siga para cadastro, histórico ou controle.</p>
             </div>
 
             <% if (operationGroups.length) { %>
@@ -156,13 +156,38 @@
                </div>
             <% } else { %>
                <div class="dashboard-empty-state">
-                  <h3>Nenhum produto operacional dispon&iacute;vel</h3>
-                  <p>Assim que houver produtos habilitados, os atalhos operacionais aparecer&atilde;o aqui.</p>
+                  <h3>Nenhum produto operacional disponível</h3>
+                  <p>Assim que houver produtos habilitados, os atalhos operacionais aparecerão aqui.</p>
                </div>
             <% } %>
          </aside>
       </section>
    </main>
+
+   <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+         const totalAlertas = <%= financialNotifications?.total || 0 %>;
+         const proximos = <%= financialNotifications?.proximos?.length || 0 %>;
+         const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
+
+         if (!totalAlertas) return;
+
+         const partes = [];
+         if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
+         if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
+
+         const confirmed = await window.AppAlerts?.confirm({
+            title: 'Notificações financeiras',
+            text: `Você tem ${partes.join(' e ')}.`,
+            confirmButtonText: 'Ver alertas',
+            cancelButtonText: 'Depois'
+         });
+
+         if (confirmed) {
+            window.location.href = '/lancamentos/vencimentos';
+         }
+      });
+   </script>
 </body>
 
 </html>

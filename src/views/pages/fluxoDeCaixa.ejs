@@ -13,11 +13,11 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-graph-up-arrow"></i> Financeiro</span>
                 <h1>Fluxo de caixa anual</h1>
-                <p>Uma visao mais organizada do desempenho mensal, com resultados, entradas e saidas em uma tabela ampla, moderna e facil de ler.</p>
+                <p>Uma visão mais organizada do desempenho mensal, com resultados, entradas e saídas em uma tabela ampla, moderna e fácil de ler.</p>
             </div>
             <div class="list-hero-side">
                 <div class="list-stat"><strong>Ano</strong><span><%= year %></span></div>
-                <div class="list-stat"><strong>Visao</strong><span>Consolidado mensal do negocio</span></div>
+                <div class="list-stat"><strong>Visão</strong><span>Consolidado mensal do negócio</span></div>
             </div>
         </section>
 
@@ -26,7 +26,7 @@
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
                         <h2>Resumo financeiro de <%= year %></h2>
-                        <p>Altere o ano para comparar rapidamente a evolucao mensal de entradas, saidas e resultado acumulado.</p>
+                        <p>Altere o ano para comparar rapidamente a evolução mensal de entradas, saídas e resultado acumulado.</p>
                     </div>
                     <div style="min-width:220px;">
                         <label for="anoInput" class="form-label">Ano para a pesquisa</label>
@@ -39,23 +39,23 @@
                         <table id="fluxoDeCaixaTable" class="modern-table">
                             <thead>
                                 <tr>
-                                    <th>Resultado atual</th>
-                                    <th>Janeiro</th>
-                                    <th>Fevereiro</th>
-                                    <th>Marco</th>
-                                    <th>Abril</th>
-                                    <th>Maio</th>
-                                    <th>Junho</th>
-                                    <th>Julho</th>
-                                    <th>Agosto</th>
-                                    <th>Setembro</th>
-                                    <th>Outubro</th>
-                                    <th>Novembro</th>
-                                    <th>Dezembro</th>
+                                    <th class="table-cell-finance">Resultado atual</th>
+                                    <th class="table-cell-month">Janeiro</th>
+                                    <th class="table-cell-month">Fevereiro</th>
+                                    <th class="table-cell-month">Março</th>
+                                    <th class="table-cell-month">Abril</th>
+                                    <th class="table-cell-month">Maio</th>
+                                    <th class="table-cell-month">Junho</th>
+                                    <th class="table-cell-month">Julho</th>
+                                    <th class="table-cell-month">Agosto</th>
+                                    <th class="table-cell-month">Setembro</th>
+                                    <th class="table-cell-month">Outubro</th>
+                                    <th class="table-cell-month">Novembro</th>
+                                    <th class="table-cell-month">Dezembro</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr class="table-row-balance-highlight">
                                     <%
                                     const currentMonth = new Date().getMonth();
                                     let somaTotalAnualCorrente = 0;
@@ -63,36 +63,44 @@
                                         somaTotalAnualCorrente += somaMensal[i] || 0;
                                     }
                                     %>
-                                    <td><span class="table-badge <%= somaTotalAnualCorrente >= 0 ? 'table-badge-green' : 'table-badge-danger' %>"><%= somaTotalAnualCorrente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span></td>
+                                    <td class="table-cell-total">
+                                        <span class="table-badge <%= somaTotalAnualCorrente >= 0 ? 'table-badge-green' : 'table-badge-danger' %>">
+                                            <%= somaTotalAnualCorrente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                                        </span>
+                                    </td>
                                     <% somaMensal.forEach(function(total) { %>
-                                        <td><strong style="color:<%= total > 0 ? '#15803d' : (total < 0 ? '#b91c1c' : '#0f172a') %>;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                        <td class="table-cell-total">
+                                            <strong style="color:<%= total > 0 ? '#15803d' : (total < 0 ? '#b91c1c' : '#0f172a') %>;">
+                                                <%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                                            </strong>
+                                        </td>
                                     <% }) %>
                                 </tr>
 
-                                <tr>
-                                    <td class="table-title-cell">Total entradas</td>
+                                <tr class="table-row-entry-highlight">
+                                    <td class="table-title-cell table-cell-total">Total entradas</td>
                                     <% totaisEntradas.forEach(function(total) { %>
-                                        <td><strong style="color:#15803d;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                        <td class="table-cell-total"><strong style="color:#15803d;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
                                     <% }) %>
                                 </tr>
                                 <% for (let tipo in dadosEntradas) { %>
                                     <tr>
-                                        <td><span class="table-muted"><%= tipo %></span></td>
+                                        <td class="table-muted table-cell-wrap"><%= tipo %></td>
                                         <% for (let i = 0; i < 12; i++) { %>
                                             <td style="color:#16a34a;"><%= dadosEntradas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
                                         <% } %>
                                     </tr>
                                 <% } %>
 
-                                <tr>
-                                    <td class="table-title-cell">Total saidas</td>
+                                <tr class="table-row-exit-highlight">
+                                    <td class="table-title-cell table-cell-total">Total saídas</td>
                                     <% totaisSaidas.forEach(function(total) { %>
-                                        <td><strong style="color:#dc2626;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                        <td class="table-cell-total"><strong style="color:#dc2626;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
                                     <% }) %>
                                 </tr>
                                 <% for (let tipo in dadosSaidas) { %>
                                     <tr>
-                                        <td><span class="table-muted"><%= tipo %></span></td>
+                                        <td class="table-muted table-cell-wrap"><%= tipo %></td>
                                         <% for (let i = 0; i < 12; i++) { %>
                                             <td style="color:#dc2626;"><%= dadosSaidas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
                                         <% } %>
@@ -106,7 +114,7 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
     function atualizarAno() {
         const ano = document.getElementById('anoInput').value;

@@ -2,189 +2,154 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Controle Geral das Figurinhas' }) %>
 
-<body class="bg-light">
+<body class="list-page-body">
     <%- include('../../partials/header') %>
-
     <div class="page-spacer"></div>
 
-    <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Controle Geral das Figurinhas', usuario: usuario }) %>
+    <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Controle Geral das Figurinhas' }) %>
 
-        <div class="cabecalho-figurinhas">
-            <h1 class="mb-0">Controle Geral das Figurinhas</h1>
-        </div>
+        <section class="list-hero list-hero-blue">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-diagram-3"></i> Operacional</span>
+                <h1>Controle geral das figurinhas</h1>
+                <p>Monte a rota por bairro, identifique os pontos que precisam de visita e gere o PDF mantendo a nova linguagem visual do sistema.</p>
+            </div>
+            <div class="list-hero-side">
+                <div class="list-stat"><strong>Pontos</strong><span><%= estabelecimentos.length %> registros</span></div>
+                <div class="list-stat"><strong>Produto</strong><span>Figurinhas</span></div>
+            </div>
+        </section>
 
-        <main class="figurinhas">
-            <form id="controleGeralForm" class="mb-4">
-                <div class="filter-toolbar">
-                    <div>
-                        <label for="bairroSelect" class="form-label fw-bold">Bairro</label>
-                        <select class="form-select text-center fw-bold" id="bairroSelect" name="bairro" required onchange="filtrarPorBairro()">
-                            <option value="" selected disabled hidden>Selecione um bairro para criar a rota</option>
-                            <option value="mostrar_todos">Mostrar todos a sangrar</option>
-                            <%
-                            const diasSangria = 7;
-                            const bairrosSangria = new Set();
-                            estabelecimentos.forEach(function(estabelecimento) {
-                                const data = new Date(estabelecimento.data);
-                                const hoje = new Date();
-                                const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
-                                if (diferencaDias > diasSangria) {
-                                    bairrosSangria.add(estabelecimento.bairro);
-                                }
-                            });
-                            bairrosSangria.forEach(function(bairro) {
-                            %>
-                                <option value="<%= bairro %>"><%= bairro %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-
-                    <div class="toolbar-actions">
-                        <button type="button" class="btn btn-secondary" onclick="mostrarTodos()">Mostrar Todos</button>
-                        <button type="button" class="btn btn-warning" onclick="gerarPDF()">Gerar PDF</button>
+        <main class="list-stage">
+            <section class="list-panel">
+                <div class="list-toolbar">
+                    <div class="list-toolbar-copy">
+                        <h2>Roteiro operacional</h2>
+                        <p>Filtre por bairro, selecione os pontos destacados e gere rapidamente a rota da equipe.</p>
                     </div>
                 </div>
-            </form>
 
-            <div class="table-container">
-                <table class="table table-striped table-hover mb-0 align-middle">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="selectAll" onclick="selecionarTodos(this)"></th>
-                            <th>ID</th>
-                            <th>Estabelecimento</th>
-                            <th>Data da Última Sangria</th>
-                            <th>Quantidade Deixada</th>
-                            <th>Dias Passados</th>
-                            <th>Situação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaEstabelecimentos">
-                        <% estabelecimentos.forEach(function(estabelecimento) {
-                            const data = new Date(estabelecimento.data);
-                            const hoje = new Date();
-                            const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
-                        %>
-                        <tr data-diferenca-dias="<%= diferencaDias %>" data-bairro="<%= estabelecimento.bairro %>">
-                            <td><input type="checkbox" class="checkbox-selecao" id="checkbox_<%= estabelecimento.id %>"></td>
-                            <td><%= estabelecimento.id %></td>
-                            <td><label for="checkbox_<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></label></td>
-                            <td><%= data.toLocaleDateString() %></td>
-                            <td><%= estabelecimento.qtde_deixada %></td>
-                            <td class="dias-passados"><%= diferencaDias %></td>
-                            <td class="situacao"></td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
+                <form id="controleGeralForm" class="mb-4">
+                    <div class="filter-toolbar">
+                        <div>
+                            <label for="bairroSelect" class="form-label fw-bold">Bairro</label>
+                            <select class="form-select text-center fw-bold" id="bairroSelect" name="bairro" required onchange="filtrarPorBairro()">
+                                <option value="" selected disabled hidden>Selecione um bairro para criar a rota</option>
+                                <option value="mostrar_todos">Mostrar todos a sangrar</option>
+                                <%
+                                const diasSangria = 7;
+                                const bairrosSangria = new Set();
+                                estabelecimentos.forEach(function(estabelecimento) {
+                                    const data = new Date(estabelecimento.data);
+                                    const hoje = new Date();
+                                    const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
+                                    if (diferencaDias > diasSangria) bairrosSangria.add(estabelecimento.bairro);
+                                });
+                                bairrosSangria.forEach(function(bairro) {
+                                %>
+                                    <option value="<%= bairro %>"><%= bairro %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+
+                        <div class="toolbar-actions">
+                            <button type="button" class="btn-modern-secondary" onclick="mostrarTodos()">Mostrar todos</button>
+                            <button type="button" class="btn-modern" onclick="gerarPDF()">Gerar PDF</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" onclick="selecionarTodos(this)"></th>
+                                    <th>ID</th>
+                                    <th>Estabelecimento</th>
+                                    <th>Data da última sangria</th>
+                                    <th>Quantidade deixada</th>
+                                    <th>Dias passados</th>
+                                    <th>Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaEstabelecimentos">
+                                <% estabelecimentos.forEach(function(estabelecimento) {
+                                    const data = new Date(estabelecimento.data);
+                                    const hoje = new Date();
+                                    const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
+                                %>
+                                <tr data-diferenca-dias="<%= diferencaDias %>" data-bairro="<%= estabelecimento.bairro %>">
+                                    <td><input type="checkbox" class="checkbox-selecao" id="checkbox_<%= estabelecimento.id %>"></td>
+                                    <td><span class="table-badge table-badge-neutral">#<%= estabelecimento.id %></span></td>
+                                    <td><label for="checkbox_<%= estabelecimento.id %>" class="table-title-cell"><%= estabelecimento.estabelecimento %></label></td>
+                                    <td><%= data.toLocaleDateString('pt-BR') %></td>
+                                    <td><%= estabelecimento.qtde_deixada %></td>
+                                    <td class="dias-passados"><%= diferencaDias %></td>
+                                    <td class="situacao"></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
     const estabelecimentos = <%- JSON.stringify(estabelecimentos) %>;
-
     function atualizarSituacao() {
-        const linhas = document.querySelectorAll('#tabelaEstabelecimentos tr');
-        linhas.forEach(linha => {
+        document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
             const diferencaDias = parseInt(linha.getAttribute('data-diferenca-dias'), 10);
             const situacaoCelula = linha.querySelector('.situacao');
-            situacaoCelula.textContent = diferencaDias >= 7 ? 'SANGRIA' : 'AGUARDAR';
-            linha.classList.toggle('table-danger', diferencaDias >= 7);
+            situacaoCelula.innerHTML = diferencaDias >= 7 ? '<span class="table-badge table-badge-danger">Sangria</span>' : '<span class="table-badge table-badge-green">Aguardar</span>';
+            linha.classList.toggle('table-row-exit-highlight', diferencaDias >= 7);
         });
     }
-
     function filtrarPorBairro() {
-        const select = document.getElementById('bairroSelect');
-        const bairroSelecionado = select.value;
-        const linhas = document.querySelectorAll('#tabelaEstabelecimentos tr');
-
-        linhas.forEach(linha => {
+        const bairroSelecionado = document.getElementById('bairroSelect').value;
+        document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
             const bairro = linha.getAttribute('data-bairro');
             const situacaoCelula = linha.querySelector('.situacao').textContent;
-            if (bairroSelecionado === 'mostrar_todos' && situacaoCelula === 'SANGRIA') {
-                linha.style.display = '';
-            } else if (bairroSelecionado !== 'mostrar_todos' && bairro === bairroSelecionado && situacaoCelula === 'SANGRIA') {
-                linha.style.display = '';
-            } else {
-                linha.style.display = 'none';
-            }
+            if (bairroSelecionado === 'mostrar_todos' && situacaoCelula.includes('Sangria')) linha.style.display = '';
+            else if (bairroSelecionado !== 'mostrar_todos' && bairro === bairroSelecionado && situacaoCelula.includes('Sangria')) linha.style.display = '';
+            else linha.style.display = 'none';
         });
     }
-
-    function mostrarTodos() {
-        document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
-            linha.style.display = '';
-        });
-    }
-
-    function selecionarTodos(selectAllCheckbox) {
-        document.querySelectorAll('.checkbox-selecao').forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
+    function mostrarTodos() { document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => { linha.style.display = ''; }); }
+    function selecionarTodos(selectAllCheckbox) { document.querySelectorAll('.checkbox-selecao').forEach(checkbox => { checkbox.checked = selectAllCheckbox.checked; }); }
     function gerarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const tabela = document.getElementById('tabelaEstabelecimentos');
-        const linhas = tabela.querySelectorAll('tr');
+        const linhas = document.querySelectorAll('#tabelaEstabelecimentos tr');
         const data = [];
         const bairros = new Set();
         let algumMarcado = false;
-
         linhas.forEach(linha => {
             if (linha.style.display !== 'none' && linha.querySelector('.checkbox-selecao').checked) {
                 const estabelecimentoId = linha.querySelector('.checkbox-selecao').id.split('_')[1];
                 const estabelecimento = estabelecimentos.find(est => est.id == estabelecimentoId);
-                data.push([
-                    estabelecimento.id,
-                    estabelecimento.estabelecimento,
-                    new Date(estabelecimento.data).toLocaleDateString(),
-                    estabelecimento.qtde_deixada,
-                    Math.floor((new Date() - new Date(estabelecimento.data)) / (1000 * 60 * 60 * 24)),
-                    linha.querySelector('.situacao').textContent
-                ]);
+                data.push([estabelecimento.id, estabelecimento.estabelecimento, new Date(estabelecimento.data).toLocaleDateString('pt-BR'), estabelecimento.qtde_deixada, Math.floor((new Date() - new Date(estabelecimento.data)) / (1000 * 60 * 60 * 24)), linha.querySelector('.situacao').textContent]);
                 bairros.add(estabelecimento.bairro);
                 algumMarcado = true;
             }
         });
-
-        if (!algumMarcado) {
-            alert('Por favor, selecione pelo menos um estabelecimento para gerar o PDF.');
-            return;
-        }
-
-        const bairrosSelecionados = Array.from(bairros).join(', ');
+        if (!algumMarcado) { alert('Por favor, selecione pelo menos um estabelecimento para gerar o PDF.'); return; }
         doc.setFontSize(14);
-        doc.text(`Rota de Sangria para os bairros: ${bairrosSelecionados}`, 20, 20);
-        doc.autoTable({
-            head: [['ID', 'Estabelecimento', 'Data da Última Sangria', 'Quantidade Deixada', 'Dias Passados', 'Situação']],
-            body: data,
-            styles: { fontSize: 8, halign: 'center' },
-            margin: { top: 30 },
-            headStyles: { fillColor: [41, 128, 185] },
-            footStyles: { fillColor: [41, 128, 185] }
-        });
+        doc.text(`Rota de Sangria para os bairros: ${Array.from(bairros).join(', ')}`, 20, 20);
+        doc.autoTable({ head: [['ID', 'Estabelecimento', 'Data da Última Sangria', 'Quantidade Deixada', 'Dias Passados', 'Situação']], body: data, styles: { fontSize: 8, halign: 'center' }, margin: { top: 30 }, headStyles: { fillColor: [41, 128, 185] } });
         doc.save('Tabela_Estabelecimentos.pdf');
-
-        document.querySelectorAll('.checkbox-selecao').forEach(checkbox => {
-            checkbox.checked = false;
-        });
+        document.querySelectorAll('.checkbox-selecao').forEach(checkbox => { checkbox.checked = false; });
     }
-
     document.addEventListener('DOMContentLoaded', atualizarSituacao);
-
     document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(row => {
         row.addEventListener('click', function(event) {
-            if (event.target.tagName.toLowerCase() !== 'input') {
-                const checkbox = this.querySelector('.checkbox-selecao');
-                checkbox.checked = !checkbox.checked;
-            }
+            if (event.target.tagName.toLowerCase() !== 'input') this.querySelector('.checkbox-selecao').checked = !this.querySelector('.checkbox-selecao').checked;
         });
     });
     </script>

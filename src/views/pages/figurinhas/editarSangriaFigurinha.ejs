@@ -14,7 +14,7 @@
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
                 <h1>Editar sangria de figurinhas</h1>
-                <p>Deixei a edicao com o mesmo padrao visual do cadastro para facilitar a revisao de quantidades, data da visita e observacoes.</p>
+                <p>Deixei a edição com o mesmo padrão visual do cadastro para facilitar a revisão de quantidades, data da visita e observações.</p>
             </div>
 
             <div class="form-hero-side">
@@ -58,7 +58,7 @@
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                                 <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
                             </select>
                         </div>
@@ -100,15 +100,15 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Observacoes</span>
-                            <h2>Anotacoes sobre o ponto</h2>
-                            <p>Atualize as observacoes para refletir o contexto real da visita ou da alteracao feita neste registro.</p>
+                            <span class="form-section-tag">Observações</span>
+                            <h2>Anotações sobre o ponto</h2>
+                            <p>Atualize as observações para refletir o contexto real da visita ou da alteração feita neste registro.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="observacoes">Observacoes</label>
+                            <label for="observacoes">Observações</label>
                             <textarea class="form-control" id="observacoes" name="observacoes" rows="5"><%= sangria.observacoes %></textarea>
                         </div>
                     </div>

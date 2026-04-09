@@ -50,6 +50,7 @@ class FigurinhasModel {
         FROM sangrias_figurinhas s 
         JOIN estabelecimentos e ON s.estabelecimento_id = e.id
         WHERE UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND COALESCE(s.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
         ORDER BY s.data_sangria DESC
     `;
     const result = await connection.query(query);

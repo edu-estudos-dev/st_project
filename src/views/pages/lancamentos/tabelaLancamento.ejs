@@ -5,11 +5,12 @@
 <body class="list-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
+    <% const currentFiltro = typeof tipoFiltro !== 'undefined' ? tipoFiltro : 'todos'; %>
 
     <div class="list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
 
-        <section class="list-hero list-hero-blue">
+        <section class="list-hero list-hero-neutral">
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-cash-stack"></i> Financeiro</span>
                 <h1>Lançamentos cadastrados</h1>
@@ -34,10 +35,22 @@
                         <h2>Painel de movimentações</h2>
                         <p>Atualize vencimentos, revise categorias e navegue pelas ações de visualizar, editar e excluir sem perder legibilidade.</p>
                     </div>
-                    <a class="list-action" href="/lancamentos/add">
-                        <i class="bi bi-plus-circle"></i>
-                        <span>Novo lançamento</span>
-                    </a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="list-action" href="/lancamentos/vencimentos">
+                            <i class="bi bi-bell"></i>
+                            <span>Vencimentos</span>
+                        </a>
+                        <a class="list-action" href="/lancamentos/add">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Novo lançamento</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-mode-switch" aria-label="Filtro de lançamentos">
+                    <a href="/lancamentos?tipo=todos" class="table-mode-btn <%= currentFiltro === 'todos' ? 'is-active' : '' %>">Todos</a>
+                    <a href="/lancamentos?tipo=entrada" class="table-mode-btn <%= currentFiltro === 'entrada' ? 'is-active' : '' %>">Entradas</a>
+                    <a href="/lancamentos?tipo=saida" class="table-mode-btn <%= currentFiltro === 'saida' ? 'is-active' : '' %>">Saídas</a>
                 </div>
 
                 <div class="list-summary-grid">
@@ -49,30 +62,28 @@
 
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table launch-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Tipo</th>
                                     <th>Data</th>
-                                    <th>Categoria</th>
+                                    <th class="table-col-category">Categoria</th>
                                     <th>Pagamento</th>
                                     <th>Valor</th>
                                     <th class="table-col-description">Descrição</th>
                                     <th>Vencimento</th>
-                                    <th>Ações</th>
+                                    <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% lancamentos.reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
+                                <% lancamentos.slice().reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
                                     <tr id="row-<%= lancamento.id %>">
-                                        <td><span class="table-badge table-badge-neutral">#<%= lancamento.id %></span></td>
                                         <td><span class="table-badge <%= lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger' %>"><%= lancamento.entrada_saida.toUpperCase() %></span></td>
                                         <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
-                                        <td><div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div></td>
-                                        <td><%= lancamento.forma_de_pagamento.toUpperCase() %></td>
+                                        <td class="table-col-category"><div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div></td>
+                                        <td><%= String(lancamento.forma_de_pagamento || '').toUpperCase() %></td>
                                         <td><strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
-                                        <td class="table-cell-description"><span class="table-muted"><%= lancamento.descricao.toUpperCase() %></span></td>
+                                        <td class="table-cell-description"><span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span></td>
                                         <td>
                                             <form action="/lancamentos/<%= lancamento.id %>/updateVencimento" method="POST" class="table-inline-form">
                                                 <input type="date" class="form-control form-control-sm" name="vencimento" id="vencimento-<%= lancamento.id %>" value="<%= vencimentoDate %>">
@@ -106,12 +117,14 @@
 
             rows.forEach((row) => {
                 const vencimentoInput = row.querySelector('input[type="date"]');
-                if (!vencimentoInput.value) return;
+                if (!vencimentoInput || !vencimentoInput.value) return;
+
                 const vencimentoDate = new Date(vencimentoInput.value);
                 const daysDifference = (vencimentoDate - today) / (1000 * 3600 * 24);
+
                 if (daysDifference <= 10 && daysDifference >= 0) {
                     row.querySelectorAll('td').forEach((cell) => {
-                        cell.style.background = '#fff7ed';
+                        cell.classList.add('table-cell-highlight');
                     });
                 }
             });

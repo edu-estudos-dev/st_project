@@ -13,7 +13,7 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-gift"></i> Operacional</span>
                 <h1>Registro financeiro das pelúcias</h1>
-                <p>A tela agora acompanha a linguagem moderna do sistema, deixando comissão, valor líquido, PIX e ações muito mais legíveis.</p>
+                <p>A tela agora acompanha a linguagem moderna do sistema, deixando o essencial do registro mais legível e os detalhes completos para a visualização.</p>
             </div>
             <div class="list-hero-side">
                 <div class="list-stat"><strong>Total</strong><span><%= sangrias.length %> registros</span></div>
@@ -42,13 +42,10 @@
                                     <th>ID</th>
                                     <th>Estabelecimento</th>
                                     <th>Data</th>
-                                    <th>Valor apurado</th>
-                                    <th>Comissão</th>
-                                    <th>Comerciante</th>
                                     <th>Líquido</th>
                                     <th>Pagamento</th>
                                     <th>PIX confirmado</th>
-                                    <th>Ações</th>
+                                    <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,16 +55,13 @@
                                             <td><span class="table-badge table-badge-neutral">#<%= sangria.id %></span></td>
                                             <td><div class="table-title-cell"><%= sangria.estabelecimento %></div></td>
                                             <td><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></td>
-                                            <td><strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong></td>
-                                            <td><span class="table-badge table-badge-violet"><%= Number(sangria.comissao).toFixed(2) %> %</span></td>
-                                            <td>R$ <%= Number(sangria.valor_comerciante).toFixed(2) %></td>
-                                            <td>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></td>
+                                            <td><strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></td>
                                             <td><span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span></td>
                                             <td>
                                                 <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select">
                                                     <option value="" selected disabled>Selecione</option>
                                                     <option value="SIM" class="option-sim">SIM</option>
-                                                    <option value="NAO" class="option-nao">NAO</option>
+                                                    <option value="NAO" class="option-nao">NÃO</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -80,7 +74,7 @@
                                         </tr>
                                     <% }); %>
                                 <% } else { %>
-                                    <tr><td colspan="10" class="table-empty">Nenhuma sangria encontrada</td></tr>
+                                    <tr><td colspan="7" class="table-empty">Nenhuma sangria encontrada</td></tr>
                                 <% } %>
                             </tbody>
                         </table>
@@ -113,7 +107,8 @@
                 });
             });
             const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success'); const errorMessage = urlParams.get('error');
+            const successMessage = urlParams.get('success');
+            const errorMessage = urlParams.get('error');
             if (successMessage) window.AppAlerts?.success(successMessage);
             if (errorMessage) window.AppAlerts?.error(errorMessage);
             if (successMessage || errorMessage) window.history.replaceState({}, document.title, window.location.pathname);

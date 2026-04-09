@@ -1,56 +1,120 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Visualizar Sangria Pelúcias' }) %>
+<%- include('../../partials/head', { title: 'Visualizar Sangria de Pelúcias' }) %>
 
-<body class="bg-light">
+<body class="view-page-body">
     <%- include('../../partials/header') %>
-
     <div class="page-spacer"></div>
 
-    <div class="page-shell py-3">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria Pelúcias' }) %>
+    <div class="view-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Pelúcias' }) %>
 
-        <div class="cabecalho-pelucia">
-            <h1 class="mb-0">Visualizar Sangria das Pelúcias</h1>
-            <a href="/pelucias/sangrias" class="btn btn-voltar">Voltar</a>
-        </div>
-
-        <main class="mb-4 pelucia">
-            <div class="card shadow detail-card">
-                <div class="card-body">
-                    <% if (sangria) { %>
-                        <div class="detail-header">
-                            <div class="detail-title">
-                                <p class="mb-0">Estabelecimento:</p>
-                                <h4 class="mb-0"><strong><%= sangria.estabelecimento %></strong></h4>
-                            </div>
-                            <p class="mb-0"><strong>ID:</strong> <%= sangria.id %></p>
-                        </div>
-
-                        <hr>
-
-                        <div class="detail-grid detail-stack">
-                            <div>
-                                <p>Data da Sangria: <strong><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></strong></p>
-                                <p>Valor Apurado: <strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong></p>
-                                <p>Comissão: <strong><%= Number(sangria.comissao).toFixed(2) %> %</strong></p>
-                                <p>Valor do Comerciante: <strong>R$ <%= Number(sangria.valor_comerciante).toFixed(2) %></strong></p>
-                            </div>
-                            <div>
-                                <p>Valor Líquido: <strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></p>
-                                <p>Tipo de Pagamento: <strong><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></strong></p>
-                                <p>Última Edição: <strong><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'N/A' %></strong></p>
-                                <p>Observações: <strong><%= sangria.observacoes || 'N/A' %></strong></p>
-                            </div>
-                        </div>
-                    <% } else { %>
-                        <p class="mb-0">Sangria nao encontrada.</p>
-                    <% } %>
+        <section class="view-hero view-hero-violet">
+            <div class="view-hero-content">
+                <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
+                <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
+                <p>Consulte em um único lugar os dados financeiros e operacionais da visita, incluindo leitura, abastecimento, vendido e saldo líquido.</p>
+            </div>
+            <div class="view-hero-side">
+                <div class="list-stat">
+                    <strong>ID</strong>
+                    <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>
+                </div>
+                <div class="list-stat">
+                    <strong>Produto</strong>
+                    <span>Pelúcias</span>
                 </div>
             </div>
+        </section>
+
+        <main class="view-stage">
+            <section class="view-panel">
+                <% if (sangria) { %>
+                    <div class="view-panel-header">
+                        <div>
+                            <span class="form-section-tag">Coleta</span>
+                            <h2>Resumo da visita</h2>
+                            <p>Os blocos abaixo destacam o financeiro da sangria e também os dados de máquina usados para o controle operacional.</p>
+                        </div>
+                    </div>
+
+                    <div class="view-grid">
+                        <div class="view-card">
+                            <strong>Data da sangria</strong>
+                            <span><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Tipo de pagamento</strong>
+                            <span><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Valor apurado</strong>
+                            <span><%= Number(sangria.valor_apurado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Valor líquido</strong>
+                            <span><%= Number(sangria.valor_liquido).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Comissão</strong>
+                            <span><%= Number(sangria.comissao).toFixed(2).replace('.', ',') %>%</span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Valor do comerciante</strong>
+                            <span><%= Number(sangria.valor_comerciante).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Leitura atual</strong>
+                            <span><%= sangria.leitura_atual ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Última leitura</strong>
+                            <span><%= sangria.ultima_leitura ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Abastecido</strong>
+                            <span><%= sangria.abastecido ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Quantidade vendida</strong>
+                            <span><%= sangria.qtde_vendido ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Estoque</strong>
+                            <span><%= sangria.estoque ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Última edição</strong>
+                            <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
+                        </div>
+                        <div class="view-card is-wide">
+                            <strong>Observações</strong>
+                            <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
+                        </div>
+                    </div>
+
+                    <div class="view-actions">
+                        <div class="view-actions-copy">
+                            Essa visão foi pensada para deixar a conferência mais rápida sem perder os detalhes importantes da operação.
+                        </div>
+                        <div class="view-actions-buttons">
+                            <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                                <i class="bi bi-arrow-left"></i>
+                                <span>Voltar</span>
+                            </a>
+                            <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="btn-modern">
+                                <i class="bi bi-pencil-square"></i>
+                                <span>Editar registro</span>
+                            </a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <p class="mb-0">Sangria não encontrada.</p>
+                <% } %>
+            </section>
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

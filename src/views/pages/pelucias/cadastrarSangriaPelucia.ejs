@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Registrar Sangria de Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Registrar Sangria de Pelúcias' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelucias' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelúcias' }) %>
 
         <section class="form-hero form-hero-violet">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
-                <h1>Registrar sangria de pelucias</h1>
-                <p>Modernizei a tela para destacar coleta, leitura, estoque e previsao de saldo em uma interface mais clara, elegante e facil de conferir durante a visita.</p>
+                <h1>Registrar sangria de pelúcias</h1>
+                <p>Modernizei a tela para destacar coleta, leitura, estoque e previsão de saldo em uma interface mais clara, elegante e fácil de conferir durante a visita.</p>
             </div>
 
             <div class="form-hero-side">
                 <div class="form-hero-stat">
                     <strong>Produto</strong>
-                    <span>Pelucias</span>
+                    <span>Pelúcias</span>
                 </div>
                 <div class="form-hero-stat">
                     <strong>Destaque</strong>
@@ -35,7 +35,7 @@
                         <div>
                             <span class="form-section-tag">Visita</span>
                             <h2>Dados da coleta</h2>
-                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avancar para os calculos.</p>
+                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avançar para os cálculos.</p>
                         </div>
                     </div>
 
@@ -56,19 +56,40 @@
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie">Especie</option>
+                                <option value="especie">Espécie</option>
                                 <option value="pix">PIX</option>
                             </select>
                         </div>
                     </div>
+
+                    <div class="row g-3 mt-1">
+                        <div class="col-12">
+                            <label class="modern-checkbox modern-checkbox-violet" for="abertura_inicial">
+                                <input class="form-check-input" type="checkbox" id="abertura_inicial" name="abertura_inicial">
+                                <span>Este é um ponto novo e quero cadastrar a abertura inicial</span>
+                            </label>
+                            <small class="modern-note">Quando ativado, o formulário simplifica o cadastro para informar só a leitura atual inicial e o estoque inicial da máquina.</small>
+                        </div>
+                    </div>
+
+                    <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="leitura_inicial">Leitura atual inicial</label>
+                            <input type="number" class="form-control text-center" id="leitura_inicial" name="leitura_inicial" min="0">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label for="estoque_inicial">Estoque inicial</label>
+                            <input type="number" class="form-control text-center" id="estoque_inicial" name="estoque_inicial" min="0">
+                        </div>
+                    </div>
                 </section>
 
-                <section class="form-card">
+                <section class="form-card" id="financeiroCard">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Financeiro</span>
-                            <h2>Apuracao e comissao</h2>
-                            <p>Preencha valor apurado e comissao para visualizar imediatamente a parte do comerciante e o valor liquido.</p>
+                            <h2>Apuração e comissão</h2>
+                            <p>Preencha valor apurado e comissão para visualizar imediatamente a parte do comerciante e o valor líquido.</p>
                         </div>
                     </div>
 
@@ -81,7 +102,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="comissao">Comissao (%)</label>
+                            <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
                                 <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required>
@@ -95,7 +116,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_liquido">Valor liquido</label>
+                            <label for="valor_liquido">Valor líquido</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
                                 <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
@@ -104,12 +125,12 @@
                     </div>
                 </section>
 
-                <section class="form-card">
+                <section class="form-card" id="leiturasCard">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Leituras</span>
-                            <h2>Controle operacional da maquina</h2>
-                            <p>Com a ultima leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
+                            <h2>Controle operacional da máquina</h2>
+                            <p>Com a última leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
                         </div>
                     </div>
 
@@ -119,7 +140,7 @@
                             <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
                         </div>
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="ultima_leitura">Ultima leitura</label>
+                            <label for="ultima_leitura">Última leitura</label>
                             <input type="number" class="form-control text-center readonly-input" id="ultima_leitura" name="ultima_leitura" value="<%= ultimaLeitura %>" readonly disabled>
                         </div>
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
@@ -142,7 +163,7 @@
 
                     <div class="form-summary-grid mt-4">
                         <div class="form-summary-card">
-                            <strong>Ultima leitura</strong>
+                            <strong>Última leitura</strong>
                             <span id="ultimaLeituraResumo"><%= ultimaLeitura %></span>
                         </div>
                         <div class="form-summary-card">
@@ -163,16 +184,16 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Observacoes</span>
-                            <h2>Anotacoes complementares</h2>
-                            <p>Registre qualquer detalhe relevante para a proxima coleta, abastecimento ou conferencia do ponto.</p>
+                            <span class="form-section-tag">Observações</span>
+                            <h2>Anotações complementares</h2>
+                            <p>Registre qualquer detalhe relevante para a próxima coleta, abastecimento ou conferência do ponto.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="observacoes">Observacoes</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: precisou de reposicao maior, leitura conferida com o ponto, saldo acima do esperado..."></textarea>
+                            <label for="observacoes">Observações</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: precisou de reposição maior, leitura conferida com o ponto, saldo acima do esperado..."></textarea>
                         </div>
                     </div>
                 </section>
@@ -258,6 +279,40 @@
             calculateEstoquePrevisto();
         }
 
+        function syncModoAberturaInicial() {
+            const isAbertura = document.getElementById('abertura_inicial').checked;
+            const aberturaBox = document.getElementById('aberturaInicialBox');
+            const leituraInicialField = document.getElementById('leitura_inicial');
+            const estoqueInicialField = document.getElementById('estoque_inicial');
+
+            aberturaBox.classList.toggle('d-none', !isAbertura);
+            leituraInicialField.required = isAbertura;
+            estoqueInicialField.required = isAbertura;
+
+            ['tipo_pagamento', 'valor_apurado', 'comissao', 'leitura_atual', 'abastecido'].forEach((id) => {
+                const field = document.getElementById(id);
+                field.required = !isAbertura;
+                if (isAbertura && field.tagName === 'INPUT') field.value = id === 'comissao' ? '15' : '';
+            });
+
+            document.getElementById('financeiroCard').classList.toggle('opacity-50', isAbertura);
+            document.getElementById('leiturasCard').classList.toggle('opacity-50', isAbertura);
+            document.getElementById('financeiroCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
+            document.getElementById('leiturasCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
+
+            if (isAbertura) {
+                document.getElementById('qtde_vendido').value = '0';
+                document.getElementById('ultima_leitura').value = '0';
+                document.getElementById('estoque_atual').value = '0';
+                document.getElementById('estoque_previsto').value = estoqueInicialField.value || '0';
+                updateResumoOperacional();
+                calculateValues();
+            } else {
+                calculateVendido();
+                calculateValues();
+            }
+        }
+
         async function loadUltimosDados(estabelecimentoId) {
             const ultimaLeituraInput = document.getElementById('ultima_leitura');
             const estoqueAtualInput = document.getElementById('estoque_atual');
@@ -277,7 +332,7 @@
             try {
                 const response = await fetch(`/pelucias/sangrias/get-ultimos-dados/${estabelecimentoId}`);
                 if (!response.ok) {
-                    throw new Error('Falha ao consultar os ultimos dados');
+                    throw new Error('Falha ao consultar os últimos dados');
                 }
 
                 const data = await response.json();
@@ -286,13 +341,13 @@
                 calculateVendido();
                 updateResumoOperacional();
             } catch (error) {
-                console.error('Erro ao buscar os ultimos dados:', error);
+                console.error('Erro ao buscar os últimos dados:', error);
                 ultimaLeituraInput.value = '';
                 estoqueAtualInput.value = '';
                 estoquePrevistoInput.value = '';
                 document.getElementById('qtde_vendido').value = '';
                 updateResumoOperacional();
-                window.AppAlerts?.error('Nao foi possivel carregar a ultima leitura e o estoque deste estabelecimento.');
+                window.AppAlerts?.error('Não foi possível carregar a última leitura e o estoque deste estabelecimento.');
             }
         }
 
@@ -302,6 +357,7 @@
             const abastecidoInput = document.getElementById('abastecido');
             const valorApuradoInput = document.getElementById('valor_apurado');
             const comissaoInput = document.getElementById('comissao');
+            const aberturaInicialInput = document.getElementById('abertura_inicial');
 
             estabelecimentoSelect.addEventListener('change', function () {
                 loadUltimosDados(this.value);
@@ -311,12 +367,16 @@
             abastecidoInput.addEventListener('input', calculateEstoquePrevisto);
             valorApuradoInput.addEventListener('input', calculateValues);
             comissaoInput.addEventListener('input', calculateValues);
+            aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
+            document.getElementById('leitura_inicial').addEventListener('input', syncModoAberturaInicial);
+            document.getElementById('estoque_inicial').addEventListener('input', syncModoAberturaInicial);
 
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
 
             calculateValues();
             calculateEstoquePrevisto();
             updateResumoOperacional();
+            syncModoAberturaInicial();
         });
     </script>
 </body>

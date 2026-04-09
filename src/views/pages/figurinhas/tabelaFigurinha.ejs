@@ -45,7 +45,7 @@
                                     <th>Valor apurado</th>
                                     <th>Pagamento</th>
                                     <th>PIX confirmado</th>
-                                    <th>Ações</th>
+                                    <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,7 +61,7 @@
                                                 <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select">
                                                     <option value="" selected disabled>Selecione</option>
                                                     <option value="SIM" class="option-sim">SIM</option>
-                                                    <option value="NAO" class="option-nao">NAO</option>
+                                                    <option value="NAO" class="option-nao">NÃO</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -108,7 +108,8 @@
                 });
             });
             const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success'); const errorMessage = urlParams.get('error');
+            const successMessage = urlParams.get('success');
+            const errorMessage = urlParams.get('error');
             if (successMessage) window.AppAlerts?.success(successMessage);
             if (errorMessage) window.AppAlerts?.error(errorMessage);
             if (successMessage || errorMessage) window.history.replaceState({}, document.title, window.location.pathname);

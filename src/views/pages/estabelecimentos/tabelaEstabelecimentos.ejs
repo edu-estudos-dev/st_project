@@ -46,10 +46,6 @@
                         <span><%= estabelecimentos.length %> pontos</span>
                     </div>
                     <div class="list-summary-card">
-                        <strong>Modo</strong>
-                        <span><%= search ? 'Resultado filtrado' : 'Lista completa' %></span>
-                    </div>
-                    <div class="list-summary-card">
                         <strong>Fluxo</strong>
                         <span>Consultar, editar e visualizar</span>
                     </div>
@@ -57,6 +53,15 @@
                         <strong>Contexto</strong>
                         <span>Operação centralizada</span>
                     </div>
+                    <div class="list-summary-card">
+                        <strong>Visualização</strong>
+                        <span id="estabelecimentosModeLabel">Dados comerciais</span>
+                    </div>
+                </div>
+
+                <div class="table-mode-switch" aria-label="Modo de visualização">
+                    <button type="button" class="table-mode-btn is-active" data-mode="commercial">Dados comerciais</button>
+                    <button type="button" class="table-mode-btn" data-mode="operational">Operacional</button>
                 </div>
 
                 <div class="modern-table-wrap">
@@ -65,26 +70,30 @@
                             <thead>
                                 <tr>
                                     <th>Estabelecimento</th>
-                                    <th>Produto</th>
-                                    <th>Chave</th>
-                                    <th>Máquina</th>
-                                    <th>Endereço</th>
-                                    <th>Responsável</th>
-                                    <th>Ações</th>
+                                    <th class="mode-all">Produto</th>
+                                    <th class="mode-commercial">Endereço</th>
+                                    <th class="mode-commercial">Responsável</th>
+                                    <th class="mode-commercial">Contato</th>
+                                    <th class="mode-operational" style="display:none;">Chave</th>
+                                    <th class="mode-operational" style="display:none;">Máquina</th>
+                                    <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% estabelecimentos.forEach((estabelecimento) => { %>
+                                    <% const produtoBase = (estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
+                                    <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
                                     <tr>
                                         <td>
                                             <div class="table-title-cell"><%= estabelecimento.estabelecimento %></div>
                                         </td>
-                                        <td><span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span></td>
-                                        <td><%= estabelecimento.chave || '-' %></td>
-                                        <td><%= estabelecimento.maquina || '-' %></td>
-                                        <td><span class="table-muted"><%= estabelecimento.endereco %></span></td>
-                                        <td><%= estabelecimento.responsavel_nome %></td>
-                                        <td>
+                                        <td class="mode-all"><span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span></td>
+                                        <td class="mode-commercial"><span class="table-muted"><%= estabelecimento.endereco %></span></td>
+                                        <td class="mode-commercial"><%= estabelecimento.responsavel_nome %></td>
+                                        <td class="mode-commercial"><%= estabelecimento.telefone_contato || '-' %></td>
+                                        <td class="mode-operational" style="display:none;"><%= hasBolinhas ? (estabelecimento.chave || '-') : '-' %></td>
+                                        <td class="mode-operational" style="display:none;"><%= hasBolinhas ? (estabelecimento.maquina || '-') : '-' %></td>
+                                        <td class="table-actions-cell">
                                             <div class="table-actions">
                                                 <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
                                                 <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">Editar</a>
@@ -113,6 +122,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const modeButtons = document.querySelectorAll('.table-mode-btn');
+            const modeLabel = document.getElementById('estabelecimentosModeLabel');
+
+            const applyMode = (mode) => {
+                document.querySelectorAll('.mode-commercial').forEach((cell) => {
+                    cell.style.display = mode === 'commercial' ? '' : 'none';
+                });
+                document.querySelectorAll('.mode-operational').forEach((cell) => {
+                    cell.style.display = mode === 'operational' ? '' : 'none';
+                });
+
+                modeButtons.forEach((button) => {
+                    button.classList.toggle('is-active', button.getAttribute('data-mode') === mode);
+                });
+
+                modeLabel.textContent = mode === 'commercial' ? 'Dados comerciais' : 'Operacional';
+            };
+
+            modeButtons.forEach((button) => {
+                button.addEventListener('click', () => applyMode(button.getAttribute('data-mode')));
+            });
+
+            applyMode('commercial');
+
             document.querySelectorAll('.view-btn').forEach((button) => {
                 button.addEventListener('click', function () {
                     window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/view`;

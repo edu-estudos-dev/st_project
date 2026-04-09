@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title: 'Vencimentos' }) %>
+
+<body class="list-page-body">
+    <%- include('../../partials/header') %>
+    <div class="page-spacer"></div>
+
+    <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Vencimentos' }) %>
+
+        <section class="list-hero list-hero-neutral">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-bell"></i> Financeiro</span>
+                <h1>Vencimentos e alertas</h1>
+                <p>Acompanhe boletos próximos do vencimento e registros atrasados em uma tela dedicada para a rotina financeira.</p>
+            </div>
+            <div class="list-hero-side">
+                <div class="list-stat"><strong>Próximos</strong><span><%= proximos.length %> registros</span></div>
+                <div class="list-stat"><strong>Atrasados</strong><span><%= atrasados.length %> registros</span></div>
+            </div>
+        </section>
+
+        <main class="list-stage">
+            <section class="list-panel">
+                <h2 class="table-section-title">Vencendo nos próximos 5 dias</h2>
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Categoria</th>
+                                    <th>Descrição</th>
+                                    <th>Vencimento</th>
+                                    <th>Dias</th>
+                                    <th class="table-actions-heading">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (proximos.length) { %>
+                                    <% proximos.forEach((item) => { %>
+                                        <tr>
+                                            <td><span class="table-badge table-badge-neutral">#<%= item.id %></span></td>
+                                            <td><div class="table-title-cell"><%= item.tipo_de_lancamento %></div></td>
+                                            <td class="table-cell-description"><span class="table-muted"><%= item.descricao %></span></td>
+                                            <td><strong><%= new Date(item.vencimento).toLocaleDateString('pt-BR') %></strong></td>
+                                            <td><span class="table-badge table-badge-amber"><%= item.diffDays %> dia(s)</span></td>
+                                            <td>
+                                                <div class="table-actions">
+                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr><td colspan="6" class="table-empty">Nenhum vencimento próximo encontrado.</td></tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="list-panel">
+                <h2 class="table-section-title">Atrasados</h2>
+                <div class="modern-table-wrap">
+                    <div class="modern-table-scroll">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Categoria</th>
+                                    <th>Descrição</th>
+                                    <th>Vencimento</th>
+                                    <th>Atraso</th>
+                                    <th class="table-actions-heading">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (atrasados.length) { %>
+                                    <% atrasados.forEach((item) => { %>
+                                        <tr>
+                                            <td><span class="table-badge table-badge-neutral">#<%= item.id %></span></td>
+                                            <td><div class="table-title-cell"><%= item.tipo_de_lancamento %></div></td>
+                                            <td class="table-cell-description"><span class="table-muted"><%= item.descricao %></span></td>
+                                            <td><strong><%= new Date(item.vencimento).toLocaleDateString('pt-BR') %></strong></td>
+                                            <td><span class="table-badge table-badge-danger"><%= Math.abs(item.diffDays) %> dia(s)</span></td>
+                                            <td>
+                                                <div class="table-actions">
+                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr><td colspan="6" class="table-empty">Nenhum vencimento atrasado encontrado.</td></tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

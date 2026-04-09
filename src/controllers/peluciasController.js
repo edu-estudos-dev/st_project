@@ -27,10 +27,55 @@ class PeluciasController {
             valor_apurado,
             comissao,
             tipo_pagamento,
-            observacoes
+            observacoes,
+            abertura_inicial,
+            leitura_inicial,
+            estoque_inicial
         } = req.body;
 
         try {
+            const isAberturaInicial = abertura_inicial === 'on';
+
+            if (isAberturaInicial) {
+                if (!estabelecimento_id || !data_sangria) {
+                    throw new Error('Estabelecimento e data são obrigatórios.');
+                }
+
+                const hasSangria = await peluciasModel.hasSangria(estabelecimento_id);
+                if (hasSangria) {
+                    throw new Error('Este estabelecimento já possui histórico de pelúcias. Use o cadastro normal de visita.');
+                }
+
+                const leituraInicial = Number(leitura_inicial || 0);
+                const estoqueInicial = Number(estoque_inicial || 0);
+
+                if (Number.isNaN(leituraInicial) || leituraInicial < 0) {
+                    throw new Error('A leitura inicial deve ser um número válido.');
+                }
+
+                if (Number.isNaN(estoqueInicial) || estoqueInicial < 0) {
+                    throw new Error('O estoque inicial deve ser um número válido.');
+                }
+
+                await peluciasModel.createSangria({
+                    estabelecimento_id,
+                    data_sangria,
+                    valor_apurado: 0,
+                    comissao: 0,
+                    valor_comerciante: 0,
+                    valor_liquido: 0,
+                    tipo_pagamento: 'especie',
+                    observacoes: `[ABERTURA INICIAL] ${observacoes || 'Ponto iniciado com leitura e estoque base.'}`.trim(),
+                    leitura_atual: leituraInicial,
+                    ultima_leitura: 0,
+                    abastecido: estoqueInicial,
+                    qtde_vendido: 0,
+                    estoque: estoqueInicial
+                });
+
+                return res.redirect('/pelucias/sangrias?success=Abertura inicial de pelúcias cadastrada com sucesso');
+            }
+
             const ultimoRegistro = await peluciasModel.getUltimosDados(estabelecimento_id);
             const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(estabelecimento_id);
 
@@ -39,11 +84,11 @@ class PeluciasController {
             const quantidadeAbastecida = Number(abastecido || 0);
 
             if (new Date(data_sangria) <= new Date(ultimaDataSangria.data_sangria)) {
-                return res.redirect('/pelucias/sangrias?error=A data do novo cadastro nao pode ser anterior ou igual a data da ultima sangria cadastrada.');
+                return res.redirect('/pelucias/sangrias?error=A data do novo cadastro não pode ser anterior ou igual à data da última sangria cadastrada.');
             }
 
             if (leituraAtual < leituraAnterior) {
-                return res.redirect('/pelucias/sangrias/add?error=A leitura atual nao pode ser menor que a ultima leitura registrada.');
+                return res.redirect('/pelucias/sangrias/add?error=A leitura atual não pode ser menor que a última leitura registrada.');
             }
 
             const qtdeVendido = leituraAtual - leituraAnterior;
@@ -70,7 +115,7 @@ class PeluciasController {
             res.redirect('/pelucias/sangrias?success=Sangria adicionada com sucesso');
         } catch (error) {
             console.error('Erro ao adicionar sangria:', error);
-            res.redirect('/pelucias/sangrias?error=Erro ao adicionar sangria');
+            res.redirect(`/pelucias/sangrias?error=${encodeURIComponent(error.message || 'Erro ao adicionar sangria')}`);
         }
     };
 

@@ -58,7 +58,7 @@
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                                 <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
                             </select>
                         </div>
@@ -109,15 +109,15 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Observacoes</span>
-                            <h2>Anotacoes da visita</h2>
-                            <p>Atualize o campo de observacoes se precisar deixar mais contexto sobre o atendimento ou a coleta.</p>
+                            <span class="form-section-tag">Observações</span>
+                            <h2>Anotações da visita</h2>
+                            <p>Atualize o campo de observações se precisar deixar mais contexto sobre o atendimento ou a coleta.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="observacoes">Observacoes</label>
+                            <label for="observacoes">Observações</label>
                             <textarea class="form-control" id="observacoes" name="observacoes" rows="5"><%= sangria.observacoes %></textarea>
                         </div>
                     </div>
@@ -125,8 +125,8 @@
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Salvar alteracoes</strong>
-                        <span>Revise os valores e confirme a atualizacao desta sangria de bolinhas.</span>
+                        <strong>Salvar alterações</strong>
+                        <span>Revise os valores e confirme a atualização desta sangria de bolinhas.</span>
                     </div>
 
                     <div class="form-actions-buttons">

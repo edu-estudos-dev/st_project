@@ -66,6 +66,93 @@ class LancamentoModel {
         await connection.query(SQL, [vencimento, id]);
     }
 
+    async findParcelGroup({
+        entrada_saida,
+        tipo_de_lancamento,
+        produto,
+        forma_de_pagamento,
+        usuario,
+        descricaoBase
+    }) {
+        const SQL = `
+        SELECT *
+        FROM lancamentos
+        WHERE entrada_saida = $1
+          AND tipo_de_lancamento = $2
+          AND produto = $3
+          AND forma_de_pagamento = $4
+          AND usuario = $5
+          AND descricao LIKE $6
+        ORDER BY id ASC
+        `;
+
+        const result = await connection.query(SQL, [
+            entrada_saida,
+            tipo_de_lancamento,
+            produto,
+            forma_de_pagamento,
+            usuario,
+            `${descricaoBase} - Parcela %/%`
+        ]);
+
+        return result.rows;
+    }
+
+    async findWithVencimento() {
+        const SQL = `
+        SELECT *
+        FROM lancamentos
+        WHERE vencimento IS NOT NULL
+        ORDER BY vencimento ASC, id ASC
+        `;
+
+        const result = await connection.query(SQL);
+
+        result.rows.forEach(lancamento => {
+            lancamento.tipo_de_lancamento = formatarTexto(lancamento.tipo_de_lancamento);
+        });
+
+        return result.rows;
+    }
+
+    async getNotificationAlerts(daysAhead = 5) {
+        const SQL = `
+        SELECT *
+        FROM lancamentos
+        WHERE vencimento IS NOT NULL
+          AND entrada_saida = 'Saida'
+        ORDER BY vencimento ASC, id ASC
+        `;
+
+        const result = await connection.query(SQL);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const proximos = [];
+        const atrasados = [];
+
+        result.rows.forEach(lancamento => {
+            const dueDate = new Date(lancamento.vencimento);
+            dueDate.setHours(0, 0, 0, 0);
+            const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+
+            lancamento.tipo_de_lancamento = formatarTexto(lancamento.tipo_de_lancamento);
+            lancamento.diffDays = diffDays;
+
+            if (diffDays >= 0 && diffDays <= daysAhead) {
+                proximos.push(lancamento);
+            } else if (diffDays < 0) {
+                atrasados.push(lancamento);
+            }
+        });
+
+        return {
+            proximos,
+            atrasados,
+            total: proximos.length + atrasados.length
+        };
+    }
+
     findAll = async () => {
         const SQL = 'SELECT * FROM lancamentos';
         const result = await connection.query(SQL);

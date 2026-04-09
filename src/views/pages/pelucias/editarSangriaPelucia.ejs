@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Editar Sangria de Pelucias' }) %>
+<%- include('../../partials/head', { title: 'Editar Sangria de Pelúcias' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
@@ -8,19 +8,19 @@
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Pelucias' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Pelúcias' }) %>
 
         <section class="form-hero form-hero-violet">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
-                <h1>Editar sangria de pelucias</h1>
-                <p>Atualizei a tela de edicao para seguir o mesmo padrao moderno do cadastro, destacando leituras, valores e observacoes em blocos mais claros.</p>
+                <h1>Editar sangria de pelúcias</h1>
+                <p>Atualizei a tela de edição para seguir o mesmo padrão moderno do cadastro, destacando leituras, valores e observações em blocos mais claros.</p>
             </div>
 
             <div class="form-hero-side">
                 <div class="form-hero-stat">
                     <strong>Produto</strong>
-                    <span>Pelucias</span>
+                    <span>Pelúcias</span>
                 </div>
                 <div class="form-hero-stat">
                     <strong>Registro</strong>
@@ -37,7 +37,7 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Visita</span>
-                            <h2>Informacoes da coleta</h2>
+                            <h2>Informações da coleta</h2>
                             <p>Atualize estabelecimento, data e forma de pagamento vinculados a este registro operacional.</p>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                                <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                                 <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
                             </select>
                         </div>
@@ -80,7 +80,7 @@
                             <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
-                            <label for="ultima_leitura">Ultima leitura</label>
+                            <label for="ultima_leitura">Última leitura</label>
                             <input class="form-control readonly-input text-center" id="ultima_leitura" name="ultima_leitura" value="<%= sangria.ultima_leitura %>" disabled readonly>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
@@ -98,8 +98,8 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Financeiro</span>
-                            <h2>Apuracao e comissao</h2>
-                            <p>Altere valor apurado e comissao para atualizar automaticamente o valor do comerciante e o valor liquido.</p>
+                            <h2>Apuração e comissão</h2>
+                            <p>Altere valor apurado e comissão para atualizar automaticamente o valor do comerciante e o valor líquido.</p>
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
-                            <label for="comissao">Comissao (%)</label>
+                            <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
                                 <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
@@ -126,7 +126,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
-                            <label for="valor_liquido">Valor liquido</label>
+                            <label for="valor_liquido">Valor líquido</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
                                 <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
@@ -138,15 +138,15 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Observacoes</span>
-                            <h2>Anotacoes complementares</h2>
-                            <p>Atualize qualquer informacao relevante para a proxima coleta, conferencia ou abastecimento.</p>
+                            <span class="form-section-tag">Observações</span>
+                            <h2>Anotações complementares</h2>
+                            <p>Atualize qualquer informação relevante para a próxima coleta, conferência ou abastecimento.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="observacoes">Observacoes</label>
+                            <label for="observacoes">Observações</label>
                             <textarea class="form-control" id="observacoes" name="observacoes" rows="5"><%= sangria.observacoes %></textarea>
                         </div>
                     </div>
@@ -154,8 +154,8 @@
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Salvar alteracoes</strong>
-                        <span>Revise leituras e valores antes de atualizar esta sangria de pelucias.</span>
+                        <strong>Salvar alterações</strong>
+                        <span>Revise leituras e valores antes de atualizar esta sangria de pelúcias.</span>
                     </div>
 
                     <div class="form-actions-buttons">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Adicionar Lancamento' }) %>
+<%- include('../../partials/head', { title: 'Adicionar Lançamento' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
@@ -8,13 +8,13 @@
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Adicionar Lancamento' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Adicionar Lançamento' }) %>
 
-        <section class="form-hero form-hero-blue">
+        <section class="form-hero form-hero-neutral">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-cash-coin"></i> Financeiro</span>
-                <h1>Novo lancamento</h1>
-                <p>Registre entradas e saidas com mais clareza visual, organizando o tipo financeiro, a origem do valor e os dados de pagamento em uma jornada mais objetiva.</p>
+                <h1>Novo lançamento</h1>
+                <p>Registre entradas e saídas com mais clareza visual, organizando o tipo financeiro, a origem do valor e os dados de pagamento em uma jornada mais objetiva.</p>
             </div>
 
             <div class="form-hero-side">
@@ -23,7 +23,7 @@
                     <span>Fluxo financeiro com contexto completo</span>
                 </div>
                 <div class="form-hero-stat">
-                    <strong>Usuario</strong>
+                    <strong>Usuário</strong>
                     <span><%= usuario.username %></span>
                 </div>
             </div>
@@ -34,19 +34,19 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Classificacao</span>
-                            <h2>Tipo e valor do lancamento</h2>
-                            <p>Defina se a movimentacao e entrada ou saida, escolha a categoria financeira e informe a data com o valor correspondente.</p>
+                            <span class="form-section-tag">Classificação</span>
+                            <h2>Tipo e valor do lançamento</h2>
+                            <p>Defina se a movimentação é entrada ou saída, escolha a categoria financeira e informe a data com o valor correspondente.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="entrada_saida">Entrada ou saida</label>
+                            <label for="entrada_saida">Entrada ou saída</label>
                             <select class="form-select text-center" id="entrada_saida" name="entrada_saida" required>
                                 <option value="" disabled selected>Selecione um tipo</option>
                                 <option value="Entrada">Entrada</option>
-                                <option value="Saida">Saida</option>
+                                <option value="Saida">Saída</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -54,7 +54,7 @@
                             <input type="date" class="form-control text-center" id="data" name="data" required>
                         </div>
                         <div class="col-12 col-lg-3">
-                            <label for="tipo_de_lancamento">Tipo de lancamento</label>
+                            <label for="tipo_de_lancamento">Tipo de lançamento</label>
                             <select class="form-select text-center" id="tipo_de_lancamento" name="tipo_de_lancamento" required>
                                 <option value="" disabled selected>Selecione um tipo</option>
                                 <option value="receita_dos_pontos" class="tipo-entrada">Receita dos Pontos</option>
@@ -81,7 +81,7 @@
                         <div>
                             <span class="form-section-tag">Pagamento</span>
                             <h2>Origem e forma de pagamento</h2>
-                            <p>Associe o lancamento ao produto correto, escolha a forma de pagamento e informe a quantidade de parcelas quando necessario.</p>
+                            <p>Associe o lançamento ao produto correto, escolha a forma de pagamento e informe a quantidade de parcelas quando necessário.</p>
                         </div>
                     </div>
 
@@ -92,7 +92,7 @@
                                 <option value="" disabled selected>Selecione um produto</option>
                                 <% if (navProducts.bolinhas) { %><option value="bolinhas">Bolinhas</option><% } %>
                                 <% if (navProducts.figurinhas) { %><option value="figurinhas">Figurinhas</option><% } %>
-                                <% if (navProducts.pelucias) { %><option value="pelucias">Pelucias</option><% } %>
+                                <% if (navProducts.pelucias) { %><option value="pelucias">Pelúcias</option><% } %>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -100,9 +100,9 @@
                             <select class="form-select text-center" id="forma_de_pagamento" name="forma_de_pagamento" required>
                                 <option value="" disabled selected>Selecione um tipo</option>
                                 <option value="boleto">Boleto</option>
-                                <option value="credito">Credito</option>
+                                <option value="credito">Crédito</option>
                                 <option value="pix">Pix</option>
-                                <option value="especie">Especie</option>
+                                <option value="especie">Espécie</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -110,7 +110,7 @@
                             <input type="number" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="1" required>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="usuario">Usuario</label>
+                            <label for="usuario">Usuário</label>
                             <input disabled type="text" class="form-control text-center readonly-input" id="usuario" name="usuario" value="<%= usuario.username %>" readonly>
                         </div>
                     </div>
@@ -119,16 +119,16 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Descricao</span>
-                            <h2>Contexto da movimentacao</h2>
-                            <p>Descreva o motivo do lancamento para facilitar auditoria, consultas e conferencias futuras.</p>
+                            <span class="form-section-tag">Descrição</span>
+                            <h2>Contexto da movimentação</h2>
+                            <p>Descreva o motivo do lançamento para facilitar auditoria, consultas e conferências futuras.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="descricao">Descricao</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="5" placeholder="Explique de forma objetiva o motivo desta movimentacao." required></textarea>
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="5" placeholder="Explique de forma objetiva o motivo desta movimentação." required></textarea>
                         </div>
                     </div>
                 </section>
@@ -136,7 +136,7 @@
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
                         <strong>Conferencia final</strong>
-                        <span>Antes de salvar, verifique tipo, data, produto e valor do lancamento.</span>
+                        <span>Antes de salvar, verifique tipo, data, produto e valor do lançamento.</span>
                     </div>
 
                     <div class="form-actions-buttons">
@@ -146,7 +146,7 @@
                         </a>
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-journal-check"></i>
-                            <span>Cadastrar lancamento</span>
+                            <span>Cadastrar lançamento</span>
                         </button>
                     </div>
                 </section>

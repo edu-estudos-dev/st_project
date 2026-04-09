@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Editar Lancamento' }) %>
+<%- include('../../partials/head', { title: 'Editar Lançamento' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
@@ -9,13 +9,13 @@
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Lancamento' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Lançamento' }) %>
 
-        <section class="form-hero form-hero-blue">
+        <section class="form-hero form-hero-neutral">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Financeiro</span>
-                <h1>Editar lancamento</h1>
-                <p>Atualize os dados financeiros com a mesma clareza visual do cadastro, revisando classificacao, pagamento e descricao em uma pagina mais leve e organizada.</p>
+                <h1>Editar lançamento</h1>
+                <p>Atualize os dados financeiros com a mesma clareza visual do cadastro, revisando classificação, pagamento e descrição em uma página mais leve e organizada.</p>
             </div>
 
             <div class="form-hero-side">
@@ -24,7 +24,7 @@
                     <span><%= lancamento.tipo_de_lancamento %></span>
                 </div>
                 <div class="form-hero-stat">
-                    <strong>Usuario</strong>
+                    <strong>Usuário</strong>
                     <span><%= lancamento.usuario %></span>
                 </div>
             </div>
@@ -35,18 +35,18 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Classificacao</span>
-                            <h2>Tipo e valor do lancamento</h2>
-                            <p>Revise a classificacao financeira, a data e o valor para garantir que a movimentacao fique correta no fluxo de caixa.</p>
+                            <span class="form-section-tag">Classificação</span>
+                            <h2>Tipo e valor do lançamento</h2>
+                            <p>Revise a classificação financeira, a data e o valor para garantir que a movimentação fique correta no fluxo de caixa.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="entrada_saida">Entrada ou saida</label>
+                            <label for="entrada_saida">Entrada ou saída</label>
                             <select class="form-select text-center" id="entrada_saida" name="entrada_saida" required>
                                 <option value="Entrada" <%= lancamento.entrada_saida === 'Entrada' ? 'selected' : '' %>>Entrada</option>
-                                <option value="Saida" <%= lancamento.entrada_saida === 'Saida' || lancamento.entrada_saida === 'SaÃƒÆ’Ã‚Â­da' ? 'selected' : '' %>>Saida</option>
+                                <option value="Saida" <%= lancamento.entrada_saida === 'Saida' ? 'selected' : '' %>>Saída</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -54,15 +54,15 @@
                             <input type="date" class="form-control text-center" id="data" name="data" value="<%= new Date(lancamento.data).toISOString().split('T')[0] %>" required>
                         </div>
                         <div class="col-12 col-lg-3">
-                            <label for="tipo_de_lancamento">Tipo de lancamento</label>
+                            <label for="tipo_de_lancamento">Tipo de lançamento</label>
                             <select class="form-select text-center" id="tipo_de_lancamento" name="tipo_de_lancamento" required>
-                                <option value="receita_dos_pontos" <%= lancamento.tipo_de_lancamento === 'receita_dos_pontos' ? 'selected' : '' %> class="tipo-entrada">Receita dos Pontos</option>
-                                <option value="incremento_de_capital" <%= lancamento.tipo_de_lancamento === 'incremento_de_capital' ? 'selected' : '' %> class="tipo-entrada">Incremento de Capital</option>
+                                <option value="receita_dos_pontos" <%= lancamento.tipo_de_lancamento === 'receita_dos_pontos' ? 'selected' : '' %> class="tipo-entrada">Receita dos pontos</option>
+                                <option value="incremento_de_capital" <%= lancamento.tipo_de_lancamento === 'incremento_de_capital' ? 'selected' : '' %> class="tipo-entrada">Incremento de capital</option>
                                 <option value="compra" <%= lancamento.tipo_de_lancamento === 'compra' ? 'selected' : '' %> class="tipo-saida">Compra</option>
                                 <option value="extra" <%= lancamento.tipo_de_lancamento === 'extra' ? 'selected' : '' %> class="tipo-saida">Extra</option>
-                                <option value="pro-labore" <%= lancamento.tipo_de_lancamento === 'pro-labore' ? 'selected' : '' %> class="tipo-saida">Pro-Labore</option>
-                                <option value="gastos_recorrentes" <%= lancamento.tipo_de_lancamento === 'gastos_recorrentes' ? 'selected' : '' %> class="tipo-saida">Gastos Recorrentes</option>
-                                <option value="bonus" <%= lancamento.tipo_de_lancamento === 'bonus' ? 'selected' : '' %> class="tipo-saida">Bonus</option>
+                                <option value="pro-labore" <%= lancamento.tipo_de_lancamento === 'pro-labore' ? 'selected' : '' %> class="tipo-saida">Pró-labore</option>
+                                <option value="gastos_recorrentes" <%= lancamento.tipo_de_lancamento === 'gastos_recorrentes' ? 'selected' : '' %> class="tipo-saida">Gastos recorrentes</option>
+                                <option value="bonus" <%= lancamento.tipo_de_lancamento === 'bonus' ? 'selected' : '' %> class="tipo-saida">Bônus</option>
                             </select>
                         </div>
                         <div class="col-12 col-lg-3">
@@ -80,7 +80,7 @@
                         <div>
                             <span class="form-section-tag">Pagamento</span>
                             <h2>Produto e forma de pagamento</h2>
-                            <p>Atualize o produto relacionado, a forma de pagamento e a quantidade de parcelas vinculadas a este lancamento.</p>
+                            <p>Atualize o produto relacionado, a forma de pagamento e a quantidade de parcelas vinculadas a este lançamento.</p>
                         </div>
                     </div>
 
@@ -90,16 +90,16 @@
                             <select class="form-select text-center" id="produto" name="produto" required>
                                 <% if (navProducts.bolinhas || lancamento.produto === 'bolinhas') { %><option value="bolinhas" <%= lancamento.produto === 'bolinhas' ? 'selected' : '' %>>Bolinhas</option><% } %>
                                 <% if (navProducts.figurinhas || lancamento.produto === 'figurinhas') { %><option value="figurinhas" <%= lancamento.produto === 'figurinhas' ? 'selected' : '' %>>Figurinhas</option><% } %>
-                                <% if (navProducts.pelucias || lancamento.produto === 'pelucias') { %><option value="pelucias" <%= lancamento.produto === 'pelucias' ? 'selected' : '' %>>Pelucias</option><% } %>
+                                <% if (navProducts.pelucias || lancamento.produto === 'pelucias') { %><option value="pelucias" <%= lancamento.produto === 'pelucias' ? 'selected' : '' %>>Pelúcias</option><% } %>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="forma_de_pagamento">Forma de pagamento</label>
                             <select class="form-select text-center" id="forma_de_pagamento" name="forma_de_pagamento" required>
                                 <option value="boleto" <%= lancamento.forma_de_pagamento === 'boleto' ? 'selected' : '' %>>Boleto</option>
-                                <option value="credito" <%= lancamento.forma_de_pagamento === 'credito' ? 'selected' : '' %>>Credito</option>
+                                <option value="credito" <%= lancamento.forma_de_pagamento === 'credito' ? 'selected' : '' %>>Crédito</option>
                                 <option value="pix" <%= lancamento.forma_de_pagamento === 'pix' ? 'selected' : '' %>>Pix</option>
-                                <option value="especie" <%= lancamento.forma_de_pagamento === 'especie' ? 'selected' : '' %>>Especie</option>
+                                <option value="especie" <%= lancamento.forma_de_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -107,7 +107,7 @@
                             <input type="number" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="<%= lancamento.qtde_de_parcelas %>" required>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="usuario">Usuario</label>
+                            <label for="usuario">Usuário</label>
                             <input disabled type="text" class="form-control text-center readonly-input" id="usuario" name="usuario" value="<%= lancamento.usuario %>" readonly>
                         </div>
                     </div>
@@ -116,15 +116,15 @@
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
-                            <span class="form-section-tag">Descricao</span>
-                            <h2>Contexto da movimentacao</h2>
-                            <p>Ajuste a descricao para que a movimentacao continue facil de rastrear nas consultas e conferencias.</p>
+                            <span class="form-section-tag">Descrição</span>
+                            <h2>Contexto da movimentação</h2>
+                            <p>Ajuste a descrição para que a movimentação continue fácil de rastrear nas consultas e conferências.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="descricao">Descricao</label>
+                            <label for="descricao">Descrição</label>
                             <textarea class="form-control" id="descricao" name="descricao" rows="5" required><%= lancamento.descricao %></textarea>
                         </div>
                     </div>
@@ -132,8 +132,8 @@
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Salvar alteracoes</strong>
-                        <span>Revise classificacao, produto e valor antes de atualizar o lancamento.</span>
+                        <strong>Salvar alterações</strong>
+                        <span>Revise classificação, produto e valor antes de atualizar o lançamento.</span>
                     </div>
 
                     <div class="form-actions-buttons">
@@ -143,7 +143,7 @@
                         </a>
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-check2-circle"></i>
-                            <span>Atualizar lancamento</span>
+                            <span>Atualizar lançamento</span>
                         </button>
                     </div>
                 </section>
