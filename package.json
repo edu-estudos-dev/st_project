@@ -22,6 +22,7 @@
     "inputmask": "^5.0.9",
     "jsonwebtoken": "^9.0.3",
     "method-override": "^3.0.0",
+    "nodemailer": "^8.0.5",
     "pg": "^8.20.0",
     "sweetalert2": "^11.26.24"
   },
