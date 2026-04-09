@@ -1,201 +1,222 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../partials/head') %>
+<%- include('../partials/head', { title: 'Ludix' }) %>
 
-   <body class="bg-light">
-      <header class="homepage homepage-header">
-         <a href="/painel"><img class="img-logo" src="/images/logo-ST.png" alt="SuperToys Logo"></a>
-         <nav>
+<body class="homepage-body">
+    <header class="homepage homepage-header homepage-topbar">
+        <a class="brand-mark brand-mark-home" href="/" aria-label="Ludix">
+            <span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span>
+        </a>
+        <nav>
             <ul>
-               <li><a href="/login">Entrar</a></li>
+                <li><a href="#solucao">Solução</a></li>
+                <li><a href="#modulos">Módulos</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a class="homepage-login-link" href="/login">Entrar</a></li>
             </ul>
-         </nav>
-      </header>
+        </nav>
+    </header>
 
-      <section class="hero">
-         <div class="container container-hero">
-            <h2>A Magia da Infância em Cada Festa!</h2>
-            <p>Trazemos alegria e diversão para as crianças!</p>
-         </div>
-      </section>
+    <section class="hero ludix-hero">
+        <div class="container container-hero ludix-hero-card">
+            <div class="ludix-hero-copy">
+                <span class="ludix-kicker">Plataforma de gestão para operações recreativas</span>
+                <h1 class="brand-mark brand-mark-hero" aria-label="Ludix">
+                    <span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span>
+                </h1>
+                <h2>Controle total da sua operação em um só lugar.</h2>
+                <p>Gerencie estabelecimentos, receitas, lançamentos, visitas, estoque e vencimentos com uma experiência mais clara, moderna e pronta para crescer com a sua operação.</p>
+                <div class="ludix-hero-actions">
+                    <a class="btn btn-primary btn-lg" href="/login">Acessar sistema</a>
+                    <a class="btn btn-outline-primary btn-lg" href="#contato">Falar com a equipe</a>
+                </div>
+            </div>
 
-      <section class="servicos">
-         <h2 class="titulo-servicos">Nossos Serviços</h2>
-         <div class="servicos-container">
-            <div class="servico">
-               <img src="../images/MG.png" alt="Imagem de Vending Machine">
-               <h3 class="fw-bold">Vending Machine<br> (Máquina de Bolinhas)</h3>
-               <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid delectus quae aspernatur, aperiam
-                  fugit, ea dolorem voluptatum dolorum sapiente dolore deleniti in eaque iure blanditiis asperiores
-                  repellat perspiciatis quas doloremque.</p>
+            <div class="ludix-hero-panel">
+                <div class="ludix-mini-card">
+                    <strong>Operação centralizada</strong>
+                    <span>Estabelecimentos, produtos e visitas no mesmo fluxo.</span>
+                </div>
+                <div class="ludix-mini-card">
+                    <strong>Financeiro organizado</strong>
+                    <span>Receitas, saídas, parcelas e vencimentos com mais previsibilidade.</span>
+                </div>
+                <div class="ludix-mini-card">
+                    <strong>Visão por produto</strong>
+                    <span>Bolinhas, figurinhas e pelúcias com leitura clara e separada.</span>
+                </div>
             </div>
-            <div class="servico">
-               <img src="../images/grua.png" alt="Imagem de Vending Machine">
-               <h3 class="fw-bold">Máquina de Pelúcias</h3>
-               <p>Brincar com a máquina de pelúcias é uma experiência emocionante que encanta crianças e adultos. Teste
-                  suas habilidades tentando pegar aquela pelúcia fofinha que você tanto deseja. Cada tentativa é cheia
-                  de suspense e diversão, tornando a brincadeira inesquecível. Venha se divertir e leve para casa uma
-                  lembrança especial!</p>
-            </div>
-            <div class="servico">
-               <img src="../images/figurinhas.png" alt="SuperToys Logo">
-               <h3 class="fw-bold">Figurinhas (Cards Colecionáveis)</h3>
-               <p>Brincar com figurinhas é uma atividade emocionante que encanta crianças de todas as idades. Trocar
-                  figurinhas com amigos é divertido e ajuda a fazer novos amigos. Cada figurinha nova é uma surpresa,
-                  tornando a brincadeira ainda mais especial. Complete sua coleção e crie memórias inesquecíveis!</p>
-            </div>
-         </div>
-      </section>
+        </div>
+    </section>
 
-      <section class="entrar-em-contato">
-         <h2>Gostaria de ter em seu estabelecimento algum dos nossos produtos?</h2>
-         <h3>Entre em contato agora mesmo.</h3>
-         <form id="contactForm" action="/enviar-contato" method="POST">
+    <section id="solucao" class="servicos ludix-section ludix-section-dark">
+        <div class="ludix-section-heading">
+            <span class="ludix-kicker ludix-kicker-light">Solução</span>
+            <h2 class="titulo-servicos">Uma plataforma pensada para a rotina real da operação</h2>
+            <p>O <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> organiza o que normalmente fica espalhado em planilhas, anotações e controles paralelos.</p>
+        </div>
+
+        <div class="servicos-container ludix-grid">
+            <div class="servico ludix-feature-card">
+                <img src="../images/MG.png" alt="Máquina de bolinhas">
+                <h3 class="fw-bold">Gestão de pontos</h3>
+                <p>Cadastre estabelecimentos, responsáveis, contatos e produtos vinculados com visão comercial e operacional no mesmo ambiente.</p>
+            </div>
+            <div class="servico ludix-feature-card">
+                <img src="../images/grua.png" alt="Máquina de pelúcias">
+                <h3 class="fw-bold">Rotina financeira</h3>
+                <p>Controle entradas, saídas, parcelamentos, vencimentos e alertas para manter o caixa organizado e previsível.</p>
+            </div>
+            <div class="servico ludix-feature-card">
+                <img src="../images/figurinhas.png" alt="Cards colecionáveis">
+                <h3 class="fw-bold">Acompanhamento por produto</h3>
+                <p>Tenha formulários, tabelas, receitas e controles específicos para bolinhas, figurinhas e pelúcias em uma mesma plataforma.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="modulos" class="depoimentos ludix-section ludix-section-light">
+        <div class="ludix-section-heading">
+            <span class="ludix-kicker">Módulos</span>
+            <h2 class="titulo-servicos">O que o <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> entrega para a sua operação</h2>
+        </div>
+
+        <div class="depoimentos-container ludix-proof-grid">
+            <figure class="depoimento ludix-proof-card">
+                <blockquote class="blockquote">
+                    <p>Cadastro inteligente de estabelecimentos com organização por responsável, contato, endereço e produtos ativos.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Base operacional mais limpa e mais fácil de consultar
+                </figcaption>
+            </figure>
+            <figure class="depoimento ludix-proof-card">
+                <blockquote class="blockquote">
+                    <p>Lançamentos financeiros com parcelamento, vencimentos encadeados, filtros e alertas para contas próximas do prazo.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Menos risco de perder boleto e mais previsibilidade
+                </figcaption>
+            </figure>
+            <figure class="depoimento ludix-proof-card">
+                <blockquote class="blockquote">
+                    <p>Receitas, sangrias, visitas e controles gerais modernizados para leitura rápida tanto no administrativo quanto no operacional.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Mais velocidade para tomar decisão no dia a dia
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section id="contato" class="entrar-em-contato ludix-section ludix-contact">
+        <h2>Quer levar o <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> para a sua operação?</h2>
+        <h3>Fale com a equipe e descubra como estruturar seus pontos com mais controle.</h3>
+
+        <form id="contactForm" action="/enviar-contato" method="POST">
             <div class="inputs">
-               <div class="box-1 py-3">
+                <div class="box-1 py-3">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required>
 
-                  <label for="nome">Nome:</label>
-                  <input type="text" id="nome" name="nome" required>
+                    <label class="mt-3" for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" required placeholder="Somente números">
+                </div>
 
-                  <label class="mt-3" for="telefone">Telefone:</label>
-                  <input type="text" id="telefone" name="telefone" required placeholder="Somente Números.">
+                <div class="box-2 p-5">
+                    <p>Quais módulos da operação mais interessam para você?</p>
+                    <div class="checkbox-container">
+                        <div class="checkbox-item ludix-checkbox-grid">
+                            <label class="ludix-check-chip" for="produto1">
+                                <input type="checkbox" id="produto1" name="produtos" value="Maquina de Bolinhas">
+                                <span>Máquina de bolinhas</span>
+                            </label>
+                            <label class="ludix-check-chip" for="produto2">
+                                <input type="checkbox" id="produto2" name="produtos" value="Figurinhas">
+                                <span>Figurinhas</span>
+                            </label>
+                            <label class="ludix-check-chip" for="produto3">
+                                <input type="checkbox" id="produto3" name="produtos" value="Maquina de Ursinho">
+                                <span>Máquina de pelúcias</span>
+                            </label>
+                        </div>
+                    </div>
 
-               </div>
-               <div class="box-2 p-5">
-                  <p>Quais produtos você tem interesse em colocar em seu estabelecimento?</p>
-                  <div class="checkbox-container">
-                     <div class="checkbox-item">
-                        <input type="checkbox" id="produto1" name="produtos" value="Maquina de Bolinhas">
-                        <label class="m-0 me-5" for="produto1">Máquina de Bolinhas</label>
-                        <input type="checkbox" id="produto2" name="produtos" value="Figurinhas">
-                        <label class="m-0 me-5" for="produto2">Figurinhas</label>
-                        <input type="checkbox" id="produto3" name="produtos" value="Maquina de Ursinho">
-                        <label class="m-0 me-5" for="produto3">Máquina de Ursinho</label>
-                     </div>
-                  </div>
-                  <div class="d-flex justify-content-center w-100">
-                     <button type="submit" class="btn btn-primary w-50">Enviar</button>
-                  </div>
-               </div>
+                    <div class="d-flex justify-content-center w-100">
+                        <button type="submit" class="btn btn-primary ludix-submit-btn">Solicitar contato</button>
+                    </div>
+                </div>
             </div>
-         </form>
+        </form>
 
-         <span class="contact-actions">
-            <a href="https://wa.me/5585986992706" target="_blank" class="contact-link">
-               <i class="bi bi-whatsapp"></i> (85) 9 8699-2706
-            </a> &nbsp; &nbsp;
-            <a href="https://wa.me/5585994287650" target="_blank" class="contact-link">
-               <i class="bi bi-whatsapp"></i> (85) 9 9428-7650
-            </a>
-         </span>
-      </section>
+    </section>
 
-      <section class="depoimentos">
-         <h2 class="titulo-servicos">O que nossos clientes dizem</h2>
-         <div class="depoimentos-container">
-            <figure class="depoimento">
-               <blockquote class="blockquote">
-                  <p>"A SuperToys superou todas as minhas expectativas! A festa do meu filho foi incrível, desde a
-                     decoração até a animação. As crianças se divertiram muito e os adultos ficaram impressionados.
-                     Recomendo de olhos fechados!"</p>
-               </blockquote>
-               <figcaption class="blockquote-footer">
-                  Ana Silva, mãe do Pedro Paulo.
-               </figcaption>
-            </figure>
-            <figure class="depoimento">
-               <blockquote class="blockquote">
-                  <p>"A SuperToys é a melhor escolha para quem busca um evento personalizado e inesquecível. A equipe é
-                     super atenciosa e criativa, transformando cada festa em um momento mágico. Obrigada por tudo!"</p>
-               </blockquote>
-               <figcaption class="blockquote-footer">
-                  Carlos Ubirajara, cliente satisfeito
-               </figcaption>
-            </figure>
-            <figure class="depoimento">
-               <blockquote class="blockquote">
-                  <p>"A SuperToys me ajudou a realizar o casamento dos meus sonhos. Tudo foi perfeito, desde a
-                     organização até a execução. A equipe é profissional e dedicada, e o resultado final foi além do que
-                     eu imaginava. Recomendo a todos!"</p>
-               </blockquote>
-               <figcaption class="blockquote-footer">
-                  Julia Oliveira, noiva feliz
-               </figcaption>
-            </figure>
-         </div>
-      </section>
-
-      <script>
-         document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const telefoneInput = document.getElementById('telefone');
 
             telefoneInput.addEventListener('input', (e) => {
-               let value = e.target.value.replace(/\D/g, '');
-               if (value.length > 11) value = value.slice(0, 11);
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
 
-               if (value.length > 0) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-               if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
-               if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
+                if (value.length > 0) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
+                if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
 
-               e.target.value = value;
+                e.target.value = value;
             });
 
             const form = document.getElementById('contactForm');
             form.addEventListener('submit', async function (event) {
-               event.preventDefault();
+                event.preventDefault();
 
-               const nome = document.getElementById('nome').value.trim();
-               const telefone = telefoneInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-               const checkboxes = document.querySelectorAll('input[name="produtos"]');
-               const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                const nome = document.getElementById('nome').value.trim();
+                const telefone = telefoneInput.value.replace(/\D/g, '');
+                const checkboxes = document.querySelectorAll('input[name="produtos"]');
+                const isChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
 
-               if (!nome) {
-                  window.AppAlerts.warning('Por favor, insira seu nome.');
-                  return;
-               }
+                if (!nome) {
+                    window.AppAlerts.warning('Por favor, insira seu nome.');
+                    return;
+                }
 
-               if (!telefone || telefone.length !== 11) {
-                  window.AppAlerts.warning('Por favor, insira um telefone valido com 11 digitos (DDD + numero).');
-                  return;
-               }
+                if (!telefone || telefone.length !== 11) {
+                    window.AppAlerts.warning('Por favor, insira um telefone válido com 11 dígitos.');
+                    return;
+                }
 
-               if (!isChecked) {
-                  window.AppAlerts.warning('Por favor, marque pelo menos um produto.');
-                  return;
-               }
+                if (!isChecked) {
+                    window.AppAlerts.warning('Por favor, marque pelo menos um módulo.');
+                    return;
+                }
 
-               const formData = new FormData(this);
-               const formDataObj = Object.fromEntries(formData.entries());
+                const formData = new FormData(this);
+                const formDataObj = Object.fromEntries(formData.entries());
 
-               try {
-                  const response = await fetch('/enviar-contato', {
-                     method: 'POST',
-                     headers: {
-                        'Content-Type': 'application/json'
-                     },
-                     body: JSON.stringify(formDataObj)
-                  });
+                try {
+                    const response = await fetch('/enviar-contato', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formDataObj)
+                    });
 
-                  if (response.ok) {
-                     const result = await response.json();
-                     window.AppAlerts.success(result.message);
-                     this.reset(); // Limpa o formulário após submissão bem-sucedida
-                  } else {
-                     const result = await response.json();
-                     window.AppAlerts.error(result.message);
-                  }
-               } catch (error) {
-                  window.AppAlerts.error('Erro ao enviar as informacoes.');
-               }
+                    if (response.ok) {
+                        const result = await response.json();
+                        window.AppAlerts.success(result.message);
+                        this.reset();
+                    } else {
+                        const result = await response.json();
+                        window.AppAlerts.error(result.message);
+                    }
+                } catch (error) {
+                    window.AppAlerts.error('Erro ao enviar as informações.');
+                }
             });
-         });
-      </script>
+        });
+    </script>
 
-
-
-
-   </body>
-
-   <%- include('../partials/footer') %>
-
+    <%- include('../partials/footer') %>
+</body>
 </html>
