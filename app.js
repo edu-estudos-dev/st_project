@@ -39,6 +39,11 @@ app.set('views', viewsDir);
 app.set('view engine', 'ejs');
 
 app.use(securityHeaders);
+
+app.use(express.static(path.join(__dirname, 'public'), {
+    etag: false
+}));
+
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 app.use(cookieParser());
@@ -49,9 +54,13 @@ app.use(attachNavigationContext);
 app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 app.use('/vendor/sweetalert2', express.static(path.join(__dirname, 'node_modules', 'sweetalert2', 'dist')));
-app.use(express.static(path.join(__dirname, 'public'), {
-    etag: false
-}));
+app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
+app.use('/vendor/bootstrap-icons', express.static(path.join(__dirname, 'node_modules', 'bootstrap-icons', 'font')));
+app.use('/vendor/inputmask', express.static(path.join(__dirname, 'node_modules', 'inputmask', 'dist')));
+app.use('/vendor/jspdf', express.static(path.join(__dirname, 'node_modules', 'jspdf', 'dist')));
+app.use('/vendor/jspdf-autotable', express.static(path.join(__dirname, 'node_modules', 'jspdf-autotable', 'dist')));
+app.use('/vendor/fontsource/urbanist', express.static(path.join(__dirname, 'node_modules', '@fontsource', 'urbanist')));
+
 
 app.use(loginLogoutRoutes);
 app.use(homepageRoutes);

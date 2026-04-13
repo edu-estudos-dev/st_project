@@ -11,7 +11,7 @@ export const shouldExposePasswordResetLink = () => {
 };
 
 const buildPasswordResetEmail = ({ user, resetUrl }) => {
-    const appName = String(process.env.APP_NAME || 'Ludix').trim();
+    const appName = String(process.env.APP_NAME || 'VendMaster').trim();
     const username = String(user?.username || 'usuário').trim();
     const subject = `${appName} - redefinição de senha`;
     const text = [

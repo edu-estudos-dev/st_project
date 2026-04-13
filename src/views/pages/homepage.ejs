@@ -1,222 +1,428 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../partials/head', { title: 'Ludix' }) %>
+<%- include('../partials/head', { title: 'VendMaster' }) %>
 
-<body class="homepage-body" id="topo">
-    <header class="homepage homepage-header homepage-topbar">
-        <a class="brand-mark brand-mark-home" href="#topo" aria-label="Ludix">
-            <span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span>
-        </a>
-        <nav>
-            <ul>
-                <li><a href="#solucao">Solução</a></li>
-                <li><a href="#modulos">Módulos</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <li><a class="homepage-login-link" href="/login">Entrar</a></li>
-            </ul>
-        </nav>
-    </header>
+    <body class="homepage-body" id="topo">
+        <header class="homepage homepage-header homepage-topbar">
+            <a href="#topo" class="vm-logo-link" aria-label="VendMaster">
+                <img src="/images/logo_sem_fundo.png" alt="Logo VendMaster" class="img-logo">
+            </a>
 
-    <section class="hero ludix-hero">
-        <div class="container container-hero ludix-hero-card">
-            <div class="ludix-hero-copy">
-                <span class="ludix-kicker">Plataforma de gestão para operações recreativas</span>
-                <h1 class="brand-mark brand-mark-hero" aria-label="Ludix">
-                    <span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span>
-                </h1>
-                <h2>Controle total da sua operação em um só lugar.</h2>
-                <p>Gerencie estabelecimentos, receitas, lançamentos, visitas, estoque e vencimentos com uma experiência mais clara, moderna e pronta para crescer com a sua operação.</p>
-                <div class="ludix-hero-actions">
-                    <a class="btn btn-primary btn-lg" href="/login">Acessar sistema</a>
-                    <a class="btn btn-outline-primary btn-lg" href="#contato">Falar com a equipe</a>
-                </div>
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="#solucao">Solução</a></li>
+                    <li><a href="#modulos">Módulos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a class="homepage-login-link" href="/login">Entrar</a></li>
+                </ul>
+            </nav>
+        </header>
 
-            <div class="ludix-hero-panel">
-                <div class="ludix-mini-card">
-                    <strong>Operação centralizada</strong>
-                    <span>Estabelecimentos, produtos e visitas no mesmo fluxo.</span>
-                </div>
-                <div class="ludix-mini-card">
-                    <strong>Financeiro organizado</strong>
-                    <span>Receitas, saídas, parcelas e vencimentos com mais previsibilidade.</span>
-                </div>
-                <div class="ludix-mini-card">
-                    <strong>Visão por produto</strong>
-                    <span>Bolinhas, figurinhas e pelúcias com leitura clara e separada.</span>
-                </div>
-            </div>
-        </div>
-    </section>
+        <section class="vm-hero">
+            <div class="vm-hero-card">
 
-    <section id="solucao" class="servicos ludix-section ludix-section-dark">
-        <div class="ludix-section-heading">
-            <span class="ludix-kicker ludix-kicker-light">Solução</span>
-            <h2 class="titulo-servicos">Uma plataforma pensada para a rotina real da operação</h2>
-            <p>O <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> organiza o que normalmente fica espalhado em planilhas, anotações e controles paralelos.</p>
-        </div>
+                <!-- ESQUERDA -->
+                <div class="vm-hero-copy">
 
-        <div class="servicos-container ludix-grid">
-            <div class="servico ludix-feature-card">
-                <img src="../images/MG.png" alt="Máquina de bolinhas">
-                <h3 class="fw-bold">Gestão de pontos</h3>
-                <p>Cadastre estabelecimentos, responsáveis, contatos e produtos vinculados com visão comercial e operacional no mesmo ambiente.</p>
-            </div>
-            <div class="servico ludix-feature-card">
-                <img src="../images/grua.png" alt="Máquina de pelúcias">
-                <h3 class="fw-bold">Rotina financeira</h3>
-                <p>Controle entradas, saídas, parcelamentos, vencimentos e alertas para manter o caixa organizado e previsível.</p>
-            </div>
-            <div class="servico ludix-feature-card">
-                <img src="../images/figurinhas.png" alt="Cards colecionáveis">
-                <h3 class="fw-bold">Acompanhamento por produto</h3>
-                <p>Tenha formulários, tabelas, receitas e controles específicos para bolinhas, figurinhas e pelúcias em uma mesma plataforma.</p>
-            </div>
-        </div>
-    </section>
+                    <span class="vm-kicker">
+                        SaaS de gestão profissional para operações recreativas
+                    </span>
 
-    <section id="modulos" class="depoimentos ludix-section ludix-section-light">
-        <div class="ludix-section-heading">
-            <span class="ludix-kicker">Módulos</span>
-            <h2 class="titulo-servicos">O que o <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> entrega para a sua operação</h2>
-        </div>
+                    <h1 class="brand-mark brand-mark-hero">
+                        <span class="brand-mark-primary">Vend</span>
+                        <span class="brand-mark-accent">Master</span>
+                    </h1>
 
-        <div class="depoimentos-container ludix-proof-grid">
-            <figure class="depoimento ludix-proof-card">
-                <blockquote class="blockquote">
-                    <p>Cadastro inteligente de estabelecimentos com organização por responsável, contato, endereço e produtos ativos.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Base operacional mais limpa e mais fácil de consultar
-                </figcaption>
-            </figure>
-            <figure class="depoimento ludix-proof-card">
-                <blockquote class="blockquote">
-                    <p>Lançamentos financeiros com parcelamento, vencimentos encadeados, filtros e alertas para contas próximas do prazo.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Menos risco de perder boleto e mais previsibilidade
-                </figcaption>
-            </figure>
-            <figure class="depoimento ludix-proof-card">
-                <blockquote class="blockquote">
-                    <p>Receitas, sangrias, visitas e controles gerais modernizados para leitura rápida tanto no administrativo quanto no operacional.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Mais velocidade para tomar decisão no dia a dia
-                </figcaption>
-            </figure>
-        </div>
-    </section>
+                    <h2 class="vm-hero-title">
+                        Transforme sua operação em uma gestão profissional e previsível
+                    </h2>
 
-    <section id="contato" class="entrar-em-contato ludix-section ludix-contact">
-        <h2>Quer levar o <span class="brand-mark brand-mark-inline" aria-label="Ludix"><span class="brand-mark-primary">Lud</span><span class="brand-mark-accent">ix</span></span> para a sua operação?</h2>
-        <h3>Fale com a equipe e descubra como estruturar seus pontos com mais controle.</h3>
+                    <p class="vm-hero-lead">
+                        Centralize financeiro, visitas e operação em um único sistema.
+                        Menos improviso, mais controle e crescimento com consistência.
+                    </p>
 
-        <form id="contactForm" action="/enviar-contato" method="POST">
-            <div class="inputs">
-                <div class="box-1 py-3">
-                    <label for="nome">Nome</label>
-                    <input type="text" id="nome" name="nome" required>
+                    <div class="vm-hero-actions">
+                        <a class="btn btn-primary btn-lg" href="#contato">
+                            Solicitar demonstração
+                        </a>
+                        <a class="btn btn-outline-primary btn-lg" href="#modulos">
+                            Ver módulos
+                        </a>
+                    </div>
 
-                    <label class="mt-3" for="telefone">Telefone</label>
-                    <input type="text" id="telefone" name="telefone" required placeholder="Somente números">
+                    <!-- MÉTRICAS MAIS LEVES -->
+                    <div class="vm-hero-badges">
+                        <span>✔ Rotas otimizadas</span>
+                        <span>✔ Financeiro sob controle</span>
+                        <span>✔ Operação centralizada</span>
+                    </div>
+
                 </div>
 
-                <div class="box-2 p-5">
-                    <p>Quais módulos da operação mais interessam para você?</p>
-                    <div class="checkbox-container">
-                        <div class="checkbox-item ludix-checkbox-grid">
-                            <label class="ludix-check-chip" for="produto1">
-                                <input type="checkbox" id="produto1" name="produtos" value="Maquina de Bolinhas">
-                                <span>Máquina de bolinhas</span>
-                            </label>
-                            <label class="ludix-check-chip" for="produto2">
-                                <input type="checkbox" id="produto2" name="produtos" value="Figurinhas">
-                                <span>Figurinhas</span>
-                            </label>
-                            <label class="ludix-check-chip" for="produto3">
-                                <input type="checkbox" id="produto3" name="produtos" value="Maquina de Ursinho">
-                                <span>Máquina de pelúcias</span>
-                            </label>
+                <!-- DIREITA (AGORA FORTE) -->
+                <div class="vm-hero-panel">
+
+                    <!-- CARD PRINCIPAL -->
+                    <div class="vm-dashboard-card">
+                        <div class="vm-dashboard-header">
+                            <strong>Painel do dia</strong>
+                            <span class="vm-status">● Atualizado</span>
+                        </div>
+
+                        <div class="vm-dashboard-metrics">
+                            <div>
+                                <strong>R$ 4.820</strong>
+                                <span>Receita hoje</span>
+                            </div>
+                            <div>
+                                <strong>18</strong>
+                                <span>Visitas</span>
+                            </div>
+                            <div>
+                                <strong>6</strong>
+                                <span>Pendências</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center w-100">
-                        <button type="submit" class="btn btn-primary ludix-submit-btn">Solicitar contato</button>
+                    <!-- CARDS SECUNDÁRIOS -->
+                    <div class="vm-dashboard-list">
+
+                        <div class="vm-mini-card">
+                            <strong>Roteiro inteligente</strong>
+                            <span>
+                                Organize automaticamente o dia da equipe com prioridades claras, reduzindo deslocamentos
+                                e aumentando o número de visitas produtivas.
+                            </span>
+                        </div>
+
+                        <div class="vm-mini-card">
+                            <strong>Financeiro previsível</strong>
+                            <span>
+                                Tenha total controle sobre entradas, saídas e vencimentos, evitando surpresas no caixa e
+                                permitindo decisões com mais segurança.
+                            </span>
+                        </div>
+
+                        <div class="vm-mini-card">
+                            <strong>Operação integrada</strong>
+                            <span>
+                                Conecte campo, financeiro e gestão em um único fluxo, eliminando retrabalho e garantindo
+                                informações sempre atualizadas.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section id="solucao" class="vm-section vm-section-dark dark-bg">
+            <div class="vm-section-heading">
+                <span class="vm-kicker vm-kicker-light">Solução</span>
+
+                <h2 class="titulo-servicos">Tudo que sua operação precisa para vender melhor e operar com mais controle
+                </h2>
+
+                <p class="fs-4">
+                    O
+                    <span class="brand-mark">
+                        <span class="brand-mark-primary">Vend</span>
+                        <span class="brand-mark-accent">Master</span>
+                    </span>
+                    substitui planilhas soltas, anotações dispersas e decisões no improviso por uma rotina profissional.
+                </p>
+            </div>
+
+            <div class="vm-grid">
+                <article class="vm-feature-card">
+                    <h3 class="fw-bold">Operação centralizada</h3>
+                    <p>Cadastros, visitas, financeiro e histórico comercial em um único fluxo para reduzir retrabalho e
+                        acelerar decisões.</p>
+                </article>
+
+                <article class="vm-feature-card">
+                    <h3 class="fw-bold">Rotina com previsibilidade</h3>
+                    <p>Planeje visitas, acompanhe execução diária e mantenha o time alinhado com metas claras e dados
+                        atualizados.</p>
+                </article>
+
+                <article class="vm-feature-card">
+                    <h3 class="fw-bold">Financeiro sob controle</h3>
+                    <p>Visualize entradas, saídas, vencimentos e alertas para agir antes do problema aparecer no caixa.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="vm-section vm-section-light">
+            <div class="vm-section-heading">
+                <span class="vm-kicker">Produtos</span>
+                <h2 class="titulo-servicos">Três frentes para ampliar receita e padronizar sua operação</h2>
+            </div>
+
+            <div class="vm-grid vm-product-grid">
+                <article class="vm-product-card">
+                    <img src="/images/MG.png" alt="Máquina de bolinhas">
+                    <h3 class="fw-bold">Bolinhas</h3>
+                    <p>Gerencie pontos de alto giro com controle de visitas, abastecimento e receita por máquina.</p>
+                </article>
+
+                <article class="vm-product-card">
+                    <img src="/images/grua.png" alt="Máquina de pelúcias">
+                    <h3 class="fw-bold">Pelúcias</h3>
+                    <p>Acompanhe reposição, desempenho por ponto e histórico operacional para manter padrão e margem.
+                    </p>
+                </article>
+
+                <article class="vm-product-card">
+                    <img src="/images/figurinhas.png" alt="Crianças brincando com figurinhas">
+                    <h3 class="fw-bold">Figurinhas</h3>
+                    <p>Tenha visão clara dos pontos ativos, evolução de resultados e oportunidades de recorrência.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="vm-section vm-section-dark dark-bg">
+            <div class="vm-section-heading">
+                <span class="vm-kicker">Como funciona</span>
+
+                <h2 class="titulo-servicos">Uma plataforma feita para dar ritmo, organização e escala à sua rotina</h2>
+            </div>
+
+            <div class="vm-cards">
+                <article class="vm-card">
+                    <h3 class="fs-4">Gestão comercial e operacional</h3>
+                    <p class="fs-5">Cadastre estabelecimentos, responsáveis, contatos e produtos com histórico
+                        organizado e leitura rápida para agir melhor em campo.</p>
+                </article>
+
+                <article class="vm-card">
+                    <h3 class="fs-4">Financeiro com previsibilidade</h3>
+                    <p class="fs-5">Controle entradas, saídas, parcelamentos, vencimentos e alertas para manter a saúde
+                        financeira da operação sempre sob controle.</p>
+                </article>
+
+                <article class="vm-card">
+                    <h3 class="fs-4">Acompanhamento por módulo</h3>
+                    <p class="fs-5">Gerencie bolinhas, figurinhas e pelúcias com visão separada por frente, sem perder a
+                        gestão central da empresa.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="modulos" class="vm-section vm-section-light">
+            <div class="vm-section-heading">
+                <span class="vm-kicker">Módulos</span>
+
+                <h2 class="titulo-servicos">
+                    O que o
+                    <span class="brand-mark brand-mark-inline">
+                        <span class="brand-mark-primary">Vend</span>
+                        <span class="brand-mark-accent">Master</span>
+                    </span>
+                    entrega para acelerar sua operação
+                </h2>
+            </div>
+
+            <div class="vm-proof-grid">
+                <article class="vm-proof-card">
+                    <h3>Cadastro inteligente de pontos</h3>
+                    <blockquote>Organize estabelecimentos, contatos, produtos ativos e observações do local em uma base
+                        confiável e fácil de consultar.</blockquote>
+                </article>
+
+                <article class="vm-proof-card">
+                    <h3>Financeiro que antecipa problemas</h3>
+                    <blockquote>Visualize vencimentos, parcelas, entradas e saídas antes que o caixa aperte e tome
+                        decisões com mais segurança.</blockquote>
+                </article>
+
+                <article class="vm-proof-card vm-proof-card-highlight">
+                    <h3>Sistema de rotas</h3>
+                    <blockquote>Chega de perder tempo decidindo por onde começar. O módulo de rotas ajuda a priorizar
+                        visitas, reduzir deslocamentos e transformar o dia em execução com resultado.</blockquote>
+                </article>
+
+                <article class="vm-proof-card">
+                    <h3>Gestão rápida no dia a dia</h3>
+                    <blockquote>Atualize informações, acompanhe frentes operacionais e mantenha a equipe alinhada sem
+                        depender de processos confusos.</blockquote>
+                </article>
+
+                <article class="vm-proof-card">
+                    <h3>Alertas e vencimentos automáticos</h3>
+                    <blockquote>Receba alertas de contas e compromissos para evitar atrasos, juros e falhas de
+                        planejamento financeiro.</blockquote>
+                </article>
+
+                <article class="vm-proof-card">
+                    <h3>Painel com visão executiva</h3>
+                    <blockquote>Acompanhe indicadores por produto, equipe e período para decidir com mais velocidade e
+                        segurança.</blockquote>
+                </article>
+            </div>
+        </section>
+
+        <section id="contato" class="vm-section vm-section-dark vm-contact dark-bg">
+            <div class="vm-section-heading">
+                <span class="vm-kicker">Contato</span>
+                <h2 class="pt-4">
+                    Leve o
+                    <span class="brand-mark">
+                        <span class="brand-mark-primary">Vend</span>
+                        <span class="brand-mark-accent">Master</span>
+                    </span>
+                    para sua operação
+                </h2>
+                <h3>Solicite um contato e veja como uma gestão profissional pode aumentar controle, produtividade e
+                    potencial de crescimento.</h3>
+            </div>
+
+            <form id="contactForm" class="vm-contact-form" action="/enviar-contato" method="POST" novalidate>
+                <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+
+                <div class="vm-contact-layout">
+                    <div class="vm-contact-fields">
+                        <label for="contact-name">Nome</label>
+                        <input id="contact-name" class="vm-input" type="text" name="nome" placeholder="Seu nome"
+                            required>
+
+                        <label for="contact-phone">Telefone</label>
+                        <input id="contact-phone" class="vm-input" type="tel" name="telefone"
+                            placeholder="(00) 00000-0000" data-phone-mask required>
+
+                        <label for="contact-email">E-mail</label>
+                        <input id="contact-email" class="vm-input" type="email" name="email"
+                            placeholder="voce@empresa.com" required>
+
+                        <p class="vm-form-note">Vamos usar seus dados apenas para retornar o contato comercial.</p>
+                    </div>
+
+                    <div class="vm-contact-options">
+                        <div>
+                            <p class="vm-options-title">Quais módulos te interessam?</p>
+
+                            <div class="vm-checkbox-grid">
+                                <label class="vm-check-chip">
+                                    <input type="checkbox" name="produtos[]" value="Bolinhas">
+                                    <span>Bolinhas</span>
+                                </label>
+
+                                <label class="vm-check-chip">
+                                    <input type="checkbox" name="produtos[]" value="Figurinhas">
+                                    <span>Figurinhas</span>
+                                </label>
+
+                                <label class="vm-check-chip">
+                                    <input type="checkbox" name="produtos[]" value="Pelúcias">
+                                    <span>Pelúcias</span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="vm-options-title">Como prefere receber o primeiro contato?</p>
+
+                            <div class="vm-radio-grid">
+                                <label class="vm-radio-card">
+                                    <input type="radio" name="preferenciaContato" value="WhatsApp" checked>
+                                    <span>WhatsApp</span>
+                                </label>
+
+                                <label class="vm-radio-card">
+                                    <input type="radio" name="preferenciaContato" value="Ligação">
+                                    <span>Ligação</span>
+                                </label>
+
+                                <label class="vm-radio-card">
+                                    <input type="radio" name="preferenciaContato" value="E-mail">
+                                    <span>E-mail</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="vm-contact-actions">
+                            <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Solicitar
+                                contato</button>
+                            <p id="contactStatus" class="vm-status" aria-live="polite"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </section>
 
-    </section>
+        <%- include('../partials/footer') %>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const telefoneInput = document.getElementById('telefone');
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const form = document.getElementById('contactForm');
+                    const submitButton = form?.querySelector('button[type="submit"]');
+                    const statusElement = document.getElementById('contactStatus');
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                    const phoneInput = document.querySelector('[data-phone-mask]');
 
-            telefoneInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) value = value.slice(0, 11);
-
-                if (value.length > 0) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-                if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
-                if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
-
-                e.target.value = value;
-            });
-
-            const form = document.getElementById('contactForm');
-            form.addEventListener('submit', async function (event) {
-                event.preventDefault();
-
-                const nome = document.getElementById('nome').value.trim();
-                const telefone = telefoneInput.value.replace(/\D/g, '');
-                const checkboxes = document.querySelectorAll('input[name="produtos"]');
-                const isChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
-
-                if (!nome) {
-                    window.AppAlerts.warning('Por favor, insira seu nome.');
-                    return;
-                }
-
-                if (!telefone || telefone.length !== 11) {
-                    window.AppAlerts.warning('Por favor, insira um telefone válido com 11 dígitos.');
-                    return;
-                }
-
-                if (!isChecked) {
-                    window.AppAlerts.warning('Por favor, marque pelo menos um módulo.');
-                    return;
-                }
-
-                const formData = new FormData(this);
-                const formDataObj = Object.fromEntries(formData.entries());
-
-                try {
-                    const response = await fetch('/enviar-contato', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formDataObj)
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        window.AppAlerts.success(result.message);
-                        this.reset();
-                    } else {
-                        const result = await response.json();
-                        window.AppAlerts.error(result.message);
+                    if (phoneInput && typeof Inputmask !== 'undefined') {
+                        Inputmask({ mask: '(99) 99999-9999' }).mask(phoneInput);
                     }
-                } catch (error) {
-                    window.AppAlerts.error('Erro ao enviar as informações.');
-                }
-            });
-        });
-    </script>
 
-    <%- include('../partials/footer') %>
-</body>
+                    if (!form) {
+                        return;
+                    }
+
+                    form.addEventListener('submit', async (event) => {
+                        event.preventDefault();
+
+                        const formData = new FormData(form);
+                        const payload = {
+                            nome: String(formData.get('nome') || '').trim(),
+                            telefone: String(formData.get('telefone') || '').trim(),
+                            email: String(formData.get('email') || '').trim(),
+                            produtos: formData.getAll('produtos[]'),
+                            preferenciaContato: String(formData.get('preferenciaContato') || '').trim()
+                        };
+
+                        if (!payload.nome || !payload.telefone || !payload.email || payload.produtos.length === 0) {
+                            window.AppAlerts?.warning('Preencha nome, telefone, e-mail e selecione ao menos um módulo.');
+                            return;
+                        }
+
+                        submitButton.disabled = true;
+                        statusElement.textContent = 'Enviando suas informações...';
+
+                        try {
+                            const response = await fetch(form.action, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-Token': csrfToken
+                                },
+                                body: JSON.stringify(payload)
+                            });
+
+                            const data = await response.json();
+
+                            if (!response.ok) {
+                                throw new Error(data.message || 'Nao foi possivel enviar sua solicitacao agora.');
+                            }
+
+                            form.reset();
+                            statusElement.textContent = data.message || 'Solicitação enviada com sucesso.';
+                            window.AppAlerts?.success(data.message || 'Solicitação enviada com sucesso.');
+                        } catch (error) {
+                            statusElement.textContent = error.message;
+                            window.AppAlerts?.error(error.message || 'Erro ao enviar as informações.');
+                        } finally {
+                            submitButton.disabled = false;
+                        }
+                    });
+                });
+            </script>
+    </body>
+
 </html>

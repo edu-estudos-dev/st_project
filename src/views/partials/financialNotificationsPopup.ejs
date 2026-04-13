@@ -15,8 +15,8 @@
         const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
         const popupMode = '<%= popupMode %>';
         const storageKey = popupMode === 'launch-once'
-            ? 'ludix-financial-alerts-launch-shown'
-            : 'ludix-financial-alerts-dashboard-shown';
+            ? 'vendmaster-financial-alerts-launch-shown'
+            : 'vendmaster-financial-alerts-dashboard-shown';
 
         if (!totalAlertas) return;
 
