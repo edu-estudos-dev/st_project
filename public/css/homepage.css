@@ -765,6 +765,15 @@
 }
 
 @media (max-width: 767.98px) {
+  .homepage-body .vm-hero-left {
+    text-align: center;
+    align-items: center;
+  }
+
+  .homepage-body .vm-hero-badge {
+    margin-inline: auto;
+  }
+
   .homepage-topbar {
     padding: 0.72rem 0.8rem;
     border-radius: 20px;
@@ -809,8 +818,10 @@
 
   .homepage-body #solucao .vm-section-heading .titulo-servicos,
   .homepage-body #solucao .vm-section-heading h2 {
-    max-width: 12ch;
+    max-width: 16ch;
     margin-inline: auto;
+    font-size: clamp(2.05rem, 7vw, 2.45rem);
+    line-height: 1.12;
   }
 
   .homepage-body #solucao .vm-section-heading p {
@@ -856,6 +867,9 @@
 
   .homepage-body .vm-hero-title {
     font-size: clamp(2.35rem, 11vw, 3.15rem);
+    max-width: 10ch;
+    margin-inline: auto;
+    text-align: center;
   }
 
   .homepage-body .vm-hero-container {
@@ -943,6 +957,12 @@
   .homepage-body .vm-module-card p,
   .homepage-body .vm-module-card--highlight p {
     font-size: 1rem;
+  }
+
+  .homepage-body .vm-hero-description {
+    max-width: 31ch;
+    margin-inline: auto;
+    text-align: center !important;
   }
 
   .homepage-body .vm-product-card,
@@ -1077,6 +1097,11 @@
 }
 
 @media (max-width: 479.98px) {
+  .homepage-body .vm-hero-left {
+    text-align: center;
+    align-items: center;
+  }
+
   .homepage-body .vm-hero {
     padding: 1.1rem 0 2.5rem;
   }
@@ -1126,7 +1151,9 @@
 
   .homepage-body #solucao .vm-section-heading .titulo-servicos,
   .homepage-body #solucao .vm-section-heading h2 {
-    max-width: 11ch;
+    max-width: 14ch;
+    font-size: clamp(1.85rem, 7.2vw, 2.1rem);
+    line-height: 1.12;
   }
 
   .homepage-body #solucao .vm-section-heading p {
@@ -1157,11 +1184,17 @@
 
   .homepage-body .vm-hero-title {
     font-size: clamp(2rem, 10vw, 2.55rem);
+    max-width: 9.6ch;
+    margin-inline: auto;
+    text-align: center;
   }
 
   .homepage-body .vm-hero-description {
     font-size: 0.96rem;
     line-height: 1.6;
+    max-width: 29ch;
+    margin-inline: auto;
+    text-align: center !important;
   }
 
   .homepage-body .vm-hero-buttons .btn {
