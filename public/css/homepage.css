@@ -794,6 +794,41 @@
     padding: 48px 0;
   }
 
+  .homepage-body #solucao {
+    width: calc(100% - 0.75rem);
+    margin-inline: auto;
+    padding: 1.6rem 1rem 1.15rem;
+    border-radius: 26px;
+  }
+
+  .homepage-body #solucao .vm-section-heading {
+    width: 100%;
+    margin-bottom: 1.2rem;
+    padding-inline: 0.1rem;
+  }
+
+  .homepage-body #solucao .vm-section-heading .titulo-servicos,
+  .homepage-body #solucao .vm-section-heading h2 {
+    max-width: 12ch;
+    margin-inline: auto;
+  }
+
+  .homepage-body #solucao .vm-section-heading p {
+    max-width: 100%;
+    margin-inline: auto;
+    padding-inline: 0.2rem;
+  }
+
+  .homepage-body #solucao .vm-grid {
+    width: 100%;
+    gap: 0.9rem;
+  }
+
+  .homepage-body #solucao .vm-feature-card {
+    padding: 1.15rem 1rem;
+    border-radius: 20px;
+  }
+
   .homepage-body .vm-section-heading {
     margin-bottom: 1.4rem;
     gap: 0.55rem;
@@ -1077,6 +1112,30 @@
 
   .homepage-body .vm-section {
     padding: 40px 0;
+  }
+
+  .homepage-body #solucao {
+    width: calc(100% - 0.5rem);
+    padding: 1.4rem 0.82rem 1rem;
+    border-radius: 22px;
+  }
+
+  .homepage-body #solucao .vm-section-heading {
+    margin-bottom: 1rem;
+  }
+
+  .homepage-body #solucao .vm-section-heading .titulo-servicos,
+  .homepage-body #solucao .vm-section-heading h2 {
+    max-width: 11ch;
+  }
+
+  .homepage-body #solucao .vm-section-heading p {
+    padding-inline: 0.1rem;
+  }
+
+  .homepage-body #solucao .vm-feature-card {
+    padding: 1rem 0.9rem;
+    border-radius: 18px;
   }
 
   .homepage-body .vm-section-heading {
