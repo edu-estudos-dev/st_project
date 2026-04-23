@@ -1117,16 +1117,14 @@
   }
 
   .homepage-topbar nav {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
+    display: grid;
+    gap: 0.7rem;
   }
 
   .homepage-topbar nav ul {
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    flex: 1;
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
@@ -1162,11 +1160,12 @@
   }
 
   .homepage-topbar .homepage-login-item {
-    flex: 0 0 auto;
+    display: block;
+    width: 100%;
   }
 
   .homepage-topbar .homepage-login-item .homepage-login-link {
-    width: auto;
+    width: 100%;
     min-height: 40px;
     justify-content: center;
     padding-inline: 1rem;
@@ -1299,7 +1298,7 @@
 
   .homepage-body .vm-hero-title {
     font-size: clamp(2.45rem, 10vw, 3.15rem);
-    max-width: 8.2ch;
+    max-width: 9.6ch;
     margin-inline: 0;
     text-align: left;
     line-height: 0.98;
@@ -1393,7 +1392,7 @@
   }
 
   .homepage-body .vm-hero-description {
-    max-width: 32ch;
+    max-width: 100%;
     margin-inline: 0;
     text-align: left !important;
   }
@@ -1642,7 +1641,7 @@
 
   .homepage-body .vm-hero-title {
     font-size: clamp(2.2rem, 9.2vw, 2.7rem);
-    max-width: 8ch;
+    max-width: 9ch;
     margin-inline: 0;
     text-align: left;
     line-height: 0.98;
@@ -1651,7 +1650,7 @@
   .homepage-body .vm-hero-description {
     font-size: 1rem;
     line-height: 1.68;
-    max-width: 25ch;
+    max-width: 100%;
     margin-inline: 0;
     text-align: left !important;
   }
