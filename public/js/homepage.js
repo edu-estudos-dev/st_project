@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     '.vm-hero-left',
     '.vm-panel',
     '.vm-section-heading',
+    '.vm-before',
+    '.vm-after',
     '.vm-feature-card',
     '.vm-product-card',
     '.vm-module-card',
