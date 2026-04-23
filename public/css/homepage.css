@@ -248,7 +248,7 @@
   font-size: clamp(3.25rem, 5vw, 5rem);
   font-weight: 800;
   line-height: 0.96;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.045em;
   color: var(--home-text);
   text-wrap: balance;
 }
@@ -961,6 +961,22 @@
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
 }
 
+.homepage-body .vm-proof-item.reveal-on-scroll {
+  transform: translate3d(0, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-left {
+  transform: translate3d(-56px, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-right {
+  transform: translate3d(56px, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
 .homepage-body .vm-proof-check {
   display: inline-flex;
   align-items: center;
@@ -1287,11 +1303,12 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.85rem, 11vw, 3.7rem);
-    max-width: 11.2ch;
+    font-size: clamp(3.15rem, 12vw, 4.05rem);
+    max-width: 12.4ch;
     margin-inline: 0;
     text-align: left;
     line-height: 0.94;
+    letter-spacing: -0.03em;
   }
 
   .homepage-body .vm-hero-container {
@@ -1639,11 +1656,12 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.55rem, 10vw, 3rem);
-    max-width: 10.4ch;
+    font-size: clamp(2.8rem, 10.8vw, 3.2rem);
+    max-width: 11.2ch;
     margin-inline: 0;
     text-align: left;
     line-height: 0.94;
+    letter-spacing: -0.025em;
   }
 
   .homepage-body .vm-hero-description {
