@@ -1,21 +1,18 @@
 ﻿:root {
-  --primary-color-1: #0000ff;
-  --primary-color-2: #ffae00;
-  --secondary-light-1: #f8f9fa;
-  --secondary-light-2: #e6e6e6;
-  --dark-color: #2c2f32;
-  --dark-color-2: #afafaf;
-  --light-blue-color: #e6e6ff;
-  --light-green-color: #e5ffeb;
-  --light-purple-color: #dadaff;
-  --dark-blue-color: #043e8a;
-  --vm-green: #22c55e; /* verde principal */
-  --vm-green-dark: #16a34a;
-
-  --vm-blue: #2563eb; /* azul principal */
+  --primary-color-1: var(--vm-blue);
+  --primary-color-2: var(--vm-green);
+  --secondary-light-1: #f8fafc;
+  --secondary-light-2: #e2e8f0;
+  --dark-color: #1e293b;
+  --dark-color-2: #64748b;
+  --light-blue-color: #dbeafe;
+  --light-green-color: #dcfce7;
+  --light-purple-color: #ede9fe;
+  --dark-blue-color: #143a76;
+  --vm-green: #22c55e;
+  --vm-blue: #2563eb;
   --vm-blue-dark: #1d4ed8;
-
-  --vm-text-dark: #0f172a;
+  --vm-violet: #7c3aed;
 }
 
 html.app-booting body {
@@ -80,13 +77,13 @@ header > nav > ul {
 
 header li > a {
   text-decoration: none;
-  color: var(--primary-color-2);
+  color: var(--primary-color-1);
   text-shadow: 1px 1px 2px #2d2d2d;
   letter-spacing: 1px;
 }
 
 header li > a:hover {
-  color: #e7ff10;
+  color: var(--primary-color-2);
   transition: color 0.5s;
 }
 
@@ -96,7 +93,7 @@ header li > a:hover {
 }
 
 .btn-header:hover {
-  color: #fffd69;
+  color: var(--primary-color-1);
 }
 
 .img-logo {
@@ -115,11 +112,11 @@ header li > a:hover {
 }
 
 .brand-mark-primary {
-  color: #0f172a;
+  color: var(--vm-blue);
 }
 
 .brand-mark-accent {
-  color: #2563eb;
+  color: var(--vm-green);
 }
 
 .brand-mark-home {
@@ -139,21 +136,11 @@ header li > a:hover {
 }
 
 .brand-mark-footer .brand-mark-primary {
-  color: #f8fafc;
+  color: var(--vm-blue);
 }
 
 .brand-mark-footer .brand-mark-accent {
-  color: #60a5fa;
-}
-
-.btn-voltar {
-  color: #fff;
-}
-
-.btn-voltar:hover {
-  color: var(--primary-color-1);
-  transition: 500ms;
-  color: #fffd69;
+  color: var(--vm-green);
 }
 
 .usuario-info {
@@ -200,77 +187,6 @@ figure {
   box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-.cabecalho {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em 1.5em;
-  background-color: var(--primary-color-2);
-  color: #ffffff;
-  align-items: center;
-  margin-bottom: 1em;
-  border-radius: 10px;
-}
-
-.cabecalho-bolinha {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em 1.5em;
-  background-color: green;
-  color: #ffffff;
-  align-items: center;
-  margin-bottom: 1em;
-  border-radius: 10px;
-}
-
-.bolinha {
-  height: auto;
-  margin-bottom: 2em;
-  background-color: var(--light-green-color);
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-  padding: 1.5em;
-  border-radius: 10px;
-}
-
-.cabecalho-figurinhas {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em 1.5em;
-  background-color: var(--dark-blue-color);
-  color: #ffffff;
-  align-items: center;
-  margin-bottom: 1em;
-  border-radius: 10px;
-}
-
-.figurinhas {
-  height: auto;
-  margin-bottom: 2em;
-  background-color: var(--light-blue-color);
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-  padding: 1.5em;
-  border-radius: 10px;
-}
-
-.geral {
-  height: auto;
-  margin-bottom: 2em;
-  background-color: var(--secondary-light-2);
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-  padding: 1.5em;
-  border-radius: 10px;
-}
-
-.cabecalho-pelucia {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em 1.5em;
-  background-color: purple;
-  color: #ffffff;
-  align-items: center;
-  margin-bottom: 1em;
-  border-radius: 10px;
-}
-
 .form-inline-action {
   display: inline-flex;
   align-items: center;
@@ -311,70 +227,6 @@ figure {
 .form-inline-action-warning.is-active {
   background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   box-shadow: 0 16px 32px rgba(194, 65, 12, 0.28);
-}
-
-.table-purple th {
-  background-color: #6f42c1 !important;
-}
-
-.pelucia {
-  height: auto;
-  margin-bottom: 2em;
-  background-color: var(--light-purple-color);
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-  padding: 1.5em;
-  border-radius: 10px;
-}
-
-.cabecalho-geral {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em 1.5em;
-  background-color: var(--dark-color);
-  color: #ffffff;
-  align-items: center;
-  margin-bottom: 1em;
-  border-radius: 10px;
-}
-
-.bg-purple {
-  background-color: #6f42c1 !important;
-}
-
-.bg-dark-blue {
-  background-color: var(--dark-blue-color) !important;
-}
-
-.text-purple {
-  color: #6f42c1 !important;
-}
-
-.btn-purple {
-  background-color: #6f42c1 !important;
-  border-color: #6f42c1 !important;
-  color: #fff;
-}
-
-.btn-purple:hover {
-  background-color: #5a32a3 !important;
-  border-color: #5a32a3 !important;
-  color: #fff;
-}
-
-.text-dark-blue {
-  color: var(--dark-blue-color) !important;
-}
-
-.btn-dark-blue {
-  background-color: var(--dark-blue-color) !important;
-  border-color: #1456ac !important;
-  color: #fff;
-}
-
-.btn-dark-blue:hover {
-  background-color: #0a4ba0 !important;
-  border-color: #1456ac !important;
-  color: #fff;
 }
 
 .btn-dark {
@@ -799,26 +651,6 @@ figure {
 .dashboard-visit-alert-item small {
   color: #64748b;
   line-height: 1.5;
-}
-
-.dashboard-visit-alert-action {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0.75rem 1rem;
-  border-radius: 14px;
-  background: #1d4ed8;
-  color: #fff;
-  font-weight: 800;
-  text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dashboard-visit-alert-action:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(29, 78, 216, 0.2);
 }
 
 .dashboard-user-card {
@@ -5221,17 +5053,6 @@ figure {
     text-align: center;
   }
 
-  .cabecalho,
-  .cabecalho-bolinha,
-  .cabecalho-figurinhas,
-  .cabecalho-pelucia,
-  .cabecalho-geral {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-
   .container-principal {
     height: auto;
     min-height: 100vh;
@@ -5601,22 +5422,6 @@ figure {
   }
 }
 
-/* =========================
-   BRAND GLOBAL (PADRÃO)
-========================= */
-
-.brand-mark-primary {
-  color: #2563eb; /* azul oficial padronizado */
-}
-
-.brand-mark-accent {
-  color: #22c55e; /* verde mantido */
-}
-
-/* =========================
-   FUNDO ESCURO
-========================= */
-
 .dark-bg .brand-mark-primary {
   color: #2563eb; /* mesmo azul, com consistência total */
 }
@@ -5628,14 +5433,6 @@ figure {
 footer {
   background: #0f172a;
   color: #e5e7eb;
-}
-
-.brand-mark-footer .brand-mark-primary {
-  color: #2563eb;
-}
-
-.brand-mark-footer .brand-mark-accent {
-  color: #22c55e;
 }
 
 /* LINKS DO FOOTER */

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import connection from '../db_config/connection.js';
 
 class UserModel {

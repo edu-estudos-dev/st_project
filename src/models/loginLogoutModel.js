@@ -1,5 +1,5 @@
 // src/models/loginLogoutModel.js
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import connection from '../db_config/connection.js';
 

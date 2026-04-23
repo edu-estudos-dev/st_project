@@ -3,13 +3,10 @@
    ========================================================================== */
 
 .homepage-body {
-  --home-surface: #f3f7fc;
-  --home-surface-strong: #ffffff;
   --home-text: #0f172a;
   --home-muted: #475569;
   --home-line: rgba(148, 163, 184, 0.18);
   --home-blue: #2563eb;
-  --home-blue-dark: #143a76;
   --home-blue-panel: linear-gradient(180deg, #0f254c 0%, #163a73 100%);
   --home-blue-card: linear-gradient(180deg, #11284f 0%, #1a3d76 100%);
   --home-green: #22c55e;
@@ -741,7 +738,7 @@
   }
 
   .homepage-body .vm-section {
-    padding: 64px 0;
+    padding: 56px 0;
   }
 
   .homepage-body .vm-hero-container,
@@ -769,17 +766,141 @@
 
 @media (max-width: 767.98px) {
   .homepage-topbar {
-    padding: 0.9rem;
+    padding: 0.72rem 0.8rem;
+    border-radius: 20px;
   }
 
   .homepage-topbar nav ul {
-    gap: 0.8rem;
+    gap: 0.55rem;
     flex-wrap: wrap;
     justify-content: center;
   }
 
+  .homepage-body .img-logo {
+    height: 42px;
+  }
+
+  .homepage-topbar li > a {
+    font-size: 0.88rem;
+  }
+
+  .homepage-login-link {
+    min-height: 40px;
+    padding: 0.58rem 0.9rem;
+  }
+
+  .homepage-body .vm-section {
+    margin-bottom: 1rem;
+    padding: 48px 0;
+  }
+
+  .homepage-body .vm-section-heading {
+    margin-bottom: 1.4rem;
+    gap: 0.55rem;
+  }
+
+  .homepage-body .vm-section-heading h2,
+  .homepage-body .vm-section-heading .titulo-servicos {
+    max-width: 100%;
+    font-size: clamp(1.9rem, 8vw, 2.45rem);
+    line-height: 1.08;
+  }
+
+  .homepage-body .vm-section-heading p,
+  .homepage-body .vm-section-heading h3,
+  .homepage-body .vm-products-intro,
+  .homepage-body .vm-modules-subtitle {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .homepage-body .vm-kicker {
+    padding: 0.38rem 0.72rem;
+    font-size: 0.7rem;
+  }
+
   .homepage-body .vm-hero-title {
     font-size: clamp(2.35rem, 11vw, 3.15rem);
+  }
+
+  .homepage-body .vm-hero-container {
+    padding: 1.35rem 1rem;
+    border-radius: 24px;
+    gap: 1.3rem;
+  }
+
+  .homepage-body .vm-hero-buttons {
+    margin: 1.35rem 0;
+    gap: 0.75rem;
+  }
+
+  .homepage-body .vm-hero-buttons .btn {
+    width: 100%;
+    min-height: 50px;
+    padding: 0.82rem 1rem;
+    font-size: 1rem;
+    border-radius: 14px;
+  }
+
+  .homepage-body .vm-hero-stats {
+    gap: 0.7rem;
+  }
+
+  .homepage-body .vm-hero-stats div {
+    padding: 0.15rem 0;
+    text-align: center;
+  }
+
+  .homepage-body .vm-hero-stats strong {
+    font-size: 1.1rem;
+    margin-bottom: 0.12rem;
+  }
+
+  .homepage-body .vm-hero-stats span {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .homepage-body .vm-panel {
+    padding: 1.3rem;
+    border-radius: 22px;
+  }
+
+  .homepage-body .vm-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .homepage-body .vm-panel-header strong {
+    font-size: 1.05rem;
+  }
+
+  .homepage-body .vm-live {
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .homepage-body .vm-panel-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .homepage-body .vm-panel-metrics div {
+    padding: 0.95rem 0.75rem;
+    min-height: 112px;
+  }
+
+  .homepage-body .vm-panel-metrics strong {
+    font-size: 1.1rem;
+    line-height: 1.1;
+  }
+
+  .homepage-body .vm-panel-metrics span {
+    font-size: 0.82rem;
+    line-height: 1.3;
   }
 
   .homepage-body .vm-hero-description,
@@ -790,23 +911,313 @@
   }
 
   .homepage-body .vm-product-card,
+  .homepage-body .vm-feature-card,
   .homepage-body .vm-module-card,
   .homepage-body .vm-module-card--highlight {
     min-height: auto;
     padding: 1.3rem;
   }
 
+  .homepage-body .vm-feature-card {
+    border-radius: 22px;
+  }
+
+  .homepage-body .vm-feature-card h3 {
+    font-size: 1.24rem;
+  }
+
+  .homepage-body .vm-feature-card p {
+    font-size: 0.95rem;
+    line-height: 1.58;
+  }
+
   .homepage-body .vm-product-visual {
     min-height: 190px;
+    padding: 1rem;
+    border-radius: 18px;
   }
 
   .homepage-body .vm-product-card h3 {
-    font-size: 1.7rem;
+    font-size: 1.45rem;
+  }
+
+  .homepage-body .vm-product-card p,
+  .homepage-body .vm-product-points li {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .homepage-body .vm-product-points {
+    gap: 0.55rem;
+  }
+
+  .homepage-body .vm-product-visual strong {
+    font-size: 1.35rem;
+  }
+
+  .homepage-body .vm-product-visual > span:last-child {
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .homepage-body .vm-product-chip {
+    padding: 0.38rem 0.62rem;
+    font-size: 0.68rem;
+  }
+
+  .homepage-body .vm-modules-header {
+    margin-bottom: 1.4rem;
+  }
+
+  .homepage-body .vm-modules-title {
+    margin-bottom: 0.7rem;
+    font-size: clamp(1.95rem, 8vw, 2.45rem);
+    max-width: 100%;
   }
 
   .homepage-body .vm-module-card h3,
   .homepage-body .vm-module-card--highlight h3 {
-    font-size: 1.35rem;
+    font-size: 1.24rem;
+  }
+
+  .homepage-body .vm-module-card p,
+  .homepage-body .vm-module-card--highlight p {
+    font-size: 0.95rem;
+    line-height: 1.58;
+  }
+
+  .homepage-body .vm-module-icon,
+  .homepage-body .vm-module-card--highlight .vm-module-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .homepage-body .vm-contact-form {
+    padding: 1.35rem 1rem;
+    border-radius: 22px;
+  }
+
+  .homepage-body .vm-contact-layout {
+    gap: 1rem;
+  }
+
+  .homepage-body .vm-contact-fields,
+  .homepage-body .vm-contact-options {
+    gap: 0.85rem;
+  }
+
+  .homepage-body .vm-contact-fields label {
+    font-size: 0.92rem;
+  }
+
+  .homepage-body .vm-input {
+    min-height: 48px;
+    padding: 0.78rem 0.9rem;
+    font-size: 0.96rem;
+    border-radius: 14px;
+  }
+
+  .homepage-body .vm-options-title {
+    margin-bottom: 0.7rem;
+    font-size: 0.98rem;
+  }
+
+  .homepage-body .vm-check-chip,
+  .homepage-body .vm-radio-card {
+    min-height: 62px;
+    padding: 0.85rem 0.9rem;
+    border-radius: 16px;
+  }
+
+  .homepage-body .vm-check-chip span,
+  .homepage-body .vm-radio-card span {
+    font-size: 0.96rem;
+  }
+
+  .homepage-body .vm-form-note,
+  .homepage-body .vm-status {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .homepage-body .vm-hero {
+    padding: 1.1rem 0 2.5rem;
+  }
+
+  .homepage-body .vm-hero-container,
+  .homepage-body .vm-contact-form {
+    width: calc(100% - 0.75rem);
+  }
+
+  .homepage-topbar {
+    width: calc(100% - 0.75rem);
+    padding: 0.65rem 0.72rem;
+    border-radius: 18px;
+  }
+
+  .homepage-body .img-logo {
+    height: 36px;
+  }
+
+  .homepage-topbar nav ul {
+    gap: 0.4rem;
+  }
+
+  .homepage-topbar li > a {
+    font-size: 0.8rem;
+  }
+
+  .homepage-login-link {
+    min-height: 36px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.82rem;
+  }
+
+  .homepage-body .vm-section {
+    padding: 40px 0;
+  }
+
+  .homepage-body .vm-section-heading {
+    margin-bottom: 1.15rem;
+  }
+
+  .homepage-body .vm-section-heading h2,
+  .homepage-body .vm-section-heading .titulo-servicos,
+  .homepage-body .vm-modules-title {
+    font-size: clamp(1.7rem, 8vw, 2.1rem);
+  }
+
+  .homepage-body .vm-section-heading p,
+  .homepage-body .vm-section-heading h3,
+  .homepage-body .vm-products-intro,
+  .homepage-body .vm-modules-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .homepage-body .vm-hero-title {
+    font-size: clamp(2rem, 10vw, 2.55rem);
+  }
+
+  .homepage-body .vm-hero-description {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .homepage-body .vm-hero-buttons .btn {
+    min-height: 46px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.96rem;
+  }
+
+  .homepage-body .vm-hero-stats strong {
+    font-size: 1rem;
+  }
+
+  .homepage-body .vm-hero-stats span {
+    font-size: 0.84rem;
+  }
+
+  .homepage-body .vm-panel {
+    padding: 1.1rem;
+  }
+
+  .homepage-body .vm-panel-header strong {
+    font-size: 0.98rem;
+  }
+
+  .homepage-body .vm-live {
+    font-size: 0.76rem;
+  }
+
+  .homepage-body .vm-panel-metrics div {
+    min-height: 98px;
+    padding: 0.85rem 0.55rem;
+    border-radius: 16px;
+  }
+
+  .homepage-body .vm-panel-metrics strong {
+    font-size: 0.96rem;
+  }
+
+  .homepage-body .vm-panel-metrics span {
+    font-size: 0.76rem;
+  }
+
+  .homepage-body .vm-feature-card,
+  .homepage-body .vm-product-card,
+  .homepage-body .vm-module-card,
+  .homepage-body .vm-module-card--highlight {
+    padding: 1.05rem;
+    border-radius: 18px;
+  }
+
+  .homepage-body .vm-feature-card h3,
+  .homepage-body .vm-product-card h3,
+  .homepage-body .vm-module-card h3,
+  .homepage-body .vm-module-card--highlight h3 {
+    font-size: 1.12rem;
+  }
+
+  .homepage-body .vm-feature-card p,
+  .homepage-body .vm-product-card p,
+  .homepage-body .vm-module-card p,
+  .homepage-body .vm-module-card--highlight p,
+  .homepage-body .vm-product-points li {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .homepage-body .vm-product-visual {
+    min-height: 146px;
+    padding: 0.9rem;
+    gap: 0.7rem;
+  }
+
+  .homepage-body .vm-product-visual strong {
+    font-size: 1.16rem;
+  }
+
+  .homepage-body .vm-product-visual > span:last-child {
+    font-size: 0.84rem;
+  }
+
+  .homepage-body .vm-product-chip {
+    font-size: 0.64rem;
+  }
+
+  .homepage-body .vm-module-icon,
+  .homepage-body .vm-module-card--highlight .vm-module-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .homepage-body .vm-contact-form {
+    padding: 1.05rem 0.85rem;
+    border-radius: 18px;
+  }
+
+  .homepage-body .vm-input {
+    min-height: 44px;
+    font-size: 0.92rem;
+  }
+
+  .homepage-body .vm-check-chip,
+  .homepage-body .vm-radio-card {
+    min-height: 56px;
+    padding: 0.75rem 0.8rem;
+  }
+
+  .homepage-body .vm-check-chip span,
+  .homepage-body .vm-radio-card span,
+  .homepage-body .vm-options-title {
+    font-size: 0.9rem;
+  }
+
+  .homepage-body .vm-submit-btn {
+    min-height: 50px;
+    border-radius: 14px;
   }
 }
 
