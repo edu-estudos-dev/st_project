@@ -219,6 +219,9 @@
 
 .homepage-body .vm-hero-left {
   color: var(--home-text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .homepage-body .vm-hero-right {
@@ -228,33 +231,37 @@
 .homepage-body .vm-hero-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.45rem 0.9rem;
+  padding: 0.42rem 0.82rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--home-blue);
-  background: rgba(37, 99, 235, 0.04);
+  background: rgba(37, 99, 235, 0.06);
   border: 1px solid rgba(37, 99, 235, 0.16);
 }
 
 .homepage-body .vm-hero-title {
-  margin: 1.35rem 0 1rem;
+  margin: 1.15rem 0 0.9rem;
   max-width: 12.8ch;
-  font-size: clamp(2.9rem, 4.2vw, 4.35rem);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  font-size: clamp(3.25rem, 5vw, 5rem);
+  font-weight: 800;
+  line-height: 0.96;
+  letter-spacing: -0.055em;
   color: var(--home-text);
+  text-wrap: balance;
 }
 
 .homepage-body .text-accent {
   color: var(--home-green);
+  display: inline-block;
+  text-shadow: 0 10px 24px rgba(34, 197, 94, 0.16);
 }
 
 .homepage-body .vm-hero-description,
 .homepage-body .vm-hero-description strong {
-  max-width: 58ch;
+  max-width: 48ch;
   font-size: 1.14rem;
   line-height: 1.78;
   color: var(--home-muted);
@@ -262,8 +269,16 @@
 }
 
 .homepage-body .vm-hero-buttons {
-  gap: 0.9rem;
-  margin: 2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.7rem 0 1.4rem;
+}
+
+.homepage-body .vm-hero-buttons .btn {
+  min-height: 52px;
+  padding-inline: 1.2rem;
+  border-radius: 16px;
 }
 
 .homepage-body .vm-hero .btn-outline-light {
@@ -282,6 +297,11 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+  padding-top: 0.35rem;
+}
+
+.homepage-body .vm-hero-stats div {
+  padding-right: 0.6rem;
 }
 
 .homepage-body .vm-hero-stats strong {
@@ -1080,19 +1100,43 @@
 
   .homepage-body .vm-hero-badge {
     margin-inline: 0;
+    font-size: 0.68rem;
   }
 
   .homepage-topbar {
-    display: grid;
-    gap: 0.9rem;
-    padding: 0.9rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.8rem 0.85rem 0.9rem;
     border-radius: 22px;
   }
 
+  .homepage-topbar .vm-logo-link {
+    align-self: flex-start;
+  }
+
+  .homepage-topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
   .homepage-topbar nav ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.55rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex: 1;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .homepage-topbar nav ul::-webkit-scrollbar {
+    display: none;
   }
 
   .homepage-body .img-logo {
@@ -1100,34 +1144,40 @@
   }
 
   .homepage-topbar li {
-    width: 100%;
+    width: auto;
+    flex: 0 0 auto;
   }
 
   .homepage-topbar li > a {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 0.65rem 0.75rem;
-    border-radius: 14px;
-    font-size: 0.88rem;
+    min-height: 36px;
+    padding: 0.55rem 0.78rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    white-space: nowrap;
     background: rgba(255, 255, 255, 0.78);
     border: 1px solid rgba(148, 163, 184, 0.16);
   }
 
   .homepage-topbar .homepage-login-item {
-    grid-column: 1 / -1;
+    flex: 0 0 auto;
   }
 
   .homepage-topbar .homepage-login-item .homepage-login-link {
-    width: 100%;
-    min-height: 44px;
+    width: auto;
+    min-height: 40px;
     justify-content: center;
+    padding-inline: 1rem;
   }
 
   .homepage-login-link {
     min-height: 40px;
-    padding: 0.58rem 0.9rem;
+    padding: 0.58rem 1rem;
+    background: linear-gradient(135deg, var(--home-blue) 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
   }
 
   .homepage-body .vm-section {
@@ -1248,26 +1298,27 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.2rem, 9vw, 2.7rem);
-    max-width: 8.6ch;
+    font-size: clamp(2.45rem, 10vw, 3.15rem);
+    max-width: 8.2ch;
     margin-inline: 0;
     text-align: left;
+    line-height: 0.98;
   }
 
   .homepage-body .vm-hero-container {
-    padding: 1.35rem 1rem;
+    padding: 1.15rem 1rem 1.3rem;
     border-radius: 24px;
-    gap: 1.3rem;
+    gap: 1.15rem;
   }
 
   .homepage-body .vm-hero-buttons {
-    margin: 1.35rem 0;
+    margin: 1.15rem 0 1rem;
     gap: 0.75rem;
   }
 
   .homepage-body .vm-hero-buttons .btn {
     width: 100%;
-    min-height: 50px;
+    min-height: 48px;
     padding: 0.82rem 1rem;
     font-size: 1rem;
     border-radius: 14px;
@@ -1278,7 +1329,7 @@
   }
 
   .homepage-body .vm-hero-stats div {
-    padding: 0.15rem 0;
+    padding: 0.05rem 0;
     text-align: center;
   }
 
@@ -1511,7 +1562,8 @@
 
   .homepage-topbar {
     width: calc(100% - 0.75rem);
-    padding: 0.82rem 0.72rem;
+    gap: 0.62rem;
+    padding: 0.76rem 0.72rem 0.82rem;
     border-radius: 18px;
   }
 
@@ -1520,19 +1572,18 @@
   }
 
   .homepage-topbar nav ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   .homepage-topbar li > a {
-    min-height: 38px;
-    padding: 0.58rem 0.6rem;
+    min-height: 34px;
+    padding: 0.48rem 0.7rem;
     font-size: 0.78rem;
   }
 
   .homepage-login-link {
     min-height: 36px;
-    padding: 0.5rem 0.8rem;
+    padding: 0.5rem 0.9rem;
     font-size: 0.82rem;
   }
 
@@ -1590,16 +1641,17 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(1.95rem, 8.5vw, 2.3rem);
-    max-width: 8.4ch;
+    font-size: clamp(2.2rem, 9.2vw, 2.7rem);
+    max-width: 8ch;
     margin-inline: 0;
     text-align: left;
+    line-height: 0.98;
   }
 
   .homepage-body .vm-hero-description {
     font-size: 1rem;
     line-height: 1.68;
-    max-width: 28ch;
+    max-width: 25ch;
     margin-inline: 0;
     text-align: left !important;
   }
