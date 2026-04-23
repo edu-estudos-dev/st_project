@@ -207,7 +207,7 @@
 
 .homepage-body #solucao .vm-section-heading h2,
 .homepage-body #solucao .vm-section-heading .titulo-servicos {
-  max-width: 24ch;
+  max-width: 18ch;
 }
 
 .homepage-body #dores,
@@ -245,10 +245,10 @@
 .homepage-body .vm-hero-title {
   margin: 1.15rem 0 0.9rem;
   max-width: 12.8ch;
-  font-size: clamp(3.25rem, 5vw, 5rem);
+  font-size: clamp(2.85rem, 4.35vw, 4.25rem);
   font-weight: 800;
-  line-height: 0.96;
-  letter-spacing: -0.045em;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
   color: var(--home-text);
   text-wrap: balance;
 }
@@ -262,8 +262,8 @@
 .homepage-body .vm-hero-description,
 .homepage-body .vm-hero-description strong {
   max-width: 48ch;
-  font-size: 1.14rem;
-  line-height: 1.78;
+  font-size: 1.06rem;
+  line-height: 1.68;
   color: var(--home-muted);
   opacity: 1;
 }
@@ -272,13 +272,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-  margin: 1.7rem 0 1.4rem;
+  margin: 1.35rem 0 1.1rem;
 }
 
 .homepage-body .vm-hero-buttons .btn {
-  min-height: 52px;
-  padding-inline: 1.2rem;
-  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-inline: 1.05rem;
+  border-radius: 15px;
+  font-size: 0.98rem;
+  line-height: 1.1;
+  text-align: center;
 }
 
 .homepage-body .vm-hero .btn-outline-light {
@@ -297,23 +305,24 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  padding-top: 0.35rem;
+  padding-top: 0.15rem;
 }
 
 .homepage-body .vm-hero-stats div {
-  padding-right: 0.6rem;
+  padding-right: 0.35rem;
 }
 
 .homepage-body .vm-hero-stats strong {
   display: block;
   margin-bottom: 0.2rem;
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   color: var(--home-text);
 }
 
 .homepage-body .vm-hero-stats span {
   color: #64748b;
-  line-height: 1.45;
+  font-size: 0.95rem;
+  line-height: 1.38;
 }
 
 .homepage-body .vm-panel {
@@ -493,6 +502,28 @@
   background: rgba(11, 26, 55, 0.42);
   box-shadow: 0 24px 46px rgba(2, 8, 23, 0.16);
   backdrop-filter: blur(8px);
+}
+
+.homepage-body .vm-ba-icon {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 1rem;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #bfdbfe;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homepage-body .vm-ba-icon svg {
+  width: 42px;
+  height: 42px;
+}
+
+.homepage-body .vm-ba-icon-after {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
 }
 
 .homepage-body .vm-before.reveal-on-scroll {
@@ -844,17 +875,23 @@
 
 .homepage-body .vm-transform .vm-section-heading .titulo-servicos,
 .homepage-body .vm-transform .vm-section-heading h2 {
-  max-width: 12ch;
+  max-width: 20ch;
 }
 
 .homepage-body .vm-proof .vm-section-heading .titulo-servicos,
 .homepage-body .vm-proof .vm-section-heading h2 {
-  max-width: 16ch;
+  max-width: 18ch;
 }
 
 .homepage-body .vm-contact .vm-section-heading .titulo-servicos,
 .homepage-body .vm-contact .vm-section-heading h2 {
   max-width: 18ch;
+}
+
+.homepage-body .vm-modules-subtitle {
+  max-width: 54ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .homepage-body .vm-modules-subtitle {
@@ -1278,6 +1315,18 @@
   .homepage-body .vm-after {
     padding: 1.3rem;
     border-radius: 22px;
+  }
+
+  .homepage-body .vm-ba-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0.9rem;
+    border-radius: 16px;
+  }
+
+  .homepage-body .vm-ba-icon svg {
+    width: 36px;
+    height: 36px;
   }
 
   .homepage-body .vm-before ul,
@@ -1780,6 +1829,18 @@
   .homepage-body .vm-after {
     padding: 1.05rem;
     border-radius: 18px;
+  }
+
+  .homepage-body .vm-ba-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 0.8rem;
+    border-radius: 14px;
+  }
+
+  .homepage-body .vm-ba-icon svg {
+    width: 32px;
+    height: 32px;
   }
 
   .homepage-body .vm-ba-label {
