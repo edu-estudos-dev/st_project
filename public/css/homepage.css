@@ -1122,19 +1122,9 @@
   }
 
   .homepage-topbar nav ul {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.45rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 0.1rem;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .homepage-topbar nav ul::-webkit-scrollbar {
-    display: none;
   }
 
   .homepage-body .img-logo {
@@ -1142,8 +1132,7 @@
   }
 
   .homepage-topbar li {
-    width: auto;
-    flex: 0 0 auto;
+    width: 100%;
   }
 
   .homepage-topbar li > a {
@@ -1151,9 +1140,10 @@
     align-items: center;
     justify-content: center;
     min-height: 36px;
-    padding: 0.55rem 0.78rem;
+    width: 100%;
+    padding: 0.52rem 0.5rem;
     border-radius: 999px;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     white-space: nowrap;
     background: rgba(255, 255, 255, 0.78);
     border: 1px solid rgba(148, 163, 184, 0.16);
@@ -1297,11 +1287,11 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.45rem, 10vw, 3.15rem);
+    font-size: clamp(2.85rem, 11vw, 3.7rem);
     max-width: 9.6ch;
     margin-inline: 0;
     text-align: left;
-    line-height: 0.98;
+    line-height: 0.94;
   }
 
   .homepage-body .vm-hero-container {
@@ -1311,15 +1301,17 @@
   }
 
   .homepage-body .vm-hero-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 1.15rem 0 1rem;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
   .homepage-body .vm-hero-buttons .btn {
     width: 100%;
     min-height: 48px;
-    padding: 0.82rem 1rem;
-    font-size: 1rem;
+    padding: 0.8rem 0.7rem;
+    font-size: 0.94rem;
     border-radius: 14px;
   }
 
@@ -1571,13 +1563,14 @@
   }
 
   .homepage-topbar nav ul {
-    gap: 0.4rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.36rem;
   }
 
   .homepage-topbar li > a {
     min-height: 34px;
-    padding: 0.48rem 0.7rem;
-    font-size: 0.78rem;
+    padding: 0.46rem 0.42rem;
+    font-size: 0.72rem;
   }
 
   .homepage-login-link {
@@ -1640,11 +1633,11 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.2rem, 9.2vw, 2.7rem);
+    font-size: clamp(2.55rem, 10vw, 3rem);
     max-width: 9ch;
     margin-inline: 0;
     text-align: left;
-    line-height: 0.98;
+    line-height: 0.94;
   }
 
   .homepage-body .vm-hero-description {
@@ -1653,6 +1646,17 @@
     max-width: 100%;
     margin-inline: 0;
     text-align: left !important;
+  }
+
+  .homepage-body .vm-hero-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .homepage-body .vm-hero-buttons .btn {
+    min-height: 46px;
+    padding: 0.76rem 0.55rem;
+    font-size: 0.88rem;
   }
 
   .homepage-body .vm-hero-buttons .btn {
