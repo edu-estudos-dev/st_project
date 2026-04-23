@@ -13,7 +13,7 @@
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Administrativo</span>
                 <h1>Editar estabelecimento</h1>
-                <p>Atualize os dados do ponto com a mesma experiência moderna do cadastro, mantendo contato, localização e produtos ativos sempre organizados.</p>
+                <p>Atualize os dados do ponto e ajuste as coordenadas para a central de rotas trabalhar com mais precisão.</p>
             </div>
 
             <div class="form-hero-side">
@@ -40,15 +40,15 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-12 col-lg-8">
+                        <div class="col-12 col-lg-4">
                             <label for="estabelecimento">Estabelecimento</label>
                             <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>">
                         </div>
-                        <div class="col-12 col-md-6 col-lg-2">
+                        <div class="col-12 col-md-6 col-lg-4 centered-field">
                             <label for="responsavel_nome">Responsável</label>
                             <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>">
                         </div>
-                        <div class="col-12 col-md-6 col-lg-2">
+                        <div class="col-12 col-md-6 col-lg-4 centered-field">
                             <label for="telefone_contato">Contato</label>
                             <input type="text" class="form-control text-center" id="telefone_contato" name="telefone_contato" value="<%= estabelecimento.telefone_contato %>">
                         </div>
@@ -59,8 +59,8 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Localização</span>
-                            <h2>Endereço e referência interna</h2>
-                            <p>Revise endereço, bairro, chave e identificação da máquina para manter a operação alinhada com a realidade do ponto.</p>
+                            <h2>Endereço, referência e coordenadas</h2>
+                            <p>Revise endereço, bairro e coordenadas do ponto para manter a operação alinhada com a realidade da rua.</p>
                         </div>
                     </div>
 
@@ -69,17 +69,37 @@
                             <label for="endereco">Endereço</label>
                             <input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>">
                         </div>
-                        <div class="col-12 col-md-4 col-lg-3">
+                        <div class="col-12 col-md-4 col-lg-2">
                             <label for="bairro">Bairro</label>
                             <input type="text" class="form-control text-center" id="bairro" name="bairro" value="<%= estabelecimento.bairro %>">
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
                             <label for="chave">Chave</label>
                             <input type="text" class="form-control text-center" id="chave" name="chave" value="<%= estabelecimento.chave %>">
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                        <div class="col-6 col-md-4 col-lg-3 compact-field centered-field">
                             <label for="maquina">Máquina</label>
                             <input type="text" class="form-control text-center" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>">
+                        </div>
+                        <div class="col-12">
+                            <div class="route-coordinates-header">
+                                <div>
+                                    <label class="mb-1" for="latitude">Coordenadas do ponto</label>
+                                    <small class="modern-note">Você pode ajustar manualmente ou capturar a posição atual se estiver no local do estabelecimento.</small>
+                                </div>
+                                <button type="button" class="btn-modern-secondary route-coordinate-button" id="captureCoordinatesButton">
+                                    <i class="bi bi-crosshair"></i>
+                                    <span>Atualizar com minha localização atual</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" class="form-control text-center" id="latitude" name="latitude" value="<%= estabelecimento.latitude ?? '' %>" placeholder="-3.731862">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" class="form-control text-center" id="longitude" name="longitude" value="<%= estabelecimento.longitude ?? '' %>" placeholder="-38.526669">
                         </div>
                     </div>
                 </section>
@@ -143,6 +163,33 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+            const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
+
+            captureCoordinatesButton?.addEventListener('click', () => {
+                if (!navigator.geolocation) {
+                    window.AppAlerts?.warning('Seu navegador não permite capturar a localização atual.');
+                    return;
+                }
+
+                captureCoordinatesButton.disabled = true;
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        latitudeInput.value = position.coords.latitude.toFixed(6);
+                        longitudeInput.value = position.coords.longitude.toFixed(6);
+                        captureCoordinatesButton.disabled = false;
+                        window.AppAlerts?.success('Coordenadas atualizadas com a sua localização atual.');
+                    },
+                    () => {
+                        captureCoordinatesButton.disabled = false;
+                        window.AppAlerts?.error('Não foi possível ler sua localização atual.');
+                    },
+                    { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+                );
+            });
+
             document.getElementById('edicaoForm').addEventListener('submit', (e) => {
                 const isChecked = Array.from(document.querySelectorAll('input[name="produto"]')).some((checkbox) => checkbox.checked);
                 if (!isChecked) {
@@ -157,4 +204,3 @@
     </script>
 </body>
 </html>
-

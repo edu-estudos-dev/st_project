@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', { title: 'Relatórios' }) %>
+
+<body class="list-page-body">
+    <%- include('../../partials/header') %>
+    <div class="page-spacer"></div>
+
+    <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Relatórios' }) %>
+
+        <section class="list-hero list-hero-blue">
+            <div class="list-hero-content">
+                <span class="list-kicker"><i class="bi bi-bar-chart-line"></i> Gestão</span>
+                <h1>Central de relatórios</h1>
+                <p>Uma visão rápida dos indicadores do sistema, com distribuição dos pontos, alertas financeiros e atividade operacional recente.</p>
+            </div>
+            <div class="list-hero-side">
+                <div class="list-stat"><strong>Pontos ativos</strong><span><%= dashboardSummary.totalAtivos %> cadastrados</span></div>
+                <div class="list-stat"><strong>Alertas</strong><span><%= financialNotifications.total %> financeiros</span></div>
+            </div>
+        </section>
+
+        <main class="list-stage reports-shell">
+            <section class="reports-kpi-grid">
+                <article class="reports-kpi">
+                    <span>Total de pontos</span>
+                    <strong><%= totalEstabelecimentos %></strong>
+                    <small>Base ativa atualmente no sistema.</small>
+                </article>
+                <article class="reports-kpi">
+                    <span>Coordenadas salvas</span>
+                    <strong><%= coordinatesCoverage %></strong>
+                    <small><%= totalEstabelecimentos ? Math.round((coordinatesCoverage / totalEstabelecimentos) * 100) : 0 %>% da base pronta para rotas.</small>
+                </article>
+                <article class="reports-kpi">
+                    <span>Contatos válidos</span>
+                    <strong><%= contactCoverage %></strong>
+                    <small><%= totalEstabelecimentos ? Math.round((contactCoverage / totalEstabelecimentos) * 100) : 0 %>% dos pontos com telefone preenchido.</small>
+                </article>
+                <article class="reports-kpi">
+                    <span>Saldo financeiro</span>
+                    <strong><%= financialSummary.saldoLabel %></strong>
+                    <small><%= financialSummary.entradasLabel %> em entradas e <%= financialSummary.saidasLabel %> em saídas.</small>
+                </article>
+            </section>
+
+            <section class="reports-grid">
+                <article class="list-panel reports-panel-half">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Distribuição</span>
+                            <h2>Pontos por produto</h2>
+                        </div>
+                        <p>Leitura rápida de como a base ativa está distribuída entre as linhas do negócio.</p>
+                    </div>
+
+                    <div class="reports-bar-chart">
+                        <% if (productDistribution.some(item => item.value > 0)) { %>
+                            <% productDistribution.forEach((item) => { %>
+                                <div class="reports-bar-row">
+                                    <span class="reports-bar-label"><%= item.label %></span>
+                                    <div class="reports-bar-track">
+                                        <div class="reports-bar-fill" style="width: <%= item.percentage %>%"></div>
+                                    </div>
+                                    <span class="reports-bar-value"><%= item.value %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Ainda não há dados suficientes para montar este gráfico.</div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-half">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Território</span>
+                            <h2>Bairros com mais pontos</h2>
+                        </div>
+                        <p>Os principais polos da operação para apoiar planejamento de visitas e expansão.</p>
+                    </div>
+
+                    <div class="reports-bar-chart">
+                        <% if (topNeighborhoods.length) { %>
+                            <% topNeighborhoods.forEach((item) => { %>
+                                <div class="reports-bar-row">
+                                    <span class="reports-bar-label"><%= item.label %></span>
+                                    <div class="reports-bar-track">
+                                        <div class="reports-bar-fill" style="width: <%= item.percentage %>%"></div>
+                                    </div>
+                                    <span class="reports-bar-value"><%= item.value %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Nenhum bairro disponível para exibir no ranking.</div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-third">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Financeiro</span>
+                            <h2>Alertas de vencimento</h2>
+                        </div>
+                        <p>Contagem de itens a vencer e atrasados no momento.</p>
+                    </div>
+
+                    <div class="reports-bar-chart">
+                        <% const alertMax = Math.max(...alertChart.map(item => item.value), 0); %>
+                        <% if (financialNotifications.total) { %>
+                            <% alertChart.forEach((item) => { %>
+                                <div class="reports-bar-row">
+                                    <span class="reports-bar-label"><%= item.label %></span>
+                                    <div class="reports-bar-track">
+                                        <div class="reports-bar-fill reports-bar-fill-alert" style="width: <%= alertMax ? Math.max(8, Math.round((item.value / alertMax) * 100)) : 0 %>%"></div>
+                                    </div>
+                                    <span class="reports-bar-value"><%= item.value %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Nenhum alerta financeiro aberto agora.</div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-third">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Financeiro</span>
+                            <h2>Totais consolidados</h2>
+                        </div>
+                        <p>Resumo geral das movimentações manuais registradas no sistema.</p>
+                    </div>
+
+                    <div class="reports-list">
+                        <div class="reports-list-item">
+                            <div>
+                                <strong>Entradas</strong>
+                                <small>Receitas registradas</small>
+                            </div>
+                            <span class="reports-badge"><%= financialSummary.entradasLabel %></span>
+                        </div>
+                        <div class="reports-list-item">
+                            <div>
+                                <strong>Saídas</strong>
+                                <small>Despesas registradas</small>
+                            </div>
+                            <span class="reports-badge"><%= financialSummary.saidasLabel %></span>
+                        </div>
+                        <div class="reports-list-item">
+                            <div>
+                                <strong>Saldo</strong>
+                                <small>Diferença entre entradas e saídas</small>
+                            </div>
+                            <span class="reports-badge"><%= financialSummary.saldoLabel %></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-third">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Receita</span>
+                            <h2>Entradas por produto</h2>
+                        </div>
+                        <p>Ranking das linhas com maior valor de entrada acumulado.</p>
+                    </div>
+
+                    <div class="reports-bar-chart">
+                        <% if (revenueByProduct.length) { %>
+                            <% revenueByProduct.forEach((item) => { %>
+                                <div class="reports-bar-row">
+                                    <span class="reports-bar-label"><%= item.label %></span>
+                                    <div class="reports-bar-track">
+                                        <div class="reports-bar-fill reports-bar-fill-revenue" style="width: <%= item.percentage %>%"></div>
+                                    </div>
+                                    <span class="reports-bar-value"><%= item.formattedValue %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Sem entradas registradas por produto até o momento.</div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-half">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Operação</span>
+                            <h2>Pontos que pedem atenção</h2>
+                        </div>
+                        <p>Locais sem visita recente ou ainda sem primeira sangria registrada.</p>
+                    </div>
+
+                    <div class="reports-list">
+                        <% if (pendingHighlights.length) { %>
+                            <% pendingHighlights.forEach((item) => { %>
+                                <div class="reports-list-item">
+                                    <div>
+                                        <strong><%= item.estabelecimento %></strong>
+                                        <small><%= item.produto %> • <%= item.lastSeenLabel %></small>
+                                    </div>
+                                    <span class="reports-badge"><%= item.ultima_movimentacao ? `${item.dias_sem_registro} dias` : 'Sem visita' %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Nenhum ponto pendente no corte atual.</div>
+                        <% } %>
+                    </div>
+                </article>
+
+                <article class="list-panel reports-panel-half">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <span class="dashboard-section-tag">Operação</span>
+                            <h2>Últimas movimentações</h2>
+                        </div>
+                        <p>Atividade operacional mais recente para acompanhar o ritmo da equipe.</p>
+                    </div>
+
+                    <div class="reports-list">
+                        <% if (recentOperationalMovements.length) { %>
+                            <% recentOperationalMovements.forEach((item) => { %>
+                                <div class="reports-list-item">
+                                    <div>
+                                        <strong><%= item.estabelecimento %></strong>
+                                        <small><%= item.produto %> • <%= item.dataLabel %> • <%= item.descricao %></small>
+                                    </div>
+                                    <span class="reports-badge"><%= item.valorLabel %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="reports-empty">Ainda não há movimentações operacionais para mostrar.</div>
+                        <% } %>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

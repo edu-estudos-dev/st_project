@@ -37,6 +37,10 @@
                             <h2>Dados do atendimento</h2>
                             <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.</p>
                         </div>
+                        <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Criar novo</span>
+                        </button>
                     </div>
 
                     <div class="row g-3 align-items-end">
@@ -55,13 +59,11 @@
                         </div>
                     </div>
 
+                    <input class="form-check-input d-none" type="checkbox" id="abertura_inicial" name="abertura_inicial">
+
                     <div class="row g-3 mt-1">
                         <div class="col-12">
-                            <label class="modern-checkbox modern-checkbox-blue" for="abertura_inicial">
-                                <input class="form-check-input" type="checkbox" id="abertura_inicial" name="abertura_inicial">
-                                <span>Este é um ponto novo e quero cadastrar a abertura inicial</span>
-                            </label>
-                            <small class="modern-note">Quando ativado, o formulário simplifica o cadastro para informar apenas a quantidade inicial deixada no ponto.</small>
+                            <small class="modern-note" id="modoRegistroHint">Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.</small>
                         </div>
                     </div>
 
@@ -162,7 +164,7 @@
                         </a>
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-save2"></i>
-                            <span>Registrar sangria</span>
+                            <span id="figurinhaSubmitLabel">Registrar sangria</span>
                         </button>
                     </div>
                 </section>
@@ -172,6 +174,7 @@
 
     <script>
         window.estoqueAnterior = 0;
+        window.figurinhaHasHistorico = false;
 
         function formatDateToBrazilian(dateString) {
             if (!dateString) return '';
@@ -192,12 +195,19 @@
 
         function syncModoAberturaInicial() {
             const isAbertura = document.getElementById('abertura_inicial').checked;
+            const hasSelectedEstabelecimento = Boolean(document.getElementById('estabelecimento').value);
+            const hasHistorico = window.figurinhaHasHistorico === true;
             const aberturaBox = document.getElementById('aberturaInicialBox');
             const quantidadeInicialInput = document.getElementById('quantidade_inicial');
+            const aberturaInicialCheckbox = document.getElementById('abertura_inicial');
+            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
+            const submitLabel = document.getElementById('figurinhaSubmitLabel');
+            const hint = document.getElementById('modoRegistroHint');
             const camposNormais = ['valor_apurado', 'qtde_vendido', 'abastecido', 'tipo_pagamento'];
 
             aberturaBox.classList.toggle('d-none', !isAbertura);
             quantidadeInicialInput.required = isAbertura;
+            toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
 
             camposNormais.forEach((id) => {
                 const field = document.getElementById(id);
@@ -208,6 +218,16 @@
             document.getElementById('movimentacaoCard').classList.toggle('opacity-50', isAbertura);
             document.getElementById('movimentacaoCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
             document.getElementById('pagamentoResumo').textContent = isAbertura ? 'Abertura inicial' : 'Espécie ou PIX';
+            submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
+
+            if (hasSelectedEstabelecimento && !hasHistorico) {
+                aberturaInicialCheckbox.checked = true;
+                toggleAberturaInicialButton.disabled = true;
+                hint.textContent = 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
+            } else {
+                toggleAberturaInicialButton.disabled = false;
+                hint.textContent = 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
+            }
 
             if (isAbertura) {
                 const qtdInicial = parseFloat(quantidadeInicialInput.value) || 0;
@@ -233,10 +253,16 @@
                     updateResumoUltimaVisita('', data.estoque || 0);
                 }
 
+                window.figurinhaHasHistorico = Boolean(data.hasHistorico);
+                if (window.figurinhaHasHistorico) {
+                    document.getElementById('abertura_inicial').checked = false;
+                    document.getElementById('quantidade_inicial').value = '';
+                }
                 window.estoqueAnterior = data.estoque || 0;
                 syncModoAberturaInicial();
             } catch (error) {
                 console.error(error);
+                window.figurinhaHasHistorico = false;
                 updateResumoUltimaVisita('', 0);
             }
         });
@@ -253,6 +279,12 @@
             updateResumoUltimaVisita('', 0);
 
             document.getElementById('abertura_inicial').addEventListener('change', syncModoAberturaInicial);
+            document.getElementById('toggleAberturaInicial').addEventListener('click', function () {
+                const aberturaInicialInput = document.getElementById('abertura_inicial');
+                if (aberturaInicialInput.disabled) return;
+                aberturaInicialInput.checked = !aberturaInicialInput.checked;
+                syncModoAberturaInicial();
+            });
             document.getElementById('quantidade_inicial').addEventListener('input', syncModoAberturaInicial);
             syncModoAberturaInicial();
         });

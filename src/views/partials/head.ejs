@@ -1,18 +1,49 @@
 <head>
+   <script>
+       document.documentElement.classList.add('app-booting');
+   </script>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta name="csrf-token" content="<%= csrfToken || '' %>">
    <title><%= title %></title>
    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+   <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
    <link rel="stylesheet" href="/vendor/fontsource/urbanist/latin.css">
    <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
    <link rel="stylesheet" href="/css/styles.css">
+   <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
+      <% extraStyles.forEach((href) => { %>
+   <link rel="stylesheet" href="<%= href %>">
+      <% }) %>
+   <% } %>
    <script defer src="/vendor/inputmask/inputmask.min.js"></script>
    <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
    <script defer src="/js/appAlerts.js"></script>
    <script defer src="/js/csrf.js"></script>
+   <script>
+       (() => {
+           const root = document.documentElement;
+           const finishBoot = () => {
+               root.classList.remove('app-booting');
+               root.classList.add('app-ready');
+           };
+
+           const fallbackTimeout = 1200;
+           const fallback = new Promise((resolve) => window.setTimeout(resolve, fallbackTimeout));
+
+           if (document.fonts?.ready) {
+               Promise.race([document.fonts.ready, fallback]).then(finishBoot);
+           } else {
+               window.addEventListener('DOMContentLoaded', finishBoot, { once: true });
+               window.addEventListener('load', finishBoot, { once: true });
+           }
+       })();
+   </script>
    <script>
        document.addEventListener('DOMContentLoaded', () => {
            const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
@@ -54,4 +85,3 @@
        });
    </script>
 </head>
-

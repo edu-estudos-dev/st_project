@@ -50,6 +50,9 @@
                                                 <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
                                                     <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                    <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
+                                                        <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -91,6 +94,9 @@
                                                 <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
                                                     <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                    <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
+                                                        <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -105,6 +111,20 @@
             </section>
         </main>
     </div>
+
+    <% const flashSuccess = typeof success !== 'undefined' ? success : null; %>
+    <% const flashError = typeof error !== 'undefined' ? error : null; %>
+    <% if (flashSuccess || flashError) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                <% if (flashSuccess) { %>
+                    window.AppAlerts?.success("<%- flashSuccess.replace(/"/g, '&quot;') %>");
+                <% } %>
+                <% if (flashError) { %>
+                    window.AppAlerts?.error("<%- flashError.replace(/"/g, '&quot;') %>");
+                <% } %>
+            });
+        </script>
+    <% } %>
 </body>
 </html>
-

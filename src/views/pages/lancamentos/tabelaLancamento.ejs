@@ -14,12 +14,12 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-cash-stack"></i> Financeiro</span>
                 <h1>Lançamentos cadastrados</h1>
-                <p>Consulte entradas e saídas em uma tabela mais clara, com destaque para vencimentos, valores e ações de manutenção do fluxo financeiro.</p>
+                <p>Consulte entradas e saídas com destaque para parcelas, vencimentos e ações de manutenção do fluxo financeiro.</p>
             </div>
             <div class="list-hero-side">
                 <div class="list-stat">
                     <strong>Total</strong>
-                    <span><%= lancamentos.length %> lançamentos</span>
+                    <span id="launchCount"><%= lancamentos.length %> lançamentos</span>
                 </div>
                 <div class="list-stat">
                     <strong>Ação rápida</strong>
@@ -33,7 +33,7 @@
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
                         <h2>Painel de movimentações</h2>
-                        <p>Atualize vencimentos, revise categorias e navegue pelas ações de visualizar, editar e excluir sem perder legibilidade.</p>
+                        <p>Revise parcelas, categorias e datas sem depender de edição manual do vencimento na grade.</p>
                     </div>
                     <div class="d-flex flex-wrap gap-2">
                         <a class="list-action" href="/lancamentos/vencimentos">
@@ -55,9 +55,9 @@
 
                 <div class="list-summary-grid">
                     <div class="list-summary-card"><strong>Entradas e saídas</strong><span>Visão consolidada</span></div>
-                    <div class="list-summary-card"><strong>Vencimentos</strong><span>Edição inline</span></div>
+                    <div class="list-summary-card"><strong>Parcelas</strong><span>Destaque visual</span></div>
                     <div class="list-summary-card"><strong>Operação</strong><span>Gestão financeira</span></div>
-                    <div class="list-summary-card"><strong>Total</strong><span><%= lancamentos.length %> registros</span></div>
+                    <div class="list-summary-card"><strong>Total</strong><span id="launchSummaryCount"><%= lancamentos.length %> registros</span></div>
                 </div>
 
                 <div class="modern-table-wrap">
@@ -75,26 +75,46 @@
                                     <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
-                                <tbody>
-                                <% lancamentos.slice().reverse().forEach(lancamento => { const vencimentoDate = lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : ''; %>
-                                    <tr id="row-<%= lancamento.id %>">
-                                        <td><span class="table-badge <%= lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger' %>"><%= lancamento.entrada_saida.toUpperCase() %></span></td>
-                                        <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
-                                        <td class="table-col-category"><div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div></td>
-                                        <td><%= String(lancamento.forma_de_pagamento || '').toUpperCase() %></td>
-                                        <td><strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
-                                        <td class="table-cell-description"><span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span></td>
+                            <tbody id="launchTableBody">
+                                <% lancamentos.slice().reverse().forEach((lancamento) => { 
+                                    const vencimentoLabel = lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido';
+                                    const isParcelado = Number(lancamento.qtde_de_parcelas || 0) > 1;
+                                    const rowTone = lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger';
+                                %>
+                                    <tr id="row-<%= lancamento.id %>" data-vencimento="<%= lancamento.vencimento || '' %>" class="<%= isParcelado ? 'launch-row-parcelado' : '' %>">
                                         <td>
-                                            <form action="/lancamentos/<%= lancamento.id %>/updateVencimento" method="POST" class="table-inline-form">
-                                                <input type="date" class="form-control form-control-sm" name="vencimento" id="vencimento-<%= lancamento.id %>" value="<%= vencimentoDate %>">
-                                                <button type="submit" class="table-btn table-btn-save">Salvar</button>
-                                            </form>
+                                            <div class="table-stack-compact">
+                                                <span class="table-badge <%= rowTone %>"><%= lancamento.entrada_saida.toUpperCase() %></span>
+                                                <% if (isParcelado) { %>
+                                                    <span class="table-badge table-badge-amber">PARCELA</span>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                        <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
+                                        <td class="table-col-category">
+                                            <div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div>
+                                        </td>
+                                        <td><%= String(lancamento.forma_de_pagamento || '').toUpperCase() %></td>
+                                        <td>
+                                            <strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+                                        </td>
+                                        <td class="table-cell-description">
+                                            <span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span>
+                                        </td>
+                                        <td>
+                                            <div class="table-vencimento-copy <%= lancamento.vencimento ? '' : 'is-empty' %>">
+                                                <strong><%= vencimentoLabel %></strong>
+                                                <% if (isParcelado) { %>
+                                                    <span>Definido no cadastro</span>
+                                                <% } %>
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="table-actions table-actions-launch">
                                                 <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Visualizar</a>
                                                 <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                <form action="/lancamentos/<%= lancamento.id %>?_method=DELETE" method="POST" class="d-inline delete-form">
+                                                <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
+                                                    <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit" class="table-btn table-btn-delete">Deletar</button>
                                                 </form>
                                             </div>
@@ -114,12 +134,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             const rows = document.querySelectorAll('tr[id^="row-"]');
             const today = new Date();
+            const tableBody = document.getElementById('launchTableBody');
+            const launchCount = document.getElementById('launchCount');
+            const launchSummaryCount = document.getElementById('launchSummaryCount');
+
+            const syncCounters = () => {
+                const totalRows = tableBody.querySelectorAll('tr[id^="row-"]').length;
+                launchCount.textContent = `${totalRows} lançamentos`;
+                launchSummaryCount.textContent = `${totalRows} registros`;
+            };
 
             rows.forEach((row) => {
-                const vencimentoInput = row.querySelector('input[type="date"]');
-                if (!vencimentoInput || !vencimentoInput.value) return;
+                const vencimentoValue = row.dataset.vencimento;
+                if (!vencimentoValue) return;
 
-                const vencimentoDate = new Date(vencimentoInput.value);
+                const vencimentoDate = new Date(`${vencimentoValue}T00:00:00`);
                 const daysDifference = (vencimentoDate - today) / (1000 * 3600 * 24);
 
                 if (daysDifference <= 10 && daysDifference >= 0) {
@@ -138,7 +167,45 @@
                         confirmButtonText: 'Excluir',
                         cancelButtonText: 'Cancelar'
                     });
-                    if (confirmed) form.submit();
+
+                    if (!confirmed) return;
+
+                    try {
+                        const rowId = form.dataset.rowId || '';
+                        const launchId = rowId.replace('row-', '').trim();
+                        const actionAttr = form.getAttribute('action') || '';
+                        const deleteUrl = form.dataset.deleteUrl
+                            || actionAttr.replace(/\?.*$/, '')
+                            || (launchId ? `/lancamentos/${launchId}` : '');
+
+                        if (!deleteUrl || !/\/lancamentos\/\d+$/.test(deleteUrl)) {
+                            throw new Error('Não foi possível identificar a rota de exclusão deste lançamento.');
+                        }
+
+                        const response = await fetch(deleteUrl, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        const contentType = response.headers.get('content-type') || '';
+                        const payload = contentType.includes('application/json')
+                            ? await response.json()
+                            : { success: false, message: 'A exclusão não retornou JSON válido.' };
+
+                        if (!response.ok || !payload.success) {
+                            throw new Error(payload.message || 'Erro ao excluir lançamento.');
+                        }
+
+                        const row = document.getElementById(rowId);
+                        row?.remove();
+                        syncCounters();
+                        window.AppAlerts?.success(payload.message || 'Lançamento excluído com sucesso.');
+                    } catch (error) {
+                        window.AppAlerts?.error(error.message || 'Erro ao excluir lançamento.');
+                    }
                 });
             });
 
@@ -149,4 +216,3 @@
     <%- include('../../partials/financialNotificationsPopup', { popupMode: 'launch-once' }) %>
 </body>
 </html>
-

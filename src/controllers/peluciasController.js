@@ -35,14 +35,14 @@ class PeluciasController {
 
         try {
             const isAberturaInicial = abertura_inicial === 'on';
+            const hasHistorico = estabelecimento_id ? await peluciasModel.hasSangria(estabelecimento_id) : false;
 
             if (isAberturaInicial) {
                 if (!estabelecimento_id || !data_sangria) {
                     throw new Error('Estabelecimento e data são obrigatórios.');
                 }
 
-                const hasSangria = await peluciasModel.hasSangria(estabelecimento_id);
-                if (hasSangria) {
+                if (hasHistorico) {
                     throw new Error('Este estabelecimento já possui histórico de pelúcias. Use o cadastro normal de visita.');
                 }
 
@@ -74,6 +74,10 @@ class PeluciasController {
                 });
 
                 return res.redirect('/pelucias/sangrias?success=Abertura inicial de pelúcias cadastrada com sucesso');
+            }
+
+            if (!hasHistorico) {
+                throw new Error('Este ponto ainda não possui registro inicial de pelúcias. Faça primeiro o cadastro inicial.');
             }
 
             const ultimoRegistro = await peluciasModel.getUltimosDados(estabelecimento_id);
@@ -276,7 +280,8 @@ class PeluciasController {
             const dados = await peluciasModel.getUltimosDados(estabelecimentoId);
             res.json({
                 ultima_leitura: Number(dados.ultima_leitura || 0),
-                estoque: Number(dados.estoque || 0)
+                estoque: Number(dados.estoque || 0),
+                hasHistorico: await peluciasModel.hasSangria(estabelecimentoId)
             });
         } catch (error) {
             console.error('Erro ao buscar os últimos dados:', error);

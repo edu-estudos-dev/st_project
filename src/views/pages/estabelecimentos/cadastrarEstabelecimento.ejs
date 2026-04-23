@@ -5,6 +5,8 @@
 <body class="form-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
+    <% const form = typeof formData !== 'undefined' && formData ? formData : {}; %>
+    <% const selectedProducts = Array.isArray(form.produto) ? form.produto : (form.produto ? [form.produto] : []); %>
 
     <div class="form-shell form-shell-modern">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Cadastrar Estabelecimento' }) %>
@@ -13,7 +15,7 @@
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-shop-window"></i> Administrativo</span>
                 <h1>Cadastrar estabelecimento</h1>
-                <p>Monte a base operacional com uma tela mais clara, mais organizada e pronta para registrar contato, local, produtos ativos e observações do ponto.</p>
+                <p>Monte a base operacional com uma tela clara e já deixe o ponto pronto para rota inteligente, visitas e consultas futuras.</p>
             </div>
 
             <div class="form-hero-side">
@@ -23,7 +25,7 @@
                 </div>
                 <div class="form-hero-stat">
                     <strong>Objetivo</strong>
-                    <span>Centralizar dados comerciais e operacionais</span>
+                    <span>Centralizar dados comerciais, operacionais e de localização</span>
                 </div>
             </div>
         </section>
@@ -42,15 +44,15 @@
                     <div class="row g-3">
                         <div class="col-12 col-lg-5">
                             <label for="estabelecimento">Nome do estabelecimento</label>
-                            <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" placeholder="Ex.: Supermercado Central" required>
+                            <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" placeholder="Ex.: Supermercado Central" value="<%= form.estabelecimento || '' %>" required>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 col-lg-3 centered-field">
                             <label for="responsavel_nome">Responsável</label>
-                            <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" placeholder="Nome" required>
+                            <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" placeholder="Nome" value="<%= form.responsavel_nome || '' %>" required>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-4">
+                        <div class="col-12 col-md-6 col-lg-4 centered-field">
                             <label for="telefone_contato">Contato</label>
-                            <input type="tel" class="form-control text-center" id="telefone_contato" name="telefone_contato" placeholder="(00) 00000-0000" required>
+                            <input type="tel" class="form-control text-center" id="telefone_contato" name="telefone_contato" placeholder="(00) 00000-0000" value="<%= form.telefone_contato || '' %>" required>
                         </div>
                     </div>
                 </section>
@@ -59,27 +61,47 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Localização</span>
-                            <h2>Endereço e referência interna</h2>
-                            <p>Guarde as informações de local e os códigos internos para encontrar o ponto com rapidez no dia a dia.</p>
+                            <h2>Endereço, referência e coordenadas</h2>
+                            <p>Guarde o local do ponto com o endereço textual e, se possível, também com latitude e longitude para melhorar as rotas.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-lg-5">
                             <label for="endereco">Endereço</label>
-                            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua, numero e complemento" required>
+                            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua, número e complemento" value="<%= form.endereco || '' %>" required>
                         </div>
                         <div class="col-12 col-md-4 col-lg-3">
                             <label for="bairro">Bairro</label>
-                            <input type="text" class="form-control text-center" id="bairro" name="bairro" placeholder="Bairro" required>
+                            <input type="text" class="form-control text-center" id="bairro" name="bairro" placeholder="Bairro" value="<%= form.bairro || '' %>" required>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
                             <label for="chave">Chave</label>
-                            <input type="text" class="form-control text-center" id="chave" name="chave" placeholder="Código">
+                            <input type="text" class="form-control text-center" id="chave" name="chave" placeholder="Código" value="<%= form.chave || '' %>">
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
                             <label for="maquina">Máquina</label>
-                            <input type="text" class="form-control text-center" id="maquina" name="maquina" placeholder="Número">
+                            <input type="text" class="form-control text-center" id="maquina" name="maquina" placeholder="Número" value="<%= form.maquina || '' %>">
+                        </div>
+                        <div class="col-12">
+                            <div class="route-coordinates-header">
+                                <div>
+                                    <label class="mb-1" for="latitude">Coordenadas do ponto</label>
+                                    <small class="modern-note">Se você estiver no local, use o botão abaixo para gravar a posição exata e melhorar a ordem das visitas.</small>
+                                </div>
+                                <button type="button" class="btn-modern-secondary route-coordinate-button" id="captureCoordinatesButton">
+                                    <i class="bi bi-crosshair"></i>
+                                    <span>Usar minha localização atual</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" class="form-control text-center" id="latitude" name="latitude" placeholder="-3.731862" value="<%= form.latitude || '' %>">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" class="form-control text-center" id="longitude" name="longitude" placeholder="-38.526669" value="<%= form.longitude || '' %>">
                         </div>
                     </div>
                 </section>
@@ -98,15 +120,15 @@
                             <label>Produtos vinculados</label>
                             <div class="modern-checkbox-grid">
                                 <label class="modern-checkbox modern-checkbox-green" for="produto1">
-                                    <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS">
+                                    <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= selectedProducts.includes('BOLINHAS') ? 'checked' : '' %>>
                                     <span>Bolinhas</span>
                                 </label>
                                 <label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                    <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS">
+                                    <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
                                     <span>Figurinhas</span>
                                 </label>
                                 <label class="modern-checkbox modern-checkbox-violet" for="produto3">
-                                    <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS">
+                                    <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= selectedProducts.includes('PELUCIAS') ? 'checked' : '' %>>
                                     <span>Pelúcias</span>
                                 </label>
                             </div>
@@ -115,7 +137,7 @@
 
                         <div class="col-12 col-lg-7">
                             <label for="observacoes">Comentários</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255" placeholder="Ex.: melhor horario para visita, pessoa de contato, detalhes do espaco..."></textarea>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255" placeholder="Ex.: melhor horário para visita, pessoa de contato, detalhes do espaço..."><%= form.observacoes || '' %></textarea>
                         </div>
                     </div>
                 </section>
@@ -145,6 +167,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const telefoneInput = document.getElementById('telefone_contato');
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+            const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
 
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
@@ -153,6 +178,29 @@
                 if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
                 if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
                 e.target.value = value;
+            });
+
+            captureCoordinatesButton?.addEventListener('click', () => {
+                if (!navigator.geolocation) {
+                    window.AppAlerts?.warning('Seu navegador não permite capturar a localização atual.');
+                    return;
+                }
+
+                captureCoordinatesButton.disabled = true;
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        latitudeInput.value = position.coords.latitude.toFixed(6);
+                        longitudeInput.value = position.coords.longitude.toFixed(6);
+                        captureCoordinatesButton.disabled = false;
+                        window.AppAlerts?.success('Coordenadas preenchidas com a sua localização atual.');
+                    },
+                    () => {
+                        captureCoordinatesButton.disabled = false;
+                        window.AppAlerts?.error('Não foi possível ler sua localização atual.');
+                    },
+                    { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+                );
             });
 
             document.getElementById('cadastroForm').addEventListener('submit', (e) => {
@@ -169,4 +217,3 @@
     </script>
 </body>
 </html>
-

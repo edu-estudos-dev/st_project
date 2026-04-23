@@ -92,25 +92,29 @@
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
                         </div>
                     </div>
+                <% } else { %>
+                    <p class="mb-0">Sangria não encontrada.</p>
+                <% } %>
 
-                    <div class="view-actions">
-                        <div class="view-actions-copy">
-                            Essa visão foi pensada para deixar a conferência mais rápida sem perder os detalhes importantes da operação.
-                        </div>
-                        <div class="view-actions-buttons">
-                            <a href="/pelucias/sangrias" class="btn-modern-secondary">
-                                <i class="bi bi-arrow-left"></i>
-                                <span>Voltar</span>
-                            </a>
+                <div class="view-actions">
+                    <div class="view-actions-copy">
+                        <%= sangria
+                            ? 'Essa visão foi pensada para deixar a conferência mais rápida sem perder os detalhes importantes da operação.'
+                            : 'Você pode voltar para a listagem geral de pelúcias e continuar a navegação normalmente.' %>
+                    </div>
+                    <div class="view-actions-buttons">
+                        <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Voltar</span>
+                        </a>
+                        <% if (sangria) { %>
                             <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>
                                 <span>Editar registro</span>
                             </a>
-                        </div>
+                        <% } %>
                     </div>
-                <% } else { %>
-                    <p class="mb-0">Sangria não encontrada.</p>
-                <% } %>
+                </div>
             </section>
         </main>
     </div>
@@ -118,4 +122,3 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
-

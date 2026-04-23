@@ -6,6 +6,29 @@ import {
   serializeProdutos
 } from '../utilities/produtoUtils.js';
 
+const parseCoordinate = (value, type) => {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    return null;
+  }
+
+  const normalized = Number(String(value).replace(',', '.').trim());
+  if (Number.isNaN(normalized)) {
+    throw new Error(
+      `Informe uma ${type === 'latitude' ? 'latitude' : 'longitude'} válida.`
+    );
+  }
+
+  if (type === 'latitude' && (normalized < -90 || normalized > 90)) {
+    throw new Error('A latitude deve estar entre -90 e 90.');
+  }
+
+  if (type === 'longitude' && (normalized < -180 || normalized > 180)) {
+    throw new Error('A longitude deve estar entre -180 e 180.');
+  }
+
+  return normalized;
+};
+
 class EstabelecimentoController {
   index = async (req, res) => {
     const usuario = req.user;
@@ -62,6 +85,7 @@ class EstabelecimentoController {
         title: 'Cadastrar Estabelecimento',
         success: null,
         error: null,
+        formData: {},
         usuario
       });
     }
@@ -99,7 +123,9 @@ class EstabelecimentoController {
         telefone_contato: req.body.telefone_contato.trim(),
         observacoes: req.body.observacoes
           ? req.body.observacoes.trim().toUpperCase()
-          : ''
+          : '',
+        latitude: parseCoordinate(req.body.latitude, 'latitude'),
+        longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
 
       // 🔥 salva no banco
@@ -136,6 +162,7 @@ class EstabelecimentoController {
           title: 'Cadastrar Estabelecimento',
           success: null,
           usuario,
+          formData: req.body,
           error:
             error.message ||
             'Erro ao cadastrar novo estabelecimento. Por favor, tente novamente.'
@@ -170,7 +197,9 @@ class EstabelecimentoController {
         telefone_contato: req.body.telefone_contato.trim(),
         observacoes: req.body.observacoes
           ? req.body.observacoes.trim().toUpperCase()
-          : ''
+          : '',
+        latitude: parseCoordinate(req.body.latitude, 'latitude'),
+        longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
 
       await EstabelecimentoModel.update(id, estabelecimento);

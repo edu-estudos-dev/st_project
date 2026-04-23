@@ -35,9 +35,10 @@ class FigurinhasController {
 
       const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id);
       const isAberturaInicial = abertura_inicial === 'on';
+      const hasHistorico = ultimaSangria.length > 0;
 
       if (isAberturaInicial) {
-        if (ultimaSangria.length > 0) {
+        if (hasHistorico) {
           throw new Error('Este estabelecimento já possui histórico de figurinhas. Use o cadastro normal de visita.');
         }
 
@@ -61,7 +62,11 @@ class FigurinhasController {
         return res.redirect('/figurinhas/sangrias?success=Abertura inicial de figurinhas cadastrada com sucesso');
       }
 
-      const estoqueAnterior = ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada, 10) : 0;
+      if (!hasHistorico) {
+        throw new Error('Este ponto ainda não possui registro inicial de figurinhas. Faça primeiro o cadastro inicial.');
+      }
+
+      const estoqueAnterior = parseInt(ultimaSangria[0].qtde_deixada, 10);
       const qtdeDeixada =
         estoqueAnterior -
         parseInt(qtde_vendido || 0, 10) +
@@ -256,13 +261,15 @@ class FigurinhasController {
       if (result.length === 0) {
         return res.json({
           estoque: 0,
-          data: null
+          data: null,
+          hasHistorico: false
         });
       }
 
       res.json({
         estoque: result[0].qtde_deixada,
-        data: result[0].data_sangria
+        data: result[0].data_sangria,
+        hasHistorico: true
       });
     } catch (error) {
       console.error('Erro ao buscar última sangria:', error);

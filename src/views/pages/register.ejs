@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+<%- include('../partials/head', { title: 'Cadastro de Usuário', extraStyles: ['/css/auth.css'] }) %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<%= csrfToken || '' %>">
-    <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-    <script defer src="/js/appAlerts.js"></script>
-    <script defer src="/js/csrf.js"></script>
-</head>
-
-<body>
-    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 auth-shell">
+<body class="auth-body">
+    <div class="auth-shell">
         <div class="border p-4 py-4 p-md-5 rounded shadow-lg auth-card">
-            <h1 class="text-center display-6 fw-bold mb-4">Criar Usuário</h1>
+            <h1 class="display-6 fw-bold auth-title">Criar usuário</h1>
+            <p class="auth-subtitle">Cadastre um novo acesso com confirmação de senha antes de liberar a entrada no sistema.</p>
 
             <hr>
 
-            <form action="/register" method="POST">
+            <form action="/register" method="POST" class="auth-form" id="registerForm" novalidate>
                 <div class="form-group mb-3">
-                    <label for="user" class="form-label">Nome de usuario</label>
+                    <label for="user" class="form-label">Nome de usuário</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" id="user" name="user"
-                            placeholder="Escolha um nome de usuario" autocomplete="username"
-                            value="<%= formData?.user || '' %>">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="user"
+                            name="user"
+                            placeholder="Escolha um nome de usuário"
+                            autocomplete="username"
+                            value="<%= formData?.user || '' %>"
+                            required
+                        >
                     </div>
                 </div>
 
@@ -37,36 +32,127 @@
                     <label for="email" class="form-label">E-mail</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" class="form-control" id="email" name="email"
-                            placeholder="Seu e-mail" autocomplete="email"
-                            value="<%= formData?.email || '' %>">
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            placeholder="Seu e-mail"
+                            autocomplete="email"
+                            value="<%= formData?.email || '' %>"
+                            required
+                        >
                     </div>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="senha" class="form-label">Senha</label>
-                    <div class="input-group">
+                    <div class="input-group has-input-action">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control" id="senha" name="senha"
-                            placeholder="Crie sua senha" autocomplete="new-password">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="senha"
+                            name="senha"
+                            placeholder="Crie sua senha"
+                            autocomplete="new-password"
+                            minlength="3"
+                            required
+                        >
+                        <button type="button" class="auth-input-action" data-toggle-password="senha" aria-label="Mostrar senha">
+                            <i class="bi bi-eye"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary mt-4 w-100">Cadastrar</button>
+                <div class="form-group mb-3">
+                    <label for="confirmarSenha" class="form-label">Confirmar senha</label>
+                    <div class="input-group has-input-action">
+                        <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="confirmarSenha"
+                            name="confirmarSenha"
+                            placeholder="Repita a mesma senha"
+                            autocomplete="new-password"
+                            minlength="3"
+                            required
+                        >
+                        <button type="button" class="auth-input-action" data-toggle-password="confirmarSenha" aria-label="Mostrar confirmação de senha">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <small class="modern-note" id="confirmarSenhaHint">A confirmação precisa ser idêntica à senha informada acima.</small>
+                </div>
+
+                <div class="auth-actions">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </div>
             </form>
 
-            <p class="text-center mt-4 mb-0">
-                Ja tem cadastro?
+            <p class="auth-help">
+                Já tem cadastro?
                 <a href="/login" class="fw-semibold text-decoration-none">Voltar para o login</a>
             </p>
         </div>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-toggle-password]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-toggle-password');
+                    const input = document.getElementById(targetId);
+                    const icon = button.querySelector('i');
+                    if (!input || !icon) return;
+
+                    const isHidden = input.type === 'password';
+                    input.type = isHidden ? 'text' : 'password';
+                    icon.className = isHidden ? 'bi bi-eye-slash' : 'bi bi-eye';
+                    button.setAttribute('aria-label', isHidden ? 'Ocultar senha' : 'Mostrar senha');
+                });
+            });
+
+            const form = document.getElementById('registerForm');
+            const senhaInput = document.getElementById('senha');
+            const confirmarSenhaInput = document.getElementById('confirmarSenha');
+            const hint = document.getElementById('confirmarSenhaHint');
+
+            const syncPasswordValidation = () => {
+                const senha = senhaInput.value;
+                const confirmarSenha = confirmarSenhaInput.value;
+
+                if (!confirmarSenha) {
+                    confirmarSenhaInput.setCustomValidity('');
+                    hint.textContent = 'A confirmação precisa ser idêntica à senha informada acima.';
+                    return;
+                }
+
+                if (senha !== confirmarSenha) {
+                    confirmarSenhaInput.setCustomValidity('As senhas não conferem.');
+                    hint.textContent = 'As senhas informadas estão diferentes.';
+                    return;
+                }
+
+                confirmarSenhaInput.setCustomValidity('');
+                hint.textContent = 'Confirmação de senha válida.';
+            };
+
+            senhaInput.addEventListener('input', syncPasswordValidation);
+            confirmarSenhaInput.addEventListener('input', syncPasswordValidation);
+
+            form.addEventListener('submit', (event) => {
+                syncPasswordValidation();
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    form.reportValidity();
+                }
+            });
+        });
+    </script>
+
     <% if (error) { %>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -75,6 +161,4 @@
         </script>
     <% } %>
 </body>
-
 </html>
-

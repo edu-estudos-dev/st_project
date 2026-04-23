@@ -12,95 +12,99 @@
         <section class="view-hero view-hero-neutral">
             <div class="view-hero-content">
                 <span class="form-kicker"><i class="bi bi-cash-stack"></i> Financeiro</span>
-                <h1><%= lancamento.tipo_de_lancamento.toUpperCase().replace('RECEITA_DOSPONTOS', 'RECEITA DOS PONTOS').replace(/_/g, ' ') %></h1>
+                <h1><%= lancamento ? lancamento.tipo_de_lancamento.toUpperCase().replace('RECEITA_DOSPONTOS', 'RECEITA DOS PONTOS').replace(/_/g, ' ') : 'Lançamento não encontrado' %></h1>
                 <p>Confira os dados financeiros do lançamento com mais clareza, incluindo tipo, pagamento, parcelas, vencimento e descrição completa.</p>
             </div>
             <div class="view-hero-side">
                 <div class="list-stat">
                     <strong>ID</strong>
-                    <span>#<%= lancamento.id %></span>
+                    <span><%= lancamento ? `#${lancamento.id}` : 'N/A' %></span>
                 </div>
                 <div class="list-stat">
                     <strong>Movimento</strong>
-                    <span><%= lancamento.entrada_saida %></span>
+                    <span><%= lancamento?.entrada_saida || 'N/A' %></span>
                 </div>
             </div>
         </section>
 
         <main class="view-stage">
             <section class="view-panel">
-                <div class="view-panel-header">
-                    <div>
-                        <span class="form-section-tag">Resumo</span>
-                        <h2>Detalhes do lançamento</h2>
-                        <p>Use esta visão para validar categorias, forma de pagamento e informações importantes antes de editar o registro.</p>
+                <% if (lancamento) { %>
+                    <div class="view-panel-header">
+                        <div>
+                            <span class="form-section-tag">Resumo</span>
+                            <h2>Detalhes do lançamento</h2>
+                            <p>Use esta visão para validar categorias, forma de pagamento e informações importantes antes de editar o registro.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="view-grid">
-                    <div class="view-card">
-                        <strong>Entrada ou saída</strong>
-                        <span><%= lancamento.entrada_saida %></span>
+                    <div class="view-grid">
+                        <div class="view-card">
+                            <strong>Entrada ou saída</strong>
+                            <span><%= lancamento.entrada_saida %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Produto</strong>
+                            <span><%= lancamento.produto %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Data do evento</strong>
+                            <span><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Dia do cadastro</strong>
+                            <span><%= new Date(lancamento.dia_do_cadastro).toLocaleDateString('pt-BR') %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Forma de pagamento</strong>
+                            <span><%= lancamento.forma_de_pagamento %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong><%= valor_da_parcela ? 'Valor da parcela' : 'Valor' %></strong>
+                            <span><%= Number(valor_da_parcela || lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Quantidade de parcelas</strong>
+                            <span><%= lancamento.qtde_de_parcelas || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Vencimento</strong>
+                            <span><%= lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Última edição</strong>
+                            <span><%= ultima_edicao ? new Date(ultima_edicao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Usuário responsável</strong>
+                            <span><%= lancamento.usuario %></span>
+                        </div>
+                        <div class="view-card is-wide">
+                            <strong>Descrição</strong>
+                            <span><%= lancamento.descricao %></span>
+                        </div>
                     </div>
-                    <div class="view-card">
-                        <strong>Produto</strong>
-                        <span><%= lancamento.produto %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Data do evento</strong>
-                        <span><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Dia do cadastro</strong>
-                        <span><%= new Date(lancamento.dia_do_cadastro).toLocaleDateString('pt-BR') %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Forma de pagamento</strong>
-                        <span><%= lancamento.forma_de_pagamento %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Valor</strong>
-                        <span><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Quantidade de parcelas</strong>
-                        <span><%= lancamento.qtde_de_parcelas || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Valor da parcela</strong>
-                        <span><%= valor_da_parcela ? valor_da_parcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Não se aplica' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Vencimento</strong>
-                        <span><%= lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Última edição</strong>
-                        <span><%= ultima_edicao ? new Date(ultima_edicao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Usuário responsável</strong>
-                        <span><%= lancamento.usuario %></span>
-                    </div>
-                    <div class="view-card is-wide">
-                        <strong>Descrição</strong>
-                        <span><%= lancamento.descricao %></span>
-                    </div>
-                </div>
+                <% } else { %>
+                    <p class="mb-0">Lançamento não encontrado.</p>
+                <% } %>
 
                 <div class="view-actions">
                     <div class="view-actions-copy">
-                        Se precisar ajustar valor, categoria ou datas, você pode seguir para a edição mantendo este mesmo padrão visual.
+                        <%= lancamento
+                            ? 'Se precisar ajustar valor, categoria ou datas, você pode seguir para a edição mantendo este mesmo padrão visual.'
+                            : 'Você pode voltar para a listagem geral de lançamentos e continuar a navegação normalmente.' %>
                     </div>
                     <div class="view-actions-buttons">
                         <a href="/lancamentos" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
-                        <a href="/lancamentos/<%= lancamento.id %>/edit" class="btn-modern">
-                            <i class="bi bi-pencil-square"></i>
-                            <span>Editar lançamento</span>
-                        </a>
+                        <% if (lancamento) { %>
+                            <a href="/lancamentos/<%= lancamento.id %>/edit" class="btn-modern">
+                                <i class="bi bi-pencil-square"></i>
+                                <span>Editar lançamento</span>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </section>
@@ -110,4 +114,3 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
-

@@ -1,0 +1,884 @@
+/* ==========================================================================
+   HOMEPAGE TOKENS
+   ========================================================================== */
+
+.homepage-body {
+  --home-surface: #f3f7fc;
+  --home-surface-strong: #ffffff;
+  --home-text: #0f172a;
+  --home-muted: #475569;
+  --home-line: rgba(148, 163, 184, 0.18);
+  --home-blue: #2563eb;
+  --home-blue-dark: #143a76;
+  --home-blue-panel: linear-gradient(180deg, #0f254c 0%, #163a73 100%);
+  --home-blue-card: linear-gradient(180deg, #11284f 0%, #1a3d76 100%);
+  --home-green: #22c55e;
+  --home-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
+  --home-page-bg:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.06), transparent 24%),
+    linear-gradient(180deg, #eef3f8 0%, #e8eef6 100%);
+  background:
+    var(--home-page-bg);
+  color: var(--home-text);
+}
+
+/* ==========================================================================
+   HOMEPAGE REVEAL
+   ========================================================================== */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translate3d(0, 56px, 0) scale(0.96);
+  filter: blur(6px);
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
+/* ==========================================================================
+   HOMEPAGE GLOBAL STRUCTURE
+   ========================================================================== */
+
+.homepage-header {
+  z-index: 20;
+}
+
+.homepage-topbar {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100% - 1.5rem));
+  height: auto;
+  padding: 0.9rem 1.1rem;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(248, 251, 255, 0.82);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.homepage-topbar nav ul {
+  gap: 1.5rem;
+}
+
+.homepage-topbar li > a {
+  color: #0f172a;
+  text-shadow: none;
+  transition: color 360ms ease, opacity 360ms ease;
+}
+
+.homepage-topbar li > a:hover,
+.homepage-topbar .homepage-login-link:hover {
+  color: var(--home-blue);
+}
+
+.homepage-login-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--home-blue) 0%, #1d4ed8 100%);
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    filter 420ms ease,
+    background 420ms ease !important;
+}
+
+.homepage-login-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+  filter: saturate(1.04);
+}
+
+.homepage-body .btn,
+.homepage-body button {
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    background-color 420ms ease,
+    border-color 420ms ease,
+    color 420ms ease,
+    filter 420ms ease !important;
+}
+
+.homepage-body .btn:hover,
+.homepage-body button:hover {
+  transform: translateY(-2px);
+}
+
+.homepage-body .btn-primary {
+  background: linear-gradient(135deg, var(--home-green) 0%, #16a34a 100%);
+  box-shadow: 0 14px 30px rgba(34, 197, 94, 0.18);
+}
+
+.homepage-body .btn-primary:hover {
+  box-shadow: 0 22px 38px rgba(34, 197, 94, 0.24);
+}
+
+.homepage-body .vm-section {
+  margin: 0 auto 1.5rem;
+  padding: 80px 0;
+}
+
+.homepage-body .vm-section-heading {
+  min-height: auto;
+  margin-bottom: 2.2rem;
+  gap: 0.75rem;
+}
+
+.homepage-body .vm-section-heading h2,
+.homepage-body .vm-section-heading .titulo-servicos {
+  max-width: 18ch;
+  color: var(--home-text);
+}
+
+.homepage-body .vm-section-heading p,
+.homepage-body .vm-section-heading h3 {
+  color: var(--home-muted);
+}
+
+.homepage-body .vm-kicker {
+  color: var(--home-blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.homepage-body .vm-kicker.vm-kicker-light {
+  color: var(--home-blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+
+.homepage-body .vm-hero {
+  min-height: auto;
+  margin-bottom: 1.5rem;
+  padding: 112px 0 72px;
+  background: transparent;
+}
+
+.homepage-body .vm-hero::before {
+  display: none;
+}
+
+.homepage-body .vm-hero-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  gap: 2.2rem;
+  align-items: center;
+  padding: 3rem;
+  border: 1px solid var(--home-line);
+  border-radius: 32px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 251, 255, 0.98) 100%);
+  box-shadow: var(--home-shadow);
+}
+
+.homepage-body .vm-section-heading,
+.homepage-body .vm-grid,
+.homepage-body .vm-contact .vm-section-heading {
+  width: min(100%, 960px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.homepage-body .vm-grid,
+.homepage-body .vm-modules-grid {
+  width: min(100%, 1180px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.homepage-body #solucao .vm-section-heading h2,
+.homepage-body #solucao .vm-section-heading .titulo-servicos {
+  max-width: 24ch;
+}
+
+.homepage-body .vm-hero-left {
+  color: var(--home-text);
+}
+
+.homepage-body .vm-hero-right {
+  position: relative;
+}
+
+.homepage-body .vm-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--home-blue);
+  background: rgba(37, 99, 235, 0.04);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+}
+
+.homepage-body .vm-hero-title {
+  margin: 1.35rem 0 1rem;
+  max-width: 11ch;
+  font-size: clamp(2.9rem, 4.2vw, 4.35rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--home-text);
+}
+
+.homepage-body .text-accent {
+  color: var(--home-green);
+}
+
+.homepage-body .vm-hero-description,
+.homepage-body .vm-hero-description strong {
+  max-width: 58ch;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: var(--home-muted);
+  opacity: 1;
+}
+
+.homepage-body .vm-hero-buttons {
+  gap: 0.9rem;
+  margin: 2rem 0;
+}
+
+.homepage-body .vm-hero .btn-outline-light {
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  color: var(--home-blue);
+  background: #ffffff;
+}
+
+.homepage-body .vm-hero .btn-outline-light:hover {
+  background: #eff6ff;
+  border-color: rgba(37, 99, 235, 0.34);
+  color: #1d4ed8;
+}
+
+.homepage-body .vm-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.homepage-body .vm-hero-stats strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 1.45rem;
+  color: var(--home-text);
+}
+
+.homepage-body .vm-hero-stats span {
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.homepage-body .vm-panel {
+  width: 100%;
+  max-width: none;
+  padding: 1.8rem;
+  border-radius: 28px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background:
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.22), transparent 28%),
+    var(--home-blue-panel);
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.24);
+}
+
+.homepage-body .vm-panel-header {
+  margin-bottom: 1.1rem;
+}
+
+.homepage-body .vm-panel-header strong {
+  font-size: 1.8rem;
+  color: #f8fafc;
+}
+
+.homepage-body .vm-live {
+  color: #4ade80;
+  font-size: 0.92rem;
+}
+
+.homepage-body .vm-panel-metrics {
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.homepage-body .vm-panel-metrics div,
+.homepage-body .vm-card-mini {
+  margin-right: 0;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  border-radius: 18px;
+  background: rgba(11, 26, 55, 0.48);
+  backdrop-filter: blur(10px);
+}
+
+.homepage-body .vm-panel-metrics strong {
+  font-size: 1.95rem;
+  color: #f8fafc;
+}
+
+.homepage-body .vm-panel-metrics span {
+  color: #dbeafe;
+}
+
+.homepage-body .vm-panel-cards {
+  gap: 0.8rem;
+}
+
+.homepage-body .vm-card-mini strong {
+  color: #f8fafc;
+}
+
+.homepage-body .vm-card-mini .tag {
+  color: #93c5fd;
+}
+
+.homepage-body .vm-card-mini p {
+  color: rgba(226, 232, 240, 0.92);
+}
+
+/* ==========================================================================
+   SOLUTION / DARK SECTIONS
+   ========================================================================== */
+
+.homepage-body .vm-section-dark,
+.homepage-body .dark-bg,
+.homepage-body .vm-section-dark.vm-contact {
+  background:
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 20%),
+    linear-gradient(135deg, #081326 0%, #0d2144 55%, #15386d 100%);
+}
+
+.homepage-body .vm-section-dark .titulo-servicos,
+.homepage-body .vm-section-dark h2,
+.homepage-body .vm-section-dark h3,
+.homepage-body .vm-section-dark p,
+.homepage-body .vm-section-dark .vm-kicker {
+  color: #f8fafc;
+}
+
+.homepage-body .vm-section-dark .vm-kicker {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homepage-body .vm-grid {
+  gap: 1.25rem;
+}
+
+.homepage-body .vm-feature-card {
+  min-height: 250px;
+  padding: 1.8rem;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  border-radius: 24px;
+  background: var(--home-blue-card);
+  box-shadow: 0 22px 42px rgba(2, 8, 23, 0.18);
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    border-color 420ms ease,
+    filter 420ms ease;
+}
+
+.homepage-body .vm-feature-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(147, 197, 253, 0.3);
+  box-shadow: 0 30px 52px rgba(2, 8, 23, 0.26);
+  filter: saturate(1.06);
+}
+
+.homepage-body .vm-feature-card h3 {
+  font-size: 1.5rem;
+  color: #f8fafc;
+}
+
+.homepage-body .vm-feature-card p {
+  color: rgba(226, 232, 240, 0.9);
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   PRODUCTS
+   ========================================================================== */
+
+.homepage-body .vm-products-section {
+  background: transparent;
+}
+
+.homepage-body .vm-products-section .vm-section-heading {
+  width: min(100%, 880px);
+}
+
+.homepage-body .vm-products-intro {
+  max-width: 60ch;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.homepage-body .vm-product-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.homepage-body .vm-product-card {
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.7rem;
+  border: 1px solid var(--home-line);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 250, 255, 0.98) 100%);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    border-color 420ms ease;
+}
+
+.homepage-body .vm-product-card::before,
+.homepage-body .vm-product-card::after,
+.homepage-body .vm-product-card img {
+  display: none;
+}
+
+.homepage-body .vm-product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 58px rgba(15, 23, 42, 0.12);
+  border-color: rgba(96, 165, 250, 0.24);
+}
+
+.homepage-body .vm-product-visual {
+  min-height: 220px;
+  padding: 1.2rem;
+  border-radius: 22px;
+  display: grid;
+  align-content: space-between;
+  gap: 1rem;
+}
+
+.homepage-body .vm-product-chip {
+  align-self: start;
+  justify-self: start;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--home-text);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.homepage-body .vm-product-visual strong {
+  display: block;
+  margin-top: auto;
+  font-size: 1.6rem;
+  line-height: 1.08;
+  color: var(--home-text);
+}
+
+.homepage-body .vm-product-visual > span:last-child {
+  color: #334155;
+  line-height: 1.6;
+}
+
+.homepage-body .vm-product-card h3 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: var(--home-text);
+}
+
+.homepage-body .vm-product-card p {
+  margin: 0;
+  color: var(--home-muted);
+  line-height: 1.72;
+}
+
+.homepage-body .vm-product-points {
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.homepage-body .vm-product-points li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.homepage-body .vm-product-points li::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 10px;
+  background: linear-gradient(135deg, #22c55e 0%, #2563eb 100%);
+}
+
+.homepage-body .vm-product-visual-bolinhas {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(96, 165, 250, 0.4), transparent 28%),
+    linear-gradient(135deg, #eaf3ff 0%, #dbeafe 100%);
+}
+
+.homepage-body .vm-product-visual-pelucias {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(34, 197, 94, 0.28), transparent 24%),
+    linear-gradient(135deg, #eefaf2 0%, #dcfce7 100%);
+}
+
+.homepage-body .vm-product-visual-figurinhas {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(14, 165, 233, 0.22), transparent 22%),
+    linear-gradient(135deg, #f1f8ff 0%, #dbeafe 100%);
+}
+
+/* ==========================================================================
+   MODULES
+   ========================================================================== */
+
+.homepage-body .vm-modules {
+  background: transparent;
+}
+
+.homepage-body .vm-modules-wrapper {
+  width: min(1180px, calc(100% - 1.5rem));
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.homepage-body .vm-modules-header {
+  max-width: 760px;
+  margin: 0 auto 2.2rem;
+}
+
+.homepage-body .vm-modules-title {
+  margin-bottom: 1rem;
+  font-size: clamp(2.4rem, 4vw, 3.3rem);
+  max-width: 15ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.12;
+  color: var(--home-text);
+}
+
+.homepage-body .vm-modules-subtitle {
+  color: var(--home-muted);
+}
+
+.homepage-body .vm-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.homepage-body .vm-module-card,
+.homepage-body .vm-module-card--highlight {
+  min-height: 250px;
+  padding: 1.7rem;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  border-radius: 24px;
+  background: var(--home-blue-card);
+  box-shadow: 0 22px 42px rgba(2, 8, 23, 0.18);
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    border-color 420ms ease,
+    filter 420ms ease;
+}
+
+.homepage-body .vm-module-card:hover,
+.homepage-body .vm-module-card--highlight:hover {
+  transform: translateY(-8px);
+  border-color: rgba(147, 197, 253, 0.3);
+  box-shadow: 0 30px 52px rgba(2, 8, 23, 0.26);
+  filter: saturate(1.06);
+}
+
+.homepage-body .vm-module-num {
+  color: rgba(191, 219, 254, 0.42);
+}
+
+.homepage-body .vm-module-badge {
+  color: #dbeafe;
+  background: rgba(37, 99, 235, 0.22);
+}
+
+.homepage-body .vm-module-icon,
+.homepage-body .vm-module-card--highlight .vm-module-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #dbeafe;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homepage-body .vm-module-card h3,
+.homepage-body .vm-module-card--highlight h3 {
+  font-size: 1.55rem;
+  line-height: 1.15;
+  color: #f8fafc;
+  margin-bottom: 0.75rem;
+}
+
+.homepage-body .vm-module-card p,
+.homepage-body .vm-module-card--highlight p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+
+.homepage-body .vm-contact-form {
+  width: min(1180px, calc(100% - 1.5rem));
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  border-radius: 28px;
+  background: rgba(8, 19, 38, 0.24);
+  box-shadow: 0 24px 46px rgba(2, 8, 23, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.site-footer {
+  background:
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 20%),
+    linear-gradient(135deg, #081326 0%, #0c2144 55%, #13386f 100%);
+  color: #dbeafe;
+}
+
+.site-footer hr {
+  border-color: rgba(191, 219, 254, 0.14);
+}
+
+.site-footer .brand-mark-footer .brand-mark-primary {
+  color: #93c5fd;
+}
+
+.site-footer .brand-mark-footer .brand-mark-accent {
+  color: #22c55e;
+}
+
+.site-footer a {
+  color: #c4f1d4;
+  transition: color 360ms ease;
+}
+
+.site-footer a:hover {
+  color: #93c5fd;
+}
+
+.site-footer h5 {
+  color: #f8fafc;
+}
+
+.site-footer h6,
+.site-footer p {
+  color: #bfdbfe;
+}
+
+/* ==========================================================================
+   HOMEPAGE MEDIA QUERIES
+   Keep all homepage breakpoints grouped here.
+   ========================================================================== */
+
+@media (max-width: 1199.98px) {
+  .homepage-body .vm-hero-container {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .homepage-body .vm-product-grid,
+  .homepage-body .vm-modules-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991.98px) {
+  .homepage-topbar {
+    position: static;
+    transform: none;
+    width: calc(100% - 1rem);
+    margin: 0.75rem auto 0;
+  }
+
+  .homepage-body .vm-hero {
+    padding: 2rem 0 4rem;
+  }
+
+  .homepage-body .vm-section {
+    padding: 64px 0;
+  }
+
+  .homepage-body .vm-hero-container,
+  .homepage-body .vm-contact-form {
+    width: calc(100% - 1rem);
+    padding: 2rem 1.4rem;
+  }
+
+  .homepage-body .vm-hero-buttons,
+  .homepage-body .vm-hero-stats {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .homepage-body .vm-panel-cards,
+  .homepage-body .vm-product-grid,
+  .homepage-body .vm-modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer .row {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .homepage-topbar {
+    padding: 0.9rem;
+  }
+
+  .homepage-topbar nav ul {
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .homepage-body .vm-hero-title {
+    font-size: clamp(2.35rem, 11vw, 3.15rem);
+  }
+
+  .homepage-body .vm-hero-description,
+  .homepage-body .vm-product-card p,
+  .homepage-body .vm-module-card p,
+  .homepage-body .vm-module-card--highlight p {
+    font-size: 1rem;
+  }
+
+  .homepage-body .vm-product-card,
+  .homepage-body .vm-module-card,
+  .homepage-body .vm-module-card--highlight {
+    min-height: auto;
+    padding: 1.3rem;
+  }
+
+  .homepage-body .vm-product-visual {
+    min-height: 190px;
+  }
+
+  .homepage-body .vm-product-card h3 {
+    font-size: 1.7rem;
+  }
+
+  .homepage-body .vm-module-card h3,
+  .homepage-body .vm-module-card--highlight h3 {
+    font-size: 1.35rem;
+  }
+}
+
+/* ==========================================================================
+   HOMEPAGE ALIGNMENT OVERRIDES
+   Keep these last to neutralize older global theme layers from styles.css.
+   ========================================================================== */
+
+.homepage-body .vm-hero {
+  min-height: auto;
+  background: transparent;
+}
+
+.homepage-body .vm-products-section,
+.homepage-body .vm-modules,
+.homepage-body .vm-contact {
+  scroll-margin-top: 104px;
+}
+
+.homepage-body .vm-modules {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 18%),
+    linear-gradient(180deg, #eef3f8 0%, #e8eef6 100%);
+}
+
+.homepage-body .vm-modules-wrapper {
+  background: transparent;
+}
+
+.homepage-body .vm-kicker.vm-kicker-light {
+  color: var(--home-blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.homepage-body .vm-module-card,
+.homepage-body .vm-module-card--highlight {
+  background: var(--home-blue-card) !important;
+  border: 1px solid rgba(96, 165, 250, 0.16) !important;
+  box-shadow: 0 22px 42px rgba(2, 8, 23, 0.18) !important;
+}
+
+.homepage-body .vm-module-card:hover,
+.homepage-body .vm-module-card--highlight:hover {
+  background: var(--home-blue-card) !important;
+  transform: translateY(-8px) !important;
+  border-color: rgba(147, 197, 253, 0.3) !important;
+  box-shadow: 0 30px 52px rgba(2, 8, 23, 0.26) !important;
+  filter: saturate(1.06) !important;
+}
+
+.homepage-body .vm-module-card,
+.homepage-body .vm-module-card--highlight,
+.homepage-body .vm-module-card:hover,
+.homepage-body .vm-module-card--highlight:hover {
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease,
+    border-color 420ms ease,
+    filter 420ms ease;
+}
+
+.homepage-body .vm-module-num {
+  color: rgba(191, 219, 254, 0.42);
+}
+
+.homepage-body .vm-module-badge {
+  color: #dbeafe;
+  background: rgba(37, 99, 235, 0.22);
+}
+
+.homepage-body .vm-module-icon,
+.homepage-body .vm-module-card--highlight .vm-module-icon {
+  color: #dbeafe;
+  background: rgba(255, 255, 255, 0.08);
+}

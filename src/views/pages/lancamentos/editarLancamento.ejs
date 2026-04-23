@@ -104,7 +104,11 @@
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="qtde_de_parcelas">Qtde. de parcelas</label>
-                            <input type="number" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="<%= lancamento.qtde_de_parcelas %>" required>
+                            <input type="number" min="1" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="<%= lancamento.qtde_de_parcelas %>" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 <%= lancamento.entrada_saida === 'Saida' && Number(lancamento.qtde_de_parcelas || 0) > 1 ? '' : 'd-none' %>" id="vencimentoField">
+                            <label for="vencimento">1º vencimento</label>
+                            <input type="date" class="form-control text-center" id="vencimento" name="vencimento" value="<%= lancamento.vencimento ? new Date(lancamento.vencimento).toISOString().split('T')[0] : '' %>">
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="usuario">Usuário</label>
@@ -154,6 +158,43 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const entradaSaidaSelect = document.getElementById('entrada_saida');
+        const formaPagamentoSelect = document.getElementById('forma_de_pagamento');
+        const parcelasInput = document.getElementById('qtde_de_parcelas');
+        const vencimentoField = document.getElementById('vencimentoField');
+        const vencimentoInput = document.getElementById('vencimento');
+        const tipoEntradas = document.querySelectorAll('.tipo-entrada');
+        const tipoSaidas = document.querySelectorAll('.tipo-saida');
+
+        const syncTipoLancamento = () => {
+            if (entradaSaidaSelect.value === 'Entrada') {
+                tipoEntradas.forEach((option) => option.style.display = 'block');
+                tipoSaidas.forEach((option) => option.style.display = 'none');
+            } else {
+                tipoEntradas.forEach((option) => option.style.display = 'none');
+                tipoSaidas.forEach((option) => option.style.display = 'block');
+            }
+        };
+
+        const syncVencimentoField = () => {
+            const isParcelado = entradaSaidaSelect.value === 'Saida' && Number(parcelasInput.value || 0) > 1;
+            vencimentoField.classList.toggle('d-none', !isParcelado);
+            vencimentoInput.required = isParcelado;
+            if (!isParcelado) {
+                vencimentoInput.value = '';
+            }
+        };
+
+        entradaSaidaSelect.addEventListener('change', () => {
+            syncTipoLancamento();
+            syncVencimentoField();
+        });
+        formaPagamentoSelect.addEventListener('change', syncVencimentoField);
+        parcelasInput.addEventListener('input', syncVencimentoField);
+
+        syncTipoLancamento();
+        syncVencimentoField();
+
         <% if (success) { %>
         window.AppAlerts?.success("<%- success.replace(/\"/g, '&quot;') %>");
         setTimeout(() => { window.location.href = '/lancamentos'; }, 1800);
@@ -165,4 +206,3 @@
     </script>
 </body>
 </html>
-

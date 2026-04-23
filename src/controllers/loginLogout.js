@@ -25,7 +25,7 @@ class LoginLogoutController {
         }
 
         return res.render('pages/register', {
-            title: 'Cadastro de Usuario',
+            title: 'Cadastro de Usuário',
             error: req.query.error,
             formData: {
                 user: '',
@@ -251,11 +251,12 @@ class LoginLogoutController {
 
         try {
             const senha = String(req.body.senha ?? '');
+            const confirmarSenha = String(req.body.confirmarSenha ?? '');
 
-            if (!formData.user || !formData.email || !senha) {
+            if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuario',
-                    error: 'Preencha nome de usuario, e-mail e senha.',
+                    title: 'Cadastro de Usuário',
+                    error: 'Preencha nome de usuário, e-mail, senha e confirmação de senha.',
                     formData
                 });
             }
@@ -263,16 +264,24 @@ class LoginLogoutController {
             const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
             if (!emailValido) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuario',
-                    error: 'Informe um e-mail valido.',
+                    title: 'Cadastro de Usuário',
+                    error: 'Informe um e-mail válido.',
                     formData
                 });
             }
 
             if (senha.length < 3) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuario',
+                    title: 'Cadastro de Usuário',
                     error: 'A senha precisa ter pelo menos 3 caracteres.',
+                    formData
+                });
+            }
+
+            if (senha !== confirmarSenha) {
+                return res.status(400).render('pages/register', {
+                    title: 'Cadastro de Usuário',
+                    error: 'A confirmação de senha não confere.',
                     formData
                 });
             }
@@ -285,7 +294,7 @@ class LoginLogoutController {
 
             if (result?.error) {
                 return res.status(409).render('pages/register', {
-                    title: 'Cadastro de Usuario',
+                    title: 'Cadastro de Usuário',
                     error: result.error,
                     formData
                 });
@@ -295,7 +304,7 @@ class LoginLogoutController {
         } catch (error) {
             console.error('Erro ao processar o cadastro:', error);
             return res.status(500).render('pages/register', {
-                title: 'Cadastro de Usuario',
+                title: 'Cadastro de Usuário',
                 error: 'Erro no servidor. Tente novamente mais tarde.',
                 formData
             });

@@ -178,9 +178,9 @@ class LoginLogout {
 
     if (existingUser) {
       if (existingUser.username === normalizedUser) {
-        return { error: 'Este nome de usuario ja esta em uso.' };
+        return { error: 'Este nome de usuário já está em uso.' };
       }
-      return { error: 'Este e-mail ja esta cadastrado.' };
+      return { error: 'Este e-mail já está cadastrado.' };
     }
 
     const senhaHash = await bcrypt.hash(normalizedPassword, 12);

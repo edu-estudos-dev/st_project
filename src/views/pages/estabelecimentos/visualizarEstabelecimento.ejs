@@ -12,87 +12,117 @@
         <section class="view-hero view-hero-neutral">
             <div class="view-hero-content">
                 <span class="form-kicker"><i class="bi bi-shop-window"></i> Administrativo</span>
-                <h1><%= estabelecimento.estabelecimento %></h1>
-                <p>Visualize rapidamente os dados comerciais e operacionais do ponto em um layout mais limpo, com leitura rápida para contato, endereço e produtos vinculados.</p>
+                <h1><%= estabelecimento ? estabelecimento.estabelecimento : 'Estabelecimento não encontrado' %></h1>
+                <p>Visualize rapidamente os dados comerciais e operacionais do ponto com leitura clara para contato, endereço, produtos e localização.</p>
             </div>
             <div class="view-hero-side">
                 <div class="list-stat">
                     <strong>ID</strong>
-                    <span>#<%= estabelecimento.id %></span>
+                    <span><%= estabelecimento ? `#${estabelecimento.id}` : 'N/A' %></span>
                 </div>
                 <div class="list-stat">
                     <strong>Status do cadastro</strong>
-                    <span><%= estabelecimento.status || 'Ativo' %></span>
+                    <span><%= estabelecimento?.status || 'Ativo' %></span>
                 </div>
             </div>
         </section>
 
         <main class="view-stage">
             <section class="view-panel">
-                <div class="view-panel-header">
-                    <div>
-                        <span class="form-section-tag">Resumo</span>
-                        <h2>Dados do estabelecimento</h2>
-                        <p>Essas informações concentram o que a equipe precisa para localizar, atender e operar o ponto com segurança.</p>
+                <% if (estabelecimento) { %>
+                    <div class="view-panel-header">
+                        <div>
+                            <span class="form-section-tag">Resumo</span>
+                            <h2>Dados do estabelecimento</h2>
+                            <p>Essas informações concentram o que a equipe precisa para localizar, atender e operar o ponto com segurança.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="view-grid">
-                    <div class="view-card">
-                        <strong>Produtos vinculados</strong>
-                        <span><%= estabelecimento.produtoFormatado || estabelecimento.produto || 'Não informado' %></span>
+                    <div class="view-grid">
+                        <div class="view-card">
+                            <strong>Produtos vinculados</strong>
+                            <span><%= estabelecimento.produtoFormatado || estabelecimento.produto || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Responsável</strong>
+                            <span><%= estabelecimento.responsavel_nome || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Contato</strong>
+                            <span><%= estabelecimento.telefone_contato || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Bairro</strong>
+                            <span><%= estabelecimento.bairro || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card is-wide">
+                            <strong>Endereço</strong>
+                            <span><%= estabelecimento.endereco || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Chave</strong>
+                            <span><%= estabelecimento.chave || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Máquina</strong>
+                            <span><%= estabelecimento.maquina || 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Latitude</strong>
+                            <span><%= estabelecimento.latitude ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Longitude</strong>
+                            <span><%= estabelecimento.longitude ?? 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Data de cadastro</strong>
+                            <span><%= estabelecimento.data_criacao ? new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
+                        </div>
+                        <div class="view-card">
+                            <strong>Última edição</strong>
+                            <span><%= estabelecimento.data_atualizacao ? new Date(estabelecimento.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
+                        </div>
+                        <div class="view-card is-wide">
+                            <strong>Observações</strong>
+                            <span><%= estabelecimento.observacoes || 'Sem observações cadastradas.' %></span>
+                        </div>
                     </div>
-                    <div class="view-card">
-                        <strong>Responsável</strong>
-                        <span><%= estabelecimento.responsavel_nome || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Contato</strong>
-                        <span><%= estabelecimento.telefone_contato || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Bairro</strong>
-                        <span><%= estabelecimento.bairro || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card is-wide">
-                        <strong>Endereço</strong>
-                        <span><%= estabelecimento.endereco || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Chave</strong>
-                        <span><%= estabelecimento.chave || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Máquina</strong>
-                        <span><%= estabelecimento.maquina || 'Não informado' %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Data de cadastro</strong>
-                        <span><%= new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') %></span>
-                    </div>
-                    <div class="view-card">
-                        <strong>Última edição</strong>
-                        <span><%= data_atualizacao ? new Date(data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
-                    </div>
-                    <div class="view-card is-wide">
-                        <strong>Observações</strong>
-                        <span><%= estabelecimento.observacoes || 'Sem observações cadastradas.' %></span>
-                    </div>
-                </div>
+                <% } else { %>
+                    <p class="mb-0">Estabelecimento não encontrado.</p>
+                <% } %>
 
                 <div class="view-actions">
                     <div class="view-actions-copy">
-                        Revise este cadastro antes de editar ou retornar para a listagem geral dos estabelecimentos.
+                        <%= estabelecimento
+                            ? 'Revise este cadastro antes de editar, gerar uma rota ou retornar para a listagem geral.'
+                            : 'Você pode voltar para a listagem geral de estabelecimentos e continuar a navegação normalmente.' %>
                     </div>
                     <div class="view-actions-buttons">
                         <a href="/estabelecimentos" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
-                        <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern">
-                            <i class="bi bi-pencil-square"></i>
-                            <span>Editar cadastro</span>
-                        </a>
+                        <% if (estabelecimento && estabelecimento.endereco) { %>
+                            <button
+                                type="button"
+                                class="btn-route-secondary"
+                                id="openRouteFromViewButton"
+                                data-address="<%= [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', ') %>"
+                                data-name="<%= estabelecimento.estabelecimento %>"
+                                data-latitude="<%= estabelecimento.latitude ?? '' %>"
+                                data-longitude="<%= estabelecimento.longitude ?? '' %>"
+                            >
+                                <i class="bi bi-sign-turn-right"></i>
+                                <span>Gerar rota até aqui</span>
+                            </button>
+                        <% } %>
+                        <% if (estabelecimento) { %>
+                            <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern">
+                                <i class="bi bi-pencil-square"></i>
+                                <span>Editar cadastro</span>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </section>
@@ -100,6 +130,75 @@
     </div>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const routeButton = document.getElementById('openRouteFromViewButton');
+            if (!routeButton) return;
+
+            const hasUsableCoordinates = (latitude, longitude) =>
+                Number.isFinite(latitude) &&
+                Number.isFinite(longitude) &&
+                !(latitude === 0 && longitude === 0);
+
+            const buildGoogleRouteUrl = (address, originCoords, destinationCoords) => {
+                const destination = destinationCoords
+                    ? `${destinationCoords.latitude},${destinationCoords.longitude}`
+                    : encodeURIComponent(address);
+
+                if (originCoords) {
+                    return `https://www.google.com/maps/dir/?api=1&origin=${originCoords.latitude},${originCoords.longitude}&destination=${destination}&travelmode=driving`;
+                }
+
+                return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
+            };
+
+            routeButton.addEventListener('click', async () => {
+                const address = routeButton.getAttribute('data-address');
+                const name = routeButton.getAttribute('data-name');
+                const latitude = Number(routeButton.getAttribute('data-latitude'));
+                const longitude = Number(routeButton.getAttribute('data-longitude'));
+
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Criar rota para o estabelecimento',
+                    text: `Deseja abrir uma rota do seu ponto atual até ${name}?`,
+                    confirmButtonText: 'Abrir rota',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (!confirmed) return;
+
+                const destinationCoords =
+                    hasUsableCoordinates(latitude, longitude)
+                        ? { latitude, longitude }
+                        : null;
+
+                if (!navigator.geolocation) {
+                    window.open(buildGoogleRouteUrl(address, null, destinationCoords), '_blank', 'noopener');
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        window.open(
+                            buildGoogleRouteUrl(
+                                address,
+                                {
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude
+                                },
+                                destinationCoords
+                            ),
+                            '_blank',
+                            'noopener'
+                        );
+                    },
+                    () => {
+                        window.open(buildGoogleRouteUrl(address, null, destinationCoords), '_blank', 'noopener');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                );
+            });
+        });
+    </script>
 </body>
 </html>
-

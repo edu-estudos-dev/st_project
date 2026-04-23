@@ -1,5 +1,6 @@
 import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 import LancamentoModel from '../models/lancamentoModel.js';
+import { syncMonthlyRevenueConsolidation } from '../services/monthlyRevenueConsolidation.js';
 
 const defaultNavigationProducts = {
     bolinhas: false,
@@ -13,6 +14,12 @@ export const attachNavigationContext = async (req, res, next) => {
         res.locals.navigationProducts = defaultNavigationProducts;
         res.locals.financialNotifications = { proximos: [], atrasados: [], total: 0 };
         return next();
+    }
+
+    try {
+        await syncMonthlyRevenueConsolidation();
+    } catch (error) {
+        console.error('Erro ao sincronizar receitas consolidadas:', error);
     }
 
     res.locals.navigationProducts = await EstabelecimentoModel.getMenuProdutosDisponiveis();

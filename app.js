@@ -18,6 +18,8 @@ import searchRoutes from './src/routes/searchRoutes.js';
 import painelRoutes from './src/routes/painelRoutes.js';
 import interessadosRoutes from './src/routes/interessadosRoutes.js';
 import fluxoDeCaixaRoutes from './src/routes/fluxoDeCaixaRoutes.js';
+import rotasRoutes from './src/routes/rotasRoutes.js';
+import relatoriosRoutes from './src/routes/relatoriosRoutes.js';
 
 import bolinhasSangriaRoutes from './src/routes/bolinhasRoutes.js';
 import figurinhasRoutes from './src/routes/figurinhasRoutes.js';
@@ -70,13 +72,15 @@ app.use('/estabelecimentos', isAuthenticated, estabelecimentoRoutes);
 app.use('/lancamentos', isAuthenticated, lancamentoRoutes);
 app.use('/painel', isAuthenticated, painelRoutes);
 app.use('/fluxo-de-caixa', isAuthenticated, fluxoDeCaixaRoutes);
+app.use('/rotas', isAuthenticated, rotasRoutes);
+app.use('/relatorios', isAuthenticated, relatoriosRoutes);
 app.use('/bolinhas', isAuthenticated, requireProductAvailable('bolinhas'), receitaBolinhaRoutes);
 app.use('/figurinhas', isAuthenticated, requireProductAvailable('figurinhas'), receitaFigurinhaRoutes);
-app.use('/bolinhas/sangrias', isAuthenticated, requireProductAvailable('bolinhas'), bolinhasSangriaRoutes);
-app.use('/figurinhas/sangrias', isAuthenticated, requireProductAvailable('figurinhas'), figurinhasRoutes); 
+app.use('/bolinhas/sangrias', isAuthenticated, bolinhasSangriaRoutes);
+app.use('/figurinhas/sangrias', isAuthenticated, figurinhasRoutes); 
 
 app.use('/pelucias', isAuthenticated, requireProductAvailable('pelucias'), receitaPeluciaRoutes);
-app.use('/pelucias', isAuthenticated, requireProductAvailable('pelucias'), peluciasRoutes);
+app.use('/pelucias', isAuthenticated, peluciasRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('pages/404');

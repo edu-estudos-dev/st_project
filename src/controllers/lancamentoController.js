@@ -1,6 +1,9 @@
 import LancamentoModel from '../models/lancamentoModel.js';
 import { addMonths } from 'date-fns';
 
+const isParcelado = ({ entrada_saida, qtde_de_parcelas }) =>
+  entrada_saida === 'Saida' && Number(qtde_de_parcelas || 0) > 1;
+
 class LancamentoController {
   index = async (req, res) => {
     try {
@@ -27,59 +30,6 @@ class LancamentoController {
     }
   };
 
-  updateVencimento = async (req, res) => {
-    const { id } = req.params;
-    const { vencimento } = req.body;
-
-    try {
-      const lancamento = await LancamentoModel.findById(id);
-
-      if (!lancamento) {
-        return res.redirect('/lancamentos?error=Lançamento não encontrado');
-      }
-
-      await LancamentoModel.updateVencimento(id, vencimento);
-
-      const parcelaMatch = String(lancamento.descricao || '').match(/^(.*) - Parcela (\d+)\/(\d+)$/);
-
-      if (parcelaMatch) {
-        const descricaoBase = parcelaMatch[1];
-        const parcelaAtual = Number(parcelaMatch[2]);
-        const totalParcelas = Number(parcelaMatch[3]);
-        const grupoParcelas = await LancamentoModel.findParcelGroup({
-          entrada_saida: lancamento.entrada_saida,
-          tipo_de_lancamento: String(lancamento.tipo_de_lancamento || '').replace(/ /g, '_').toLowerCase(),
-          produto: lancamento.produto,
-          forma_de_pagamento: lancamento.forma_de_pagamento,
-          usuario: lancamento.usuario,
-          descricaoBase
-        });
-
-        if (grupoParcelas.length >= totalParcelas) {
-          const baseDate = new Date(`${vencimento}T00:00:00`);
-
-          for (const parcela of grupoParcelas) {
-            const siblingMatch = String(parcela.descricao || '').match(/ - Parcela (\d+)\/(\d+)$/);
-            if (!siblingMatch) continue;
-
-            const numeroParcela = Number(siblingMatch[1]);
-            const nextDate = addMonths(baseDate, numeroParcela - parcelaAtual);
-            const nextDateString = nextDate.toISOString().split('T')[0];
-
-            if (String(parcela.id) !== String(id)) {
-              await LancamentoModel.updateVencimento(parcela.id, nextDateString);
-            }
-          }
-        }
-      }
-
-      res.redirect('/lancamentos?success=Vencimento atualizado com sucesso');
-    } catch (error) {
-      console.error('Erro ao atualizar vencimento:', error);
-      res.redirect('/lancamentos?error=Erro ao atualizar vencimento');
-    }
-  };
-
   vencimentos = async (req, res) => {
     const usuario = req.user;
 
@@ -91,6 +41,8 @@ class LancamentoController {
         usuario,
         proximos,
         atrasados,
+        success: req.query.success,
+        error: req.query.error,
         tipoFiltro: 'todos'
       });
     } catch (error) {
@@ -117,6 +69,7 @@ class LancamentoController {
       tipo_de_lancamento,
       produto,
       forma_de_pagamento,
+      vencimento,
       qtde_de_parcelas,
       valor,
       descricao
@@ -136,16 +89,24 @@ class LancamentoController {
       return res.status(400).send('Todos os campos são obrigatórios.');
     }
 
+    if (isParcelado({ entrada_saida, qtde_de_parcelas }) && !vencimento) {
+      return res.status(400).send('Informe a data de vencimento da primeira parcela.');
+    }
+
     try {
-      if (entrada_saida === 'Saida' && qtde_de_parcelas > 1) {
+      if (isParcelado({ entrada_saida, qtde_de_parcelas })) {
         const valorParcela = valor / qtde_de_parcelas;
+        const baseVencimento = new Date(`${vencimento}T00:00:00`);
+
         for (let i = 0; i < qtde_de_parcelas; i++) {
+          const vencimentoParcela = addMonths(baseVencimento, i).toISOString().split('T')[0];
           await LancamentoModel.create({
             entrada_saida,
             data,
             tipo_de_lancamento,
             produto,
             forma_de_pagamento,
+            vencimento: vencimentoParcela,
             qtde_de_parcelas,
             valor: valorParcela,
             descricao: `${descricao} - Parcela ${i + 1}/${qtde_de_parcelas}`,
@@ -158,13 +119,15 @@ class LancamentoController {
           data,
           tipo_de_lancamento,
           produto,
-          forma_de_pagamento,
+          forma_de_pagamento,     
+          vencimento: vencimento || null,
           qtde_de_parcelas,
           valor,
           descricao,
           usuario
         });
       }
+
       res.redirect('/lancamentos?success=Lançamento cadastrado com sucesso');
     } catch (error) {
       console.error('Erro ao adicionar lançamento:', error);
@@ -180,11 +143,13 @@ class LancamentoController {
   editLancamentoForm = async (req, res) => {
     const usuario = req.user;
     const { id } = req.params;
+
     try {
       const lancamento = await LancamentoModel.findById(id);
       if (!lancamento) {
         return res.status(404).send('Lançamento não encontrado.');
       }
+
       res.status(200).render('pages/lancamentos/editarLancamento', {
         title: 'Editar Lançamento',
         lancamento,
@@ -207,6 +172,7 @@ class LancamentoController {
       tipo_de_lancamento,
       produto,
       forma_de_pagamento,
+      vencimento,
       qtde_de_parcelas,
       valor,
       descricao
@@ -225,6 +191,10 @@ class LancamentoController {
       return res.status(400).send('Todos os campos são obrigatórios.');
     }
 
+    if (isParcelado({ entrada_saida, qtde_de_parcelas }) && !vencimento) {
+      return res.status(400).send('Informe a data de vencimento da primeira parcela.');
+    }
+
     try {
       await LancamentoModel.update(id, {
         entrada_saida,
@@ -232,6 +202,7 @@ class LancamentoController {
         tipo_de_lancamento,
         produto,
         forma_de_pagamento,
+        vencimento: vencimento || null,
         qtde_de_parcelas,
         valor,
         descricao
@@ -246,6 +217,7 @@ class LancamentoController {
           tipo_de_lancamento,
           produto,
           forma_de_pagamento,
+          vencimento,
           qtde_de_parcelas,
           valor,
           descricao
@@ -268,12 +240,49 @@ class LancamentoController {
 
   deleteLancamento = async (req, res) => {
     const { id } = req.params;
+    const acceptsJson = req.xhr
+      || req.get('x-requested-with') === 'XMLHttpRequest'
+      || req.get('accept')?.includes('application/json');
+
     try {
       await LancamentoModel.delete(id);
-      res.redirect('/lancamentos?success=Lançamento excluído com sucesso');
+
+      if (acceptsJson) {
+        return res.status(200).json({
+          success: true,
+          message: 'Lançamento excluído com sucesso.'
+        });
+      }
+
+      return res.redirect('/lancamentos?success=Lançamento excluído com sucesso');
     } catch (error) {
       console.error('Erro ao deletar lançamento:', error);
-      res.status(500).send('Erro ao deletar lançamento.');
+
+      if (acceptsJson) {
+        return res.status(500).json({
+          success: false,
+          message: 'Erro ao deletar lançamento.'
+        });
+      }
+
+      return res.status(500).send('Erro ao deletar lançamento.');
+    }
+  };
+
+  markAsPaid = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const lancamento = await LancamentoModel.markAsPaid(id);
+
+      if (!lancamento) {
+        return res.redirect('/lancamentos/vencimentos?error=O boleto selecionado nao pode ser marcado como pago.');
+      }
+
+      return res.redirect('/lancamentos/vencimentos?success=Boleto marcado como pago com sucesso.');
+    } catch (error) {
+      console.error('Erro ao marcar lancamento como pago:', error);
+      return res.redirect('/lancamentos/vencimentos?error=Erro ao marcar boleto como pago.');
     }
   };
 
@@ -283,21 +292,17 @@ class LancamentoController {
 
     try {
       const lancamento = await LancamentoModel.findById(id);
-      let valor_da_parcela = null;
-
-      if (
-        lancamento.forma_de_pagamento !== 'Especie' &&
-        lancamento.qtde_de_parcelas
-      ) {
-        valor_da_parcela = lancamento.valor / lancamento.qtde_de_parcelas;
-      }
+      const valorDaParcela =
+        Number(lancamento.qtde_de_parcelas || 0) > 1
+          ? Number(lancamento.valor || 0)
+          : null;
 
       res.status(200).render('pages/lancamentos/visualizarLancamento', {
         title: 'Visualizar Lançamento',
         lancamento,
         success: undefined,
         error: undefined,
-        valor_da_parcela,
+        valor_da_parcela: valorDaParcela,
         ultima_edicao: lancamento.ultima_edicao,
         usuario
       });
@@ -310,6 +315,7 @@ class LancamentoController {
   search = async (req, res) => {
     const { termo } = req.body;
     const usuario = req.user;
+
     try {
       const lancamentos = await LancamentoModel.search(termo);
       res.status(200).render('pages/lancamentos/tabelaLancamento', {

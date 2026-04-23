@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg fixed-top app-nav">
     <div class="container-fluid">
         <a href="/painel" style="display:flex; align-items:center;">
-            <img src="/images/logo_sem_fundo.png" style="height:50px;">
+            <img src="/images/logo_sem_fundo.png" style="height:50px;" alt="VendMaster">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -14,91 +14,157 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn-header fs-6" href="#" id="navbarDropdownAdministrativo" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Administrativo
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdministrativo">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownCadastros" aria-expanded="false">
+                        Estabelecimentos
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownCadastros">
+                        <li class="menu-group-label">Base de pontos</li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/estabelecimentos">
+                                <span class="menu-link-title">Estabelecimentos cadastrados</span>
+                                <small class="menu-link-text">Veja a lista completa dos pontos ativos.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/estabelecimentos/add">
+                                <span class="menu-link-title">Cadastrar estabelecimento</span>
+                                <small class="menu-link-text">Abra o formulário para incluir um novo ponto.</small>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownFinanceiro" aria-expanded="false">
+                        Financeiro
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
+                        <li class="menu-group-label">Fluxo e lançamentos</li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/lancamentos">
+                                <span class="menu-link-title">Lançamentos cadastrados</span>
+                                <small class="menu-link-text">Consulte entradas, saídas e histórico financeiro.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/lancamentos/add">
+                                <span class="menu-link-title">Fazer lançamento</span>
+                                <small class="menu-link-text">Registre uma nova movimentação financeira.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/fluxo-de-caixa">
+                                <span class="menu-link-title">Fluxo de caixa</span>
+                                <small class="menu-link-text">Acompanhe saldo e consolidado do período.</small>
+                            </a>
+                        </li>
+                        <% if (navProducts.hasAny) { %>
+                            <li class="dropdown-submenu">
+                                <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
+                                    id="navbarDropdownReceitas" aria-expanded="false">
+                                    <span class="menu-link-title">Receitas por produto</span>
+                                    <small class="menu-link-text">Abra os relatórios consolidados de receita.</small>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
+                                    <% if (navProducts.bolinhas) { %>
+                                        <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
+                                    <% } %>
+                                    <% if (navProducts.figurinhas) { %>
+                                        <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Figurinhas</a></li>
+                                    <% } %>
+                                    <% if (navProducts.pelucias) { %>
+                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
+                                    <% } %>
+                                </ul>
+                            </li>
+                        <% } %>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownPlanejamento" aria-expanded="false">
+                        Planejamento
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownPlanejamento">
+                        <li class="menu-group-label">Visão gerencial</li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/relatorios">
+                                <span class="menu-link-title">Relatórios</span>
+                                <small class="menu-link-text">Indicadores, rankings e resumos do sistema.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/rotas">
+                                <span class="menu-link-title">Rotas dos pontos</span>
+                                <small class="menu-link-text">Organize visitas por bairro com navegação assistida.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/lancamentos/vencimentos">
+                                <span class="menu-link-title">Alertas financeiros</span>
+                                <small class="menu-link-text">Veja vencimentos próximos e itens atrasados.</small>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownOperacional" aria-expanded="false">
+                        Operacional
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
                         <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownEstabelecimentos"
-                                role="button" aria-expanded="false">Estabelecimentos</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownEstabelecimentos">
-                                <li><a class="dropdown-item" href="/estabelecimentos">Estabelecimentos cadastrados</a></li>
-                                <li><a class="dropdown-item" href="/estabelecimentos/add">Cadastrar estabelecimento</a></li>
+                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
+                                id="navbarDropdownBolinhas" aria-expanded="false">
+                                <span class="menu-link-title">Bolinhas</span>
+                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
+                                <% if (navProducts.bolinhas) { %>
+                                    <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
+                                    <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
+                                <% } %>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownFinanceiro"
-                                role="button" aria-expanded="false">Financeiro</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                                <li><a class="dropdown-item" href="/lancamentos">Lançamentos cadastrados</a></li>
-                                <li><a class="dropdown-item" href="/lancamentos/add">Fazer lançamento</a></li>
-                                <li><a class="dropdown-item" href="/fluxo-de-caixa">Fluxo de caixa</a></li>
-                                <% if (navProducts.hasAny) { %>
-                                    <li class="dropdown-submenu">
-                                        <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownReceitas"
-                                            role="button" aria-expanded="false">Receitas</a>
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
-                                            <% if (navProducts.bolinhas) { %>
-                                                <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
-                                            <% } %>
-                                            <% if (navProducts.figurinhas) { %>
-                                                <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Figurinhas</a></li>
-                                            <% } %>
-                                            <% if (navProducts.pelucias) { %>
-                                                <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
-                                            <% } %>
-                                        </ul>
-                                    </li>
+                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
+                                id="navbarDropdownFigurinhas" aria-expanded="false">
+                                <span class="menu-link-title">Figurinhas</span>
+                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
+                                <% if (navProducts.figurinhas) { %>
+                                    <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
+                                    <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
+                                <% } %>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
+                                id="navbarDropdownPelucias" aria-expanded="false">
+                                <span class="menu-link-title">Pelúcias</span>
+                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
+                                <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
+                                <% if (navProducts.pelucias) { %>
+                                    <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
+                                    <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
                                 <% } %>
                             </ul>
                         </li>
                     </ul>
                 </li>
-
-                <% if (navProducts.hasAny) { %>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle btn-header fs-6" href="#" id="navbarDropdownOperacional" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Operacional
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
-                            <% if (navProducts.bolinhas) { %>
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownBolinhas"
-                                        role="button" aria-expanded="false">Bolinhas</a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
-                                        <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
-                                    </ul>
-                                </li>
-                            <% } %>
-                            <% if (navProducts.figurinhas) { %>
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownFigurinhas"
-                                        role="button" aria-expanded="false">Figurinhas</a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
-                                        <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
-                                    </ul>
-                                </li>
-                            <% } %>
-                            <% if (navProducts.pelucias) { %>
-                                <li class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle submenu-toggle" href="#" id="navbarDropdownPelucias"
-                                        role="button" aria-expanded="false">Pelúcias</a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
-                                        <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
-                                    </ul>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </li>
-                <% } %>
             </ul>
 
             <div class="d-flex align-items-center gap-2">
@@ -125,6 +191,14 @@
 <style>
     .dropdown-submenu {
         position: relative;
+    }
+
+    .nav-item.dropdown > .dropdown-menu {
+        display: none;
+    }
+
+    .nav-item.dropdown.show > .dropdown-menu {
+        display: block;
     }
 
     .dropdown-submenu .dropdown-menu {
@@ -161,6 +235,50 @@
         color: #0f172a !important;
     }
 
+    .app-nav button.nav-link,
+    .app-nav .submenu-toggle {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        text-align: left;
+    }
+
+    .menu-group-label {
+        padding: 0.45rem 0.9rem 0.3rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #64748b;
+    }
+
+    .menu-link {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+        min-width: 260px;
+    }
+
+    .menu-link-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .menu-link-text {
+        color: #64748b;
+        font-size: 0.78rem;
+        font-weight: 600;
+        line-height: 1.35;
+        white-space: normal;
+    }
+
+    .menu-link-button::after {
+        align-self: center;
+        margin-left: auto;
+    }
+
     @media (min-width: 992px) {
         .dropdown-submenu:hover > .dropdown-menu {
             display: block;
@@ -184,6 +302,10 @@
             margin-top: 0.35rem;
         }
 
+        .menu-link {
+            min-width: 100%;
+        }
+
         .dropdown-submenu .dropdown-menu {
             position: static !important;
             left: auto !important;
@@ -198,29 +320,101 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    function initHeaderNavigation() {
+        if (document.body.dataset.headerNavInitialized === 'true') return;
+        document.body.dataset.headerNavInitialized = 'true';
+
+        var topLevelToggles = document.querySelectorAll('.app-nav .nav-item.dropdown > .dropdown-toggle');
         var submenuToggles = document.querySelectorAll('.submenu-toggle');
+
+        function closeNestedSubmenus(container) {
+            if (!container) return;
+
+            container.querySelectorAll('.dropdown-submenu.show').forEach(function (submenu) {
+                submenu.classList.remove('show');
+            });
+
+            container.querySelectorAll('.submenu-toggle.menu-active').forEach(function (toggle) {
+                toggle.classList.remove('menu-active');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        function closeTopLevelMenus(exceptParent) {
+            document.querySelectorAll('.app-nav .nav-item.dropdown.show').forEach(function (dropdown) {
+                if (dropdown === exceptParent) return;
+
+                dropdown.classList.remove('show');
+                closeNestedSubmenus(dropdown);
+
+                var toggle = dropdown.querySelector(':scope > .dropdown-toggle');
+                if (toggle) {
+                    toggle.classList.remove('show');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        topLevelToggles.forEach(function (toggle) {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var parent = this.closest('.nav-item.dropdown');
+                var shouldOpen = !parent.classList.contains('show');
+
+                closeTopLevelMenus(parent);
+
+                parent.classList.toggle('show', shouldOpen);
+                this.classList.toggle('show', shouldOpen);
+                this.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+
+                if (!shouldOpen) {
+                    closeNestedSubmenus(parent);
+                }
+            });
+        });
 
         submenuToggles.forEach(function (toggle) {
             toggle.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+
                 var parent = this.closest('.dropdown-submenu');
-                parent.classList.toggle('show');
-                this.classList.toggle('menu-active');
+                var shouldOpen = !parent.classList.contains('show');
+
+                parent.parentElement.querySelectorAll(':scope > .dropdown-submenu.show').forEach(function (submenu) {
+                    submenu.classList.remove('show');
+
+                    var siblingToggle = submenu.querySelector(':scope > .submenu-toggle');
+                    if (siblingToggle) {
+                        siblingToggle.classList.remove('menu-active');
+                        siblingToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                parent.classList.toggle('show', shouldOpen);
+                this.classList.toggle('menu-active', shouldOpen);
+                this.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
             });
         });
 
         document.addEventListener('click', function (e) {
-            if (!e.target.closest('.dropdown-submenu')) {
-                document.querySelectorAll('.dropdown-submenu.show').forEach(function (submenu) {
-                    submenu.classList.remove('show');
-                });
-                document.querySelectorAll('.submenu-toggle.menu-active').forEach(function (toggle) {
-                    toggle.classList.remove('menu-active');
-                });
+            if (!e.target.closest('.app-nav')) {
+                closeTopLevelMenus();
             }
         });
-    });
-</script>
 
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeTopLevelMenus();
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHeaderNavigation);
+    } else {
+        initHeaderNavigation();
+    }
+</script>

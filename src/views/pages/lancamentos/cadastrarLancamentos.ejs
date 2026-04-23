@@ -57,13 +57,13 @@
                             <label for="tipo_de_lancamento">Tipo de lançamento</label>
                             <select class="form-select text-center" id="tipo_de_lancamento" name="tipo_de_lancamento" required>
                                 <option value="" disabled selected>Selecione um tipo</option>
-                                <option value="receita_dos_pontos" class="tipo-entrada">Receita dos Pontos</option>
-                                <option value="incremento_de_capital" class="tipo-entrada">Incremento de Capital</option>
+                                <option value="receita_dos_pontos" class="tipo-entrada">Receita dos pontos</option>
+                                <option value="incremento_de_capital" class="tipo-entrada">Incremento de capital</option>
                                 <option value="compra" class="tipo-saida">Compra</option>
                                 <option value="extra" class="tipo-saida">Extra</option>
-                                <option value="pro-labore" class="tipo-saida">Pro-Labore</option>
-                                <option value="gastos_recorrentes" class="tipo-saida">Gastos Recorrentes</option>
-                                <option value="bonus" class="tipo-saida">Bonus</option>
+                                <option value="pro-labore" class="tipo-saida">Pró-labore</option>
+                                <option value="gastos_recorrentes" class="tipo-saida">Gastos recorrentes</option>
+                                <option value="bonus" class="tipo-saida">Bônus</option>
                             </select>
                         </div>
                         <div class="col-12 col-lg-3">
@@ -107,9 +107,13 @@
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="qtde_de_parcelas">Qtde. de parcelas</label>
-                            <input type="number" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="1" required>
+                            <input type="number" min="1" class="form-control text-center" id="qtde_de_parcelas" name="qtde_de_parcelas" value="1" required>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 col-lg-3 d-none" id="vencimentoField">
+                            <label for="vencimento">1º vencimento</label>
+                            <input type="date" class="form-control text-center" id="vencimento" name="vencimento">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3" id="usuarioField">
                             <label for="usuario">Usuário</label>
                             <input disabled type="text" class="form-control text-center readonly-input" id="usuario" name="usuario" value="<%= usuario.username %>" readonly>
                         </div>
@@ -135,7 +139,7 @@
 
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Conferencia final</strong>
+                        <strong>Conferência final</strong>
                         <span>Antes de salvar, verifique tipo, data, produto e valor do lançamento.</span>
                     </div>
 
@@ -158,8 +162,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const entradaSaidaSelect = document.getElementById('entrada_saida');
+            const formaPagamentoSelect = document.getElementById('forma_de_pagamento');
+            const parcelasInput = document.getElementById('qtde_de_parcelas');
+            const vencimentoField = document.getElementById('vencimentoField');
+            const vencimentoInput = document.getElementById('vencimento');
             const tipoEntradas = document.querySelectorAll('.tipo-entrada');
             const tipoSaidas = document.querySelectorAll('.tipo-saida');
+
+            function syncVencimentoField() {
+                const isParcelado = entradaSaidaSelect.value === 'Saida' && Number(parcelasInput.value || 0) > 1;
+                vencimentoField.classList.toggle('d-none', !isParcelado);
+                vencimentoInput.required = isParcelado;
+                if (!isParcelado) {
+                    vencimentoInput.value = '';
+                }
+            }
 
             entradaSaidaSelect.addEventListener('change', function () {
                 const selectedValue = this.value;
@@ -171,9 +188,15 @@
                     tipoEntradas.forEach((option) => option.style.display = 'none');
                     tipoSaidas.forEach((option) => option.style.display = 'block');
                 }
+
+                syncVencimentoField();
             });
 
+            formaPagamentoSelect.addEventListener('change', syncVencimentoField);
+            parcelasInput.addEventListener('input', syncVencimentoField);
+
             entradaSaidaSelect.dispatchEvent(new Event('change'));
+            syncVencimentoField();
 
             <% if (success) { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>
             <% if (error) { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
@@ -182,4 +205,3 @@
     <%- include('../../partials/financialNotificationsPopup', { popupMode: 'launch-once' }) %>
 </body>
 </html>
-

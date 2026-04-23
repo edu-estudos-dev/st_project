@@ -83,12 +83,29 @@
                                 <% estabelecimentos.forEach((estabelecimento) => { %>
                                     <% const produtoBase = (estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
                                     <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
+                                    <% const enderecoCompleto = [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', '); %>
                                     <tr>
                                         <td>
                                             <div class="table-title-cell"><%= estabelecimento.estabelecimento %></div>
                                         </td>
                                         <td class="mode-all"><span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span></td>
-                                        <td class="mode-commercial"><span class="table-muted"><%= estabelecimento.endereco %></span></td>
+                                        <td class="mode-commercial">
+                                            <% if (enderecoCompleto) { %>
+                                                <button
+                                                    type="button"
+                                                    class="table-address-link route-address-link"
+                                                    data-address="<%= enderecoCompleto %>"
+                                                    data-name="<%= estabelecimento.estabelecimento %>"
+                                                    data-latitude="<%= estabelecimento.latitude ?? '' %>"
+                                                    data-longitude="<%= estabelecimento.longitude ?? '' %>"
+                                                >
+                                                    <i class="bi bi-geo-alt"></i>
+                                                    <span><%= estabelecimento.endereco %></span>
+                                                </button>
+                                            <% } else { %>
+                                                <span class="table-muted">Não informado</span>
+                                            <% } %>
+                                        </td>
                                         <td class="mode-commercial"><%= estabelecimento.responsavel_nome %></td>
                                         <td class="mode-commercial"><%= estabelecimento.telefone_contato || '-' %></td>
                                         <td class="mode-operational" style="display:none;"><%= hasBolinhas ? (estabelecimento.chave || '-') : '-' %></td>
@@ -124,6 +141,10 @@
         document.addEventListener('DOMContentLoaded', function () {
             const modeButtons = document.querySelectorAll('.table-mode-btn');
             const modeLabel = document.getElementById('estabelecimentosModeLabel');
+            const hasUsableCoordinates = (latitude, longitude) =>
+                Number.isFinite(latitude) &&
+                Number.isFinite(longitude) &&
+                !(latitude === 0 && longitude === 0);
 
             const applyMode = (mode) => {
                 document.querySelectorAll('.mode-commercial').forEach((cell) => {
@@ -140,11 +161,68 @@
                 modeLabel.textContent = mode === 'commercial' ? 'Dados comerciais' : 'Operacional';
             };
 
+            const buildGoogleRouteUrl = (address, coords, destinationCoords) => {
+                const destination = destinationCoords
+                    ? `${destinationCoords.latitude},${destinationCoords.longitude}`
+                    : encodeURIComponent(address);
+                if (coords) {
+                    return `https://www.google.com/maps/dir/?api=1&origin=${coords.latitude},${coords.longitude}&destination=${destination}&travelmode=driving`;
+                }
+
+                return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
+            };
+
+            const openRouteToAddress = (address, destinationCoords = null) => {
+                if (!navigator.geolocation) {
+                    window.open(buildGoogleRouteUrl(address, null, destinationCoords), '_blank', 'noopener');
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const routeUrl = buildGoogleRouteUrl(address, {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        }, destinationCoords);
+                        window.open(routeUrl, '_blank', 'noopener');
+                    },
+                    () => {
+                        window.open(buildGoogleRouteUrl(address, null, destinationCoords), '_blank', 'noopener');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                );
+            };
+
             modeButtons.forEach((button) => {
                 button.addEventListener('click', () => applyMode(button.getAttribute('data-mode')));
             });
 
             applyMode('commercial');
+
+            document.querySelectorAll('.route-address-link').forEach((button) => {
+                button.addEventListener('click', async function () {
+                    const address = this.getAttribute('data-address');
+                    const name = this.getAttribute('data-name');
+                    const latitude = Number(this.getAttribute('data-latitude'));
+                    const longitude = Number(this.getAttribute('data-longitude'));
+                    if (!address) return;
+
+                    const confirmed = await window.AppAlerts?.confirm({
+                        title: 'Criar rota para o estabelecimento',
+                        text: `Deseja abrir uma rota do seu ponto atual até ${name}?`,
+                        confirmButtonText: 'Abrir rota',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (!confirmed) return;
+                    openRouteToAddress(
+                        address,
+                        hasUsableCoordinates(latitude, longitude)
+                            ? { latitude, longitude }
+                            : null
+                    );
+                });
+            });
 
             document.querySelectorAll('.view-btn').forEach((button) => {
                 button.addEventListener('click', function () {
@@ -187,4 +265,3 @@
     </script>
 </body>
 </html>
-

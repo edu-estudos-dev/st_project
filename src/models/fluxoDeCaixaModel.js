@@ -12,12 +12,12 @@ class FluxoDeCaixaModel {
         const SQL = `
             SELECT 
                 tipo_de_lancamento,
-                EXTRACT(MONTH FROM data) as mes,
+                EXTRACT(MONTH FROM COALESCE(vencimento, data)) as mes,
                 SUM(valor) as total
             FROM 
                 lancamentos
             WHERE 
-                EXTRACT(YEAR FROM data) = $1
+                EXTRACT(YEAR FROM COALESCE(vencimento, data)) = $1
             GROUP BY 
                 tipo_de_lancamento, mes
             ORDER BY 

@@ -2,235 +2,211 @@
 <html lang="pt-BR">
 <%- include('../partials/head', { title }) %>
 
-   <body class="dashboard-body">
-      <% const navProducts=navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false };
-         %>
-         <% const adminShortcuts=[ { href: '/estabelecimentos' , title: 'Estabelecimentos' ,
-            description: 'Consulte a base cadastrada e acompanhe os pontos ativos.' , tone: 'blue' }, {
-            href: '/estabelecimentos/add' , title: 'Novo estabelecimento' ,
-            description: 'Cadastre uma nova máquina com todos os dados operacionais.' , tone: 'gold' }, {
-            href: '/lancamentos' , title: 'Lançamentos' ,
-            description: 'Visualize entradas, saídas e movimentações registradas.' , tone: 'slate' }, {
-            href: '/lancamentos/add' , title: 'Novo lançamento' ,
-            description: 'Registre uma movimentação financeira rapidamente.' , tone: 'green' }, {
-            href: '/fluxo-de-caixa' , title: 'Fluxo de caixa' ,
-            description: 'Acompanhe o consolidado financeiro e o saldo do período.' , tone: 'violet' }, { href: '#' ,
-            title: 'Financeiro consolidado' ,
-            description: 'Espaço reservado para consolidar indicadores gerais do negócio.' , tone: 'amber' , disabled:
-            true } ]; %>
-            <% const revenueShortcuts=[]; %>
-               <% if (navProducts.bolinhas) revenueShortcuts.push({ href: '/bolinhas/receita-bolinha' ,
-                  title: 'Receita das bolinhas' , badge: 'Bolinhas' , tone: 'green' }); %>
-                  <% if (navProducts.figurinhas) revenueShortcuts.push({ href: '/figurinhas/receita-figurinha' ,
-                     title: 'Receita das figurinhas' , badge: 'Figurinhas' , tone: 'blue' }); %>
-                     <% if (navProducts.pelucias) revenueShortcuts.push({ href: '/pelucias/receita-pelucia' ,
-                        title: 'Receita das pelúcias' , badge: 'Pelúcias' , tone: 'violet' }); %>
-                        <% const operationGroups=[]; %>
-                           <% if (navProducts.bolinhas) operationGroups.push({ title: 'Bolinhas' ,
-                              subtitle: 'Operação diária, registros e visão consolidada.' , accent: 'green' , actions: [
-                              { href: '/bolinhas/sangrias/add' , label: 'Novo formulário' , meta: 'Registrar receita' },
-                              { href: '/bolinhas/sangrias' , label: 'Registro financeiro' ,
-                              meta: 'Consultar lançamentos' }, { href: '/bolinhas/sangrias/controle-geral' ,
-                              label: 'Controle geral' , meta: 'Analisar desempenho' } ] }); %>
-                              <% if (navProducts.figurinhas) operationGroups.push({ title: 'Figurinhas' ,
-                                 subtitle: 'Acompanhe coletas, receitas e indicadores da operação.' , accent: 'blue' ,
-                                 actions: [ { href: '/figurinhas/sangrias/add' , label: 'Novo formulário' ,
-                                 meta: 'Registrar receita' }, { href: '/figurinhas/sangrias' ,
-                                 label: 'Registro financeiro' , meta: 'Consultar lançamentos' }, {
-                                 href: '/figurinhas/sangrias/controle-geral' , label: 'Controle geral' ,
-                                 meta: 'Analisar desempenho' } ] }); %>
-                                 <% if (navProducts.pelucias) operationGroups.push({ title: 'Pelúcias' ,
-                                    subtitle: 'Gerencie a rotina operacional e o controle consolidado.' ,
-                                    accent: 'violet' , actions: [ { href: '/pelucias/sangrias/add' ,
-                                    label: 'Novo formulário' , meta: 'Registrar receita' }, { href: '/pelucias/sangrias'
-                                    , label: 'Registro financeiro' , meta: 'Consultar lançamentos' }, {
-                                    href: '/pelucias/sangrias/controle-geral' , label: 'Controle geral' ,
-                                    meta: 'Analisar desempenho' } ] }); %>
-                                    <% const overviewStats=[ { value: adminShortcuts.length,
-                                       label: 'atalhos administrativos' }, { value: revenueShortcuts.length,
-                                       label: 'consolidados de receita' }, { value: operationGroups.length,
-                                       label: 'frentes operacionais ativas' } ]; %>
+<body class="dashboard-body">
+   <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+   <% const financialData = financialNotifications || { proximos: [], atrasados: [], total: 0 }; %>
+   <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
+   <% const visitAlert = typeof dashboardVisitAlert !== 'undefined'
+      ? dashboardVisitAlert
+      : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto crítico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
+   <% const adminShortcuts = [
+      { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
+      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova máquina com todos os dados operacionais.', tone: 'gold' },
+      { href: '/rotas', title: 'Rotas dos pontos', description: 'Monte o trajeto por bairro e abra a navegação no Google Maps ou no Waze.', tone: 'amber' },
+      { href: '/lancamentos', title: 'Lançamentos', description: 'Visualize entradas, saídas e movimentações registradas.', tone: 'slate' },
+      { href: '/lancamentos/add', title: 'Novo lançamento', description: 'Registre uma movimentação financeira rapidamente.', tone: 'green' },
+      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' }
+   ]; %>
+   <% const operationalShortcuts = [
+      { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green' },
+      { href: '/figurinhas/sangrias/add', title: 'Cadastro de figurinhas', description: 'Abrir o formulário operacional de figurinhas.', tone: 'blue' },
+      { href: '/pelucias/sangrias/add', title: 'Cadastro de pelúcias', description: 'Abrir o formulário operacional de pelúcias.', tone: 'violet' }
+   ]; %>
+   <% const overviewStats = [
+      { value: summary.totalAtivos, label: 'pontos ativos' },
+      { value: summary.bolinhasAtivas, label: 'pontos com bolinhas' },
+      { value: summary.figurinhasAtivas + summary.peluciasAtivas, label: 'outras frentes ativas' }
+   ]; %>
+   <% const financeTitle = financialData.atrasados.length
+      ? `${financialData.atrasados.length} vencimento(s) atrasado(s)`
+      : financialData.proximos.length
+         ? `${financialData.proximos.length} vencimento(s) próximos`
+         : 'Financeiro sem alerta urgente'; %>
+   <% const financeDescription = financialData.atrasados.length
+      ? `Há ${financialData.atrasados.length} item(ns) vencido(s) e ${financialData.proximos.length} a vencer nos próximos 5 dias.`
+      : financialData.proximos.length
+         ? `${financialData.proximos.length} vencimento(s) chegam nos próximos 5 dias.`
+         : 'Nenhum vencimento urgente nos próximos 5 dias.'; %>
+   <% const heroSummary = summary.totalAtivos
+      ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com o painel focado nas prioridades mais úteis do dia.`
+      : 'Sem pontos ativos cadastrados ainda. O primeiro cadastro libera a operação do sistema.'; %>
 
-                                       <main class="dashboard-shell">
-                                          <section class="dashboard-hero">
-                                             <div class="dashboard-hero-copy">
-                                                <div class="dashboard-brand-row">
-                                                   <a class="brand-mark dashboard-brand-mark" href="/painel"
-                                                      aria-label="VendMaster">
-                                                      <span class="brand-mark-primary">Vend</span><span
-                                                         class="brand-mark-accent">Master</span>
-                                                   </a>
-                                                   <form action="/logout" method="POST">
-                                                      <button type="submit" class="dashboard-logout-btn">Sair</button>
-                                                   </form>
-                                                </div>
-                                                <span class="dashboard-kicker">Painel central</span>
-                                                <h1>Painel de Controle</h1>
-                                                <p>Organize a operação, consulte os dados principais e avance rápido
-                                                   para as rotinas mais usadas do sistema.</p>
+   <main class="dashboard-shell">
+      <section class="dashboard-hero">
+         <div class="dashboard-hero-copy dashboard-hero-copy--full">
+            <div class="dashboard-brand-row">
+               <a href="/painel" aria-label="VendMaster" class="brand-mark dashboard-brand-mark">
+                  <span class="brand-mark-primary">Vend</span><span class="brand-mark-accent">Master</span>
+               </a>
+               <form action="/logout" method="POST">
+                  <button type="submit" class="dashboard-logout-btn">Sair</button>
+               </form>
+            </div>
 
-                                                <div class="dashboard-overview">
-                                                   <% overviewStats.forEach((item)=> { %>
-                                                      <div class="dashboard-overview-card">
-                                                         <strong>
-                                                            <%= item.value %>
-                                                         </strong>
-                                                         <span>
-                                                            <%= item.label %>
-                                                         </span>
-                                                      </div>
-                                                      <% }) %>
-                                                </div>
-                                             </div>
+            <div class="dashboard-hero-main">
+               <div class="dashboard-hero-copy-block">
+                  <span class="dashboard-kicker">Painel central</span>
+                  <h1>Painel de Controle</h1>
+                  <p><%= heroSummary %></p>
+               </div>
 
-                                             <div class="dashboard-user-card">
-                                                <span class="dashboard-user-label">Usuário ativo</span>
-                                                <strong>
-                                                   <%= usuario.username %>
-                                                </strong>
-                                                <small>Ambiente pronto para gestão administrativa e operacional.</small>
-                                                <div class="dashboard-user-meta">
-                                                   <span>Visão centralizada</span>
-                                                   <span>Navegação rápida</span>
-                                                </div>
-                                             </div>
-                                          </section>
+               <div class="dashboard-overview">
+                  <% overviewStats.forEach((item) => { %>
+                     <div class="dashboard-overview-card">
+                        <strong><%= item.value %></strong>
+                        <span><%= item.label %></span>
+                     </div>
+                  <% }) %>
+               </div>
+            </div>
 
-                                          <section class="dashboard-grid">
-                                             <article class="dashboard-panel dashboard-panel-primary">
-                                                <div class="dashboard-panel-header">
-                                                   <div>
-                                                      <span class="dashboard-section-tag">Administrativo</span>
-                                                      <h2>Rotinas de gestão</h2>
-                                                   </div>
-                                                   <p>Atalhos para cadastros, lançamentos e visão financeira.</p>
-                                                </div>
+            <div class="dashboard-hero-insights">
+               <a href="/lancamentos/vencimentos" class="dashboard-hero-card dashboard-hero-card-action">
+                  <span class="dashboard-hero-card-tag">Financeiro</span>
+                  <strong><%= financeTitle %></strong>
+                  <p><%= financeDescription %></p>
+                  <em>Ver alertas</em>
+               </a>
 
-                                                <div class="dashboard-shortcuts">
-                                                   <% adminShortcuts.forEach((item)=> { %>
-                                                      <a href="<%= item.href %>"
-                                                         class="dashboard-shortcut dashboard-shortcut-<%= item.tone %><%= item.disabled ? ' is-disabled' : '' %>">
-                                                         <div class="dashboard-shortcut-top">
-                                                            <span class="dashboard-shortcut-pill"><%- item.disabled
-                                                                  ? 'Em breve' : 'Acesso rápido' %></span>
-                                                            <span class="dashboard-shortcut-arrow"><%- item.disabled
-                                                                  ? '&bull;' : '&rarr;' %></span>
-                                                         </div>
-                                                         <h3><%- item.title %></h3>
-                                                         <p><%- item.description %></p>
-                                                      </a>
-                                                      <% }) %>
-                                                </div>
+               <a href="/rotas" class="dashboard-hero-card dashboard-hero-card-action">
+                  <span class="dashboard-hero-card-tag">Rotas</span>
+                  <strong>Planejar visita por bairro</strong>
+                  <p>Abra a central de rotas para montar o deslocamento do dia com Google Maps e Waze.</p>
+                  <em>Abrir rotas</em>
+               </a>
+            </div>
+         </div>
+      </section>
 
-                                                <% if (revenueShortcuts.length) { %>
-                                                   <div class="dashboard-revenue-strip">
-                                                      <div class="dashboard-revenue-copy">
-                                                         <span class="dashboard-section-tag">Receitas</span>
-                                                         <h3>Consolidados por produto</h3>
-                                                      </div>
-                                                      <div class="dashboard-revenue-links">
-                                                         <% revenueShortcuts.forEach((item)=> { %>
-                                                            <a href="<%= item.href %>"
-                                                               class="dashboard-mini-link dashboard-mini-link-<%= item.tone %>">
-                                                               <span><%- item.badge %></span>
-                                                               <strong><%- item.title %></strong>
-                                                            </a>
-                                                            <% }) %>
-                                                      </div>
-                                                   </div>
-                                                   <% } %>
-                                             </article>
+      <section class="dashboard-grid">
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Administrativo</span>
+                  <h2>Atalhos principais</h2>
+               </div>
+               <p>Acesso rápido ao que mais importa na rotina.</p>
+            </div>
 
-                                             <aside class="dashboard-panel dashboard-panel-secondary">
-                                                <div class="dashboard-panel-header">
-                                                   <div>
-                                                      <span class="dashboard-section-tag">Operacional</span>
-                                                      <h2>Fluxos do dia a dia</h2>
-                                                   </div>
-                                                   <p>Escolha o produto e siga para cadastro, histórico ou controle.</p>
-                                                </div>
+            <div class="dashboard-shortcuts">
+               <% adminShortcuts.forEach((item) => { %>
+                  <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
+                     <div class="dashboard-shortcut-top">
+                        <span class="dashboard-shortcut-pill">Acesso rápido</span>
+                        <span class="dashboard-shortcut-arrow">&rarr;</span>
+                     </div>
+                     <h3><%= item.title %></h3>
+                     <p><%= item.description %></p>
+                  </a>
+               <% }) %>
+            </div>
 
-                                                <% if (operationGroups.length) { %>
-                                                   <div class="dashboard-operations">
-                                                      <% operationGroups.forEach((group)=> { %>
-                                                         <section
-                                                            class="dashboard-operation-card dashboard-operation-card-<%= group.accent %>">
-                                                            <div class="dashboard-operation-head">
-                                                               <div>
-                                                                  <h3><%- group.title %></h3>
-                                                                  <p><%- group.subtitle %></p>
-                                                               </div>
-                                                            </div>
+            <div class="dashboard-panel-header" style="margin-top: 1.5rem;">
+               <div>
+                  <span class="dashboard-section-tag">Operacional</span>
+                  <h2>Cadastros dos produtos</h2>
+               </div>
+               <p>Esses acessos continuam disponíveis mesmo quando não há pontos ativos cadastrados.</p>
+            </div>
 
-                                                            <div class="dashboard-operation-actions">
-                                                               <% group.actions.forEach((action)=> { %>
-                                                                  <a href="<%= action.href %>"
-                                                                     class="dashboard-operation-link">
-                                                                     <strong><%- action.label %></strong>
-                                                                     <span><%- action.meta %></span>
-                                                                     <em>Abrir</em>
-                                                                  </a>
-                                                                  <% }) %>
-                                                            </div>
-                                                         </section>
-                                                         <% }) %>
-                                                   </div>
-                                                   <% } else { %>
-                                                      <div class="dashboard-empty-state">
-                                                         <h3>Nenhum produto operacional disponível</h3>
-                                                         <p>Assim que houver produtos habilitados, os atalhos
-                                                            operacionais aparecerão aqui.</p>
-                                                      </div>
-                                                      <% } %>
-                                             </aside>
-                                          </section>
-                                       </main>
+            <div class="dashboard-shortcuts">
+               <% operationalShortcuts.forEach((item) => { %>
+                  <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
+                     <div class="dashboard-shortcut-top">
+                        <span class="dashboard-shortcut-pill">Cadastro direto</span>
+                        <span class="dashboard-shortcut-arrow">&rarr;</span>
+                     </div>
+                     <h3><%= item.title %></h3>
+                     <p><%= item.description %></p>
+                  </a>
+               <% }) %>
+            </div>
+         </article>
 
-                                       <script>
-                                          document.addEventListener('DOMContentLoaded', async () => {
-                                             const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
-                                             const waitForSwalToClose = async () => {
-                                                if (typeof Swal === 'undefined') return;
+         <aside class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Atenção</span>
+                  <h2>Visitas críticas</h2>
+               </div>
+               <p>Um resumo direto para não deixar ponto parado por muito tempo.</p>
+            </div>
 
-                                                let guard = 0;
-                                                while (Swal.isVisible() && guard < 40) {
-                                                   await new Promise((resolve) => window.setTimeout(resolve, 150));
-                                                   guard += 1;
-                                                }
-                                             };
+            <div class="dashboard-visit-alert dashboard-visit-alert-<%= visitAlert.tone %>">
+               <span class="dashboard-visit-alert-tag">Mais de 30 dias sem visita</span>
+               <strong><%= visitAlert.title %></strong>
+               <p><%= visitAlert.description %></p>
 
-                                             const totalAlertas = <%= financialNotifications?.total || 0 %>;
-                                             const proximos = <%= financialNotifications?.proximos?.length || 0 %>;
-                                             const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
+               <% if (visitAlert.items.length) { %>
+                  <div class="dashboard-visit-alert-list">
+                     <% visitAlert.items.forEach((item) => { %>
+                        <div class="dashboard-visit-alert-item">
+                           <strong><%= item.estabelecimento %> <span>(<%= item.produto %>)</span></strong>
+                           <small><%= item.lastSeenLabel %> | <%= item.daysLabel %></small>
+                        </div>
+                     <% }) %>
+                  </div>
+               <% } %>
 
-                                             const painelAlertStorageKey = 'vendmaster-financial-alerts-dashboard-shown';
+               <a href="<%= visitAlert.actionHref %>" class="dashboard-visit-alert-action"><%= visitAlert.actionLabel %></a>
+            </div>
+         </aside>
+      </section>
+   </main>
 
-                                             if (!totalAlertas) return;
-                                             if (window.sessionStorage.getItem(painelAlertStorageKey) === 'true') return;
+   <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+         const sleep = ms => new Promise(resolve => window.setTimeout(resolve, ms));
+         const waitForSwalToClose = async () => {
+            if (typeof Swal === 'undefined') return;
 
-                                             const partes = [];
-                                             if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
-                                             if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
+            let guard = 0;
+            while (Swal.isVisible() && guard < 40) {
+               await new Promise(resolve => window.setTimeout(resolve, 150));
+               guard += 1;
+            }
+         };
 
-                                             window.sessionStorage.setItem(painelAlertStorageKey, 'true');
-                                             if (new URLSearchParams(window.location.search).has('success')) {
-                                                await sleep(2800);
-                                             }
-                                             await waitForSwalToClose();
+         const totalAlertas = <%= financialData.total || 0 %>;
+         const proximos = <%= financialData.proximos?.length || 0 %>;
+         const atrasados = <%= financialData.atrasados?.length || 0 %>;
 
-                                             const confirmed = await window.AppAlerts?.confirm({
-                                                title: 'Notificações financeiras',
-                                                text: `Você tem ${partes.join(' e ')}.`,
-                                                confirmButtonText: 'Ver alertas',
-                                                cancelButtonText: 'Depois'
-                                             });
+         const painelAlertStorageKey = 'vendmaster-financial-alerts-dashboard-shown';
 
-                                             if (confirmed) {
-                                                window.location.href = '/lancamentos/vencimentos';
-                                             }
-                                          });
-                                       </script>
-   </body>
+         if (!totalAlertas) return;
+         if (window.sessionStorage.getItem(painelAlertStorageKey) === 'true') return;
 
+         const partes = [];
+         if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
+         if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
+
+         window.sessionStorage.setItem(painelAlertStorageKey, 'true');
+         if (new URLSearchParams(window.location.search).has('success')) {
+            await sleep(2800);
+         }
+         await waitForSwalToClose();
+
+         const confirmed = await window.AppAlerts?.confirm({
+            title: 'Notificações financeiras',
+            text: `Você tem ${partes.join(' e ')}.`,
+            confirmButtonText: 'Ver alertas',
+            cancelButtonText: 'Depois'
+         });
+
+         if (confirmed) {
+            window.location.href = '/lancamentos/vencimentos';
+         }
+      });
+   </script>
+</body>
 </html>
-

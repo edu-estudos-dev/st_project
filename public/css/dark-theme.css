@@ -1,94 +1,93 @@
-/* dark-theme.css */
+/* ==========================================================================
+   DARK THEME FOUNDATION
+   ========================================================================== */
+
 body {
-   background-color: #121212;
-   color: #f1f1f1;
+  background:
+    radial-gradient(circle at top left, rgba(96, 165, 250, 0.2), transparent 24%),
+    linear-gradient(135deg, #071225 0%, #0b1d3a 52%, #12356b 100%);
+  color: #f8fafc;
 }
 
 .container-principal {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   height: 100vh;
-   background-color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: transparent;
 }
 
 .container-painel {
-   background-color: #1e1e1e;
-   min-height: 90vh;
-   width: 100%;
-   max-width: 1200px;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   gap: 10px;
-   padding: 2rem;
-   box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.8); /* Verde esmeralda */
-   border-radius: 10px;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 2rem;
+  border-radius: 18px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background:
+    linear-gradient(180deg, rgba(8, 19, 38, 0.96) 0%, rgba(14, 40, 82, 0.96) 100%);
+  box-shadow: 0 24px 60px rgba(2, 8, 23, 0.38);
 }
 
 .btn-adm,
 .btn-op {
-   height: 100%;
-   font-size: 1.2rem;
-   padding: 0.5rem;
+  height: 100%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.88);
 }
 
-.btn-adm {
-   background-color: #3a3a3a;
-   color: #f1f1f1;
-   border: 1px solid #555555;
-}
-
-.btn-adm:hover {
-   background-color: #555555;
-}
-
-.btn-op {
-   background-color: #3a3a3a;
-   color: #f1f1f1;
-   border: 1px solid #555555;
-}
-
+.btn-adm:hover,
 .btn-op:hover {
-   background-color: #555555;
+  background: rgba(30, 64, 175, 0.9);
 }
 
 .area-painel {
-   display: flex;
-   flex-wrap: wrap;
-   gap: 20px;
-   height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  height: 100%;
 }
 
 .administrativo,
 .operacional {
-   flex: 1;
-   height: 100%;
-   display: flex;
-   flex-direction: column;
-   padding: 1rem;
-   gap: 10px;
-}
-
-.administrativo {
-   background-color: #2c2c2c;
-   border: 1px solid #444444;
-}
-
-.operacional {
-   background-color: #2c2c2c;
-   border: 1px solid #444444;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  background: rgba(15, 23, 42, 0.76);
 }
 
 .area-painel > .col {
-   padding: 0;
+  padding: 0;
 }
 
 h1,
-h2 {
-   color: #f1f1f1;
+h2,
+.usuario-info {
+  color: #e2e8f0;
 }
 
-.usuario-info {
-   color: #d1d1d1;
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .container-principal {
+    padding: 1rem;
+  }
+
+  .container-painel {
+    min-height: auto;
+    padding: 1.25rem;
+  }
 }

@@ -14,7 +14,7 @@
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
                 <h1>Editar sangria de bolinhas</h1>
-                <p>Revise os dados da coleta com a mesma linguagem visual do cadastro, deixando os valores e observacoes mais faceis de conferir.</p>
+                <p>Revise os dados da coleta com a mesma linguagem visual do cadastro, deixando os valores e observações mais fáceis de conferir.</p>
             </div>
 
             <div class="form-hero-side">
@@ -37,7 +37,7 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Visita</span>
-                            <h2>Informacoes da coleta</h2>
+                            <h2>Informações da coleta</h2>
                             <p>Atualize estabelecimento, data e forma de pagamento vinculados a esta sangria.</p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <div>
                             <span class="form-section-tag">Financeiro</span>
                             <h2>Valores da sangria</h2>
-                            <p>Ao editar valor apurado e comissao, os valores do comerciante e liquido continuam sendo recalculados automaticamente.</p>
+                            <p>Ao editar valor apurado e comissão, os valores do comerciante e líquido continuam sendo recalculados automaticamente.</p>
                         </div>
                     </div>
 
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
-                            <label for="comissao">Comissao (%)</label>
+                            <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
                                 <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 col-xl-3">
-                            <label for="valor_liquido">Valor liquido</label>
+                            <label for="valor_liquido">Valor líquido</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
                                 <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
@@ -158,4 +158,3 @@
     </script>
 </body>
 </html>
-
