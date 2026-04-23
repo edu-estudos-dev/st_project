@@ -65,6 +65,9 @@
 }
 
 .homepage-topbar nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 1.5rem;
 }
 
@@ -732,16 +735,18 @@
   list-style: none;
   display: grid;
   gap: 0.7rem;
+  text-align: left;
 }
 
 .homepage-body .vm-product-points li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.65rem;
   color: #0f172a;
   font-size: 1.01rem;
   font-weight: 600;
   line-height: 1.6;
+  text-align: left;
 }
 
 .homepage-body .vm-product-points li::before {
@@ -796,11 +801,27 @@
 .homepage-body .vm-modules-title {
   margin-bottom: 1rem;
   font-size: clamp(2.4rem, 4vw, 3.3rem);
-  max-width: 15ch;
+  max-width: 16ch;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.12;
   color: var(--home-text);
+  text-wrap: balance;
+}
+
+.homepage-body .vm-transform .vm-section-heading .titulo-servicos,
+.homepage-body .vm-transform .vm-section-heading h2 {
+  max-width: 12ch;
+}
+
+.homepage-body .vm-proof .vm-section-heading .titulo-servicos,
+.homepage-body .vm-proof .vm-section-heading h2 {
+  max-width: 16ch;
+}
+
+.homepage-body .vm-contact .vm-section-heading .titulo-servicos,
+.homepage-body .vm-contact .vm-section-heading h2 {
+  max-width: 18ch;
 }
 
 .homepage-body .vm-modules-subtitle {
@@ -885,6 +906,10 @@
   background: rgba(8, 19, 38, 0.24);
   box-shadow: 0 24px 46px rgba(2, 8, 23, 0.16);
   backdrop-filter: blur(8px);
+}
+
+.homepage-body .vm-contact .vm-section-heading {
+  padding-top: 0.6rem;
 }
 
 /* ==========================================================================
@@ -1049,31 +1074,55 @@
 
 @media (max-width: 767.98px) {
   .homepage-body .vm-hero-left {
-    text-align: center;
-    align-items: center;
+    text-align: left;
+    align-items: flex-start;
   }
 
   .homepage-body .vm-hero-badge {
-    margin-inline: auto;
+    margin-inline: 0;
   }
 
   .homepage-topbar {
-    padding: 0.72rem 0.8rem;
-    border-radius: 20px;
+    display: grid;
+    gap: 0.9rem;
+    padding: 0.9rem 0.85rem;
+    border-radius: 22px;
   }
 
   .homepage-topbar nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.55rem;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .homepage-body .img-logo {
     height: 42px;
   }
 
+  .homepage-topbar li {
+    width: 100%;
+  }
+
   .homepage-topbar li > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0.65rem 0.75rem;
+    border-radius: 14px;
     font-size: 0.88rem;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .homepage-topbar .homepage-login-item {
+    grid-column: 1 / -1;
+  }
+
+  .homepage-topbar .homepage-login-item .homepage-login-link {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
   }
 
   .homepage-login-link {
@@ -1199,10 +1248,10 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2.35rem, 11vw, 3.15rem);
-    max-width: 10ch;
-    margin-inline: auto;
-    text-align: center;
+    font-size: clamp(2.2rem, 9vw, 2.7rem);
+    max-width: 8.6ch;
+    margin-inline: 0;
+    text-align: left;
   }
 
   .homepage-body .vm-hero-container {
@@ -1293,9 +1342,9 @@
   }
 
   .homepage-body .vm-hero-description {
-    max-width: 31ch;
-    margin-inline: auto;
-    text-align: center !important;
+    max-width: 32ch;
+    margin-inline: 0;
+    text-align: left !important;
   }
 
   .homepage-body .vm-product-card,
@@ -1345,6 +1394,7 @@
 
   .homepage-body .vm-product-points {
     gap: 0.55rem;
+    justify-items: start;
   }
 
   .homepage-body .vm-product-visual strong {
@@ -1367,8 +1417,11 @@
 
   .homepage-body .vm-modules-title {
     margin-bottom: 0.7rem;
-    font-size: clamp(1.95rem, 8vw, 2.45rem);
-    max-width: 100%;
+    font-size: clamp(1.9rem, 7vw, 2.2rem);
+    max-width: 16ch;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
   }
 
   .homepage-body .vm-module-card h3,
@@ -1390,8 +1443,12 @@
   }
 
   .homepage-body .vm-contact-form {
-    padding: 1.35rem 1rem;
+    padding: 1.55rem 1rem 1.35rem;
     border-radius: 22px;
+  }
+
+  .homepage-body .vm-contact .vm-section-heading {
+    padding-top: 0.55rem;
   }
 
   .homepage-body .vm-contact-layout {
@@ -1439,8 +1496,8 @@
 
 @media (max-width: 479.98px) {
   .homepage-body .vm-hero-left {
-    text-align: center;
-    align-items: center;
+    text-align: left;
+    align-items: flex-start;
   }
 
   .homepage-body .vm-hero {
@@ -1454,7 +1511,7 @@
 
   .homepage-topbar {
     width: calc(100% - 0.75rem);
-    padding: 0.65rem 0.72rem;
+    padding: 0.82rem 0.72rem;
     border-radius: 18px;
   }
 
@@ -1463,11 +1520,14 @@
   }
 
   .homepage-topbar nav ul {
-    gap: 0.4rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
   }
 
   .homepage-topbar li > a {
-    font-size: 0.8rem;
+    min-height: 38px;
+    padding: 0.58rem 0.6rem;
+    font-size: 0.78rem;
   }
 
   .homepage-login-link {
@@ -1530,18 +1590,18 @@
   }
 
   .homepage-body .vm-hero-title {
-    font-size: clamp(2rem, 10vw, 2.55rem);
-    max-width: 10.4ch;
-    margin-inline: auto;
-    text-align: center;
+    font-size: clamp(1.95rem, 8.5vw, 2.3rem);
+    max-width: 8.4ch;
+    margin-inline: 0;
+    text-align: left;
   }
 
   .homepage-body .vm-hero-description {
     font-size: 1rem;
     line-height: 1.68;
-    max-width: 29ch;
-    margin-inline: auto;
-    text-align: center !important;
+    max-width: 28ch;
+    margin-inline: 0;
+    text-align: left !important;
   }
 
   .homepage-body .vm-hero-buttons .btn {
@@ -1620,6 +1680,10 @@
     line-height: 1.6;
   }
 
+  .homepage-body .vm-product-points {
+    justify-items: start;
+  }
+
   .homepage-body .vm-before,
   .homepage-body .vm-after {
     padding: 1.05rem;
@@ -1657,7 +1721,7 @@
   }
 
   .homepage-body .vm-contact-form {
-    padding: 1.05rem 0.85rem;
+    padding: 1.3rem 0.85rem 1.05rem;
     border-radius: 18px;
   }
 
