@@ -4,7 +4,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "free:8081": "node scripts/free-port.js 8081",
+    "prestart": "npm run free:8081",
     "start": "node server.js",
+    "predev": "npm run free:8081",
     "dev": "node --watch server.js"
   },
   "keywords": [],
