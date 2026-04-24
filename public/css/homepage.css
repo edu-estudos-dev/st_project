@@ -1339,8 +1339,8 @@
 
   .homepage-body .vm-pain-card p,
   .homepage-body .vm-proof-item p {
-    font-size: 0.95rem;
-    line-height: 1.58;
+    font-size: 1.02rem;
+    line-height: 1.66;
   }
 
   .homepage-body .vm-transform-inner {
@@ -1391,8 +1391,8 @@
   .homepage-body .vm-section-heading h3,
   .homepage-body .vm-products-intro,
   .homepage-body .vm-modules-subtitle {
-    font-size: 1.03rem;
-    line-height: 1.62;
+    font-size: 1.08rem;
+    line-height: 1.68;
   }
 
   .homepage-body .vm-kicker {
@@ -1506,7 +1506,7 @@
   .homepage-body .vm-product-card p,
   .homepage-body .vm-module-card p,
   .homepage-body .vm-module-card--highlight p {
-    font-size: 1.04rem;
+    font-size: 1.1rem;
   }
 
   .homepage-body .vm-hero-description {
@@ -1543,8 +1543,8 @@
   }
 
   .homepage-body .vm-feature-card p {
-    font-size: 1rem;
-    line-height: 1.66;
+    font-size: 1.06rem;
+    line-height: 1.72;
   }
 
   .homepage-body .vm-product-visual {
@@ -1559,8 +1559,8 @@
 
   .homepage-body .vm-product-card p,
   .homepage-body .vm-product-points li {
-    font-size: 1rem;
-    line-height: 1.62;
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   .homepage-body .vm-product-points {
@@ -1608,8 +1608,8 @@
 
   .homepage-body .vm-module-card p,
   .homepage-body .vm-module-card--highlight p {
-    font-size: 1rem;
-    line-height: 1.66;
+    font-size: 1.06rem;
+    line-height: 1.72;
   }
 
   .homepage-body .vm-module-icon,
@@ -1783,7 +1783,8 @@
   .homepage-body .vm-section-heading h3,
   .homepage-body .vm-products-intro,
   .homepage-body .vm-modules-subtitle {
-    font-size: 0.98rem;
+    font-size: 1.04rem;
+    line-height: 1.66;
   }
 
   .homepage-body .vm-hero-title {
@@ -1797,8 +1798,8 @@
   }
 
   .homepage-body .vm-hero-description {
-    font-size: 1rem;
-    line-height: 1.62;
+    font-size: 1.08rem;
+    line-height: 1.7;
     max-width: 100%;
     margin: 0;
     margin-inline: 0;
@@ -1916,8 +1917,8 @@
   .homepage-body .vm-module-card--highlight p,
   .homepage-body .vm-proof-item p,
   .homepage-body .vm-product-points li {
-    font-size: 0.96rem;
-    line-height: 1.6;
+    font-size: 1.08rem;
+    line-height: 1.72;
   }
 
   .homepage-body .vm-product-points {
