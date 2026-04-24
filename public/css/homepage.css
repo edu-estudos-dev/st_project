@@ -1261,6 +1261,12 @@
     padding: 48px 0;
   }
 
+  .homepage-body #solucao,
+  .homepage-body .vm-products-section,
+  .homepage-body .vm-proof {
+    display: none;
+  }
+
   .homepage-body #solucao {
     width: calc(100% - 0.75rem);
     margin-inline: auto;
@@ -1316,6 +1322,10 @@
     min-height: auto;
     padding: 1.15rem 1rem;
     border-radius: 20px;
+  }
+
+  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n + 5) {
+    display: none;
   }
 
   .homepage-body .vm-pain-card h4 {
@@ -1591,6 +1601,11 @@
     font-size: 1.24rem;
   }
 
+  .homepage-body .vm-modules-grid .vm-module-card:nth-child(n + 5),
+  .homepage-body .vm-modules-grid .vm-module-card--highlight:nth-child(n + 5) {
+    display: none;
+  }
+
   .homepage-body .vm-module-card p,
   .homepage-body .vm-module-card--highlight p {
     font-size: 1rem;
@@ -1712,6 +1727,12 @@
 
   .homepage-body .vm-section {
     padding: 40px 0;
+  }
+
+  .homepage-body #solucao,
+  .homepage-body .vm-products-section,
+  .homepage-body .vm-proof {
+    display: none;
   }
 
   .homepage-body #solucao {
@@ -1855,6 +1876,10 @@
     overflow: hidden;
   }
 
+  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n + 5) {
+    display: none;
+  }
+
   .homepage-body .vm-pain-marker {
     width: 38px;
     height: 38px;
@@ -1868,6 +1893,11 @@
   .homepage-body .vm-module-card h3,
   .homepage-body .vm-module-card--highlight h3 {
     font-size: 1.12rem;
+  }
+
+  .homepage-body .vm-modules-grid .vm-module-card:nth-child(n + 5),
+  .homepage-body .vm-modules-grid .vm-module-card--highlight:nth-child(n + 5) {
+    display: none;
   }
 
   .homepage-body .vm-pain-card h4 {
