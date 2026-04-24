@@ -1319,20 +1319,12 @@
   }
 
   .homepage-body .vm-pain-card h4 {
-    font-size: 1.18rem;
-    max-width: 18ch;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(2) h4 {
-    max-width: 20ch;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(3) h4 {
-    max-width: none;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(6) h4 {
-    max-width: 22ch;
+    width: 100%;
+    max-width: 100%;
+    font-size: 1.12rem;
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
   .homepage-body .vm-pain-card p,
@@ -1879,19 +1871,12 @@
   }
 
   .homepage-body .vm-pain-card h4 {
-    max-width: 17ch;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(2) h4 {
-    max-width: 19ch;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(3) h4 {
-    max-width: none;
-  }
-
-  .homepage-body .vm-pain-card:nth-child(6) h4 {
-    max-width: 21ch;
+    width: 100%;
+    max-width: 100%;
+    font-size: 1.08rem;
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
   .homepage-body .vm-feature-card p,
