@@ -1165,6 +1165,15 @@
 }
 
 @media (max-width: 767.98px) {
+  .homepage-body,
+  .homepage-body * {
+    box-sizing: border-box;
+  }
+
+  .homepage-body {
+    overflow-x: hidden;
+  }
+
   .homepage-body .vm-hero-left {
     text-align: left;
     align-items: flex-start;
@@ -1175,6 +1184,9 @@
     font-size: 0.68rem;
     padding: 0.44rem 0.86rem;
     line-height: 1.35;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .homepage-topbar {
@@ -1218,7 +1230,8 @@
     padding: 0.52rem 0.5rem;
     border-radius: 999px;
     font-size: 0.76rem;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     background: rgba(255, 255, 255, 0.78);
     border: 1px solid rgba(148, 163, 184, 0.16);
   }
@@ -1387,6 +1400,7 @@
     padding: 1.15rem 1rem 1.3rem;
     border-radius: 24px;
     gap: 1.15rem;
+    max-width: 100%;
   }
 
   .homepage-body .vm-hero-buttons {
@@ -1432,6 +1446,8 @@
   .homepage-body .vm-panel {
     padding: 1.3rem;
     border-radius: 22px;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .homepage-body .vm-panel-header {
@@ -1448,7 +1464,8 @@
 
   .homepage-body .vm-live {
     font-size: 0.82rem;
-    white-space: nowrap;
+    white-space: normal;
+    text-align: right;
   }
 
   .homepage-body .vm-panel-metrics {
@@ -1491,6 +1508,8 @@
   .homepage-body .vm-module-card--highlight {
     min-height: auto;
     padding: 1.3rem;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .homepage-body .vm-feature-card {
@@ -1634,6 +1653,15 @@
 }
 
 @media (max-width: 479.98px) {
+  .homepage-body,
+  .homepage-body * {
+    box-sizing: border-box;
+  }
+
+  .homepage-body {
+    overflow-x: hidden;
+  }
+
   .homepage-body .vm-hero-left {
     text-align: left;
     align-items: flex-start;
@@ -1646,6 +1674,7 @@
   .homepage-body .vm-hero-container,
   .homepage-body .vm-contact-form {
     width: calc(100% - 0.75rem);
+    max-width: 100%;
   }
 
   .homepage-topbar {
@@ -1653,6 +1682,7 @@
     gap: 0.62rem;
     padding: 0.76rem 0.72rem 0.82rem;
     border-radius: 18px;
+    max-width: 100%;
   }
 
   .homepage-body .img-logo {
@@ -1684,12 +1714,14 @@
     width: calc(100% - 0.5rem);
     padding: 1.4rem 0.82rem 1rem;
     border-radius: 22px;
+    max-width: 100%;
   }
 
   .homepage-body .vm-products-section {
     width: calc(100% - 0.5rem);
     padding-inline: 0.82rem;
     border-radius: 22px;
+    max-width: 100%;
   }
 
   .homepage-body #solucao .vm-section-heading {
@@ -1781,6 +1813,8 @@
 
   .homepage-body .vm-panel {
     padding: 1.1rem;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .homepage-body .vm-panel-header strong {
@@ -1813,6 +1847,8 @@
   .homepage-body .vm-proof-item {
     padding: 1.05rem;
     border-radius: 18px;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .homepage-body .vm-pain-marker {
