@@ -14,14 +14,6 @@ class LancamentoModel {
         this.paymentColumnReady = false;
     }
 
-    getManualLaunchFilter = () => `
-        NOT (
-            usuario = 'sistema'
-            AND tipo_de_lancamento = 'receita_dos_pontos'
-            AND descricao ILIKE 'Receita consolidada do produto %'
-        )
-    `;
-
     async ensurePaymentColumn() {
         if (this.paymentColumnReady) return;
 
@@ -176,7 +168,7 @@ class LancamentoModel {
         const SQL = `
         SELECT *
         FROM lancamentos
-        WHERE ${this.getManualLaunchFilter()}
+        ORDER BY data ASC, id ASC
         `;
         const result = await connection.query(SQL);
 
@@ -191,7 +183,6 @@ class LancamentoModel {
         const SQL = `
         SELECT *
         FROM lancamentos
-        WHERE ${this.getManualLaunchFilter()}
         ORDER BY COALESCE(ultima_edicao, dia_do_cadastro, data) DESC, id DESC
         LIMIT $1
         `;
@@ -286,8 +277,7 @@ class LancamentoModel {
         const SQL = `
         SELECT *
         FROM lancamentos
-        WHERE ${this.getManualLaunchFilter()}
-          AND (
+        WHERE (
             tipo_de_lancamento ILIKE $1
             OR entrada_saida ILIKE $2
             OR descricao ILIKE $3

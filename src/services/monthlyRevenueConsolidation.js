@@ -22,23 +22,36 @@ const MIN_SYNC_INTERVAL_MS = 60 * 1000;
 
 let runningSync = null;
 let lastSyncAt = 0;
-
-const isClosedMonth = (ano, mes, referenceDate) => {
-  const currentYear = referenceDate.getFullYear();
-  const currentMonth = referenceDate.getMonth() + 1;
-
-  return Number(ano) < currentYear || (Number(ano) === currentYear && Number(mes) < currentMonth);
-};
+let lastSyncedReferenceKey = null;
 
 const getLastDayOfMonth = (ano, mes) => {
   const date = new Date(Number(ano), Number(mes), 0);
   return date.toISOString().split('T')[0];
 };
 
+const getPreviousMonthReference = (referenceDate) => {
+  const year = referenceDate.getFullYear();
+  const month = referenceDate.getMonth() + 1;
+
+  if (month === 1) {
+    return { ano: year - 1, mes: 12 };
+  }
+
+  return { ano: year, mes: month - 1 };
+};
+
+const getReferenceKey = ({ ano, mes }) => `${ano}-${String(mes).padStart(2, '0')}`;
+
 const buildDescription = (produto, ano, mes) => {
   const mesIndex = Number(mes) - 1;
   const mesTexto = MONTH_NAMES[mesIndex] || String(mes).padStart(2, '0');
-  return `Receita consolidada do produto ${produto} referente a ${mesTexto}/${ano}.`;
+  const labels = {
+    bolinhas: 'bolinhas',
+    figurinhas: 'figurinhas',
+    pelucias: 'pelúcias'
+  };
+
+  return `Lucro Líquido das ${labels[produto] || produto} do mês ${mesTexto} no ano ${ano}`;
 };
 
 const upsertConsolidatedRevenue = async ({ produto, ano, mes, total }) => {
@@ -69,13 +82,15 @@ const upsertConsolidatedRevenue = async ({ produto, ano, mes, total }) => {
   });
 };
 
-const syncClosedMonths = async (produto, rows, referenceDate) => {
+const syncPreviousMonth = async (produto, rows, referenceDate) => {
+  const { ano: targetAno, mes: targetMes } = getPreviousMonthReference(referenceDate);
+
   for (const row of rows) {
     const ano = Number(row.ano);
     const mes = Number(row.mes);
     const total = Number(row.total || 0);
 
-    if (!total || !isClosedMonth(ano, mes, referenceDate)) {
+    if (!total || ano !== targetAno || mes !== targetMes) {
       continue;
     }
 
@@ -83,30 +98,35 @@ const syncClosedMonths = async (produto, rows, referenceDate) => {
   }
 };
 
-export const syncMonthlyRevenueConsolidation = async () => {
+export const syncMonthlyRevenueConsolidation = async ({ referenceDate = new Date(), force = false } = {}) => {
   const now = Date.now();
+  const referenceKey = getReferenceKey(getPreviousMonthReference(referenceDate));
 
   if (runningSync) {
     return runningSync;
   }
 
-  if (now - lastSyncAt < MIN_SYNC_INTERVAL_MS) {
+  if (!force && lastSyncedReferenceKey === referenceKey) {
+    return;
+  }
+
+  if (!force && now - lastSyncAt < MIN_SYNC_INTERVAL_MS) {
     return;
   }
 
   runningSync = (async () => {
-    const referenceDate = new Date();
     const [bolinhas, figurinhas, pelucias] = await Promise.all([
       BolinhasModel.getMonthlyRevenue(),
       FigurinhasModel.getMonthlyRevenue(),
       PeluciasModel.getMonthlyRevenue()
     ]);
 
-    await syncClosedMonths('bolinhas', bolinhas, referenceDate);
-    await syncClosedMonths('figurinhas', figurinhas, referenceDate);
-    await syncClosedMonths('pelucias', pelucias, referenceDate);
+    await syncPreviousMonth('bolinhas', bolinhas, referenceDate);
+    await syncPreviousMonth('figurinhas', figurinhas, referenceDate);
+    await syncPreviousMonth('pelucias', pelucias, referenceDate);
 
     lastSyncAt = Date.now();
+    lastSyncedReferenceKey = referenceKey;
   })().finally(() => {
     runningSync = null;
   });
