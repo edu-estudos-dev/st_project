@@ -23,25 +23,35 @@
 
         <main class="list-stage">
             <section class="list-panel">
-                <div class="dashboard-panel-header">
+                <div class="dashboard-panel-header route-planner-header">
                     <div>
                         <span class="dashboard-section-tag">Planejamento</span>
                         <h2>Montar rota do dia</h2>
                     </div>
-                    <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
                 </div>
 
-                <form action="/rotas" method="GET" class="modern-form route-planner-form">
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6">
-                            <label for="bairros">Bairros</label>
-                            <select class="form-select" id="bairros" name="bairros" multiple required size="5">
-                                <% bairros.forEach((item) => { %>
-                                    <option value="<%= item.bairro %>" <%= selectedBairros?.includes(item.bairro) ? 'selected' : '' %>><%= item.bairro %></option>
-                                <% }) %>
-                            </select>
+                <form action="/rotas" method="GET" class="modern-form route-planner-form" id="routePlannerForm">
+                    <div class="route-planner-grid">
+                        <div class="route-planner-field route-planner-field-neighborhood">
+                            <div class="route-neighborhood-header">
+                                <label>Bairros</label>
+                            </div>
+                            <div class="route-neighborhood-picker" data-route-neighborhood-picker>
+                                <button
+                                    type="button"
+                                    class="route-neighborhood-trigger"
+                                    data-route-neighborhood-trigger
+                                    aria-expanded="false"
+                                >
+                                    <span data-route-neighborhood-summary>Selecione os bairros</span>
+                                    <i class="bi bi-geo-alt"></i>
+                                </button>
+                            </div>
+                            <small class="route-neighborhood-count" data-route-neighborhood-count>
+                                <%= selectedBairros?.length || 0 %> bairro(s) selecionado(s)
+                            </small>
                         </div>
-                        <div class="col-12 col-md-4">
+                        <div class="route-planner-field">
                             <label for="produto">Produto</label>
                             <select class="form-select" id="produto" name="produto">
                                 <% produtoOptions.forEach((option) => { %>
@@ -49,8 +59,17 @@
                                 <% }) %>
                             </select>
                         </div>
-                        <div class="col-12 col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn-modern w-100">
+                    </div>
+                    <div class="route-planner-footer">
+                        <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
+                        <div class="route-planner-actions">
+                            <% if (routeItems?.length) { %>
+                                <button type="button" class="btn-modern-secondary route-planner-pdf-button" id="routePdfButton">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                    <span>Gerar PDF</span>
+                                </button>
+                            <% } %>
+                            <button type="submit" class="btn-modern route-planner-submit-button">
                                 <i class="bi bi-search"></i>
                                 <span>Gerar rota</span>
                             </button>
@@ -193,6 +212,10 @@
                                 data-waze="<%= item.wazeLink || '' %>"
                                 data-latitude="<%= item.latitude ?? '' %>"
                                 data-longitude="<%= item.longitude ?? '' %>"
+                                data-product="<%= item.produtoLabel %>"
+                                data-neighborhood="<%= item.bairro || '' %>"
+                                data-key="<%= item.chave || '-' %>"
+                                data-machine="<%= item.maquina || '-' %>"
                             >
                                 <div class="route-point-copy">
                                     <span class="route-point-order" data-route-order><%= item.orderLabel %></span>
@@ -220,6 +243,171 @@
         </main>
     </div>
 
+    <div class="route-neighborhood-modal-backdrop" data-route-neighborhood-backdrop></div>
+    <section class="route-neighborhood-modal" data-route-neighborhood-modal aria-hidden="true">
+        <div class="route-neighborhood-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="routeNeighborhoodModalTitle">
+            <div class="route-neighborhood-modal-header">
+                <div>
+                    <span>Planejamento</span>
+                    <h2 id="routeNeighborhoodModalTitle">Selecionar bairros</h2>
+                </div>
+                <button type="button" class="route-neighborhood-modal-close" data-route-neighborhood-close aria-label="Fechar seleção de bairros">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="route-neighborhood-modal-tools">
+                <div class="route-neighborhood-search">
+                    <i class="bi bi-search"></i>
+                    <input type="search" placeholder="Filtrar bairros" data-route-neighborhood-filter aria-label="Filtrar bairros">
+                </div>
+                <div class="route-neighborhood-actions" aria-label="Acoes de selecao de bairros">
+                    <button type="button" data-route-select-all>Todos</button>
+                    <button type="button" data-route-clear-selection>Limpar</button>
+                </div>
+            </div>
+
+            <div class="route-neighborhood-list" data-route-neighborhood-list>
+                <% bairros.forEach((item, index) => { %>
+                    <% const bairroId = `bairro-${index}`; %>
+                    <label class="route-neighborhood-option" for="<%= bairroId %>" data-route-neighborhood-option>
+                        <input
+                            type="checkbox"
+                            id="<%= bairroId %>"
+                            name="bairros"
+                            value="<%= item.bairro %>"
+                            form="routePlannerForm"
+                            <%= selectedBairros?.includes(item.bairro) ? 'checked' : '' %>
+                        >
+                        <span><%= item.bairro %></span>
+                    </label>
+                <% }) %>
+            </div>
+
+            <div class="route-neighborhood-modal-footer">
+                <span data-route-neighborhood-modal-count><%= selectedBairros?.length || 0 %> bairro(s) selecionado(s)</span>
+                <button type="button" class="btn-route-secondary" data-route-neighborhood-apply>
+                    <i class="bi bi-check2"></i>
+                    <span>Aplicar seleção</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <% if (routeItems?.length) { %>
+        <script src="/vendor/jspdf/jspdf.umd.min.js"></script>
+        <script src="/vendor/jspdf-autotable/jspdf.plugin.autotable.min.js"></script>
+    <% } %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const plannerForm = document.querySelector('.route-planner-form');
+            const picker = document.querySelector('[data-route-neighborhood-picker]');
+            const trigger = document.querySelector('[data-route-neighborhood-trigger]');
+            const summaryEl = document.querySelector('[data-route-neighborhood-summary]');
+            const countEl = document.querySelector('[data-route-neighborhood-count]');
+            const modalCountEl = document.querySelector('[data-route-neighborhood-modal-count]');
+            const modal = document.querySelector('[data-route-neighborhood-modal]');
+            const backdrop = document.querySelector('[data-route-neighborhood-backdrop]');
+            const closeButton = document.querySelector('[data-route-neighborhood-close]');
+            const applyButton = document.querySelector('[data-route-neighborhood-apply]');
+            const filterInput = document.querySelector('[data-route-neighborhood-filter]');
+            const optionLabels = Array.from(document.querySelectorAll('[data-route-neighborhood-option]'));
+            const selectAllButton = document.querySelector('[data-route-select-all]');
+            const clearButton = document.querySelector('[data-route-clear-selection]');
+            const checkboxes = Array.from(document.querySelectorAll('input[name="bairros"]'));
+
+            if (!plannerForm || !picker || !trigger || !modal || !backdrop || !checkboxes.length) return;
+
+            const openNeighborhoodModal = () => {
+                document.body.classList.add('route-neighborhood-modal-open');
+                modal.setAttribute('aria-hidden', 'false');
+                picker.classList.remove('route-neighborhood-picker-empty');
+                trigger.setAttribute('aria-expanded', 'true');
+                setTimeout(() => filterInput?.focus(), 80);
+            };
+
+            const closeNeighborhoodModal = () => {
+                document.body.classList.remove('route-neighborhood-modal-open');
+                modal.setAttribute('aria-hidden', 'true');
+                trigger.setAttribute('aria-expanded', 'false');
+            };
+
+            const syncNeighborhoodState = () => {
+                const selected = checkboxes.filter((checkbox) => checkbox.checked);
+                const selectedCount = selected.length;
+
+                if (summaryEl) {
+                    if (!selectedCount) {
+                        summaryEl.textContent = 'Selecione os bairros';
+                    } else if (selectedCount <= 2) {
+                        summaryEl.textContent = selected.map((checkbox) => checkbox.value).join(', ');
+                    } else {
+                        summaryEl.textContent = `${selectedCount} bairros selecionados`;
+                    }
+                }
+
+                if (countEl) {
+                    countEl.textContent = `${selectedCount} bairro(s) selecionado(s)`;
+                }
+
+                if (modalCountEl) {
+                    modalCountEl.textContent = `${selectedCount} bairro(s) selecionado(s)`;
+                }
+            };
+
+            trigger.addEventListener('click', openNeighborhoodModal);
+
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', syncNeighborhoodState);
+            });
+
+            selectAllButton?.addEventListener('click', () => {
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = true;
+                });
+                syncNeighborhoodState();
+            });
+
+            clearButton?.addEventListener('click', () => {
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                });
+                syncNeighborhoodState();
+            });
+
+            filterInput?.addEventListener('input', () => {
+                const term = filterInput.value.trim().toUpperCase();
+                optionLabels.forEach((label) => {
+                    const value = label.textContent.trim().toUpperCase();
+                    label.hidden = term && !value.includes(term);
+                });
+            });
+
+            closeButton?.addEventListener('click', closeNeighborhoodModal);
+            applyButton?.addEventListener('click', closeNeighborhoodModal);
+            backdrop.addEventListener('click', closeNeighborhoodModal);
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeNeighborhoodModal();
+                }
+            });
+
+            plannerForm.addEventListener('submit', (event) => {
+                const hasSelectedNeighborhood = checkboxes.some((checkbox) => checkbox.checked);
+                if (hasSelectedNeighborhood) return;
+
+                event.preventDefault();
+                window.AppAlerts?.error('Selecione ao menos um bairro para gerar a rota.');
+                picker.classList.add('route-neighborhood-picker-empty');
+                openNeighborhoodModal();
+            });
+
+            syncNeighborhoodState();
+        });
+    </script>
+
     <% if (routeItems?.length) { %>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -237,6 +425,7 @@
                 const progressDoneEl = document.getElementById('routeProgressDone');
                 const progressPendingEl = document.getElementById('routeProgressPending');
                 const progressModeEl = document.getElementById('routeProgressMode');
+                const routePdfButton = document.getElementById('routePdfButton');
 
                 const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairros || []) %>}:${<%- JSON.stringify(selectedProduto) %>}`;
 
@@ -530,6 +719,44 @@
                     reorderCards();
                 };
 
+                const generateRoutePdf = () => {
+                    const { jsPDF } = window.jspdf || {};
+                    if (!jsPDF) return;
+
+                    const doc = new jsPDF();
+                    const orderedCards = Array.from(document.querySelectorAll('[data-route-item]'));
+                    const bairros = new Set();
+                    const data = orderedCards.map((card, index) => {
+                        bairros.add(card.dataset.neighborhood || '-');
+                        return [
+                            `${index + 1}`,
+                            card.dataset.name || '-',
+                            card.dataset.address || '-',
+                            card.dataset.key || '-',
+                            card.dataset.machine || '-',
+                            card.dataset.neighborhood || '-',
+                            card.dataset.product || '-'
+                        ];
+                    });
+
+                    doc.setFontSize(14);
+                    doc.text(`Rota de visitas: ${Array.from(bairros).join(', ')}`, 14, 18);
+                    doc.setFontSize(9);
+                    doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, 14, 25);
+                    doc.autoTable({
+                        head: [['#', 'Estabelecimento', 'Endereco', 'Chave', 'Maquina', 'Bairro', 'Produto']],
+                        body: data,
+                        styles: { fontSize: 8, halign: 'center' },
+                        columnStyles: {
+                            1: { halign: 'left' },
+                            2: { halign: 'left' }
+                        },
+                        margin: { top: 32 },
+                        headStyles: { fillColor: [37, 99, 235] }
+                    });
+                    doc.save('Rota_de_Visitas.pdf');
+                };
+
                 startButton.addEventListener('click', async () => {
                     try {
                         startButton.disabled = true;
@@ -576,6 +803,8 @@
                     if (!confirmed) return;
                     resetRouteState();
                 });
+
+                routePdfButton?.addEventListener('click', generateRoutePdf);
 
                 renderQueue();
                 updateProgress();

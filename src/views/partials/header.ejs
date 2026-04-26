@@ -13,7 +13,7 @@
         <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav mx-auto">
+            <ul class="navbar-nav mx-auto app-primary-nav">
                 <li class="nav-item dropdown">
                     <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -218,7 +218,6 @@
                 <form action="/search" class="app-nav-search" role="search" method="POST" novalidate>
                     <i class="bi bi-search"></i>
                     <input name="termo" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar no sistema">
-                    <button class="btn btn-outline-light" type="submit">Buscar</button>
                 </form>
                 <div class="nav-account-menu">
                     <button type="button" class="nav-account-toggle" id="accountMenuToggle" aria-expanded="false">
@@ -309,7 +308,7 @@
         display: flex;
         align-items: center;
         gap: 0.45rem;
-        min-width: 250px;
+        min-width: 275px;
     }
 
     .app-nav-search > i {
@@ -323,14 +322,6 @@
         min-height: 40px;
         padding-left: 2.25rem;
         border-radius: 12px;
-    }
-
-    .app-nav-search .btn {
-        min-height: 40px;
-        padding-inline: 0.9rem;
-        border-color: rgba(37, 99, 235, 0.28);
-        color: #1d4ed8;
-        background: #eff6ff;
     }
 
     .nav-alert-link,
@@ -701,6 +692,18 @@
     }
 
     @media (min-width: 992px) {
+        .app-nav .container-fluid {
+            position: relative;
+        }
+
+        .app-primary-nav {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+        }
+
         .dropdown-submenu:hover > .dropdown-menu {
             display: block;
         }
@@ -731,8 +734,9 @@
             flex: 1;
         }
 
-        .app-nav-search .btn {
-            display: none;
+        .app-primary-nav {
+            position: static;
+            transform: none;
         }
 
         .nav-account-dropdown {

@@ -13,8 +13,9 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-diagram-3"></i> Operacional</span>
                 <h1>Controle geral das bolinhas</h1>
-                <p>Filtre bairros, destaque pontos que precisam de visita e acompanhe os dados comerciais mais importantes da operação.</p>
+                <p>Acompanhe os pontos que precisam de visita e monitore os dados mais importantes da operação.</p>
             </div>
+
             <div class="list-hero-side">
                 <div class="list-stat"><strong>Pontos</strong><span><%= estabelecimentos.length %> registros</span></div>
                 <div class="list-stat"><strong>Produto</strong><span>Bolinhas</span></div>
@@ -23,56 +24,30 @@
 
         <main class="list-stage">
             <section class="list-panel">
-                <div class="list-toolbar">
+
+                <div class="list-toolbar roteiro-toolbar">
                     <div class="list-toolbar-copy">
-                        <h2>Roteiro comercial</h2>
-                        <p>Selecione os pontos que precisam de visita, filtre por bairro e gere rapidamente o PDF da rota.</p>
+                        <h2>Pontos pendentes de visita</h2>
+                    </div>
+
+                    <div class="dias-sangria-top">
+                        <label for="diasSangria" class="form-label fw-bold">Dias para fazer a sangria</label>
+                        <input
+                            type="number"
+                            class="form-control text-center fw-bold"
+                            id="diasSangria"
+                            name="diasSangria"
+                            min="1"
+                            required
+                        >
                     </div>
                 </div>
-
-                <form id="controleGeralForm" class="mb-4">
-                    <div class="filter-toolbar">
-                        <div>
-                            <label for="bairroSelect" class="form-label fw-bold">Bairro</label>
-                            <select class="form-select text-center fw-bold" id="bairroSelect" name="bairro" required onchange="filtrarPorBairro()">
-                                <option value="" selected disabled hidden>Selecione um bairro para criar a rota</option>
-                                <option value="mostrar_todos">Mostrar todos a sangrar</option>
-                                <%
-                                const diasSangria = 7;
-                                const bairrosSangria = new Set();
-                                estabelecimentos.forEach(function(estabelecimento) {
-                                    const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
-                                    const hoje = new Date();
-                                    const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : Number.POSITIVE_INFINITY;
-                                    if (diferencaDias > diasSangria && estabelecimento.bairro) {
-                                        bairrosSangria.add(estabelecimento.bairro);
-                                    }
-                                });
-                                bairrosSangria.forEach(function(bairro) {
-                                %>
-                                    <option value="<%= bairro %>"><%= bairro %></option>
-                                <% }); %>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="diasSangria" class="form-label fw-bold">Dias para fazer a sangria</label>
-                            <input type="number" class="form-control text-center fw-bold" id="diasSangria" name="diasSangria" required oninput="salvarDiasSangria()">
-                        </div>
-
-                        <div class="toolbar-actions">
-                            <button type="button" class="btn-modern-secondary" onclick="mostrarTodos()">Mostrar todos</button>
-                            <button type="button" class="btn-modern" onclick="gerarPDF()">Gerar PDF</button>
-                        </div>
-                    </div>
-                </form>
 
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
                         <table class="modern-table">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="selectAll" onclick="selecionarTodos(this)"></th>
                                     <th>Estabelecimento</th>
                                     <th>Chave</th>
                                     <th>Máquina</th>
@@ -82,15 +57,24 @@
                                     <th>Situação</th>
                                 </tr>
                             </thead>
+
                             <tbody id="tabelaEstabelecimentos">
                                 <% estabelecimentos.forEach(function(estabelecimento) {
                                     const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
                                     const hoje = new Date();
                                     const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
                                 %>
-                                <tr data-diferenca-dias="<%= diferencaDias %>" data-sem-visita="<%= data ? 'false' : 'true' %>" data-bairro="<%= estabelecimento.bairro || '' %>">
-                                    <td><input type="checkbox" class="checkbox-selecao" id="checkbox_<%= estabelecimento.id %>"></td>
-                                    <td><label for="checkbox_<%= estabelecimento.id %>" class="table-title-cell"><%= estabelecimento.estabelecimento %></label></td>
+
+                                <tr
+                                    data-diferenca-dias="<%= diferencaDias %>"
+                                    data-sem-visita="<%= data ? 'false' : 'true' %>"
+                                >
+                                    <td>
+                                        <span class="table-title-cell">
+                                            <%= estabelecimento.estabelecimento %>
+                                        </span>
+                                    </td>
+
                                     <td><%= estabelecimento.chave || '-' %></td>
                                     <td><%= estabelecimento.maquina || '-' %></td>
                                     <td class="table-cell-wrap"><%= estabelecimento.endereco || '-' %></td>
@@ -98,101 +82,97 @@
                                     <td class="dias-passados"><%= data ? diferencaDias : 'Sem visita' %></td>
                                     <td class="situacao"></td>
                                 </tr>
+
                                 <% }); %>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </section>
         </main>
     </div>
 
-    <script src="/vendor/jspdf/jspdf.umd.min.js"></script>
-    <script src="/vendor/jspdf-autotable/jspdf.plugin.autotable.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
+    function obterDiasSangria() {
+        const input = document.getElementById('diasSangria');
+        const valor = input.value.trim();
+
+        if (valor === '') {
+            return 30;
+        }
+
+        const numero = Number(valor);
+
+        if (Number.isNaN(numero) || numero <= 0) {
+            return 30;
+        }
+
+        return numero;
+    }
+
     function salvarDiasSangria() {
-        const diasSangria = document.getElementById('diasSangria').value;
-        localStorage.setItem('diasSangria', diasSangria);
+        const input = document.getElementById('diasSangria');
+        localStorage.setItem('diasSangriaBolinhas', input.value);
         atualizarSituacao();
     }
+
     function carregarDiasSangria() {
-        const diasSangria = localStorage.getItem('diasSangria');
-        document.getElementById('diasSangria').value = diasSangria !== null ? diasSangria : '7';
+        const input = document.getElementById('diasSangria');
+        const diasSalvos = localStorage.getItem('diasSangriaBolinhas');
+
+        if (diasSalvos === null || diasSalvos === '' || Number(diasSalvos) <= 0 || Number.isNaN(Number(diasSalvos))) {
+            input.value = '30';
+            localStorage.setItem('diasSangriaBolinhas', '30');
+        } else {
+            input.value = diasSalvos;
+        }
+
         atualizarSituacao();
     }
+
     function atualizarSituacao() {
-        const diasSangria = parseInt(document.getElementById('diasSangria').value, 10) || 0;
-        let pontosComAlerta = 0;
+        const diasSangria = obterDiasSangria();
+
         document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
             const semVisita = linha.getAttribute('data-sem-visita') === 'true';
-            const diferencaDias = parseInt(linha.getAttribute('data-diferenca-dias'), 10);
-            const situacaoCelula = linha.querySelector('.situacao');
-            const precisaVisita = semVisita || diferencaDias > diasSangria;
-            const alerta30Dias = semVisita || diferencaDias > 30;
 
-            if (alerta30Dias) {
-                pontosComAlerta += 1;
-                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Alerta 30+ dias</span>';
+            let diferencaDias = Number(linha.getAttribute('data-diferenca-dias'));
+
+            if (Number.isNaN(diferencaDias)) {
+                diferencaDias = 0;
+            }
+
+            const situacaoCelula = linha.querySelector('.situacao');
+
+            if (semVisita) {
+                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sem visita</span>';
                 linha.classList.add('table-row-exit-highlight');
-            } else if (precisaVisita) {
+                return;
+            }
+
+            if (diferencaDias >= diasSangria) {
                 situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sangria</span>';
                 linha.classList.add('table-row-exit-highlight');
-            } else {
-                situacaoCelula.innerHTML = '<span class="table-badge table-badge-green">Aguardar</span>';
-                linha.classList.remove('table-row-exit-highlight');
+                return;
             }
-        });
 
-        if (pontosComAlerta > 0 && window.AppAlerts && !document.body.dataset.bolinhasAlertShown) {
-            document.body.dataset.bolinhasAlertShown = 'true';
-            window.AppAlerts.warning(`${pontosComAlerta} ponto(s) de bolinhas estão há mais de 30 dias sem visita.`);
-        }
-    }
-    function filtrarPorBairro() {
-        const bairroSelecionado = document.getElementById('bairroSelect').value;
-        document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
-            const bairro = linha.getAttribute('data-bairro');
-            const situacaoCelula = linha.querySelector('.situacao').textContent;
-            const precisaVisita = situacaoCelula.includes('Sangria') || situacaoCelula.includes('Alerta');
-            if (bairroSelecionado === 'mostrar_todos' && precisaVisita) linha.style.display = '';
-            else if (bairroSelecionado !== 'mostrar_todos' && bairro === bairroSelecionado && precisaVisita) linha.style.display = '';
-            else linha.style.display = 'none';
+            situacaoCelula.innerHTML = '<span class="table-badge table-badge-green">Aguardar</span>';
+            linha.classList.remove('table-row-exit-highlight');
         });
     }
-    function mostrarTodos() { document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => { linha.style.display = ''; }); }
-    function selecionarTodos(selectAllCheckbox) { document.querySelectorAll('.checkbox-selecao').forEach(checkbox => { checkbox.checked = selectAllCheckbox.checked; }); }
-    function gerarPDF() {
-        const { jsPDF } = window.jspdf;
-        if (!jsPDF) return;
-        const doc = new jsPDF();
-        const linhas = document.querySelectorAll('#tabelaEstabelecimentos tr');
-        const data = [];
-        const bairros = new Set();
-        let algumMarcado = false;
-        linhas.forEach(linha => {
-            if (linha.style.display !== 'none' && linha.querySelector('.checkbox-selecao').checked) {
-                const cells = Array.from(linha.children);
-                data.push([cells[1].innerText, cells[4].innerText, cells[2].innerText, cells[3].innerText, cells[5].innerText]);
-                bairros.add(cells[5].innerText);
-                algumMarcado = true;
-            }
-        });
-        if (!algumMarcado) { alert('Por favor, selecione pelo menos um estabelecimento para gerar o PDF.'); return; }
-        doc.setFontSize(14);
-        doc.text(`Rota de Sangria para os bairros: ${Array.from(bairros).join(', ')}`, 20, 20);
-        doc.autoTable({ head: [['Estabelecimento', 'Endereço', 'Chave', 'Máquina', 'Bairro']], body: data, styles: { fontSize: 8, halign: 'center' }, margin: { top: 30 }, headStyles: { fillColor: [41, 128, 185] } });
-        doc.save('Tabela_Estabelecimentos.pdf');
-        document.querySelectorAll('.checkbox-selecao').forEach(checkbox => { checkbox.checked = false; });
-    }
-    document.addEventListener('DOMContentLoaded', carregarDiasSangria);
-    document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(row => {
-        row.addEventListener('click', function(event) {
-            if (event.target.tagName.toLowerCase() !== 'input') this.querySelector('.checkbox-selecao').checked = !this.querySelector('.checkbox-selecao').checked;
-        });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputDiasSangria = document.getElementById('diasSangria');
+
+        carregarDiasSangria();
+
+        inputDiasSangria.addEventListener('input', salvarDiasSangria);
+        inputDiasSangria.addEventListener('change', salvarDiasSangria);
+        inputDiasSangria.addEventListener('keyup', salvarDiasSangria);
     });
     </script>
 </body>
 </html>
-
