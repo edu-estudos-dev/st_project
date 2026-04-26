@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title }) %>
+
+  <body class="list-page-body">
+    <%- include('../../partials/header') %>
+      <div class="page-spacer"></div>
+
+      <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Assinante' }) %>
+
+          <section class="list-hero list-hero-neutral">
+            <div class="list-hero-content">
+              <span class="list-kicker"><i class="bi bi-person-gear"></i> SaaS</span>
+              <h1>
+                <%= assinante.username %>
+              </h1>
+              <p>
+                <%= assinante.email %>
+              </p>
+            </div>
+            <div class="list-hero-side">
+              <div class="list-stat">
+                <strong>Status atual</strong>
+                <span>
+                  <%= String(assinante.status_assinatura || '' ).toUpperCase() %>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <main class="list-stage">
+            <section class="list-panel">
+              <div class="list-toolbar">
+                <div class="list-toolbar-copy">
+                  <h2>Dados da assinatura</h2>
+                  <p>Altere manualmente status, ciclo de cobrança e datas de controle.</p>
+                </div>
+                <a class="list-action" href="/admin/assinantes">
+                  <i class="bi bi-arrow-left"></i>
+                  <span>Voltar</span>
+                </a>
+              </div>
+
+              <form action="/admin/assinantes/<%= assinante.id %>/edit" method="POST" class="modern-form">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="status_assinatura">Status</label>
+                    <select class="form-select" id="status_assinatura" name="status_assinatura" required>
+                      <% statusOptions.forEach((status)=> { %>
+                        <option value="<%= status %>" <%=assinante.status_assinatura===status ? 'selected' : '' %>><%=
+                            status %>
+                        </option>
+                        <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="tipo_cobranca">Tipo de cobrança</label>
+                    <select class="form-select" id="tipo_cobranca" name="tipo_cobranca">
+                      <% billingOptions.forEach((tipo)=> { %>
+                        <option value="<%= tipo %>" <%=(assinante.tipo_cobranca || '' )===tipo ? 'selected' : '' %>><%=
+                            tipo || 'Sem cobrança' %>
+                        </option>
+                        <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Produtos habilitados</label>
+                    <div class="modern-checkbox-grid">
+                      <% const selectedProducts = assinante.produtos_habilitados_lista || []; %>
+                      <% productOptions.forEach((produto) => { %>
+                        <label class="modern-checkbox" for="produto_<%= produto.value %>">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="produto_<%= produto.value %>"
+                            name="produtos_habilitados"
+                            value="<%= produto.value %>"
+                            <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
+                          >
+                          <span><%= produto.label %></span>
+                        </label>
+                      <% }) %>
+                    </div>
+                    <small class="modern-note">Esses produtos definem quais modulos aparecem para o assinante.</small>
+                  </div>
+
+                  <div class="col-md-3">
+                    <label class="form-label" for="trial_fim">Fim do trial</label>
+                    <input class="form-control" type="date" id="trial_fim" name="trial_fim"
+                      value="<%= formatDateInput(assinante.trial_fim) %>">
+                  </div>
+
+                  <div class="col-md-3">
+                    <label class="form-label" for="data_ativacao">Ativa&ccedil;&atilde;o</label>
+                    <input class="form-control" type="date" id="data_ativacao" name="data_ativacao"
+                      value="<%= formatDateInput(assinante.data_ativacao) %>">
+                  </div>
+
+                  <div class="col-md-3">
+                    <label class="form-label" for="data_vencimento">Vencimento</label>
+                    <input class="form-control" type="date" id="data_vencimento" name="data_vencimento"
+                      value="<%= formatDateInput(assinante.data_vencimento) %>">
+                  </div>
+
+                  <div class="col-md-3">
+                    <label class="form-label" for="data_limite_exclusao">Limite exclus&atilde;o</label>
+                    <input class="form-control" type="date" id="data_limite_exclusao" name="data_limite_exclusao"
+                      value="<%= formatDateInput(assinante.data_limite_exclusao) %>">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="gateway_customer_id">Gateway customer ID</label>
+                    <input class="form-control" type="text" id="gateway_customer_id" name="gateway_customer_id"
+                      value="<%= assinante.gateway_customer_id || '' %>">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="gateway_subscription_id">Gateway subscription ID</label>
+                    <input class="form-control" type="text" id="gateway_subscription_id" name="gateway_subscription_id"
+                      value="<%= assinante.gateway_subscription_id || '' %>">
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                  <button type="submit" class="list-action">
+                    <i class="bi bi-check-circle"></i>
+                    <span>Salvar assinatura</span>
+                  </button>
+                  <a href="/admin/assinantes" class="list-action">
+                    <i class="bi bi-x-circle"></i>
+                    <span>Cancelar</span>
+                  </a>
+                </div>
+              </form>
+            </section>
+          </main>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+      <% if (typeof success !== 'undefined' && success) { %> window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");<% } %>
+      <% if (typeof error !== 'undefined' && error) { %> window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");<% } %>
+    });
+      </script>
+  </body>
+
+</html>

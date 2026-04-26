@@ -35,6 +35,21 @@
   backdrop-filter: blur(14px);
 }
 
+.auth-card-register {
+  max-width: 820px;
+  gap: 0.7rem;
+  padding-top: 1.8rem !important;
+  padding-bottom: 1.8rem !important;
+}
+
+.auth-card-register h1 {
+  font-size: clamp(1.85rem, 3vw, 2.25rem);
+}
+
+.auth-card-register hr {
+  margin: 0.8rem 0 1rem;
+}
+
 .auth-card h1 {
   margin-bottom: 0.75rem !important;
   font-size: clamp(2rem, 4vw, 2.5rem);
@@ -57,7 +72,7 @@
 .auth-card .form-group {
   display: grid;
   gap: 0.65rem;
-  margin-bottom: 1.35rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .auth-card .input-group {
@@ -188,8 +203,75 @@
   gap: 0.25rem;
 }
 
+.auth-card-register .auth-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 0.2rem;
+}
+
+.auth-card-register .form-control {
+  min-height: 48px;
+}
+
+.auth-card-register .btn-primary {
+  min-height: 50px;
+  margin-top: 0.35rem !important;
+}
+
+.auth-card-register .form-group:nth-of-type(3),
+.auth-card-register .form-group:nth-of-type(4),
+.auth-card-register .form-group:nth-of-type(5),
+.auth-card-register .auth-actions {
+  grid-column: 1 / -1;
+}
+
+.auth-card-register .form-group:nth-of-type(3),
+.auth-card-register .form-group:nth-of-type(4) {
+  max-width: 100%;
+}
+
+.auth-card-register .auth-help {
+  grid-column: 1 / -1;
+}
+
 .auth-actions {
-  margin-top: 0.55rem;
+  margin-top: 0.2rem;
+}
+
+.auth-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.auth-product-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 46px;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f8fbff 0%, #f1f6fd 100%);
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.auth-product-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.auth-product-option span {
+  font-weight: 800;
+}
+
+.auth-product-option:has(input:checked) {
+  border-color: rgba(37, 99, 235, 0.4);
+  background: #eff6ff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
 }
 
 .auth-help {
@@ -214,5 +296,32 @@
   .auth-card {
     padding: 1.35rem;
     border-radius: 24px !important;
+  }
+
+  .auth-card-register {
+    max-width: 520px;
+  }
+
+  .auth-card-register .auth-form {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .auth-product-option {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 64px;
+    padding: 0.55rem 0.4rem;
+    text-align: center;
+  }
+
+  .auth-product-option span {
+    font-size: 0.76rem;
+    line-height: 1.1;
   }
 }

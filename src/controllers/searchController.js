@@ -17,8 +17,8 @@ class SearchController {
             });
         }
         try {
-            const estabelecimentos = await EstabelecimentoModel.search(termo);
-            const lancamentos = await LancamentoModel.search(termo);
+            const estabelecimentos = await EstabelecimentoModel.search(termo, usuario.assinante_id);
+            const lancamentos = await LancamentoModel.search(termo, usuario.assinante_id);
 
             if (estabelecimentos.length > 0 && lancamentos.length > 0) {
                 res.status(200).render('pages/searchResults', {

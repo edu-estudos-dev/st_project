@@ -4,6 +4,7 @@
 
 <body class="dashboard-body">
    <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+   <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
    <% const financialData = financialNotifications || { proximos: [], atrasados: [], total: 0 }; %>
    <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
    <% const visitAlert = typeof dashboardVisitAlert !== 'undefined'
@@ -19,7 +20,7 @@
    ]; %>
    <% const operationalShortcuts = [
       { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green' },
-      { href: '/figurinhas/sangrias/add', title: 'Cadastro de figurinhas', description: 'Abrir o formulário operacional de figurinhas.', tone: 'blue' },
+      { href: '/figurinhas/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue' },
       { href: '/pelucias/sangrias/add', title: 'Cadastro de pelúcias', description: 'Abrir o formulário operacional de pelúcias.', tone: 'violet' }
    ]; %>
    <% const overviewStats = [
@@ -100,6 +101,7 @@
 
             <div class="dashboard-shortcuts">
                <% adminShortcuts.forEach((item) => { %>
+                  <% if (isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href)) return; %>
                   <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
                      <div class="dashboard-shortcut-top">
                         <span class="dashboard-shortcut-pill">Acesso rápido</span>
@@ -111,26 +113,28 @@
                <% }) %>
             </div>
 
-            <div class="dashboard-panel-header" style="margin-top: 1.5rem;">
-               <div>
-                  <span class="dashboard-section-tag">Operacional</span>
-                  <h2>Cadastros dos produtos</h2>
+            <% if (!isReadOnly) { %>
+               <div class="dashboard-panel-header" style="margin-top: 1.5rem;">
+                  <div>
+                     <span class="dashboard-section-tag">Operacional</span>
+                     <h2>Cadastros dos produtos</h2>
+                  </div>
+                  <p>Esses acessos continuam disponíveis mesmo quando não há pontos ativos cadastrados.</p>
                </div>
-               <p>Esses acessos continuam disponíveis mesmo quando não há pontos ativos cadastrados.</p>
-            </div>
 
-            <div class="dashboard-shortcuts">
-               <% operationalShortcuts.forEach((item) => { %>
-                  <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
-                     <div class="dashboard-shortcut-top">
-                        <span class="dashboard-shortcut-pill">Cadastro direto</span>
-                        <span class="dashboard-shortcut-arrow">&rarr;</span>
-                     </div>
-                     <h3><%= item.title %></h3>
-                     <p><%= item.description %></p>
-                  </a>
-               <% }) %>
-            </div>
+               <div class="dashboard-shortcuts">
+                  <% operationalShortcuts.forEach((item) => { %>
+                     <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
+                        <div class="dashboard-shortcut-top">
+                           <span class="dashboard-shortcut-pill">Cadastro direto</span>
+                           <span class="dashboard-shortcut-arrow">&rarr;</span>
+                        </div>
+                        <h3><%= item.title %></h3>
+                        <p><%= item.description %></p>
+                     </a>
+                  <% }) %>
+               </div>
+            <% } %>
          </article>
 
          <aside class="dashboard-panel dashboard-panel-primary">

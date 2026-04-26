@@ -2,10 +2,23 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import connection from '../db_config/connection.js';
+import AssinanteModel from './assinanteModel.js';
+import { serializeProdutos } from '../utilities/produtoUtils.js';
 
 class LoginLogout {
   constructor() {
     this.passwordResetTableReady = false;
+  }
+
+  buildTrialDates() {
+    const trialInicio = new Date();
+    const trialFim = new Date(trialInicio);
+    trialFim.setDate(trialFim.getDate() + 7);
+
+    return {
+      trialInicio,
+      trialFim
+    };
   }
 
   /**
@@ -103,14 +116,25 @@ class LoginLogout {
    */
   async login(user, senha) {
     const normalizedUser = this.normalizeUser(user);
+    const normalizedEmail = this.normalizeEmail(user);
     if (!normalizedUser || !senha) {
       throw new Error('User and password must be provided');
     }
 
     try {
       const result = await connection.query(
-        'SELECT id, username, senha FROM users WHERE username = $1 LIMIT 1',
-        [normalizedUser]
+        `SELECT
+          u.id,
+          u.username,
+          u.senha,
+          a.id AS assinante_id,
+          a.status_assinatura
+        FROM users u
+        LEFT JOIN assinantes a ON a.user_id = u.id
+        WHERE LOWER(TRIM(u.username)) = LOWER($1)
+           OR LOWER(TRIM(u.email)) = $2
+        LIMIT 1`,
+        [normalizedUser, normalizedEmail]
       );
 
       const usuario = result.rows[0];
@@ -134,9 +158,16 @@ class LoginLogout {
 
       if (!senhaValida) return null;
 
+      const assinante = await this.ensureAssinanteForUser(usuario.id, {
+        username: usuario.username
+      });
+
       return {
         id: usuario.id,
-        username: usuario.username
+        user_id: usuario.id,
+        username: usuario.username,
+        assinante_id: assinante.id,
+        status_assinatura: assinante.status_assinatura
       };
     } catch (error) {
       console.error('Erro ao executar a consulta SQL (login):', error);
@@ -152,7 +183,11 @@ class LoginLogout {
     const normalizedEmail = this.normalizeEmail(email);
 
     const result = await connection.query(
-      'SELECT id, username, email FROM users WHERE username = $1 OR email = $2 LIMIT 1',
+      `SELECT id, username, email
+       FROM users
+       WHERE LOWER(TRIM(username)) = LOWER($1)
+          OR LOWER(TRIM(email)) = $2
+       LIMIT 1`,
       [normalizedUser, normalizedEmail]
     );
 
@@ -162,7 +197,7 @@ class LoginLogout {
   /**
    * Cria novo usuário (com hash bcrypt)
    */
-  async createUser({ user, email, senha }) {
+  async createUser({ user, email, senha, produtos_habilitados }) {
     const normalizedUser = this.normalizeUser(user);
     const normalizedEmail = this.normalizeEmail(email);
     const normalizedPassword = String(senha ?? '');
@@ -177,24 +212,136 @@ class LoginLogout {
     );
 
     if (existingUser) {
-      if (existingUser.username === normalizedUser) {
+      if (this.normalizeUser(existingUser.username).toLowerCase() === normalizedUser.toLowerCase()) {
         return { error: 'Este nome de usuário já está em uso.' };
       }
       return { error: 'Este e-mail já está cadastrado.' };
     }
 
     const senhaHash = await bcrypt.hash(normalizedPassword, 12);
+    const client = await connection.connect();
 
-    const result = await connection.query(
-      'INSERT INTO users (username, email, senha) VALUES ($1, $2, $3) RETURNING id',
-      [normalizedUser, normalizedEmail, senhaHash]
+    try {
+      await client.query('BEGIN');
+
+      const result = await client.query(
+        'INSERT INTO users (username, email, senha) VALUES ($1, $2, $3) RETURNING id',
+        [normalizedUser, normalizedEmail, senhaHash]
+      );
+
+      const userId = result.rows[0].id;
+      const assinante = await this.createAssinanteForUser(client, userId, {
+        produtos_habilitados
+      });
+
+      await client.query('COMMIT');
+
+      return {
+        id: userId,
+        user_id: userId,
+        username: normalizedUser,
+        email: normalizedEmail,
+        assinante_id: assinante.id,
+        status_assinatura: assinante.status_assinatura
+      };
+    } catch (error) {
+      await client.query('ROLLBACK');
+
+      if (error?.code === '23505') {
+        const detail = String(error.detail || error.constraint || '').toLowerCase();
+
+        if (detail.includes('username')) {
+          return { error: 'Este nome de usuário já está em uso.' };
+        }
+
+        if (detail.includes('email')) {
+          return { error: 'Este e-mail já está cadastrado.' };
+        }
+      }
+
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  async findAssinanteByUserId(userId) {
+    return AssinanteModel.findByUserId(userId);
+  }
+
+  async createAssinanteForUser(client, userId, overrides = {}) {
+    const { trialInicio, trialFim } = this.buildTrialDates();
+    const statusAssinatura = overrides.status_assinatura || 'trial';
+    const tipoCobranca = overrides.tipo_cobranca ?? null;
+    const dataAtivacao = overrides.data_ativacao ?? null;
+    const dataVencimento = overrides.data_vencimento ?? null;
+    const dataLimiteExclusao = overrides.data_limite_exclusao ?? null;
+    const produtosHabilitados = serializeProdutos(overrides.produtos_habilitados || []);
+
+    await client.query(`
+      ALTER TABLE assinantes
+      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
+    `);
+
+    const result = await client.query(
+      `INSERT INTO assinantes (
+        user_id,
+        status_assinatura,
+        tipo_cobranca,
+        produtos_habilitados,
+        trial_inicio,
+        trial_fim,
+        data_ativacao,
+        data_vencimento,
+        data_limite_exclusao,
+        created_at,
+        updated_at
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+      RETURNING id, user_id, status_assinatura, tipo_cobranca, trial_inicio, trial_fim,
+                data_ativacao, data_vencimento, data_limite_exclusao, produtos_habilitados`,
+      [
+        userId,
+        statusAssinatura,
+        tipoCobranca,
+        produtosHabilitados,
+        trialInicio,
+        trialFim,
+        dataAtivacao,
+        dataVencimento,
+        dataLimiteExclusao
+      ]
     );
 
-    return {
-      id: result.rows[0].id,
-      username: normalizedUser,
-      email: normalizedEmail
-    };
+    return result.rows[0];
+  }
+
+  async ensureAssinanteForUser(userId, userInfo = {}) {
+    const existingAssinante = await this.findAssinanteByUserId(userId);
+    if (existingAssinante) {
+      return existingAssinante;
+    }
+
+    const client = await connection.connect();
+
+    try {
+      await client.query('BEGIN');
+      const createdAssinante = await this.createAssinanteForUser(client, userId);
+      await client.query('COMMIT');
+
+      if (userInfo.username) {
+        console.warn(
+          `Assinante criado automaticamente para o usuário ${userInfo.username} (id ${userId}).`
+        );
+      }
+
+      return createdAssinante;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async findUserByEmail(email) {

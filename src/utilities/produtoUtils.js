@@ -37,6 +37,7 @@ export const hasProduto = (produtos, produto) => {
 
 export const formatProdutoLabel = (produto) => {
     const normalized = normalizeProduto(produto);
+    if (normalized === 'FIGURINHAS') return 'CONSIGNADOS';
     return normalized === 'PELUCIAS' ? 'PELÚCIAS' : normalized;
 };
 

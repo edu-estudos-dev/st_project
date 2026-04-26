@@ -13,10 +13,10 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-sign-turn-right"></i> Operação</span>
                 <h1>Central de rotas</h1>
-                <p>Selecione um bairro, organize a sequência de visitas e avance ponto a ponto sem rodar à toa.</p>
+                <p>Selecione um ou mais bairros, organize a sequência de visitas e avance ponto a ponto sem rodar à toa.</p>
             </div>
             <div class="list-hero-side">
-                <div class="list-stat"><strong>Bairro</strong><span><%= selectedBairro || 'Selecione' %></span></div>
+                <div class="list-stat"><strong>Bairros</strong><span><%= selectedBairros?.length ? selectedBairros.join(', ') : 'Selecione' %></span></div>
                 <div class="list-stat"><strong>Pontos</strong><span><%= routeSummary.total %> na rota</span></div>
             </div>
         </section>
@@ -28,17 +28,16 @@
                         <span class="dashboard-section-tag">Planejamento</span>
                         <h2>Montar rota do dia</h2>
                     </div>
-                    <p>O sistema usa os pontos ativos do bairro para montar uma fila de visitas baseada na sua posição atual.</p>
+                    <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
                 </div>
 
                 <form action="/rotas" method="GET" class="modern-form route-planner-form">
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
-                            <label for="bairro">Bairro</label>
-                            <select class="form-select" id="bairro" name="bairro" required>
-                                <option value="">Selecione um bairro</option>
+                            <label for="bairros">Bairros</label>
+                            <select class="form-select" id="bairros" name="bairros" multiple required size="5">
                                 <% bairros.forEach((item) => { %>
-                                    <option value="<%= item.bairro %>" <%= selectedBairro === item.bairro ? 'selected' : '' %>><%= item.bairro %></option>
+                                    <option value="<%= item.bairro %>" <%= selectedBairros?.includes(item.bairro) ? 'selected' : '' %>><%= item.bairro %></option>
                                 <% }) %>
                             </select>
                         </div>
@@ -73,7 +72,7 @@
                     <section class="route-journey-card">
                         <div class="route-journey-status">
                             <span class="route-journey-pill">Rota assistida</span>
-                            <strong id="routeJourneyTitle"><%= routeSummary.total ? 'Pronto para organizar a fila de visitas.' : 'Selecione um bairro para iniciar a rota.' %></strong>
+                            <strong id="routeJourneyTitle"><%= routeSummary.total ? 'Pronto para organizar a fila de visitas.' : 'Selecione ao menos um bairro para iniciar a rota.' %></strong>
                             <p id="routeJourneyText"><%= routeSummary.total ? 'Clique em “Iniciar rota inteligente” para ordenar os pontos a partir da sua localização atual.' : 'Assim que houver pontos na seleção, o sistema libera o modo de visita.' %></p>
                             <% if (routeSummary.total) { %>
                                 <small class="route-journey-note">
@@ -100,7 +99,7 @@
 
                         <div class="route-journey-helper">
                             <i class="bi bi-info-circle"></i>
-                            <span id="routeJourneyHelperText"><%= routeSummary.total ? 'O botão “Cheguei neste ponto” fica liberado logo depois que a rota for iniciada.' : 'Selecione um bairro para liberar a rota assistida.' %></span>
+                            <span id="routeJourneyHelperText"><%= routeSummary.total ? 'O botão “Cheguei neste ponto” fica liberado logo depois que a rota for iniciada.' : 'Selecione ao menos um bairro para liberar a rota assistida.' %></span>
                         </div>
 
                         <div class="route-progress-strip" id="routeProgressStrip">
@@ -142,7 +141,7 @@
                     <section class="route-summary-card">
                         <div class="route-summary-top">
                             <strong><%= routeSummary.total %> ponto(s) na seleção</strong>
-                            <span><%= selectedBairro ? `Bairro ${selectedBairro}` : 'Escolha um bairro para montar a rota.' %></span>
+                            <span><%= selectedBairros?.length ? `Bairros ${selectedBairros.join(', ')}` : 'Escolha ao menos um bairro para montar a rota.' %></span>
                         </div>
 
                         <div class="route-summary-grid">
@@ -170,15 +169,15 @@
                     <p>Depois de iniciar a rota, os pontos são reordenados e cada um pode ser marcado como visitado. O progresso fica salvo no navegador até você reiniciar.</p>
                 </div>
 
-                <% if (!selectedBairro) { %>
+                <% if (!selectedBairros?.length) { %>
                     <div class="dashboard-empty-state dashboard-empty-state-light">
                         <h3>Nenhuma rota gerada ainda</h3>
-                        <p>Selecione um bairro acima para listar os pontos ativos e montar o trajeto.</p>
+                        <p>Selecione um ou mais bairros acima para listar os pontos ativos e montar o trajeto.</p>
                     </div>
                 <% } else if (!routeItems.length) { %>
                     <div class="dashboard-empty-state dashboard-empty-state-light">
                         <h3>Sem pontos para esse filtro</h3>
-                        <p>Não há estabelecimentos ativos no bairro e produto escolhidos.</p>
+                        <p>Não há estabelecimentos ativos nos bairros e produto escolhidos.</p>
                     </div>
                 <% } else { %>
                     <div class="route-point-list" id="routePointList">
@@ -239,7 +238,7 @@
                 const progressPendingEl = document.getElementById('routeProgressPending');
                 const progressModeEl = document.getElementById('routeProgressMode');
 
-                const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairro) %>}:${<%- JSON.stringify(selectedProduto) %>}`;
+                const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairros || []) %>}:${<%- JSON.stringify(selectedProduto) %>}`;
 
                 let routeState = {
                     currentIndex: -1,
@@ -477,7 +476,7 @@
 
                 const sortRouteByNearest = async () => {
                     titleEl.textContent = 'Calculando a rota';
-                    textEl.textContent = 'Pegando sua localização e organizando os pontos do bairro para evitar deslocamento desnecessário.';
+                    textEl.textContent = 'Pegando sua localização e organizando os pontos selecionados para evitar deslocamento desnecessário.';
                     helperTextEl.textContent = 'Se um ponto ainda não tiver coordenadas salvas, o sistema usa o endereço como apoio.';
 
                     const currentPosition = await new Promise((resolve, reject) => {

@@ -17,11 +17,11 @@ class EstabelecimentoModel {
     }
   };
 
-  findAll = async () => {
+  findAll = async (assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
-      const SQL = 'SELECT * FROM estabelecimentos WHERE status = $1';
-      const result = await connection.query(SQL, ['ativo']);
+      const SQL = 'SELECT * FROM estabelecimentos WHERE status = $1 AND assinante_id = $2';
+      const result = await connection.query(SQL, ['ativo', assinanteId]);
       return result.rows;
     } catch (error) {
       console.error('Erro ao executar a query:', error);
@@ -29,19 +29,21 @@ class EstabelecimentoModel {
     }
   };
 
-  search = async query => {
+  search = async (query, assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
       const SQL = `
-                SELECT * FROM estabelecimentos 
-                WHERE (estabelecimento ILIKE $1 OR responsavel_nome ILIKE $2 OR bairro ILIKE $3) 
-                AND status = $4
-            `;
+        SELECT * FROM estabelecimentos
+        WHERE (estabelecimento ILIKE $1 OR responsavel_nome ILIKE $2 OR bairro ILIKE $3)
+          AND status = $4
+          AND assinante_id = $5
+      `;
       const result = await connection.query(SQL, [
         `%${query}%`,
         `%${query}%`,
         `%${query}%`,
-        'ativo'
+        'ativo',
+        assinanteId
       ]);
       return result.rows;
     } catch (error) {
@@ -51,6 +53,7 @@ class EstabelecimentoModel {
   };
 
   create = async ({
+    assinante_id,
     estabelecimento,
     produto,
     chave,
@@ -65,13 +68,30 @@ class EstabelecimentoModel {
   }) => {
     try {
       await this.ensureCoordinatesColumns();
-      const SQL = `INSERT INTO estabelecimentos 
-                        (estabelecimento, produto, chave, maquina, endereco, bairro, responsavel_nome, telefone_contato, observacoes, latitude, longitude, data_criacao, status) 
-                        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`;
+      const SQL = `
+        INSERT INTO estabelecimentos (
+          assinante_id,
+          estabelecimento,
+          produto,
+          chave,
+          maquina,
+          endereco,
+          bairro,
+          responsavel_nome,
+          telefone_contato,
+          observacoes,
+          latitude,
+          longitude,
+          data_criacao,
+          status
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+      `;
 
       const dateISO = new Date();
 
       await connection.query(SQL, [
+        assinante_id,
         estabelecimento,
         produto,
         chave,
@@ -93,6 +113,7 @@ class EstabelecimentoModel {
   };
 
   update = async (
+    assinanteId,
     id,
     {
       estabelecimento,
@@ -109,19 +130,23 @@ class EstabelecimentoModel {
     }
   ) => {
     await this.ensureCoordinatesColumns();
-    const sql = `UPDATE estabelecimentos SET
-            estabelecimento = $1,
-            produto = $2,
-            chave = $3,
-            maquina = $4,
-            endereco = $5,
-            bairro = $6,
-            responsavel_nome = $7,
-            telefone_contato = $8,
-            observacoes = $9,
-            latitude = $10,
-            longitude = $11,
-            data_atualizacao = $12 WHERE id = $13`;
+    const sql = `
+      UPDATE estabelecimentos SET
+        estabelecimento = $1,
+        produto = $2,
+        chave = $3,
+        maquina = $4,
+        endereco = $5,
+        bairro = $6,
+        responsavel_nome = $7,
+        telefone_contato = $8,
+        observacoes = $9,
+        latitude = $10,
+        longitude = $11,
+        data_atualizacao = $12
+      WHERE id = $13
+        AND assinante_id = $14
+    `;
 
     const dateISO = new Date();
 
@@ -138,29 +163,35 @@ class EstabelecimentoModel {
       latitude,
       longitude,
       dateISO,
-      id
+      id,
+      assinanteId
     ]);
 
     return result;
   };
 
-  findById = async id => {
+  findById = async (id, assinanteId) => {
     await this.ensureCoordinatesColumns();
-    const sql = 'SELECT * FROM estabelecimentos WHERE id = $1';
-    const result = await connection.query(sql, [id]);
+    const sql = 'SELECT * FROM estabelecimentos WHERE id = $1 AND assinante_id = $2';
+    const result = await connection.query(sql, [id, assinanteId]);
     return result.rows[0];
   };
 
-  destroy = async id => {
+  destroy = async (id, assinanteId) => {
     try {
-      const sql =
-        'UPDATE estabelecimentos SET status = $1, data_encerramento = $2 WHERE id = $3';
+      const sql = `
+        UPDATE estabelecimentos
+        SET status = $1, data_encerramento = $2
+        WHERE id = $3
+          AND assinante_id = $4
+      `;
       const dataEncerramento = new Date();
 
       const result = await connection.query(sql, [
         'inativo',
         dataEncerramento,
-        id
+        id,
+        assinanteId
       ]);
       console.log('Estabelecimento marcado como inativo:', result);
     } catch (error) {
@@ -169,14 +200,20 @@ class EstabelecimentoModel {
     }
   };
 
-  getBairrosByProduto = async produto => {
+  getBairrosByProduto = async (produto, assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
-      const SQL =
-        'SELECT DISTINCT bairro FROM estabelecimentos WHERE UPPER(produto) LIKE $1 AND status = $2';
+      const SQL = `
+        SELECT DISTINCT bairro
+        FROM estabelecimentos
+        WHERE UPPER(produto) LIKE $1
+          AND status = $2
+          AND assinante_id = $3
+      `;
       const result = await connection.query(SQL, [
         `%${produto.toUpperCase()}%`,
-        'ativo'
+        'ativo',
+        assinanteId
       ]);
       return result.rows;
     } catch (error) {
@@ -185,18 +222,19 @@ class EstabelecimentoModel {
     }
   };
 
-  getRouteBairros = async () => {
+  getRouteBairros = async (assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
       const SQL = `
         SELECT DISTINCT bairro
         FROM estabelecimentos
         WHERE status = 'ativo'
+          AND assinante_id = $1
           AND COALESCE(TRIM(bairro), '') <> ''
         ORDER BY bairro ASC
       `;
 
-      const result = await connection.query(SQL);
+      const result = await connection.query(SQL, [assinanteId]);
       return result.rows;
     } catch (error) {
       console.error('Erro ao buscar bairros para rotas:', error);
@@ -204,10 +242,18 @@ class EstabelecimentoModel {
     }
   };
 
-  getRoutePoints = async ({ bairro, produto = 'todos' }) => {
+  getRoutePoints = async ({ bairro, bairros, produto = 'todos', assinanteId }) => {
     try {
       await this.ensureCoordinatesColumns();
-      const params = ['ativo', bairro];
+      const bairrosSelecionados = Array.isArray(bairros)
+        ? bairros.map(item => String(item || '').trim()).filter(Boolean)
+        : [String(bairro || '').trim()].filter(Boolean);
+
+      if (!bairrosSelecionados.length) {
+        return [];
+      }
+
+      const params = ['ativo', bairrosSelecionados, assinanteId];
       let productFilter = '';
 
       if (produto && produto !== 'todos') {
@@ -230,9 +276,10 @@ class EstabelecimentoModel {
           longitude
         FROM estabelecimentos
         WHERE status = $1
-          AND bairro = $2
+          AND bairro = ANY($2)
+          AND assinante_id = $3
           ${productFilter}
-        ORDER BY estabelecimento ASC
+        ORDER BY bairro ASC, estabelecimento ASC
       `;
 
       const result = await connection.query(SQL, params);
@@ -243,12 +290,47 @@ class EstabelecimentoModel {
     }
   };
 
-  getMenuProdutosDisponiveis = async () => {
+  getMenuProdutosDisponiveis = async (assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
-      const SQL =
-        "SELECT produto FROM estabelecimentos WHERE status = $1 AND produto IS NOT NULL AND produto <> ''";
-      const result = await connection.query(SQL, ['ativo']);
+      await connection.query(`
+        ALTER TABLE assinantes
+        ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
+      `);
+
+      const assinaturaResult = await connection.query(
+        `SELECT produtos_habilitados
+         FROM assinantes
+         WHERE id = $1
+         LIMIT 1`,
+        [assinanteId]
+      );
+
+      const produtosHabilitados = assinaturaResult.rows[0]?.produtos_habilitados;
+      const produtosConfigurados = {
+        bolinhas: hasProduto(produtosHabilitados, 'BOLINHAS'),
+        figurinhas: hasProduto(produtosHabilitados, 'FIGURINHAS'),
+        pelucias: hasProduto(produtosHabilitados, 'PELUCIAS')
+      };
+
+      produtosConfigurados.hasAny =
+        produtosConfigurados.bolinhas ||
+        produtosConfigurados.figurinhas ||
+        produtosConfigurados.pelucias;
+
+      if (produtosConfigurados.hasAny) {
+        return produtosConfigurados;
+      }
+
+      const SQL = `
+        SELECT produto
+        FROM estabelecimentos
+        WHERE status = $1
+          AND assinante_id = $2
+          AND produto IS NOT NULL
+          AND produto <> ''
+      `;
+      const result = await connection.query(SQL, ['ativo', assinanteId]);
 
       const disponibilidade = {
         bolinhas: false,
@@ -261,10 +343,7 @@ class EstabelecimentoModel {
           disponibilidade.bolinhas = true;
         }
 
-        if (
-          !disponibilidade.figurinhas &&
-          hasProduto(row.produto, 'FIGURINHAS')
-        ) {
+        if (!disponibilidade.figurinhas && hasProduto(row.produto, 'FIGURINHAS')) {
           disponibilidade.figurinhas = true;
         }
 
@@ -277,12 +356,10 @@ class EstabelecimentoModel {
         disponibilidade.bolinhas ||
         disponibilidade.figurinhas ||
         disponibilidade.pelucias;
+
       return disponibilidade;
     } catch (error) {
-      console.error(
-        'Erro ao carregar produtos disponíveis para o menu:',
-        error
-      );
+      console.error('Erro ao carregar produtos disponiveis para o menu:', error);
       return {
         bolinhas: true,
         figurinhas: true,
@@ -292,7 +369,7 @@ class EstabelecimentoModel {
     }
   };
 
-  getDashboardSummary = async () => {
+  getDashboardSummary = async (assinanteId) => {
     try {
       await this.ensureCoordinatesColumns();
       const SQL = `
@@ -302,9 +379,10 @@ class EstabelecimentoModel {
           COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%FIGURINHAS%') AS figurinhas_ativas,
           COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%PELUCIAS%') AS pelucias_ativas
         FROM estabelecimentos
+        WHERE assinante_id = $1
       `;
 
-      const result = await connection.query(SQL);
+      const result = await connection.query(SQL, [assinanteId]);
       const row = result.rows[0] || {};
 
       return {
@@ -324,7 +402,7 @@ class EstabelecimentoModel {
     }
   };
 
-  getOperationalPendingItems = async (staleDays = 7, limit = 6) => {
+  getOperationalPendingItems = async (assinanteId, staleDays = 7, limit = 6) => {
     try {
       await this.ensureCoordinatesColumns();
       const SQL = `
@@ -341,10 +419,12 @@ class EstabelecimentoModel {
             SELECT sb.data_sangria
             FROM sangrias_bolinha sb
             WHERE sb.estabelecimento_id = e.id
+              AND sb.assinante_id = e.assinante_id
             ORDER BY sb.data_sangria DESC, sb.id DESC
             LIMIT 1
           ) latest ON TRUE
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%BOLINHAS%'
 
           UNION ALL
@@ -352,7 +432,7 @@ class EstabelecimentoModel {
           SELECT
             e.id AS estabelecimento_id,
             e.estabelecimento,
-            'Figurinhas' AS produto,
+            'Consignados' AS produto,
             '/figurinhas/sangrias/add' AS action_href,
             latest.data_sangria AS ultima_movimentacao,
             CURRENT_DATE - latest.data_sangria::date AS dias_sem_registro
@@ -361,10 +441,12 @@ class EstabelecimentoModel {
             SELECT sf.data_sangria
             FROM sangrias_figurinhas sf
             WHERE sf.estabelecimento_id = e.id
+              AND sf.assinante_id = e.assinante_id
             ORDER BY sf.data_sangria DESC, sf.id DESC
             LIMIT 1
           ) latest ON TRUE
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%FIGURINHAS%'
 
           UNION ALL
@@ -372,7 +454,7 @@ class EstabelecimentoModel {
           SELECT
             e.id AS estabelecimento_id,
             e.estabelecimento,
-            'Pelúcias' AS produto,
+            'Pelucias' AS produto,
             '/pelucias/sangrias/add' AS action_href,
             latest.data_sangria AS ultima_movimentacao,
             CURRENT_DATE - latest.data_sangria::date AS dias_sem_registro
@@ -381,10 +463,12 @@ class EstabelecimentoModel {
             SELECT sp.data_sangria
             FROM sangrias_pelucias sp
             WHERE sp.estabelecimento_id = e.id
+              AND sp.assinante_id = e.assinante_id
             ORDER BY sp.data_sangria DESC, sp.id DESC
             LIMIT 1
           ) latest ON TRUE
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%PELUCIAS%'
         )
         SELECT
@@ -396,15 +480,15 @@ class EstabelecimentoModel {
           COALESCE(dias_sem_registro, 9999) AS dias_sem_registro
         FROM operational_status
         WHERE ultima_movimentacao IS NULL
-           OR dias_sem_registro > $1
+          OR dias_sem_registro > $2
         ORDER BY
           CASE WHEN ultima_movimentacao IS NULL THEN 0 ELSE 1 END,
           dias_sem_registro DESC,
           estabelecimento ASC
-        LIMIT $2
+        LIMIT $3
       `;
 
-      const result = await connection.query(SQL, [staleDays, limit]);
+      const result = await connection.query(SQL, [assinanteId, staleDays, limit]);
       return result.rows;
     } catch (error) {
       console.error('Erro ao carregar pendencias operacionais do dashboard:', error);
@@ -412,7 +496,7 @@ class EstabelecimentoModel {
     }
   };
 
-  getRecentOperationalMovements = async (limit = 6) => {
+  getRecentOperationalMovements = async (assinanteId, limit = 6) => {
     try {
       await this.ensureCoordinatesColumns();
       const SQL = `
@@ -428,8 +512,11 @@ class EstabelecimentoModel {
             COALESCE(sb.valor_liquido, sb.valor_apurado, 0) AS valor,
             'Sangria registrada' AS descricao
           FROM sangrias_bolinha sb
-          JOIN estabelecimentos e ON e.id = sb.estabelecimento_id
+          JOIN estabelecimentos e
+            ON e.id = sb.estabelecimento_id
+           AND e.assinante_id = sb.assinante_id
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%BOLINHAS%'
 
           UNION ALL
@@ -437,15 +524,18 @@ class EstabelecimentoModel {
           SELECT
             sf.id,
             'operacional' AS origem,
-            'Figurinhas' AS produto,
+            'Consignados' AS produto,
             e.estabelecimento,
             sf.data_sangria::timestamp AS data_movimentacao,
             '/figurinhas/sangrias/view/' || sf.id AS href,
             COALESCE(sf.valor_apurado, 0) AS valor,
             'Coleta registrada' AS descricao
           FROM sangrias_figurinhas sf
-          JOIN estabelecimentos e ON e.id = sf.estabelecimento_id
+          JOIN estabelecimentos e
+            ON e.id = sf.estabelecimento_id
+           AND e.assinante_id = sf.assinante_id
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%FIGURINHAS%'
             AND COALESCE(sf.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
 
@@ -454,23 +544,26 @@ class EstabelecimentoModel {
           SELECT
             sp.id,
             'operacional' AS origem,
-            'Pelúcias' AS produto,
+            'Pelucias' AS produto,
             e.estabelecimento,
             sp.data_sangria::timestamp AS data_movimentacao,
             '/pelucias/sangrias/view/' || sp.id AS href,
             COALESCE(sp.valor_liquido, sp.valor_apurado, 0) AS valor,
             'Sangria registrada' AS descricao
           FROM sangrias_pelucias sp
-          JOIN estabelecimentos e ON e.id = sp.estabelecimento_id
+          JOIN estabelecimentos e
+            ON e.id = sp.estabelecimento_id
+           AND e.assinante_id = sp.assinante_id
           WHERE e.status = 'ativo'
+            AND e.assinante_id = $1
             AND UPPER(e.produto) LIKE '%PELUCIAS%'
             AND sp.valor_apurado <> 0
         ) recent_movements
         ORDER BY data_movimentacao DESC, id DESC
-        LIMIT $1
+        LIMIT $2
       `;
 
-      const result = await connection.query(SQL, [limit]);
+      const result = await connection.query(SQL, [assinanteId, limit]);
       return result.rows;
     } catch (error) {
       console.error('Erro ao carregar ultimas movimentacoes operacionais:', error);

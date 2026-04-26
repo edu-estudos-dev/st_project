@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Registrar Sangria de Figurinhas' }) %>
+<%- include('../../partials/head', { title: 'Registrar Sangria de Consignados' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Figurinhas' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Consignados' }) %>
 
         <section class="form-hero form-hero-blue">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-stickies"></i> Operacional</span>
-                <h1>Registrar sangria de figurinhas</h1>
+                <h1>Registrar sangria de consignados</h1>
                 <p>Organize a visita do ponto com mais contexto visual, enxergando venda, abastecimento e estoque deixado de forma mais fluida durante o preenchimento.</p>
             </div>
 
             <div class="form-hero-side">
                 <div class="form-hero-stat">
                     <strong>Produto</strong>
-                    <span>Figurinhas</span>
+                    <span>Consignados</span>
                 </div>
                 <div class="form-hero-stat">
                     <strong>Destaque</strong>
@@ -54,7 +54,7 @@
                             </select>
                         </div>
                         <div class="col-12 col-lg-4">
-                            <label for="data_sangria">Data da visita</label>
+                            <label for="data_sangria" id="dataSangriaLabel">Data da sangria</label>
                             <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                             <label for="qtde_deixada">Quantidade deixada</label>
                             <input type="number" class="form-control text-center readonly-input" id="qtde_deixada" readonly disabled>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-4">
+                        <div class="col-12 col-md-6 col-lg-4" id="tipoPagamentoField">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
                                 <option value="especie">Espécie</option>
@@ -203,9 +203,13 @@
             const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
             const submitLabel = document.getElementById('figurinhaSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
+            const dataSangriaLabel = document.getElementById('dataSangriaLabel');
+            const tipoPagamentoField = document.getElementById('tipoPagamentoField');
             const camposNormais = ['valor_apurado', 'qtde_vendido', 'abastecido', 'tipo_pagamento'];
 
             aberturaBox.classList.toggle('d-none', !isAbertura);
+            tipoPagamentoField.classList.toggle('d-none', isAbertura);
+            dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
             quantidadeInicialInput.required = isAbertura;
             toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
 

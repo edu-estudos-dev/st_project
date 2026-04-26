@@ -11,9 +11,10 @@ const formatDate = value =>
 
 class PainelController {
   async renderPainel(req, res) {
+    const assinanteId = req.user.assinante_id;
     const [dashboardSummary, operationalPendingItems] = await Promise.all([
-      EstabelecimentoModel.getDashboardSummary(),
-      EstabelecimentoModel.getOperationalPendingItems()
+      EstabelecimentoModel.getDashboardSummary(assinanteId),
+      EstabelecimentoModel.getOperationalPendingItems(assinanteId)
     ]);
 
     const criticalVisitItems = operationalPendingItems

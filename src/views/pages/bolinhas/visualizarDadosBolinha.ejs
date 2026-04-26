@@ -4,6 +4,7 @@
 
 <body class="view-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="view-shell">
@@ -87,7 +88,7 @@
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
-                        <% if (sangria) { %>
+                        <% if (sangria && !isReadOnly) { %>
                             <a href="/bolinhas/sangrias/edit/<%= sangria.id %>" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>
                                 <span>Editar registro</span>

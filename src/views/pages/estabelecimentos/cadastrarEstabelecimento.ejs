@@ -119,18 +119,24 @@
                         <div class="col-12 col-lg-5">
                             <label>Produtos vinculados</label>
                             <div class="modern-checkbox-grid">
-                                <label class="modern-checkbox modern-checkbox-green" for="produto1">
+                                <% (productOptions || []).forEach((produto, index) => { %>
+                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                        <input class="form-check-input" type="checkbox" id="produto<%= index + 1 %>" name="produto" value="<%= produto.value %>" <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>>
+                                        <span><%= produto.label %></span>
+                                    </label>
+                                <% }) %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-green" for="produto1">
                                     <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= selectedProducts.includes('BOLINHAS') ? 'checked' : '' %>>
                                     <span>Bolinhas</span>
-                                </label>
-                                <label class="modern-checkbox modern-checkbox-blue" for="produto2">
+                                </label><% } %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-blue" for="produto2">
                                     <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
-                                    <span>Figurinhas</span>
-                                </label>
-                                <label class="modern-checkbox modern-checkbox-violet" for="produto3">
+                                    <span>Consignados</span>
+                                </label><% } %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-violet" for="produto3">
                                     <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= selectedProducts.includes('PELUCIAS') ? 'checked' : '' %>>
                                     <span>Pelúcias</span>
-                                </label>
+                                </label><% } %>
                             </div>
                             <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
                         </div>

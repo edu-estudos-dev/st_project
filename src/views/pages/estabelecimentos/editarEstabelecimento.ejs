@@ -117,18 +117,24 @@
                         <div class="col-12 col-lg-5">
                             <label>Produtos vinculados</label>
                             <div class="modern-checkbox-grid">
-                                <label class="modern-checkbox modern-checkbox-green" for="produto1">
+                                <% (productOptions || []).forEach((produto, index) => { %>
+                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                        <input class="form-check-input" type="checkbox" id="produto<%= index + 1 %>" name="produto" value="<%= produto.value %>" <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>>
+                                        <span><%= produto.label %></span>
+                                    </label>
+                                <% }) %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-green" for="produto1">
                                     <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>>
                                     <span>Bolinhas</span>
-                                </label>
-                                <label class="modern-checkbox modern-checkbox-blue" for="produto2">
+                                </label><% } %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-blue" for="produto2">
                                     <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>>
-                                    <span>Figurinhas</span>
-                                </label>
-                                <label class="modern-checkbox modern-checkbox-violet" for="produto3">
+                                    <span>Consignados</span>
+                                </label><% } %>
+                                <% if (false) { %><label class="modern-checkbox modern-checkbox-violet" for="produto3">
                                     <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>>
                                     <span>Pelúcias</span>
-                                </label>
+                                </label><% } %>
                             </div>
                             <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
                         </div>

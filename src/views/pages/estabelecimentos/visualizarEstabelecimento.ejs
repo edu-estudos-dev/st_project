@@ -4,6 +4,7 @@
 
 <body class="view-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="view-shell">
@@ -117,7 +118,7 @@
                                 <span>Gerar rota até aqui</span>
                             </button>
                         <% } %>
-                        <% if (estabelecimento) { %>
+                        <% if (estabelecimento && !isReadOnly) { %>
                             <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>
                                 <span>Editar cadastro</span>

@@ -4,6 +4,7 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="list-shell">
@@ -49,10 +50,12 @@
                                             <td>
                                                 <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
-                                                    <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                    <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
-                                                        <button type="submit" class="table-btn table-btn-pay">Pago</button>
-                                                    </form>
+                                                    <% if (!isReadOnly) { %>
+                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                        <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
+                                                            <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                        </form>
+                                                    <% } %>
                                                 </div>
                                             </td>
                                         </tr>
@@ -93,10 +96,12 @@
                                             <td>
                                                 <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
-                                                    <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                    <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
-                                                        <button type="submit" class="table-btn table-btn-pay">Pago</button>
-                                                    </form>
+                                                    <% if (!isReadOnly) { %>
+                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                        <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
+                                                            <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                        </form>
+                                                    <% } %>
                                                 </div>
                                             </td>
                                         </tr>

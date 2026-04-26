@@ -1,6 +1,9 @@
 import { execSync } from 'child_process';
+import dotenv from 'dotenv';
 
-const port = Number(process.argv[2] || process.env.PORT || 8081);
+dotenv.config();
+
+const port = Number(process.argv[2] || process.env.PORT || 8082);
 
 if (!Number.isInteger(port) || port <= 0) {
   console.error('Porta inválida para liberar.');

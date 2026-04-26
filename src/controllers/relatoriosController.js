@@ -19,6 +19,7 @@ const formatDate = value =>
 
 class RelatoriosController {
   index = async (req, res) => {
+    const assinanteId = req.user.assinante_id;
     const [
       dashboardSummary,
       estabelecimentos,
@@ -27,12 +28,12 @@ class RelatoriosController {
       lancamentos,
       financialNotifications
     ] = await Promise.all([
-      EstabelecimentoModel.getDashboardSummary(),
-      EstabelecimentoModel.findAll(),
-      EstabelecimentoModel.getOperationalPendingItems(7, 5),
-      EstabelecimentoModel.getRecentOperationalMovements(5),
-      LancamentoModel.findAll(),
-      LancamentoModel.getNotificationAlerts(5)
+      EstabelecimentoModel.getDashboardSummary(assinanteId),
+      EstabelecimentoModel.findAll(assinanteId),
+      EstabelecimentoModel.getOperationalPendingItems(assinanteId, 7, 5),
+      EstabelecimentoModel.getRecentOperationalMovements(assinanteId, 5),
+      LancamentoModel.findAll(assinanteId),
+      LancamentoModel.getNotificationAlerts(5, assinanteId)
     ]);
 
     const totalEstabelecimentos = estabelecimentos.length;
@@ -43,7 +44,7 @@ class RelatoriosController {
           .length
       },
       {
-        label: 'Figurinhas',
+        label: 'Consignados',
         value: estabelecimentos.filter(item => hasProduto(item.produto, 'FIGURINHAS'))
           .length
       },

@@ -8,7 +8,9 @@ const PRODUCT_LABELS = {
 
 export const requireProductAvailable = (productKey) => {
     return async (req, res, next) => {
-        const disponibilidade = await EstabelecimentoModel.getMenuProdutosDisponiveis();
+        const disponibilidade = await EstabelecimentoModel.getMenuProdutosDisponiveis(
+            req.user?.assinante_id
+        );
 
         if (disponibilidade[productKey]) {
             return next();

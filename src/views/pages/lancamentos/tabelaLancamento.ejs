@@ -4,6 +4,7 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
     <% const currentFiltro = typeof tipoFiltro !== 'undefined' ? tipoFiltro : 'todos'; %>
 
@@ -40,10 +41,12 @@
                             <i class="bi bi-bell"></i>
                             <span>Vencimentos</span>
                         </a>
-                        <a class="list-action" href="/lancamentos/add">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Novo lançamento</span>
-                        </a>
+                        <% if (!isReadOnly) { %>
+                            <a class="list-action" href="/lancamentos/add">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Novo lançamento</span>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
 
@@ -112,11 +115,13 @@
                                         <td>
                                             <div class="table-actions table-actions-launch">
                                                 <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Visualizar</a>
-                                                <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="table-btn table-btn-delete">Deletar</button>
-                                                </form>
+                                                <% if (!isReadOnly) { %>
+                                                    <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                    <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button type="submit" class="table-btn table-btn-delete">Deletar</button>
+                                                    </form>
+                                                <% } %>
                                             </div>
                                         </td>
                                     </tr>

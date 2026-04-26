@@ -89,7 +89,7 @@
                             <label for="produto">Produto</label>
                             <select class="form-select text-center" id="produto" name="produto" required>
                                 <% if (navProducts.bolinhas || lancamento.produto === 'bolinhas') { %><option value="bolinhas" <%= lancamento.produto === 'bolinhas' ? 'selected' : '' %>>Bolinhas</option><% } %>
-                                <% if (navProducts.figurinhas || lancamento.produto === 'figurinhas') { %><option value="figurinhas" <%= lancamento.produto === 'figurinhas' ? 'selected' : '' %>>Figurinhas</option><% } %>
+                                <% if (navProducts.figurinhas || lancamento.produto === 'figurinhas') { %><option value="figurinhas" <%= lancamento.produto === 'figurinhas' ? 'selected' : '' %>>Consignados</option><% } %>
                                 <% if (navProducts.pelucias || lancamento.produto === 'pelucias') { %><option value="pelucias" <%= lancamento.produto === 'pelucias' ? 'selected' : '' %>>Pelúcias</option><% } %>
                             </select>
                         </div>

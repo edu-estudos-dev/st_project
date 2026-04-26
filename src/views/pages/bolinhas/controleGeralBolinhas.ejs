@@ -13,7 +13,7 @@
             <div class="list-hero-content">
                 <span class="list-kicker"><i class="bi bi-diagram-3"></i> Operacional</span>
                 <h1>Controle geral das bolinhas</h1>
-                <p>Filtre bairros, destaque pontos que precisam de sangria e gere a rota em PDF dentro do mesmo padrão moderno do restante do sistema.</p>
+                <p>Filtre bairros, destaque pontos que precisam de visita e acompanhe os dados comerciais mais importantes da operação.</p>
             </div>
             <div class="list-hero-side">
                 <div class="list-stat"><strong>Pontos</strong><span><%= estabelecimentos.length %> registros</span></div>
@@ -25,7 +25,7 @@
             <section class="list-panel">
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
-                        <h2>Roteiro operacional</h2>
+                        <h2>Roteiro comercial</h2>
                         <p>Selecione os pontos que precisam de visita, filtre por bairro e gere rapidamente o PDF da rota.</p>
                     </div>
                 </div>
@@ -41,10 +41,10 @@
                                 const diasSangria = 7;
                                 const bairrosSangria = new Set();
                                 estabelecimentos.forEach(function(estabelecimento) {
-                                    const data = new Date(estabelecimento.data);
+                                    const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
                                     const hoje = new Date();
-                                    const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
-                                    if (diferencaDias > diasSangria) {
+                                    const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : Number.POSITIVE_INFINITY;
+                                    if (diferencaDias > diasSangria && estabelecimento.bairro) {
                                         bairrosSangria.add(estabelecimento.bairro);
                                     }
                                 });
@@ -73,36 +73,30 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAll" onclick="selecionarTodos(this)"></th>
-                                    <th>ID</th>
                                     <th>Estabelecimento</th>
                                     <th>Chave</th>
                                     <th>Máquina</th>
                                     <th>Endereço</th>
                                     <th>Bairro</th>
-                                    <th>Data</th>
                                     <th>Dias passados</th>
                                     <th>Situação</th>
-                                    <th>Contato</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaEstabelecimentos">
                                 <% estabelecimentos.forEach(function(estabelecimento) {
-                                    const data = new Date(estabelecimento.data);
+                                    const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
                                     const hoje = new Date();
-                                    const diferencaDias = Math.floor((hoje - data) / (1000 * 60 * 60 * 24));
+                                    const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
                                 %>
-                                <tr data-diferenca-dias="<%= diferencaDias %>" data-bairro="<%= estabelecimento.bairro %>">
+                                <tr data-diferenca-dias="<%= diferencaDias %>" data-sem-visita="<%= data ? 'false' : 'true' %>" data-bairro="<%= estabelecimento.bairro || '' %>">
                                     <td><input type="checkbox" class="checkbox-selecao" id="checkbox_<%= estabelecimento.id %>"></td>
-                                    <td><span class="table-badge table-badge-neutral">#<%= estabelecimento.id %></span></td>
                                     <td><label for="checkbox_<%= estabelecimento.id %>" class="table-title-cell"><%= estabelecimento.estabelecimento %></label></td>
-                                    <td><%= estabelecimento.chave %></td>
-                                    <td><%= estabelecimento.maquina %></td>
-                                    <td class="table-cell-wrap"><%= estabelecimento.endereco %></td>
-                                    <td><%= estabelecimento.bairro %></td>
-                                    <td><%= data.toLocaleDateString('pt-BR') %></td>
-                                    <td class="dias-passados"><%= diferencaDias %></td>
+                                    <td><%= estabelecimento.chave || '-' %></td>
+                                    <td><%= estabelecimento.maquina || '-' %></td>
+                                    <td class="table-cell-wrap"><%= estabelecimento.endereco || '-' %></td>
+                                    <td><%= estabelecimento.bairro || '-' %></td>
+                                    <td class="dias-passados"><%= data ? diferencaDias : 'Sem visita' %></td>
                                     <td class="situacao"></td>
-                                    <td><%= estabelecimento.telefone_contato %></td>
                                 </tr>
                                 <% }); %>
                             </tbody>
@@ -125,15 +119,24 @@
     }
     function carregarDiasSangria() {
         const diasSangria = localStorage.getItem('diasSangria');
-        if (diasSangria !== null) document.getElementById('diasSangria').value = diasSangria;
+        document.getElementById('diasSangria').value = diasSangria !== null ? diasSangria : '7';
         atualizarSituacao();
     }
     function atualizarSituacao() {
         const diasSangria = parseInt(document.getElementById('diasSangria').value, 10) || 0;
+        let pontosComAlerta = 0;
         document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
+            const semVisita = linha.getAttribute('data-sem-visita') === 'true';
             const diferencaDias = parseInt(linha.getAttribute('data-diferenca-dias'), 10);
             const situacaoCelula = linha.querySelector('.situacao');
-            if (diferencaDias > diasSangria) {
+            const precisaVisita = semVisita || diferencaDias > diasSangria;
+            const alerta30Dias = semVisita || diferencaDias > 30;
+
+            if (alerta30Dias) {
+                pontosComAlerta += 1;
+                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Alerta 30+ dias</span>';
+                linha.classList.add('table-row-exit-highlight');
+            } else if (precisaVisita) {
                 situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sangria</span>';
                 linha.classList.add('table-row-exit-highlight');
             } else {
@@ -141,14 +144,20 @@
                 linha.classList.remove('table-row-exit-highlight');
             }
         });
+
+        if (pontosComAlerta > 0 && window.AppAlerts && !document.body.dataset.bolinhasAlertShown) {
+            document.body.dataset.bolinhasAlertShown = 'true';
+            window.AppAlerts.warning(`${pontosComAlerta} ponto(s) de bolinhas estão há mais de 30 dias sem visita.`);
+        }
     }
     function filtrarPorBairro() {
         const bairroSelecionado = document.getElementById('bairroSelect').value;
         document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
             const bairro = linha.getAttribute('data-bairro');
             const situacaoCelula = linha.querySelector('.situacao').textContent;
-            if (bairroSelecionado === 'mostrar_todos' && situacaoCelula.includes('Sangria')) linha.style.display = '';
-            else if (bairroSelecionado !== 'mostrar_todos' && bairro === bairroSelecionado && situacaoCelula.includes('Sangria')) linha.style.display = '';
+            const precisaVisita = situacaoCelula.includes('Sangria') || situacaoCelula.includes('Alerta');
+            if (bairroSelecionado === 'mostrar_todos' && precisaVisita) linha.style.display = '';
+            else if (bairroSelecionado !== 'mostrar_todos' && bairro === bairroSelecionado && precisaVisita) linha.style.display = '';
             else linha.style.display = 'none';
         });
     }
@@ -165,15 +174,15 @@
         linhas.forEach(linha => {
             if (linha.style.display !== 'none' && linha.querySelector('.checkbox-selecao').checked) {
                 const cells = Array.from(linha.children);
-                data.push([cells[2].innerText, cells[5].innerText, cells[3].innerText, cells[4].innerText, cells[6].innerText, cells[10].innerText]);
-                bairros.add(cells[6].innerText);
+                data.push([cells[1].innerText, cells[4].innerText, cells[2].innerText, cells[3].innerText, cells[5].innerText]);
+                bairros.add(cells[5].innerText);
                 algumMarcado = true;
             }
         });
         if (!algumMarcado) { alert('Por favor, selecione pelo menos um estabelecimento para gerar o PDF.'); return; }
         doc.setFontSize(14);
         doc.text(`Rota de Sangria para os bairros: ${Array.from(bairros).join(', ')}`, 20, 20);
-        doc.autoTable({ head: [['Estabelecimento', 'Endereço', 'Chave', 'Máquina', 'Bairro', 'Telefone de Contato']], body: data, styles: { fontSize: 8, halign: 'center' }, margin: { top: 30 }, headStyles: { fillColor: [41, 128, 185] } });
+        doc.autoTable({ head: [['Estabelecimento', 'Endereço', 'Chave', 'Máquina', 'Bairro']], body: data, styles: { fontSize: 8, halign: 'center' }, margin: { top: 30 }, headStyles: { fillColor: [41, 128, 185] } });
         doc.save('Tabela_Estabelecimentos.pdf');
         document.querySelectorAll('.checkbox-selecao').forEach(checkbox => { checkbox.checked = false; });
     }

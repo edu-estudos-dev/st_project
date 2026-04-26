@@ -3,7 +3,7 @@ import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 const PRODUCT_OPTIONS = [
   { value: 'todos', label: 'Todos os produtos' },
   { value: 'BOLINHAS', label: 'Bolinhas' },
-  { value: 'FIGURINHAS', label: 'Figurinhas' },
+  { value: 'FIGURINHAS', label: 'Consignados' },
   { value: 'PELUCIAS', label: 'Pelúcias' }
 ];
 
@@ -16,7 +16,7 @@ const formatProduto = produto => {
     .filter(Boolean)
     .map(item => {
       if (item === 'BOLINHAS') return 'Bolinhas';
-      if (item === 'FIGURINHAS') return 'Figurinhas';
+      if (item === 'FIGURINHAS') return 'Consignados';
       if (item === 'PELUCIAS') return 'Pelúcias';
       return item;
     })
@@ -44,17 +44,33 @@ const buildWazeLink = address => {
 class RotasController {
   index = async (req, res) => {
     const usuario = req.user;
-    const bairro = String(req.query.bairro ?? '').trim().toUpperCase();
+    const rawBairros = Array.isArray(req.query.bairros)
+      ? req.query.bairros
+      : Array.isArray(req.query.bairro)
+        ? req.query.bairro
+        : [req.query.bairros ?? req.query.bairro].filter(Boolean);
+    const selectedBairros = rawBairros
+      .map(item => String(item ?? '').trim().toUpperCase())
+      .filter(Boolean);
+    const bairro = selectedBairros[0] || '';
     const produto =
       String(req.query.produto ?? 'todos').trim().toUpperCase() || 'TODOS';
 
     try {
-      const bairros = await EstabelecimentoModel.getRouteBairros();
-      const shouldLoadPoints = Boolean(bairro);
+      const bairros = await EstabelecimentoModel.getRouteBairros(
+        usuario.assinante_id
+      );
+      const navigationProducts = res.locals.navigationProducts || {};
+      const produtoOptions = PRODUCT_OPTIONS.filter(option => {
+        if (option.value === 'todos') return true;
+        return Boolean(navigationProducts[option.value.toLowerCase()]);
+      });
+      const shouldLoadPoints = selectedBairros.length > 0;
       const routePoints = shouldLoadPoints
         ? await EstabelecimentoModel.getRoutePoints({
-            bairro,
-            produto: produto === 'TODOS' ? 'todos' : produto
+            bairros: selectedBairros,
+            produto: produto === 'TODOS' ? 'todos' : produto,
+            assinanteId: usuario.assinante_id
           })
         : [];
 
@@ -94,8 +110,9 @@ class RotasController {
         title: 'Rotas dos Pontos',
         usuario,
         bairros,
-        produtoOptions: PRODUCT_OPTIONS,
+        produtoOptions,
         selectedBairro: bairro,
+        selectedBairros,
         selectedProduto: produto === 'TODOS' ? 'todos' : produto,
         routeItems,
         routeSummary: {

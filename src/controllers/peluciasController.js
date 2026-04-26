@@ -4,7 +4,7 @@ class PeluciasController {
     addSangriaForm = async (req, res) => {
         const usuario = req.user || null;
         try {
-            const estabelecimentos = await peluciasModel.getEstabelecimentos();
+            const estabelecimentos = await peluciasModel.getEstabelecimentos(usuario.assinante_id);
 
             res.render('pages/pelucias/cadastrarSangriaPelucia', {
                 estabelecimentos,
@@ -19,6 +19,7 @@ class PeluciasController {
     };
 
     addSangria = async (req, res) => {
+        const usuario = req.user;
         const {
             estabelecimento_id,
             data_sangria,
@@ -35,7 +36,7 @@ class PeluciasController {
 
         try {
             const isAberturaInicial = abertura_inicial === 'on';
-            const hasHistorico = estabelecimento_id ? await peluciasModel.hasSangria(estabelecimento_id) : false;
+            const hasHistorico = estabelecimento_id ? await peluciasModel.hasSangria(estabelecimento_id, usuario.assinante_id) : false;
 
             if (isAberturaInicial) {
                 if (!estabelecimento_id || !data_sangria) {
@@ -58,6 +59,7 @@ class PeluciasController {
                 }
 
                 await peluciasModel.createSangria({
+                    assinante_id: usuario.assinante_id,
                     estabelecimento_id,
                     data_sangria,
                     valor_apurado: 0,
@@ -80,8 +82,8 @@ class PeluciasController {
                 throw new Error('Este ponto ainda não possui registro inicial de pelúcias. Faça primeiro o cadastro inicial.');
             }
 
-            const ultimoRegistro = await peluciasModel.getUltimosDados(estabelecimento_id);
-            const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(estabelecimento_id);
+            const ultimoRegistro = await peluciasModel.getUltimosDados(estabelecimento_id, usuario.assinante_id);
+            const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(estabelecimento_id, usuario.assinante_id);
 
             const leituraAnterior = Number(ultimoRegistro.ultima_leitura || 0);
             const leituraAtual = Number(leitura_atual || 0);
@@ -101,6 +103,7 @@ class PeluciasController {
             const valorLiquido = Number(valor_apurado || 0) - valorDaComissao;
 
             await peluciasModel.createSangria({
+                assinante_id: usuario.assinante_id,
                 estabelecimento_id,
                 data_sangria,
                 leitura_atual: leituraAtual,
@@ -126,7 +129,7 @@ class PeluciasController {
     index = async (req, res) => {
         const usuario = req.user;
         try {
-            const sangrias = await peluciasModel.getSangrias();
+            const sangrias = await peluciasModel.getSangrias(usuario.assinante_id);
             const { success, error } = req.query;
             res.render('pages/pelucias/tabelaPelucia', {
                 sangrias,
@@ -144,8 +147,8 @@ class PeluciasController {
         const usuario = req.user;
         try {
             const id = req.params.id;
-            const estabelecimentos = await peluciasModel.getEstabelecimentos();
-            const sangria = await peluciasModel.getSangriaById(id);
+            const estabelecimentos = await peluciasModel.getEstabelecimentos(usuario.assinante_id);
+            const sangria = await peluciasModel.getSangriaById(id, usuario.assinante_id);
 
             if (!sangria) {
                 return res.status(404).send('Sangria não encontrada.');
@@ -164,6 +167,7 @@ class PeluciasController {
 
     updateSangria = async (req, res) => {
         try {
+            const usuario = req.user;
             const {
                 id,
                 estabelecimento_id,
@@ -181,6 +185,7 @@ class PeluciasController {
             const valorLiquido = valor_apurado - valorDaComissao;
 
             await peluciasModel.updateSangria({
+                assinante_id: usuario.assinante_id,
                 id,
                 estabelecimento_id,
                 data_sangria,
@@ -204,8 +209,9 @@ class PeluciasController {
 
     deleteSangria = async (req, res) => {
         try {
+            const usuario = req.user;
             const id = req.params.id;
-            await peluciasModel.deleteSangria(id);
+            await peluciasModel.deleteSangria(id, usuario.assinante_id);
             res.status(200).json({ success: true, message: 'Sangria excluída com sucesso' });
         } catch (error) {
             console.error('Erro ao deletar sangria:', error);
@@ -217,7 +223,7 @@ class PeluciasController {
         const usuario = req.user;
         try {
             const id = req.params.id;
-            const sangria = await peluciasModel.getSangriaById(id);
+            const sangria = await peluciasModel.getSangriaById(id, usuario.assinante_id);
 
             if (!sangria) {
                 return res.status(404).send('Sangria não encontrada.');
@@ -233,7 +239,7 @@ class PeluciasController {
     getReceitaPelucias = async (req, res) => {
         const usuario = req.user;
         try {
-            const receita = await peluciasModel.getMonthlyRevenue();
+            const receita = await peluciasModel.getMonthlyRevenue(usuario.assinante_id);
             res.render('pages/pelucias/receitaPelucia', {
                 receita,
                 usuario
@@ -247,7 +253,7 @@ class PeluciasController {
     renderControleGeralPelucias = async (req, res) => {
         const usuario = req.user;
         try {
-            const dadosControleGeral = await peluciasModel.getLatestSangriaForAllEstabelecimentos();
+            const dadosControleGeral = await peluciasModel.getLatestSangriaForAllEstabelecimentos(usuario.assinante_id);
 
             res.render('pages/pelucias/controleGeralPelucias', {
                 estabelecimentos: dadosControleGeral,
@@ -262,7 +268,7 @@ class PeluciasController {
     controleGeral = async (req, res) => {
         const usuario = req.user || null;
         try {
-            const estabelecimentos = await peluciasModel.getAllSangrias();
+            const estabelecimentos = await peluciasModel.getAllSangrias(usuario.assinante_id);
 
             res.render('pages/pelucias/controleGeralPelucias', {
                 estabelecimentos,
@@ -277,11 +283,11 @@ class PeluciasController {
     getUltimosDados = async (req, res) => {
         const { estabelecimentoId } = req.params;
         try {
-            const dados = await peluciasModel.getUltimosDados(estabelecimentoId);
+            const dados = await peluciasModel.getUltimosDados(estabelecimentoId, req.user.assinante_id);
             res.json({
                 ultima_leitura: Number(dados.ultima_leitura || 0),
                 estoque: Number(dados.estoque || 0),
-                hasHistorico: await peluciasModel.hasSangria(estabelecimentoId)
+                hasHistorico: await peluciasModel.hasSangria(estabelecimentoId, req.user.assinante_id)
             });
         } catch (error) {
             console.error('Erro ao buscar os últimos dados:', error);

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Visualizar Sangria de Figurinhas' }) %>
+<%- include('../../partials/head', { title: 'Visualizar Sangria de Consignados' }) %>
 
 <body class="view-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="view-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Figurinhas' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Consignados' }) %>
 
         <section class="view-hero view-hero-blue">
             <div class="view-hero-content">
@@ -22,7 +23,7 @@
                 </div>
                 <div class="list-stat">
                     <strong>Produto</strong>
-                    <span>Figurinhas</span>
+                    <span>Consignados</span>
                 </div>
             </div>
         </section>
@@ -84,14 +85,14 @@
                     <div class="view-actions-copy">
                         <%= sangria
                             ? 'Use esta visualização para conferir o histórico do ponto antes de editar ou registrar a próxima visita.'
-                            : 'Você pode voltar para a listagem geral de figurinhas e continuar a navegação normalmente.' %>
+                            : 'Você pode voltar para a listagem geral de consignados e continuar a navegação normalmente.' %>
                     </div>
                     <div class="view-actions-buttons">
                         <a href="/figurinhas/sangrias" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
-                        <% if (sangria) { %>
+                        <% if (sangria && !isReadOnly) { %>
                             <a href="/figurinhas/sangrias/edit/<%= sangria.id %>" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>
                                 <span>Editar registro</span>

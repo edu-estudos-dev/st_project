@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<%- include('../../partials/head', { title: 'Editar Sangria de Figurinhas' }) %>
+<%- include('../../partials/head', { title: 'Editar Sangria de Consignados' }) %>
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
@@ -8,19 +8,19 @@
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Figurinhas' }) %>
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Consignados' }) %>
 
         <section class="form-hero form-hero-blue">
             <div class="form-hero-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
-                <h1>Editar sangria de figurinhas</h1>
+                <h1>Editar sangria de consignados</h1>
                 <p>Deixei a edição com o mesmo padrão visual do cadastro para facilitar a revisão de quantidades, data da visita e observações.</p>
             </div>
 
             <div class="form-hero-side">
                 <div class="form-hero-stat">
                     <strong>Produto</strong>
-                    <span>Figurinhas</span>
+                    <span>Consignados</span>
                 </div>
                 <div class="form-hero-stat">
                     <strong>Registro</strong>
@@ -117,7 +117,7 @@
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
                         <strong>Atualizar visita</strong>
-                        <span>Revise as quantidades e confirme a atualização desta sangria de figurinhas.</span>
+                        <span>Revise as quantidades e confirme a atualização desta sangria de consignados.</span>
                     </div>
 
                     <div class="form-actions-buttons">
@@ -135,7 +135,7 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
     function calculateQuantidadeDeixada() {
         const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;

@@ -3,6 +3,7 @@ import { formatTelefone } from '../utilities/formatters.js';
 import {
   formatProdutoList,
   hasProduto,
+  normalizeSelectedProdutos,
   serializeProdutos
 } from '../utilities/produtoUtils.js';
 
@@ -29,11 +30,41 @@ const parseCoordinate = (value, type) => {
   return normalized;
 };
 
+const PRODUCT_OPTIONS = [
+  { value: 'BOLINHAS', label: 'Bolinhas', className: 'modern-checkbox-green' },
+  { value: 'FIGURINHAS', label: 'Consignados', className: 'modern-checkbox-blue' },
+  { value: 'PELUCIAS', label: 'Pelucias', className: 'modern-checkbox-violet' }
+];
+
+const getEnabledProductOptions = (req, selectedProdutos = []) => {
+  const navProducts = req.res?.locals?.navigationProducts || {};
+  const selected = normalizeSelectedProdutos(selectedProdutos);
+
+  return PRODUCT_OPTIONS.filter((option) => {
+    const key = option.value.toLowerCase();
+    return Boolean(navProducts[key]) || selected.includes(option.value);
+  });
+};
+
+const validateProdutosEnabled = (req, produtos) => {
+  const enabledValues = getEnabledProductOptions(req).map((option) => option.value);
+  const selected = normalizeSelectedProdutos(produtos);
+  const invalid = selected.filter((produto) => !enabledValues.includes(produto));
+
+  if (invalid.length) {
+    throw new Error('Este produto nao esta habilitado na sua assinatura.');
+  }
+
+  return selected;
+};
+
 class EstabelecimentoController {
   index = async (req, res) => {
     const usuario = req.user;
     try {
-      let estabelecimentos = await EstabelecimentoModel.findAll();
+      let estabelecimentos = await EstabelecimentoModel.findAll(
+        usuario.assinante_id
+      );
 
       estabelecimentos = estabelecimentos.map(estabelecimento => {
         estabelecimento.telefone_contato = formatTelefone(
@@ -63,7 +94,10 @@ class EstabelecimentoController {
     const usuario = req.user;
     try {
       const query = req.body.estabelecimento;
-      const estabelecimentos = await EstabelecimentoModel.search(query);
+      const estabelecimentos = await EstabelecimentoModel.search(
+        query,
+        usuario.assinante_id
+      );
 
       res.status(200).render('pages/estabelecimentos/tabelaEstabelecimentos', {
         title: 'Search Results',
@@ -86,6 +120,7 @@ class EstabelecimentoController {
         success: null,
         error: null,
         formData: {},
+        productOptions: getEnabledProductOptions(req),
         usuario
       });
     }
@@ -105,6 +140,7 @@ class EstabelecimentoController {
         }
       }
 
+      validateProdutosEnabled(req, req.body.produto);
       const produtos = serializeProdutos(req.body.produto);
       if (!produtos) {
         throw new Error(
@@ -113,6 +149,7 @@ class EstabelecimentoController {
       }
 
       const estabelecimento = {
+        assinante_id: usuario.assinante_id,
         estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
         produto: produtos,
         chave: req.body.chave ? req.body.chave.trim() : '',
@@ -132,7 +169,9 @@ class EstabelecimentoController {
       await EstabelecimentoModel.create(estabelecimento);
 
       // 🔥 busca lista atualizada
-      let estabelecimentos = await EstabelecimentoModel.findAll();
+      let estabelecimentos = await EstabelecimentoModel.findAll(
+        usuario.assinante_id
+      );
 
       estabelecimentos = estabelecimentos.map(est => {
         est.telefone_contato = formatTelefone(est.telefone_contato);
@@ -162,6 +201,7 @@ class EstabelecimentoController {
           title: 'Cadastrar Estabelecimento',
           success: null,
           usuario,
+          productOptions: getEnabledProductOptions(req, req.body.produto),
           formData: req.body,
           error:
             error.message ||
@@ -174,6 +214,7 @@ class EstabelecimentoController {
     const usuario = req.user;
     try {
       const id = req.params.id;
+      validateProdutosEnabled(req, req.body.produto);
       const produtos = serializeProdutos(req.body.produto);
 
       if (!produtos) {
@@ -202,13 +243,18 @@ class EstabelecimentoController {
         longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
 
-      await EstabelecimentoModel.update(id, estabelecimento);
+      await EstabelecimentoModel.update(
+        usuario.assinante_id,
+        id,
+        estabelecimento
+      );
       return res
         .status(200)
         .render('pages/estabelecimentos/editarEstabelecimento', {
           title: 'Editar Estabelecimento',
           estabelecimento,
           hasProduto,
+          productOptions: getEnabledProductOptions(req, estabelecimento.produto),
           success: 'Estabelecimento atualizado com sucesso!',
           error: null,
           usuario
@@ -224,6 +270,7 @@ class EstabelecimentoController {
           title: 'Editar Estabelecimento',
           estabelecimento: req.body,
           hasProduto,
+          productOptions: getEnabledProductOptions(req, req.body.produto),
           success: null,
           usuario,
           error: error.message || 'Erro ao atualizar estabelecimento.'
@@ -235,7 +282,10 @@ class EstabelecimentoController {
     const usuario = req.user;
     try {
       const id = req.params.id;
-      const estabelecimento = await EstabelecimentoModel.findById(id);
+      const estabelecimento = await EstabelecimentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
 
       if (!estabelecimento) {
         return res
@@ -249,6 +299,7 @@ class EstabelecimentoController {
           title: 'Editar Estabelecimento',
           estabelecimento,
           hasProduto,
+          productOptions: getEnabledProductOptions(req, estabelecimento.produto),
           success: null,
           error: null,
           usuario
@@ -266,7 +317,15 @@ class EstabelecimentoController {
     const { id } = req.params;
 
     try {
-      const estabelecimento = await EstabelecimentoModel.findById(id);
+      const estabelecimento = await EstabelecimentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!estabelecimento) {
+        return res.status(404).send('Estabelecimento nao encontrado.');
+      }
+
       estabelecimento.produtoFormatado = formatProdutoList(
         estabelecimento.produto
       );
@@ -289,11 +348,15 @@ class EstabelecimentoController {
 
   deleteEstabelecimento = async (req, res) => {
     try {
+      const usuario = req.user;
       const id = req.params.id;
-      const estabelecimento = await EstabelecimentoModel.findById(id);
+      const estabelecimento = await EstabelecimentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
 
       if (estabelecimento) {
-        await EstabelecimentoModel.destroy(id);
+        await EstabelecimentoModel.destroy(id, usuario.assinante_id);
         return res
           .status(200)
           .json({ message: 'Estabelecimento Excluído com Sucesso!' });
@@ -314,7 +377,10 @@ class EstabelecimentoController {
     const { termo } = req.body;
     const usuario = req.user;
     try {
-      const estabelecimentos = await EstabelecimentoModel.search(termo);
+      const estabelecimentos = await EstabelecimentoModel.search(
+        termo,
+        usuario.assinante_id
+      );
       return res
         .status(200)
         .render('pages/estabelecimentos/tabelaEstabelecimentos', {

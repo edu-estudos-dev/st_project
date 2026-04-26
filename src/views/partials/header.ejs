@@ -10,6 +10,7 @@
         </button>
 
         <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+        <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto">
@@ -27,12 +28,14 @@
                                 <small class="menu-link-text">Veja a lista completa dos pontos ativos.</small>
                             </a>
                         </li>
+                        <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/estabelecimentos/add">
                                 <span class="menu-link-title">Cadastrar estabelecimento</span>
                                 <small class="menu-link-text">Abra o formulário para incluir um novo ponto.</small>
                             </a>
                         </li>
+                        <% } %>
                     </ul>
                 </li>
 
@@ -50,12 +53,14 @@
                                 <small class="menu-link-text">Consulte entradas, saídas e histórico financeiro.</small>
                             </a>
                         </li>
+                        <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos/add">
                                 <span class="menu-link-title">Fazer lançamento</span>
                                 <small class="menu-link-text">Registre uma nova movimentação financeira.</small>
                             </a>
                         </li>
+                        <% } %>
                         <li>
                             <a class="dropdown-item menu-link" href="/fluxo-de-caixa">
                                 <span class="menu-link-title">Fluxo de caixa</span>
@@ -74,7 +79,7 @@
                                         <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
                                     <% } %>
                                     <% if (navProducts.figurinhas) { %>
-                                        <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Figurinhas</a></li>
+                                        <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Consignados</a></li>
                                     <% } %>
                                     <% if (navProducts.pelucias) { %>
                                         <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
@@ -84,7 +89,6 @@
                         <% } %>
                     </ul>
                 </li>
-
                 <li class="nav-item dropdown">
                     <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -111,9 +115,22 @@
                                 <small class="menu-link-text">Veja vencimentos próximos e itens atrasados.</small>
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/assinatura/produtos">
+                                <span class="menu-link-title">Produtos da operacao</span>
+                                <small class="menu-link-text">Escolha quais frentes aparecem no sistema.</small>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
+                <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
+                <li class="nav-item">
+                    <a class="nav-link btn-header fs-6" href="/admin/assinantes">Assinantes</a>
+                </li>
+                <% } %>
+
+                <% if (navProducts.hasAny) { %>
                 <li class="nav-item dropdown">
                     <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside"
@@ -121,6 +138,7 @@
                         Operacional
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
+                        <% if (navProducts.bolinhas) { %>
                         <li class="dropdown-submenu">
                             <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                 id="navbarDropdownBolinhas" aria-expanded="false">
@@ -128,27 +146,31 @@
                                 <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
-                                <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
-                                <% if (navProducts.bolinhas) { %>
-                                    <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
-                                    <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
+                                <% if (!isReadOnly) { %>
+                                    <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
                                 <% } %>
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
+                                <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
                             </ul>
                         </li>
+                        <% } %>
+                        <% if (navProducts.figurinhas) { %>
                         <li class="dropdown-submenu">
                             <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                 id="navbarDropdownFigurinhas" aria-expanded="false">
-                                <span class="menu-link-title">Figurinhas</span>
+                                <span class="menu-link-title">Consignados</span>
                                 <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
-                                <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
-                                <% if (navProducts.figurinhas) { %>
-                                    <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
-                                    <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
+                                <% if (!isReadOnly) { %>
+                                    <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
                                 <% } %>
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
+                                <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
                             </ul>
                         </li>
+                        <% } %>
+                        <% if (navProducts.pelucias) { %>
                         <li class="dropdown-submenu">
                             <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                 id="navbarDropdownPelucias" aria-expanded="false">
@@ -156,15 +178,17 @@
                                 <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
-                                <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
-                                <% if (navProducts.pelucias) { %>
-                                    <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
-                                    <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
+                                <% if (!isReadOnly) { %>
+                                    <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
                                 <% } %>
+                                <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
+                                <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
                             </ul>
                         </li>
+                        <% } %>
                     </ul>
                 </li>
+                <% } %>
             </ul>
 
             <div class="d-flex align-items-center gap-2">
@@ -184,11 +208,408 @@
                     <button class="btn btn-danger text-white px-3" type="submit">Sair</button>
                 </form>
             </div>
+            <div class="app-nav-actions">
+                <button type="button" class="nav-alert-link" id="notificationDrawerOpen" title="Alertas ativos" aria-label="Abrir alertas">
+                    <i class="bi bi-bell"></i>
+                    <% if (financialNotifications && financialNotifications.total > 0) { %>
+                        <span class="nav-alert-badge"><%= financialNotifications.total %></span>
+                    <% } %>
+                </button>
+                <form action="/search" class="app-nav-search" role="search" method="POST" novalidate>
+                    <i class="bi bi-search"></i>
+                    <input name="termo" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar no sistema">
+                    <button class="btn btn-outline-light" type="submit">Buscar</button>
+                </form>
+                <div class="nav-account-menu">
+                    <button type="button" class="nav-account-toggle" id="accountMenuToggle" aria-expanded="false">
+                        <i class="bi bi-list"></i>
+                        <span class="nav-account-avatar"><%= (usuario?.username || 'U').slice(0, 1).toUpperCase() %></span>
+                    </button>
+                    <div class="nav-account-dropdown" id="accountMenu">
+                        <a class="nav-account-profile" href="/painel">
+                            <span class="nav-account-avatar nav-account-avatar-lg"><%= (usuario?.username || 'U').slice(0, 1).toUpperCase() %></span>
+                            <span>
+                                <strong><%= usuario?.username || 'Usuário' %></strong>
+                                <small><%= usuario?.email || 'VendMaster' %></small>
+                            </span>
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                        <div class="nav-account-divider"></div>
+                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>Relatórios</span></a>
+                        <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
+                        <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Produtos da operação</span></a>
+                        <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
+                        <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
+                            <a href="/admin/assinantes"><i class="bi bi-shield-check"></i><span>Assinantes</span></a>
+                        <% } %>
+                        <div class="nav-account-divider"></div>
+                        <form action="/logout" method="POST">
+                            <button type="submit"><i class="bi bi-box-arrow-right"></i><span>Sair</span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
+<div class="notification-drawer-backdrop" id="notificationDrawerBackdrop"></div>
+<aside class="notification-drawer" id="notificationDrawer" aria-hidden="true">
+    <div class="notification-drawer-header">
+        <div>
+            <span>Central</span>
+            <h2>Alertas</h2>
+        </div>
+        <button type="button" id="notificationDrawerClose" aria-label="Fechar alertas">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div class="notification-drawer-list">
+        <% const notificationItems = [
+            ...((financialNotifications?.atrasados || []).map((item) => ({ ...item, tone: 'danger', label: `${Math.abs(item.diffDays || 0)} dia(s) atrasado`, title: 'Vencimento atrasado' }))),
+            ...((financialNotifications?.proximos || []).map((item) => ({ ...item, tone: 'warning', label: `${item.diffDays || 0} dia(s)`, title: 'Vencimento próximo' })))
+        ]; %>
+        <% if (notificationItems.length) { %>
+            <% notificationItems.forEach((item) => { %>
+                <a class="notification-drawer-item notification-drawer-item-<%= item.tone %>" href="/lancamentos/vencimentos">
+                    <span class="notification-drawer-icon"><i class="bi bi-exclamation-circle"></i></span>
+                    <span class="notification-drawer-copy">
+                        <strong><%= item.title %></strong>
+                        <small><%= item.descricao || item.tipo_de_lancamento || 'Lançamento financeiro' %></small>
+                    </span>
+                    <span class="notification-drawer-time"><%= item.label %></span>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <div class="notification-drawer-empty">
+                <i class="bi bi-check2-circle"></i>
+                <strong>Nenhum alerta ativo</strong>
+                <span>Vencimentos e avisos importantes aparecerão aqui.</span>
+            </div>
+        <% } %>
+    </div>
+    <a class="notification-drawer-footer" href="/lancamentos/vencimentos">Ver detalhes financeiros</a>
+</aside>
+
 <style>
+    .app-nav .navbar-collapse > .d-flex.align-items-center.gap-2,
+    .app-nav .nav-item:has(#navbarDropdownPlanejamento) {
+        display: none !important;
+    }
+
+    .app-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        margin-left: auto;
+    }
+
+    .app-nav-search {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-width: 250px;
+    }
+
+    .app-nav-search > i {
+        position: absolute;
+        left: 0.85rem;
+        z-index: 2;
+        color: #64748b;
+    }
+
+    .app-nav-search .form-control {
+        min-height: 40px;
+        padding-left: 2.25rem;
+        border-radius: 12px;
+    }
+
+    .app-nav-search .btn {
+        min-height: 40px;
+        padding-inline: 0.9rem;
+        border-color: rgba(37, 99, 235, 0.28);
+        color: #1d4ed8;
+        background: #eff6ff;
+    }
+
+    .nav-alert-link,
+    .nav-account-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        min-width: 42px;
+        min-height: 42px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 14px;
+        background: #fff;
+        color: #0f172a;
+        cursor: pointer;
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+    }
+
+    .nav-alert-link i,
+    .nav-account-toggle i {
+        font-size: 1.05rem;
+    }
+
+    .nav-alert-badge {
+        position: absolute;
+        top: -0.32rem;
+        right: -0.32rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.25rem;
+        height: 1.25rem;
+        padding: 0 0.28rem;
+        border-radius: 999px;
+        background: #ef4444;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 900;
+    }
+
+    .nav-account-menu {
+        position: relative;
+    }
+
+    .nav-account-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #1d4ed8, #22c55e);
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 900;
+    }
+
+    .nav-account-avatar-lg {
+        width: 46px;
+        height: 46px;
+        font-size: 1.05rem;
+        flex: 0 0 auto;
+    }
+
+    .nav-account-dropdown {
+        position: absolute;
+        top: calc(100% + 0.8rem);
+        right: 0;
+        z-index: 1100;
+        display: none;
+        width: min(330px, calc(100vw - 2rem));
+        padding: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 18px;
+        background: #10151f;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+    }
+
+    .nav-account-menu.is-open .nav-account-dropdown {
+        display: grid;
+        gap: 0.25rem;
+    }
+
+    .nav-account-dropdown a,
+    .nav-account-dropdown button {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        width: 100%;
+        padding: 0.82rem 0.75rem;
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        color: #e5e7eb;
+        font-weight: 800;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .nav-account-dropdown a:hover,
+    .nav-account-dropdown button:hover {
+        background: rgba(148, 163, 184, 0.12);
+        color: #fff;
+    }
+
+    .nav-account-profile {
+        align-items: center;
+        padding: 0.7rem 0.5rem 0.95rem !important;
+    }
+
+    .nav-account-profile span:nth-child(2) {
+        display: grid;
+        min-width: 0;
+    }
+
+    .nav-account-profile small {
+        color: #94a3b8;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .nav-account-profile .bi-chevron-right {
+        margin-left: auto;
+        color: #94a3b8;
+    }
+
+    .nav-account-divider {
+        height: 1px;
+        margin: 0.45rem 0;
+        background: rgba(148, 163, 184, 0.22);
+    }
+
+    .notification-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1190;
+        display: none;
+        background: rgba(15, 23, 42, 0.38);
+        backdrop-filter: blur(2px);
+    }
+
+    .notification-drawer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1200;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        width: min(460px, 92vw);
+        height: 100vh;
+        background: #171c26;
+        color: #f8fafc;
+        transform: translateX(-100%);
+        transition: transform 220ms ease;
+        box-shadow: 24px 0 70px rgba(15, 23, 42, 0.32);
+    }
+
+    body.notification-drawer-open .notification-drawer {
+        transform: translateX(0);
+    }
+
+    body.notification-drawer-open .notification-drawer-backdrop {
+        display: block;
+    }
+
+    .notification-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.35rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    }
+
+    .notification-drawer-header span {
+        color: #94a3b8;
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .notification-drawer-header h2 {
+        margin: 0.1rem 0 0;
+        font-size: 1.45rem;
+        font-weight: 900;
+    }
+
+    .notification-drawer-header button {
+        border: 0;
+        background: transparent;
+        color: #94a3b8;
+        font-size: 1.1rem;
+    }
+
+    .notification-drawer-list {
+        overflow-y: auto;
+    }
+
+    .notification-drawer-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 1rem;
+        padding: 1.15rem 1.35rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+        color: #e5e7eb;
+        text-decoration: none;
+    }
+
+    .notification-drawer-item:hover {
+        background: rgba(148, 163, 184, 0.1);
+        color: #fff;
+    }
+
+    .notification-drawer-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.12);
+    }
+
+    .notification-drawer-item-danger .notification-drawer-icon {
+        color: #fecaca;
+        background: rgba(239, 68, 68, 0.16);
+    }
+
+    .notification-drawer-item-warning .notification-drawer-icon {
+        color: #fde68a;
+        background: rgba(245, 158, 11, 0.16);
+    }
+
+    .notification-drawer-copy {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .notification-drawer-copy strong {
+        font-size: 0.98rem;
+    }
+
+    .notification-drawer-copy small,
+    .notification-drawer-time {
+        color: #b6bdca;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .notification-drawer-time {
+        white-space: nowrap;
+        font-size: 0.82rem;
+    }
+
+    .notification-drawer-empty {
+        display: grid;
+        place-items: center;
+        gap: 0.55rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: #b6bdca;
+    }
+
+    .notification-drawer-empty i {
+        color: #22c55e;
+        font-size: 2rem;
+    }
+
+    .notification-drawer-footer {
+        padding: 1rem 1.35rem;
+        border-top: 1px solid rgba(148, 163, 184, 0.24);
+        color: #bfdbfe;
+        font-weight: 900;
+        text-align: center;
+        text-decoration: none;
+    }
+
     .dropdown-submenu {
         position: relative;
     }
@@ -296,6 +717,26 @@
 
         .app-nav .container-fluid {
             padding: 0.7rem;
+        }
+
+        .app-nav-actions {
+            width: 100%;
+            margin-top: 0.75rem;
+            margin-left: 0;
+            align-items: stretch;
+        }
+
+        .app-nav-search {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .app-nav-search .btn {
+            display: none;
+        }
+
+        .nav-account-dropdown {
+            right: 0;
         }
 
         .navbar .dropdown-menu {
@@ -408,8 +849,59 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeTopLevelMenus();
+                closeAccountMenu();
+                closeNotificationDrawer();
             }
         });
+
+        var accountMenu = document.getElementById('accountMenu');
+        var accountMenuToggle = document.getElementById('accountMenuToggle');
+        var notificationOpen = document.getElementById('notificationDrawerOpen');
+        var notificationClose = document.getElementById('notificationDrawerClose');
+        var notificationBackdrop = document.getElementById('notificationDrawerBackdrop');
+
+        function closeAccountMenu() {
+            var wrapper = accountMenuToggle?.closest('.nav-account-menu');
+            if (!wrapper) return;
+            wrapper.classList.remove('is-open');
+            accountMenuToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        function openNotificationDrawer() {
+            document.body.classList.add('notification-drawer-open');
+            document.getElementById('notificationDrawer')?.setAttribute('aria-hidden', 'false');
+            closeAccountMenu();
+        }
+
+        function closeNotificationDrawer() {
+            document.body.classList.remove('notification-drawer-open');
+            document.getElementById('notificationDrawer')?.setAttribute('aria-hidden', 'true');
+        }
+
+        accountMenuToggle?.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var wrapper = this.closest('.nav-account-menu');
+            var shouldOpen = !wrapper.classList.contains('is-open');
+            closeTopLevelMenus();
+            closeNotificationDrawer();
+            wrapper.classList.toggle('is-open', shouldOpen);
+            this.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        });
+
+        accountMenu?.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        notificationOpen?.addEventListener('click', function (e) {
+            e.preventDefault();
+            openNotificationDrawer();
+        });
+
+        notificationClose?.addEventListener('click', closeNotificationDrawer);
+        notificationBackdrop?.addEventListener('click', closeNotificationDrawer);
+
+        document.addEventListener('click', closeAccountMenu);
     }
 
     if (document.readyState === 'loading') {

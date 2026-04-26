@@ -7,7 +7,7 @@ class BolinhasController {
     addSangriaForm = async (req, res) => {
         const usuario = req.user;
         try {
-            const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos();
+            const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos(usuario.assinante_id);
             res.render('pages/bolinhas/cadastrarSangriaBolinha', { estabelecimentos, usuario });
         } catch (error) {
             console.error('Erro ao carregar o formulário de sangria:', error);
@@ -19,6 +19,7 @@ class BolinhasController {
     // Método para adicionar uma nova sangria
     addSangria = async (req, res) => {
         try {
+            const usuario = req.user;
             const { estabelecimento_id,
                 data_sangria,
                 valor_apurado,
@@ -30,6 +31,7 @@ class BolinhasController {
             const valor_liquido = valor_apurado - valor_da_comissao;
 
             await BolinhasSangriaModel.createSangria({
+                assinante_id: usuario.assinante_id,
                 estabelecimento_id,
                 data_sangria,
                 valor_apurado,
@@ -53,10 +55,10 @@ class BolinhasController {
         const usuario = req.user;
 
         try {
-            const sangrias = await BolinhasSangriaModel.getSangrias({ orderBy: 'data_sangria', order: 'ASC' });
+            const sangriasFiltradas = await BolinhasSangriaModel.getSangrias(usuario.assinante_id);
             const { success, error } = req.query;
             res.render('pages/bolinhas/tabelaBolinha', {
-                sangrias,
+                sangrias: sangriasFiltradas,
                 usuario,
                 success,
                 error
@@ -73,8 +75,8 @@ class BolinhasController {
         const usuario = req.user;
         try {
             const id = req.params.id;
-            const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos();
-            const sangria = await BolinhasSangriaModel.getSangriaById(id);
+            const estabelecimentos = await BolinhasSangriaModel.getEstabelecimentos(usuario.assinante_id);
+            const sangria = await BolinhasSangriaModel.getSangriaById(id, usuario.assinante_id);
 
             if (!sangria.length) {
                 return res.status(404).send('Sangria não encontrada.');
@@ -94,6 +96,7 @@ class BolinhasController {
     // Método para atualizar uma sangria
     updateSangria = async (req, res) => {
         try {
+            const usuario = req.user;
             const { id,
                 estabelecimento_id,
                 data_sangria,
@@ -106,6 +109,7 @@ class BolinhasController {
             const valor_liquido = valor_apurado - valor_da_comissao;
 
             await BolinhasSangriaModel.updateSangria({
+                assinante_id: usuario.assinante_id,
                 id,
                 estabelecimento_id,
                 data_sangria,
@@ -128,8 +132,9 @@ class BolinhasController {
     // Método para deletar uma sangria
     deleteSangria = async (req, res) => {
         try {
+            const usuario = req.user;
             const id = req.params.id;
-            await BolinhasSangriaModel.deleteSangria(id);
+            await BolinhasSangriaModel.deleteSangria(id, usuario.assinante_id);
             res.status(200).json({ success: true, message: 'Sangria excluída com sucesso' });
         } catch (error) {
             console.error('Erro ao deletar sangria:', error);
@@ -143,7 +148,7 @@ class BolinhasController {
         const usuario = req.user;
         try {
             const id = req.params.id;
-            const sangria = await BolinhasSangriaModel.getSangriaById(id);
+            const sangria = await BolinhasSangriaModel.getSangriaById(id, usuario.assinante_id);
 
             if (sangria.length === 0) {
                 return res.status(404).send('Sangria não encontrada.');
@@ -163,7 +168,7 @@ class BolinhasController {
     getReceitaBolinhas = async (req, res) => {
         const usuario = req.user;
         try {
-            const receita = await BolinhasSangriaModel.getMonthlyRevenue();
+            const receita = await BolinhasSangriaModel.getMonthlyRevenue(usuario.assinante_id);
             res.render('pages/bolinhas/receitaBolinha', {
                 receita,
                 usuario });
@@ -178,8 +183,8 @@ class BolinhasController {
     renderControleGeral = async (req, res) => {
         const usuario = req.user;
         try {
-            const dadosControleGeral = await BolinhasSangriaModel.getControleGeral();
-            const bairros = await EstabelecimentoModel.getBairrosByProduto('BOLINHAS');
+            const dadosControleGeral = await BolinhasSangriaModel.getControleGeral(usuario.assinante_id);
+            const bairros = await EstabelecimentoModel.getBairrosByProduto('BOLINHAS', usuario.assinante_id);
             res.render('pages/bolinhas/controleGeralBolinhas', {
                 estabelecimentos: dadosControleGeral,
                 bairros: bairros,

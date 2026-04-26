@@ -13,7 +13,10 @@ export const attachAuthenticatedUser = (req, res, next) => {
         const payload = verifyAuthToken(token);
         req.user = {
             id: payload.sub,
-            username: payload.username
+            user_id: payload.sub,
+            username: payload.username,
+            assinante_id: payload.assinante_id,
+            status_assinatura: payload.status_assinatura
         };
         res.locals.usuario = req.user;
         return next();

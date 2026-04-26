@@ -1,4 +1,5 @@
 import LoginLogout from '../models/loginLogoutModel.js';
+import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 import { buildPasswordResetUrl, dispatchPasswordResetLink } from '../utilities/passwordReset.js';
 import {
     getAuthCookieName,
@@ -6,6 +7,12 @@ import {
     getClearAuthCookieOptions,
     signAuthToken
 } from '../utilities/authToken.js';
+
+const PRODUCT_OPTIONS = [
+    { value: 'BOLINHAS', label: 'Bolinhas' },
+    { value: 'FIGURINHAS', label: 'Consignados' },
+    { value: 'PELUCIAS', label: 'Pelúcias' }
+];
 
 class LoginLogoutController {
     login(req, res) {
@@ -25,12 +32,14 @@ class LoginLogoutController {
         }
 
         return res.render('pages/register', {
-            title: 'Cadastro de Usuário',
+            title: 'Cadastro de Usu�rio',
             error: req.query.error,
             formData: {
                 user: '',
-                email: ''
-            }
+                email: '',
+                produtos_habilitados: []
+            },
+            productOptions: PRODUCT_OPTIONS
         });
     }
 
@@ -227,9 +236,18 @@ class LoginLogoutController {
                 });
             }
 
+            if (usuario.status_assinatura === 'bloqueado') {
+                return res.status(403).render('pages/login', {
+                    title: 'Login',
+                    erro: 'Assinatura bloqueada. Entre em contato com o suporte.'
+                });
+            }
+
             const authToken = signAuthToken({
-                sub: usuario.id,
-                username: usuario.username
+                sub: usuario.user_id,
+                username: usuario.username,
+                assinante_id: usuario.assinante_id,
+                status_assinatura: usuario.status_assinatura
             });
 
             res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
@@ -246,67 +264,95 @@ class LoginLogoutController {
     async processRegister(req, res) {
         const formData = {
             user: String(req.body.user ?? '').trim(),
-            email: String(req.body.email ?? '').trim()
+            email: String(req.body.email ?? '').trim(),
+            produtos_habilitados: Array.isArray(req.body.produtos_habilitados)
+                ? req.body.produtos_habilitados
+                : [req.body.produtos_habilitados].filter(Boolean)
         };
 
         try {
             const senha = String(req.body.senha ?? '');
             const confirmarSenha = String(req.body.confirmarSenha ?? '');
+            const produtosHabilitados = normalizeSelectedProdutos(formData.produtos_habilitados);
 
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuário',
+                    title: 'Cadastro de Usu�rio',
                     error: 'Preencha nome de usuário, e-mail, senha e confirmação de senha.',
-                    formData
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
+                });
+            }
+
+            if (!produtosHabilitados.length) {
+                return res.status(400).render('pages/register', {
+                    title: 'Cadastro de UsuÃ¡rio',
+                    error: 'Selecione pelo menos um produto da sua operaÃ§Ã£o.',
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
                 });
             }
 
             const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
             if (!emailValido) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuário',
+                    title: 'Cadastro de Usu�rio',
                     error: 'Informe um e-mail válido.',
-                    formData
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
                 });
             }
 
             if (senha.length < 3) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuário',
+                    title: 'Cadastro de Usu�rio',
                     error: 'A senha precisa ter pelo menos 3 caracteres.',
-                    formData
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
                 });
             }
 
             if (senha !== confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usuário',
+                    title: 'Cadastro de Usu�rio',
                     error: 'A confirmação de senha não confere.',
-                    formData
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
                 });
             }
 
             const result = await LoginLogout.createUser({
                 user: formData.user,
                 email: formData.email,
-                senha
+                senha,
+                produtos_habilitados: produtosHabilitados
             });
 
             if (result?.error) {
                 return res.status(409).render('pages/register', {
-                    title: 'Cadastro de Usuário',
+                    title: 'Cadastro de Usu�rio',
                     error: result.error,
-                    formData
+                    formData,
+                    productOptions: PRODUCT_OPTIONS
                 });
             }
 
-            return res.redirect('/login?success=Cadastro realizado com sucesso. Faça login para continuar.');
+            const authToken = signAuthToken({
+                sub: result.user_id,
+                username: result.username,
+                assinante_id: result.assinante_id,
+                status_assinatura: result.status_assinatura
+            });
+
+            res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
+            return res.redirect('/painel?success=Cadastro realizado com sucesso');
         } catch (error) {
             console.error('Erro ao processar o cadastro:', error);
             return res.status(500).render('pages/register', {
-                title: 'Cadastro de Usuário',
+                title: 'Cadastro de Usu�rio',
                 error: 'Erro no servidor. Tente novamente mais tarde.',
-                formData
+                formData,
+                productOptions: PRODUCT_OPTIONS
             });
         }
     }
@@ -319,3 +365,4 @@ class LoginLogoutController {
 }
 
 export default new LoginLogoutController();
+

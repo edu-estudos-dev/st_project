@@ -4,6 +4,7 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="list-shell">
@@ -34,10 +35,12 @@
                         <h2>Base de estabelecimentos</h2>
                         <p>Consulte os principais dados da operação e use os atalhos para abrir a tela certa sem perder contexto.</p>
                     </div>
-                    <a class="list-action" href="/estabelecimentos/add">
-                        <i class="bi bi-plus-circle"></i>
-                        <span>Novo estabelecimento</span>
-                    </a>
+                    <% if (!isReadOnly) { %>
+                        <a class="list-action" href="/estabelecimentos/add">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Novo estabelecimento</span>
+                        </a>
+                    <% } %>
                 </div>
 
                 <div class="list-summary-grid">
@@ -113,8 +116,10 @@
                                         <td class="table-actions-cell">
                                             <div class="table-actions">
                                                 <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
-                                                <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">Editar</a>
-                                                <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
+                                                <% if (!isReadOnly) { %>
+                                                    <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">Editar</a>
+                                                    <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
+                                                <% } %>
                                             </div>
                                         </td>
                                     </tr>

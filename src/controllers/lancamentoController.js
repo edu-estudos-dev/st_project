@@ -9,7 +9,7 @@ class LancamentoController {
     try {
       const usuario = req.user;
       const tipoFiltro = (req.query.tipo || 'todos').toLowerCase();
-      let lancamentos = await LancamentoModel.findAll();
+      let lancamentos = await LancamentoModel.findAll(usuario.assinante_id);
 
       if (tipoFiltro === 'entrada') {
         lancamentos = lancamentos.filter((item) => item.entrada_saida === 'Entrada');
@@ -34,7 +34,10 @@ class LancamentoController {
     const usuario = req.user;
 
     try {
-      const { proximos, atrasados } = await LancamentoModel.getNotificationAlerts(5);
+      const { proximos, atrasados } = await LancamentoModel.getNotificationAlerts(
+        5,
+        usuario.assinante_id
+      );
 
       res.render('pages/lancamentos/vencimentos', {
         title: 'Vencimentos',
@@ -101,6 +104,7 @@ class LancamentoController {
         for (let i = 0; i < qtde_de_parcelas; i++) {
           const vencimentoParcela = addMonths(baseVencimento, i).toISOString().split('T')[0];
           await LancamentoModel.create({
+            assinante_id: usuario.assinante_id,
             entrada_saida,
             data,
             tipo_de_lancamento,
@@ -115,6 +119,7 @@ class LancamentoController {
         }
       } else {
         await LancamentoModel.create({
+          assinante_id: usuario.assinante_id,
           entrada_saida,
           data,
           tipo_de_lancamento,
@@ -145,7 +150,10 @@ class LancamentoController {
     const { id } = req.params;
 
     try {
-      const lancamento = await LancamentoModel.findById(id);
+      const lancamento = await LancamentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
       if (!lancamento) {
         return res.status(404).send('Lançamento não encontrado.');
       }
@@ -196,7 +204,7 @@ class LancamentoController {
     }
 
     try {
-      await LancamentoModel.update(id, {
+      await LancamentoModel.update(id, usuario.assinante_id, {
         entrada_saida,
         data,
         tipo_de_lancamento,
@@ -239,13 +247,14 @@ class LancamentoController {
   };
 
   deleteLancamento = async (req, res) => {
+    const usuario = req.user;
     const { id } = req.params;
     const acceptsJson = req.xhr
       || req.get('x-requested-with') === 'XMLHttpRequest'
       || req.get('accept')?.includes('application/json');
 
     try {
-      await LancamentoModel.delete(id);
+      await LancamentoModel.delete(id, usuario.assinante_id);
 
       if (acceptsJson) {
         return res.status(200).json({
@@ -270,10 +279,14 @@ class LancamentoController {
   };
 
   markAsPaid = async (req, res) => {
+    const usuario = req.user;
     const { id } = req.params;
 
     try {
-      const lancamento = await LancamentoModel.markAsPaid(id);
+      const lancamento = await LancamentoModel.markAsPaid(
+        id,
+        usuario.assinante_id
+      );
 
       if (!lancamento) {
         return res.redirect('/lancamentos/vencimentos?error=O boleto selecionado nao pode ser marcado como pago.');
@@ -291,7 +304,15 @@ class LancamentoController {
     const { id } = req.params;
 
     try {
-      const lancamento = await LancamentoModel.findById(id);
+      const lancamento = await LancamentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!lancamento) {
+        return res.status(404).send('Lancamento nao encontrado.');
+      }
+
       const valorDaParcela =
         Number(lancamento.qtde_de_parcelas || 0) > 1
           ? Number(lancamento.valor || 0)
@@ -317,7 +338,10 @@ class LancamentoController {
     const usuario = req.user;
 
     try {
-      const lancamentos = await LancamentoModel.search(termo);
+      const lancamentos = await LancamentoModel.search(
+        termo,
+        usuario.assinante_id
+      );
       res.status(200).render('pages/lancamentos/tabelaLancamento', {
         title: 'Resultados da Pesquisa - Lançamentos',
         lancamentos,

@@ -17,12 +17,12 @@ export const attachNavigationContext = async (req, res, next) => {
     }
 
     try {
-        await syncMonthlyRevenueConsolidation();
+        await syncMonthlyRevenueConsolidation({ assinanteId: req.user.assinante_id });
     } catch (error) {
         console.error('Erro ao sincronizar receitas consolidadas:', error);
     }
 
-    res.locals.navigationProducts = await EstabelecimentoModel.getMenuProdutosDisponiveis();
-    res.locals.financialNotifications = await LancamentoModel.getNotificationAlerts(5);
+    res.locals.navigationProducts = await EstabelecimentoModel.getMenuProdutosDisponiveis(req.user.assinante_id);
+    res.locals.financialNotifications = await LancamentoModel.getNotificationAlerts(5, req.user.assinante_id);
     return next();
 };

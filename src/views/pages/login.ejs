@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken || '' %>">
     <title>Login</title>
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/auth.css">
@@ -26,10 +25,10 @@
 
             <form action="/login" method="POST" class="auth-form">
                 <div class="form-group mb-3">
-                    <label for="user" class="form-label">Usuário</label>
+                    <label for="user" class="form-label">Usuário ou e-mail</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" id="user" name="user" placeholder="Entre com o usuário"
+                        <input type="text" class="form-control" id="user" name="user" placeholder="Entre com seu usuário ou e-mail"
                             autocomplete="username">
                     </div>
                 </div>
@@ -53,14 +52,12 @@
             </p>
             <p class="auth-help">
                 Ainda não tem cadastro?
-                <a href="/register" class="fw-semibold text-decoration-none">Criar usuário</a>
+                <a href="/register" class="fw-semibold text-decoration-none">Criar conta</a>
             </p>
         </div>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             window.sessionStorage.removeItem('vendmaster-financial-alerts-dashboard-shown');

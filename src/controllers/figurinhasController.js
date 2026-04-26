@@ -4,7 +4,7 @@ class FigurinhasController {
   addSangriaForm = async (req, res) => {
     const usuario = req.user || null;
     try {
-      const estabelecimentos = await figurinhasModel.getEstabelecimentos();
+      const estabelecimentos = await figurinhasModel.getEstabelecimentos(usuario.assinante_id);
       res.render('pages/figurinhas/cadastrarSangriaFigurinha', {
         estabelecimentos,
         usuario
@@ -17,6 +17,7 @@ class FigurinhasController {
 
   addSangria = async (req, res) => {
     try {
+      const usuario = req.user;
       const {
         estabelecimento_id,
         data_sangria,
@@ -33,13 +34,13 @@ class FigurinhasController {
         throw new Error('Dados obrigatórios faltando.');
       }
 
-      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id, usuario.assinante_id);
       const isAberturaInicial = abertura_inicial === 'on';
       const hasHistorico = ultimaSangria.length > 0;
 
       if (isAberturaInicial) {
         if (hasHistorico) {
-          throw new Error('Este estabelecimento já possui histórico de figurinhas. Use o cadastro normal de visita.');
+          throw new Error('Este estabelecimento já possui histórico de consignados. Use o cadastro normal de visita.');
         }
 
         const quantidadeInicial = parseInt(quantidade_inicial || 0, 10);
@@ -48,6 +49,7 @@ class FigurinhasController {
         }
 
         await figurinhasModel.createSangria({
+          assinante_id: usuario.assinante_id,
           estabelecimento_id,
           data_sangria,
           qtde_deixada: quantidadeInicial,
@@ -59,11 +61,11 @@ class FigurinhasController {
           observacoes: `[ABERTURA INICIAL] ${observacoes || 'Ponto iniciado com estoque base.'}`.trim()
         });
 
-        return res.redirect('/figurinhas/sangrias?success=Abertura inicial de figurinhas cadastrada com sucesso');
+        return res.redirect('/figurinhas/sangrias?success=Abertura inicial de consignados cadastrada com sucesso');
       }
 
       if (!hasHistorico) {
-        throw new Error('Este ponto ainda não possui registro inicial de figurinhas. Faça primeiro o cadastro inicial.');
+        throw new Error('Este ponto ainda não possui registro inicial de consignados. Faça primeiro o cadastro inicial.');
       }
 
       const estoqueAnterior = parseInt(ultimaSangria[0].qtde_deixada, 10);
@@ -77,6 +79,7 @@ class FigurinhasController {
       }
 
       await figurinhasModel.createSangria({
+        assinante_id: usuario.assinante_id,
         estabelecimento_id,
         data_sangria,
         qtde_deixada: qtdeDeixada,
@@ -90,7 +93,7 @@ class FigurinhasController {
 
       res.redirect('/figurinhas/sangrias?success=Sangria adicionada com sucesso');
     } catch (error) {
-      console.error('Erro ao adicionar sangria de figurinhas:', error);
+      console.error('Erro ao adicionar sangria de consignados:', error);
       res.redirect(`/figurinhas/sangrias?error=${encodeURIComponent(error.message)}`);
     }
   };
@@ -98,7 +101,7 @@ class FigurinhasController {
   index = async (req, res) => {
     const usuario = req.user;
     try {
-      const sangrias = await figurinhasModel.getSangrias();
+      const sangrias = await figurinhasModel.getSangrias(usuario.assinante_id);
       const { success, error } = req.query;
 
       res.render('pages/figurinhas/tabelaFigurinha', {
@@ -108,7 +111,7 @@ class FigurinhasController {
         error
       });
     } catch (error) {
-      console.error('Erro ao listar figurinhas:', error);
+      console.error('Erro ao listar consignados:', error);
       res.status(500).send('Erro ao listar.');
     }
   };
@@ -118,8 +121,8 @@ class FigurinhasController {
     try {
       const id = req.params.id;
 
-      const estabelecimentos = await figurinhasModel.getEstabelecimentos();
-      const sangria = await figurinhasModel.getSangriaById(id);
+      const estabelecimentos = await figurinhasModel.getEstabelecimentos(usuario.assinante_id);
+      const sangria = await figurinhasModel.getSangriaById(id, usuario.assinante_id);
 
       if (!sangria) {
         return res.status(404).send('Sangria não encontrada.');
@@ -136,8 +139,9 @@ class FigurinhasController {
     }
   };
 
-  updateSangria = async (req, res) => {
-    try {
+    updateSangria = async (req, res) => {
+      try {
+      const usuario = req.user;
       const {
         id,
         estabelecimento_id,
@@ -149,7 +153,7 @@ class FigurinhasController {
         observacoes
       } = req.body;
 
-      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id);
+      const ultimaSangria = await figurinhasModel.getUltimaSangria(estabelecimento_id, usuario.assinante_id);
       const estoqueAnterior = ultimaSangria.length > 0 ? parseInt(ultimaSangria[0].qtde_deixada, 10) : 0;
 
       const qtdeDeixada =
@@ -162,6 +166,7 @@ class FigurinhasController {
       }
 
       await figurinhasModel.updateSangria({
+        assinante_id: usuario.assinante_id,
         id,
         estabelecimento_id,
         data_sangria,
@@ -181,11 +186,12 @@ class FigurinhasController {
     }
   };
 
-  deleteSangria = async (req, res) => {
-    try {
+    deleteSangria = async (req, res) => {
+      try {
+      const usuario = req.user;
       const id = req.params.id;
 
-      await figurinhasModel.deleteSangria(id);
+      await figurinhasModel.deleteSangria(id, usuario.assinante_id);
 
       res.status(200).json({
         success: true,
@@ -205,7 +211,7 @@ class FigurinhasController {
     try {
       const id = req.params.id;
 
-      const sangria = await figurinhasModel.getSangriaById(id);
+      const sangria = await figurinhasModel.getSangriaById(id, usuario.assinante_id);
 
       if (!sangria) {
         return res.status(404).send('Sangria não encontrada.');
@@ -224,7 +230,7 @@ class FigurinhasController {
   getReceitaFigurinhas = async (req, res) => {
     const usuario = req.user;
     try {
-      const receita = await figurinhasModel.getMonthlyRevenue();
+      const receita = await figurinhasModel.getMonthlyRevenue(usuario.assinante_id);
 
       res.render('pages/figurinhas/receitaFigurinha', {
         receita,
@@ -240,7 +246,7 @@ class FigurinhasController {
     const usuario = req.user;
     try {
       const dados =
-        await figurinhasModel.getLatestSangriaForAllEstabelecimentos();
+        await figurinhasModel.getLatestSangriaForAllEstabelecimentos(usuario.assinante_id);
 
       res.render('pages/figurinhas/controleGeralFigurinhas', {
         estabelecimentos: dados,
@@ -254,9 +260,10 @@ class FigurinhasController {
 
   getUltimaSangria = async (req, res) => {
     try {
+      const usuario = req.user;
       const estabelecimentoId = req.params.id;
 
-      const result = await figurinhasModel.getUltimaSangria(estabelecimentoId);
+      const result = await figurinhasModel.getUltimaSangria(estabelecimentoId, usuario.assinante_id);
 
       if (result.length === 0) {
         return res.json({

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title }) %>
+
+  <body class="list-page-body">
+    <%- include('../../partials/header') %>
+      <div class="page-spacer"></div>
+
+      <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Assinantes' }) %>
+
+          <section class="list-hero list-hero-neutral">
+            <div class="list-hero-content">
+              <span class="list-kicker"><i class="bi bi-building-check"></i> SaaS</span>
+              <h1>Assinantes</h1>
+              <p>Gerencie status, cobran&ccedil;a e prazos dos assinantes do sistema.</p>
+            </div>
+            <div class="list-hero-side">
+              <div class="list-stat">
+                <strong>Total</strong>
+                <span>
+                  <%= assinantes.length %> assinante(s)
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <main class="list-stage">
+            <section class="list-panel">
+              <div class="list-toolbar">
+                <div class="list-toolbar-copy">
+                  <h2>Controle de assinatura</h2>
+                  <p>Status vencido e cancelado deixam o assinante em somente leitura; bloqueado impede acesso.</p>
+                </div>
+              </div>
+
+              <div class="modern-table-wrap">
+                <div class="modern-table-scroll">
+                  <table class="modern-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Assinante</th>
+                        <th>Status</th>
+                        <th>Cobran&ccedil;a</th>
+                        <th>Produtos</th>
+                        <th>Trial</th>
+                        <th>Vencimento</th>
+                        <th>Dados</th>
+                        <th class="table-actions-heading">A&ccedil;&otilde;es</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% assinantes.forEach((assinante)=> { %>
+                        <% const statusTone={ trial: 'table-badge-amber' , ativo: 'table-badge-green' ,
+                          vencido: 'table-badge-danger' , cancelado: 'table-badge-danger' ,
+                          bloqueado: 'table-badge-danger' }[assinante.status_assinatura] || 'table-badge-amber' ; %>
+                          <tr>
+                            <td><strong>#<%= assinante.id %></strong></td>
+                            <td>
+                              <div class="table-title-cell">
+                                <%= assinante.username %>
+                              </div>
+                              <span class="table-muted">
+                                <%= assinante.email %>
+                              </span>
+                            </td>
+                            <td><span class="table-badge <%= statusTone %>">
+                                <%= String(assinante.status_assinatura || '' ).toUpperCase() %>
+                              </span></td>
+                            <td>
+                              <%= assinante.tipo_cobranca || 'Sem cobrança' %>
+                            </td>
+                            <td>
+                              <span class="table-muted">
+                                <%= assinante.produtos_habilitados_lista?.length ? assinante.produtos_habilitados_lista.join(', ') : 'Nenhum' %>
+                              </span>
+                            </td>
+                            <td>
+                              <%= assinante.trial_fim ? new Date(assinante.trial_fim).toLocaleDateString('pt-BR')
+                                : 'Sem trial' %>
+                            </td>
+                            <td>
+                              <%= assinante.data_vencimento ? new
+                                Date(assinante.data_vencimento).toLocaleDateString('pt-BR') : 'Sem vencimento' %>
+                            </td>
+                            <td>
+                              <span class="table-muted">
+                                <%= assinante.estabelecimentos %> ponto(s),
+                                  <%= assinante.lancamentos %> lan&ccedil;.,
+                                    <%= assinante.bolinhas + assinante.figurinhas + assinante.pelucias %> sangria(s)
+                              </span>
+                            </td>
+                            <td>
+                              <div class="table-actions">
+                                <a href="/admin/assinantes/<%= assinante.id %>/edit"
+                                  class="table-btn table-btn-edit">Editar</a>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </main>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+      <% if (typeof success !== 'undefined' && success) { %> window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");<% } %>
+      <% if (typeof error !== 'undefined' && error) { %> window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");<% } %>
+    });
+      </script>
+  </body>
+
+</html>

@@ -4,6 +4,7 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
     <div class="list-shell">
@@ -28,10 +29,12 @@
                         <h2>Sangrias de pelúcias</h2>
                         <p>Use esta lista para revisar resultados financeiros, acompanhar pagamento e acessar rapidamente os detalhes da operação.</p>
                     </div>
-                    <a class="list-action" href="/pelucias/sangrias/add">
-                        <i class="bi bi-plus-circle"></i>
-                        <span>Novo registro</span>
-                    </a>
+                    <% if (!isReadOnly) { %>
+                        <a class="list-action" href="/pelucias/sangrias/add">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Novo registro</span>
+                        </a>
+                    <% } %>
                 </div>
 
                 <div class="modern-table-wrap">
@@ -58,7 +61,7 @@
                                             <td><strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></td>
                                             <td><span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span></td>
                                             <td>
-                                                <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select">
+                                                <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select" <%= isReadOnly ? 'disabled' : '' %>>
                                                     <option value="" selected disabled>Selecione</option>
                                                     <option value="SIM" class="option-sim">SIM</option>
                                                     <option value="NAO" class="option-nao">NÃO</option>
@@ -67,8 +70,10 @@
                                             <td>
                                                 <div class="table-actions">
                                                     <a href="/pelucias/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
-                                                    <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
-                                                    <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                    <% if (!isReadOnly) { %>
+                                                        <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
+                                                        <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                    <% } %>
                                                 </div>
                                             </td>
                                         </tr>

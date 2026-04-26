@@ -41,7 +41,8 @@ class FluxoDeCaixaController {
     showFluxoDeCaixa = async (req, res) => {
         try {
             const year = req.query.year || new Date().getFullYear();
-            const fluxoDeCaixa = await FluxoDeCaixaModel.criarFluxo(year);
+            const usuario = req.user;
+            const fluxoDeCaixa = await FluxoDeCaixaModel.criarFluxo(year, usuario.assinante_id);
     
             const tiposEntradas = ['receita_dos_pontos', 'incremento_de_capital'];
             const tiposSaidas = ['compra', 'extra', 'pro-labore', 'gastos_recorrentes', 'bonus'];
@@ -56,8 +57,6 @@ class FluxoDeCaixaController {
             };
     
             const { dadosEntradas, dadosSaidas, totaisEntradas, totaisSaidas, somaMensal, somaTotalAnual } = this.calcularTotais(fluxoDeCaixa, tiposEntradas, tiposSaidas, tipos);
-    
-            const usuario = req.user;
     
             res.render('pages/fluxoDeCaixa', { 
                 dadosEntradas, 
@@ -78,7 +77,7 @@ class FluxoDeCaixaController {
 
     async getLancamentos(req, res) {
         try {
-            const lancamentos = await FluxoDeCaixaModel.findAll();
+            const lancamentos = await FluxoDeCaixaModel.findAll(req.user.assinante_id);
             res.json(lancamentos);
         } catch (error) {
             res.status(500).json({ error: 'Erro ao buscar lançamentos' });

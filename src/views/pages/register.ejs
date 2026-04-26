@@ -4,15 +4,15 @@
 
 <body class="auth-body">
     <div class="auth-shell">
-        <div class="border p-4 py-4 p-md-5 rounded shadow-lg auth-card">
-            <h1 class="display-6 fw-bold auth-title">Criar usuário</h1>
-            <p class="auth-subtitle">Cadastre um novo acesso com confirmação de senha antes de liberar a entrada no sistema.</p>
+        <div class="border p-4 py-4 p-md-5 rounded shadow-lg auth-card auth-card-register">
+            <h1 class="display-6 fw-bold auth-title">Criar conta</h1>
+            <p class="auth-subtitle">Informe nome, e-mail e senha para acessar o sistema imediatamente.</p>
 
             <hr>
 
             <form action="/register" method="POST" class="auth-form" id="registerForm" novalidate>
                 <div class="form-group mb-3">
-                    <label for="user" class="form-label">Nome de usuário</label>
+                    <label for="user" class="form-label">Nome</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
                         <input
@@ -20,7 +20,7 @@
                             class="form-control"
                             id="user"
                             name="user"
-                            placeholder="Escolha um nome de usuário"
+                            placeholder="Seu nome"
                             autocomplete="username"
                             value="<%= formData?.user || '' %>"
                             required
@@ -86,6 +86,26 @@
                     <small class="modern-note" id="confirmarSenhaHint">A confirmação precisa ser idêntica à senha informada acima.</small>
                 </div>
 
+                <div class="form-group mb-3">
+                    <label class="form-label">Quais produtos você quer trabalhar?</label>
+                    <div class="auth-product-grid">
+                        <% const selectedProducts = formData?.produtos_habilitados || []; %>
+                        <% (productOptions || []).forEach((produto) => { %>
+                            <label class="auth-product-option" for="produto_<%= produto.value %>">
+                                <input
+                                    type="checkbox"
+                                    id="produto_<%= produto.value %>"
+                                    name="produtos_habilitados"
+                                    value="<%= produto.value %>"
+                                    <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
+                                >
+                                <span><%= produto.label %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                    <small class="modern-note" id="produtosHint">Essa escolha define quais módulos aparecem no sistema.</small>
+                </div>
+
                 <div class="auth-actions">
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </div>
@@ -118,6 +138,7 @@
             const senhaInput = document.getElementById('senha');
             const confirmarSenhaInput = document.getElementById('confirmarSenha');
             const hint = document.getElementById('confirmarSenhaHint');
+            const produtosHint = document.getElementById('produtosHint');
 
             const syncPasswordValidation = () => {
                 const senha = senhaInput.value;
@@ -144,6 +165,13 @@
 
             form.addEventListener('submit', (event) => {
                 syncPasswordValidation();
+                const hasProduct = Array.from(document.querySelectorAll('input[name="produtos_habilitados"]')).some((checkbox) => checkbox.checked);
+                if (!hasProduct) {
+                    event.preventDefault();
+                    produtosHint.textContent = 'Selecione pelo menos um produto para criar sua operação.';
+                    window.AppAlerts?.warning('Selecione pelo menos um produto da sua operação.');
+                    return;
+                }
 
                 if (!form.checkValidity()) {
                     event.preventDefault();

@@ -54,10 +54,10 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="data_sangria">Data da sangria</label>
+                            <label for="data_sangria" id="dataSangriaLabel">Data da sangria</label>
                             <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 col-lg-3" id="tipoPagamentoField">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
                                 <option value="especie">Espécie</option>
@@ -154,7 +154,7 @@
                             <input type="number" class="form-control text-center readonly-input" id="qtde_vendido" name="qtde_vendido" readonly disabled>
                         </div>
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="estoque_atual">Estoque atual</label>
+                            <label for="estoque_atual">Estoque anterior</label>
                             <input type="number" class="form-control text-center readonly-input" id="estoque_atual" value="<%= ultimoEstoque %>" readonly disabled>
                         </div>
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
@@ -169,7 +169,7 @@
                             <span id="ultimaLeituraResumo"><%= ultimaLeitura %></span>
                         </div>
                         <div class="form-summary-card">
-                            <strong>Estoque atual</strong>
+                            <strong>Estoque anterior</strong>
                             <span id="estoqueAtualResumo"><%= ultimoEstoque %></span>
                         </div>
                         <div class="form-summary-card">
@@ -221,9 +221,7 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
         window.peluciaHasHistorico = false;
@@ -294,8 +292,12 @@
             const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
             const submitLabel = document.getElementById('peluciaSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
+            const dataSangriaLabel = document.getElementById('dataSangriaLabel');
+            const tipoPagamentoField = document.getElementById('tipoPagamentoField');
 
             aberturaBox.classList.toggle('d-none', !isAbertura);
+            tipoPagamentoField.classList.toggle('d-none', isAbertura);
+            dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
             leituraInicialField.required = isAbertura;
             estoqueInicialField.required = isAbertura;
             toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
