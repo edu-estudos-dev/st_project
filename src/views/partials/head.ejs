@@ -2,19 +2,44 @@
     <script>
         document.documentElement.classList.add('app-booting');
     </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken || '' %>">
-    <title>
-        <%= title %>
-    </title>
 
+    <!-- SEO PRINCIPAL -->
+    <title><%= title || 'VendMaster | Gestão Inteligente de Máquinas e Consignados' %></title>
+
+    <meta name="description"
+        content="Pare de rodar à toa. Organize seus roteiros de coleta, controle estoque de máquinas de bolinhas e pelúcias e automatize o acerto de consignados.">
+
+    <link rel="canonical" href="https://vendmaster.com.br/">
+
+    <!-- OPEN GRAPH (WHATSAPP / LINKEDIN) -->
+    <meta property="og:title" content="VendMaster | Gestão Inteligente de Máquinas e Consignados">
+    <meta property="og:description"
+        content="Pare de rodar à toa. Organize seus roteiros de coleta, controle estoque de máquinas de bolinhas e pelúcias e automatize o acerto de consignados.">
+    <meta property="og:url" content="https://vendmaster.com.br/">
+    <meta property="og:image" content="https://vendmaster.com.br/images/og-image.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="VendMaster">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- TWITTER (usa o mesmo do OG) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VendMaster | Gestão Inteligente de Máquinas e Consignados">
+    <meta name="twitter:description"
+        content="Pare de rodar à toa. Organize seus roteiros de coleta, controle estoque de máquinas de bolinhas e pelúcias e automatize o acerto de consignados.">
+    <meta name="twitter:image" content="https://vendmaster.com.br/images/og-image.png">
+
+    <!-- FAVICONS -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    
+
+    <!-- FONTES -->
     <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2" as="font"
         type="font/woff2" crossorigin>
     <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-600-normal.woff2" as="font"
@@ -23,77 +48,86 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-800-normal.woff2" as="font"
         type="font/woff2" crossorigin>
+
     <link rel="stylesheet" href="/vendor/fontsource/urbanist/latin.css">
     <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+
     <% if (typeof extraStyles !=='undefined' && extraStyles) { %>
         <% extraStyles.forEach((href)=> { %>
             <link rel="stylesheet" href="<%= href %>">
-            <% }) %>
-                <% } %>
-                    <script defer src="/vendor/inputmask/inputmask.min.js"></script>
-                    <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-                    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-                    <script defer src="/js/appAlerts.js"></script>
-                    <script defer src="/js/csrf.js"></script>
-                    <script>
-                        (() => {
-                            const root = document.documentElement;
-                            const finishBoot = () => {
-                                root.classList.remove('app-booting');
-                                root.classList.add('app-ready');
-                            };
+        <% }) %>
+    <% } %>
 
-                            const fallbackTimeout = 1200;
-                            const fallback = new Promise((resolve) => window.setTimeout(resolve, fallbackTimeout));
+    <!-- SCRIPTS -->
+    <script defer src="/vendor/inputmask/inputmask.min.js"></script>
+    <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script defer src="/js/appAlerts.js"></script>
+    <script defer src="/js/csrf.js"></script>
 
-                            if (document.fonts?.ready) {
-                                Promise.race([document.fonts.ready, fallback]).then(finishBoot);
-                            } else {
-                                window.addEventListener('DOMContentLoaded', finishBoot, { once: true });
-                                window.addEventListener('load', finishBoot, { once: true });
-                            }
-                        })();
-                    </script>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
+    <!-- BOOT CONTROL -->
+    <script>
+        (() => {
+            const root = document.documentElement;
+            const finishBoot = () => {
+                root.classList.remove('app-booting');
+                root.classList.add('app-ready');
+            };
 
-                            numericInputs.forEach((input) => {
-                                const step = input.getAttribute('step');
-                                const allowsDecimal = step && step !== '1';
+            const fallbackTimeout = 1200;
+            const fallback = new Promise((resolve) => window.setTimeout(resolve, fallbackTimeout));
 
-                                input.addEventListener('keydown', (event) => {
-                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (document.fonts?.ready) {
+                Promise.race([document.fonts.ready, fallback]).then(finishBoot);
+            } else {
+                window.addEventListener('DOMContentLoaded', finishBoot, { once: true });
+                window.addEventListener('load', finishBoot, { once: true });
+            }
+        })();
+    </script>
 
-                                    if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) return;
-                                    if (/^\d$/.test(event.key)) return;
+    <!-- INPUT NUMBER CONTROL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
 
-                                    if (allowsDecimal && (event.key === '.' || event.key === ',')) {
-                                        if (input.value.includes('.') || input.value.includes(',')) event.preventDefault();
-                                        return;
-                                    }
+            numericInputs.forEach((input) => {
+                const step = input.getAttribute('step');
+                const allowsDecimal = step && step !== '1';
 
-                                    event.preventDefault();
-                                });
+                input.addEventListener('keydown', (event) => {
+                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
 
-                                input.addEventListener('input', () => {
-                                    let value = input.value;
+                    if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) return;
+                    if (/^\d$/.test(event.key)) return;
 
-                                    if (allowsDecimal) {
-                                        value = value.replace(',', '.').replace(/[^\d.]/g, '');
-                                        const firstDotIndex = value.indexOf('.');
-                                        if (firstDotIndex !== -1) {
-                                            value = `${value.slice(0, firstDotIndex + 1)}${value.slice(firstDotIndex + 1).replace(/\./g, '')}`;
-                                        }
-                                    } else {
-                                        value = value.replace(/\D/g, '');
-                                    }
+                    if (allowsDecimal && (event.key === '.' || event.key === ',')) {
+                        if (input.value.includes('.') || input.value.includes(',')) event.preventDefault();
+                        return;
+                    }
 
-                                    if (input.value !== value) input.value = value;
-                                });
-                            });
-                        });
-                    </script>
+                    event.preventDefault();
+                });
+
+                input.addEventListener('input', () => {
+                    let value = input.value;
+
+                    if (allowsDecimal) {
+                        value = value.replace(',', '.').replace(/[^\d.]/g, '');
+                        const firstDotIndex = value.indexOf('.');
+                        if (firstDotIndex !== -1) {
+                            value = `${value.slice(0, firstDotIndex + 1)}${value.slice(firstDotIndex + 1).replace(/\./g, '')}`;
+                        }
+                    } else {
+                        value = value.replace(/\D/g, '');
+                    }
+
+                    if (input.value !== value) input.value = value;
+                });
+            });
+        });
+    </script>
+
 </head>
