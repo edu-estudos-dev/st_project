@@ -66,6 +66,16 @@
   background: #f5f7fa; /* claro */
   padding-block: clamp(4rem, 8vw, 7rem);
   color: #fff;
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(59, 130, 246, 0.25),
+      transparent 40%
+    ),
+    radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.2), transparent 40%),
+    linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+  overflow: hidden;
 }
 .vm-hero-card {
   width: min(1180px, 100%);
@@ -175,7 +185,7 @@
 .vm-mini-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: 165px;
   padding: 1.15rem 1.15rem;
   border-radius: 24px;
@@ -654,7 +664,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  min-height: 72px;
+  min-height: 88px;
   padding: 1rem 1.1rem;
   border-radius: 18px;
   background: #fff;
@@ -731,7 +741,8 @@
   font-size: 56px; /* antes 64 */
   line-height: 1.1;
   max-width: 520px;
-  color: #0f172a; /* importante */
+  color: #f8fafc;
+  letter-spacing: -0.5px;
 }
 .vm-hero-badges {
   display: flex;
@@ -755,7 +766,7 @@
 }
 .vm-dashboard-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 1rem;
 }
 .vm-status {
@@ -764,7 +775,7 @@
 }
 .vm-dashboard-metrics {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1rem;
 }
 .vm-dashboard-metrics div {
@@ -800,7 +811,7 @@
   display: flex;
   gap: 80px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 80px;
   background: #ffffff;
   border-radius: 24px;
@@ -837,11 +848,11 @@
   color: var(--vm-green);
 }
 .vm-hero-description {
-  color: #475569; /* cinza elegante */
+  color: #cbd5f5;
+  max-width: 520px;
   margin-bottom: 30px;
   font-size: 19px;
   line-height: 1.6;
-  max-width: 500px;
 }
 .vm-hero-buttons {
   display: flex;
@@ -875,8 +886,9 @@
   font-size: 18px;
 }
 .vm-live {
-  font-size: 14px;
-  color: var(--vm-green);
+  color: #22c55e;
+  font-size: 0.8rem;
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
 }
 .vm-hero-right {
   flex: 1;
@@ -884,16 +896,19 @@
   justify-content: center;
 }
 .vm-panel {
-  background: #1c1f26;
-  border-radius: 22px;
-  padding: 32px;
-  width: 100%;
-  max-width: 480; /* aumentei */
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  position: relative;
+  z-index: 2;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(18px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(59, 130, 246, 0.15);
 }
 .vm-panel-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 20px;
 }
 .vm-live {
@@ -902,7 +917,7 @@
 }
 .vm-panel-metrics {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 20px;
 }
 .vm-panel-metrics div {
@@ -1348,7 +1363,7 @@
     text-align: left;
   }
   .vm-check-chip {
-    min-height: 72px;
+    min-height: 88px;
     padding: 0.95rem 1rem;
   }
   .vm-check-chip span {
@@ -1616,16 +1631,33 @@
 .vm-hero::before {
   content: '';
   position: absolute;
+  width: 600px;
+  height: 600px;
   inset: 0;
-  background:
-    linear-gradient(120deg, rgba(255, 255, 255, 0.04), transparent 34%),
-    radial-gradient(
-      circle at bottom right,
-      rgba(34, 197, 94, 0.1),
-      transparent 20%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.35),
+    transparent 70%
+  );
+  top: -100px;
+  right: -150px;
+  filter: blur(80px);
+  z-index: 0;
   pointer-events: none;
 }
+
+.vm-hero::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.25), transparent 70%);
+  bottom: -120px;
+  left: -120px;
+  filter: blur(90px);
+  z-index: 0;
+}
+
 .vm-hero-container,
 .vm-panel,
 .vm-hero-left,
@@ -1859,7 +1891,7 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .vm-dashboard-copy h3 {
   margin: 1rem 0;
@@ -1965,7 +1997,7 @@
 }
 .vm-modules-carousel-section {
   overflow: hidden;
-  padding-bottom: 2rem;
+  padding-bottom: 2.75rem;
   border: 0;
 }
 .vm-modules-carousel-section .vm-modules-slider {
@@ -1974,7 +2006,7 @@
   position: relative;
   width: min(1120px, calc(100% - 2rem));
   margin: 1.5rem auto 0;
-  padding: 1rem 4.5rem 1.5rem;
+  padding: 1rem 4.5rem 2.25rem;
   background: transparent !important;
 }
 .vm-modules-carousel-section .vm-slider-hint {
@@ -1992,11 +2024,14 @@
   background: transparent !important;
   border-radius: 0;
   box-shadow: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  padding-bottom: 1.8rem;
 }
 .vm-modules-carousel-section .vm-modules-track {
   display: flex;
   gap: var(--gap);
-  padding: 1.2rem 0;
+  padding: 1.4rem 0 2.2rem;
   transition: transform 0.6s ease;
   will-change: transform;
   background: transparent !important;
@@ -2004,13 +2039,15 @@
 }
 .vm-modules-carousel-section .vm-modules-track .vm-module-card {
   flex: 0 0 calc((100% - (var(--gap) * 2)) / 3);
-  min-height: 335px;
-  height: 335px;
+  min-height: 480px;
+  height: 480px;
 
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
 
-  padding: 1.5rem;
+  padding: 2.25rem 1.85rem;
+  justify-content: flex-start;
   border-radius: 22px;
   border: 1px solid rgba(96, 165, 250, 0.12);
 
@@ -2031,10 +2068,16 @@
   transform: translateY(-8px);
   box-shadow: 0 18px 34px rgba(15, 23, 42, 0.18) !important;
 }
+
 .vm-modules-carousel-section .vm-modules-track .vm-module-card h3 {
-  min-height: 58px;
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
 }
+
 .vm-modules-carousel-section .vm-modules-track .vm-module-card p {
+  margin-top: auto;
   margin-bottom: 0;
 }
 .vm-modules-carousel-section .vm-slider-btn {
@@ -2111,7 +2154,7 @@
   }
   .vm-modules-carousel-section .vm-modules-track .vm-module-card {
     flex: 0 0 100%;
-    min-height: 300px;
+    min-height: 360px;
     height: auto;
   }
   .vm-modules-carousel-section .vm-slider-btn {
@@ -2164,6 +2207,7 @@
 @media (max-width: 991.98px) {
   .vm-hero-container {
     flex-direction: column;
+  gap: 1.15rem;
     gap: 1.5rem;
     text-align: center;
   }
@@ -2312,6 +2356,7 @@
   box-shadow: 0 22px 55px rgba(15, 23, 42, 0.08);
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
   gap: 1rem;
 }
 .homepage-body .vm-product-card::before,
@@ -2336,6 +2381,7 @@
   border-radius: 22px;
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
   justify-content: flex-end;
   gap: 0.45rem;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
@@ -2500,6 +2546,7 @@
   .homepage-body .vm-hero-buttons,
   .homepage-body .vm-hero-stats {
     flex-direction: column;
+  gap: 1.15rem;
     gap: 1rem;
   }
   .homepage-body .vm-product-card {
@@ -2739,6 +2786,18 @@ body.homepage-body {
   box-shadow: 0 22px 38px rgba(34, 197, 94, 0.24);
 }
 
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  border: none;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.5);
+}
+
 .homepage-body .vm-section {
   margin: 0 auto 1.5rem;
   padding: 4rem 0;
@@ -2853,6 +2912,7 @@ body.homepage-body {
   color: var(--home-text);
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
   align-items: flex-start;
 }
 
@@ -2995,10 +3055,15 @@ body.homepage-body {
 .homepage-body .vm-panel-metrics div,
 .homepage-body .vm-card-mini {
   margin-right: 0;
-  border: 1px solid rgba(96, 165, 250, 0.16);
-  border-radius: 18px;
-  background: rgba(11, 26, 55, 0.48);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+.vm-card-mini:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .homepage-body .vm-panel-metrics strong {
@@ -3053,7 +3118,7 @@ body.homepage-body {
 
 .homepage-body .vm-pains-section {
   background: transparent;
-  padding-inline: 0.75rem;
+  padding-inline: clamp(2.25rem, 4.5vw, 4.5rem);
 }
 
 .homepage-body .vm-pains-grid {
@@ -3067,6 +3132,7 @@ body.homepage-body {
 .homepage-body .vm-pain-card {
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
   gap: 0.95rem;
   min-height: 240px;
   padding: 1.7rem;
@@ -3119,7 +3185,7 @@ body.homepage-body {
 }
 
 .homepage-body .vm-transform {
-  padding-inline: 0.75rem;
+  padding-inline: clamp(2.25rem, 4.5vw, 4.5rem);
 }
 
 .homepage-body .vm-transform-inner {
@@ -3379,6 +3445,7 @@ body.homepage-body {
   min-height: 500px;
   display: flex;
   flex-direction: column;
+  gap: 1.15rem;
   align-items: center;
   gap: 1rem;
   padding: 1.7rem;
@@ -3798,6 +3865,7 @@ body.homepage-body {
   .homepage-body .vm-hero-stats {
     grid-template-columns: 1fr;
     flex-direction: column;
+  gap: 1.15rem;
   }
 
   .homepage-body .vm-panel-cards,
@@ -3848,6 +3916,7 @@ body.homepage-body {
   .homepage-topbar {
     display: flex;
     flex-direction: column;
+  gap: 1.15rem;
     align-items: stretch;
     gap: 0.7rem;
     padding: 0.8rem 0.85rem 0.9rem;
@@ -4131,7 +4200,7 @@ body.homepage-body {
   .homepage-body .vm-panel-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 0.75rem;
     margin-bottom: 0.9rem;
   }
@@ -4801,4 +4870,453 @@ body.homepage-body {
 .homepage-body .vm-modules-carousel-section .vm-modules-slider {
   margin-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+/* ========================================================================== 
+   HOMEPAGE — CORREÇÃO FINAL PREMIUM SAAS
+   Este bloco precisa ficar por último para vencer regras antigas duplicadas.
+   ========================================================================== */
+
+.homepage-body {
+  --home-text: #0f172a;
+  --home-muted-dark: #cbd5e1;
+  --home-premium-blue: #2563eb;
+  --home-premium-blue-soft: #60a5fa;
+  --home-premium-green: #22c55e;
+  --home-premium-bg: #071225;
+  --home-premium-card: rgba(15, 23, 42, 0.72);
+  background:
+    radial-gradient(
+      circle at 14% 8%,
+      rgba(59, 130, 246, 0.16),
+      transparent 28%
+    ),
+    radial-gradient(circle at 88% 18%, rgba(34, 197, 94, 0.1), transparent 24%),
+    linear-gradient(180deg, #eef5fe 0%, #e7f0fb 100%) !important;
+}
+
+.homepage-body .homepage-topbar {
+  background: rgba(248, 251, 255, 0.78) !important;
+  border: 1px solid rgba(96, 165, 250, 0.2) !important;
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.14) !important;
+  backdrop-filter: blur(18px) saturate(1.2) !important;
+}
+
+.homepage-body .homepage-login-link {
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
+  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.28) !important;
+}
+
+.homepage-body .vm-hero {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: auto !important;
+  margin-bottom: 1.5rem !important;
+  padding: 130px 0 90px !important;
+  background:
+    radial-gradient(
+      circle at 18% 24%,
+      rgba(59, 130, 246, 0.34),
+      transparent 34%
+    ),
+    radial-gradient(circle at 82% 70%, rgba(34, 197, 94, 0.2), transparent 34%),
+    linear-gradient(135deg, #06101f 0%, #071b38 46%, #0e2f63 100%) !important;
+}
+
+.homepage-body .vm-hero::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 680px !important;
+  height: 680px !important;
+  top: -180px !important;
+  right: -180px !important;
+  left: auto !important;
+  bottom: auto !important;
+  border-radius: 999px !important;
+  background: radial-gradient(
+    circle,
+    rgba(96, 165, 250, 0.38),
+    rgba(37, 99, 235, 0.14) 42%,
+    transparent 72%
+  ) !important;
+  filter: blur(34px) !important;
+  opacity: 1 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+.homepage-body .vm-hero::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  width: 560px !important;
+  height: 560px !important;
+  left: -170px !important;
+  bottom: -180px !important;
+  top: auto !important;
+  right: auto !important;
+  border-radius: 999px !important;
+  background: radial-gradient(
+    circle,
+    rgba(34, 197, 94, 0.24),
+    rgba(34, 197, 94, 0.08) 44%,
+    transparent 72%
+  ) !important;
+  filter: blur(42px) !important;
+  opacity: 1 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+.homepage-body .vm-hero-container {
+  position: relative !important;
+  z-index: 1 !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr) !important;
+  gap: 2.4rem !important;
+  align-items: center !important;
+  padding: clamp(2rem, 4vw, 3.4rem) !important;
+  border-radius: 34px !important;
+  border: 1px solid rgba(191, 219, 254, 0.16) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.78) 0%,
+    rgba(15, 38, 76, 0.7) 58%,
+    rgba(10, 24, 52, 0.74) 100%
+  ) !important;
+  box-shadow:
+    0 34px 90px rgba(2, 8, 23, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(22px) saturate(1.18) !important;
+}
+
+.homepage-body .vm-hero-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(96, 165, 250, 0.4),
+    rgba(34, 197, 94, 0.22),
+    rgba(255, 255, 255, 0.08)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.homepage-body .vm-hero-left,
+.homepage-body .vm-hero-right,
+.homepage-body .vm-panel {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.homepage-body .vm-hero-left {
+  color: #f8fafc !important;
+}
+
+.homepage-body .vm-hero-badge {
+  color: #bfdbfe !important;
+  background: rgba(96, 165, 250, 0.12) !important;
+  border: 1px solid rgba(147, 197, 253, 0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.homepage-body .vm-hero-title {
+  color: #f8fafc !important;
+  text-shadow: 0 18px 50px rgba(2, 8, 23, 0.45) !important;
+}
+
+.homepage-body .text-accent {
+  color: #4ade80 !important;
+  text-shadow: 0 0 34px rgba(34, 197, 94, 0.26) !important;
+}
+
+.homepage-body .vm-hero-description,
+.homepage-body .vm-hero-description strong {
+  color: #dbeafe !important;
+  opacity: 0.94 !important;
+}
+
+.homepage-body .vm-hero-stats strong {
+  color: #f8fafc !important;
+}
+
+.homepage-body .vm-hero-stats span {
+  color: #bfdbfe !important;
+}
+
+.homepage-body .vm-hero-buttons .btn-primary,
+.homepage-body .vm-hero .btn-primary {
+  color: #ffffff !important;
+  border: 0 !important;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
+  box-shadow:
+    0 18px 42px rgba(37, 99, 235, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+}
+
+.homepage-body .vm-hero-buttons .btn-primary:hover,
+.homepage-body .vm-hero .btn-primary:hover {
+  transform: translateY(-3px) !important;
+  box-shadow:
+    0 24px 54px rgba(37, 99, 235, 0.42),
+    0 0 28px rgba(34, 197, 94, 0.18) !important;
+}
+
+.homepage-body .vm-hero .btn-outline-light {
+  color: #eff6ff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(191, 219, 254, 0.3) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.homepage-body .vm-hero .btn-outline-light:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(191, 219, 254, 0.52) !important;
+}
+
+.homepage-body .vm-panel {
+  width: 100% !important;
+  max-width: 520px !important;
+  padding: 1.85rem !important;
+  border-radius: 30px !important;
+  border: 1px solid rgba(147, 197, 253, 0.22) !important;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(96, 165, 250, 0.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(6, 16, 31, 0.92) 0%,
+      rgba(13, 37, 75, 0.92) 100%
+    ) !important;
+  box-shadow:
+    0 30px 78px rgba(2, 8, 23, 0.5),
+    0 0 0 1px rgba(96, 165, 250, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(18px) saturate(1.16) !important;
+}
+
+.homepage-body .vm-panel-header strong {
+  color: #f8fafc !important;
+}
+
+.homepage-body .vm-live {
+  color: #4ade80 !important;
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.65) !important;
+}
+
+.homepage-body .vm-panel-metrics {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.85rem !important;
+}
+
+.homepage-body .vm-panel-metrics div,
+.homepage-body .vm-card-mini {
+  background: rgba(255, 255, 255, 0.055) !important;
+  border: 1px solid rgba(191, 219, 254, 0.1) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 30px rgba(2, 8, 23, 0.18) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.homepage-body .vm-card-mini {
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease !important;
+}
+
+.homepage-body .vm-card-mini:hover {
+  transform: translateY(-5px) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(96, 165, 250, 0.38) !important;
+  box-shadow:
+    0 22px 42px rgba(2, 8, 23, 0.3),
+    0 0 26px rgba(96, 165, 250, 0.08) !important;
+}
+
+.homepage-body .vm-panel-metrics strong,
+.homepage-body .vm-card-mini strong {
+  color: #f8fafc !important;
+}
+
+.homepage-body .vm-panel-metrics span,
+.homepage-body .vm-card-mini p {
+  color: #dbeafe !important;
+}
+
+.homepage-body .vm-card-mini .tag {
+  color: #93c5fd !important;
+}
+
+.homepage-body .vm-card-mini .tag-alert {
+  color: #fca5a5 !important;
+}
+
+.homepage-body .vm-card-mini .tag-success {
+  color: #86efac !important;
+}
+
+.homepage-body .vm-section-dark,
+.homepage-body .dark-bg,
+.homepage-body .vm-section-dark.vm-contact,
+.homepage-body .vm-products-section {
+  background:
+    radial-gradient(
+      circle at 85% 12%,
+      rgba(96, 165, 250, 0.22),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 12% 88%,
+      rgba(34, 197, 94, 0.12),
+      transparent 22%
+    ),
+    linear-gradient(135deg, #071225 0%, #0b1d3a 52%, #13376f 100%) !important;
+}
+
+.homepage-body .vm-module-card,
+.homepage-body .vm-module-card--highlight,
+.homepage-body .vm-modules-carousel-section .vm-modules-track .vm-module-card {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(96, 165, 250, 0.14),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 19, 38, 0.98) 0%,
+      rgba(14, 40, 82, 0.98) 100%
+    ) !important;
+  border: 1px solid rgba(96, 165, 250, 0.18) !important;
+  box-shadow: 0 24px 48px rgba(2, 8, 23, 0.22) !important;
+}
+
+.homepage-body .vm-module-card--highlight,
+.homepage-body
+  .vm-modules-carousel-section
+  .vm-modules-track
+  .vm-module-card--highlight {
+  border-color: rgba(34, 197, 94, 0.44) !important;
+  box-shadow:
+    0 24px 48px rgba(2, 8, 23, 0.24),
+    0 0 0 1px rgba(34, 197, 94, 0.12) inset !important;
+}
+
+@media (max-width: 991.98px) {
+  .homepage-body .vm-hero {
+    padding: 2rem 0 4rem !important;
+  }
+
+  .homepage-body .vm-hero-container {
+    grid-template-columns: 1fr !important;
+    width: calc(100% - 1rem) !important;
+    gap: 1.6rem !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-hero {
+    padding: 1.2rem 0 2.5rem !important;
+  }
+
+  .homepage-body .vm-hero-container {
+    padding: 1.2rem 1rem 1.35rem !important;
+    border-radius: 24px !important;
+  }
+
+  .homepage-body .vm-panel {
+    max-width: 100% !important;
+    padding: 1.25rem !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-body .vm-panel-metrics {
+    gap: 0.58rem !important;
+  }
+}
+
+/* ========================================================================== 
+   HOMEPAGE — CORREÇÕES DE ESPAÇAMENTO E CARROSSEL
+   Mantido no fim porque neutraliza regras antigas duplicadas do próprio arquivo.
+   ========================================================================== */
+
+.homepage-body .vm-pains-section,
+.homepage-body .vm-transform {
+  padding-left: clamp(2.25rem, 4.5vw, 4.5rem) !important;
+  padding-right: clamp(2.25rem, 4.5vw, 4.5rem) !important;
+}
+
+.homepage-body .vm-pains-grid,
+.homepage-body .vm-transform-inner {
+  width: 100% !important;
+  max-width: 1080px !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-slider,
+.homepage-body .vm-modules-carousel-section .vm-modules-viewport,
+.homepage-body .vm-modules-carousel-section .vm-modules-track {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-viewport {
+  padding-bottom: 1.8rem !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-track {
+  padding: 1.4rem 0 2.2rem !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-track .vm-module-card {
+  min-height: 480px !important;
+  height: 480px !important;
+  padding: 2.25rem 1.85rem !important;
+  justify-content: flex-start !important;
+  gap: 1.15rem !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-track .vm-module-card h3 {
+  min-height: 88px !important;
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 0 !important;
+}
+
+.homepage-body .vm-modules-carousel-section .vm-modules-track .vm-module-card p {
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-pains-section,
+  .homepage-body .vm-transform {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .homepage-body .vm-modules-carousel-section .vm-modules-track .vm-module-card {
+    min-height: 360px !important;
+    height: auto !important;
+  }
 }
