@@ -491,9 +491,9 @@
     <section id="contato" class="vm-section vm-section-dark vm-contact dark-bg">
       <div class="vm-section-heading">
         <span class="vm-kicker">Começar agora</span>
-        <h2 class="pt-4">
+        <h2 class="vm-contact-title">
           Organize sua operação com
-          <span class="brand-mark">
+          <span class="brand-mark vm-contact-brand">
             <span class="brand-mark-primary">Vend</span><span class="brand-mark-accent">Master</span>
           </span>
         </h2>
@@ -526,15 +526,17 @@
             <div>
               <p class="vm-options-title">Quais frentes você opera?</p>
               <div class="vm-checkbox-grid">
-                <label class="vm-check-chip">
+                <label class="vm-option-btn vm-option-multi">
                   <input type="checkbox" name="produtos[]" value="Bolinhas">
                   <span>Bolinhas</span>
                 </label>
-                <label class="vm-check-chip">
+
+                <label class="vm-option-btn vm-option-multi">
                   <input type="checkbox" name="produtos[]" value="Consignados">
                   <span>Consignados</span>
                 </label>
-                <label class="vm-check-chip">
+
+                <label class="vm-option-btn vm-option-multi">
                   <input type="checkbox" name="produtos[]" value="Pelúcias">
                   <span>Pelúcias</span>
                 </label>
@@ -544,18 +546,22 @@
             <div>
               <p class="vm-options-title">Como prefere receber o primeiro contato?</p>
               <div class="vm-radio-grid">
-                <label class="vm-radio-card">
+
+                <label class="vm-option-btn">
                   <input type="radio" name="preferenciaContato" value="WhatsApp" checked>
-                  <span>WhatsApp</span>
+                  <span><i class="bi bi-whatsapp"></i> WhatsApp</span>
                 </label>
-                <label class="vm-radio-card">
+
+                <label class="vm-option-btn">
                   <input type="radio" name="preferenciaContato" value="Ligação">
-                  <span>Ligação</span>
+                  <span><i class="bi bi-telephone"></i> Ligação</span>
                 </label>
-                <label class="vm-radio-card">
+
+                <label class="vm-option-btn">
                   <input type="radio" name="preferenciaContato" value="E-mail">
-                  <span>E-mail</span>
+                  <span><i class="bi bi-envelope"></i> E-mail</span>
                 </label>
+
               </div>
             </div>
 
