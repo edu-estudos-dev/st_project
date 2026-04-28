@@ -16,7 +16,10 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
+    "@fontsource/urbanist": "^5.2.7",
     "bcrypt": "^6.0.0",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
     "cookie-parser": "^1.4.7",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
@@ -24,18 +27,13 @@
     "express": "^4.21.1",
     "express-rate-limit": "^8.3.1",
     "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.3",
-    "method-override": "^3.0.0",
-    "nodemailer": "^8.0.5",
-    "pg": "^8.20.0"
-  },
-  "devDependencies": {
-    "@fontsource/urbanist": "^5.2.7",
-    "bootstrap": "^5.3.8",
-    "bootstrap-icons": "^1.13.1",
     "inputmask": "^5.0.9",
+    "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
+    "method-override": "^3.0.0",
+    "nodemailer": "^8.0.5",
+    "pg": "^8.20.0",
     "sweetalert2": "^11.26.24"
   },
   "keywords": [
