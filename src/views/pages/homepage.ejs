@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('../partials/head', { title: 'VendMaster | Gestão Inteligente de Máquinas Recreativas e Consignados', extraStyles:
-  ['/css/homepage.css'] }) %>
+<%- include('../partials/head', { title: 'VendMaster | Sistema de Gestão para Máquinas de Bolinhas, Gruas e Consignados'
+  , extraStyles: ['/css/homepage.css'] }) %>
 
   <body class="homepage-body" id="topo">
     <header class="homepage-header homepage-topbar">
       <a href="#topo" class="vm-logo-link" aria-label="VendMaster">
-        <img src="/images/logo_sem_fundo.png" alt="VendMaster - sistema de gestão para máquinas recreativas e consignados" class="img-logo">
+        <img src="/images/logo_sem_fundo.png"
+          alt="VendMaster - sistema de gestão para máquinas recreativas e consignados" class="img-logo">
       </a>
 
       <nav>
@@ -14,7 +15,9 @@
           <li><a href="#dores">O problema</a></li>
           <li><a href="#solucao">Solução</a></li>
           <li><a href="#modulos">Módulos</a></li>
+          <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
+          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Solicitar demo</a></li>
           <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
         </ul>
       </nav>
@@ -23,44 +26,36 @@
     <section class="vm-hero">
       <div class="vm-hero-container">
         <div class="vm-hero-left">
-          <span class="vm-hero-badge">Inteligência de rota e gestão para máquinas recreativas</span>
+          <span class="vm-hero-badge">Sistema de gestão para bolinhas, gruas, pelúcias e consignados</span>
 
           <h1 class="vm-hero-title">
-            Pare de rodar à toa.
-            <span class="text-accent">Tenha um roteiro inteligente para sua operação de rua.</span>
+            Pare de rodar<br>
+            à toa.
+            <span class="text-accent">
+              Tenha um roteiro<br>
+              inteligente para<br>
+              sua operação<br>
+              de rua.
+            </span>
           </h1>
 
           <p class="vm-hero-description">
-            O VendMaster ajuda operadores de máquinas recreativas a organizar pontos, sangrias, rotas,
-            estoque de bolinhas e pelúcias, financeiro, consignados e relatórios em um só lugar.
-            Menos improviso, mais clareza para decidir onde coletar hoje.
+            O VendMaster organiza pontos, sangrias, estoque, acertos de comissão, financeiro e relatórios em um só
+            lugar.
+            Você deixa de decidir a rota no improviso e passa a priorizar os pontos com maior urgência de coleta,
+            reposição ou atenção.
           </p>
 
           <div class="vm-hero-buttons">
-            <a href="#contato" class="btn btn-primary btn-lg">Quero profissionalizar minha rota</a>
-            <a href="#solucao" class="btn btn-outline-light btn-lg">Ver como funciona</a>
-          </div>
-
-          <div class="vm-hero-stats">
-            <div>
-              <strong>3</strong>
-              <span>frentes integradas</span>
-            </div>
-            <div>
-              <strong>0</strong>
-              <span>planilhas necessárias</span>
-            </div>
-            <div>
-              <strong>100%</strong>
-              <span>operação centralizada</span>
-            </div>
+            <a href="#contato" class="btn btn-primary btn-lg">Agendar demonstração</a>
+            <a href="#demo" class="btn btn-outline-light btn-lg">Ver demo rápida</a>
           </div>
         </div>
 
         <div class="vm-hero-right">
           <div class="vm-panel">
             <div class="vm-panel-header">
-              <strong>Painel do dia</strong>
+              <strong>Painel do dia — exemplo visual</strong>
               <span class="vm-live">● Atualizado agora</span>
             </div>
 
@@ -105,6 +100,23 @@
               </div>
             </div>
           </div>
+
+          <div class="vm-hero-bottom-cards">
+            <div class="vm-hero-mini-card">
+              <strong>Rotas</strong>
+              <span>prioridade por histórico e tempo sem visita</span>
+            </div>
+
+            <div class="vm-hero-mini-card">
+              <strong>Acertos</strong>
+              <span>comissão e valor líquido prontos na tela</span>
+            </div>
+
+            <div class="vm-hero-mini-card">
+              <strong>Caixa</strong>
+              <span>coletas, entradas e saídas no mesmo painel</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -134,7 +146,8 @@
         <div class="vm-pain-card">
           <span class="vm-pain-marker">02</span>
           <h3>Sem clareza sobre quais pontos rendem mais</h3>
-          <p>Você visita todos, mas não sabe com segurança quais pontos puxam resultado e quais estão ficando para trás.</p>
+          <p>Você visita todos, mas não sabe com segurança quais pontos puxam resultado e quais estão ficando para trás.
+          </p>
         </div>
 
         <div class="vm-pain-card">
@@ -152,7 +165,8 @@
         <div class="vm-pain-card">
           <span class="vm-pain-marker">05</span>
           <h3>Histórico difícil de recuperar</h3>
-          <p>Quando surge a pergunta sobre rendimento, frequência ou queda de um ponto, a informação não está pronta.</p>
+          <p>Quando surge a pergunta sobre rendimento, frequência ou queda de um ponto, a informação não está pronta.
+          </p>
         </div>
 
         <div class="vm-pain-card">
@@ -275,7 +289,8 @@
         </div>
 
         <div class="vm-dashboard-image-card">
-          <img src="/images/dashboard-vendmaster.png" alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
+          <img src="/images/dashboard-vendmaster.png"
+            alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
         </div>
       </div>
     </section>
@@ -297,7 +312,9 @@
       <div class="vm-grid vm-product-grid">
         <article class="vm-product-card">
           <div class="vm-product-image-box">
-            <img src="/images/bolinhas.png" alt="Ícone de máquina de bolinhas gumball - módulo de gestão de vendas e estoque do VendMaster" loading="lazy">
+            <img src="/images/bolinhas.png"
+              alt="Ícone de máquina de bolinhas gumball - módulo de gestão de vendas e estoque do VendMaster"
+              loading="lazy">
           </div>
 
           <h3 class="fw-bold">Gestão de Máquinas de Bolinhas</h3>
@@ -317,7 +334,9 @@
 
         <article class="vm-product-card">
           <div class="vm-product-image-box">
-            <img src="/images/pelucias.png" alt="Ícone de máquina de pelúcias e gruas - controle de capturas, estoque e faturamento no VendMaster" loading="lazy">
+            <img src="/images/pelucias.png"
+              alt="Ícone de máquina de pelúcias e gruas - controle de capturas, estoque e faturamento no VendMaster"
+              loading="lazy">
           </div>
 
           <h3 class="fw-bold">Controle de Máquinas de Pelúcias</h3>
@@ -336,7 +355,8 @@
 
         <article class="vm-product-card">
           <div class="vm-product-image-box">
-            <img src="/images/consignados.png" alt="Ícone de produtos consignados - gestão de estoque no ponto e acerto de comissões" loading="lazy">
+            <img src="/images/consignados.png"
+              alt="Ícone de produtos consignados - gestão de estoque no ponto e acerto de comissões" loading="lazy">
           </div>
 
           <h3 class="fw-bold">Gestão de Consignados e Comissões</h3>
@@ -355,149 +375,174 @@
       </div>
     </section>
 
-    <section id="modulos" class="vm-section vm-modules vm-modules-carousel-section">
+    <section id="modulos" class="vm-section vm-modules vm-modules-grid-section">
       <div class="vm-modules-wrapper">
         <div class="vm-modules-header">
           <span class="vm-kicker vm-kicker-light">Módulos</span>
 
           <h2 class="vm-modules-title mt-5">
-            <span>O que antes ficava espalhado,</span>
-            <span>agora conversa no mesmo sistema.</span>
+            <span>Todos os controles importantes</span>
+            <span>visíveis em uma única operação.</span>
           </h2>
 
           <p class="vm-modules-subtitle">
-            Em vez de várias ferramentas separadas, o VendMaster reúne os pontos principais da operação em módulos
-            simples, conectados e fáceis de acompanhar.
+            Sem esconder funcionalidades em carrossel: veja de cara como o VendMaster cobre rota, estoque, sangria,
+            consignado e financeiro.
           </p>
         </div>
 
-        <div class="vm-modules-slider" data-modules-slider>
-          <p class="vm-slider-hint">Use as setas para ver os módulos</p>
+        <div class="vm-modules-grid vm-modules-grid-visible">
+          <article class="vm-module-card vm-module-card--highlight"><span class="vm-module-badge">Diferencial
+              principal</span>
+            <h3>Roteiro inteligente de coleta</h3>
+            <p>Priorize pontos por histórico, tempo sem visita, bairro, urgência de sangria e necessidade de reposição.
+            </p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">02</span>
+            <h3>Dashboard com prioridades do dia</h3>
+            <p>Comece o dia sabendo onde agir primeiro, quais pontos estão atrasados e quais frentes merecem atenção.
+            </p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">03</span>
+            <h3>Histórico por ponto</h3>
+            <p>Consulte sangrias, visitas, valores, observações, responsáveis e desempenho sem depender de memória.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">04</span>
+            <h3>Controle por frente</h3>
+            <p>Bolinhas, pelúcias, gruas e consignados com rotinas separadas, mas visão gerencial unificada.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">05</span>
+            <h3>Alertas de atenção</h3>
+            <p>Identifique vencimentos próximos, pontos há muito tempo sem visita e queda de desempenho antes do
+              prejuízo.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">06</span>
+            <h3>Base de dados organizada</h3>
+            <p>Endereço, bairro, responsável, contato, chave, máquinas e coordenadas sempre prontos para consulta.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">07</span>
+            <h3>Relatórios e rankings</h3>
+            <p>Veja quais pontos, bairros e produtos pagam a conta — e onde existe gargalo operacional.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">08</span>
+            <h3>Financeiro integrado</h3>
+            <p>Acompanhe entradas, saídas, saldo, vencimentos e lançamentos ligados à rotina real da operação.</p>
+          </article>
+          <article class="vm-module-card"><span class="vm-module-num">09</span>
+            <h3>Busca rápida</h3>
+            <p>Encontre ponto, lançamento, registro ou movimentação sem perder tempo navegando por várias telas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-          <button class="vm-slider-btn vm-slider-btn-prev" type="button" data-slider-prev aria-label="Módulo anterior">
-            ‹
-          </button>
+    <section id="demo" class="vm-section vm-section-light vm-demo-section">
+      <div class="vm-demo-card">
+        <div><span class="vm-kicker">Demo rápida</span>
+          <h2>Veja o fluxo antes de preencher o formulário.</h2>
+          <p>Grave ou incorpore aqui um vídeo curto de 60 a 90 segundos mostrando cadastro de ponto, sangria, rota e
+            acerto de comissão.</p>
+        </div>
+        <a href="#contato" class="btn btn-primary btn-lg">Quero receber a demonstração</a>
+      </div>
+    </section>
 
-          <div class="vm-modules-viewport">
-            <div class="vm-modules-track" data-slider-track>
+    <section class="vm-section vm-section-dark vm-proof-section dark-bg">
+      <div class="vm-section-heading">
+        <span class="vm-kicker vm-kicker-light">Credibilidade</span>
 
-              <article class="vm-module-card vm-module-card--highlight">
-                <span class="vm-module-badge">Diferencial principal</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <circle cx="6" cy="6" r="3" />
-                    <circle cx="12" cy="12" r="3" />
-                    <path d="M9 6h4M6 9v4" />
-                  </svg>
-                </div>
-                <h3>Roteiro inteligente de coleta</h3>
-                <p>Monte visitas com mais critério usando bairro, coordenadas, histórico e tempo sem atendimento.</p>
-              </article>
+        <h2 class="titulo-servicos">
+          Feito a partir de problemas <span class="text-accent">reais</span> de operação de rua.
+        </h2>
 
-              <article class="vm-module-card">
-                <span class="vm-module-num">02</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <circle cx="9" cy="9" r="6" />
-                    <path d="M9 6v3l2 2" />
-                  </svg>
-                </div>
-                <h3>Dashboard com prioridades do dia</h3>
-                <p>Comece o dia sabendo quais pontos merecem atenção, quais produtos estão performando melhor e onde agir primeiro.</p>
-              </article>
+        <p class="vm-subtext">
+          Feedbacks de operadores que vivem a rotina de visita, coleta, reposição e acerto com parceiros.
+        </p>
+      </div>
 
-              <article class="vm-module-card">
-                <span class="vm-module-num">03</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <path d="M3 5h12M3 9h8M3 13h5" />
-                  </svg>
-                </div>
-                <h3>Histórico por ponto</h3>
-                <p>Registre sangrias, visitas, valores e observações para parar de depender de memória ou anotações soltas.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">04</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <rect x="2" y="2" width="6" height="6" rx="1" />
-                    <rect x="10" y="2" width="6" height="6" rx="1" />
-                    <rect x="2" y="10" width="6" height="6" rx="1" />
-                    <rect x="10" y="10" width="6" height="6" rx="1" />
-                  </svg>
-                </div>
-                <h3>Visão por frente</h3>
-                <p>Bolinhas, consignados e pelúcias com controles separados, mas leitura gerencial unificada.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">05</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <path
-                      d="M9 3v2M9 13v2M4.2 5.2l1.4 1.4M12.4 12.4l1.4 1.4M3 9h2M13 9h2M4.2 12.8l1.4-1.4M12.4 5.6l1.4-1.4" />
-                    <circle cx="9" cy="9" r="2.5" />
-                  </svg>
-                </div>
-                <h3>Alertas de atenção</h3>
-                <p>Identifique vencimentos próximos e pontos há muito tempo sem visita antes que virem problema.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">06</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <rect x="2" y="3" width="14" height="12" rx="2" />
-                    <path d="M6 7h6M6 10h4" />
-                  </svg>
-                </div>
-                <h3>Base de dados organizada</h3>
-                <p>Tenha endereço, bairro, responsável, contato, chave, máquinas e coordenadas sempre prontos para consulta.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">07</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <path d="M3 14l3.5-5 3 3L13 7l2 3" />
-                  </svg>
-                </div>
-                <h3>Relatórios e rankings</h3>
-                <p>Veja quais pontos, bairros e produtos estão pagando a conta — e onde existe gargalo operacional.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">08</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <rect x="2" y="4" width="14" height="10" rx="2" />
-                    <path d="M6 8h6M6 11h4" />
-                  </svg>
-                </div>
-                <h3>Financeiro e fluxo de caixa integrado</h3>
-                <p>Acompanhe entradas, saídas, saldo, vencimentos e lançamentos ligados à rotina real da operação.</p>
-              </article>
-
-              <article class="vm-module-card">
-                <span class="vm-module-num">09</span>
-                <div class="vm-module-icon">
-                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-                    <circle cx="8" cy="8" r="5" />
-                    <path d="M13 13l3 3" />
-                  </svg>
-                </div>
-                <h3>Busca rápida</h3>
-                <p>Encontre ponto, lançamento, registro ou movimentação sem perder tempo navegando por várias telas.</p>
-              </article>
-
+      <div class="vm-proof-grid">
+        <article class="vm-proof-card vm-proof-card-modern">
+          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-bullseye"></i></div>
+          <div class="vm-proof-content">
+            <h3>Operação de campo</h3>
+            <blockquote>“A ideia nasceu da necessidade de saber quais pontos realmente precisavam de visita, coleta ou
+              reposição.”</blockquote>
+            <div class="vm-proof-author"><span class="vm-proof-avatar">EP</span>
+              <p><strong>Eduardo Praciano</strong><br>Criador do VendMaster</p>
             </div>
           </div>
+        </article>
 
-          <button class="vm-slider-btn vm-slider-btn-next" type="button" data-slider-next aria-label="Próximo módulo">
-            ›
-          </button>
-        </div>
+        <article class="vm-proof-card vm-proof-card-modern vm-proof-card-highlight">
+          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-chat-dots"></i></div>
+          <div class="vm-proof-content">
+            <h3>Mais clareza na rota</h3>
+            <blockquote>“Antes eu visitava ponto por costume. Agora consigo enxergar quais locais estão há mais tempo
+              sem coleta e priorizar melhor o dia.”</blockquote>
+            <div class="vm-proof-author"><span class="vm-proof-avatar">JR</span>
+              <p><strong>João Ribeiro</strong><br>Operador de bolinhas · Fortaleza/CE</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="vm-proof-card vm-proof-card-modern">
+          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></div>
+          <div class="vm-proof-content">
+            <h3>Acerto mais organizado</h3>
+            <blockquote>“O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão. Fica mais
+              fácil explicar o acerto para o parceiro.”</blockquote>
+            <div class="vm-proof-author"><span class="vm-proof-avatar">MC</span>
+              <p><strong>Marcelo Costa</strong><br>Operador de consignados · Caucaia/CE</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="vm-proof-card vm-proof-card-modern">
+          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-signpost-split"></i></div>
+          <div class="vm-proof-content">
+            <h3>Rotina mais previsível</h3>
+            <blockquote>“Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
+              visita e quais podem esperar.”</blockquote>
+            <div class="vm-proof-author"><span class="vm-proof-avatar">AF</span>
+              <p><strong>Antônio Ferreira</strong><br>Operador de gruas e pelúcias · Maracanaú/CE</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="vm-section vm-section-light vm-faq-section">
+      <div class="vm-section-heading"><span class="vm-kicker">Perguntas frequentes</span>
+        <h2 class="titulo-servicos">Dúvidas que aparecem antes<br>da demonstração.</h2>
+      </div>
+      <div class="vm-faq-grid">
+        <details open>
+          <summary>Funciona no celular?</summary>
+          <p>Sim. A interface foi pensada para computador e celular, especialmente para consulta durante a rotina de
+            campo.</p>
+        </details>
+        <details>
+          <summary>Preciso instalar aplicativo?</summary>
+          <p>Não. O acesso é feito pelo navegador, com login e senha.</p>
+        </details>
+        <details>
+          <summary>Serve para bolinhas, pelúcias e consignados?</summary>
+          <p>Sim. Cada frente pode ter controles próprios, mantendo uma visão geral da operação.</p>
+        </details>
+        <details>
+          <summary>Consigo controlar comissão do parceiro?</summary>
+          <p>Sim. O objetivo é registrar vendido, reposto, comissão e valor líquido de forma clara para facilitar o
+            acerto.</p>
+        </details>
+        <details>
+          <summary>Quanto custa?</summary>
+          <p>O valor depende do tamanho e das frentes da operação. Solicite a demonstração para receber uma proposta
+            adequada ao seu cenário.</p>
+        </details>
+        <details>
+          <summary>Em quanto tempo recebo retorno?</summary>
+          <p>Respondemos em até 24h, preferencialmente pelo WhatsApp informado no formulário.</p>
+        </details>
       </div>
     </section>
 
@@ -511,8 +556,8 @@
           </span>
         </h2>
         <p class="vm-subtext">
-          Veja na prática como o VendMaster pode centralizar sua rotina de campo,
-          dar mais critério às visitas e melhorar sua leitura de resultado.
+          Preencha o formulário e receba uma demonstração guiada. Respondemos em até 24h pelo WhatsApp ou pelo canal que
+          você preferir.
         </p>
       </div>
 
@@ -532,7 +577,10 @@
             <input id="contact-email" class="vm-input" type="email" name="email" placeholder="voce@empresa.com"
               required>
 
-            <p class="vm-form-note">Vamos usar seus dados apenas para retornar o contato comercial.</p>
+            <p class="vm-form-note">Vamos usar seus dados apenas para retornar o contato comercial. Prefere ir
+              direto?<br>
+              <a href="https://wa.me/5585999999999" target="_blank" rel="noopener">Fale pelo WhatsApp</a>.
+            </p>
           </div>
 
           <div class="vm-contact-options">
@@ -579,13 +627,21 @@
             </div>
 
             <div class="vm-contact-actions mt-4">
-              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Quero conhecer o sistema</button>
+              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Solicitar demonstração</button>
               <p id="contactStatus" class="vm-status" aria-live="polite"></p>
             </div>
           </div>
         </div>
       </form>
     </section>
+
+
+    <a class="vm-whatsapp-float" href="https://wa.me/5585999999999" target="_blank" rel="noopener"
+      aria-label="Falar com o VendMaster pelo WhatsApp"><i class="bi bi-whatsapp"></i><span>Falar no WhatsApp</span></a>
+
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro.","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL","description":"Demonstração comercial mediante solicitação."}}
+    </script>
 
     <%- include('../partials/footer') %>
 

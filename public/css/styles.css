@@ -1,8 +1,4 @@
 ﻿/* ==========================================================================
-   PARTE 01 — cole esta parte na ordem indicada
-   ========================================================================== */
-
-/* ==========================================================================
    VENDMASTER — CSS ORGANIZADO
    Observação: a ordem original foi preservada para evitar quebra de cascata.
    Foram removidos apenas os blocos duplicados/adicionados na última alteração.
@@ -131,14 +127,6 @@ header li > a:hover {
   color: #37a647 !important;
 }
 
-.brand-mark-home {
-  font-size: clamp(2rem, 3vw, 2.6rem);
-}
-
-.brand-mark-hero {
-  font-size: clamp(3rem, 7vw, 5rem);
-}
-
 .brand-mark-footer {
   font-size: 2rem;
 }
@@ -180,18 +168,6 @@ footer h5 {
 
 footer p {
   color: var(--dark-color-2);
-}
-
-.titulo-servicos {
-  margin-bottom: 12px;
-  font-size: clamp(2.2rem, 3vw, 2.8rem);
-  font-weight: 900;
-  text-align: center;
-
-  max-width: 520px; /* 👈 ESSA LINHA RESOLVE */
-  margin-inline: auto;
-
-  line-height: 1.1;
 }
 
 figure {
@@ -363,35 +339,6 @@ figure {
   box-shadow: none;
 }
 
-.dashboard-hero {
-  display: flex;
-  justify-content: stretch;
-  align-items: stretch;
-  gap: 1.5rem;
-  margin-bottom: 1.75rem;
-}
-
-.dashboard-hero-copy,
-.dashboard-user-card,
-.dashboard-panel {
-  border: 1px solid rgba(14, 30, 84, 0.08);
-  box-shadow: 0 18px 40px rgba(22, 34, 66, 0.08);
-}
-
-.dashboard-hero-copy {
-  flex: 1 1 auto;
-  padding: 2rem;
-  border-radius: 28px;
-  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
-  color: #fff;
-  overflow: hidden;
-  position: relative;
-}
-
-.dashboard-hero-copy--full {
-  width: 100%;
-}
-
 .dashboard-brand-row {
   position: relative;
   z-index: 1;
@@ -445,17 +392,6 @@ figure {
   background: rgba(255, 255, 255, 0.24);
 }
 
-.dashboard-hero-copy::after {
-  content: '';
-  position: absolute;
-  inset: auto -5% -35% auto;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  filter: blur(2px);
-}
-
 .dashboard-kicker,
 .dashboard-section-tag,
 .dashboard-shortcut-pill {
@@ -476,99 +412,11 @@ figure {
   color: #dbeafe;
 }
 
-.dashboard-hero h1 {
-  font-size: clamp(2rem, 3vw, 3.1rem);
-  line-height: 1.02;
-  margin-bottom: 0.85rem;
-  color: #fff;
-}
-
-.dashboard-hero p {
-  max-width: 62ch;
-  margin-bottom: 0;
-  font-size: 1.02rem;
-  color: rgba(255, 255, 255, 0.82);
-}
-
 .dashboard-overview {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem;
   margin-top: 1.5rem;
-}
-
-.dashboard-hero-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
-  gap: 1.25rem;
-  align-items: stretch;
-}
-
-.dashboard-hero-copy-block {
-  max-width: 720px;
-}
-
-.dashboard-hero-insights {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.9rem;
-  margin-top: 1.2rem;
-}
-
-.dashboard-hero-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  min-height: 170px;
-  padding: 1.1rem 1.15rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fff;
-}
-
-.dashboard-hero-card-wide {
-  grid-column: span 2;
-}
-
-.dashboard-hero-card-tag {
-  color: #dbeafe;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.dashboard-hero-card strong {
-  font-size: 1.3rem;
-  line-height: 1.2;
-}
-
-.dashboard-hero-card p {
-  margin: 0;
-  color: rgba(219, 234, 254, 0.9);
-  line-height: 1.55;
-}
-
-.dashboard-hero-card-action {
-  text-decoration: none;
-  transition:
-    transform 0.24s ease,
-    box-shadow 0.24s ease,
-    background 0.24s ease;
-}
-
-.dashboard-hero-card-action:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 38px rgba(15, 23, 42, 0.22);
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.dashboard-hero-card-action em {
-  margin-top: auto;
-  color: #bbf7d0;
-  font-style: normal;
-  font-weight: 700;
 }
 
 .dashboard-overview-card {
@@ -1053,10 +901,6 @@ figure {
   font-size: 1.15rem;
 }
 
-/* ==========================================================================
-   PARTE 02 — cole esta parte na ordem indicada
-   ========================================================================== */
-
 .dashboard-revenue-links {
   display: flex;
   flex-wrap: wrap;
@@ -1486,66 +1330,6 @@ figure {
   padding-bottom: 3rem;
 }
 
-.form-hero {
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
-  padding: 1.75rem;
-  border-radius: 30px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
-  color: #fff;
-}
-
-.form-hero::before,
-.form-hero::after {
-  content: '';
-  position: absolute;
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-.form-hero::before {
-  width: 240px;
-  height: 240px;
-  right: -40px;
-  top: -70px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.form-hero::after {
-  width: 180px;
-  height: 180px;
-  right: 18%;
-  bottom: -90px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.form-hero-neutral {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 52%, #334155 100%);
-}
-
-.form-hero-blue {
-  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #2563eb 100%);
-}
-
-.form-hero-green {
-  background: linear-gradient(135deg, #052e16 0%, #166534 52%, #22c55e 100%);
-}
-
-.form-hero-violet {
-  background: linear-gradient(135deg, #2e1065 0%, #6d28d9 50%, #8b5cf6 100%);
-}
-
-.form-hero-content,
-.form-hero-side {
-  position: relative;
-  z-index: 1;
-}
-
 .form-kicker {
   display: inline-flex;
   align-items: center;
@@ -1559,55 +1343,6 @@ figure {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.form-hero h1 {
-  margin-bottom: 0.7rem;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.04;
-  color: #fff;
-}
-
-.form-hero p {
-  max-width: 62ch;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.form-hero-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.9rem;
-}
-
-.form-hero-stat {
-  padding: 1rem 1.1rem;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(10px);
-}
-
-.form-hero-stat strong,
-.form-hero-stat span {
-  display: block;
-}
-
-.form-hero-stat strong {
-  font-size: 0.88rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.form-hero-stat span {
-  margin-top: 0.35rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
 }
 
 .form-stage {
@@ -2029,66 +1764,6 @@ figure {
   padding-bottom: 3rem;
 }
 
-.list-hero {
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
-  padding: 1.75rem;
-  border-radius: 30px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
-  color: #fff;
-}
-
-.list-hero::before,
-.list-hero::after {
-  content: '';
-  position: absolute;
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-.list-hero::before {
-  width: 240px;
-  height: 240px;
-  right: -40px;
-  top: -70px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.list-hero::after {
-  width: 180px;
-  height: 180px;
-  right: 18%;
-  bottom: -90px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.list-hero-neutral {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 52%, #334155 100%);
-}
-
-.list-hero-blue {
-  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #2563eb 100%);
-}
-
-.list-hero-green {
-  background: linear-gradient(135deg, #052e16 0%, #166534 52%, #22c55e 100%);
-}
-
-.list-hero-violet {
-  background: linear-gradient(135deg, #2e1065 0%, #6d28d9 50%, #8b5cf6 100%);
-}
-
-.list-hero-content,
-.list-hero-side {
-  position: relative;
-  z-index: 1;
-}
-
 .list-kicker {
   display: inline-flex;
   align-items: center;
@@ -2102,32 +1777,6 @@ figure {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.list-hero h1 {
-  margin-bottom: 0.7rem;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.04;
-  color: #fff;
-}
-
-/* ==========================================================================
-   PARTE 03 — cole esta parte na ordem indicada
-   ========================================================================== */
-
-.list-hero p {
-  max-width: 62ch;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.list-hero-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.9rem;
 }
 
 .list-stat {
@@ -3167,10 +2816,6 @@ body.route-neighborhood-modal-open {
   box-shadow: 0 18px 38px rgba(37, 99, 235, 0.12);
 }
 
-/* ==========================================================================
-   PARTE 04 — cole esta parte na ordem indicada
-   ========================================================================== */
-
 .route-point-card-visited {
   opacity: 0.72;
   background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
@@ -3622,55 +3267,6 @@ body.route-neighborhood-modal-open {
   padding-bottom: 2.5rem;
 }
 
-.view-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
-  gap: 1.25rem;
-  padding: 1.55rem;
-  margin-bottom: 1.25rem;
-  border-radius: 30px;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  box-shadow: 0 24px 44px rgba(15, 23, 42, 0.1);
-  overflow: hidden;
-}
-
-.view-hero-neutral {
-  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-}
-
-.view-hero-green {
-  background: linear-gradient(135deg, #14532d 0%, #22c55e 100%);
-}
-
-.view-hero-blue {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-}
-
-.view-hero-violet {
-  background: linear-gradient(135deg, #581c87 0%, #8b5cf6 100%);
-}
-
-.view-hero-content h1 {
-  margin: 0;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.04;
-  color: #fff;
-}
-
-.view-hero-content p {
-  max-width: 60ch;
-  margin: 0.85rem 0 0;
-  color: rgba(255, 255, 255, 0.84);
-  line-height: 1.6;
-}
-
-.view-hero-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.9rem;
-}
-
 .view-stage {
   display: grid;
   gap: 1.2rem;
@@ -3905,10 +3501,6 @@ body.route-neighborhood-modal-open {
   gap: 0.75rem;
 }
 
-/* ==========================================================================
-   PARTE 05 — cole esta parte na ordem indicada
-   ========================================================================== */
-
 /* =========================
    PRODUTOS (SOLUÇÃO)
 ========================= */
@@ -4078,28 +3670,6 @@ body.route-neighborhood-modal-open {
   opacity: 1;
 }
 
-/* HERO MELHORADO */
-
-/* DIREITA MAIS ROBUSTA */
-
-/* LISTA DIREITA */
-
-/* ESQUERDA */
-
-/* Badge do hero */
-
-/* Negrito na descrição sem quebrar o tom */
-
-/* DIREITA */
-
-/* CARDS */
-
-/* TAG */
-
-/* TÍTULO */
-
-/* TEXTO */
-
 /* CUSTOM BUTTON OVERRIDE */
 .btn-primary {
   background: var(--vm-blue);
@@ -4117,10 +3687,6 @@ body.route-neighborhood-modal-open {
 /* GRID */
 
 /* CARD */
-
-/* ==========================================================================
-   PARTE 06 — cole esta parte na ordem indicada
-   ========================================================================== */
 
 /* =========================
    DORES / PROBLEMA REAL
@@ -4183,16 +3749,6 @@ body.route-neighborhood-modal-open {
     padding: 1rem;
     flex-direction: column;
     gap: 0.75rem;
-  }
-
-  .titulo-servicos {
-    font-size: 2rem;
-    padding: 1rem 0;
-    text-align: center;
-  }
-
-  .brand-mark-home {
-    font-size: 2rem;
   }
 
   .dashboard-brand-row {
@@ -4356,33 +3912,12 @@ body.route-neighborhood-modal-open {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .dashboard-hero-main,
-  .dashboard-hero-insights {
-    grid-template-columns: 1fr;
-  }
-
-  .dashboard-hero-card-wide {
-    grid-column: auto;
-  }
-
-  .form-hero {
-    grid-template-columns: 1fr;
-  }
-
   .form-summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .list-hero {
-    grid-template-columns: 1fr;
-  }
-
   .list-summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .view-hero {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -4390,29 +3925,6 @@ body.route-neighborhood-modal-open {
   .dashboard-shell {
     width: calc(100% - 1rem);
     padding: 1rem 0 1.5rem;
-  }
-
-  .dashboard-hero,
-  .dashboard-panel-header,
-  .dashboard-revenue-strip {
-    flex-direction: column;
-  }
-
-  .dashboard-hero-copy,
-  .dashboard-panel {
-    border-radius: 22px;
-  }
-
-  .dashboard-hero-copy,
-  .dashboard-panel {
-    padding: 1.2rem;
-  }
-
-  .dashboard-shortcuts,
-  .dashboard-overview,
-  .dashboard-operation-actions,
-  .dashboard-hero-insights {
-    grid-template-columns: 1fr;
   }
 
   .dashboard-pending-card,
@@ -4423,10 +3935,6 @@ body.route-neighborhood-modal-open {
   .dashboard-activity-value {
     align-items: flex-start;
     min-width: 0;
-  }
-
-  .dashboard-hero-card-wide {
-    grid-column: auto;
   }
 
   .dashboard-revenue-links {
@@ -4441,19 +3949,6 @@ body.route-neighborhood-modal-open {
   .form-shell-modern {
     width: calc(100% - 1rem);
     padding-bottom: 1.5rem;
-  }
-
-  .form-hero,
-  .form-stage,
-  .form-card,
-  .form-actions-bar {
-    border-radius: 22px;
-  }
-
-  .form-hero,
-  .form-stage,
-  .form-card {
-    padding: 1.15rem;
   }
 
   .form-summary-grid,
@@ -4475,17 +3970,6 @@ body.route-neighborhood-modal-open {
     padding-bottom: 1.5rem;
   }
 
-  .list-hero,
-  .list-panel,
-  .modern-table-wrap {
-    border-radius: 22px;
-  }
-
-  .list-hero,
-  .list-panel {
-    padding: 1.15rem;
-  }
-
   .list-summary-grid {
     grid-template-columns: 1fr;
   }
@@ -4501,17 +3985,6 @@ body.route-neighborhood-modal-open {
   .view-shell {
     width: calc(100% - 1rem);
     padding-bottom: 1.5rem;
-  }
-
-  .view-hero,
-  .view-panel,
-  .view-card {
-    border-radius: 22px;
-  }
-
-  .view-hero,
-  .view-panel {
-    padding: 1.15rem;
   }
 
   .view-grid {
@@ -4578,15 +4051,8 @@ footer hr {
   margin: 0.25rem 0 0;
 }
 
-/* ==========================================================================
-   PARTE 07 — cole esta parte na ordem indicada
-   ========================================================================== */
-
 /* Mobile */
 @media (max-width: 768px) {
-  .titulo-servicos {
-    font-size: clamp(1.65rem, 7vw, 2.1rem);
-  }
 }
 
 /* ==========================================================================
@@ -4782,10 +4248,6 @@ footer hr {
     gap: 1.5rem;
   }
 }
-
-/* ==========================================================================
-   PARTE 08 — cole esta parte na ordem indicada
-   ========================================================================== */
 
 .reports-shell {
   display: grid;
