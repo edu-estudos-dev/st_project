@@ -9,14 +9,14 @@
   <div class="form-shell form-shell-modern">
     <%- include('../../partials/breadcrumb', { pageTitle: 'Produtos da Operação' }) %>
 
-    <section class="form-hero form-hero-neutral">
-      <div class="form-hero-content">
+    <section class="page-titlebar page-titlebar-neutral">
+      <div class="page-titlebar-content">
         <span class="form-kicker"><i class="bi bi-grid-3x3-gap"></i> Assinatura</span>
         <h1>Produtos da operação</h1>
         <p>Escolha quais frentes fazem parte da sua rotina para o sistema mostrar apenas os módulos que você realmente usa.</p>
       </div>
-      <div class="form-hero-side">
-        <div class="form-hero-stat">
+      <div class="page-titlebar-side">
+        <div class="page-titlebar-stat">
           <strong>Produtos</strong>
           <span><%= assinante?.produtos_habilitados_lista?.length || 0 %> habilitado(s)</span>
         </div>

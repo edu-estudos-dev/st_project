@@ -10,13 +10,13 @@
     <div class="view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Consignados' }) %>
 
-        <section class="view-hero view-hero-blue">
-            <div class="view-hero-content">
+        <section class="page-titlebar page-titlebar-blue">
+            <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-stickies"></i> Operacional</span>
                 <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
                 <p>Veja o histórico da visita com foco em valor apurado, quantidade deixada e referência da última passagem pelo ponto.</p>
             </div>
-            <div class="view-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>ID</strong>
                     <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>

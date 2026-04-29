@@ -10,13 +10,13 @@
     <div class="view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Lançamento' }) %>
 
-        <section class="view-hero view-hero-neutral">
-            <div class="view-hero-content">
+        <section class="page-titlebar page-titlebar-neutral">
+            <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-cash-stack"></i> Financeiro</span>
                 <h1><%= lancamento ? lancamento.tipo_de_lancamento.toUpperCase().replace('RECEITA_DOSPONTOS', 'RECEITA DOS PONTOS').replace(/_/g, ' ') : 'Lançamento não encontrado' %></h1>
                 <p>Confira os dados financeiros do lançamento com mais clareza, incluindo tipo, pagamento, parcelas, vencimento e descrição completa.</p>
             </div>
-            <div class="view-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>ID</strong>
                     <span><%= lancamento ? `#${lancamento.id}` : 'N/A' %></span>

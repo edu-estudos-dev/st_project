@@ -9,13 +9,13 @@
     <div class="list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Relatórios' }) %>
 
-        <section class="list-hero list-hero-blue">
-            <div class="list-hero-content">
+        <section class="page-titlebar page-titlebar-blue">
+            <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-bar-chart-line"></i> Gestão</span>
                 <h1>Central de relatórios</h1>
                 <p>Uma visão rápida dos indicadores do sistema, com distribuição dos pontos, alertas financeiros e atividade operacional recente.</p>
             </div>
-            <div class="list-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat"><strong>Pontos ativos</strong><span><%= dashboardSummary.totalAtivos %> cadastrados</span></div>
                 <div class="list-stat"><strong>Alertas</strong><span><%= financialNotifications.total %> financeiros</span></div>
             </div>

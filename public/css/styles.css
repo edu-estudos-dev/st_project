@@ -1,7 +1,7 @@
-Ôªø/* ==========================================================================
-   VENDMASTER ‚Äî CSS ORGANIZADO
-   Observa√ß√£o: a ordem original foi preservada para evitar quebra de cascata.
-   Foram removidos apenas os blocos duplicados/adicionados na √∫ltima altera√ß√£o.
+/* ==========================================================================
+   VENDMASTER ó CSS ORGANIZADO
+   ObservaÁ„o: a ordem original foi preservada para evitar quebra de cascata.
+   Foram removidos apenas os blocos duplicados/adicionados na ˙ltima alteraÁ„o.
    ========================================================================== */
 
 :root {
@@ -339,6 +339,105 @@ figure {
   box-shadow: none;
 }
 
+.dashboard-titlebar {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-titlebar-copy {
+  position: relative;
+  overflow: hidden;
+  padding: 1.55rem;
+  border-radius: 30px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(55, 166, 71, 0.28), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(3, 89, 191, 0.34), transparent 34%),
+    linear-gradient(135deg, #172033 0%, #253142 52%, #111827 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+}
+
+.dashboard-titlebar-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
+}
+
+.dashboard-titlebar-copy-block h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2rem, 3vw, 3.1rem);
+  line-height: 1.05;
+}
+
+.dashboard-titlebar-copy-block p {
+  max-width: 760px;
+  margin: 0.7rem 0 0;
+  color: rgba(241, 245, 249, 0.92);
+  line-height: 1.6;
+}
+
+.dashboard-titlebar-insights {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  margin-top: 1.35rem;
+}
+
+.dashboard-titlebar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  padding: 1rem 1.1rem;
+  border-radius: 22px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.dashboard-titlebar-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.16);
+}
+
+.dashboard-titlebar-card-tag {
+  align-self: flex-start;
+  padding: 0.36rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #dbeafe;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dashboard-titlebar-card strong {
+  color: #fff;
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.dashboard-titlebar-card p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.9);
+  line-height: 1.5;
+}
+
+.dashboard-titlebar-card em {
+  margin-top: auto;
+  color: #bfdbfe;
+  font-style: normal;
+  font-weight: 800;
+}
+
 .dashboard-brand-row {
   position: relative;
   z-index: 1;
@@ -414,7 +513,7 @@ figure {
 
 .dashboard-overview {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.9rem;
   margin-top: 1.5rem;
 }
@@ -1764,6 +1863,157 @@ figure {
   padding-bottom: 3rem;
 }
 
+.page-titlebar {
+  --page-titlebar-rgb: 31, 41, 55;
+  --page-titlebar-start: #334155;
+  --page-titlebar-end: #111827;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 0 1.1rem;
+  padding: 1rem;
+  border-radius: 22px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(var(--page-titlebar-rgb), 0.34), transparent 28%),
+    radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, var(--page-titlebar-start) 0%, var(--page-titlebar-end) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+}
+
+.page-titlebar-green {
+  --page-titlebar-rgb: 55, 166, 71;
+  --page-titlebar-start: #2f9e44;
+  --page-titlebar-end: #14532d;
+}
+
+.page-titlebar-blue {
+  --page-titlebar-rgb: 3, 89, 191;
+  --page-titlebar-start: #2563eb;
+  --page-titlebar-end: #143a76;
+}
+
+.page-titlebar-violet {
+  --page-titlebar-rgb: 124, 58, 237;
+  --page-titlebar-start: #8b5cf6;
+  --page-titlebar-end: #4c1d95;
+}
+
+.page-titlebar-neutral {
+  --page-titlebar-rgb: 71, 85, 105;
+  --page-titlebar-start: #475569;
+  --page-titlebar-end: #111827;
+}
+
+.page-titlebar-content,
+.page-titlebar-side {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.page-titlebar h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.55rem, 8vw, 2rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+.page-titlebar p {
+  max-width: 860px;
+  margin: 0.55rem 0 0;
+  color: rgba(241, 245, 249, 0.92);
+  font-size: 0.95rem;
+  line-height: 1.52;
+}
+
+.page-titlebar-side {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+  align-content: stretch;
+}
+
+.page-titlebar-stat,
+.page-titlebar .list-stat {
+  min-width: 0;
+  padding: 0.85rem 0.9rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.page-titlebar-stat strong,
+.page-titlebar-stat span {
+  display: block;
+}
+
+.page-titlebar-stat strong,
+.page-titlebar .list-stat strong {
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.page-titlebar-stat span,
+.page-titlebar .list-stat span {
+  margin-top: 0.28rem;
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.page-titlebar .list-kicker,
+.page-titlebar .form-kicker {
+  background: rgba(255, 255, 255, 0.16);
+  color: #eff6ff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 768px) {
+  .page-titlebar {
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding: clamp(1.35rem, 2.4vw, 2rem);
+    border-radius: 30px;
+  }
+
+  .page-titlebar h1 {
+    font-size: clamp(1.85rem, 2.7vw, 2.8rem);
+  }
+
+  .page-titlebar p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .page-titlebar-stat,
+  .page-titlebar .list-stat {
+    padding: 1rem 1.1rem;
+    border-radius: 22px;
+  }
+
+  .page-titlebar-stat strong,
+  .page-titlebar .list-stat strong {
+    font-size: 0.82rem;
+  }
+
+  .page-titlebar-stat span,
+  .page-titlebar .list-stat span {
+    font-size: 1.06rem;
+  }
+}
 .list-kicker {
   display: inline-flex;
   align-items: center;
@@ -3502,7 +3752,7 @@ body.route-neighborhood-modal-open {
 }
 
 /* =========================
-   PRODUTOS (SOLU√á√ÉO)
+   PRODUTOS (SOLU«√O)
 ========================= */
 
 /* Glow */
@@ -3555,18 +3805,18 @@ body.route-neighborhood-modal-open {
 }
 
 /* =========================
-   BOT√ïES DE SELE√á√ÉO (RADIO)
+   BOT’ES DE SELE«√O (RADIO)
 ========================= */
 
 /* esconde o radio */
 
-/* bot√£o visual */
+/* bot„o visual */
 
 /* hover */
 
 /* ativo (selecionado) */
 
-/* √≠cones */
+/* Ìcones */
 
 /* fluxo de caixa */
 
@@ -3696,6 +3946,16 @@ body.route-neighborhood-modal-open {
 
 /* =================== Media queries ==========================*/
 
+@media (min-width: 768px) {
+  .dashboard-titlebar-insights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 991.98px) {
   .navbar-nav {
     gap: 0.5rem;
@@ -3731,12 +3991,29 @@ body.route-neighborhood-modal-open {
   }
 }
 
-/* Corre√ß√£o dos textos azuis nos cards */
+/* CorreÁ„o dos textos azuis nos cards */
 
 /* MEDIAS  ===================================================================*/
 @media (max-width: 767.98px) {
   h1 {
     font-size: 1.5rem;
+  }
+
+  .dashboard-shell,
+  .list-shell,
+  .form-shell-modern,
+  .view-shell {
+    width: calc(100% - 1rem);
+  }
+
+  .dashboard-titlebar-copy,
+  .page-titlebar {
+    padding: 1.15rem;
+    border-radius: 24px;
+  }
+
+  .dashboard-overview {
+    grid-template-columns: 1fr;
   }
 
   main {
@@ -3756,9 +4033,9 @@ body.route-neighborhood-modal-open {
     align-items: flex-start;
   }
 
-  /* RADIO COMO BOT√ÉO - PREFER√äNCIA DE CONTATO */
+  /* RADIO COMO BOT√O - PREFER NCIA DE CONTATO */
 
-  /* √çCONES DOS BOT√ïES DE CONTATO */
+  /* ÕCONES DOS BOT’ES DE CONTATO */
 
   figure {
     width: 100%;
@@ -3893,7 +4170,7 @@ body.route-neighborhood-modal-open {
   }
 }
 
-/* Corrigir texto da se√ß√£o clara */
+/* Corrigir texto da seÁ„o clara */
 
 @media (max-width: 1199.98px) {
   .dashboard-grid {
@@ -4060,7 +4337,7 @@ footer hr {
    ========================================================================== */
 
 /* =========================
-   CENTRALIZA√á√ÉO REAL
+   CENTRALIZA«√O REAL
 ========================= */
 .auth-shell {
   min-height: 100vh;
@@ -4082,7 +4359,7 @@ footer hr {
 }
 
 /* =========================
-   T√çTULO MAIS FORTE
+   TÕTULO MAIS FORTE
 ========================= */
 .auth-card h1 {
   font-weight: 700;
@@ -4115,7 +4392,7 @@ footer hr {
 }
 
 /* =========================
-   BOT√ÉO (AGORA COM SUA IDENTIDADE VERDE)
+   BOT√O (AGORA COM SUA IDENTIDADE VERDE)
 ========================= */
 .btn-primary {
   background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -4145,7 +4422,7 @@ footer hr {
 }
 
 /* =========================
-   ESPA√áAMENTO MELHOR
+   ESPA«AMENTO MELHOR
 ========================= */
 .auth-card form {
   margin-top: 10px;
@@ -4163,21 +4440,21 @@ footer hr {
 
 /* Mobile */
 
-/* CTA: menos espa√ßo em cima */
+/* CTA: menos espaÁo em cima */
 
 /* Container geral do slider */
 
 /* Texto acima */
 
-/* Janela vis√≠vel */
+/* Janela visÌvel */
 
 /* Linha que desliza */
 
 /* Cards */
 
-/* Bot√µes */
+/* Botıes */
 
-/* Destaque do m√≥dulo principal */
+/* Destaque do mÛdulo principal */
 
 /* Tablet */
 

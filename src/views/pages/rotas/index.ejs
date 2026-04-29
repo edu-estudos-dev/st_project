@@ -9,13 +9,13 @@
     <div class="list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Rotas dos Pontos' }) %>
 
-        <section class="list-hero list-hero-neutral">
-            <div class="list-hero-content">
+        <section class="page-titlebar page-titlebar-neutral">
+            <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-sign-turn-right"></i> Operação</span>
                 <h1>Central de rotas</h1>
                 <p>Selecione um ou mais bairros, organize a sequência de visitas e avance ponto a ponto sem rodar à toa.</p>
             </div>
-            <div class="list-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat"><strong>Bairros</strong><span><%= selectedBairros?.length ? selectedBairros.join(', ') : 'Selecione' %></span></div>
                 <div class="list-stat"><strong>Pontos</strong><span><%= routeSummary.total %> na rota</span></div>
             </div>

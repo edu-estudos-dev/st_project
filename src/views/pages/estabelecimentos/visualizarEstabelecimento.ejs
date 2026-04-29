@@ -10,13 +10,13 @@
     <div class="view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Estabelecimento' }) %>
 
-        <section class="view-hero view-hero-neutral">
-            <div class="view-hero-content">
+        <section class="page-titlebar page-titlebar-neutral">
+            <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-shop-window"></i> Administrativo</span>
                 <h1><%= estabelecimento ? estabelecimento.estabelecimento : 'Estabelecimento não encontrado' %></h1>
                 <p>Visualize rapidamente os dados comerciais e operacionais do ponto com leitura clara para contato, endereço, produtos e localização.</p>
             </div>
-            <div class="view-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>ID</strong>
                     <span><%= estabelecimento ? `#${estabelecimento.id}` : 'N/A' %></span>

@@ -38,13 +38,13 @@
       : financialData.proximos.length
          ? `${financialData.proximos.length} vencimento(s) chegam nos próximos 5 dias.`
          : 'Nenhum vencimento urgente nos próximos 5 dias.'; %>
-   <% const heroSummary = summary.totalAtivos
+   <% const titlebarSummary = summary.totalAtivos
       ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com o painel focado nas prioridades mais úteis do dia.`
       : 'Sem pontos ativos cadastrados ainda. O primeiro cadastro libera a operação do sistema.'; %>
 
    <main class="dashboard-shell">
-      <section class="dashboard-hero">
-         <div class="dashboard-hero-copy dashboard-hero-copy--full">
+      <section class="dashboard-titlebar">
+         <div class="dashboard-titlebar-copy dashboard-titlebar-copy--full">
             <div class="dashboard-brand-row">
                <a href="/painel" aria-label="VendMaster" class="brand-mark dashboard-brand-mark">
                   <span class="brand-mark-primary">Vend</span><span class="brand-mark-accent">Master</span>
@@ -54,11 +54,11 @@
                </form>
             </div>
 
-            <div class="dashboard-hero-main">
-               <div class="dashboard-hero-copy-block">
+            <div class="dashboard-titlebar-main">
+               <div class="dashboard-titlebar-copy-block">
                   <span class="dashboard-kicker">Painel central</span>
                   <h1>Painel de Controle</h1>
-                  <p><%= heroSummary %></p>
+                  <p><%= titlebarSummary %></p>
                </div>
 
                <div class="dashboard-overview">
@@ -71,16 +71,16 @@
                </div>
             </div>
 
-            <div class="dashboard-hero-insights">
-               <a href="/lancamentos/vencimentos" class="dashboard-hero-card dashboard-hero-card-action">
-                  <span class="dashboard-hero-card-tag">Financeiro</span>
+            <div class="dashboard-titlebar-insights">
+               <a href="/lancamentos/vencimentos" class="dashboard-titlebar-card dashboard-titlebar-card-action">
+                  <span class="dashboard-titlebar-card-tag">Financeiro</span>
                   <strong><%= financeTitle %></strong>
                   <p><%= financeDescription %></p>
                   <em>Ver alertas</em>
                </a>
 
-               <a href="/rotas" class="dashboard-hero-card dashboard-hero-card-action">
-                  <span class="dashboard-hero-card-tag">Rotas</span>
+               <a href="/rotas" class="dashboard-titlebar-card dashboard-titlebar-card-action">
+                  <span class="dashboard-titlebar-card-tag">Rotas</span>
                   <strong>Planejar visita por bairro</strong>
                   <p>Abra a central de rotas para montar o deslocamento do dia com Google Maps e Waze.</p>
                   <em>Abrir rotas</em>

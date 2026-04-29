@@ -10,13 +10,13 @@
     <div class="view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Pelúcias' }) %>
 
-        <section class="view-hero view-hero-violet">
-            <div class="view-hero-content">
+        <section class="page-titlebar page-titlebar-violet">
+            <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
                 <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
                 <p>Consulte em um único lugar os dados financeiros e operacionais da visita, incluindo leitura, abastecimento, vendido e saldo líquido.</p>
             </div>
-            <div class="view-hero-side">
+            <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>ID</strong>
                     <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>
