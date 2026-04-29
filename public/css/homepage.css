@@ -5868,3 +5868,203 @@ body.homepage-body {
     min-height: 84px !important;
   }
 }
+
+/* ========================================================================== */
+/* Mobile UX cleanup - homepage                                                */
+/* ========================================================================== */
+@media (max-width: 767.98px) {
+  .homepage-body .homepage-topbar {
+    width: min(100% - 1rem, 390px) !important;
+    padding: 0.78rem !important;
+    gap: 0.7rem !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-body .homepage-topbar nav,
+  .homepage-body .homepage-topbar nav ul {
+    width: 100% !important;
+  }
+
+  .homepage-body .homepage-topbar nav ul {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.42rem !important;
+  }
+
+  .homepage-body .homepage-topbar li,
+  .homepage-body .homepage-topbar li > a {
+    min-width: 0 !important;
+  }
+
+  .homepage-body .homepage-topbar li > a {
+    min-height: 34px !important;
+    padding: 0.48rem 0.4rem !important;
+    font-size: 0.66rem !important;
+    line-height: 1 !important;
+  }
+
+  .homepage-body .homepage-topbar .homepage-login-item {
+    grid-column: 1 / -1 !important;
+  }
+
+  .homepage-body .homepage-login-link,
+  .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
+    min-height: 38px !important;
+    padding: 0.62rem 0.9rem !important;
+    font-size: 0.74rem !important;
+  }
+
+  .homepage-body .vm-hero {
+    padding: 8.25rem 0.75rem 2rem !important;
+  }
+
+  .homepage-body .vm-hero-container {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 1.05rem !important;
+    gap: 1.25rem !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-body .vm-hero-left {
+    gap: 0.72rem !important;
+  }
+
+  .homepage-body .vm-hero-title {
+    max-width: 10.8ch !important;
+    margin: 0.35rem 0 0 !important;
+    font-size: clamp(2.3rem, 12.2vw, 3.05rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: 0 !important;
+    text-wrap: balance !important;
+  }
+
+  .homepage-body .vm-hero-title .text-accent {
+    max-width: 11.4ch !important;
+    margin-top: 0.22rem !important;
+    line-height: 1.02 !important;
+  }
+
+  .homepage-body .vm-hero-description {
+    max-width: 30ch !important;
+    font-size: 0.94rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .homepage-body .vm-panel {
+    padding: 0.95rem !important;
+    border-radius: 18px !important;
+  }
+
+  .homepage-body .vm-panel-metrics div,
+  .homepage-body .vm-card-mini {
+    min-height: auto !important;
+    padding: 0.82rem !important;
+    border-radius: 15px !important;
+  }
+
+  .homepage-body .vm-section,
+  .homepage-body .vm-pains-section,
+  .homepage-body .vm-transform,
+  .homepage-body .vm-modules-carousel-section,
+  .homepage-body .vm-contact {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .homepage-body #dores,
+  .homepage-body .vm-transform,
+  .homepage-body .vm-modules-wrapper,
+  .homepage-body .vm-contact-layout,
+  .homepage-body .vm-contact-form {
+    width: min(100% - 1.25rem, 390px) !important;
+    margin-inline: auto !important;
+  }
+
+  .homepage-body .vm-section-heading {
+    margin-bottom: 1.1rem !important;
+    gap: 0.45rem !important;
+  }
+
+  .homepage-body .vm-section-heading h2,
+  .homepage-body .vm-section-heading .titulo-servicos,
+  .homepage-body .vm-modules-title,
+  .homepage-body .vm-contact-title {
+    max-width: 15ch !important;
+    font-size: clamp(1.72rem, 8.3vw, 2.18rem) !important;
+    line-height: 1.08 !important;
+    text-wrap: balance !important;
+  }
+
+  .homepage-body .vm-section-heading p,
+  .homepage-body .vm-products-intro,
+  .homepage-body .vm-modules-subtitle {
+    max-width: 30ch !important;
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .homepage-body .vm-pains-grid,
+  .homepage-body .vm-proof-grid,
+  .homepage-body .vm-product-grid,
+  .homepage-body .vm-modules-grid,
+  .homepage-body .vm-modules-grid-visible,
+  .homepage-body .vm-before-after {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+
+  .homepage-body .vm-pain-card,
+  .homepage-body .vm-feature-card,
+  .homepage-body .vm-product-card,
+  .homepage-body .vm-module-card,
+  .homepage-body .vm-module-card--highlight,
+  .homepage-body .vm-proof-item,
+  .homepage-body .vm-before,
+  .homepage-body .vm-after {
+    min-height: auto !important;
+    padding: 1rem !important;
+    border-radius: 18px !important;
+  }
+
+  .homepage-body .vm-pain-card h4,
+  .homepage-body .vm-feature-card h3,
+  .homepage-body .vm-product-card h3,
+  .homepage-body .vm-module-card h3,
+  .homepage-body .vm-module-card--highlight h3 {
+    font-size: 1.08rem !important;
+    line-height: 1.18 !important;
+    text-wrap: balance !important;
+  }
+
+  .homepage-body .vm-pain-card p,
+  .homepage-body .vm-feature-card p,
+  .homepage-body .vm-product-card p,
+  .homepage-body .vm-module-card p,
+  .homepage-body .vm-module-card--highlight p,
+  .homepage-body .vm-proof-item p,
+  .homepage-body .vm-before-after li {
+    font-size: 0.94rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .homepage-body .vm-whatsapp-float {
+    right: 0.75rem !important;
+    bottom: 0.75rem !important;
+    min-height: 44px !important;
+    padding: 0 0.86rem !important;
+    font-size: 0.82rem !important;
+    box-shadow: 0 12px 26px rgba(22, 163, 74, 0.28) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .homepage-body .vm-hero-title {
+    max-width: 10.4ch !important;
+    font-size: clamp(2.12rem, 11.8vw, 2.75rem) !important;
+  }
+
+  .homepage-body .homepage-topbar li > a {
+    font-size: 0.61rem !important;
+  }
+}
