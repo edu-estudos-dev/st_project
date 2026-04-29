@@ -48,6 +48,9 @@
   app.use(express.static(path.join(__dirname, 'public'), {
       etag: false
   }));
+  app.get('/healthz', (req, res) => {
+      res.status(200).json({ status: 'ok' });
+  });
   app.get('/favicon.ico', (req, res) => {
       res.redirect(301, '/favicon.svg');
   });
