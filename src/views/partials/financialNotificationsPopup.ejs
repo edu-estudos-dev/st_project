@@ -13,12 +13,17 @@
         const totalAlertas = <%= financialNotifications?.total || 0 %>;
         const proximos = <%= financialNotifications?.proximos?.length || 0 %>;
         const atrasados = <%= financialNotifications?.atrasados?.length || 0 %>;
+        const visitasAtrasadas = <%= operationalNotifications?.total || 0 %>;
+        const totalGeral = totalAlertas + visitasAtrasadas;
+        const dismissedKey = 'vendmaster-alerts-dismissed-date';
+        const todayKey = new Date().toISOString().slice(0, 10);
         const popupMode = '<%= popupMode %>';
         const storageKey = popupMode === 'launch-once'
-            ? 'vendmaster-financial-alerts-launch-shown'
-            : 'vendmaster-financial-alerts-dashboard-shown';
+            ? 'vendmaster-alerts-launch-shown'
+            : 'vendmaster-alerts-dashboard-shown';
 
-        if (!totalAlertas) return;
+        if (!totalGeral) return;
+        if (window.localStorage.getItem(dismissedKey) === todayKey) return;
 
         if ((popupMode === 'dashboard-once' || popupMode === 'launch-once')
             && window.sessionStorage.getItem(storageKey) === 'true') {
@@ -28,21 +33,26 @@
         const partes = [];
         if (proximos) partes.push(`${proximos} vencimento(s) nos próximos 5 dias`);
         if (atrasados) partes.push(`${atrasados} vencimento(s) atrasado(s)`);
+        if (visitasAtrasadas) partes.push(`${visitasAtrasadas} ponto(s) sem visita há mais de 30 dias`);
 
         if (popupMode === 'dashboard-once' || popupMode === 'launch-once') {
             window.sessionStorage.setItem(storageKey, 'true');
         }
+
+        await new Promise((resolve) => window.setTimeout(resolve, 900));
         await waitForSwalToClose();
 
         const confirmed = await window.AppAlerts?.confirm({
-            title: 'Notificações financeiras',
+            title: 'Alertas da operação',
             text: `Você tem ${partes.join(' e ')}.`,
-            confirmButtonText: 'Ver alertas',
+            confirmButtonText: visitasAtrasadas && !totalAlertas ? 'Ver rotas' : 'Ver alertas',
             cancelButtonText: 'Depois'
         });
 
         if (confirmed) {
-            window.location.href = '/lancamentos/vencimentos';
+            window.location.href = visitasAtrasadas && !totalAlertas ? '/rotas' : '/lancamentos/vencimentos';
+        } else {
+            window.localStorage.setItem(dismissedKey, todayKey);
         }
     });
 </script>

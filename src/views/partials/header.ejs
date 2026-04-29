@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg fixed-top app-nav">
+﻿<nav class="navbar navbar-expand-lg fixed-top app-nav">
     <div class="container-fluid">
         <a href="/painel" style="display:flex; align-items:center;">
             <img src="/images/logo_sem_fundo.png" style="height:50px;" alt="VendMaster">
@@ -32,7 +32,7 @@
                         <li>
                             <a class="dropdown-item menu-link" href="/estabelecimentos/add">
                                 <span class="menu-link-title">Cadastrar estabelecimento</span>
-                                <small class="menu-link-text">Abra o formulário para incluir um novo ponto.</small>
+                                <small class="menu-link-text">Abra o formul?rio para incluir um novo ponto.</small>
                             </a>
                         </li>
                         <% } %>
@@ -46,7 +46,7 @@
                         Financeiro
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                        <li class="menu-group-label">Fluxo e lançamentos</li>
+                        <li class="menu-group-label">Fluxo e lan?amentos</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos">
                                 <span class="menu-link-title">Lançamentos cadastrados</span>
@@ -56,7 +56,7 @@
                         <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos/add">
-                                <span class="menu-link-title">Fazer lançamento</span>
+                                <span class="menu-link-title">Fazer lan?amento</span>
                                 <small class="menu-link-text">Registre uma nova movimentação financeira.</small>
                             </a>
                         </li>
@@ -64,7 +64,7 @@
                         <li>
                             <a class="dropdown-item menu-link" href="/fluxo-de-caixa">
                                 <span class="menu-link-title">Fluxo de caixa</span>
-                                <small class="menu-link-text">Acompanhe saldo e consolidado do período.</small>
+                                <small class="menu-link-text">Acompanhe saldo e consolidado do per?odo.</small>
                             </a>
                         </li>
                         <% if (navProducts.hasAny) { %>
@@ -72,7 +72,7 @@
                                 <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                     id="navbarDropdownReceitas" aria-expanded="false">
                                     <span class="menu-link-title">Receitas por produto</span>
-                                    <small class="menu-link-text">Abra os relatórios consolidados de receita.</small>
+                                    <small class="menu-link-text">Abra os relat?rios consolidados de receita.</small>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
                                     <% if (navProducts.bolinhas) { %>
@@ -82,7 +82,7 @@
                                         <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Consignados</a></li>
                                     <% } %>
                                     <% if (navProducts.pelucias) { %>
-                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pel?cias</a></li>
                                     <% } %>
                                 </ul>
                             </li>
@@ -96,10 +96,10 @@
                         Planejamento
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownPlanejamento">
-                        <li class="menu-group-label">Visão gerencial</li>
+                        <li class="menu-group-label">Vis?o gerencial</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/relatorios">
-                                <span class="menu-link-title">Relatórios</span>
+                                <span class="menu-link-title">Relat?rios</span>
                                 <small class="menu-link-text">Indicadores, rankings e resumos do sistema.</small>
                             </a>
                         </li>
@@ -174,7 +174,7 @@
                         <li class="dropdown-submenu">
                             <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                 id="navbarDropdownPelucias" aria-expanded="false">
-                                <span class="menu-link-title">Pelúcias</span>
+                                <span class="menu-link-title">Pel?cias</span>
                                 <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
@@ -191,12 +191,16 @@
                 <% } %>
             </ul>
 
+            <% const financialAlertTotal = financialNotifications?.total || 0; %>
+            <% const operationalAlertTotal = operationalNotifications?.total || 0; %>
+            <% const activeAlertTotal = financialAlertTotal + operationalAlertTotal; %>
+
             <div class="d-flex align-items-center gap-2">
-                <a href="/lancamentos/vencimentos" class="nav-alert-link" title="Próximos vencimentos">
+                <a href="/lancamentos/vencimentos" class="nav-alert-link" title="Pr?ximos vencimentos">
                     <i class="bi bi-bell"></i>
                     <span>Alertas</span>
-                    <% if (financialNotifications && financialNotifications.total > 0) { %>
-                        <span class="nav-alert-badge"><%= financialNotifications.total %></span>
+                    <% if (activeAlertTotal > 0) { %>
+                        <span class="nav-alert-badge"><%= activeAlertTotal %></span>
                     <% } %>
                 </a>
                 <form action="/search" class="d-flex flex-grow-1" role="search" method="POST" novalidate>
@@ -211,8 +215,8 @@
             <div class="app-nav-actions">
                 <button type="button" class="nav-alert-link" id="notificationDrawerOpen" title="Alertas ativos" aria-label="Abrir alertas">
                     <i class="bi bi-bell"></i>
-                    <% if (financialNotifications && financialNotifications.total > 0) { %>
-                        <span class="nav-alert-badge"><%= financialNotifications.total %></span>
+                    <% if (activeAlertTotal > 0) { %>
+                        <span class="nav-alert-badge"><%= activeAlertTotal %></span>
                     <% } %>
                 </button>
                 <form action="/search" class="app-nav-search" role="search" method="POST" novalidate>
@@ -228,13 +232,13 @@
                         <a class="nav-account-profile" href="/painel">
                             <span class="nav-account-avatar nav-account-avatar-lg"><%= (usuario?.username || 'U').slice(0, 1).toUpperCase() %></span>
                             <span>
-                                <strong><%= usuario?.username || 'Usuário' %></strong>
+                                <strong><%= usuario?.username || 'Usu?rio' %></strong>
                                 <small><%= usuario?.email || 'VendMaster' %></small>
                             </span>
                             <i class="bi bi-chevron-right"></i>
                         </a>
                         <div class="nav-account-divider"></div>
-                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>Relatórios</span></a>
+                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>Relat?rios</span></a>
                         <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
                         <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Produtos da operação</span></a>
                         <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
@@ -266,11 +270,19 @@
     <div class="notification-drawer-list">
         <% const notificationItems = [
             ...((financialNotifications?.atrasados || []).map((item) => ({ ...item, tone: 'danger', label: `${Math.abs(item.diffDays || 0)} dia(s) atrasado`, title: 'Vencimento atrasado' }))),
-            ...((financialNotifications?.proximos || []).map((item) => ({ ...item, tone: 'warning', label: `${item.diffDays || 0} dia(s)`, title: 'Vencimento próximo' })))
+            ...((financialNotifications?.proximos || []).map((item) => ({ ...item, tone: 'warning', label: `${item.diffDays || 0} dia(s)`, title: 'Vencimento próximo' }))),
+            ...((operationalNotifications?.visitasAtrasadas || []).map((item) => ({
+                ...item,
+                tone: 'operation',
+                label: item.diffDays === null ? 'Sem visita' : `${item.diffDays} dia(s)`,
+                title: 'Ponto sem visita',
+                descricao: `${item.estabelecimento} (${item.produto})`,
+                href: item.action_href || '/rotas'
+            })))
         ]; %>
         <% if (notificationItems.length) { %>
             <% notificationItems.forEach((item) => { %>
-                <a class="notification-drawer-item notification-drawer-item-<%= item.tone %>" href="/lancamentos/vencimentos">
+                <a class="notification-drawer-item notification-drawer-item-<%= item.tone %>" href="<%= item.href || '/lancamentos/vencimentos' %>">
                     <span class="notification-drawer-icon"><i class="bi bi-exclamation-circle"></i></span>
                     <span class="notification-drawer-copy">
                         <strong><%= item.title %></strong>
@@ -283,11 +295,14 @@
             <div class="notification-drawer-empty">
                 <i class="bi bi-check2-circle"></i>
                 <strong>Nenhum alerta ativo</strong>
-                <span>Vencimentos e avisos importantes aparecerão aqui.</span>
+                <span>Vencimentos e avisos importantes aparecer?o aqui.</span>
             </div>
         <% } %>
     </div>
-    <a class="notification-drawer-footer" href="/lancamentos/vencimentos">Ver detalhes financeiros</a>
+    <div class="notification-drawer-footer">
+        <a href="/lancamentos/vencimentos">Ver detalhes financeiros</a>
+        <button type="button" id="notificationDismissToday">Dispensar por hoje</button>
+    </div>
 </aside>
 
 <style>
@@ -477,7 +492,7 @@
         background: #171c26;
         color: #f8fafc;
         transform: translateX(-100%);
-        transition: transform 220ms ease;
+        transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
         box-shadow: 24px 0 70px rgba(15, 23, 42, 0.32);
     }
 
@@ -557,6 +572,11 @@
         background: rgba(245, 158, 11, 0.16);
     }
 
+    .notification-drawer-item-operation .notification-drawer-icon {
+        color: #bfdbfe;
+        background: rgba(37, 99, 235, 0.18);
+    }
+
     .notification-drawer-copy {
         display: grid;
         gap: 0.35rem;
@@ -593,12 +613,24 @@
     }
 
     .notification-drawer-footer {
+        display: grid;
+        gap: 0.65rem;
         padding: 1rem 1.35rem;
         border-top: 1px solid rgba(148, 163, 184, 0.24);
+    }
+
+    .notification-drawer-footer a,
+    .notification-drawer-footer button {
+        border: 0;
+        background: transparent;
         color: #bfdbfe;
         font-weight: 900;
         text-align: center;
         text-decoration: none;
+    }
+
+    .notification-drawer-footer button {
+        color: #cbd5e1;
     }
 
     .dropdown-submenu {
@@ -863,6 +895,33 @@
         var notificationOpen = document.getElementById('notificationDrawerOpen');
         var notificationClose = document.getElementById('notificationDrawerClose');
         var notificationBackdrop = document.getElementById('notificationDrawerBackdrop');
+        var notificationDismissToday = document.getElementById('notificationDismissToday');
+        var notificationList = document.querySelector('.notification-drawer-list');
+        var notificationDismissKey = 'vendmaster-alerts-dismissed-date';
+        var todayKey = new Date().toISOString().slice(0, 10);
+
+        function markNotificationsDismissed() {
+            window.localStorage.setItem(notificationDismissKey, todayKey);
+            document.querySelectorAll('.nav-alert-badge').forEach(function (badge) {
+                badge.remove();
+            });
+
+            if (notificationList) {
+                notificationList.innerHTML = '<div class="notification-drawer-empty"><i class="bi bi-check2-circle"></i><strong>Alertas dispensados hoje</strong><span>Novos avisos voltam a aparecer amanhã.</span></div>';
+            }
+
+            closeNotificationDrawer();
+        }
+
+        if (window.localStorage.getItem(notificationDismissKey) === todayKey) {
+            document.querySelectorAll('.nav-alert-badge').forEach(function (badge) {
+                badge.remove();
+            });
+
+            if (notificationList) {
+                notificationList.innerHTML = '<div class="notification-drawer-empty"><i class="bi bi-check2-circle"></i><strong>Alertas dispensados hoje</strong><span>Novos avisos voltam a aparecer amanhã.</span></div>';
+            }
+        }
 
         function closeAccountMenu() {
             var wrapper = accountMenuToggle?.closest('.nav-account-menu');
@@ -904,6 +963,7 @@
 
         notificationClose?.addEventListener('click', closeNotificationDrawer);
         notificationBackdrop?.addEventListener('click', closeNotificationDrawer);
+        notificationDismissToday?.addEventListener('click', markNotificationsDismissed);
 
         document.addEventListener('click', closeAccountMenu);
     }

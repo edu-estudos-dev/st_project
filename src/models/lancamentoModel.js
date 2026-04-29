@@ -1,7 +1,20 @@
 import connection from '../db_config/connection.js';
 
 const formatarTexto = (texto) => {
-  return texto.replace(/_/g, ' ').replace(/\b\w/g, (letra) => letra.toUpperCase());
+  return String(texto || '').replace(/_/g, ' ').replace(/\b\w/g, (letra) => letra.toUpperCase());
+};
+
+const parseDateOnly = (value) => {
+  if (!value) return null;
+  if (value instanceof Date) {
+    return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+  }
+
+  const [datePart] = String(value).split('T');
+  const [year, month, day] = datePart.split('-').map(Number);
+
+  if (!year || !month || !day) return new Date(value);
+  return new Date(year, month - 1, day);
 };
 
 const getUsuarioPersistido = (usuario) => {
@@ -145,7 +158,9 @@ class LancamentoModel {
     const atrasados = [];
 
     result.rows.forEach((lancamento) => {
-      const dueDate = new Date(lancamento.vencimento);
+      const dueDate = parseDateOnly(lancamento.vencimento);
+      if (!dueDate || Number.isNaN(dueDate.getTime())) return;
+
       dueDate.setHours(0, 0, 0, 0);
       const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
 

@@ -62,6 +62,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             window.sessionStorage.removeItem('vendmaster-financial-alerts-dashboard-shown');
             window.sessionStorage.removeItem('vendmaster-financial-alerts-launch-shown');
+            window.sessionStorage.removeItem('vendmaster-alerts-dashboard-shown');
+            window.sessionStorage.removeItem('vendmaster-alerts-launch-shown');
+            window.localStorage.removeItem('vendmaster-alerts-dismissed-date');
 
             document.querySelectorAll('[data-toggle-password]').forEach((button) => {
                 button.addEventListener('click', () => {

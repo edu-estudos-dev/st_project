@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('../partials/head', { title, metaDescription, canonicalUrl, faqJsonLd, extraStyles: ['/css/homepage.css'] }) %>
+<%- include('../partials/head', { title, metaDescription, canonicalUrl, faqJsonLd, extraStyles: ['/css/homepage.css'] })
+  %>
 
   <body class="homepage-body" id="topo">
-    <header class="homepage-header homepage-topbar">
+    <header class="homepage-header homepage-topbar" data-homepage-header>
       <a href="#topo" class="vm-logo-link" aria-label="VendMaster">
         <img src="/images/logo_sem_fundo.png"
           alt="VendMaster - sistema de gestão para máquinas recreativas e consignados" class="img-logo">
       </a>
 
-      <nav>
+      <button class="homepage-menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"
+        aria-controls="homepageNav" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="homepageNav" class="homepage-nav" data-homepage-nav>
         <ul>
           <li><a href="#solucao">Solução</a></li>
           <li><a href="#modulos">Módulos</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
-          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Solicitar demo</a></li>
+          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Ver demonstração</a></li>
           <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
         </ul>
       </nav>
@@ -40,6 +46,8 @@
 
           <div class="vm-hero-buttons">
             <a href="#contato" class="btn btn-primary btn-lg">Agendar demonstração</a>
+            <a href="https://wa.me/5585986992706" target="_blank" rel="noopener"
+              class="btn btn-outline-light btn-lg">Falar no WhatsApp</a>
           </div>
         </div>
 
@@ -122,7 +130,7 @@
         </h2>
 
         <p class="vm-subtext">
-          A operação cresce, os pontos se multiplicam e a rotina começa a depender demais de memória,
+          A operação cresce, os pontos se multiplicam e a rotina começa a depender <br> demais de memória,
           planilhas e improviso.
         </p>
       </div>
@@ -149,7 +157,7 @@
 
         <div class="vm-pain-card">
           <span class="vm-pain-marker">04</span>
-          <h3>Rotas montadas na hora</h3>
+          <h3>Rotas montadas <br>na hora</h3>
           <p>O dia começa sem prioridade clara, com deslocamento maior do que deveria e visitas pouco estratégicas.</p>
         </div>
 
@@ -284,6 +292,16 @@
             alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
         </div>
       </div>
+
+      <div class="vm-section-cta vm-dashboard-integrated-cta">
+        <div class="vm-section-cta-copy">
+          <span class="vm-kicker">Veja o sistema em ação</span>
+          <h3>Quer parar de decidir rota no achismo?</h3>
+          <p>Solicite uma demonstração e veja como o VendMaster organiza prioridades, coletas, acertos e financeiro sem
+            depender de planilhas espalhadas.</p>
+        </div>
+        <a href="#contato" class="btn btn-primary btn-lg">Quero ver na prática</a>
+      </div>
     </section>
 
     <section class="vm-section vm-section-dark vm-products-section dark-bg">
@@ -308,18 +326,18 @@
               loading="lazy">
           </div>
 
-          <h3 class="fw-bold">Gestão de Máquinas de Bolinhas</h3>
+          <h3 class="fw-bold">Máquinas de Bolinhas</h3>
 
           <p>
-            Mantenha o controle das cápsulas, abastecimentos e sangrias sem depender
-            de memória ou anotações soltas. Ideal para garantir frequência de visita
-            e evitar pontos esquecidos.
+            Controle abastecimentos, sangrias e histórico de visitas por ponto.
+            Veja onde coletar primeiro, quais locais estão esquecidos e onde vale
+            reforçar a operação.
           </p>
 
           <ul class="vm-product-points">
-            <li>Controle de abastecimento por ponto</li>
-            <li>Histórico de sangrias e visitas</li>
-            <li>Mais clareza sobre onde coletar primeiro</li>
+            <li>Abastecimento e sangria por ponto</li>
+            <li>Histórico de visitas sempre à mão</li>
+            <li>Prioridade para os pontos mais urgentes</li>
           </ul>
         </article>
 
@@ -330,15 +348,15 @@
               loading="lazy">
           </div>
 
-          <h3 class="fw-bold">Controle de Máquinas de Pelúcias</h3>
+          <h3 class="fw-bold">Máquinas de Pelúcias</h3>
 
           <p>
-            Gerencie prêmios, reposições e desempenho das gruas com mais critério.
-            Saiba onde vale reforçar estoque e onde a máquina precisa de atenção.
+            Acompanhe reposição de prêmios, desempenho das gruas e pontos que precisam
+            de atenção. Saiba onde reforçar estoque e onde a máquina está rendendo menos.
           </p>
 
           <ul class="vm-product-points">
-            <li>Controle de prêmios e reposição</li>
+            <li>Controle de prêmios e reposições</li>
             <li>Leitura de desempenho por máquina</li>
             <li>Mais critério para investir nos melhores pontos</li>
           </ul>
@@ -350,17 +368,18 @@
               alt="Ícone de produtos consignados - gestão de estoque no ponto e acerto de comissões" loading="lazy">
           </div>
 
-          <h3 class="fw-bold">Gestão de Consignados e Comissões</h3>
+          <h3 class="fw-bold">Consignados e Comissões</h3>
 
           <p>
-            Acerto de contas sem papel e caneta. Registre o que foi deixado, confira o que girou
-            e calcule a comissão do parceiro automaticamente, com valor líquido pronto na tela.
+            Registre o que foi deixado, vendido e reposto em cada ponto.
+            O sistema calcula comissão, valor líquido e deixa o acerto mais claro
+            para o parceiro.
           </p>
 
           <ul class="vm-product-points">
-            <li>Conferência do estoque deixado, vendido e reposto</li>
-            <li>Cálculo automático da comissão do dono do ponto</li>
-            <li>Acerto claro na frente do parceiro, sem cálculo de cabeça</li>
+            <li>Conferência do estoque deixado e vendido</li>
+            <li>Cálculo automático da comissão</li>
+            <li>Acerto mais claro com o dono do ponto</li>
           </ul>
         </article>
       </div>
@@ -377,7 +396,7 @@
           </h2>
 
           <p class="vm-modules-subtitle">
-            Veja tudo de uma vez: rota, estoque, sangria, consignado e financeiro — sem precisar procurar.
+            Veja tudo de uma vez: rota, estoque, sangria, consignado <br> e financeiro — sem precisar procurar.
           </p>
         </div>
 
@@ -435,7 +454,7 @@
         </h2>
 
         <p class="vm-subtext">
-          Feedbacks de operadores que vivem a rotina de visita, coleta, reposição e acerto com parceiros.
+          Feedbacks de operadores que vivem a rotina de visita,<br> coleta, reposição e acerto com parceiros.
         </p>
       </div>
 
@@ -622,10 +641,42 @@
       {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro.","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL","description":"Demonstração comercial mediante solicitação."}}
     </script>
 
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Organization","name":"VendMaster","url":"https://vendmaster.com.br/","logo":"https://vendmaster.com.br/images/logo_sem_fundo.png","contactPoint":{"@type":"ContactPoint","contactType":"sales","telephone":"+55-85-98699-2706","areaServed":"BR","availableLanguage":"Portuguese"}}
+    </script>
+
     <%- include('../partials/footer') %>
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
+          const menuToggle = document.querySelector('[data-menu-toggle]');
+          const homepageNav = document.querySelector('[data-homepage-nav]');
+          const homepageHeader = document.querySelector('[data-homepage-header]');
+
+          function closeHomepageMenu() {
+            document.body.classList.remove('homepage-menu-open');
+            menuToggle?.setAttribute('aria-expanded', 'false');
+          }
+
+          if (menuToggle && homepageNav) {
+            menuToggle.addEventListener('click', () => {
+              const isOpen = document.body.classList.toggle('homepage-menu-open');
+              menuToggle.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            homepageNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeHomepageMenu));
+
+            document.addEventListener('click', (event) => {
+              if (!document.body.classList.contains('homepage-menu-open')) return;
+              if (homepageHeader?.contains(event.target)) return;
+              closeHomepageMenu();
+            });
+
+            document.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') closeHomepageMenu();
+            });
+          }
+
           const form = document.getElementById('contactForm');
           const submitButton = form?.querySelector('button[type="submit"]');
           const statusElement = document.getElementById('contactStatus');
