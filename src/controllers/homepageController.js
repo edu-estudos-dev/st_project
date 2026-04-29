@@ -36,6 +36,14 @@ const homepageFaqJsonLd = {
         },
         {
             '@type': 'Question',
+            name: 'Quanto custa?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'O valor depende do tamanho e das frentes da opera\u00e7\u00e3o. Solicite a demonstra\u00e7\u00e3o para receber uma proposta adequada ao seu cen\u00e1rio.'
+            }
+        },
+        {
+            '@type': 'Question',
             name: 'Em quanto tempo recebo retorno?',
             acceptedAnswer: {
                 '@type': 'Answer',

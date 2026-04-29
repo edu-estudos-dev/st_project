@@ -51,6 +51,17 @@
   app.get('/healthz', (req, res) => {
       res.status(200).json({ status: 'ok' });
   });
+  app.get('/sitemap.xml', (req, res) => {
+      res.type('application/xml');
+      res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://vendmaster.com.br/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`);
+  });
   app.get('/favicon.ico', (req, res) => {
       res.redirect(301, '/favicon.svg');
   });
