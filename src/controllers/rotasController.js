@@ -115,6 +115,7 @@ class RotasController {
         selectedBairros,
         selectedProduto: produto === 'TODOS' ? 'todos' : produto,
         routeItems,
+        googleMapsEmbedApiKey: process.env.GOOGLE_MAPS_EMBED_API_KEY || '',
         routeSummary: {
           total: routeItems.length,
           coordinatesCoverage: routeItems.filter(item => item.hasCoordinates)

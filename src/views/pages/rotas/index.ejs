@@ -3,6 +3,7 @@
 <%- include('../../partials/head', { title: 'Rotas dos Pontos' }) %>
 
 <body class="list-page-body">
+    <% const mapsEmbedApiKey = typeof googleMapsEmbedApiKey !== 'undefined' ? googleMapsEmbedApiKey : ''; %>
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
@@ -15,9 +16,17 @@
                 <h1>Central de rotas</h1>
                 <p>Selecione um ou mais bairros, organize a sequência de visitas e avance ponto a ponto sem rodar à toa.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Bairros</strong><span><%= selectedBairros?.length ? selectedBairros.join(', ') : 'Selecione' %></span></div>
-                <div class="list-stat"><strong>Pontos</strong><span><%= routeSummary.total %> na rota</span></div>
+                <div class="list-stat">
+                    <strong>Bairros</strong>
+                    <span><%= selectedBairros?.length ? selectedBairros.join(', ') : 'Selecione' %></span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Pontos</strong>
+                    <span><%= routeSummary.total %> na rota</span>
+                </div>
             </div>
         </section>
 
@@ -36,6 +45,7 @@
                             <div class="route-neighborhood-header">
                                 <label>Bairros</label>
                             </div>
+
                             <div class="route-neighborhood-picker" data-route-neighborhood-picker>
                                 <button
                                     type="button"
@@ -47,10 +57,12 @@
                                     <i class="bi bi-geo-alt"></i>
                                 </button>
                             </div>
+
                             <small class="route-neighborhood-count" data-route-neighborhood-count>
                                 <%= selectedBairros?.length || 0 %> bairro(s) selecionado(s)
                             </small>
                         </div>
+
                         <div class="route-planner-field">
                             <label for="produto">Produto</label>
                             <select class="form-select" id="produto" name="produto">
@@ -60,13 +72,11 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="route-planner-footer">
                         <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
+
                         <div class="route-planner-actions">
-                            <button type="button" class="btn-modern-secondary route-planner-pdf-button" id="routePdfButton" <%= routeItems?.length ? '' : 'disabled' %>>
-                                <i class="bi bi-file-earmark-pdf"></i>
-                                <span>Gerar PDF</span>
-                            </button>
                             <button type="submit" class="btn-modern route-planner-submit-button">
                                 <i class="bi bi-search"></i>
                                 <span>Gerar rota</span>
@@ -83,14 +93,22 @@
                             <span class="dashboard-section-tag">Execução</span>
                             <h2>Modo de visita</h2>
                         </div>
+
                         <p>Comece pela sua localização atual, confirme a chegada e deixe o sistema apontar o próximo destino.</p>
                     </div>
 
                     <section class="route-journey-card">
                         <div class="route-journey-status">
                             <span class="route-journey-pill">Rota assistida</span>
-                            <strong id="routeJourneyTitle"><%= routeSummary.total ? 'Pronto para organizar a fila de visitas.' : 'Selecione ao menos um bairro para iniciar a rota.' %></strong>
-                            <p id="routeJourneyText"><%= routeSummary.total ? 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localização atual.' : 'Assim que houver pontos na seleção, o sistema libera o modo de visita.' %></p>
+
+                            <strong id="routeJourneyTitle">
+                                <%= routeSummary.total ? 'Pronto para organizar a fila de visitas.' : 'Selecione ao menos um bairro para iniciar a rota.' %>
+                            </strong>
+
+                            <p id="routeJourneyText">
+                                <%= routeSummary.total ? 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localização atual.' : 'Assim que houver pontos na seleção, o sistema libera o modo de visita.' %>
+                            </p>
+
                             <% if (routeSummary.total) { %>
                                 <small class="route-journey-note">
                                     <%= routeSummary.coordinatesCoverage %> de <%= routeSummary.total %> ponto(s) já têm latitude e longitude salvas.
@@ -104,10 +122,12 @@
                                 <i class="bi bi-geo-alt-fill"></i>
                                 <span>Iniciar rota inteligente</span>
                             </button>
+
                             <button type="button" class="btn-route-secondary" id="markVisitedButton" disabled>
                                 <i class="bi bi-check2-circle"></i>
                                 <span>Cheguei neste ponto</span>
                             </button>
+
                             <button type="button" class="btn-route-ghost" id="resetRouteButton" disabled>
                                 <i class="bi bi-arrow-counterclockwise"></i>
                                 <span>Reiniciar rota</span>
@@ -116,7 +136,9 @@
 
                         <div class="route-journey-helper">
                             <i class="bi bi-info-circle"></i>
-                            <span id="routeJourneyHelperText"><%= routeSummary.total ? 'O botão "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.' : 'Selecione ao menos um bairro para liberar a rota assistida.' %></span>
+                            <span id="routeJourneyHelperText">
+                                <%= routeSummary.total ? 'O botão "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.' : 'Selecione ao menos um bairro para liberar a rota assistida.' %>
+                            </span>
                         </div>
 
                         <div class="route-progress-strip" id="routeProgressStrip">
@@ -124,10 +146,12 @@
                                 <strong id="routeProgressDone">0</strong>
                                 <span>concluídos</span>
                             </div>
+
                             <div class="route-progress-pill">
                                 <strong id="routeProgressPending"><%= routeSummary.total %></strong>
                                 <span>pendentes</span>
                             </div>
+
                             <div class="route-progress-pill">
                                 <strong id="routeProgressMode">Nova rota</strong>
                                 <span>estado atual</span>
@@ -138,6 +162,7 @@
                             <strong>Próximo ponto</strong>
                             <span id="routeNextStopName">Aguardando início da rota</span>
                             <small id="routeNextStopMeta">O sistema vai calcular a melhor próxima visita com base na sua posição atual.</small>
+
                             <div class="route-next-stop-actions">
                                 <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenGoogleButton" aria-disabled="true">Abrir no Google Maps</a>
                                 <a href="#" class="table-btn table-btn-edit is-disabled" id="routeOpenWazeButton" aria-disabled="true">Abrir no Waze</a>
@@ -150,23 +175,49 @@
                                     <strong>Mapa do percurso</strong>
                                     <span id="routeCircuitSummary">Inicie a rota para visualizar o circuito completo.</span>
                                 </div>
+
                                 <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenFullMapButton" aria-disabled="true">
                                     Abrir rota completa
                                 </a>
                             </div>
+
                             <div class="route-circuit-map" id="routeCircuitMap" aria-label="Mapa esquemático do circuito da rota">
+                                <% if (mapsEmbedApiKey) { %>
+                                    <iframe
+                                        id="routeGoogleMapFrame"
+                                        class="route-google-map-frame"
+                                        title="Mapa da rota no Google Maps"
+                                        loading="lazy"
+                                        allowfullscreen
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        src=""
+                                    ></iframe>
+                                <% } %>
                                 <svg viewBox="0 0 640 300" role="img" aria-hidden="true">
                                     <polyline id="routeCircuitLine" points="" fill="none" />
                                     <g id="routeCircuitMarkers"></g>
                                 </svg>
+
                                 <div class="route-circuit-empty" id="routeCircuitEmpty">
                                     O circuito aparece aqui depois que a localização atual for liberada.
                                 </div>
                             </div>
+
                             <div class="route-circuit-stats">
-                                <span><strong id="routeCircuitDistance">-- km</strong><small>percurso estimado</small></span>
-                                <span><strong id="routeCircuitStops"><%= routeSummary.total %></strong><small>paradas</small></span>
-                                <span><strong id="routeCircuitReturn">Retorno</strong><small>termina no ponto inicial</small></span>
+                                <span>
+                                    <strong id="routeCircuitDistance">-- km</strong>
+                                    <small>percurso estimado</small>
+                                </span>
+
+                                <span>
+                                    <strong id="routeCircuitStops"><%= routeSummary.total %></strong>
+                                    <small>paradas</small>
+                                </span>
+
+                                <span>
+                                    <strong id="routeCircuitReturn">Retorno</strong>
+                                    <small>termina no ponto inicial</small>
+                                </span>
                             </div>
                         </div>
                     </section>
@@ -178,6 +229,7 @@
                             <span class="dashboard-section-tag">Resumo</span>
                             <h2>Leitura rápida da rota</h2>
                         </div>
+
                         <p>Conferência rápida antes de sair para a rua.</p>
                     </div>
 
@@ -193,6 +245,7 @@
                                 <span><%= produtoOptions.find((item) => item.value === selectedProduto)?.label || 'Todos os produtos' %></span>
                                 <em>Planejamento</em>
                             </article>
+
                             <article class="route-summary-item">
                                 <strong>Coordenadas salvas</strong>
                                 <span><%= routeSummary.coordinatesCoverage %> ponto(s) com latitude e longitude já cadastradas.</span>
@@ -204,12 +257,24 @@
             </section>
 
             <section class="list-panel">
-                <div class="dashboard-panel-header">
+                <div class="dashboard-panel-header route-list-header">
                     <div>
                         <span class="dashboard-section-tag">Fila de visitas</span>
                         <h2>Estabelecimentos da rota</h2>
                     </div>
-                    <p>Inicie a rota para ordenar os pontos. O progresso fica salvo no navegador.</p>
+
+                    <% if (routeItems?.length) { %>
+                        <div class="route-list-header-actions">
+                            <p>Imprima a sequência atual da rota ou ajuste a ordem antes de gerar o PDF.</p>
+
+                            <button type="button" class="btn-modern-secondary route-planner-pdf-button" id="routePdfButton">
+                                <i class="bi bi-printer"></i>
+                                <span>Imprimir rota</span>
+                            </button>
+                        </div>
+                    <% } else { %>
+                        <p>Selecione os bairros e gere a rota para imprimir a sequência de visitas.</p>
+                    <% } %>
                 </div>
 
                 <% if (!selectedBairros?.length) { %>
@@ -243,20 +308,43 @@
                             >
                                 <div class="route-point-copy">
                                     <span class="route-point-order" data-route-order><%= item.orderLabel %></span>
+
                                     <h3><%= item.estabelecimento %></h3>
+
                                     <p><strong>Produtos:</strong> <%= item.produtoLabel %></p>
                                     <p><strong>Endereço:</strong> <%= item.enderecoCompleto %></p>
                                     <p><strong>Responsável:</strong> <%= item.responsavel_nome || 'Não informado' %> | <strong>Contato:</strong> <%= item.telefone_contato || 'Não informado' %></p>
                                     <p><strong>Coordenadas:</strong> <%= item.hasCoordinates ? `${item.latitude}, ${item.longitude}` : 'Ainda não cadastradas' %></p>
+
                                     <small class="route-point-status" data-route-status>Aguardando organização da rota</small>
                                 </div>
+
                                 <div class="route-point-actions">
+                                    <div class="route-point-order-actions" aria-label="Reordenar ponto">
+                                        <button type="button" class="route-order-button" data-route-move="up" title="Mover ponto para cima">
+                                            <i class="bi bi-arrow-up"></i>
+                                            <span>Subir</span>
+                                        </button>
+
+                                        <button type="button" class="route-order-button" data-route-move="down" title="Mover ponto para baixo">
+                                            <i class="bi bi-arrow-down"></i>
+                                            <span>Descer</span>
+                                        </button>
+                                    </div>
+
+                                    <button type="button" class="table-btn table-btn-danger route-remove-point-button" data-route-remove>
+                                        <i class="bi bi-x-circle"></i>
+                                        <span>Remover da rota</span>
+                                    </button>
+
                                     <% if (item.googleMapsLink) { %>
                                         <a href="<%= item.googleMapsLink %>" target="_blank" rel="noopener noreferrer" class="table-btn table-btn-view">Google Maps</a>
                                     <% } %>
+
                                     <% if (item.wazeLink) { %>
                                         <a href="<%= item.wazeLink %>" target="_blank" rel="noopener noreferrer" class="table-btn table-btn-edit">Waze</a>
                                     <% } %>
+
                                     <a href="/estabelecimentos/<%= item.id %>/view" class="table-btn table-btn-pay">Ver ponto</a>
                                 </div>
                             </article>
@@ -268,6 +356,7 @@
     </div>
 
     <div class="route-neighborhood-modal-backdrop" data-route-neighborhood-backdrop></div>
+
     <section class="route-neighborhood-modal" data-route-neighborhood-modal aria-hidden="true">
         <div class="route-neighborhood-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="routeNeighborhoodModalTitle">
             <div class="route-neighborhood-modal-header">
@@ -275,6 +364,7 @@
                     <span>Planejamento</span>
                     <h2 id="routeNeighborhoodModalTitle">Selecionar bairros</h2>
                 </div>
+
                 <button type="button" class="route-neighborhood-modal-close" data-route-neighborhood-close aria-label="Fechar seleção de bairros">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -285,6 +375,7 @@
                     <i class="bi bi-search"></i>
                     <input type="search" placeholder="Filtrar bairros" data-route-neighborhood-filter aria-label="Filtrar bairros">
                 </div>
+
                 <div class="route-neighborhood-actions" aria-label="Acoes de selecao de bairros">
                     <button type="button" data-route-select-all>Todos</button>
                     <button type="button" data-route-clear-selection>Limpar</button>
@@ -294,6 +385,7 @@
             <div class="route-neighborhood-list" data-route-neighborhood-list>
                 <% bairros.forEach((item, index) => { %>
                     <% const bairroId = `bairro-${index}`; %>
+
                     <label class="route-neighborhood-option" for="<%= bairroId %>" data-route-neighborhood-option>
                         <input
                             type="checkbox"
@@ -310,6 +402,7 @@
 
             <div class="route-neighborhood-modal-footer">
                 <span data-route-neighborhood-modal-count><%= selectedBairros?.length || 0 %> bairro(s) selecionado(s)</span>
+
                 <button type="button" class="btn-route-secondary" data-route-neighborhood-apply>
                     <i class="bi bi-check2"></i>
                     <span>Aplicar seleção</span>
@@ -390,6 +483,7 @@
                 checkboxes.forEach((checkbox) => {
                     checkbox.checked = true;
                 });
+
                 syncNeighborhoodState();
             });
 
@@ -397,11 +491,13 @@
                 checkboxes.forEach((checkbox) => {
                     checkbox.checked = false;
                 });
+
                 syncNeighborhoodState();
             });
 
             filterInput?.addEventListener('input', () => {
                 const term = filterInput.value.trim().toUpperCase();
+
                 optionLabels.forEach((label) => {
                     const value = label.textContent.trim().toUpperCase();
                     label.hidden = term && !value.includes(term);
@@ -420,6 +516,7 @@
 
             plannerForm.addEventListener('submit', (event) => {
                 const hasSelectedNeighborhood = checkboxes.some((checkbox) => checkbox.checked);
+
                 if (hasSelectedNeighborhood) return;
 
                 event.preventDefault();
@@ -435,7 +532,8 @@
     <% if (routeItems?.length) { %>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const routeItems = Array.from(document.querySelectorAll('[data-route-item]'));
+                let routeItems = Array.from(document.querySelectorAll('[data-route-item]'));
+                const routePointList = document.getElementById('routePointList');
                 const startButton = document.getElementById('startSmartRouteButton');
                 const markVisitedButton = document.getElementById('markVisitedButton');
                 const resetRouteButton = document.getElementById('resetRouteButton');
@@ -456,8 +554,11 @@
                 const routeCircuitSummary = document.getElementById('routeCircuitSummary');
                 const routeCircuitDistance = document.getElementById('routeCircuitDistance');
                 const routeOpenFullMapButton = document.getElementById('routeOpenFullMapButton');
+                const routeCircuitStops = document.getElementById('routeCircuitStops');
+                const routeGoogleMapFrame = document.getElementById('routeGoogleMapFrame');
+                const googleMapsEmbedApiKey = <%- JSON.stringify(mapsEmbedApiKey || '') %>;
 
-                const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairros || []) %>}:${<%- JSON.stringify(selectedProduto) %>}`;
+                const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairros || []) %>}:${<%- JSON.stringify(selectedProduto || 'todos') %>}`;
 
                 let routeState = {
                     currentIndex: -1,
@@ -475,6 +576,7 @@
                     }
 
                     const results = await response.json();
+
                     if (!results.length) return null;
 
                     return {
@@ -526,7 +628,30 @@
                         .map((address) => encodeURIComponent(address));
 
                     const base = `https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=${origin}&destination=${origin}`;
+
                     return waypoints.length ? `${base}&waypoints=${waypoints.join('|')}` : base;
+                };
+
+                const buildGoogleEmbedRoute = (startPosition, orderedCards) => {
+                    if (!googleMapsEmbedApiKey || !orderedCards.length) return null;
+
+                    const origin = `${startPosition.lat},${startPosition.lon}`;
+                    const waypoints = orderedCards
+                        .map((card) => card.dataset.address)
+                        .filter(Boolean)
+                        .join('|');
+                    const params = new URLSearchParams({
+                        key: googleMapsEmbedApiKey,
+                        origin,
+                        destination: origin,
+                        mode: 'driving'
+                    });
+
+                    if (waypoints) {
+                        params.set('waypoints', waypoints);
+                    }
+
+                    return `https://www.google.com/maps/embed/v1/directions?${params.toString()}`;
                 };
 
                 const renderCircuitMap = (startPosition, orderedWithCoords, totalDistanceKm) => {
@@ -559,8 +684,13 @@
                         y: height - padding - ((coords.lat - minLat) / latRange) * (height - padding * 2)
                     });
 
-                    const projected = points.map((point) => ({ ...point, ...project(point.coords) }));
+                    const projected = points.map((point) => ({
+                        ...point,
+                        ...project(point.coords)
+                    }));
+
                     routeCircuitLine.setAttribute('points', projected.map((point) => `${point.x},${point.y}`).join(' '));
+
                     routeCircuitMarkers.innerHTML = projected
                         .slice(0, -1)
                         .map((point) => `
@@ -580,22 +710,71 @@
                     if (!orderedWithCoords.length) return 0;
 
                     let total = haversine(startPosition, orderedWithCoords[0].coords);
+
                     orderedWithCoords.forEach((item, index) => {
                         const next = orderedWithCoords[index + 1];
-                        if (next) total += haversine(item.coords, next.coords);
+
+                        if (next) {
+                            total += haversine(item.coords, next.coords);
+                        }
                     });
+
                     total += haversine(orderedWithCoords[orderedWithCoords.length - 1].coords, startPosition);
+
                     return total;
                 };
 
+                const getCurrentCard = () => {
+                    if (!routeState.started || routeState.currentIndex < 0 || routeState.currentIndex >= routeItems.length) {
+                        return null;
+                    }
+
+                    return routeItems[routeState.currentIndex];
+                };
+
+                const getCurrentCardId = () => getCurrentCard()?.dataset.id || null;
+
+                const updateRouteButtonsState = () => {
+                    routeItems.forEach((card, index) => {
+                        const upButton = card.querySelector('[data-route-move="up"]');
+                        const downButton = card.querySelector('[data-route-move="down"]');
+                        const removeButton = card.querySelector('[data-route-remove]');
+
+                        if (upButton) {
+                            upButton.disabled = index === 0;
+                        }
+
+                        if (downButton) {
+                            downButton.disabled = index === routeItems.length - 1;
+                        }
+
+                        if (removeButton) {
+                            removeButton.disabled = routeItems.length <= 1 && routeState.started;
+                        }
+                    });
+
+                    if (routePdfButton) {
+                        routePdfButton.disabled = routeItems.length === 0;
+                    }
+
+                    if (startButton) {
+                        startButton.disabled = routeItems.length === 0;
+                    }
+
+                    if (routeCircuitStops) {
+                        routeCircuitStops.textContent = routeItems.length;
+                    }
+                };
+
                 const saveRouteState = () => {
-                    if (!routeState.started) {
+                    if (!routeItems.length) {
                         localStorage.removeItem(routeStorageKey);
                         return;
                     }
 
                     localStorage.setItem(routeStorageKey, JSON.stringify({
                         currentIndex: routeState.currentIndex,
+                        started: routeState.started,
                         orderedIds: routeItems.map((card) => card.dataset.id),
                         savedAt: new Date().toISOString()
                     }));
@@ -604,6 +783,7 @@
                 const updateProgress = () => {
                     const done = routeState.started ? Math.min(routeState.currentIndex, routeItems.length) : 0;
                     const pending = Math.max(routeItems.length - done, 0);
+
                     progressDoneEl.textContent = done;
                     progressPendingEl.textContent = pending;
 
@@ -627,7 +807,9 @@
                         card.classList.toggle('route-point-card-current', isCurrent);
                         card.classList.toggle('route-point-card-visited', isVisited);
 
-                        if (orderEl) orderEl.textContent = `${index + 1}º ponto`;
+                        if (orderEl) {
+                            orderEl.textContent = `${index + 1}º ponto`;
+                        }
 
                         if (!statusEl) return;
 
@@ -641,6 +823,8 @@
                             statusEl.textContent = 'Na fila das próximas visitas';
                         }
                     });
+
+                    updateRouteButtonsState();
                 };
 
                 const scrollToCurrentCard = () => {
@@ -658,20 +842,44 @@
                     updateProgress();
                     resetRouteButton.disabled = !routeState.started;
 
+                    if (!routeItems.length) {
+                        titleEl.textContent = 'Nenhum ponto na rota';
+                        textEl.textContent = 'Todos os pontos foram removidos desta rota.';
+                        helperTextEl.textContent = 'Gere uma nova rota para voltar a listar pontos.';
+                        nextStopNameEl.textContent = 'Nenhum ponto disponível';
+                        nextStopMetaEl.textContent = 'A rota atual ficou vazia.';
+
+                        setActionLinkState(googleButton, null);
+                        setActionLinkState(wazeButton, null);
+                        setActionLinkState(routeOpenFullMapButton, null);
+
+                        markVisitedButton.disabled = true;
+                        resetRouteButton.disabled = true;
+
+                        localStorage.removeItem(routeStorageKey);
+                        return;
+                    }
+
                     if (!routeState.started || routeState.currentIndex >= routeItems.length) {
                         titleEl.textContent = routeState.started ? 'Rota finalizada' : 'Pronto para organizar a fila de visitas.';
+
                         textEl.textContent = routeState.started
                             ? 'Todos os pontos da fila já foram marcados como visitados.'
                             : 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localização atual.';
+
                         helperTextEl.textContent = routeState.started
                             ? 'Você concluiu a rota selecionada. Se quiser, reinicie a rota para montar uma nova ordem.'
                             : 'O botão "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.';
+
                         nextStopNameEl.textContent = routeState.started ? 'Nenhum ponto pendente' : 'Aguardando início da rota';
+
                         nextStopMetaEl.textContent = routeState.started
                             ? 'Você concluiu a rota selecionada.'
                             : 'O sistema vai calcular a melhor próxima visita com base na sua posição atual.';
+
                         setActionLinkState(googleButton, null);
                         setActionLinkState(wazeButton, null);
+
                         markVisitedButton.disabled = true;
                         saveRouteState();
                         return;
@@ -686,46 +894,199 @@
                     helperTextEl.textContent = 'O botão "Cheguei neste ponto" já está liberado para esta parada.';
                     nextStopNameEl.textContent = name;
                     nextStopMetaEl.textContent = address;
+
                     setActionLinkState(googleButton, buildGoogleRoute(address));
                     setActionLinkState(wazeButton, buildWazeRoute(address));
+
                     markVisitedButton.disabled = false;
                     saveRouteState();
                 };
 
                 const reorderCards = () => {
-                    const list = document.getElementById('routePointList');
-                    routeItems.forEach((card) => list.appendChild(card));
+                    routeItems.forEach((card) => routePointList.appendChild(card));
                     renderQueue();
                     syncCurrentStop();
+                    updateRouteButtonsState();
                     scrollToCurrentCard();
                 };
+
+                const syncRouteAfterManualChange = (previousCurrentCardId = null) => {
+                    if (routeState.started && previousCurrentCardId) {
+                        const newCurrentIndex = routeItems.findIndex((card) => card.dataset.id === previousCurrentCardId);
+
+                        if (newCurrentIndex >= 0) {
+                            routeState.currentIndex = newCurrentIndex;
+                        } else {
+                            routeState.currentIndex = Math.min(routeState.currentIndex, routeItems.length);
+                        }
+                    }
+
+                    if (!routeItems.length) {
+                        routeState = {
+                            currentIndex: -1,
+                            started: false
+                        };
+
+                        localStorage.removeItem(routeStorageKey);
+
+                        titleEl.textContent = 'Nenhum ponto na rota';
+                        textEl.textContent = 'Todos os pontos foram removidos desta rota.';
+                        helperTextEl.textContent = 'Gere uma nova rota para voltar a listar pontos.';
+                        nextStopNameEl.textContent = 'Nenhum ponto disponível';
+                        nextStopMetaEl.textContent = 'A rota atual ficou vazia.';
+                        progressDoneEl.textContent = '0';
+                        progressPendingEl.textContent = '0';
+                        progressModeEl.textContent = 'Sem pontos';
+
+                        setActionLinkState(googleButton, null);
+                        setActionLinkState(wazeButton, null);
+                        setActionLinkState(routeOpenFullMapButton, null);
+
+                        markVisitedButton.disabled = true;
+                        resetRouteButton.disabled = true;
+
+                        routeCircuitMap?.classList.remove('has-route', 'has-google-map');
+                        routeCircuitLine?.setAttribute('points', '');
+                        if (routeGoogleMapFrame) {
+                            routeGoogleMapFrame.src = '';
+                        }
+
+                        if (routeCircuitMarkers) {
+                            routeCircuitMarkers.innerHTML = '';
+                        }
+
+                        if (routeCircuitDistance) {
+                            routeCircuitDistance.textContent = '-- km';
+                        }
+
+                        if (routeCircuitSummary) {
+                            routeCircuitSummary.textContent = 'Nenhum ponto disponível para montar o circuito.';
+                        }
+
+                        updateRouteButtonsState();
+                        return;
+                    }
+
+                    renderQueue();
+                    syncCurrentStop();
+                    updateRouteButtonsState();
+                };
+
+                const moveRouteCard = (card, direction) => {
+                    const previousCurrentCardId = getCurrentCardId();
+                    const currentIndex = routeItems.indexOf(card);
+
+                    if (currentIndex < 0) return;
+
+                    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+                    if (targetIndex < 0 || targetIndex >= routeItems.length) return;
+
+                    const [movedCard] = routeItems.splice(currentIndex, 1);
+
+                    routeItems.splice(targetIndex, 0, movedCard);
+                    routeItems.forEach((item) => routePointList.appendChild(item));
+
+                    helperTextEl.textContent = routeState.started
+                        ? 'Ordem ajustada manualmente. O próximo ponto foi preservado.'
+                        : 'Ordem ajustada manualmente. Você ainda pode iniciar a rota inteligente ou seguir esta ordem.';
+
+                    syncRouteAfterManualChange(previousCurrentCardId);
+                    saveRouteState();
+                };
+
+                const removeRouteCard = async (card) => {
+                    const pointName = card.dataset.name || 'este ponto';
+
+                    const confirmed = await window.AppAlerts?.confirm({
+                        title: 'Remover ponto da rota',
+                        text: `Deseja remover ${pointName} apenas desta rota? O estabelecimento não será excluído do sistema.`,
+                        confirmButtonText: 'Remover da rota',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (!confirmed) return;
+
+                    const previousCurrentCardId = getCurrentCardId();
+                    const removedIndex = routeItems.indexOf(card);
+                    const removedWasCurrent = previousCurrentCardId === card.dataset.id;
+
+                    if (removedIndex < 0) return;
+
+                    routeItems.splice(removedIndex, 1);
+                    card.remove();
+
+                    if (routeState.started) {
+                        if (removedWasCurrent) {
+                            routeState.currentIndex = Math.min(removedIndex, routeItems.length);
+                        } else if (removedIndex < routeState.currentIndex) {
+                            routeState.currentIndex -= 1;
+                        }
+                    }
+
+                    helperTextEl.textContent = `${pointName} foi removido apenas desta rota.`;
+
+                    syncRouteAfterManualChange(removedWasCurrent ? null : previousCurrentCardId);
+                    saveRouteState();
+                };
+
+                routePointList?.addEventListener('click', async (event) => {
+                    const moveButton = event.target.closest('[data-route-move]');
+                    const removeButton = event.target.closest('[data-route-remove]');
+
+                    if (!moveButton && !removeButton) return;
+
+                    const card = event.target.closest('[data-route-item]');
+
+                    if (!card) return;
+
+                    if (moveButton) {
+                        moveRouteCard(card, moveButton.dataset.routeMove);
+                        return;
+                    }
+
+                    if (removeButton) {
+                        await removeRouteCard(card);
+                    }
+                });
 
                 const getCardCoordinates = async (card) => {
                     const latitude = Number(card.dataset.latitude);
                     const longitude = Number(card.dataset.longitude);
 
                     if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-                        return { lat: latitude, lon: longitude };
+                        return {
+                            lat: latitude,
+                            lon: longitude
+                        };
                     }
 
                     return geocodeAddress(card.dataset.address);
                 };
 
                 const applySavedOrder = (orderedIds) => {
-                    if (!Array.isArray(orderedIds) || orderedIds.length !== routeItems.length) return false;
+                    if (!Array.isArray(orderedIds) || !orderedIds.length) return false;
 
-                    const cardById = new Map(routeItems.map(card => [card.dataset.id, card]));
+                    const cardById = new Map(routeItems.map((card) => [card.dataset.id, card]));
                     const orderedCards = [];
 
                     for (const id of orderedIds) {
                         const card = cardById.get(id);
-                        if (!card) return false;
-                        orderedCards.push(card);
+
+                        if (card) {
+                            orderedCards.push(card);
+                        }
                     }
 
-                    orderedCards.forEach((card, index) => {
-                        routeItems[index] = card;
+                    if (!orderedCards.length) return false;
+
+                    routeItems.forEach((card) => {
+                        if (!orderedIds.includes(card.dataset.id)) {
+                            orderedCards.push(card);
+                        }
                     });
+
+                    routeItems = orderedCards;
 
                     return true;
                 };
@@ -733,20 +1094,30 @@
                 const restoreSavedRoute = () => {
                     try {
                         const raw = localStorage.getItem(routeStorageKey);
+
                         if (!raw) return false;
 
                         const saved = JSON.parse(raw);
-                        if (!saved || typeof saved.currentIndex !== 'number') return false;
+
+                        if (!saved || !Array.isArray(saved.orderedIds)) return false;
 
                         const orderApplied = applySavedOrder(saved.orderedIds);
+
                         if (!orderApplied) return false;
 
                         routeState = {
-                            currentIndex: saved.currentIndex,
-                            started: true
+                            currentIndex: typeof saved.currentIndex === 'number' ? saved.currentIndex : -1,
+                            started: Boolean(saved.started)
                         };
 
-                        helperTextEl.textContent = 'Rota retomada automaticamente a partir do progresso salvo nesta máquina.';
+                        if (routeState.currentIndex > routeItems.length) {
+                            routeState.currentIndex = routeItems.length;
+                        }
+
+                        helperTextEl.textContent = routeState.started
+                            ? 'Rota retomada automaticamente a partir do progresso salvo nesta máquina.'
+                            : 'Ordem manual retomada automaticamente. Você pode iniciar a rota quando quiser.';
+
                         reorderCards();
                         return true;
                     } catch (error) {
@@ -760,14 +1131,31 @@
                         currentIndex: -1,
                         started: false
                     };
+
                     localStorage.removeItem(routeStorageKey);
+
                     routeItems.sort((left, right) => Number(left.dataset.routeIndex) - Number(right.dataset.routeIndex));
-                    routeCircuitMap?.classList.remove('has-route');
+
+                    routeCircuitMap?.classList.remove('has-route', 'has-google-map');
                     routeCircuitLine?.setAttribute('points', '');
-                    if (routeCircuitMarkers) routeCircuitMarkers.innerHTML = '';
-                    if (routeCircuitDistance) routeCircuitDistance.textContent = '-- km';
-                    if (routeCircuitSummary) routeCircuitSummary.textContent = 'Inicie a rota para visualizar o circuito completo.';
+                    if (routeGoogleMapFrame) {
+                        routeGoogleMapFrame.src = '';
+                    }
+
+                    if (routeCircuitMarkers) {
+                        routeCircuitMarkers.innerHTML = '';
+                    }
+
+                    if (routeCircuitDistance) {
+                        routeCircuitDistance.textContent = '-- km';
+                    }
+
+                    if (routeCircuitSummary) {
+                        routeCircuitSummary.textContent = 'Inicie a rota para visualizar o circuito completo.';
+                    }
+
                     setActionLinkState(routeOpenFullMapButton, null);
+
                     reorderCards();
                 };
 
@@ -790,14 +1178,23 @@
                                 });
                             },
                             () => reject(new Error('Não foi possível ler sua localização atual.')),
-                            { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+                            {
+                                enableHighAccuracy: true,
+                                timeout: 12000,
+                                maximumAge: 60000
+                            }
                         );
                     });
 
                     const geocoded = [];
+
                     for (const card of routeItems) {
                         const coords = await getCardCoordinates(card);
-                        geocoded.push({ card, coords });
+
+                        geocoded.push({
+                            card,
+                            coords
+                        });
                     }
 
                     const valid = geocoded.filter((item) => item.coords);
@@ -809,7 +1206,9 @@
 
                     while (pending.length) {
                         pending.sort((left, right) => haversine(origin, left.coords) - haversine(origin, right.coords));
+
                         const next = pending.shift();
+
                         ordered.push(next.card);
                         orderedWithCoords.push(next);
                         origin = next.coords;
@@ -818,8 +1217,15 @@
                     invalid.forEach((item) => ordered.push(item.card));
 
                     const totalDistanceKm = calculateCircuitDistance(currentPosition, orderedWithCoords);
+
                     renderCircuitMap(currentPosition, orderedWithCoords, totalDistanceKm);
                     setActionLinkState(routeOpenFullMapButton, buildFullGoogleRoute(currentPosition, ordered));
+
+                    const googleEmbedRouteUrl = buildGoogleEmbedRoute(currentPosition, ordered);
+                    if (routeGoogleMapFrame && googleEmbedRouteUrl) {
+                        routeGoogleMapFrame.src = googleEmbedRouteUrl;
+                        routeCircuitMap?.classList.add('has-google-map');
+                    }
 
                     routeState = {
                         currentIndex: 0,
@@ -835,13 +1241,16 @@
 
                 const generateRoutePdf = () => {
                     const { jsPDF } = window.jspdf || {};
+
                     if (!jsPDF) return;
 
                     const doc = new jsPDF();
                     const orderedCards = Array.from(document.querySelectorAll('[data-route-item]'));
                     const bairros = new Set();
+
                     const data = orderedCards.map((card, index) => {
                         bairros.add(card.dataset.neighborhood || '-');
+
                         return [
                             `${index + 1}`,
                             card.dataset.name || '-',
@@ -855,19 +1264,33 @@
 
                     doc.setFontSize(14);
                     doc.text(`Rota de visitas: ${Array.from(bairros).join(', ')}`, 14, 18);
+
                     doc.setFontSize(9);
                     doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, 14, 25);
+
                     doc.autoTable({
                         head: [['#', 'Estabelecimento', 'Endereco', 'Chave', 'Maquina', 'Bairro', 'Produto']],
                         body: data,
-                        styles: { fontSize: 8, halign: 'center' },
-                        columnStyles: {
-                            1: { halign: 'left' },
-                            2: { halign: 'left' }
+                        styles: {
+                            fontSize: 8,
+                            halign: 'center'
                         },
-                        margin: { top: 32 },
-                        headStyles: { fillColor: [37, 99, 235] }
+                        columnStyles: {
+                            1: {
+                                halign: 'left'
+                            },
+                            2: {
+                                halign: 'left'
+                            }
+                        },
+                        margin: {
+                            top: 32
+                        },
+                        headStyles: {
+                            fillColor: [37, 99, 235]
+                        }
                     });
+
                     doc.save('Rota_de_Visitas.pdf');
                 };
 
@@ -902,6 +1325,7 @@
                     if (!confirmed) return;
 
                     routeState.currentIndex += 1;
+
                     renderQueue();
                     syncCurrentStop();
                 });
@@ -915,6 +1339,7 @@
                     });
 
                     if (!confirmed) return;
+
                     resetRouteState();
                 });
 
@@ -922,6 +1347,8 @@
 
                 renderQueue();
                 updateProgress();
+                updateRouteButtonsState();
+
                 if (!restoreSavedRoute()) {
                     syncCurrentStop();
                 }
@@ -929,4 +1356,5 @@
         </script>
     <% } %>
 </body>
+
 </html>

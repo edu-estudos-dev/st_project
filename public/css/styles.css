@@ -1,7 +1,7 @@
 /* ==========================================================================
-   VENDMASTER — CSS ORGANIZADO
-   Observação: a ordem original foi preservada para evitar quebra de cascata.
-   Foram removidos apenas os blocos duplicados/adicionados na última alteração.
+   VENDMASTER ï¿½ CSS ORGANIZADO
+   Observaï¿½ï¿½o: a ordem original foi preservada para evitar quebra de cascata.
+   Foram removidos apenas os blocos duplicados/adicionados na ï¿½ltima alteraï¿½ï¿½o.
    ========================================================================== */
 
 :root {
@@ -350,7 +350,11 @@ figure {
   border-radius: 30px;
   color: #fff;
   background:
-    radial-gradient(circle at 12% 12%, rgba(55, 166, 71, 0.28), transparent 30%),
+    radial-gradient(
+      circle at 12% 12%,
+      rgba(55, 166, 71, 0.28),
+      transparent 30%
+    ),
     radial-gradient(circle at 88% 8%, rgba(3, 89, 191, 0.34), transparent 34%),
     linear-gradient(135deg, #172033 0%, #253142 52%, #111827 100%);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1879,9 +1883,21 @@ figure {
   border-radius: 22px;
   color: #fff;
   background:
-    radial-gradient(circle at 12% 16%, rgba(var(--page-titlebar-rgb), 0.34), transparent 28%),
-    radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
-    linear-gradient(135deg, var(--page-titlebar-start) 0%, var(--page-titlebar-end) 100%);
+    radial-gradient(
+      circle at 12% 16%,
+      rgba(var(--page-titlebar-rgb), 0.34),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(255, 255, 255, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      var(--page-titlebar-start) 0%,
+      var(--page-titlebar-end) 100%
+    );
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
 }
@@ -2342,6 +2358,16 @@ figure {
   text-align: left;
 }
 
+/* ==========================================================================
+   ROTAS DOS PONTOS
+   - Planejamento de bairros/produtos
+   - Fila de visitas
+   - BotÃ£o de imprimir rota
+   - Modo de visita assistida
+   - Mapa do percurso
+   - BotÃµes de subir/descer/remover cards
+   ========================================================================== */
+
 .route-planner-form {
   margin-top: 0.5rem;
 }
@@ -2682,59 +2708,90 @@ body.route-neighborhood-modal-open {
   font-weight: 900;
 }
 
-@media (max-width: 991.98px) {
-  .route-planner-header {
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .route-planner-header p {
-    max-width: none;
-  }
-
-  .route-planner-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .route-planner-footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .route-planner-actions {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .route-planner-submit-button,
-  .route-planner-pdf-button {
-    width: 100%;
-  }
+.route-list-header {
+  align-items: center;
 }
 
-@media (max-width: 575.98px) {
-  .route-neighborhood-modal {
-    padding: 0.75rem;
-  }
+.route-list-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
 
-  .route-neighborhood-modal-dialog {
-    max-height: calc(100vh - 1.5rem);
-    padding: 1rem;
-    border-radius: 18px;
-  }
+.route-list-header-actions p {
+  max-width: 34ch;
+  margin: 0;
+  color: #64748b;
+  line-height: 1.45;
+  text-align: right;
+}
 
-  .route-neighborhood-list {
-    grid-template-columns: 1fr;
-  }
+.route-list-header-actions .route-planner-pdf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-width: 170px;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #2563eb !important;
+  border-radius: 14px;
+  background: #2563eb !important;
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
 
-  .route-neighborhood-modal-footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
+.route-list-header-actions .route-planner-pdf-button i,
+.route-list-header-actions .route-planner-pdf-button span {
+  color: #ffffff !important;
+}
 
-  .route-neighborhood-modal-footer .btn-route-secondary {
-    width: 100%;
-  }
+.route-list-header-actions .route-planner-pdf-button:hover {
+  transform: translateY(-1px);
+  border-color: #1d4ed8 !important;
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.28);
+}
+
+.route-list-header-actions .route-planner-pdf-button:hover i,
+.route-list-header-actions .route-planner-pdf-button:hover span {
+  color: #ffffff !important;
+}
+
+.route-list-header-actions .route-planner-pdf-button:focus {
+  outline: none;
+  box-shadow:
+    0 18px 34px rgba(37, 99, 235, 0.28),
+    0 0 0 0.22rem rgba(37, 99, 235, 0.2);
+}
+
+.route-list-header-actions .route-planner-pdf-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  border-color: #93c5fd !important;
+  background: #93c5fd !important;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+
+.route-list-header-actions .route-planner-pdf-button:disabled i,
+.route-list-header-actions .route-planner-pdf-button:disabled span {
+  color: #ffffff !important;
 }
 
 .route-coordinates-header {
@@ -3054,6 +3111,61 @@ body.route-neighborhood-modal-open {
   min-width: 170px;
 }
 
+.route-point-order-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.route-order-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 38px;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  color: #1d4ed8;
+  font-size: 0.82rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.route-order-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.12);
+}
+
+.route-order-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.route-remove-point-button {
+  width: 100%;
+  border: 1px solid rgba(220, 38, 38, 0.18) !important;
+  background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%) !important;
+  color: #b91c1c !important;
+}
+
+.route-remove-point-button:hover {
+  background: linear-gradient(180deg, #ffe4e6 0%, #fecdd3 100%) !important;
+  color: #991b1b !important;
+}
+
+.route-remove-point-button i,
+.route-remove-point-button span {
+  pointer-events: none;
+}
+
 .route-point-status {
   display: inline-flex;
   margin-top: 0.35rem;
@@ -3100,7 +3212,154 @@ body.route-neighborhood-modal-open {
   color: #1d4ed8;
 }
 
+.route-circuit-card {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+}
+
+.route-circuit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.route-circuit-header > div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.route-circuit-header strong {
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.route-circuit-header span {
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.route-circuit-map {
+  position: relative;
+  min-height: 230px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  background:
+    linear-gradient(rgba(148, 163, 184, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.09) 1px, transparent 1px),
+    linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+  background-size: 38px 38px;
+}
+
+.route-circuit-map svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.route-circuit-map polyline {
+  stroke: #2563eb;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 8px 12px rgba(37, 99, 235, 0.22));
+}
+
+.route-circuit-marker circle {
+  fill: #ffffff;
+  stroke: #2563eb;
+  stroke-width: 3;
+}
+
+.route-circuit-marker text {
+  fill: #0f172a;
+  font-size: 13px;
+  font-weight: 900;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.route-circuit-marker-start circle {
+  stroke: #22c55e;
+}
+
+.route-circuit-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: #64748b;
+  font-weight: 800;
+  text-align: center;
+}
+
+.route-circuit-map.has-route .route-circuit-empty {
+  display: none;
+}
+
+.route-circuit-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.route-circuit-stats span {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.route-circuit-stats strong {
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.route-circuit-stats small {
+  color: #64748b;
+  font-weight: 800;
+}
+
 @media (max-width: 991.98px) {
+  .route-planner-header {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .route-planner-header p {
+    max-width: none;
+  }
+
+  .route-planner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .route-planner-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .route-planner-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .route-planner-submit-button,
+  .route-planner-pdf-button {
+    width: 100%;
+  }
+
   .route-shortcuts-grid {
     grid-template-columns: 1fr;
   }
@@ -3130,10 +3389,78 @@ body.route-neighborhood-modal-open {
 }
 
 @media (max-width: 767.98px) {
+  .route-list-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .route-list-header-actions {
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+
+  .route-list-header-actions p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .route-list-header-actions .route-planner-pdf-button {
+    width: 100%;
+  }
+
   .route-point-actions {
     grid-template-columns: 1fr;
   }
+
+  .route-point-order-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .route-order-button,
+  .route-remove-point-button {
+    width: 100%;
+  }
 }
+
+@media (max-width: 575.98px) {
+  .route-neighborhood-modal {
+    padding: 0.75rem;
+  }
+
+  .route-neighborhood-modal-dialog {
+    max-height: calc(100vh - 1.5rem);
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .route-neighborhood-list {
+    grid-template-columns: 1fr;
+  }
+
+  .route-neighborhood-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .route-neighborhood-modal-footer .btn-route-secondary {
+    width: 100%;
+  }
+
+  .route-circuit-header,
+  .route-circuit-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .route-circuit-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+/* ==========================================================================
+   FIM - ROTAS DOS PONTOS
+   ========================================================================== */
 
 .table-badge {
   display: inline-flex;
@@ -3752,7 +4079,7 @@ body.route-neighborhood-modal-open {
 }
 
 /* =========================
-   PRODUTOS (SOLUÇÃO)
+   PRODUTOS (SOLUï¿½ï¿½O)
 ========================= */
 
 /* Glow */
@@ -3805,18 +4132,18 @@ body.route-neighborhood-modal-open {
 }
 
 /* =========================
-   BOTÕES DE SELEÇÃO (RADIO)
+   BOTï¿½ES DE SELEï¿½ï¿½O (RADIO)
 ========================= */
 
 /* esconde o radio */
 
-/* botão visual */
+/* botï¿½o visual */
 
 /* hover */
 
 /* ativo (selecionado) */
 
-/* ícones */
+/* ï¿½cones */
 
 /* fluxo de caixa */
 
@@ -3991,7 +4318,7 @@ body.route-neighborhood-modal-open {
   }
 }
 
-/* Correção dos textos azuis nos cards */
+/* Correï¿½ï¿½o dos textos azuis nos cards */
 
 /* MEDIAS  ===================================================================*/
 @media (max-width: 767.98px) {
@@ -4033,9 +4360,9 @@ body.route-neighborhood-modal-open {
     align-items: flex-start;
   }
 
-  /* RADIO COMO BOTÃO - PREFERÊNCIA DE CONTATO */
+  /* RADIO COMO BOTï¿½O - PREFERï¿½NCIA DE CONTATO */
 
-  /* ÍCONES DOS BOTÕES DE CONTATO */
+  /* ï¿½CONES DOS BOTï¿½ES DE CONTATO */
 
   figure {
     width: 100%;
@@ -4170,7 +4497,7 @@ body.route-neighborhood-modal-open {
   }
 }
 
-/* Corrigir texto da seção clara */
+/* Corrigir texto da seï¿½ï¿½o clara */
 
 @media (max-width: 1199.98px) {
   .dashboard-grid {
@@ -4337,7 +4664,7 @@ footer hr {
    ========================================================================== */
 
 /* =========================
-   CENTRALIZAÇÃO REAL
+   CENTRALIZAï¿½ï¿½O REAL
 ========================= */
 .auth-shell {
   min-height: 100vh;
@@ -4359,7 +4686,7 @@ footer hr {
 }
 
 /* =========================
-   TÍTULO MAIS FORTE
+   Tï¿½TULO MAIS FORTE
 ========================= */
 .auth-card h1 {
   font-weight: 700;
@@ -4392,7 +4719,7 @@ footer hr {
 }
 
 /* =========================
-   BOTÃO (AGORA COM SUA IDENTIDADE VERDE)
+   BOTï¿½O (AGORA COM SUA IDENTIDADE VERDE)
 ========================= */
 .btn-primary {
   background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -4422,7 +4749,7 @@ footer hr {
 }
 
 /* =========================
-   ESPAÇAMENTO MELHOR
+   ESPAï¿½AMENTO MELHOR
 ========================= */
 .auth-card form {
   margin-top: 10px;
@@ -4440,21 +4767,21 @@ footer hr {
 
 /* Mobile */
 
-/* CTA: menos espaço em cima */
+/* CTA: menos espaï¿½o em cima */
 
 /* Container geral do slider */
 
 /* Texto acima */
 
-/* Janela visível */
+/* Janela visï¿½vel */
 
 /* Linha que desliza */
 
 /* Cards */
 
-/* Botões */
+/* Botï¿½es */
 
-/* Destaque do módulo principal */
+/* Destaque do mï¿½dulo principal */
 
 /* Tablet */
 
@@ -4699,130 +5026,21 @@ footer hr {
   }
 }
 
-.route-circuit-card {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
-}
-
-.route-circuit-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.route-circuit-header > div {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.route-circuit-header strong {
-  color: #0f172a;
-  font-weight: 900;
-}
-
-.route-circuit-header span {
-  color: #64748b;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.route-circuit-map {
-  position: relative;
-  min-height: 230px;
-  overflow: hidden;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 18px;
-  background: linear-gradient(rgba(148, 163, 184, 0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.09) 1px, transparent 1px), linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
-  background-size: 38px 38px;
-}
-
-.route-circuit-map svg {
+.route-google-map-frame {
   position: absolute;
   inset: 0;
+  z-index: 2;
+  display: none;
   width: 100%;
   height: 100%;
+  border: 0;
 }
 
-.route-circuit-map polyline {
-  stroke: #2563eb;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 8px 12px rgba(37, 99, 235, 0.22));
+.route-circuit-map.has-google-map .route-google-map-frame {
+  display: block;
 }
 
-.route-circuit-marker circle {
-  fill: #ffffff;
-  stroke: #2563eb;
-  stroke-width: 3;
-}
-
-.route-circuit-marker text {
-  fill: #0f172a;
-  font-size: 13px;
-  font-weight: 900;
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-
-.route-circuit-marker-start circle {
-  stroke: #22c55e;
-}
-
-.route-circuit-empty {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  color: #64748b;
-  font-weight: 800;
-  text-align: center;
-}
-
-.route-circuit-map.has-route .route-circuit-empty {
+.route-circuit-map.has-google-map svg,
+.route-circuit-map.has-google-map .route-circuit-empty {
   display: none;
-}
-
-.route-circuit-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-}
-
-.route-circuit-stats span {
-  display: grid;
-  gap: 0.2rem;
-  padding: 0.85rem;
-  border-radius: 14px;
-  background: #f8fafc;
-}
-
-.route-circuit-stats strong {
-  color: #0f172a;
-  font-weight: 900;
-}
-
-.route-circuit-stats small {
-  color: #64748b;
-  font-weight: 800;
-}
-
-@media (max-width: 575.98px) {
-  .route-circuit-header,
-  .route-circuit-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .route-circuit-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
 }
