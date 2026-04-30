@@ -105,6 +105,11 @@ class RotasController {
           wazeLink: buildWazeLink(address)
         };
       });
+      const googleMapsEmbedApiKey = process.env.GOOGLE_MAPS_EMBED_API_KEY || '';
+      const canUseGoogleMapsEmbed = [
+        'vendmaster.com.br',
+        'www.vendmaster.com.br'
+      ].includes(req.hostname);
 
       return res.render('pages/rotas/index', {
         title: 'Rotas dos Pontos',
@@ -115,7 +120,9 @@ class RotasController {
         selectedBairros,
         selectedProduto: produto === 'TODOS' ? 'todos' : produto,
         routeItems,
-        googleMapsEmbedApiKey: process.env.GOOGLE_MAPS_EMBED_API_KEY || '',
+        googleMapsEmbedApiKey: canUseGoogleMapsEmbed
+          ? googleMapsEmbedApiKey
+          : '',
         routeSummary: {
           total: routeItems.length,
           coordinatesCoverage: routeItems.filter(item => item.hasCoordinates)

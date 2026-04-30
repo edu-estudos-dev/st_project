@@ -3223,6 +3223,14 @@ body.route-neighborhood-modal-open {
   box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
 }
 
+.route-circuit-card-wide {
+  margin-top: 1.25rem;
+}
+
+.route-circuit-card-wide .route-circuit-map {
+  min-height: 360px;
+}
+
 .route-circuit-header {
   display: flex;
   align-items: center;
@@ -3455,6 +3463,10 @@ body.route-neighborhood-modal-open {
   .route-circuit-header {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .route-circuit-card-wide .route-circuit-map {
+    min-height: 280px;
   }
 }
 

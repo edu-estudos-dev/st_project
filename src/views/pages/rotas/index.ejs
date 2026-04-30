@@ -169,57 +169,6 @@
                             </div>
                         </div>
 
-                        <div class="route-circuit-card" id="routeCircuitCard">
-                            <div class="route-circuit-header">
-                                <div>
-                                    <strong>Mapa do percurso</strong>
-                                    <span id="routeCircuitSummary">Inicie a rota para visualizar o circuito completo.</span>
-                                </div>
-
-                                <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenFullMapButton" aria-disabled="true">
-                                    Abrir rota completa
-                                </a>
-                            </div>
-
-                            <div class="route-circuit-map" id="routeCircuitMap" aria-label="Mapa esquemático do circuito da rota">
-                                <% if (mapsEmbedApiKey) { %>
-                                    <iframe
-                                        id="routeGoogleMapFrame"
-                                        class="route-google-map-frame"
-                                        title="Mapa da rota no Google Maps"
-                                        loading="lazy"
-                                        allowfullscreen
-                                        referrerpolicy="no-referrer-when-downgrade"
-                                        src=""
-                                    ></iframe>
-                                <% } %>
-                                <svg viewBox="0 0 640 300" role="img" aria-hidden="true">
-                                    <polyline id="routeCircuitLine" points="" fill="none" />
-                                    <g id="routeCircuitMarkers"></g>
-                                </svg>
-
-                                <div class="route-circuit-empty" id="routeCircuitEmpty">
-                                    O circuito aparece aqui depois que a localização atual for liberada.
-                                </div>
-                            </div>
-
-                            <div class="route-circuit-stats">
-                                <span>
-                                    <strong id="routeCircuitDistance">-- km</strong>
-                                    <small>percurso estimado</small>
-                                </span>
-
-                                <span>
-                                    <strong id="routeCircuitStops"><%= routeSummary.total %></strong>
-                                    <small>paradas</small>
-                                </span>
-
-                                <span>
-                                    <strong id="routeCircuitReturn">Retorno</strong>
-                                    <small>termina no ponto inicial</small>
-                                </span>
-                            </div>
-                        </div>
                     </section>
                 </article>
 
@@ -253,6 +202,58 @@
                             </article>
                         </div>
                     </section>
+
+                    <div class="route-circuit-card route-circuit-card-wide" id="routeCircuitCard">
+                        <div class="route-circuit-header">
+                            <div>
+                                <strong>Mapa do percurso</strong>
+                                <span id="routeCircuitSummary">Inicie a rota para visualizar o circuito completo.</span>
+                            </div>
+
+                            <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenFullMapButton" aria-disabled="true">
+                                Abrir rota completa
+                            </a>
+                        </div>
+
+                        <div class="route-circuit-map" id="routeCircuitMap" aria-label="Mapa esquemático do circuito da rota">
+                            <% if (mapsEmbedApiKey) { %>
+                                <iframe
+                                    id="routeGoogleMapFrame"
+                                    class="route-google-map-frame"
+                                    title="Mapa da rota no Google Maps"
+                                    loading="lazy"
+                                    allowfullscreen
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src=""
+                                ></iframe>
+                            <% } %>
+                            <svg viewBox="0 0 640 300" role="img" aria-hidden="true">
+                                <polyline id="routeCircuitLine" points="" fill="none" />
+                                <g id="routeCircuitMarkers"></g>
+                            </svg>
+
+                            <div class="route-circuit-empty" id="routeCircuitEmpty">
+                                O circuito aparece aqui depois que a localização atual for liberada.
+                            </div>
+                        </div>
+
+                        <div class="route-circuit-stats">
+                            <span>
+                                <strong id="routeCircuitDistance">-- km</strong>
+                                <small>percurso estimado</small>
+                            </span>
+
+                            <span>
+                                <strong id="routeCircuitStops"><%= routeSummary.total %></strong>
+                                <small>paradas</small>
+                            </span>
+
+                            <span>
+                                <strong id="routeCircuitReturn">Retorno</strong>
+                                <small>termina no ponto inicial</small>
+                            </span>
+                        </div>
+                    </div>
                 </aside>
             </section>
 
