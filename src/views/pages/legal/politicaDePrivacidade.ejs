@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', { title, metaDescription, canonicalUrl, extraStyles: ['/css/homepage.css'] }) %>
+
+<body class="homepage-body">
+  <main class="vm-section vm-section-light">
+    <div class="vm-section-heading">
+      <span class="vm-kicker">VendMaster</span>
+      <h1 class="titulo-servicos">Política de Privacidade</h1>
+      <p class="vm-subtext">Tratamos dados de contato apenas para retorno comercial, demonstração do sistema e suporte relacionado ao VendMaster.</p>
+    </div>
+
+    <div class="vm-faq-grid">
+      <details open>
+        <summary>Quais dados coletamos?</summary>
+        <p>Nome, WhatsApp, e dados enviados voluntariamente em formulários ou conversas comerciais.</p>
+      </details>
+      <details open>
+        <summary>Para que usamos esses dados?</summary>
+        <p>Para responder solicitações, agendar demonstrações, apresentar proposta comercial e prestar suporte.</p>
+      </details>
+      <details open>
+        <summary>Como solicitar remoção?</summary>
+        <p>Envie uma solicitação para suporte@vendmaster.com ou pelo WhatsApp informado no rodapé.</p>
+      </details>
+    </div>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>

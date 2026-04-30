@@ -3309,6 +3309,39 @@ html:has(.homepage-body) {
   gap: 1rem;
 }
 
+.vm-contact-price-card {
+  min-height: 100%;
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef6ff 100%);
+  border: 1px solid rgba(147, 197, 253, 0.28);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+}
+
+.vm-contact-price-card span {
+  display: block;
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vm-contact-price-card strong {
+  display: block;
+  margin-top: 0.45rem;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  line-height: 1.05;
+}
+
+.vm-contact-price-card p {
+  margin: 0.85rem 0 0;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
 .vm-contact-fields label {
   font-size: 1rem;
   font-weight: 700;

@@ -23,9 +23,9 @@ const interessadosController = {
     const produtos = normalizarProdutos(req.body?.produtos ?? req.body?.['produtos[]']);
     const telefoneNumerico = telefone.replace(/\D/g, '');
 
-    if (!nome || !email || !telefone || produtos.length === 0) {
+    if (!nome || !telefone) {
       return res.status(400).json({
-        message: 'Preencha nome, telefone, e-mail e selecione ao menos um módulo.'
+        message: 'Preencha nome e WhatsApp para solicitar a demonstração.'
       });
     }
 
@@ -35,14 +35,20 @@ const interessadosController = {
       });
     }
 
-    if (!emailRegex.test(email)) {
+    if (email && !emailRegex.test(email)) {
       return res.status(400).json({
-        message: 'Informe um e-mail válido para receber o retorno.'
+        message: 'Informe um e-mail válido ou deixe o campo em branco.'
       });
     }
 
     try {
-      await salvarContato({ nome, telefone, email, produtos, preferenciaContato });
+      await salvarContato({
+        nome,
+        telefone,
+        email: email || null,
+        produtos: produtos.length ? produtos : ['Nao informado'],
+        preferenciaContato: preferenciaContato || 'WhatsApp'
+      });
 
       return res.status(201).json({
         message: 'Recebemos seu interesse. Em breve nossa equipe vai entrar em contato.'

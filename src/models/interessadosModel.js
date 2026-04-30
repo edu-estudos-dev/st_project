@@ -26,14 +26,20 @@ const ensureInteressadosTable = async () => {
       ADD COLUMN IF NOT EXISTS data TIMESTAMPTZ DEFAULT NOW();
   `);
 
+  await connection.query(`
+    ALTER TABLE interessados
+      ALTER COLUMN email DROP NOT NULL,
+      ALTER COLUMN produtos DROP NOT NULL;
+  `);
+
   ensuredTable = true;
 };
 
 export const salvarContato = async contato => {
   const { nome, telefone, email, produtos, preferenciaContato } = contato;
 
-  if (!nome || !telefone || !email || !Array.isArray(produtos) || produtos.length === 0) {
-    throw new Error('Todos os campos obrigatórios precisam ser informados.');
+  if (!nome || !telefone) {
+    throw new Error('Nome e telefone precisam ser informados.');
   }
 
   await ensureInteressadosTable();
@@ -48,8 +54,8 @@ export const salvarContato = async contato => {
     const result = await connection.query(query, [
       nome,
       telefone,
-      email,
-      JSON.stringify(produtos),
+      email || null,
+      JSON.stringify(Array.isArray(produtos) && produtos.length ? produtos : ['Nao informado']),
       preferenciaContato || null
     ]);
 

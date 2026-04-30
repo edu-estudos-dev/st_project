@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', { title, metaDescription, canonicalUrl, extraStyles: ['/css/homepage.css'] }) %>
+
+<body class="homepage-body">
+  <main class="vm-section vm-section-light">
+    <div class="vm-section-heading">
+      <span class="vm-kicker">VendMaster</span>
+      <h1 class="titulo-servicos">Termos de Uso</h1>
+      <p class="vm-subtext">Estes termos apresentam as condições gerais para demonstração, contratação e uso do VendMaster.</p>
+    </div>
+
+    <div class="vm-faq-grid">
+      <details open>
+        <summary>Uso do sistema</summary>
+        <p>O VendMaster é oferecido para gestão operacional e financeira de pontos, rotas, sangrias, estoque e acertos comerciais.</p>
+      </details>
+      <details open>
+        <summary>Demonstração e contratação</summary>
+        <p>A demonstração é gratuita. A contratação, valores e condições são confirmados em proposta comercial própria.</p>
+      </details>
+      <details open>
+        <summary>Responsabilidade dos dados</summary>
+        <p>O usuário é responsável pela veracidade dos dados cadastrados e pelo uso adequado das informações registradas no sistema.</p>
+      </details>
+    </div>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>

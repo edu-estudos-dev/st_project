@@ -39,7 +39,7 @@ const homepageFaqJsonLd = {
             name: 'Quanto custa?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'O valor depende do tamanho e das frentes da opera\u00e7\u00e3o. Solicite a demonstra\u00e7\u00e3o para receber uma proposta adequada ao seu cen\u00e1rio.'
+                text: 'Os planos come\u00e7am a partir de R$ 97 por m\u00eas para opera\u00e7\u00f5es menores. A proposta final depende da quantidade de pontos e frentes utilizadas.'
             }
         },
         {
@@ -57,10 +57,26 @@ class HomepageController {
     renderHomepage(req, res) {
         console.log('Renderizando pagina inicial');
         res.render('pages/homepage', {
-            title: 'VendMaster | Roteiro Inteligente para M\u00e1quinas Recreativas',
-            metaDescription: 'Pare de improvisar a rota. O VendMaster organiza pontos, sangrias e financeiro para voc\u00ea sair sabendo onde coletar, sem planilha e sem achismo.',
+            title: 'Sistema de gest\u00e3o para m\u00e1quinas recreativas e consignados | VendMaster',
+            metaDescription: 'Sistema de gest\u00e3o para m\u00e1quinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comiss\u00f5es e financeiro.',
             canonicalUrl: 'https://vendmaster.com.br/',
             faqJsonLd: homepageFaqJsonLd
+        });
+    }
+
+    renderPrivacyPolicy(req, res) {
+        res.render('pages/legal/politicaDePrivacidade', {
+            title: 'Pol\u00edtica de Privacidade | VendMaster',
+            metaDescription: 'Entenda como o VendMaster trata dados enviados por formul\u00e1rios, contatos comerciais e uso do sistema.',
+            canonicalUrl: 'https://vendmaster.com.br/politica-de-privacidade'
+        });
+    }
+
+    renderTermsOfUse(req, res) {
+        res.render('pages/legal/termosDeUso', {
+            title: 'Termos de Uso | VendMaster',
+            metaDescription: 'Condi\u00e7\u00f5es gerais de uso do VendMaster, sistema de gest\u00e3o para m\u00e1quinas recreativas e consignados.',
+            canonicalUrl: 'https://vendmaster.com.br/termos-de-uso'
         });
     }
 }

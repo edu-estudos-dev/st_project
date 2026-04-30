@@ -32,8 +32,8 @@
       <div class="vm-hero-container">
         <div class="vm-hero-left">
           <h1 class="vm-hero-title">
-            Pare de rodar <br> &agrave; toa.
-            <span class="text-accent">Use um sistema de gest&atilde;o para m&aacute;quinas recreativas, bolinhas e consignados.</span>
+            Sistema de gest&atilde;o para m&aacute;quinas recreativas e consignados.
+            <span class="text-accent">Pare de rodar &agrave; toa.</span>
           </h1>
           <%# ALTERAÇÃO: badge com keyword explícita para SEO %>
           <span class="vm-hero-badge">
@@ -50,7 +50,7 @@
 
           <div class="vm-hero-buttons">
             <%# ALTERAÇÃO: CTA unificado %>
-            <a href="#contato" class="btn btn-primary btn-lg">Quero ver na prática</a>
+            <a href="#contato" class="btn btn-primary btn-lg">Começar minha demonstração</a>
             <a href="https://wa.me/5585986992706" target="_blank" rel="noopener"
               class="btn btn-outline-light btn-lg">Falar no WhatsApp</a>
           </div>
@@ -321,7 +321,7 @@
                   </div>
 
                   <div class="vm-dashboard-print-frame">
-                    <img src="/images/dashboard-vendmaster.png"
+                    <img src="/images/dashboard-vendmaster.png" width="675" height="791"
                       alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
                   </div>
 
@@ -341,7 +341,7 @@
                   </div>
 
                   <div class="vm-dashboard-print-frame">
-                    <img src="/images/rota-vendmaster.png"
+                    <img src="/images/rota-vendmaster.png" width="1048" height="822"
                       alt="Tela de rota inteligente do VendMaster com pontos selecionados, mapa do percurso e próximo destino">
                   </div>
 
@@ -669,8 +669,8 @@
         <details>
           <summary>Quanto custa?</summary>
           <p>
-            O VendMaster trabalha com planos conforme o tamanho da opera&ccedil;&atilde;o e as frentes utilizadas.
-            A demonstra&ccedil;&atilde;o &eacute; gratuita, sem compromisso, e a proposta &eacute; ajustada ao seu cen&aacute;rio.
+            Os planos come&ccedil;am a partir de R$ 19,90/m&ecirc;s por produto para opera&ccedil;&otilde;es menores.
+            A demonstra&ccedil;&atilde;o &eacute; gratuita e a proposta final depende da quantidade de produtos que você possui.
           </p>
         </details>
         <details>
@@ -690,8 +690,7 @@
           </span>
         </h2>
         <p class="vm-subtext">
-          Preencha o formul&aacute;rio e receba uma demonstra&ccedil;&atilde;o gratuita e sem compromisso. Respondemos em at&eacute; 24h pelo WhatsApp ou pelo canal que
-          voc&ecirc; preferir.
+          Planos a partir de R$ 97/m&ecirc;s. Preencha nome e WhatsApp para receber uma demonstra&ccedil;&atilde;o gratuita e sem compromisso.
         </p>
       </div>
 
@@ -707,62 +706,25 @@
             <input id="contact-phone" class="vm-input" type="tel" name="telefone" placeholder="(00) 00000-0000"
               data-phone-mask required>
 
-            <label for="contact-email">E-mail</label>
-            <input id="contact-email" class="vm-input" type="email" name="email" placeholder="voce@empresa.com"
-              required>
+            <input type="hidden" name="preferenciaContato" value="WhatsApp">
+            <input type="hidden" name="produtos[]" value="Nao informado">
 
-            <p class="vm-form-note">A demonstra&ccedil;&atilde;o &eacute; gratuita e sem compromisso. Vamos usar seus dados apenas para retornar o contato comercial. Prefere ir
+            <p class="vm-form-note">A demonstra&ccedil;&atilde;o &eacute; gratuita. Vamos usar seus dados apenas para retornar o contato comercial. Prefere ir
               direto?<br>
               <a href="https://wa.me/5585986992706" target="_blank" rel="noopener">Fale pelo WhatsApp</a>.
             </p>
           </div>
 
           <div class="vm-contact-options">
-            <div>
-              <p class="vm-options-title">Quais frentes você opera?</p>
-              <div class="vm-checkbox-grid">
-                <label class="vm-option-btn vm-option-multi">
-                  <input type="checkbox" name="produtos[]" value="Bolinhas">
-                  <span>Bolinhas</span>
-                </label>
-
-                <label class="vm-option-btn vm-option-multi">
-                  <input type="checkbox" name="produtos[]" value="Consignados">
-                  <span>Consignados</span>
-                </label>
-
-                <label class="vm-option-btn vm-option-multi">
-                  <input type="checkbox" name="produtos[]" value="Pelúcias">
-                  <span>Pelúcias</span>
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <p class="vm-options-title">Como prefere receber o primeiro contato?</p>
-              <div class="vm-radio-grid">
-
-                <label class="vm-option-btn">
-                  <input type="radio" name="preferenciaContato" value="WhatsApp" checked>
-                  <span><i class="bi bi-whatsapp"></i> WhatsApp</span>
-                </label>
-
-                <label class="vm-option-btn">
-                  <input type="radio" name="preferenciaContato" value="Ligação">
-                  <span><i class="bi bi-telephone"></i> Ligação</span>
-                </label>
-
-                <label class="vm-option-btn">
-                  <input type="radio" name="preferenciaContato" value="E-mail">
-                  <span><i class="bi bi-envelope"></i> E-mail</span>
-                </label>
-
-              </div>
+            <div class="vm-contact-price-card">
+              <span>Plano inicial</span>
+              <strong>A partir de R$ 19,90/m&ecirc;s</strong>
+              <p>Valor de entrada para opera&ccedil;&otilde;es menores. Na demonstra&ccedil;&atilde;o, ajustamos a proposta ao n&uacute;mero de produtos da sua operação.</p>
             </div>
 
             <div class="vm-contact-actions mt-4">
               <%# ALTERAÇÃO: CTA unificado %>
-              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Quero ver na prática</button>
+              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Começar minha demonstração</button>
               <p id="contactStatus" class="vm-status" aria-live="polite"></p>
             </div>
           </div>
@@ -775,11 +737,11 @@
       aria-label="Falar com o VendMaster pelo WhatsApp"><i class="bi bi-whatsapp"></i><span>Falar no WhatsApp</span></a>
 
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro.","offers":{"@type":"Offer","description":"Demonstração gratuita e proposta personalizada conforme o tamanho da operação."}}
+      {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://vendmaster.com.br/","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro.","offers":{"@type":"Offer","price":"97","priceCurrency":"BRL","description":"Planos a partir de R$ 97 por mês para operações menores. Demonstração gratuita e proposta personalizada conforme o tamanho da operação."}}
     </script>
 
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"Organization","name":"VendMaster","url":"https://vendmaster.com.br/","logo":"https://vendmaster.com.br/images/logo_sem_fundo.png","contactPoint":{"@type":"ContactPoint","contactType":"sales","telephone":"+55-85-98699-2706","areaServed":"BR","availableLanguage":"Portuguese"}}
+      {"@context":"https://schema.org","@type":["Organization","LocalBusiness"],"name":"VendMaster","url":"https://vendmaster.com.br/","logo":"https://vendmaster.com.br/images/logo_sem_fundo.png","areaServed":"BR","address":{"@type":"PostalAddress","addressLocality":"Fortaleza","addressRegion":"CE","addressCountry":"BR"},"contactPoint":{"@type":"ContactPoint","contactType":"sales","telephone":"+55-85-98699-2706","areaServed":"BR","availableLanguage":"Portuguese"}}
     </script>
 
     <%- include('../partials/footer') %>
@@ -838,8 +800,8 @@
               preferenciaContato: String(formData.get('preferenciaContato') || '').trim()
             };
 
-            if (!payload.nome || !payload.telefone || !payload.email || payload.produtos.length === 0) {
-              window.AppAlerts?.warning('Preencha nome, telefone, e-mail e selecione ao menos uma frente.');
+            if (!payload.nome || !payload.telefone) {
+              window.AppAlerts?.warning('Preencha nome e WhatsApp para solicitar a demonstração.');
               return;
             }
 
