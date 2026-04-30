@@ -39,7 +39,7 @@ const homepageFaqJsonLd = {
             name: 'Quanto custa?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Os planos come\u00e7am a partir de R$ 97 por m\u00eas para opera\u00e7\u00f5es menores. A proposta final depende da quantidade de pontos e frentes utilizadas.'
+                text: 'Os planos come\u00e7am a partir de R$ 19,90 por m\u00eas por produto para opera\u00e7\u00f5es menores. A proposta final depende da quantidade de pontos e frentes utilizadas.'
             }
         },
         {
