@@ -483,7 +483,7 @@ html:has(.homepage-body) {
 
 .vm-hero-left {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -500,7 +500,7 @@ html:has(.homepage-body) {
   display: inline-block;
   width: auto;
   max-width: min(100%, 29rem);
-  margin: 0 0 1rem;
+  margin: 0 0 1.15rem;
   padding: 0.62rem 1.25rem;
   border-radius: 999px;
   border: 1px solid rgba(147, 197, 253, 0.48);
@@ -529,13 +529,13 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 .vm-hero-title {
-  max-width: 14.2ch;
-  margin: 0 0 1.05rem;
+  max-width: 16.2ch;
+  margin: 0 0 1.2rem;
   color: #f8fafc;
-  font-size: clamp(2.35rem, 3.25vw, 3.25rem);
+  font-size: clamp(2.85rem, 3.75vw, 3.9rem);
   font-weight: 950;
-  line-height: 1.04;
-  letter-spacing: -0.052em;
+  line-height: 1.06;
+  letter-spacing: -0.055em;
 }
 
 .vm-hero-title .text-accent {
@@ -552,13 +552,13 @@ html:has(.homepage-body) {
 .homepage-body .vm-hero .vm-hero-description,
 .homepage-body .vm-hero .vm-hero-left > .vm-hero-description {
   width: 100% !important;
-  max-width: 52ch !important;
-  margin: 0 0 0.95rem !important;
+  max-width: 58ch !important;
+  margin: 0 0 1.25rem !important;
   color: #dbe7f7 !important;
   opacity: 0.96 !important;
-  font-size: clamp(1.03rem, 1.02vw, 1.11rem) !important;
-  line-height: 1.72 !important;
-  letter-spacing: -0.01em !important;
+  font-size: clamp(1.16rem, 1.18vw, 1.28rem) !important;
+  line-height: 1.9 !important;
+  letter-spacing: -0.012em !important;
 }
 
 /* ========================================================================== */
@@ -2875,161 +2875,115 @@ html:has(.homepage-body) {
   align-items: stretch;
 }
 
-/* ========================================================================== */
-/* 11 — SEÇÃO PROVA / CREDIBILIDADE                                            */
-/* ========================================================================== */
+/* ==========================================================================
+   11 — SEÇÃO PROVA SOCIAL / DEPOIMENTOS DE OPERADORES
+   ========================================================================== */
 
-.vm-proof-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 32px;
-  gap: 24px;
-  align-items: stretch;
+/* ==========================================================================
+   11.1 — LAYOUT GERAL DA SEÇÃO
+   Controla fundo, bordas, espaçamento e largura máxima da área de prova social.
+   ========================================================================== */
+
+.homepage-body .vm-proof-section {
+  position: relative !important;
+  overflow: hidden !important;
+  width: min(1180px, calc(100% - 2rem)) !important;
+  margin: 0 auto !important;
+  padding: clamp(4rem, 6vw, 5.6rem) clamp(1.25rem, 4vw, 4rem) !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(37, 99, 235, 0.18),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 18%,
+      rgba(34, 197, 94, 0.1),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 18, 35, 0.98) 0%,
+      rgba(15, 43, 88, 0.98) 100%
+    ) !important;
+  border: 1px solid rgba(96, 165, 250, 0.18) !important;
+  box-shadow: 0 28px 70px rgba(2, 8, 23, 0.22) !important;
 }
 
-.vm-proof-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(
-    circle at top left,
-    rgba(37, 99, 235, 0.25),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: 0.35s;
-}
-
-.vm-proof-card:hover::before {
-  opacity: 1;
-}
-
-.vm-proof-card-highlight {
-  border-color: rgba(34, 197, 94, 0.35);
-  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.22);
-}
-
-.vm-proof-card * {
-  color: rgba(255, 255, 255, 0.9) !important;
-}
-
-.vm-proof-card span {
-  background: none !important;
-  color: inherit !important;
-}
-
-.vm-proof-card mark {
-  background: none !important;
-  color: inherit !important;
-}
-
-.vm-proof-card strong {
-  background: none !important;
-  color: inherit !important;
-}
-
-.vm-cards {
-  align-items: stretch;
-}
-
-.homepage-body .vm-proof .vm-section-heading .titulo-servicos {
-  max-width: 18ch;
-}
-
-.homepage-body .vm-proof .vm-section-heading h2 {
-  max-width: 18ch;
-}
-
-.homepage-body .vm-proof {
-  background: transparent;
-  padding-inline: 0.75rem;
-}
-
-.homepage-body .vm-proof-grid {
-  width: min(100%, 1180px);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.homepage-body .vm-proof-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.95rem;
-  min-height: 132px;
-  padding: 1.45rem 1.5rem;
-  border: 1px solid var(--home-line);
-  border-radius: 24px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(247, 250, 255, 0.98) 100%
-  );
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-}
-
-.homepage-body .vm-proof-item.reveal-on-scroll {
-  transform: translate3d(0, 42px, 0) scale(0.98);
-}
-
-.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-left {
-  transform: translate3d(-56px, 42px, 0) scale(0.98);
-}
-
-.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-right {
-  transform: translate3d(56px, 42px, 0) scale(0.98);
-}
-
-.homepage-body .vm-proof-item.reveal-on-scroll.is-visible {
-  transform: translate3d(0, 0, 0) scale(1);
-}
-
-.homepage-body .vm-proof-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  flex: 0 0 34px;
-  font-weight: 800;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--home-green) 0%, #16a34a 100%);
-}
-
-.homepage-body .vm-proof-item p {
-  margin: 0;
-  color: var(--home-text);
-  font-size: 1.03rem;
-  line-height: 1.74;
-}
+/* ==========================================================================
+   11.2 — CABEÇALHO DA SEÇÃO
+   Centraliza kicker, título e subtítulo.
+   ========================================================================== */
 
 .homepage-body .vm-proof-section .vm-section-heading {
   min-height: auto !important;
-  margin-bottom: 0 !important;
+  margin: 0 auto !important;
+  text-align: center !important;
 }
 
-.homepage-body .vm-proof-section .vm-section-heading .titulo-servicos {
-  max-width: 760px !important;
+.homepage-body .vm-proof-section .vm-kicker,
+.homepage-body .vm-proof-section .vm-kicker-light {
+  width: fit-content !important;
+  margin: 0 auto 1.05rem !important;
 }
 
+.homepage-body .vm-proof-section .vm-section-heading .titulo-servicos,
 .homepage-body .vm-proof-section .vm-section-heading h2 {
   max-width: 760px !important;
+  margin: 0 auto !important;
+  color: #f8fafc !important;
+  font-size: clamp(2.35rem, 4vw, 3.7rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.055em !important;
+  text-align: center !important;
+  text-wrap: balance !important;
 }
 
+.homepage-body .vm-proof-section .vm-section-heading .text-accent {
+  color: #4ade80 !important;
+}
+
+.homepage-body .vm-proof-section .vm-subtext,
+.homepage-body .vm-proof-section .vm-section-heading p {
+  max-width: 720px !important;
+  margin: 1rem auto 0 !important;
+  color: rgba(226, 232, 240, 0.88) !important;
+  font-size: clamp(1rem, 1.2vw, 1.1rem) !important;
+  line-height: 1.65 !important;
+  text-align: center !important;
+}
+
+/* ==========================================================================
+   11.3 — GRID DOS DEPOIMENTOS
+   Dois cards na primeira linha e o terceiro centralizado abaixo.
+   ========================================================================== */
+
 .homepage-body .vm-proof-section .vm-proof-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 1.25rem !important;
   width: min(1040px, 100%) !important;
   max-width: 1040px !important;
   margin: 2.5rem auto 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1.25rem !important;
+  align-items: stretch !important;
 }
+
+.homepage-body .vm-proof-section .vm-proof-grid-3 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.homepage-body .vm-proof-section .vm-proof-grid-3 .vm-proof-card:nth-child(3) {
+  grid-column: 1 / -1 !important;
+  width: calc((100% - 1.25rem) / 2) !important;
+  justify-self: center !important;
+}
+
+/* ==========================================================================
+   11.4 — CARD MODERNO DE DEPOIMENTO
+   Estilo base dos cards: ícone à esquerda e conteúdo à direita.
+   ========================================================================== */
 
 .homepage-body .vm-proof-card-modern {
   display: grid !important;
@@ -3059,6 +3013,11 @@ html:has(.homepage-body) {
     0 0 0 1px rgba(34, 197, 94, 0.12) inset !important;
 }
 
+/* ==========================================================================
+   11.5 — ÍCONE DO CARD
+   Quadrado arredondado com ícone Bootstrap dentro do depoimento.
+   ========================================================================== */
+
 .homepage-body .vm-proof-icon {
   width: 54px !important;
   height: 54px !important;
@@ -3071,10 +3030,20 @@ html:has(.homepage-body) {
   font-weight: 900 !important;
 }
 
+/* ==========================================================================
+   11.6 — CONTEÚDO DO CARD
+   Título, depoimento e divisor interno.
+   ========================================================================== */
+
+.homepage-body .vm-proof-content {
+  min-width: 0 !important;
+}
+
 .homepage-body .vm-proof-content h3 {
   margin: 0 0 0.75rem !important;
   color: #f8fafc !important;
   font-size: clamp(1.25rem, 1.8vw, 1.55rem) !important;
+  font-weight: 950 !important;
   line-height: 1.15 !important;
   text-align: left !important;
 }
@@ -3086,8 +3055,14 @@ html:has(.homepage-body) {
   color: #e2e8f0 !important;
   font-size: 1rem !important;
   line-height: 1.65 !important;
+  font-style: normal !important;
   border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
+
+/* ==========================================================================
+   11.7 — AUTOR DO DEPOIMENTO
+   Foto real em WebP, nome e descrição do operador.
+   ========================================================================== */
 
 .homepage-body .vm-proof-author {
   display: flex !important;
@@ -3099,13 +3074,21 @@ html:has(.homepage-body) {
 .homepage-body .vm-proof-avatar {
   width: 46px !important;
   height: 46px !important;
-  display: grid !important;
-  place-items: center !important;
+  display: block !important;
   flex: 0 0 auto !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-  color: #ffffff !important;
-  font-weight: 900 !important;
+  overflow: hidden !important;
+  background: #d9dde5 !important;
+  border: 2px solid rgba(255, 255, 255, 0.88) !important;
+  box-shadow: 0 8px 18px rgba(2, 8, 23, 0.18) !important;
+}
+
+.homepage-body .vm-proof-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center 36% !important;
 }
 
 .homepage-body .vm-proof-author p {
@@ -3117,6 +3100,186 @@ html:has(.homepage-body) {
 
 .homepage-body .vm-proof-author strong {
   color: #4ade80 !important;
+  font-weight: 900 !important;
+}
+
+/* ==========================================================================
+   11.8 — AJUSTES INDIVIDUAIS DAS FOTOS
+   Mantém controle fino do enquadramento de cada operador.
+   ========================================================================== */
+
+.homepage-body .vm-proof-author img[src*="joao-ribeiro"] {
+  object-position: center 36% !important;
+}
+
+.homepage-body .vm-proof-author img[src*="marcelo-costa"] {
+  object-position: center 36% !important;
+}
+
+.homepage-body .vm-proof-author img[src*="antonio-ferreira"] {
+  object-position: center 36% !important;
+}
+
+/* ==========================================================================
+   11.9 — COMPATIBILIDADE COM CARD ANTIGO
+   Mantém suporte caso ainda exista algum .vm-proof-item antigo no projeto.
+   ========================================================================== */
+
+.homepage-body .vm-proof-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.95rem;
+  min-height: 132px;
+  padding: 1.45rem 1.5rem;
+  border: 1px solid var(--home-line);
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(247, 250, 255, 0.98) 100%
+  );
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.homepage-body .vm-proof-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  flex: 0 0 34px;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--home-green) 0%, #16a34a 100%);
+}
+
+.homepage-body .vm-proof-item p {
+  margin: 0;
+  color: var(--home-text);
+  font-size: 1.03rem;
+  line-height: 1.74;
+}
+
+/* ==========================================================================
+   11.10 — ANIMAÇÃO / REVEAL
+   Mantém as animações existentes dos cards antigos.
+   ========================================================================== */
+
+.homepage-body .vm-proof-item.reveal-on-scroll {
+  transform: translate3d(0, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-left {
+  transform: translate3d(-56px, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.reveal-from-right {
+  transform: translate3d(56px, 42px, 0) scale(0.98);
+}
+
+.homepage-body .vm-proof-item.reveal-on-scroll.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* ==========================================================================
+   11.11 — RESPONSIVO TABLET
+   Em telas menores, todos os cards passam a ocupar 100% da largura.
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+  .homepage-body .vm-proof-section {
+    width: min(100% - 1.5rem, 760px) !important;
+    padding: 3.5rem 1.25rem !important;
+    border-radius: 28px !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-section-heading .titulo-servicos,
+  .homepage-body .vm-proof-section .vm-section-heading h2 {
+    max-width: 13ch !important;
+    font-size: clamp(2.1rem, 7vw, 3rem) !important;
+    line-height: 1.05 !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-proof-grid,
+  .homepage-body .vm-proof-section .vm-proof-grid-3 {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-proof-grid-3 .vm-proof-card:nth-child(3) {
+    grid-column: auto !important;
+    width: 100% !important;
+    justify-self: stretch !important;
+  }
+
+  .homepage-body .vm-proof-card-modern {
+    min-height: auto !important;
+  }
+}
+
+/* ==========================================================================
+   11.12 — RESPONSIVO MOBILE
+   Compacta padding, avatar, ícone e texto para melhorar leitura no celular.
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .homepage-body .vm-proof-section {
+    width: calc(100% - 0.75rem) !important;
+    padding: 3rem 1rem !important;
+    border-radius: 26px !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-section-heading .titulo-servicos,
+  .homepage-body .vm-proof-section .vm-section-heading h2 {
+    max-width: 14ch !important;
+    font-size: clamp(2rem, 9vw, 2.5rem) !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-subtext,
+  .homepage-body .vm-proof-section .vm-section-heading p {
+    font-size: 0.94rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .homepage-body .vm-proof-card-modern {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 1.15rem 1rem !important;
+    border-radius: 20px !important;
+  }
+
+  .homepage-body .vm-proof-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important;
+    font-size: 1.25rem !important;
+  }
+
+  .homepage-body .vm-proof-content h3 {
+    font-size: 1.25rem !important;
+  }
+
+  .homepage-body .vm-proof-content blockquote {
+    min-height: auto !important;
+    font-size: 0.94rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .homepage-body .vm-proof-author {
+    gap: 0.75rem !important;
+  }
+
+  .homepage-body .vm-proof-avatar {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .homepage-body .vm-proof-author p {
+    font-size: 0.9rem !important;
+  }
 }
 
 /* ========================================================================== */
@@ -6115,25 +6278,25 @@ html:has(.homepage-body) {
 }
 
 .vm-founder-avatar {
-  width: 58px;
-  height: 58px;
-  display: block;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
-  background: #dbeafe;
-  border: 3px solid #ffffff;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
-  flex: 0 0 auto;
   overflow: hidden;
+  flex: 0 0 auto;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  background: #d9dde5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .vm-founder-avatar img {
+  width: 112%;
+  height: 112%;
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: 50% 50%;
-  transform: scale(1.24) translateY(4px);
-  transform-origin: 50% 50%;
+  object-fit: cover;
+  object-position: center 15%;
 }
 
 .vm-founder-info {
@@ -6317,8 +6480,8 @@ html:has(.homepage-body) {
   }
 
   .vm-founder-avatar {
-    width: 52px;
-    height: 52px;
+    width: 60px;
+    height: 60px;
   }
 
   .vm-founder-title {

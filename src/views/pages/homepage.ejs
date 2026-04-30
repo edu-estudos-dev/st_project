@@ -21,8 +21,6 @@
           <li><a href="#modulos">Módulos</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
-          <%# ALTERAÇÃO: CTA unificado para "Quero ver na prática" %>
-          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Quero ver na prática</a></li>
           <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
         </ul>
       </nav>
@@ -555,12 +553,13 @@
 
         <div class="vm-founder-card">
           <div class="vm-founder-person">
-            <div class="vm-founder-avatar">
-              <img
-                src="/images/eduardo-praciano.png"
-                alt="Foto de Eduardo Praciano"
-              />
-            </div>
+          <div class="vm-founder-avatar">
+            <img
+              src="/images/eduardo-praciano.webp"
+              alt="Foto de Eduardo Praciano"
+              loading="lazy"
+            />
+          </div>
             <div class="vm-founder-info">
               <strong>Eduardo Praciano</strong>
               <span>Operador e criador do VendMaster · Fortaleza/CE</span>
@@ -589,59 +588,127 @@
          Eduardo removido daqui e promovido para seção própria acima.
          Título atualizado para foco em prova social real.
          ===================================================================== %>
-    <section class="vm-section vm-section-dark vm-proof-section dark-bg">
-      <div class="vm-section-heading">
-        <%# ALTERAÇÃO: kicker e título atualizados %>
-        <span class="vm-kicker vm-kicker-light">O que dizem os operadores</span>
+   <%# =====================================================================
+     SEÇÃO PROVA SOCIAL — DEPOIMENTOS DE OPERADORES
+     Avatares em texto substituídos por fotos reais em WebP.
+     As imagens devem estar em: public/images/
+     ===================================================================== %>
+<section class="vm-section vm-section-dark vm-proof-section dark-bg">
+  <div class="vm-section-heading">
+    <span class="vm-kicker vm-kicker-light">O que dizem os operadores</span>
 
-        <h2 class="titulo-servicos">
-          Quem usa <span class="text-accent">já não volta</span> para o improviso.
-        </h2>
+    <h2 class="titulo-servicos">
+      Quem usa <span class="text-accent">já não volta</span> para o improviso.
+    </h2>
 
-        <p class="vm-subtext">
-          Operadores de bolinhas, gruas, pelúcias e consignados<br> que trocaram a planilha por uma rota com critério.
-        </p>
+    <p class="vm-subtext">
+      Operadores de bolinhas, gruas, pelúcias e consignados<br>
+      que trocaram a planilha por uma rota com critério.
+    </p>
+  </div>
+
+  <div class="vm-proof-grid vm-proof-grid-3">
+    <%# =================================================================
+         DEPOIMENTO 01 — JOÃO RIBEIRO
+         ================================================================= %>
+    <article class="vm-proof-card vm-proof-card-modern vm-proof-card-highlight">
+      <div class="vm-proof-icon" aria-hidden="true">
+        <i class="bi bi-chat-dots"></i>
       </div>
 
-      <%# ALTERAÇÃO: grid com 3 depoimentos reais (Eduardo removido) %>
-      <div class="vm-proof-grid vm-proof-grid-3">
-        <article class="vm-proof-card vm-proof-card-modern vm-proof-card-highlight">
-          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-chat-dots"></i></div>
-          <div class="vm-proof-content">
-            <h3>Mais clareza na rota</h3>
-            <blockquote>"Antes eu visitava ponto por costume. Agora consigo enxergar quais locais estão há mais tempo
-              sem coleta e priorizar melhor o dia."</blockquote>
-            <div class="vm-proof-author"><span class="vm-proof-avatar">JR</span>
-              <p><strong>João Ribeiro</strong><br>Operador de bolinhas · Fortaleza/CE</p>
-            </div>
-          </div>
-        </article>
+      <div class="vm-proof-content">
+        <h3>Mais clareza na rota</h3>
 
-        <article class="vm-proof-card vm-proof-card-modern">
-          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></div>
-          <div class="vm-proof-content">
-            <h3>Acerto mais organizado</h3>
-            <blockquote>"O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão. Fica mais
-              fácil explicar o acerto para o parceiro."</blockquote>
-            <div class="vm-proof-author"><span class="vm-proof-avatar">MC</span>
-              <p><strong>Marcelo Costa</strong><br>Operador de consignados · Caucaia/CE</p>
-            </div>
-          </div>
-        </article>
+        <blockquote>
+          "Antes eu visitava ponto por costume. Agora consigo enxergar quais locais estão há mais tempo
+          sem coleta e priorizar melhor o dia."
+        </blockquote>
 
-        <article class="vm-proof-card vm-proof-card-modern">
-          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-signpost-split"></i></div>
-          <div class="vm-proof-content">
-            <h3>Rotina mais previsível</h3>
-            <blockquote>"Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
-              visita e quais podem esperar."</blockquote>
-            <div class="vm-proof-author"><span class="vm-proof-avatar">AF</span>
-              <p><strong>Antônio Ferreira</strong><br>Operador de gruas e pelúcias · Maracanaú/CE</p>
-            </div>
-          </div>
-        </article>
+        <div class="vm-proof-author">
+          <span class="vm-proof-avatar">
+            <img
+              src="/images/joao-ribeiro.webp"
+              alt="Foto de João Ribeiro"
+              loading="lazy"
+            >
+          </span>
+
+          <p>
+            <strong>João Ribeiro</strong><br>
+            Operador de bolinhas · Fortaleza/CE
+          </p>
+        </div>
       </div>
-    </section>
+    </article>
+
+    <%# =================================================================
+         DEPOIMENTO 02 — MARCELO COSTA
+         ================================================================= %>
+    <article class="vm-proof-card vm-proof-card-modern">
+      <div class="vm-proof-icon" aria-hidden="true">
+        <i class="bi bi-clock-history"></i>
+      </div>
+
+      <div class="vm-proof-content">
+        <h3>Acerto mais organizado</h3>
+
+        <blockquote>
+          "O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão.
+          Fica mais fácil explicar o acerto para o parceiro."
+        </blockquote>
+
+        <div class="vm-proof-author">
+          <span class="vm-proof-avatar">
+            <img
+              src="/images/marcelo-costa.webp"
+              alt="Foto de Marcelo Costa"
+              loading="lazy"
+            >
+          </span>
+
+          <p>
+            <strong>Marcelo Costa</strong><br>
+            Operador de consignados · Caucaia/CE
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <%# =================================================================
+         DEPOIMENTO 03 — ANTÔNIO FERREIRA
+         Card centralizado via CSS abaixo dos dois primeiros.
+         ================================================================= %>
+    <article class="vm-proof-card vm-proof-card-modern">
+      <div class="vm-proof-icon" aria-hidden="true">
+        <i class="bi bi-signpost-split"></i>
+      </div>
+
+      <div class="vm-proof-content">
+        <h3>Rotina mais previsível</h3>
+
+        <blockquote>
+          "Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
+          visita e quais podem esperar."
+        </blockquote>
+
+        <div class="vm-proof-author">
+          <span class="vm-proof-avatar">
+            <img
+              src="/images/antonio-ferreira.webp"
+              alt="Foto de Antônio Ferreira"
+              loading="lazy"
+            >
+          </span>
+
+          <p>
+            <strong>Antônio Ferreira</strong><br>
+            Operador de gruas e pelúcias · Maracanaú/CE
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
 
     <section id="faq" class="vm-section vm-section-light vm-faq-section">
       <div class="vm-section-heading"><span class="vm-kicker">Perguntas frequentes</span>
