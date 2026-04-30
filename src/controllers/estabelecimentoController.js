@@ -15,6 +15,7 @@ const parseCoordinate = (value, type) => {
   }
 
   const normalized = Number(String(value).replace(',', '.').trim());
+
   if (Number.isNaN(normalized)) {
     throw new Error(
       `Informe uma ${type === 'latitude' ? 'latitude' : 'longitude'} válida.`
@@ -33,9 +34,21 @@ const parseCoordinate = (value, type) => {
 };
 
 const PRODUCT_OPTIONS = [
-  { value: 'BOLINHAS', label: 'Bolinhas', className: 'modern-checkbox-green' },
-  { value: 'FIGURINHAS', label: 'Consignados', className: 'modern-checkbox-blue' },
-  { value: 'PELUCIAS', label: 'Pelúcias', className: 'modern-checkbox-violet' }
+  {
+    value: 'BOLINHAS',
+    label: 'Bolinhas',
+    className: 'modern-checkbox-green'
+  },
+  {
+    value: 'FIGURINHAS',
+    label: 'Consignados',
+    className: 'modern-checkbox-blue'
+  },
+  {
+    value: 'PELUCIAS',
+    label: 'Pelúcias',
+    className: 'modern-checkbox-violet'
+  }
 ];
 
 const parseInitialInteger = (value, fieldLabel) => {
@@ -46,26 +59,39 @@ const parseInitialInteger = (value, fieldLabel) => {
   const parsed = Number.parseInt(String(value).trim(), 10);
 
   if (Number.isNaN(parsed) || parsed < 0) {
-    throw new Error(`${fieldLabel} deve ser um número válido maior ou igual a zero.`);
+    throw new Error(
+      `${fieldLabel} deve ser um número válido maior ou igual a zero.`
+    );
   }
 
   return parsed;
+};
+
+const getOptionalString = (value) => {
+  if (value === undefined || value === null) {
+    return '';
+  }
+
+  return String(value).trim();
 };
 
 const getEnabledProductOptions = (req, selectedProdutos = []) => {
   const navProducts = req.res?.locals?.navigationProducts || {};
   const selected = normalizeSelectedProdutos(selectedProdutos);
 
-  return PRODUCT_OPTIONS.filter((option) => {
+  return PRODUCT_OPTIONS.filter(option => {
     const key = option.value.toLowerCase();
     return Boolean(navProducts[key]) || selected.includes(option.value);
   });
 };
 
 const validateProdutosEnabled = (req, produtos) => {
-  const enabledValues = getEnabledProductOptions(req).map((option) => option.value);
+  const enabledValues = getEnabledProductOptions(req).map(
+    option => option.value
+  );
+
   const selected = normalizeSelectedProdutos(produtos);
-  const invalid = selected.filter((produto) => !enabledValues.includes(produto));
+  const invalid = selected.filter(produto => !enabledValues.includes(produto));
 
   if (invalid.length) {
     throw new Error('Este produto nao esta habilitado na sua assinatura.');
@@ -77,6 +103,7 @@ const validateProdutosEnabled = (req, produtos) => {
 class EstabelecimentoController {
   index = async (req, res) => {
     const usuario = req.user;
+
     try {
       let estabelecimentos = await EstabelecimentoModel.findAll(
         usuario.assinante_id
@@ -86,9 +113,11 @@ class EstabelecimentoController {
         estabelecimento.telefone_contato = formatTelefone(
           estabelecimento.telefone_contato
         );
+
         estabelecimento.produtoFormatado = formatProdutoList(
           estabelecimento.produto
         );
+
         return estabelecimento;
       });
 
@@ -100,6 +129,7 @@ class EstabelecimentoController {
       });
     } catch (error) {
       console.error('Erro ao obter todos os estabelecimentos.', error);
+
       res
         .status(500)
         .json({ message: 'Erro ao obter todos os estabelecimentos.' });
@@ -108,8 +138,10 @@ class EstabelecimentoController {
 
   find = async (req, res) => {
     const usuario = req.user;
+
     try {
       const query = req.body.estabelecimento;
+
       const estabelecimentos = await EstabelecimentoModel.search(
         query,
         usuario.assinante_id
@@ -123,6 +155,7 @@ class EstabelecimentoController {
       });
     } catch (error) {
       console.error('Erro ao obter estabelecimento.', error);
+
       res.status(500).json({ message: 'Erro ao obter estabelecimento.' });
     }
   };
@@ -156,34 +189,78 @@ class EstabelecimentoController {
         }
       }
 
-      const produtosSelecionados = validateProdutosEnabled(req, req.body.produto);
+      const produtosSelecionados = validateProdutosEnabled(
+        req,
+        req.body.produto
+      );
+
       const produtos = serializeProdutos(req.body.produto);
+
       if (!produtos) {
         throw new Error(
           'Selecione pelo menos um produto para o estabelecimento.'
         );
       }
 
+      const hasBolinhas = produtosSelecionados.includes('BOLINHAS');
+      const hasFigurinhas = produtosSelecionados.includes('FIGURINHAS');
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
-      const isOnlyFigurinhas =
-        produtosSelecionados.length === 1 &&
-        produtosSelecionados[0] === 'FIGURINHAS';
+
+      const chaveBolinhas = hasBolinhas
+        ? getOptionalString(req.body.chave_bolinhas)
+        : '';
+
+      const maquinaBolinhas = hasBolinhas
+        ? getOptionalString(req.body.maquina_bolinhas)
+        : '';
+
+      const chavePelucias = hasPelucias
+        ? getOptionalString(req.body.chave_pelucias)
+        : '';
+
+      const maquinaPelucias = hasPelucias
+        ? getOptionalString(req.body.maquina_pelucias)
+        : '';
+
+      const chaveLegada = chaveBolinhas || chavePelucias || '';
+      const maquinaLegada = maquinaBolinhas || maquinaPelucias || '';
+
       const peluciaLeituraInicial = hasPelucias
-        ? parseInitialInteger(req.body.pelucia_leitura_inicial, 'Leitura inicial de pelúcias')
+        ? parseInitialInteger(
+            req.body.pelucia_leitura_inicial,
+            'Leitura inicial de pelúcias'
+          )
         : null;
+
       const peluciaAbastecidoInicial = hasPelucias
-        ? parseInitialInteger(req.body.pelucia_abastecido_inicial, 'Abastecido inicial de pelúcias')
+        ? parseInitialInteger(
+            req.body.pelucia_abastecido_inicial,
+            'Abastecido inicial de pelúcias'
+          )
         : null;
-      const figurinhaQuantidadeInicial = isOnlyFigurinhas
-        ? parseInitialInteger(req.body.figurinha_quantidade_inicial, 'Quantidade inicial deixada')
+
+      const figurinhaQuantidadeInicial = hasFigurinhas
+        ? parseInitialInteger(
+            req.body.figurinha_quantidade_inicial,
+            'Quantidade inicial deixada de consignados'
+          )
         : null;
 
       const estabelecimento = {
         assinante_id: usuario.assinante_id,
         estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
         produto: produtos,
-        chave: !isOnlyFigurinhas && req.body.chave ? req.body.chave.trim() : '',
-        maquina: !isOnlyFigurinhas && req.body.maquina ? req.body.maquina.trim() : '',
+
+        // Campos antigos mantidos por compatibilidade com telas antigas.
+        chave: chaveLegada,
+        maquina: maquinaLegada,
+
+        // Campos novos separados por produto.
+        chave_bolinhas: chaveBolinhas,
+        maquina_bolinhas: maquinaBolinhas,
+        chave_pelucias: chavePelucias,
+        maquina_pelucias: maquinaPelucias,
+
         endereco: req.body.endereco.trim().toUpperCase(),
         bairro: req.body.bairro.trim().toUpperCase(),
         responsavel_nome: req.body.responsavel_nome.trim().toUpperCase(),
@@ -195,8 +272,9 @@ class EstabelecimentoController {
         longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
 
-      // 🔥 salva no banco
-      const novoEstabelecimento = await EstabelecimentoModel.create(estabelecimento);
+      const novoEstabelecimento =
+        await EstabelecimentoModel.create(estabelecimento);
+
       const dataInicial = new Date().toISOString().slice(0, 10);
 
       if (novoEstabelecimento?.id && hasPelucias) {
@@ -209,7 +287,8 @@ class EstabelecimentoController {
           valor_comerciante: 0,
           valor_liquido: 0,
           tipo_pagamento: 'especie',
-          observacoes: '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.',
+          observacoes:
+            '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.',
           leitura_atual: peluciaLeituraInicial,
           ultima_leitura: 0,
           abastecido: peluciaAbastecidoInicial,
@@ -218,7 +297,7 @@ class EstabelecimentoController {
         });
       }
 
-      if (novoEstabelecimento?.id && isOnlyFigurinhas) {
+      if (novoEstabelecimento?.id && hasFigurinhas) {
         await figurinhasModel.createSangria({
           assinante_id: usuario.assinante_id,
           estabelecimento_id: novoEstabelecimento.id,
@@ -229,11 +308,11 @@ class EstabelecimentoController {
           qtde_vendido: 0,
           valor_apurado: 0,
           tipo_pagamento: 'especie',
-          observacoes: '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.'
+          observacoes:
+            '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.'
         });
       }
 
-      // 🔥 busca lista atualizada
       let estabelecimentos = await EstabelecimentoModel.findAll(
         usuario.assinante_id
       );
@@ -244,7 +323,6 @@ class EstabelecimentoController {
         return est;
       });
 
-      // 🔥 renderiza a tabela com sucesso
       return res
         .status(200)
         .render('pages/estabelecimentos/tabelaEstabelecimentos', {
@@ -277,9 +355,15 @@ class EstabelecimentoController {
 
   editEstabelecimento = async (req, res) => {
     const usuario = req.user;
+
     try {
       const id = req.params.id;
-      validateProdutosEnabled(req, req.body.produto);
+
+      const produtosSelecionados = validateProdutosEnabled(
+        req,
+        req.body.produto
+      );
+
       const produtos = serializeProdutos(req.body.produto);
 
       if (!produtos) {
@@ -288,6 +372,28 @@ class EstabelecimentoController {
         );
       }
 
+      const hasBolinhas = produtosSelecionados.includes('BOLINHAS');
+      const hasPelucias = produtosSelecionados.includes('PELUCIAS');
+
+      const chaveBolinhas = hasBolinhas
+        ? getOptionalString(req.body.chave_bolinhas)
+        : '';
+
+      const maquinaBolinhas = hasBolinhas
+        ? getOptionalString(req.body.maquina_bolinhas)
+        : '';
+
+      const chavePelucias = hasPelucias
+        ? getOptionalString(req.body.chave_pelucias)
+        : '';
+
+      const maquinaPelucias = hasPelucias
+        ? getOptionalString(req.body.maquina_pelucias)
+        : '';
+
+      const chaveLegada = chaveBolinhas || chavePelucias || '';
+      const maquinaLegada = maquinaBolinhas || maquinaPelucias || '';
+
       const estabelecimento = {
         id,
         estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
@@ -295,8 +401,17 @@ class EstabelecimentoController {
           ? req.body.status.trim().toUpperCase()
           : 'ATIVO',
         produto: produtos,
-        chave: req.body.chave ? req.body.chave.trim() : '',
-        maquina: req.body.maquina ? req.body.maquina.trim().toUpperCase() : '',
+
+        // Campos antigos mantidos por compatibilidade com telas antigas.
+        chave: chaveLegada,
+        maquina: maquinaLegada,
+
+        // Campos novos separados por produto.
+        chave_bolinhas: chaveBolinhas,
+        maquina_bolinhas: maquinaBolinhas,
+        chave_pelucias: chavePelucias,
+        maquina_pelucias: maquinaPelucias,
+
         endereco: req.body.endereco.trim().toUpperCase(),
         bairro: req.body.bairro.trim().toUpperCase(),
         responsavel_nome: req.body.responsavel_nome.trim().toUpperCase(),
@@ -313,13 +428,17 @@ class EstabelecimentoController {
         id,
         estabelecimento
       );
+
       return res
         .status(200)
         .render('pages/estabelecimentos/editarEstabelecimento', {
           title: 'Editar Estabelecimento',
           estabelecimento,
           hasProduto,
-          productOptions: getEnabledProductOptions(req, estabelecimento.produto),
+          productOptions: getEnabledProductOptions(
+            req,
+            estabelecimento.produto
+          ),
           success: 'Estabelecimento atualizado com sucesso!',
           error: null,
           usuario
@@ -329,6 +448,7 @@ class EstabelecimentoController {
         'Erro ao atualizar o estabelecimento. Detalhes do erro:',
         error
       );
+
       return res
         .status(500)
         .render('pages/estabelecimentos/editarEstabelecimento', {
@@ -345,8 +465,10 @@ class EstabelecimentoController {
 
   editEstabelecimentoForm = async (req, res) => {
     const usuario = req.user;
+
     try {
       const id = req.params.id;
+
       const estabelecimento = await EstabelecimentoModel.findById(
         id,
         usuario.assinante_id
@@ -364,13 +486,17 @@ class EstabelecimentoController {
           title: 'Editar Estabelecimento',
           estabelecimento,
           hasProduto,
-          productOptions: getEnabledProductOptions(req, estabelecimento.produto),
+          productOptions: getEnabledProductOptions(
+            req,
+            estabelecimento.produto
+          ),
           success: null,
           error: null,
           usuario
         });
     } catch (error) {
       console.error('Erro ao buscar dados do estabelecimento.', error);
+
       return res
         .status(500)
         .json({ message: 'Erro ao buscar dados do estabelecimento.' });
@@ -407,6 +533,7 @@ class EstabelecimentoController {
         });
     } catch (error) {
       console.error('Erro ao buscar estabelecimento:', error);
+
       return res.status(500).send('Erro ao buscar estabelecimento.');
     }
   };
@@ -415,6 +542,7 @@ class EstabelecimentoController {
     try {
       const usuario = req.user;
       const id = req.params.id;
+
       const estabelecimento = await EstabelecimentoModel.findById(
         id,
         usuario.assinante_id
@@ -422,6 +550,7 @@ class EstabelecimentoController {
 
       if (estabelecimento) {
         await EstabelecimentoModel.destroy(id, usuario.assinante_id);
+
         return res
           .status(200)
           .json({ message: 'Estabelecimento Excluído com Sucesso!' });
@@ -432,6 +561,7 @@ class EstabelecimentoController {
         .json({ message: 'Estabelecimento não encontrado.' });
     } catch (error) {
       console.error('Erro ao excluir Estabelecimento.', error);
+
       return res
         .status(500)
         .json({ message: 'Erro ao excluir Estabelecimento.' });
@@ -441,11 +571,13 @@ class EstabelecimentoController {
   search = async (req, res) => {
     const { termo } = req.body;
     const usuario = req.user;
+
     try {
       const estabelecimentos = await EstabelecimentoModel.search(
         termo,
         usuario.assinante_id
       );
+
       return res
         .status(200)
         .render('pages/estabelecimentos/tabelaEstabelecimentos', {
@@ -456,6 +588,7 @@ class EstabelecimentoController {
         });
     } catch (error) {
       console.error('Erro ao buscar estabelecimentos:', error);
+
       return res.status(500).send('Erro ao buscar estabelecimentos.');
     }
   };

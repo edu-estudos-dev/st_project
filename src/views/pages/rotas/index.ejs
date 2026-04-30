@@ -304,8 +304,10 @@
                                 data-longitude="<%= item.longitude ?? '' %>"
                                 data-product="<%= item.produtoLabel %>"
                                 data-neighborhood="<%= item.bairro || '' %>"
-                                data-key="<%= item.chave || '-' %>"
-                                data-machine="<%= item.maquina || '-' %>"
+                                data-key-bolinhas="<%= item.chave_bolinhas || item.chave || '-' %>"
+                                data-machine-bolinhas="<%= item.maquina_bolinhas || item.maquina || '-' %>"
+                                data-key-pelucias="<%= item.chave_pelucias || '-' %>"
+                                data-machine-pelucias="<%= item.maquina_pelucias || '-' %>"
                             >
                                 <div class="route-point-copy">
                                     <span class="route-point-order" data-route-order><%= item.orderLabel %></span>
@@ -1256,8 +1258,10 @@
                             `${index + 1}`,
                             card.dataset.name || '-',
                             card.dataset.address || '-',
-                            card.dataset.key || '-',
-                            card.dataset.machine || '-',
+                            card.dataset.keyBolinhas || '-',
+                            card.dataset.machineBolinhas || '-',
+                            card.dataset.keyPelucias || '-',
+                            card.dataset.machinePelucias || '-',
                             card.dataset.neighborhood || '-',
                             card.dataset.product || '-'
                         ];
@@ -1270,7 +1274,7 @@
                     doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, 14, 25);
 
                     doc.autoTable({
-                        head: [['#', 'Estabelecimento', 'Endereco', 'Chave', 'Maquina', 'Bairro', 'Produto']],
+                        head: [['#', 'Estabelecimento', 'Endereco', 'Chave Bolinhas', 'Maquina Bolinhas', 'Chave Pelucias', 'Maquina Pelucias', 'Bairro', 'Produto']],
                         body: data,
                         styles: {
                             fontSize: 8,

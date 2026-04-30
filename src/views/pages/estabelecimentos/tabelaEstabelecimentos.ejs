@@ -77,8 +77,12 @@
                                     <th class="mode-commercial">Endereço</th>
                                     <th class="mode-commercial">Responsável</th>
                                     <th class="mode-commercial">Contato</th>
-                                    <th class="mode-operational" style="display:none;">Chave</th>
-                                    <th class="mode-operational" style="display:none;">Máquina</th>
+
+                                    <th class="mode-operational" style="display:none;">Chave Bolinhas</th>
+                                    <th class="mode-operational" style="display:none;">Máquina Bolinhas</th>
+                                    <th class="mode-operational" style="display:none;">Chave Pelúcias</th>
+                                    <th class="mode-operational" style="display:none;">Máquina Pelúcias</th>
+
                                     <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
@@ -86,12 +90,23 @@
                                 <% estabelecimentos.forEach((estabelecimento) => { %>
                                     <% const produtoBase = (estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
                                     <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
+                                    <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
                                     <% const enderecoCompleto = [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', '); %>
+
+                                    <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
+                                    <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
+                                    <% const chavePelucias = estabelecimento.chave_pelucias || ''; %>
+                                    <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
+
                                     <tr>
                                         <td>
                                             <div class="table-title-cell"><%= estabelecimento.estabelecimento %></div>
                                         </td>
-                                        <td class="mode-all"><span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span></td>
+
+                                        <td class="mode-all">
+                                            <span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span>
+                                        </td>
+
                                         <td class="mode-commercial">
                                             <% if (enderecoCompleto) { %>
                                                 <button
@@ -109,10 +124,42 @@
                                                 <span class="table-muted">Não informado</span>
                                             <% } %>
                                         </td>
+
                                         <td class="mode-commercial"><%= estabelecimento.responsavel_nome %></td>
                                         <td class="mode-commercial"><%= estabelecimento.telefone_contato || '-' %></td>
-                                        <td class="mode-operational" style="display:none;"><%= hasBolinhas ? (estabelecimento.chave || '-') : '-' %></td>
-                                        <td class="mode-operational" style="display:none;"><%= hasBolinhas ? (estabelecimento.maquina || '-') : '-' %></td>
+
+                                        <td class="mode-operational" style="display:none;">
+                                            <% if (hasBolinhas) { %>
+                                                <span class="table-operational-pill table-operational-green"><%= chaveBolinhas || '-' %></span>
+                                            <% } else { %>
+                                                <span class="table-muted">-</span>
+                                            <% } %>
+                                        </td>
+
+                                        <td class="mode-operational" style="display:none;">
+                                            <% if (hasBolinhas) { %>
+                                                <span class="table-operational-pill table-operational-green"><%= maquinaBolinhas || '-' %></span>
+                                            <% } else { %>
+                                                <span class="table-muted">-</span>
+                                            <% } %>
+                                        </td>
+
+                                        <td class="mode-operational" style="display:none;">
+                                            <% if (hasPelucias) { %>
+                                                <span class="table-operational-pill table-operational-violet"><%= chavePelucias || '-' %></span>
+                                            <% } else { %>
+                                                <span class="table-muted">-</span>
+                                            <% } %>
+                                        </td>
+
+                                        <td class="mode-operational" style="display:none;">
+                                            <% if (hasPelucias) { %>
+                                                <span class="table-operational-pill table-operational-violet"><%= maquinaPelucias || '-' %></span>
+                                            <% } else { %>
+                                                <span class="table-muted">-</span>
+                                            <% } %>
+                                        </td>
+
                                         <td class="table-actions-cell">
                                             <div class="table-actions">
                                                 <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
@@ -141,11 +188,42 @@
         </main>
     </div>
 
+    <style>
+        /* =========================================================
+           TABELA DE ESTABELECIMENTOS - CAMPOS OPERACIONAIS
+           ========================================================= */
+
+        .table-operational-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 28px;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .table-operational-green {
+            color: #166534;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.22);
+        }
+
+        .table-operational-violet {
+            color: #6d28d9;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.22);
+        }
+    </style>
+
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const modeButtons = document.querySelectorAll('.table-mode-btn');
             const modeLabel = document.getElementById('estabelecimentosModeLabel');
+
             const hasUsableCoordinates = (latitude, longitude) =>
                 Number.isFinite(latitude) &&
                 Number.isFinite(longitude) &&
@@ -155,6 +233,7 @@
                 document.querySelectorAll('.mode-commercial').forEach((cell) => {
                     cell.style.display = mode === 'commercial' ? '' : 'none';
                 });
+
                 document.querySelectorAll('.mode-operational').forEach((cell) => {
                     cell.style.display = mode === 'operational' ? '' : 'none';
                 });
@@ -170,6 +249,7 @@
                 const destination = destinationCoords
                     ? `${destinationCoords.latitude},${destinationCoords.longitude}`
                     : encodeURIComponent(address);
+
                 if (coords) {
                     return `https://www.google.com/maps/dir/?api=1&origin=${coords.latitude},${coords.longitude}&destination=${destination}&travelmode=driving`;
                 }
@@ -189,6 +269,7 @@
                             latitude: position.coords.latitude,
                             longitude: position.coords.longitude
                         }, destinationCoords);
+
                         window.open(routeUrl, '_blank', 'noopener');
                     },
                     () => {
@@ -210,6 +291,7 @@
                     const name = this.getAttribute('data-name');
                     const latitude = Number(this.getAttribute('data-latitude'));
                     const longitude = Number(this.getAttribute('data-longitude'));
+
                     if (!address) return;
 
                     const confirmed = await window.AppAlerts?.confirm({
@@ -220,6 +302,7 @@
                     });
 
                     if (!confirmed) return;
+
                     openRouteToAddress(
                         address,
                         hasUsableCoordinates(latitude, longitude)
@@ -244,18 +327,27 @@
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async function () {
                     const idEstabelecimento = this.getAttribute('data-id');
+
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Excluir estabelecimento',
                         text: 'Tem certeza que deseja excluir este estabelecimento?',
                         confirmButtonText: 'Excluir',
                         cancelButtonText: 'Cancelar'
                     });
+
                     if (!confirmed) return;
 
                     try {
-                        const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, { method: 'DELETE' });
+                        const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, {
+                            method: 'DELETE'
+                        });
+
                         const data = await response.json();
-                        if (!response.ok) throw new Error(data.message || 'Erro ao excluir estabelecimento');
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Erro ao excluir estabelecimento');
+                        }
+
                         await window.AppAlerts?.success(data.message || 'Estabelecimento excluído com sucesso');
                         window.location.reload();
                     } catch (error) {
@@ -264,8 +356,13 @@
                 });
             });
 
-            <% if (typeof success !== 'undefined') { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>
-            <% if (typeof error !== 'undefined') { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
+            <% if (typeof success !== 'undefined') { %>
+                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
+            <% } %>
+
+            <% if (typeof error !== 'undefined') { %>
+                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
+            <% } %>
         });
     </script>
 </body>

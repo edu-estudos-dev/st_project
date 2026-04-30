@@ -31,6 +31,15 @@
         <main class="view-stage">
             <section class="view-panel">
                 <% if (estabelecimento) { %>
+                    <% const produtoBase = (estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
+                    <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
+                    <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
+
+                    <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
+                    <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
+                    <% const chavePelucias = estabelecimento.chave_pelucias || ''; %>
+                    <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
+
                     <div class="view-panel-header">
                         <div>
                             <span class="form-section-tag">Resumo</span>
@@ -44,46 +53,83 @@
                             <strong>Produtos vinculados</strong>
                             <span><%= estabelecimento.produtoFormatado || estabelecimento.produto || 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Responsável</strong>
                             <span><%= estabelecimento.responsavel_nome || 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Contato</strong>
                             <span><%= estabelecimento.telefone_contato || 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Bairro</strong>
                             <span><%= estabelecimento.bairro || 'Não informado' %></span>
                         </div>
+
                         <div class="view-card is-wide">
                             <strong>Endereço</strong>
                             <span><%= estabelecimento.endereco || 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
-                            <strong>Chave</strong>
-                            <span><%= estabelecimento.chave || 'Não informado' %></span>
-                        </div>
-                        <div class="view-card">
-                            <strong>Máquina</strong>
-                            <span><%= estabelecimento.maquina || 'Não informado' %></span>
-                        </div>
+
+                        <% if (hasBolinhas) { %>
+                            <div class="view-card view-card-product view-card-product-green">
+                                <strong>
+                                    <span class="view-product-tag view-product-tag-green">Bolinhas</span>
+                                    Chave da máquina
+                                </strong>
+                                <span><%= chaveBolinhas || 'Não informado' %></span>
+                            </div>
+
+                            <div class="view-card view-card-product view-card-product-green">
+                                <strong>
+                                    <span class="view-product-tag view-product-tag-green">Bolinhas</span>
+                                    Número da máquina
+                                </strong>
+                                <span><%= maquinaBolinhas || 'Não informado' %></span>
+                            </div>
+                        <% } %>
+
+                        <% if (hasPelucias) { %>
+                            <div class="view-card view-card-product view-card-product-violet">
+                                <strong>
+                                    <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                    Chave da máquina
+                                </strong>
+                                <span><%= chavePelucias || 'Não informado' %></span>
+                            </div>
+
+                            <div class="view-card view-card-product view-card-product-violet">
+                                <strong>
+                                    <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                    Número da máquina
+                                </strong>
+                                <span><%= maquinaPelucias || 'Não informado' %></span>
+                            </div>
+                        <% } %>
+
                         <div class="view-card">
                             <strong>Latitude</strong>
                             <span><%= estabelecimento.latitude ?? 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Longitude</strong>
                             <span><%= estabelecimento.longitude ?? 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Data de cadastro</strong>
                             <span><%= estabelecimento.data_criacao ? new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Última edição</strong>
                             <span><%= estabelecimento.data_atualizacao ? new Date(estabelecimento.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
+
                         <div class="view-card is-wide">
                             <strong>Observações</strong>
                             <span><%= estabelecimento.observacoes || 'Sem observações cadastradas.' %></span>
@@ -99,11 +145,13 @@
                             ? 'Revise este cadastro antes de editar, gerar uma rota ou retornar para a listagem geral.'
                             : 'Você pode voltar para a listagem geral de estabelecimentos e continuar a navegação normalmente.' %>
                     </div>
+
                     <div class="view-actions-buttons">
                         <a href="/estabelecimentos" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
+
                         <% if (estabelecimento && estabelecimento.endereco) { %>
                             <button
                                 type="button"
@@ -118,6 +166,7 @@
                                 <span>Gerar rota até aqui</span>
                             </button>
                         <% } %>
+
                         <% if (estabelecimento && !isReadOnly) { %>
                             <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>
@@ -129,6 +178,67 @@
             </section>
         </main>
     </div>
+
+    <style>
+        /* =========================================================
+           VISUALIZAR ESTABELECIMENTO - CAMPOS POR PRODUTO
+           ========================================================= */
+
+        .view-card-product {
+            border-width: 1px;
+            border-style: solid;
+            padding-top: 0.85rem !important;
+            padding-bottom: 0.85rem !important;
+        }
+
+        .view-card-product-green {
+            border-color: rgba(34, 197, 94, 0.24);
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.8), #ffffff);
+        }
+
+        .view-card-product-violet {
+            border-color: rgba(124, 58, 237, 0.24);
+            background: linear-gradient(180deg, rgba(245, 243, 255, 0.9), #ffffff);
+        }
+
+       .view-product-tag {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: fit-content !important;
+            margin-bottom: 0.18rem !important;
+            padding: 0.08rem 0.32rem !important;
+            border-radius: 999px !important;
+            font-size: 0.58rem !important;
+            font-weight: 800 !important;
+            line-height: 1 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.025em !important;
+        }
+
+        .view-card-product strong {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.12rem !important;
+        }
+
+        .view-card-product span:last-child {
+            font-size: 0.94rem;
+            font-weight: 800;
+        }
+        .view-product-tag-green {
+            color: #166534;
+            background: rgba(34, 197, 94, 0.14);
+            border: 1px solid rgba(34, 197, 94, 0.24);
+        }
+
+        .view-product-tag-violet {
+            color: #6d28d9;
+            background: rgba(124, 58, 237, 0.14);
+            border: 1px solid rgba(124, 58, 237, 0.24);
+        }
+    </style>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>

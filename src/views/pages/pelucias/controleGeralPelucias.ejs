@@ -50,6 +50,7 @@
                                 <tr>
                                     <th>Estabelecimento</th>
                                     <th>Data da sangria</th>
+                                    <th>Chave</th>
                                     <th>Máquina</th>
                                     <th>Última leitura</th>
                                     <th>Abastecido</th>
@@ -74,7 +75,8 @@
                                     </td>
 
                                     <td><%= data.toLocaleDateString('pt-BR') %></td>
-                                    <td><%= estabelecimento.maquina %></td>
+                                    <td><%= estabelecimento.chave_pelucias || '-' %></td>
+                                    <td><%= estabelecimento.maquina_pelucias || estabelecimento.maquina || '-' %></td>
                                     <td><%= estabelecimento.ultima_leitura !== undefined ? estabelecimento.ultima_leitura : 'N/A' %></td>
                                     <td><%= estabelecimento.abastecido !== undefined ? estabelecimento.abastecido : 'N/A' %></td>
                                     <td><%= estabelecimento.estoque !== undefined ? estabelecimento.estoque : 'N/A' %></td>

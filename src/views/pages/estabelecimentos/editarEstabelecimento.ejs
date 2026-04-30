@@ -30,6 +30,73 @@
 
         <main class="form-stage">
             <form id="edicaoForm" class="modern-form" action="/estabelecimentos/<%= estabelecimento.id %>?_method=PUT" method="POST">
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Operação</span>
+                            <h2>Produtos e observações</h2>
+                            <p>Atualize os produtos ativos no ponto e registre comentários úteis para a equipe nas próximas visitas.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 align-items-start">
+                        <div class="col-12 col-lg-5">
+                            <label>Produtos vinculados</label>
+
+                            <div class="modern-checkbox-grid">
+                                <% (productOptions || []).forEach((produto, index) => { %>
+                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="produto<%= index + 1 %>"
+                                            name="produto"
+                                            value="<%= produto.value %>"
+                                            <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>
+                                        >
+                                        <span><%= produto.label %></span>
+                                    </label>
+                                <% }) %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-green" for="produto1">
+                                        <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>>
+                                        <span>Bolinhas</span>
+                                    </label>
+                                <% } %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-blue" for="produto2">
+                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>>
+                                        <span>Consignados</span>
+                                    </label>
+                                <% } %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-violet" for="produto3">
+                                        <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>>
+                                        <span>Pelúcias</span>
+                                    </label>
+                                <% } %>
+                            </div>
+
+                            <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
+                        </div>
+
+                        <div class="col-12 col-lg-7">
+                            <label for="observacoes">Comentários</label>
+                            <textarea
+                                class="form-control"
+                                id="observacoes"
+                                name="observacoes"
+                                rows="5"
+                                maxlength="255"
+                            ><%= estabelecimento.observacoes || '' %></textarea>
+                        </div>
+                    </div>
+                </section>
+
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
@@ -40,17 +107,40 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-12 col-lg-4">
+                        <div class="col-12 col-lg-5">
                             <label for="estabelecimento">Estabelecimento</label>
-                            <input type="text" class="form-control" id="estabelecimento" name="estabelecimento" value="<%= estabelecimento.estabelecimento %>">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="estabelecimento"
+                                name="estabelecimento"
+                                value="<%= estabelecimento.estabelecimento || '' %>"
+                                required
+                            >
                         </div>
-                        <div class="col-12 col-md-6 col-lg-4 centered-field">
+
+                        <div class="col-12 col-md-6 col-lg-3 centered-field">
                             <label for="responsavel_nome">Responsável</label>
-                            <input type="text" class="form-control text-center" id="responsavel_nome" name="responsavel_nome" value="<%= estabelecimento.responsavel_nome %>">
+                            <input
+                                type="text"
+                                class="form-control text-center"
+                                id="responsavel_nome"
+                                name="responsavel_nome"
+                                value="<%= estabelecimento.responsavel_nome || '' %>"
+                                required
+                            >
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4 centered-field">
                             <label for="telefone_contato">Contato</label>
-                            <input type="text" class="form-control text-center" id="telefone_contato" name="telefone_contato" value="<%= estabelecimento.telefone_contato %>">
+                            <input
+                                type="text"
+                                class="form-control text-center"
+                                id="telefone_contato"
+                                name="telefone_contato"
+                                value="<%= estabelecimento.telefone_contato || '' %>"
+                                required
+                            >
                         </div>
                     </div>
                 </section>
@@ -65,22 +155,130 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-12 col-lg-5">
+                        <div class="col-12 col-lg-8">
                             <label for="endereco">Endereço</label>
-                            <input type="text" class="form-control" id="endereco" name="endereco" value="<%= estabelecimento.endereco %>">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="endereco"
+                                name="endereco"
+                                value="<%= estabelecimento.endereco || '' %>"
+                                required
+                            >
                         </div>
-                        <div class="col-12 col-md-4 col-lg-2">
+
+                        <div class="col-12 col-lg-4">
                             <label for="bairro">Bairro</label>
-                            <input type="text" class="form-control text-center" id="bairro" name="bairro" value="<%= estabelecimento.bairro %>">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="bairro"
+                                name="bairro"
+                                value="<%= estabelecimento.bairro || '' %>"
+                                required
+                            >
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
-                            <label for="chave">Chave</label>
-                            <input type="text" class="form-control text-center" id="chave" name="chave" value="<%= estabelecimento.chave %>">
+
+                        <!-- ===== BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
+
+                        <div class="col-12 d-none" data-operational-field="bolinhas-machine">
+                            <div class="product-setup-block theme-green">
+                                <div class="product-setup-header">
+                                    <div class="product-setup-badges">
+                                        <span class="product-badge product-badge-green">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Bolinhas
+                                        </span>
+                                    </div>
+
+                                    <h3>Máquina de bolinhas</h3>
+                                    <p>Campos opcionais para registrar a chave e o número da máquina de bolinhas instalada neste ponto.</p>
+                                </div>
+
+                                <div class="product-divider"></div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                        <label for="chave_bolinhas">
+                                            Chave da máquina de bolinhas <span class="optional-label">opcional</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control text-center"
+                                            id="chave_bolinhas"
+                                            name="chave_bolinhas"
+                                            placeholder="Código da chave"
+                                            value="<%= estabelecimento.chave_bolinhas || estabelecimento.chave || '' %>"
+                                        >
+                                    </div>
+
+                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                        <label for="maquina_bolinhas">
+                                            Número da máquina de bolinhas <span class="optional-label">opcional</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control text-center"
+                                            id="maquina_bolinhas"
+                                            name="maquina_bolinhas"
+                                            placeholder="Número da máquina"
+                                            value="<%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '' %>"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-3 compact-field centered-field">
-                            <label for="maquina">Máquina</label>
-                            <input type="text" class="form-control text-center" id="maquina" name="maquina" value="<%= estabelecimento.maquina %>">
+
+                        <div class="col-12 d-none" data-operational-field="pelucias-machine">
+                            <div class="product-setup-block theme-violet">
+                                <div class="product-setup-header">
+                                    <div class="product-setup-badges">
+                                        <span class="product-badge product-badge-violet">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Pelúcias
+                                        </span>
+                                    </div>
+
+                                    <h3>Máquina de pelúcias</h3>
+                                    <p>Campos opcionais para registrar a chave e o número da máquina de pelúcias instalada neste ponto.</p>
+                                </div>
+
+                                <div class="product-divider"></div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                        <label for="chave_pelucias">
+                                            Chave da máquina de pelúcias <span class="optional-label">opcional</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control text-center"
+                                            id="chave_pelucias"
+                                            name="chave_pelucias"
+                                            placeholder="Código da chave"
+                                            value="<%= estabelecimento.chave_pelucias || '' %>"
+                                        >
+                                    </div>
+
+                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                        <label for="maquina_pelucias">
+                                            Número da máquina de pelúcias <span class="optional-label">opcional</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control text-center"
+                                            id="maquina_pelucias"
+                                            name="maquina_pelucias"
+                                            placeholder="Número da máquina"
+                                            value="<%= estabelecimento.maquina_pelucias || '' %>"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- ===== FIM DO BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
+
                         <div class="col-12">
                             <div class="route-coordinates-header">
                                 <div>
@@ -93,55 +291,29 @@
                                 </button>
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6">
                             <label for="latitude">Latitude</label>
-                            <input type="text" class="form-control text-center" id="latitude" name="latitude" value="<%= estabelecimento.latitude ?? '' %>" placeholder="-3.731862">
+                            <input
+                                type="text"
+                                class="form-control text-center"
+                                id="latitude"
+                                name="latitude"
+                                value="<%= estabelecimento.latitude ?? '' %>"
+                                placeholder="-3.731862"
+                            >
                         </div>
+
                         <div class="col-12 col-md-6">
                             <label for="longitude">Longitude</label>
-                            <input type="text" class="form-control text-center" id="longitude" name="longitude" value="<%= estabelecimento.longitude ?? '' %>" placeholder="-38.526669">
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Operação</span>
-                            <h2>Produtos e observações</h2>
-                            <p>Atualize os produtos ativos no ponto e registre comentários úteis para a equipe nas próximas visitas.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4 align-items-start">
-                        <div class="col-12 col-lg-5">
-                            <label>Produtos vinculados</label>
-                            <div class="modern-checkbox-grid">
-                                <% (productOptions || []).forEach((produto, index) => { %>
-                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
-                                        <input class="form-check-input" type="checkbox" id="produto<%= index + 1 %>" name="produto" value="<%= produto.value %>" <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>>
-                                        <span><%= produto.label %></span>
-                                    </label>
-                                <% }) %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-green" for="produto1">
-                                    <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>>
-                                    <span>Bolinhas</span>
-                                </label><% } %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                    <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= hasProduto(estabelecimento.produto, 'FIGURINHAS') ? 'checked' : '' %>>
-                                    <span>Consignados</span>
-                                </label><% } %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-violet" for="produto3">
-                                    <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>>
-                                    <span>Pelúcias</span>
-                                </label><% } %>
-                            </div>
-                            <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
-                        </div>
-
-                        <div class="col-12 col-lg-7">
-                            <label for="observacoes">Comentários</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255"><%= estabelecimento.observacoes %></textarea>
+                            <input
+                                type="text"
+                                class="form-control text-center"
+                                id="longitude"
+                                name="longitude"
+                                value="<%= estabelecimento.longitude ?? '' %>"
+                                placeholder="-38.526669"
+                            >
                         </div>
                     </div>
                 </section>
@@ -166,12 +338,212 @@
             </form>
         </main>
     </div>
+
+    <style>
+        /* =========================================================
+           EDITAR ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
+           ========================================================= */
+
+        .product-setup-block {
+            border: 1px solid #d9e2f1;
+            border-radius: 20px;
+            padding: 18px 18px 16px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+            margin-top: 8px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.045);
+        }
+
+        .product-setup-header {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .product-setup-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .product-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 30px;
+            padding: 0 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border: 1px solid transparent;
+        }
+
+        .product-badge i {
+            font-size: 0.48rem;
+        }
+
+        .product-badge-green {
+            color: #166534;
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.28);
+        }
+
+        .product-badge-violet {
+            color: #6d28d9;
+            background: rgba(124, 58, 237, 0.12);
+            border-color: rgba(124, 58, 237, 0.24);
+        }
+
+        .product-setup-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #1f2937;
+        }
+
+        .product-setup-header p {
+            margin: 0;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            color: #64748b;
+        }
+
+        .product-divider {
+            width: 100%;
+            height: 1px;
+            margin: 14px 0 16px;
+            background: linear-gradient(90deg, rgba(148, 163, 184, 0.45) 0%, rgba(148, 163, 184, 0.12) 100%);
+        }
+
+        .theme-green {
+            border-color: rgba(34, 197, 94, 0.25);
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.88) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .theme-green .product-setup-header h3,
+        .theme-green label {
+            color: #166534;
+        }
+
+        .theme-green .product-divider {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.45) 0%, rgba(34, 197, 94, 0.08) 100%);
+        }
+
+        .theme-green .form-control:focus {
+            border-color: rgba(34, 197, 94, 0.62);
+            box-shadow: 0 0 0 0.18rem rgba(34, 197, 94, 0.12);
+        }
+
+        .theme-violet {
+            border-color: rgba(124, 58, 237, 0.22);
+            background: linear-gradient(180deg, rgba(245, 243, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+        .theme-violet .product-setup-header h3,
+        .theme-violet label {
+            color: #6d28d9;
+        }
+
+        .theme-violet .product-divider {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.40) 0%, rgba(124, 58, 237, 0.08) 100%);
+        }
+
+        .theme-violet .form-control:focus {
+            border-color: rgba(124, 58, 237, 0.58);
+            box-shadow: 0 0 0 0.18rem rgba(124, 58, 237, 0.12);
+        }
+
+        .optional-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.66rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            vertical-align: middle;
+            color: #475569;
+            background: rgba(148, 163, 184, 0.16);
+        }
+
+        @media (max-width: 767.98px) {
+            .product-setup-block {
+                padding: 16px 14px 14px;
+                border-radius: 16px;
+            }
+
+            .product-setup-header h3 {
+                font-size: 0.95rem;
+            }
+
+            .product-setup-header p {
+                font-size: 0.82rem;
+            }
+
+            .optional-label {
+                margin-left: 0;
+                margin-top: 4px;
+            }
+        }
+    </style>
+
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const latitudeInput = document.getElementById('latitude');
             const longitudeInput = document.getElementById('longitude');
             const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
+            const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
+
+            const bolinhasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="bolinhas-machine"]'));
+            const peluciasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-machine"]'));
+
+            const chaveBolinhasInput = document.getElementById('chave_bolinhas');
+            const maquinaBolinhasInput = document.getElementById('maquina_bolinhas');
+            const chavePeluciasInput = document.getElementById('chave_pelucias');
+            const maquinaPeluciasInput = document.getElementById('maquina_pelucias');
+
+            const getSelectedProducts = () => produtoInputs
+                .filter((checkbox) => checkbox.checked)
+                .map((checkbox) => checkbox.value);
+
+            const setGroupVisibility = (fields, shouldShow) => {
+                fields.forEach((field) => field.classList.toggle('d-none', !shouldShow));
+            };
+
+            const syncOperationalFields = () => {
+                const selectedProducts = getSelectedProducts();
+
+                const hasBolinhas = selectedProducts.includes('BOLINHAS');
+                const hasPelucias = selectedProducts.includes('PELUCIAS');
+
+                setGroupVisibility(bolinhasMachineFields, hasBolinhas);
+                setGroupVisibility(peluciasMachineFields, hasPelucias);
+
+                if (chaveBolinhasInput) chaveBolinhasInput.required = false;
+                if (maquinaBolinhasInput) maquinaBolinhasInput.required = false;
+                if (chavePeluciasInput) chavePeluciasInput.required = false;
+                if (maquinaPeluciasInput) maquinaPeluciasInput.required = false;
+
+                if (!hasBolinhas) {
+                    if (chaveBolinhasInput) chaveBolinhasInput.value = '';
+                    if (maquinaBolinhasInput) maquinaBolinhasInput.value = '';
+                }
+
+                if (!hasPelucias) {
+                    if (chavePeluciasInput) chavePeluciasInput.value = '';
+                    if (maquinaPeluciasInput) maquinaPeluciasInput.value = '';
+                }
+            };
+
+            produtoInputs.forEach((input) => input.addEventListener('change', syncOperationalFields));
+            syncOperationalFields();
 
             captureCoordinatesButton?.addEventListener('click', () => {
                 if (!navigator.geolocation) {
@@ -192,20 +564,34 @@
                         captureCoordinatesButton.disabled = false;
                         window.AppAlerts?.error('Não foi possível ler sua localização atual.');
                     },
-                    { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 12000,
+                        maximumAge: 60000
+                    }
                 );
             });
 
             document.getElementById('edicaoForm').addEventListener('submit', (e) => {
-                const isChecked = Array.from(document.querySelectorAll('input[name="produto"]')).some((checkbox) => checkbox.checked);
+                const isChecked = getSelectedProducts().length > 0;
+
                 if (!isChecked) {
                     e.preventDefault();
                     window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
+                    return;
                 }
             });
 
-            <% if (success) { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>"); setTimeout(() => { window.location.href = '/estabelecimentos'; }, 1800);<% } %>
-            <% if (error) { %>window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");<% } %>
+            <% if (success) { %>
+                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
+                setTimeout(() => {
+                    window.location.href = '/estabelecimentos';
+                }, 1800);
+            <% } %>
+
+            <% if (error) { %>
+                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
+            <% } %>
         });
     </script>
 </body>

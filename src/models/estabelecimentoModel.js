@@ -2,25 +2,40 @@ import connection from '../db_config/connection.js';
 import { hasProduto } from '../utilities/produtoUtils.js';
 
 class EstabelecimentoModel {
-  ensureCoordinatesColumns = async () => {
+  ensureEstabelecimentoColumns = async () => {
     try {
       const SQL = `
         ALTER TABLE estabelecimentos
         ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION,
-        ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION
+        ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION,
+        ADD COLUMN IF NOT EXISTS chave_bolinhas VARCHAR(100),
+        ADD COLUMN IF NOT EXISTS maquina_bolinhas VARCHAR(100),
+        ADD COLUMN IF NOT EXISTS chave_pelucias VARCHAR(100),
+        ADD COLUMN IF NOT EXISTS maquina_pelucias VARCHAR(100)
       `;
 
       await connection.query(SQL);
     } catch (error) {
-      console.error('Erro ao garantir colunas de coordenadas:', error);
-      throw new Error('Erro ao preparar coordenadas dos estabelecimentos.');
+      console.error('Erro ao garantir colunas extras dos estabelecimentos:', error);
+      throw new Error('Erro ao preparar colunas dos estabelecimentos.');
     }
+  };
+
+  ensureCoordinatesColumns = async () => {
+    await this.ensureEstabelecimentoColumns();
   };
 
   findAll = async (assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
-      const SQL = 'SELECT * FROM estabelecimentos WHERE status = $1 AND assinante_id = $2';
+      await this.ensureEstabelecimentoColumns();
+
+      const SQL = `
+        SELECT *
+        FROM estabelecimentos
+        WHERE status = $1
+          AND assinante_id = $2
+      `;
+
       const result = await connection.query(SQL, ['ativo', assinanteId]);
       return result.rows;
     } catch (error) {
@@ -31,13 +46,16 @@ class EstabelecimentoModel {
 
   search = async (query, assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
-        SELECT * FROM estabelecimentos
+        SELECT *
+        FROM estabelecimentos
         WHERE (estabelecimento ILIKE $1 OR responsavel_nome ILIKE $2 OR bairro ILIKE $3)
           AND status = $4
           AND assinante_id = $5
       `;
+
       const result = await connection.query(SQL, [
         `%${query}%`,
         `%${query}%`,
@@ -45,6 +63,7 @@ class EstabelecimentoModel {
         'ativo',
         assinanteId
       ]);
+
       return result.rows;
     } catch (error) {
       console.error('Erro ao executar a query de busca:', error);
@@ -58,6 +77,10 @@ class EstabelecimentoModel {
     produto,
     chave,
     maquina,
+    chave_bolinhas,
+    maquina_bolinhas,
+    chave_pelucias,
+    maquina_pelucias,
     endereco,
     bairro,
     responsavel_nome,
@@ -67,7 +90,8 @@ class EstabelecimentoModel {
     longitude
   }) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         INSERT INTO estabelecimentos (
           assinante_id,
@@ -75,6 +99,10 @@ class EstabelecimentoModel {
           produto,
           chave,
           maquina,
+          chave_bolinhas,
+          maquina_bolinhas,
+          chave_pelucias,
+          maquina_pelucias,
           endereco,
           bairro,
           responsavel_nome,
@@ -85,7 +113,7 @@ class EstabelecimentoModel {
           data_criacao,
           status
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
         RETURNING id
       `;
 
@@ -95,8 +123,12 @@ class EstabelecimentoModel {
         assinante_id,
         estabelecimento,
         produto,
-        chave,
-        maquina,
+        chave || '',
+        maquina || '',
+        chave_bolinhas || '',
+        maquina_bolinhas || '',
+        chave_pelucias || '',
+        maquina_pelucias || '',
         endereco,
         bairro,
         responsavel_nome,
@@ -123,6 +155,10 @@ class EstabelecimentoModel {
       produto,
       chave,
       maquina,
+      chave_bolinhas,
+      maquina_bolinhas,
+      chave_pelucias,
+      maquina_pelucias,
       endereco,
       bairro,
       responsavel_nome,
@@ -132,23 +168,28 @@ class EstabelecimentoModel {
       longitude
     }
   ) => {
-    await this.ensureCoordinatesColumns();
+    await this.ensureEstabelecimentoColumns();
+
     const sql = `
       UPDATE estabelecimentos SET
         estabelecimento = $1,
         produto = $2,
         chave = $3,
         maquina = $4,
-        endereco = $5,
-        bairro = $6,
-        responsavel_nome = $7,
-        telefone_contato = $8,
-        observacoes = $9,
-        latitude = $10,
-        longitude = $11,
-        data_atualizacao = $12
-      WHERE id = $13
-        AND assinante_id = $14
+        chave_bolinhas = $5,
+        maquina_bolinhas = $6,
+        chave_pelucias = $7,
+        maquina_pelucias = $8,
+        endereco = $9,
+        bairro = $10,
+        responsavel_nome = $11,
+        telefone_contato = $12,
+        observacoes = $13,
+        latitude = $14,
+        longitude = $15,
+        data_atualizacao = $16
+      WHERE id = $17
+        AND assinante_id = $18
     `;
 
     const dateISO = new Date();
@@ -156,8 +197,12 @@ class EstabelecimentoModel {
     const result = await connection.query(sql, [
       estabelecimento,
       produto,
-      chave,
-      maquina,
+      chave || '',
+      maquina || '',
+      chave_bolinhas || '',
+      maquina_bolinhas || '',
+      chave_pelucias || '',
+      maquina_pelucias || '',
       endereco,
       bairro,
       responsavel_nome,
@@ -174,8 +219,15 @@ class EstabelecimentoModel {
   };
 
   findById = async (id, assinanteId) => {
-    await this.ensureCoordinatesColumns();
-    const sql = 'SELECT * FROM estabelecimentos WHERE id = $1 AND assinante_id = $2';
+    await this.ensureEstabelecimentoColumns();
+
+    const sql = `
+      SELECT *
+      FROM estabelecimentos
+      WHERE id = $1
+        AND assinante_id = $2
+    `;
+
     const result = await connection.query(sql, [id, assinanteId]);
     return result.rows[0];
   };
@@ -184,10 +236,12 @@ class EstabelecimentoModel {
     try {
       const sql = `
         UPDATE estabelecimentos
-        SET status = $1, data_encerramento = $2
+        SET status = $1,
+            data_encerramento = $2
         WHERE id = $3
           AND assinante_id = $4
       `;
+
       const dataEncerramento = new Date();
 
       const result = await connection.query(sql, [
@@ -196,6 +250,7 @@ class EstabelecimentoModel {
         id,
         assinanteId
       ]);
+
       console.log('Estabelecimento marcado como inativo:', result);
     } catch (error) {
       console.error('Erro ao deletar o estabelecimento:', error);
@@ -205,7 +260,8 @@ class EstabelecimentoModel {
 
   getBairrosByProduto = async (produto, assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         SELECT DISTINCT bairro
         FROM estabelecimentos
@@ -213,11 +269,13 @@ class EstabelecimentoModel {
           AND status = $2
           AND assinante_id = $3
       `;
+
       const result = await connection.query(SQL, [
         `%${produto.toUpperCase()}%`,
         'ativo',
         assinanteId
       ]);
+
       return result.rows;
     } catch (error) {
       console.error('Erro ao buscar bairros:', error);
@@ -227,7 +285,8 @@ class EstabelecimentoModel {
 
   getRouteBairros = async (assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         SELECT DISTINCT bairro
         FROM estabelecimentos
@@ -247,7 +306,8 @@ class EstabelecimentoModel {
 
   getRoutePoints = async ({ bairro, bairros, produto = 'todos', assinanteId }) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const bairrosSelecionados = Array.isArray(bairros)
         ? bairros.map(item => String(item || '').trim()).filter(Boolean)
         : [String(bairro || '').trim()].filter(Boolean);
@@ -275,6 +335,10 @@ class EstabelecimentoModel {
           telefone_contato,
           chave,
           maquina,
+          chave_bolinhas,
+          maquina_bolinhas,
+          chave_pelucias,
+          maquina_pelucias,
           latitude,
           longitude
         FROM estabelecimentos
@@ -295,21 +359,25 @@ class EstabelecimentoModel {
 
   getMenuProdutosDisponiveis = async (assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       await connection.query(`
         ALTER TABLE assinantes
         ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
       `);
 
       const assinaturaResult = await connection.query(
-        `SELECT produtos_habilitados
-         FROM assinantes
-         WHERE id = $1
-         LIMIT 1`,
+        `
+          SELECT produtos_habilitados
+          FROM assinantes
+          WHERE id = $1
+          LIMIT 1
+        `,
         [assinanteId]
       );
 
       const produtosHabilitados = assinaturaResult.rows[0]?.produtos_habilitados;
+
       const produtosConfigurados = {
         bolinhas: hasProduto(produtosHabilitados, 'BOLINHAS'),
         figurinhas: hasProduto(produtosHabilitados, 'FIGURINHAS'),
@@ -333,6 +401,7 @@ class EstabelecimentoModel {
           AND produto IS NOT NULL
           AND produto <> ''
       `;
+
       const result = await connection.query(SQL, ['ativo', assinanteId]);
 
       const disponibilidade = {
@@ -363,6 +432,7 @@ class EstabelecimentoModel {
       return disponibilidade;
     } catch (error) {
       console.error('Erro ao carregar produtos disponiveis para o menu:', error);
+
       return {
         bolinhas: true,
         figurinhas: true,
@@ -374,7 +444,8 @@ class EstabelecimentoModel {
 
   getDashboardSummary = async (assinanteId) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         SELECT
           COUNT(*) FILTER (WHERE status = 'ativo') AS total_ativos,
@@ -396,6 +467,7 @@ class EstabelecimentoModel {
       };
     } catch (error) {
       console.error('Erro ao carregar resumo do dashboard:', error);
+
       return {
         totalAtivos: 0,
         bolinhasAtivas: 0,
@@ -407,7 +479,8 @@ class EstabelecimentoModel {
 
   getOperationalPendingItems = async (assinanteId, staleDays = 7, limit = 6) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         WITH operational_status AS (
           SELECT
@@ -457,7 +530,7 @@ class EstabelecimentoModel {
           SELECT
             e.id AS estabelecimento_id,
             e.estabelecimento,
-            'Pelucias' AS produto,
+            'Pelúcias' AS produto,
             '/pelucias/sangrias/add' AS action_href,
             latest.data_sangria AS ultima_movimentacao,
             CURRENT_DATE - latest.data_sangria::date AS dias_sem_registro
@@ -491,7 +564,12 @@ class EstabelecimentoModel {
         LIMIT $3
       `;
 
-      const result = await connection.query(SQL, [assinanteId, staleDays, limit]);
+      const result = await connection.query(SQL, [
+        assinanteId,
+        staleDays,
+        limit
+      ]);
+
       return result.rows;
     } catch (error) {
       console.error('Erro ao carregar pendencias operacionais do dashboard:', error);
@@ -501,7 +579,8 @@ class EstabelecimentoModel {
 
   getRecentOperationalMovements = async (assinanteId, limit = 6) => {
     try {
-      await this.ensureCoordinatesColumns();
+      await this.ensureEstabelecimentoColumns();
+
       const SQL = `
         SELECT *
         FROM (
@@ -547,7 +626,7 @@ class EstabelecimentoModel {
           SELECT
             sp.id,
             'operacional' AS origem,
-            'Pelucias' AS produto,
+            'Pelúcias' AS produto,
             e.estabelecimento,
             sp.data_sangria::timestamp AS data_movimentacao,
             '/pelucias/sangrias/view/' || sp.id AS href,

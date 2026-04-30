@@ -75,8 +75,8 @@
                                         </span>
                                     </td>
 
-                                    <td><%= estabelecimento.chave || '-' %></td>
-                                    <td><%= estabelecimento.maquina || '-' %></td>
+                                    <td><%= estabelecimento.chave_bolinhas || estabelecimento.chave || '-' %></td>
+                                    <td><%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '-' %></td>
                                     <td class="table-cell-wrap"><%= estabelecimento.endereco || '-' %></td>
                                     <td><%= estabelecimento.bairro || '-' %></td>
                                     <td class="dias-passados"><%= data ? diferencaDias : 'Sem visita' %></td>

@@ -20,6 +20,7 @@
    13 - Rodape moderno / site footer
    14 - Relatorios
    15 - Google Maps nas rotas
+   16 - CADASTRO DE ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
    ========================================================================== */
 
 /* ==========================================================================
@@ -5021,4 +5022,176 @@ footer hr {
 .route-circuit-map.has-google-map svg,
 .route-circuit-map.has-google-map .route-circuit-empty {
   display: none;
+}
+
+/* =========================================================
+   16. CADASTRO DE ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
+   ========================================================= */
+
+.product-setup-block {
+    border: 1px solid #d9e2f1;
+    border-radius: 20px;
+    padding: 18px 18px 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    margin-top: 8px;
+}
+
+.product-setup-block + .product-setup-block {
+    margin-top: 14px;
+}
+
+.product-setup-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.product-setup-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.product-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+}
+
+.product-badge-green {
+    color: #166534;
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.28);
+}
+
+.product-badge-blue {
+    color: #1d4ed8;
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.24);
+}
+
+.product-badge-violet {
+    color: #6d28d9;
+    background: rgba(124, 58, 237, 0.12);
+    border-color: rgba(124, 58, 237, 0.24);
+}
+
+.product-setup-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.product-setup-header p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: #64748b;
+}
+
+.product-divider {
+    width: 100%;
+    height: 1px;
+    margin: 14px 0 16px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.45) 0%, rgba(148, 163, 184, 0.12) 100%);
+}
+
+.theme-green {
+    border-color: rgba(34, 197, 94, 0.25);
+    background: linear-gradient(180deg, rgba(240, 253, 244, 0.88) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.theme-green .product-setup-header h3,
+.theme-green label {
+    color: #166534;
+}
+
+.theme-green .product-divider {
+    background: linear-gradient(90deg, rgba(34, 197, 94, 0.45) 0%, rgba(34, 197, 94, 0.08) 100%);
+}
+
+.theme-blue {
+    border-color: rgba(37, 99, 235, 0.22);
+    background: linear-gradient(180deg, rgba(239, 246, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.theme-blue .product-setup-header h3,
+.theme-blue label {
+    color: #1d4ed8;
+}
+
+.theme-blue .product-divider {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.40) 0%, rgba(37, 99, 235, 0.08) 100%);
+}
+
+.theme-violet {
+    border-color: rgba(124, 58, 237, 0.22);
+    background: linear-gradient(180deg, rgba(245, 243, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.theme-violet .product-setup-header h3,
+.theme-violet label {
+    color: #6d28d9;
+}
+
+.theme-violet .product-divider {
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.40) 0%, rgba(124, 58, 237, 0.08) 100%);
+}
+
+.theme-mixed {
+    border-color: rgba(100, 116, 139, 0.22);
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.theme-mixed .product-divider {
+    background: linear-gradient(90deg, rgba(100, 116, 139, 0.35) 0%, rgba(100, 116, 139, 0.08) 100%);
+}
+
+.optional-label,
+.required-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
+}
+
+.optional-label {
+    color: #475569;
+    background: rgba(148, 163, 184, 0.16);
+}
+
+.required-label {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+@media (max-width: 767.98px) {
+    .product-setup-block {
+        padding: 16px 14px 14px;
+        border-radius: 16px;
+    }
+
+    .product-setup-header h3 {
+        font-size: 0.95rem;
+    }
+
+    .product-setup-header p {
+        font-size: 0.83rem;
+    }
 }
