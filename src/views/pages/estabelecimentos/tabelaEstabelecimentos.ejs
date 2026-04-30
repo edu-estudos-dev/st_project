@@ -16,11 +16,13 @@
                 <h1>Estabelecimentos cadastrados</h1>
                 <p>Uma visão mais limpa da base de pontos para consultar produtos ativos, localizar responsáveis e agir rapidamente em visualizar, editar ou excluir.</p>
             </div>
+
             <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>Total</strong>
                     <span><%= estabelecimentos.length %> registros</span>
                 </div>
+
                 <div class="list-stat">
                     <strong>Ação rápida</strong>
                     <span>Cadastrar e gerenciar pontos</span>
@@ -35,6 +37,7 @@
                         <h2>Base de estabelecimentos</h2>
                         <p>Consulte os principais dados da operação e use os atalhos para abrir a tela certa sem perder contexto.</p>
                     </div>
+
                     <% if (!isReadOnly) { %>
                         <a class="list-action" href="/estabelecimentos/add">
                             <i class="bi bi-plus-circle"></i>
@@ -48,14 +51,17 @@
                         <strong>Registros</strong>
                         <span><%= estabelecimentos.length %> pontos</span>
                     </div>
+
                     <div class="list-summary-card">
                         <strong>Fluxo</strong>
                         <span>Consultar, editar e visualizar</span>
                     </div>
+
                     <div class="list-summary-card">
                         <strong>Contexto</strong>
                         <span>Operação centralizada</span>
                     </div>
+
                     <div class="list-summary-card">
                         <strong>Visualização</strong>
                         <span id="estabelecimentosModeLabel">Dados comerciais</span>
@@ -67,25 +73,24 @@
                     <button type="button" class="table-mode-btn" data-mode="operational">Operacional</button>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table class="modern-table">
+                <div class="modern-table-wrap estabelecimentos-table-wrap">
+                    <div class="modern-table-scroll estabelecimentos-table-scroll">
+                        <table class="modern-table estabelecimentos-table">
                             <thead>
                                 <tr>
-                                    <th>Estabelecimento</th>
-                                    <th class="mode-all">Produto</th>
-                                    <th class="mode-commercial">Endereço</th>
-                                    <th class="mode-commercial">Responsável</th>
-                                    <th class="mode-commercial">Contato</th>
+                                    <th class="est-col-name">Estabelecimento</th>
+                                    <th class="mode-all est-col-product">Produto</th>
+                                    <th class="mode-commercial est-col-address">Endereço</th>
 
-                                    <th class="mode-operational" style="display:none;">Chave Bolinhas</th>
-                                    <th class="mode-operational" style="display:none;">Máquina Bolinhas</th>
-                                    <th class="mode-operational" style="display:none;">Chave Pelúcias</th>
-                                    <th class="mode-operational" style="display:none;">Máquina Pelúcias</th>
+                                    <th class="mode-operational est-col-small" style="display:none;">Chave Bolinhas</th>
+                                    <th class="mode-operational est-col-small" style="display:none;">Máquina Bolinhas</th>
+                                    <th class="mode-operational est-col-small" style="display:none;">Chave Pelúcias</th>
+                                    <th class="mode-operational est-col-small" style="display:none;">Máquina Pelúcias</th>
 
-                                    <th class="table-actions-heading">Ações</th>
+                                    <th class="table-actions-heading est-actions-sticky">Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <% estabelecimentos.forEach((estabelecimento) => { %>
                                     <% const produtoBase = (estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
@@ -99,36 +104,52 @@
                                     <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
 
                                     <tr>
-                                        <td>
-                                            <div class="table-title-cell"><%= estabelecimento.estabelecimento %></div>
+                                        <td class="est-col-name">
+                                            <div class="table-title-cell estabelecimento-title">
+                                                <%= estabelecimento.estabelecimento %>
+                                            </div>
+
+                                            <div class="est-mobile-meta">
+                                                <% if (estabelecimento.responsavel_nome) { %>
+                                                    <span><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
+                                                <% } %>
+
+                                                <% if (estabelecimento.telefone_contato) { %>
+                                                    <span><i class="bi bi-telephone"></i> <%= estabelecimento.telefone_contato %></span>
+                                                <% } %>
+                                            </div>
                                         </td>
 
-                                        <td class="mode-all">
-                                            <span class="table-badge table-badge-blue"><%= estabelecimento.produtoFormatado || estabelecimento.produto %></span>
+                                        <td class="mode-all est-col-product">
+                                            <span class="table-badge table-badge-blue estabelecimento-product-badge">
+                                                <%= estabelecimento.produtoFormatado || estabelecimento.produto %>
+                                            </span>
                                         </td>
 
-                                        <td class="mode-commercial">
+                                        <td class="mode-commercial est-col-address">
                                             <% if (enderecoCompleto) { %>
                                                 <button
                                                     type="button"
-                                                    class="table-address-link route-address-link"
+                                                    class="table-address-link route-address-link estabelecimento-address-link"
                                                     data-address="<%= enderecoCompleto %>"
                                                     data-name="<%= estabelecimento.estabelecimento %>"
                                                     data-latitude="<%= estabelecimento.latitude ?? '' %>"
                                                     data-longitude="<%= estabelecimento.longitude ?? '' %>"
                                                 >
                                                     <i class="bi bi-geo-alt"></i>
-                                                    <span><%= estabelecimento.endereco %></span>
+                                                    <span>
+                                                        <strong><%= estabelecimento.endereco %></strong>
+                                                        <% if (estabelecimento.bairro) { %>
+                                                            <small><%= estabelecimento.bairro %></small>
+                                                        <% } %>
+                                                    </span>
                                                 </button>
                                             <% } else { %>
                                                 <span class="table-muted">Não informado</span>
                                             <% } %>
                                         </td>
 
-                                        <td class="mode-commercial"><%= estabelecimento.responsavel_nome %></td>
-                                        <td class="mode-commercial"><%= estabelecimento.telefone_contato || '-' %></td>
-
-                                        <td class="mode-operational" style="display:none;">
+                                        <td class="mode-operational est-col-small" style="display:none;">
                                             <% if (hasBolinhas) { %>
                                                 <span class="table-operational-pill table-operational-green"><%= chaveBolinhas || '-' %></span>
                                             <% } else { %>
@@ -136,7 +157,7 @@
                                             <% } %>
                                         </td>
 
-                                        <td class="mode-operational" style="display:none;">
+                                        <td class="mode-operational est-col-small" style="display:none;">
                                             <% if (hasBolinhas) { %>
                                                 <span class="table-operational-pill table-operational-green"><%= maquinaBolinhas || '-' %></span>
                                             <% } else { %>
@@ -144,7 +165,7 @@
                                             <% } %>
                                         </td>
 
-                                        <td class="mode-operational" style="display:none;">
+                                        <td class="mode-operational est-col-small" style="display:none;">
                                             <% if (hasPelucias) { %>
                                                 <span class="table-operational-pill table-operational-violet"><%= chavePelucias || '-' %></span>
                                             <% } else { %>
@@ -152,7 +173,7 @@
                                             <% } %>
                                         </td>
 
-                                        <td class="mode-operational" style="display:none;">
+                                        <td class="mode-operational est-col-small" style="display:none;">
                                             <% if (hasPelucias) { %>
                                                 <span class="table-operational-pill table-operational-violet"><%= maquinaPelucias || '-' %></span>
                                             <% } else { %>
@@ -160,12 +181,23 @@
                                             <% } %>
                                         </td>
 
-                                        <td class="table-actions-cell">
-                                            <div class="table-actions">
-                                                <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">Visualizar</a>
+                                        <td class="table-actions-cell est-actions-sticky">
+                                            <div class="table-actions estabelecimento-actions">
+                                                <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">
+                                                    <i class="bi bi-eye"></i>
+                                                    <span>Ver</span>
+                                                </a>
+
                                                 <% if (!isReadOnly) { %>
-                                                    <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">Editar</a>
-                                                    <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">Excluir</a>
+                                                    <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                        <span>Editar</span>
+                                                    </a>
+
+                                                    <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">
+                                                        <i class="bi bi-trash"></i>
+                                                        <span>Excluir</span>
+                                                    </a>
                                                 <% } %>
                                             </div>
                                         </td>
@@ -189,9 +221,167 @@
     </div>
 
     <style>
-        /* =========================================================
-           TABELA DE ESTABELECIMENTOS - CAMPOS OPERACIONAIS
-           ========================================================= */
+    /* =========================================================
+       TABELA DE ESTABELECIMENTOS - UX / COLUNA DE AÇÕES FIXA
+       ========================================================= */
+        .estabelecimentos-table-wrap {
+            overflow: hidden;
+        }
+
+        .estabelecimentos-table-scroll {
+            overflow-x: auto;
+            border-radius: 18px;
+        }
+
+        .estabelecimentos-table {
+            min-width: 960px;
+            table-layout: fixed;
+        }
+
+        .estabelecimentos-table th,
+        .estabelecimentos-table td {
+            vertical-align: middle;
+        }
+
+        .est-col-name {
+            width: 310px;
+        }
+
+        .est-col-product {
+            width: 165px;
+            text-align: center;
+        }
+
+        .est-col-address {
+            width: 435px;
+            text-align: left !important;
+        }
+
+        .estabelecimentos-table td.est-col-address,
+        .estabelecimentos-table th.est-col-address {
+            text-align: left !important;
+        }
+
+        .est-col-small {
+            width: 170px;
+            text-align: center;
+        }
+
+        .estabelecimento-title {
+            line-height: 1.35;
+            white-space: normal;
+        }
+
+        .est-mobile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 0.65rem;
+            margin-top: 0.45rem;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .est-mobile-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .estabelecimento-product-badge {
+            display: inline-flex;
+            justify-content: center;
+            max-width: 150px;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.25;
+            padding-left: 0.55rem;
+            padding-right: 0.55rem;
+        }
+
+        .estabelecimento-address-link {
+            display: inline-flex;
+            align-items: flex-start;
+            justify-content: flex-start !important;
+            gap: 0.42rem;
+            width: 100%;
+            max-width: 100%;
+            white-space: normal;
+            text-align: left !important;
+            line-height: 1.35;
+        }
+
+        .estabelecimento-address-link i {
+            margin-top: 0.12rem;
+            flex-shrink: 0;
+        }
+
+        .estabelecimento-address-link span {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.12rem;
+            min-width: 0;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            text-align: left !important;
+        }
+
+        .estabelecimento-address-link strong {
+            display: block;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            text-align: left !important;
+            line-height: 1.35;
+        }
+
+        .estabelecimento-address-link small {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            text-align: left !important;
+        }
+
+        .est-actions-sticky {
+            position: sticky;
+            right: 0;
+            z-index: 3;
+            width: 245px;
+            min-width: 245px;
+            background: #ffffff;
+            box-shadow: -14px 0 22px rgba(15, 23, 42, 0.06);
+        }
+
+        thead .est-actions-sticky {
+            z-index: 5;
+            background: #eaf3ff;
+        }
+
+        .estabelecimento-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.4rem;
+            flex-wrap: nowrap;
+        }
+
+        .estabelecimento-actions .table-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            min-height: 32px;
+            padding: 0.35rem 0.55rem;
+            white-space: nowrap;
+        }
+
+        .estabelecimento-actions .table-btn i {
+            font-size: 0.85rem;
+        }
 
         .table-operational-pill {
             display: inline-flex;
@@ -216,9 +406,87 @@
             background: rgba(124, 58, 237, 0.12);
             border: 1px solid rgba(124, 58, 237, 0.22);
         }
+
+        @media (max-width: 991.98px) {
+            .estabelecimentos-table {
+                min-width: 880px;
+            }
+
+            .est-col-name {
+                width: 260px;
+            }
+
+            .est-col-product {
+                width: 145px;
+            }
+
+            .est-col-address {
+                width: 380px;
+            }
+
+            .estabelecimento-product-badge {
+                max-width: 130px;
+            }
+
+            .est-actions-sticky {
+                width: 218px;
+                min-width: 218px;
+            }
+
+            .estabelecimento-actions .table-btn span {
+                display: none;
+            }
+
+            .estabelecimento-actions .table-btn {
+                width: 38px;
+                padding: 0.35rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .estabelecimentos-table {
+                min-width: 780px;
+            }
+
+            .est-col-name {
+                width: 230px;
+            }
+
+            .est-col-product {
+                width: 135px;
+            }
+
+            .est-col-address {
+                width: 320px;
+            }
+
+            .est-col-small {
+                width: 150px;
+            }
+
+            .estabelecimento-product-badge {
+                max-width: 120px;
+                font-size: 0.68rem;
+            }
+
+            .est-actions-sticky {
+                width: 168px;
+                min-width: 168px;
+            }
+
+            .estabelecimento-actions {
+                gap: 0.28rem;
+            }
+
+            .estabelecimento-actions .table-btn {
+                width: 34px;
+                min-height: 30px;
+            }
+        }
     </style>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const modeButtons = document.querySelectorAll('.table-mode-btn');
@@ -242,7 +510,9 @@
                     button.classList.toggle('is-active', button.getAttribute('data-mode') === mode);
                 });
 
-                modeLabel.textContent = mode === 'commercial' ? 'Dados comerciais' : 'Operacional';
+                if (modeLabel) {
+                    modeLabel.textContent = mode === 'commercial' ? 'Dados comerciais' : 'Operacional';
+                }
             };
 
             const buildGoogleRouteUrl = (address, coords, destinationCoords) => {
@@ -338,11 +608,20 @@
                     if (!confirmed) return;
 
                     try {
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
                         const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, {
-                            method: 'DELETE'
+                            method: 'DELETE',
+                            credentials: 'same-origin',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-Token': csrfToken
+                            }
                         });
 
-                        const data = await response.json();
+                        const contentType = response.headers.get('content-type') || '';
+                        const data = contentType.includes('application/json')
+                            ? await response.json()
+                            : { message: await response.text() };
 
                         if (!response.ok) {
                             throw new Error(data.message || 'Erro ao excluir estabelecimento');
@@ -356,11 +635,11 @@
                 });
             });
 
-            <% if (typeof success !== 'undefined') { %>
+            <% if (typeof success !== 'undefined' && success) { %>
                 window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
             <% } %>
 
-            <% if (typeof error !== 'undefined') { %>
+            <% if (typeof error !== 'undefined' && error) { %>
                 window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
             <% } %>
         });

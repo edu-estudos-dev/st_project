@@ -157,8 +157,8 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Localização</span>
-                            <h2>Endereço, referência e coordenadas</h2>
-                            <p>Guarde o local do ponto com o endereço textual e, se possível, também com latitude e longitude para melhorar as rotas.</p>
+                            <h2>Endereço e localização do ponto</h2>
+                            <p>Informe o endereço do estabelecimento e, se estiver no local, salve a localização exata automaticamente.</p>
                         </div>
                     </div>
 
@@ -306,7 +306,7 @@
                                             class="form-control text-center"
                                             id="maquina_pelucias"
                                             name="maquina_pelucias"
-                                            placeholder="Número da máquina"
+                                            placeholder="Número da máquina, Ex. GRUA-001"
                                             value="<%= form.maquina_pelucias || '' %>"
                                         >
                                     </div>
@@ -348,7 +348,7 @@
 
                                     <div class="col-12 col-md-6 col-lg-3 compact-field centered-field">
                                         <label for="pelucia_abastecido_inicial">
-                                            Abastecido <span class="required-label">obrigatório</span>
+                                            Qtde. Inicial <span class="required-label">obrigatório</span>
                                         </label>
                                         <input
                                             type="number"
@@ -367,10 +367,20 @@
                         <!-- ===== FIM DO BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
 
                         <div class="col-12">
-                            <div class="route-coordinates-header">
+                            <div class="route-coordinates-header route-coordinates-private">
                                 <div>
-                                    <label class="mb-1" for="latitude">Coordenadas do ponto</label>
-                                    <small class="modern-note">Se você estiver no local, use o botão abaixo para gravar a posição exata e melhorar a ordem das visitas.</small>
+                                    <label class="mb-1">Localização exata do ponto</label>
+                                    <small class="modern-note">
+                                        Se você estiver no estabelecimento, clique no botão para salvar a localização automaticamente.
+                                        Esses dados ficam salvos apenas no sistema para melhorar as rotas.
+                                    </small>
+
+                                    <small
+                                        class="coordinates-capture-status <%= form.latitude && form.longitude ? 'is-success' : '' %>"
+                                        id="coordinatesCaptureStatus"
+                                    >
+                                        <%= form.latitude && form.longitude ? 'Localização já capturada para este ponto.' : 'Localização ainda não capturada.' %>
+                                    </small>
                                 </div>
 
                                 <button type="button" class="btn-modern-secondary route-coordinate-button" id="captureCoordinatesButton">
@@ -378,28 +388,18 @@
                                     <span>Usar minha localização atual</span>
                                 </button>
                             </div>
-                        </div>
 
-                        <div class="col-12 col-md-6">
-                            <label for="latitude">Latitude</label>
                             <input
-                                type="text"
-                                class="form-control text-center"
+                                type="hidden"
                                 id="latitude"
                                 name="latitude"
-                                placeholder="-3.731862"
                                 value="<%= form.latitude || '' %>"
                             >
-                        </div>
 
-                        <div class="col-12 col-md-6">
-                            <label for="longitude">Longitude</label>
                             <input
-                                type="text"
-                                class="form-control text-center"
+                                type="hidden"
                                 id="longitude"
                                 name="longitude"
-                                placeholder="-38.526669"
                                 value="<%= form.longitude || '' %>"
                             >
                         </div>
@@ -594,6 +594,30 @@
             background: rgba(239, 68, 68, 0.12);
         }
 
+        .route-coordinates-private {
+            align-items: flex-start;
+        }
+
+        .coordinates-capture-status {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #475569;
+            background: rgba(148, 163, 184, 0.14);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .coordinates-capture-status.is-success {
+            color: #166534;
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.24);
+        }
+
         @media (max-width: 767.98px) {
             .product-setup-block {
                 padding: 16px 14px 14px;
@@ -613,6 +637,14 @@
                 margin-left: 0;
                 margin-top: 4px;
             }
+
+            .route-coordinates-private {
+                gap: 1rem;
+            }
+
+            .coordinates-capture-status {
+                font-size: 0.74rem;
+            }
         }
     </style>
 
@@ -624,6 +656,7 @@
             const latitudeInput = document.getElementById('latitude');
             const longitudeInput = document.getElementById('longitude');
             const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
+            const coordinatesCaptureStatus = document.getElementById('coordinatesCaptureStatus');
             const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
 
             const bolinhasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="bolinhas-machine"]'));
@@ -707,16 +740,32 @@
 
                 captureCoordinatesButton.disabled = true;
 
+                if (coordinatesCaptureStatus) {
+                    coordinatesCaptureStatus.textContent = 'Capturando localização...';
+                    coordinatesCaptureStatus.classList.remove('is-success');
+                }
+
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         latitudeInput.value = position.coords.latitude.toFixed(6);
                         longitudeInput.value = position.coords.longitude.toFixed(6);
+
+                        if (coordinatesCaptureStatus) {
+                            coordinatesCaptureStatus.textContent = 'Localização capturada com sucesso.';
+                            coordinatesCaptureStatus.classList.add('is-success');
+                        }
+
                         captureCoordinatesButton.disabled = false;
-                        window.AppAlerts?.success('Coordenadas preenchidas com a sua localização atual.');
+                        window.AppAlerts?.success('Localização do ponto salva com sucesso.');
                     },
                     () => {
+                        if (coordinatesCaptureStatus) {
+                            coordinatesCaptureStatus.textContent = 'Localização ainda não capturada.';
+                            coordinatesCaptureStatus.classList.remove('is-success');
+                        }
+
                         captureCoordinatesButton.disabled = false;
-                        window.AppAlerts?.error('Não foi possível ler sua localização atual.');
+                        window.AppAlerts?.error('Não foi possível capturar sua localização. Verifique a permissão do navegador e tente novamente.');
                     },
                     {
                         enableHighAccuracy: true,
@@ -746,7 +795,7 @@
                     (!peluciaLeituraInicialInput.value || !peluciaAbastecidoInicialInput.value)
                 ) {
                     e.preventDefault();
-                    window.AppAlerts?.warning('Informe leitura inicial e abastecido inicial para pelúcias.');
+                    window.AppAlerts?.warning('Informe leitura inicial e quantidade inicial para pelúcias.');
                     return;
                 }
             });

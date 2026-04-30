@@ -11,6 +11,7 @@
   },
   "scripts": {
     "free:port": "node scripts/free-port.js",
+    "kill:8082": "node scripts/free-port.js 8082",
     "start": "node server.js",
     "predev": "npm run free:port",
     "dev": "node --watch server.js"

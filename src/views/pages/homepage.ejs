@@ -31,12 +31,15 @@
     <section class="vm-hero">
       <div class="vm-hero-container">
         <div class="vm-hero-left">
-          <%# ALTERAÇÃO: badge com keyword explícita para SEO %>
-          <span class="vm-hero-badge">Sistema de gestão para máquinas recreativas · Feito por um operador, para operadores</span>
           <h1 class="vm-hero-title">
             Pare de rodar <br> &agrave; toa.
             <span class="text-accent">Use um sistema de gest&atilde;o para m&aacute;quinas recreativas, bolinhas e consignados.</span>
           </h1>
+          <%# ALTERAÇÃO: badge com keyword explícita para SEO %>
+          <span class="vm-hero-badge">
+            <span>Sistema de gestão para máquinas recreativas</span>
+            <span>Feito por operador para operadores</span>
+          </span>
 
           <p class="vm-hero-description">
             O VendMaster organiza pontos, sangrias, estoque, acertos de comissão, financeiro e relatórios em um só
@@ -254,7 +257,11 @@
     <section id="solucao" class="vm-section vm-section-light vm-dashboard-showcase">
       <div class="vm-section-heading">
         <span class="vm-kicker">Painel gerencial</span>
-        <h2 class="titulo-servicos">Veja na prática como o VendMaster centraliza sua operação.</h2>
+
+        <h2 class="titulo-servicos">
+          Veja na prática como o VendMaster centraliza sua operação.
+        </h2>
+
         <p class="vm-subtext">
           Acompanhe pontos, produtos, bairros, entradas, saídas, alertas e últimas movimentações sem depender
           de planilhas espalhadas.
@@ -264,7 +271,10 @@
       <div class="vm-dashboard-layout">
         <div class="vm-dashboard-copy">
           <span class="vm-kicker">Clareza para decidir</span>
-          <h3>O painel mostra onde está o lucro, onde está o gargalo e quais pontos pedem atenção.</h3>
+
+          <h3>
+            O painel mostra onde está o lucro, onde está o gargalo e quais pontos pedem atenção.
+          </h3>
 
           <p>
             Em vez de abrir várias abas, conferir anotações ou tentar lembrar a última visita,
@@ -283,25 +293,91 @@
             </div>
 
             <div>
-              <strong>Ranking por produto</strong>
-              <span>Veja rapidamente quais frentes e pontos estão trazendo mais resultado.</span>
+              <strong>Rotas inteligentes</strong>
+              <span>Monte o percurso com base em prioridade, bairro, pendências e pontos mais urgentes.</span>
             </div>
           </div>
         </div>
 
         <div class="vm-dashboard-image-card">
-          <img src="/images/dashboard-vendmaster.png"
-            alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
+          <div id="vmDashboardCarousel" class="carousel slide carousel-fade vm-dashboard-carousel" data-bs-ride="carousel"
+            data-bs-interval="5200" data-bs-pause="hover" data-bs-touch="true">
+
+            <div class="carousel-indicators vm-dashboard-carousel-indicators">
+              <button type="button" data-bs-target="#vmDashboardCarousel" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Painel gerencial"></button>
+
+              <button type="button" data-bs-target="#vmDashboardCarousel" data-bs-slide-to="1"
+                aria-label="Rota inteligente"></button>
+            </div>
+
+            <div class="carousel-inner vm-dashboard-carousel-inner">
+              <div class="carousel-item active">
+                <div class="vm-dashboard-slide vm-dashboard-slide-panel">
+                  <div class="vm-dashboard-browser-bar" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+
+                  <div class="vm-dashboard-print-frame">
+                    <img src="/images/dashboard-vendmaster.png"
+                      alt="Dashboard do VendMaster com indicadores de rota, financeiro, pontos e operação de máquinas recreativas">
+                  </div>
+
+                  <div class="vm-dashboard-slide-caption">
+                    <span>Painel gerencial</span>
+                    <strong>Indicadores, prioridades e financeiro em uma visão única.</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item">
+                <div class="vm-dashboard-slide vm-dashboard-slide-route">
+                  <div class="vm-dashboard-browser-bar" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+
+                  <div class="vm-dashboard-print-frame">
+                    <img src="/images/rota-vendmaster.png"
+                      alt="Tela de rota inteligente do VendMaster com pontos selecionados, mapa do percurso e próximo destino">
+                  </div>
+
+                  <div class="vm-dashboard-slide-caption">
+                    <span>Rota inteligente</span>
+                    <strong>O operador sabe para onde ir, o que visitar e qual ponto priorizar.</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="carousel-control-prev vm-dashboard-carousel-control" type="button"
+              data-bs-target="#vmDashboardCarousel" data-bs-slide="prev" aria-label="Imagem anterior">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+
+            <button class="carousel-control-next vm-dashboard-carousel-control" type="button"
+              data-bs-target="#vmDashboardCarousel" data-bs-slide="next" aria-label="Próxima imagem">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="vm-section-cta vm-dashboard-integrated-cta">
         <div class="vm-section-cta-copy">
           <span class="vm-kicker">Veja o sistema em ação</span>
+
           <h3>Quer parar de decidir rota no achismo?</h3>
-          <p>Solicite uma demonstração e veja como o VendMaster organiza prioridades, coletas, acertos e financeiro sem
-            depender de planilhas espalhadas.</p>
+
+          <p>
+            Solicite uma demonstração e veja como o VendMaster organiza prioridades, coletas, acertos e financeiro sem
+            depender de planilhas espalhadas.
+          </p>
         </div>
+
         <%# ALTERAÇÃO: CTA unificado %>
         <a href="#contato" class="btn btn-primary btn-lg">Quero ver na prática</a>
       </div>
@@ -456,7 +532,7 @@
         <div class="vm-founder-text">
           <span class="vm-kicker">Quem está por trás</span>
           <h2 class="vm-founder-title">
-            Criado por um operador.<br>
+            Criado por um operador de m&aacute;quinas recreativas.<br>
             <span class="text-accent-dark">Para quem opera de verdade.</span>
           </h2>
           <p>
@@ -474,25 +550,35 @@
             Brasil. Sem grande empresa por trás. Sem consultor que nunca pisou num ponto.
             Só alguém que conhece a rotina porque a vive.
           </p>
-          <a href="#contato" class="btn btn-founder-cta">Quero ver na prática</a>
+
         </div>
 
         <div class="vm-founder-card">
-          <div class="vm-founder-avatar" aria-hidden="true">EP</div>
-          <div class="vm-founder-info">
-            <strong>Eduardo Praciano</strong>
-            <span>Operador e criador do VendMaster · Fortaleza/CE</span>
+          <div class="vm-founder-person">
+            <div class="vm-founder-avatar">
+              <img
+                src="/images/eduardo-praciano.png"
+                alt="Foto de Eduardo Praciano"
+              />
+            </div>
+            <div class="vm-founder-info">
+              <strong>Eduardo Praciano</strong>
+              <span>Operador e criador do VendMaster · Fortaleza/CE</span>
+            </div>
           </div>
           <blockquote class="vm-founder-quote">
-            "Não existia sistema feito para quem opera máquinas recreativas no Brasil.
+            Não existia sistema feito para quem opera máquinas recreativas no Brasil.
             Eu precisava saber quais pontos visitar primeiro, controlar sangria, acertar comissão
             e entender meu financeiro — tudo junto. Construí o VendMaster para resolver minha própria
-            operação. Agora está disponível para quem vive a mesma rotina."
+            operação. Agora está disponível para quem vive a mesma rotina.
           </blockquote>
           <div class="vm-founder-tags">
             <span class="vm-founder-tag">Operador ativo</span>
             <span class="vm-founder-tag">Bolinhas · Pelúcias · Consignados</span>
             <span class="vm-founder-tag">Ceará / Brasil</span>
+          </div>
+          <div class="vm-founder-actions">
+            <a href="#contato" class="btn btn-founder-cta">Quero ver na prática</a>
           </div>
         </div>
       </div>

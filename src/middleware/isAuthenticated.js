@@ -31,6 +31,12 @@ const isAuthenticated = (req, res, next) => {
         return next();
     }
 
+    if (req.xhr || req.get('accept')?.includes('application/json')) {
+        return res.status(401).json({
+            message: 'Sua sessao expirou. Faca login novamente.'
+        });
+    }
+
     return res.redirect('/login?erro=Por favor, faça login primeiro.');
 };
 
