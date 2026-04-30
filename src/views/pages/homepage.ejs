@@ -21,7 +21,8 @@
           <li><a href="#modulos">Módulos</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
-          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Ver demonstração</a></li>
+          <%# ALTERAÇÃO: CTA unificado para "Quero ver na prática" %>
+          <li class="homepage-cta-item"><a class="homepage-cta-link" href="#contato">Quero ver na prática</a></li>
           <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
         </ul>
       </nav>
@@ -30,7 +31,8 @@
     <section class="vm-hero">
       <div class="vm-hero-container">
         <div class="vm-hero-left">
-          <span class="vm-hero-badge">Sistema de gestão para máquinas recreativas</span>
+          <%# ALTERAÇÃO: badge com keyword explícita para SEO %>
+          <span class="vm-hero-badge">Sistema de gestão para máquinas recreativas · Feito por um operador, para operadores</span>
           <h1 class="vm-hero-title">
             Pare de rodar <br> &agrave; toa.
             <span class="text-accent">Use um sistema de gest&atilde;o para m&aacute;quinas recreativas, bolinhas e consignados.</span>
@@ -44,6 +46,7 @@
           </p>
 
           <div class="vm-hero-buttons">
+            <%# ALTERAÇÃO: CTA unificado %>
             <a href="#contato" class="btn btn-primary btn-lg">Quero ver na prática</a>
             <a href="https://wa.me/5585986992706" target="_blank" rel="noopener"
               class="btn btn-outline-light btn-lg">Falar no WhatsApp</a>
@@ -299,6 +302,7 @@
           <p>Solicite uma demonstração e veja como o VendMaster organiza prioridades, coletas, acertos e financeiro sem
             depender de planilhas espalhadas.</p>
         </div>
+        <%# ALTERAÇÃO: CTA unificado %>
         <a href="#contato" class="btn btn-primary btn-lg">Quero ver na prática</a>
       </div>
     </section>
@@ -442,38 +446,85 @@
       </div>
     </section>
 
+    <%# =====================================================================
+         NOVA SEÇÃO: QUEM CRIOU O VENDMASTER
+         Separada dos depoimentos de clientes. Posicionada após os módulos
+         e antes da prova social, como camada de credibilidade de origem.
+         ===================================================================== %>
+    <section class="vm-section vm-section-light vm-founder-section">
+      <div class="vm-founder-inner">
+        <div class="vm-founder-text">
+          <span class="vm-kicker">Quem está por trás</span>
+          <h2 class="vm-founder-title">
+            Criado por um operador.<br>
+            <span class="text-accent-dark">Para quem opera de verdade.</span>
+          </h2>
+          <p>
+            O VendMaster não foi desenhado em escritório. Ele nasceu de uma rota real — de uma operação
+            com bolinhas, pelúcias e consignados que cresceu e precisou de controle.
+          </p>
+          <p>
+            Depois de tentar planilha, caderno e improviso, Eduardo Praciano — que opera suas próprias
+            máquinas no Ceará — decidiu construir o sistema que ele queria ter. Cada funcionalidade veio
+            de uma dor real de campo: saber qual ponto visitar primeiro, fechar o acerto com o parceiro
+            sem erro, entender o que realmente está pagando a conta.
+          </p>
+          <p>
+            Quando o sistema funcionou para a sua própria operação, ele abriu para outros operadores do
+            Brasil. Sem grande empresa por trás. Sem consultor que nunca pisou num ponto.
+            Só alguém que conhece a rotina porque a vive.
+          </p>
+          <a href="#contato" class="btn btn-founder-cta">Quero ver na prática</a>
+        </div>
+
+        <div class="vm-founder-card">
+          <div class="vm-founder-avatar" aria-hidden="true">EP</div>
+          <div class="vm-founder-info">
+            <strong>Eduardo Praciano</strong>
+            <span>Operador e criador do VendMaster · Fortaleza/CE</span>
+          </div>
+          <blockquote class="vm-founder-quote">
+            "Não existia sistema feito para quem opera máquinas recreativas no Brasil.
+            Eu precisava saber quais pontos visitar primeiro, controlar sangria, acertar comissão
+            e entender meu financeiro — tudo junto. Construí o VendMaster para resolver minha própria
+            operação. Agora está disponível para quem vive a mesma rotina."
+          </blockquote>
+          <div class="vm-founder-tags">
+            <span class="vm-founder-tag">Operador ativo</span>
+            <span class="vm-founder-tag">Bolinhas · Pelúcias · Consignados</span>
+            <span class="vm-founder-tag">Ceará / Brasil</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <%# =====================================================================
+         SEÇÃO PROVA SOCIAL — apenas depoimentos de clientes
+         Eduardo removido daqui e promovido para seção própria acima.
+         Título atualizado para foco em prova social real.
+         ===================================================================== %>
     <section class="vm-section vm-section-dark vm-proof-section dark-bg">
       <div class="vm-section-heading">
-        <span class="vm-kicker vm-kicker-light">Credibilidade</span>
+        <%# ALTERAÇÃO: kicker e título atualizados %>
+        <span class="vm-kicker vm-kicker-light">O que dizem os operadores</span>
 
         <h2 class="titulo-servicos">
-          Feito a partir de problemas <span class="text-accent">reais</span> de operação de rua.
+          Quem usa <span class="text-accent">já não volta</span> para o improviso.
         </h2>
 
         <p class="vm-subtext">
-          Feedbacks de operadores que vivem a rotina de visita,<br> coleta, reposição e acerto com parceiros.
+          Operadores de bolinhas, gruas, pelúcias e consignados<br> que trocaram a planilha por uma rota com critério.
         </p>
       </div>
 
-      <div class="vm-proof-grid">
-        <article class="vm-proof-card vm-proof-card-modern">
-          <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-bullseye"></i></div>
-          <div class="vm-proof-content">
-            <h3>Operação de campo</h3>
-            <blockquote>“A ideia nasceu da necessidade de saber quais pontos realmente precisavam de visita, coleta ou
-              reposição.”</blockquote>
-            <div class="vm-proof-author"><span class="vm-proof-avatar">EP</span>
-              <p><strong>Eduardo Praciano</strong><br>Criador do VendMaster</p>
-            </div>
-          </div>
-        </article>
-
+      <%# ALTERAÇÃO: grid com 3 depoimentos reais (Eduardo removido) %>
+      <div class="vm-proof-grid vm-proof-grid-3">
         <article class="vm-proof-card vm-proof-card-modern vm-proof-card-highlight">
           <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-chat-dots"></i></div>
           <div class="vm-proof-content">
             <h3>Mais clareza na rota</h3>
-            <blockquote>“Antes eu visitava ponto por costume. Agora consigo enxergar quais locais estão há mais tempo
-              sem coleta e priorizar melhor o dia.”</blockquote>
+            <blockquote>"Antes eu visitava ponto por costume. Agora consigo enxergar quais locais estão há mais tempo
+              sem coleta e priorizar melhor o dia."</blockquote>
             <div class="vm-proof-author"><span class="vm-proof-avatar">JR</span>
               <p><strong>João Ribeiro</strong><br>Operador de bolinhas · Fortaleza/CE</p>
             </div>
@@ -484,8 +535,8 @@
           <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></div>
           <div class="vm-proof-content">
             <h3>Acerto mais organizado</h3>
-            <blockquote>“O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão. Fica mais
-              fácil explicar o acerto para o parceiro.”</blockquote>
+            <blockquote>"O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão. Fica mais
+              fácil explicar o acerto para o parceiro."</blockquote>
             <div class="vm-proof-author"><span class="vm-proof-avatar">MC</span>
               <p><strong>Marcelo Costa</strong><br>Operador de consignados · Caucaia/CE</p>
             </div>
@@ -496,8 +547,8 @@
           <div class="vm-proof-icon" aria-hidden="true"><i class="bi bi-signpost-split"></i></div>
           <div class="vm-proof-content">
             <h3>Rotina mais previsível</h3>
-            <blockquote>“Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
-              visita e quais podem esperar.”</blockquote>
+            <blockquote>"Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
+              visita e quais podem esperar."</blockquote>
             <div class="vm-proof-author"><span class="vm-proof-avatar">AF</span>
               <p><strong>Antônio Ferreira</strong><br>Operador de gruas e pelúcias · Maracanaú/CE</p>
             </div>
@@ -624,7 +675,8 @@
             </div>
 
             <div class="vm-contact-actions mt-4">
-              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Solicitar demonstração</button>
+              <%# ALTERAÇÃO: CTA unificado %>
+              <button type="submit" class="btn btn-primary btn-lg vm-submit-btn">Quero ver na prática</button>
               <p id="contactStatus" class="vm-status" aria-live="polite"></p>
             </div>
           </div>

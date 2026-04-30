@@ -32,6 +32,58 @@
 
         <main class="form-stage">
             <form id="cadastroForm" class="modern-form" action="/estabelecimentos/add" method="POST">
+
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Operação</span>
+                            <h2>Produtos ativos e observações</h2>
+                            <p>Marque quais linhas estão ativas no estabelecimento e registre qualquer detalhe útil para visitas, sangrias ou manutenção.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 align-items-start">
+                        <div class="col-12 col-lg-5">
+                            <label>Produtos vinculados</label>
+                            <div class="modern-checkbox-grid">
+                                <% (productOptions || []).forEach((produto, index) => { %>
+                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                        <input class="form-check-input" type="checkbox" id="produto<%= index + 1 %>" name="produto" value="<%= produto.value %>" <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>>
+                                        <span><%= produto.label %></span>
+                                    </label>
+                                <% }) %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-green" for="produto1">
+                                        <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= selectedProducts.includes('BOLINHAS') ? 'checked' : '' %>>
+                                        <span>Bolinhas</span>
+                                    </label>
+                                <% } %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-blue" for="produto2">
+                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
+                                        <span>Consignados</span>
+                                    </label>
+                                <% } %>
+
+                                <% if (false) { %>
+                                    <label class="modern-checkbox modern-checkbox-violet" for="produto3">
+                                        <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= selectedProducts.includes('PELUCIAS') ? 'checked' : '' %>>
+                                        <span>Pelúcias</span>
+                                    </label>
+                                <% } %>
+                            </div>
+                            <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
+                        </div>
+
+                        <div class="col-12 col-lg-7">
+                            <label for="observacoes">Comentários</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255" placeholder="Ex.: melhor horário para visita, pessoa de contato, detalhes do espaço..."><%= form.observacoes || '' %></textarea>
+                        </div>
+                    </div>
+                </section>
+
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
@@ -75,13 +127,25 @@
                             <label for="bairro">Bairro</label>
                             <input type="text" class="form-control text-center" id="bairro" name="bairro" placeholder="Bairro" value="<%= form.bairro || '' %>" required>
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field" data-operational-field="machine">
                             <label for="chave">Chave</label>
                             <input type="text" class="form-control text-center" id="chave" name="chave" placeholder="Código" value="<%= form.chave || '' %>">
                         </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field">
+                        <div class="col-6 col-md-4 col-lg-2 compact-field centered-field" data-operational-field="machine">
                             <label for="maquina">Máquina</label>
                             <input type="text" class="form-control text-center" id="maquina" name="maquina" placeholder="Número" value="<%= form.maquina || '' %>">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 compact-field centered-field d-none" data-operational-field="figurinhas-initial">
+                            <label for="figurinha_quantidade_inicial">Quantidade inicial deixada</label>
+                            <input type="number" class="form-control text-center" id="figurinha_quantidade_inicial" name="figurinha_quantidade_inicial" min="0" value="<%= form.figurinha_quantidade_inicial || '' %>">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2 compact-field centered-field d-none" data-operational-field="pelucias-initial">
+                            <label for="pelucia_leitura_inicial">Leitura inicial</label>
+                            <input type="number" class="form-control text-center" id="pelucia_leitura_inicial" name="pelucia_leitura_inicial" min="0" value="<%= form.pelucia_leitura_inicial || '' %>">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2 compact-field centered-field d-none" data-operational-field="pelucias-initial">
+                            <label for="pelucia_abastecido_inicial">Abastecido</label>
+                            <input type="number" class="form-control text-center" id="pelucia_abastecido_inicial" name="pelucia_abastecido_inicial" min="0" value="<%= form.pelucia_abastecido_inicial || '' %>">
                         </div>
                         <div class="col-12">
                             <div class="route-coordinates-header">
@@ -102,48 +166,6 @@
                         <div class="col-12 col-md-6">
                             <label for="longitude">Longitude</label>
                             <input type="text" class="form-control text-center" id="longitude" name="longitude" placeholder="-38.526669" value="<%= form.longitude || '' %>">
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Operação</span>
-                            <h2>Produtos ativos e observações</h2>
-                            <p>Marque quais linhas estão ativas no estabelecimento e registre qualquer detalhe útil para visitas, sangrias ou manutenção.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-4 align-items-start">
-                        <div class="col-12 col-lg-5">
-                            <label>Produtos vinculados</label>
-                            <div class="modern-checkbox-grid">
-                                <% (productOptions || []).forEach((produto, index) => { %>
-                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
-                                        <input class="form-check-input" type="checkbox" id="produto<%= index + 1 %>" name="produto" value="<%= produto.value %>" <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>>
-                                        <span><%= produto.label %></span>
-                                    </label>
-                                <% }) %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-green" for="produto1">
-                                    <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= selectedProducts.includes('BOLINHAS') ? 'checked' : '' %>>
-                                    <span>Bolinhas</span>
-                                </label><% } %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                    <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
-                                    <span>Consignados</span>
-                                </label><% } %>
-                                <% if (false) { %><label class="modern-checkbox modern-checkbox-violet" for="produto3">
-                                    <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= selectedProducts.includes('PELUCIAS') ? 'checked' : '' %>>
-                                    <span>Pelúcias</span>
-                                </label><% } %>
-                            </div>
-                            <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
-                        </div>
-
-                        <div class="col-12 col-lg-7">
-                            <label for="observacoes">Comentários</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" maxlength="255" placeholder="Ex.: melhor horário para visita, pessoa de contato, detalhes do espaço..."><%= form.observacoes || '' %></textarea>
                         </div>
                     </div>
                 </section>
@@ -176,6 +198,52 @@
             const latitudeInput = document.getElementById('latitude');
             const longitudeInput = document.getElementById('longitude');
             const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
+            const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
+            const machineFields = Array.from(document.querySelectorAll('[data-operational-field="machine"]'));
+            const figurinhasInitialFields = Array.from(document.querySelectorAll('[data-operational-field="figurinhas-initial"]'));
+            const peluciasInitialFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-initial"]'));
+            const figurinhaQuantidadeInicialInput = document.getElementById('figurinha_quantidade_inicial');
+            const peluciaLeituraInicialInput = document.getElementById('pelucia_leitura_inicial');
+            const peluciaAbastecidoInicialInput = document.getElementById('pelucia_abastecido_inicial');
+            const chaveInput = document.getElementById('chave');
+            const maquinaInput = document.getElementById('maquina');
+
+            const getSelectedProducts = () => produtoInputs
+                .filter((checkbox) => checkbox.checked)
+                .map((checkbox) => checkbox.value);
+
+            const setGroupVisibility = (fields, shouldShow) => {
+                fields.forEach((field) => field.classList.toggle('d-none', !shouldShow));
+            };
+
+            const syncOperationalFields = () => {
+                const selectedProducts = getSelectedProducts();
+                const onlyFigurinhas = selectedProducts.length === 1 && selectedProducts.includes('FIGURINHAS');
+                const hasPelucias = selectedProducts.includes('PELUCIAS');
+
+                setGroupVisibility(machineFields, !onlyFigurinhas);
+                setGroupVisibility(figurinhasInitialFields, onlyFigurinhas);
+                setGroupVisibility(peluciasInitialFields, hasPelucias);
+
+                figurinhaQuantidadeInicialInput.required = onlyFigurinhas;
+                peluciaLeituraInicialInput.required = hasPelucias;
+                peluciaAbastecidoInicialInput.required = hasPelucias;
+
+                if (!onlyFigurinhas) {
+                    figurinhaQuantidadeInicialInput.value = '';
+                } else {
+                    chaveInput.value = '';
+                    maquinaInput.value = '';
+                }
+
+                if (!hasPelucias) {
+                    peluciaLeituraInicialInput.value = '';
+                    peluciaAbastecidoInicialInput.value = '';
+                }
+            };
+
+            produtoInputs.forEach((input) => input.addEventListener('change', syncOperationalFields));
+            syncOperationalFields();
 
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
@@ -210,10 +278,24 @@
             });
 
             document.getElementById('cadastroForm').addEventListener('submit', (e) => {
-                const isChecked = Array.from(document.querySelectorAll('input[name="produto"]')).some((checkbox) => checkbox.checked);
+                const selectedProducts = getSelectedProducts();
+                const isChecked = selectedProducts.length > 0;
+
                 if (!isChecked) {
                     e.preventDefault();
                     window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
+                    return;
+                }
+
+                if (selectedProducts.includes('PELUCIAS') && (!peluciaLeituraInicialInput.value || !peluciaAbastecidoInicialInput.value)) {
+                    e.preventDefault();
+                    window.AppAlerts?.warning('Informe leitura inicial e abastecido para pelúcias.');
+                    return;
+                }
+
+                if (selectedProducts.length === 1 && selectedProducts[0] === 'FIGURINHAS' && !figurinhaQuantidadeInicialInput.value) {
+                    e.preventDefault();
+                    window.AppAlerts?.warning('Informe a quantidade inicial deixada para consignados.');
                 }
             });
 

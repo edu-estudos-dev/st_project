@@ -102,6 +102,12 @@
                 const step = input.getAttribute('step');
                 const allowsDecimal = step && step !== '1';
 
+                input.addEventListener('wheel', (event) => {
+                    if (document.activeElement === input) {
+                        event.preventDefault();
+                    }
+                }, { passive: false });
+
                 input.addEventListener('keydown', (event) => {
                     const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
 

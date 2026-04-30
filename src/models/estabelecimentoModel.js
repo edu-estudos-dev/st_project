@@ -86,11 +86,12 @@ class EstabelecimentoModel {
           status
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+        RETURNING id
       `;
 
       const dateISO = new Date();
 
-      await connection.query(SQL, [
+      const result = await connection.query(SQL, [
         assinante_id,
         estabelecimento,
         produto,
@@ -106,6 +107,8 @@ class EstabelecimentoModel {
         dateISO,
         'ativo'
       ]);
+
+      return result.rows[0];
     } catch (error) {
       console.error('Erro ao criar novo estabelecimento:', error);
       throw new Error('Erro ao criar novo estabelecimento.');

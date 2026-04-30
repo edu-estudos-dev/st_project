@@ -29,7 +29,7 @@
         </section>
 
         <main class="form-stage">
-            <form action="/pelucias/sangrias/add" method="POST" class="modern-form">
+            <form action="/pelucias/sangrias/add" method="POST" class="modern-form" id="peluciaForm">
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
@@ -80,7 +80,7 @@
                             <input type="number" class="form-control text-center" id="leitura_inicial" name="leitura_inicial" min="0">
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label for="estoque_inicial">Estoque inicial</label>
+                            <label for="estoque_inicial">Abastecido inicial</label>
                             <input type="number" class="form-control text-center" id="estoque_inicial" name="estoque_inicial" min="0">
                         </div>
                     </div>
@@ -409,6 +409,30 @@
             document.getElementById('estoque_inicial').addEventListener('input', syncModoAberturaInicial);
 
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
+
+            document.getElementById('peluciaForm').addEventListener('submit', (event) => {
+                const isAbertura = aberturaInicialInput.checked;
+                const hasHistorico = window.peluciaHasHistorico === true;
+                const leituraInicial = document.getElementById('leitura_inicial').value;
+                const estoqueInicial = document.getElementById('estoque_inicial').value;
+
+                if (!estabelecimentoSelect.value) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Selecione um estabelecimento antes de salvar.');
+                    return;
+                }
+
+                if (!hasHistorico && !isAbertura) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe leitura inicial e abastecido inicial.');
+                    return;
+                }
+
+                if (isAbertura && (!leituraInicial || !estoqueInicial)) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Informe leitura inicial e abastecido inicial antes de salvar a abertura de pelúcias.');
+                }
+            });
 
             calculateValues();
             calculateEstoquePrevisto();

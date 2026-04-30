@@ -47,8 +47,16 @@ class PeluciasController {
                     throw new Error('Este estabelecimento já possui histórico de pelúcias. Use o cadastro normal de visita.');
                 }
 
-                const leituraInicial = Number(leitura_inicial || 0);
-                const estoqueInicial = Number(estoque_inicial || 0);
+                if (leitura_inicial === undefined || leitura_inicial === null || String(leitura_inicial).trim() === '') {
+                    throw new Error('Informe a leitura inicial antes de cadastrar a abertura de pelúcias.');
+                }
+
+                if (estoque_inicial === undefined || estoque_inicial === null || String(estoque_inicial).trim() === '') {
+                    throw new Error('Informe o abastecido inicial antes de cadastrar a abertura de pelúcias.');
+                }
+
+                const leituraInicial = Number(leitura_inicial);
+                const estoqueInicial = Number(estoque_inicial);
 
                 if (Number.isNaN(leituraInicial) || leituraInicial < 0) {
                     throw new Error('A leitura inicial deve ser um número válido.');

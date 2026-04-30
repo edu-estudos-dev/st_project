@@ -1,4 +1,6 @@
 import EstabelecimentoModel from '../models/estabelecimentoModel.js';
+import figurinhasModel from '../models/figurinhasModel.js';
+import peluciasModel from '../models/peluciasModel.js';
 import { formatTelefone } from '../utilities/formatters.js';
 import {
   formatProdutoList,
@@ -33,8 +35,22 @@ const parseCoordinate = (value, type) => {
 const PRODUCT_OPTIONS = [
   { value: 'BOLINHAS', label: 'Bolinhas', className: 'modern-checkbox-green' },
   { value: 'FIGURINHAS', label: 'Consignados', className: 'modern-checkbox-blue' },
-  { value: 'PELUCIAS', label: 'Pelucias', className: 'modern-checkbox-violet' }
+  { value: 'PELUCIAS', label: 'Pelúcias', className: 'modern-checkbox-violet' }
 ];
+
+const parseInitialInteger = (value, fieldLabel) => {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    throw new Error(`${fieldLabel} é obrigatório.`);
+  }
+
+  const parsed = Number.parseInt(String(value).trim(), 10);
+
+  if (Number.isNaN(parsed) || parsed < 0) {
+    throw new Error(`${fieldLabel} deve ser um número válido maior ou igual a zero.`);
+  }
+
+  return parsed;
+};
 
 const getEnabledProductOptions = (req, selectedProdutos = []) => {
   const navProducts = req.res?.locals?.navigationProducts || {};
@@ -140,7 +156,7 @@ class EstabelecimentoController {
         }
       }
 
-      validateProdutosEnabled(req, req.body.produto);
+      const produtosSelecionados = validateProdutosEnabled(req, req.body.produto);
       const produtos = serializeProdutos(req.body.produto);
       if (!produtos) {
         throw new Error(
@@ -148,12 +164,26 @@ class EstabelecimentoController {
         );
       }
 
+      const hasPelucias = produtosSelecionados.includes('PELUCIAS');
+      const isOnlyFigurinhas =
+        produtosSelecionados.length === 1 &&
+        produtosSelecionados[0] === 'FIGURINHAS';
+      const peluciaLeituraInicial = hasPelucias
+        ? parseInitialInteger(req.body.pelucia_leitura_inicial, 'Leitura inicial de pelúcias')
+        : null;
+      const peluciaAbastecidoInicial = hasPelucias
+        ? parseInitialInteger(req.body.pelucia_abastecido_inicial, 'Abastecido inicial de pelúcias')
+        : null;
+      const figurinhaQuantidadeInicial = isOnlyFigurinhas
+        ? parseInitialInteger(req.body.figurinha_quantidade_inicial, 'Quantidade inicial deixada')
+        : null;
+
       const estabelecimento = {
         assinante_id: usuario.assinante_id,
         estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
         produto: produtos,
-        chave: req.body.chave ? req.body.chave.trim() : '',
-        maquina: req.body.maquina ? req.body.maquina.trim() : '',
+        chave: !isOnlyFigurinhas && req.body.chave ? req.body.chave.trim() : '',
+        maquina: !isOnlyFigurinhas && req.body.maquina ? req.body.maquina.trim() : '',
         endereco: req.body.endereco.trim().toUpperCase(),
         bairro: req.body.bairro.trim().toUpperCase(),
         responsavel_nome: req.body.responsavel_nome.trim().toUpperCase(),
@@ -166,7 +196,42 @@ class EstabelecimentoController {
       };
 
       // 🔥 salva no banco
-      await EstabelecimentoModel.create(estabelecimento);
+      const novoEstabelecimento = await EstabelecimentoModel.create(estabelecimento);
+      const dataInicial = new Date().toISOString().slice(0, 10);
+
+      if (novoEstabelecimento?.id && hasPelucias) {
+        await peluciasModel.createSangria({
+          assinante_id: usuario.assinante_id,
+          estabelecimento_id: novoEstabelecimento.id,
+          data_sangria: dataInicial,
+          valor_apurado: 0,
+          comissao: 0,
+          valor_comerciante: 0,
+          valor_liquido: 0,
+          tipo_pagamento: 'especie',
+          observacoes: '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.',
+          leitura_atual: peluciaLeituraInicial,
+          ultima_leitura: 0,
+          abastecido: peluciaAbastecidoInicial,
+          qtde_vendido: 0,
+          estoque: peluciaAbastecidoInicial
+        });
+      }
+
+      if (novoEstabelecimento?.id && isOnlyFigurinhas) {
+        await figurinhasModel.createSangria({
+          assinante_id: usuario.assinante_id,
+          estabelecimento_id: novoEstabelecimento.id,
+          data_sangria: dataInicial,
+          qtde_deixada: figurinhaQuantidadeInicial,
+          abastecido: figurinhaQuantidadeInicial,
+          estoque: 0,
+          qtde_vendido: 0,
+          valor_apurado: 0,
+          tipo_pagamento: 'especie',
+          observacoes: '[ABERTURA INICIAL] Ponto iniciado no cadastro do estabelecimento.'
+        });
+      }
 
       // 🔥 busca lista atualizada
       let estabelecimentos = await EstabelecimentoModel.findAll(

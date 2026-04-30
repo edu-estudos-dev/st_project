@@ -10,19 +10,19 @@
    <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
    <% const visitAlert = typeof dashboardVisitAlert !== 'undefined'
       ? dashboardVisitAlert
-      : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto cr?tico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
+      : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto crítico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
    <% const adminShortcuts = [
       { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
-      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova m?quina com todos os dados operacionais.', tone: 'gold' },
+      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova máquina com todos os dados operacionais.', tone: 'gold' },
       { href: '/rotas', title: 'Rotas dos pontos', description: 'Monte o trajeto por bairro e abra a navegação no Google Maps ou no Waze.', tone: 'amber' },
       { href: '/lancamentos', title: 'Lançamentos', description: 'Visualize entradas, saídas e movimentações registradas.', tone: 'slate' },
       { href: '/lancamentos/add', title: 'Novo lançamento', description: 'Registre uma movimentação financeira rapidamente.', tone: 'green' },
-      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do per?odo.', tone: 'violet' }
+      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' }
    ]; %>
    <% const operationalShortcuts = [
-      { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formul?rio operacional de bolinhas.', tone: 'green' },
-      { href: '/figurinhas/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formul?rio operacional de consignados.', tone: 'blue' },
-      { href: '/pelucias/sangrias/add', title: 'Cadastro de pel?cias', description: 'Abrir o formul?rio operacional de pel?cias.', tone: 'violet' }
+      { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green' },
+      { href: '/figurinhas/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue' },
+      { href: '/pelucias/sangrias/add', title: 'Cadastro de pelúcias', description: 'Abrir o formulário operacional de pelúcias.', tone: 'violet' }
    ]; %>
    <% const overviewStats = [
       { value: summary.totalAtivos, label: 'pontos ativos' },
@@ -40,7 +40,7 @@
          ? `${financialData.proximos.length} vencimento(s) chegam nos próximos 5 dias.`
          : 'Nenhum vencimento urgente nos próximos 5 dias.'; %>
    <% const titlebarSummary = summary.totalAtivos
-      ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com o painel focado nas prioridades mais ?teis do dia.`
+      ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com o painel focado nas prioridades mais úteis do dia.`
       : 'Sem pontos ativos cadastrados ainda. O primeiro cadastro libera a operação do sistema.'; %>
 
    <main class="dashboard-shell">
@@ -97,7 +97,7 @@
                   <span class="dashboard-section-tag">Administrativo</span>
                   <h2>Atalhos principais</h2>
                </div>
-               <p>Acesso r?pido ao que mais importa na rotina.</p>
+               <p>Acesso rápido ao que mais importa na rotina.</p>
             </div>
 
             <div class="dashboard-shortcuts">
@@ -105,7 +105,7 @@
                   <% if (isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href)) return; %>
                   <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
                      <div class="dashboard-shortcut-top">
-                        <span class="dashboard-shortcut-pill">Acesso r?pido</span>
+                        <span class="dashboard-shortcut-pill">Acesso rápido</span>
                         <span class="dashboard-shortcut-arrow">&rarr;</span>
                      </div>
                      <h3><%= item.title %></h3>
@@ -142,7 +142,7 @@
             <div class="dashboard-panel-header">
                <div>
                   <span class="dashboard-section-tag">Atenção</span>
-                  <h2>Visitas cr?ticas</h2>
+                  <h2>Visitas críticas</h2>
                </div>
                <p>Um resumo direto para não deixar ponto parado por muito tempo.</p>
             </div>
@@ -209,7 +209,7 @@
 
          const confirmed = await window.AppAlerts?.confirm({
             title: 'Alertas da operação',
-            text: `Voc? tem ${partes.join(' e ')}.`,
+            text: `Você tem ${partes.join(' e ')}.`,
             confirmButtonText: visitasAtrasadas && !totalAlertas ? 'Ver rotas' : 'Ver alertas',
             cancelButtonText: 'Depois'
          });

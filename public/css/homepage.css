@@ -5692,3 +5692,271 @@ html:has(.homepage-body) {
     font-size: 0.61rem !important;
   }
 }
+
+/* ==========================================================================
+   SEÇÃO FOUNDER — QUEM CRIOU O VENDMASTER
+   Adicionar ao final do homepage.css, antes do bloco "99 — AJUSTES FINAIS"
+   ========================================================================== */
+
+/* ========================================================================== */
+/* FOUNDER — LAYOUT GERAL                                                      */
+/* ========================================================================== */
+
+.vm-founder-section {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.06), transparent 28%),
+    radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.05), transparent 24%),
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+}
+
+.vm-founder-inner {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+/* ========================================================================== */
+/* FOUNDER — COLUNA DE TEXTO (ESQUERDA)                                        */
+/* ========================================================================== */
+
+.vm-founder-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.vm-founder-text .vm-kicker {
+  width: fit-content;
+  margin: 0 0 0.5rem;
+}
+
+.vm-founder-title {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 950;
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.vm-founder-title .text-accent-dark {
+  display: block;
+  color: #2563eb;
+}
+
+.vm-founder-text p {
+  margin: 0;
+  color: #475569;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.78;
+}
+
+.btn-founder-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 50px;
+  margin-top: 0.5rem;
+  padding: 0 1.5rem;
+  border-radius: 16px;
+  border: 0;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease;
+}
+
+.btn-founder-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 40px rgba(37, 99, 235, 0.28);
+  color: #ffffff;
+}
+
+/* ========================================================================== */
+/* FOUNDER — CARD DO CRIADOR (DIREITA)                                         */
+/* ========================================================================== */
+
+.vm-founder-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.vm-founder-card::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem;
+  right: 1.5rem;
+  font-size: 7rem;
+  line-height: 1;
+  color: rgba(37, 99, 235, 0.08);
+  font-weight: 900;
+  pointer-events: none;
+  user-select: none;
+}
+
+.vm-founder-avatar {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  flex: 0 0 auto;
+}
+
+.vm-founder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.vm-founder-info strong {
+  display: block;
+  color: #0f172a;
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+.vm-founder-info span {
+  color: #64748b;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.vm-founder-quote {
+  margin: 0;
+  padding: 1.25rem 1.35rem;
+  border-radius: 18px;
+  background: rgba(37, 99, 235, 0.04);
+  border-left: 3px solid #2563eb;
+  color: #334155;
+  font-size: 0.98rem;
+  line-height: 1.72;
+  font-style: normal;
+}
+
+.vm-founder-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vm-founder-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* ========================================================================== */
+/* FOUNDER — PROVA SOCIAL: grid 3 colunas para 3 depoimentos                  */
+/* ========================================================================== */
+
+.vm-proof-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* ========================================================================== */
+/* FOUNDER — RESPONSIVO TABLET                                                  */
+/* ========================================================================== */
+
+@media (max-width: 991.98px) {
+  .vm-founder-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .vm-founder-title {
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+  }
+
+  .vm-founder-text .vm-kicker {
+    margin-inline: auto;
+  }
+
+  .vm-founder-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vm-founder-title .text-accent-dark {
+    display: inline;
+  }
+
+  .vm-founder-text p {
+    max-width: 60ch;
+    text-align: center;
+  }
+
+  .btn-founder-cta {
+    margin-inline: auto;
+  }
+
+  .vm-proof-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ========================================================================== */
+/* FOUNDER — RESPONSIVO MOBILE                                                  */
+/* ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .vm-founder-card {
+    padding: 1.4rem;
+    border-radius: 22px;
+  }
+
+  .vm-founder-card::before {
+    font-size: 5rem;
+    right: 1rem;
+  }
+
+  .vm-founder-title {
+    font-size: clamp(1.75rem, 8vw, 2.2rem);
+  }
+
+  .vm-founder-quote {
+    font-size: 0.94rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .vm-founder-tags {
+    gap: 0.4rem;
+  }
+
+  .vm-founder-tag {
+    font-size: 0.68rem;
+    padding: 0.26rem 0.6rem;
+  }
+}

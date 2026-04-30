@@ -32,7 +32,7 @@
                         <li>
                             <a class="dropdown-item menu-link" href="/estabelecimentos/add">
                                 <span class="menu-link-title">Cadastrar estabelecimento</span>
-                                <small class="menu-link-text">Abra o formul?rio para incluir um novo ponto.</small>
+                                <small class="menu-link-text">Abra o formulário para incluir um novo ponto.</small>
                             </a>
                         </li>
                         <% } %>
@@ -46,7 +46,7 @@
                         Financeiro
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                        <li class="menu-group-label">Fluxo e lan?amentos</li>
+                        <li class="menu-group-label">Fluxo e lançamentos</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos">
                                 <span class="menu-link-title">Lançamentos cadastrados</span>
@@ -56,7 +56,7 @@
                         <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos/add">
-                                <span class="menu-link-title">Fazer lan?amento</span>
+                                <span class="menu-link-title">Fazer lançamento</span>
                                 <small class="menu-link-text">Registre uma nova movimentação financeira.</small>
                             </a>
                         </li>
@@ -64,7 +64,7 @@
                         <li>
                             <a class="dropdown-item menu-link" href="/fluxo-de-caixa">
                                 <span class="menu-link-title">Fluxo de caixa</span>
-                                <small class="menu-link-text">Acompanhe saldo e consolidado do per?odo.</small>
+                                <small class="menu-link-text">Acompanhe saldo e consolidado do período.</small>
                             </a>
                         </li>
                         <% if (navProducts.hasAny) { %>
@@ -72,7 +72,7 @@
                                 <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
                                     id="navbarDropdownReceitas" aria-expanded="false">
                                     <span class="menu-link-title">Receitas por produto</span>
-                                    <small class="menu-link-text">Abra os relat?rios consolidados de receita.</small>
+                                    <small class="menu-link-text">Abra os relatórios consolidados de receita.</small>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
                                     <% if (navProducts.bolinhas) { %>
@@ -82,7 +82,7 @@
                                         <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Consignados</a></li>
                                     <% } %>
                                     <% if (navProducts.pelucias) { %>
-                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pel?cias</a></li>
+                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
                                     <% } %>
                                 </ul>
                             </li>
@@ -96,10 +96,10 @@
                         Planejamento
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownPlanejamento">
-                        <li class="menu-group-label">Vis?o gerencial</li>
+                        <li class="menu-group-label">Visão gerencial</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/relatorios">
-                                <span class="menu-link-title">Relat?rios</span>
+                                <span class="menu-link-title">relatórios</span>
                                 <small class="menu-link-text">Indicadores, rankings e resumos do sistema.</small>
                             </a>
                         </li>
@@ -196,7 +196,7 @@
             <% const activeAlertTotal = financialAlertTotal + operationalAlertTotal; %>
 
             <div class="d-flex align-items-center gap-2">
-                <a href="/lancamentos/vencimentos" class="nav-alert-link" title="Pr?ximos vencimentos">
+                <a href="/lancamentos/vencimentos" class="nav-alert-link" title="Próximos vencimentos">
                     <i class="bi bi-bell"></i>
                     <span>Alertas</span>
                     <% if (activeAlertTotal > 0) { %>
@@ -232,13 +232,13 @@
                         <a class="nav-account-profile" href="/painel">
                             <span class="nav-account-avatar nav-account-avatar-lg"><%= (usuario?.username || 'U').slice(0, 1).toUpperCase() %></span>
                             <span>
-                                <strong><%= usuario?.username || 'Usu?rio' %></strong>
+                                <strong><%= usuario?.username || 'Usuário' %></strong>
                                 <small><%= usuario?.email || 'VendMaster' %></small>
                             </span>
                             <i class="bi bi-chevron-right"></i>
                         </a>
                         <div class="nav-account-divider"></div>
-                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>Relat?rios</span></a>
+                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>relatórios</span></a>
                         <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
                         <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Produtos da operação</span></a>
                         <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
@@ -295,7 +295,7 @@
             <div class="notification-drawer-empty">
                 <i class="bi bi-check2-circle"></i>
                 <strong>Nenhum alerta ativo</strong>
-                <span>Vencimentos e avisos importantes aparecer?o aqui.</span>
+                <span>Vencimentos e avisos importantes aparecerãoaqui.</span>
             </div>
         <% } %>
     </div>
