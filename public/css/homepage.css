@@ -6603,3 +6603,17 @@ html:has(.homepage-body) {
     transform: scale(1.08) !important;
   }
 }
+
+/* =========================================================
+   ACESSIBILIDADE — MAIN LANDMARK DA HOMEPAGE
+   Remove estilos globais de main aplicados nas páginas internas.
+   ========================================================= */
+
+.homepage-body .homepage-main {
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
