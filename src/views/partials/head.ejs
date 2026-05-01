@@ -54,7 +54,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
 
-    <!-- FONTES -->
+    <!-- FONTES CRÍTICAS -->
     <link
         rel="preload"
         href="/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2"
@@ -71,7 +71,39 @@
         crossorigin
     >
 
-    <link rel="stylesheet" href="/vendor/fontsource/urbanist/latin.css">
+    <style>
+        @font-face {
+            font-family: 'Urbanist';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: url('/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'Urbanist';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 600;
+            src: url('/vendor/fontsource/urbanist/files/urbanist-latin-600-normal.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'Urbanist';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 700;
+            src: url('/vendor/fontsource/urbanist/files/urbanist-latin-700-normal.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'Urbanist';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 800;
+            src: url('/vendor/fontsource/urbanist/files/urbanist-latin-800-normal.woff2') format('woff2');
+        }
+    </style>
 
     <!-- CSS CRÍTICO DA APLICAÇÃO -->
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
