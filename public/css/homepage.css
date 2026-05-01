@@ -7318,3 +7318,78 @@ html:has(.homepage-body) {
     font-size: 0.88rem !important;
   }
 }
+
+/* ========================================================================== */
+/* SVG ICONS — HOMEPAGE SEM BOOTSTRAP ICONS                                   */
+/* Ícones em SVG direto no HTML para evitar carregar bootstrap-icons.woff2.    */
+/* ========================================================================== */
+
+/* Ícones dos cards de prova social/depoimentos */
+.vm-proof-svg-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  color: currentColor;
+  flex: 0 0 24px;
+}
+
+/* Ícone da observação da garantia */
+.vm-guarantee-note-svg {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+  flex: 0 0 20px;
+}
+
+/* Garante alinhamento correto da linha "Cancelamento feito pelo WhatsApp..." */
+.vm-guarantee-cancel-note {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* SVG do WhatsApp no botão flutuante */
+.vm-whatsapp-float {
+  gap: 0.55rem !important;
+}
+
+.vm-whatsapp-float .vm-whatsapp-svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 20px !important;
+  color: currentColor !important;
+}
+
+/* SVG do WhatsApp no rodapé, caso o footer também seja convertido para SVG */
+.footer-whatsapp-svg {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 0.35rem;
+  color: currentColor;
+  vertical-align: -0.2em;
+}
+
+/* Mobile: botão flutuante vira apenas ícone */
+@media (max-width: 575.98px) {
+  .homepage-body .vm-whatsapp-float span {
+    display: none !important;
+  }
+
+  .homepage-body .vm-whatsapp-float {
+    width: 50px !important;
+    min-width: 50px !important;
+    height: 50px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 999px !important;
+  }
+
+  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
+    width: 24px !important;
+    height: 24px !important;
+    flex-basis: 24px !important;
+  }
+}
