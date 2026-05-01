@@ -1,7 +1,7 @@
 /* ==========================================================================
    HOMEPAGE.CSS — VENDMASTER
    Arquivo consolidado, corrigido e organizado por blocos comentados.
-   Último ajuste: seção Painel Gerencial com menos padding e print maior.
+   Último ajuste: hero organizado com botões alinhados no bloco correto.
    ========================================================================== */
 
 /* ========================================================================== */
@@ -136,14 +136,16 @@ body.homepage-body {
 
 .homepage-login-link:hover,
 .homepage-body .homepage-login-link:hover,
-.homepage-body .homepage-topbar .homepage-login-item .homepage-login-link:hover {
+.homepage-body
+  .homepage-topbar
+  .homepage-login-item
+  .homepage-login-link:hover {
   transform: translateY(-1px);
   border-color: rgba(34, 197, 94, 0.7) !important;
   background: linear-gradient(135deg, #1d4ed8 0%, #15803d 100%) !important;
   color: #ffffff !important;
   box-shadow: 0 16px 34px rgba(37, 99, 235, 0.32) !important;
 }
-
 
 /* ========================================================================== */
 /* 02.1 — HEADER STICKY / MENU MOBILE / CTA DO TOPO                           */
@@ -331,12 +333,10 @@ html:has(.homepage-body) {
     border: 0 !important;
   }
   .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
-    background: linear-gradient(
-      135deg,
-      rgba(37, 99, 235, 0.14) 0%,
-      rgba(34, 197, 94, 0.14) 100%
-    ) !important;
-    color: #2563eb !important;
+    background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
+    color: #ffffff !important;
+    border-color: rgba(34, 197, 94, 0.45) !important;
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22) !important;
   }
   .homepage-body .vm-hero {
     padding-top: 7.25rem !important;
@@ -384,6 +384,12 @@ html:has(.homepage-body) {
     justify-content: center !important;
     border-radius: 999px !important;
   }
+
+  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
+    width: 24px !important;
+    height: 24px !important;
+    flex-basis: 24px !important;
+  }
 }
 
 /* ========================================================================== */
@@ -400,7 +406,7 @@ html:has(.homepage-body) {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8.3rem 1rem 3.2rem;
+  padding: 6.9rem 1rem 3.2rem;
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -477,6 +483,9 @@ html:has(.homepage-body) {
 .vm-hero-left,
 .vm-hero-right {
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+  align-self: stretch;
   position: relative;
   z-index: 1;
 }
@@ -556,59 +565,94 @@ html:has(.homepage-body) {
 .homepage-body .vm-hero .vm-hero-description,
 .homepage-body .vm-hero .vm-hero-left > .vm-hero-description {
   width: 100% !important;
-  max-width: 58ch !important;
-  margin: 0 0 1.25rem !important;
+  max-width: 45ch !important;
+  margin: 0 0 1.1rem !important;
   color: #dbe7f7 !important;
   opacity: 0.96 !important;
-  font-size: clamp(1.16rem, 1.18vw, 1.28rem) !important;
-  line-height: 1.9 !important;
+  font-size: clamp(1.03rem, 1.05vw, 1.14rem) !important;
+  line-height: 1.72 !important;
   letter-spacing: -0.012em !important;
 }
 
 /* ========================================================================== */
 /* HERO — BOTÕES                                                               */
-/* Mantém margin-top:auto para alinhar com os cards inferiores da direita.     */
+/* Botões com peso visual equilibrado e alinhados com a base da coluna direita.*/
 /* ========================================================================== */
 
-.vm-hero-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 0.85rem;
-  margin-top: auto;
-  padding-top: 0.95rem;
+.vm-hero-buttons,
+.homepage-body .vm-hero .vm-hero-buttons {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.75rem !important;
+  margin-top: auto !important;
+  padding-top: 1rem !important;
 }
 
-.vm-hero-buttons .btn {
-  min-height: 48px;
-  padding: 0 1.15rem;
-  border-radius: 14px;
-  font-size: 0.92rem;
-  font-weight: 900;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+.vm-hero-buttons .btn,
+.homepage-body .vm-hero .vm-hero-buttons .btn {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  padding: 0 1.35rem !important;
+  border-radius: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.94rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
+  transition:
+    transform 520ms ease,
+    background-color 650ms ease,
+    border-color 650ms ease,
+    color 520ms ease,
+    box-shadow 650ms ease,
+    opacity 650ms ease !important;
 }
 
-.vm-hero-buttons .btn-primary {
-  border: 0;
-  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
-  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.25);
+.vm-hero-buttons .btn-primary,
+.homepage-body .vm-hero .vm-hero-buttons .btn-primary {
+  min-width: 230px !important;
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  box-shadow: 0 18px 34px rgba(34, 197, 94, 0.24) !important;
+}
+
+.vm-hero-buttons .btn-primary:hover,
+.homepage-body .vm-hero .vm-hero-buttons .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  box-shadow: 0 22px 40px rgba(34, 197, 94, 0.28) !important;
 }
 
 .vm-hero-buttons .btn-outline-light,
-.vm-hero .btn-outline-light {
-  border: 1px solid rgba(203, 213, 225, 0.5);
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.04);
+.vm-hero .btn-outline-light,
+.homepage-body .vm-hero .vm-hero-buttons .btn-outline-light {
+  min-width: 176px !important;
+  border: 1px solid rgba(203, 213, 225, 0.48) !important;
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 26px rgba(15, 23, 42, 0.12) !important;
 }
 
 .vm-hero-buttons .btn-outline-light:hover,
-.vm-hero .btn-outline-light:hover {
-  border-color: transparent;
-  color: #0f172a;
-  background: #f8fafc;
+.vm-hero .btn-outline-light:hover,
+.homepage-body .vm-hero .vm-hero-buttons .btn-outline-light:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(147, 197, 253, 0.78) !important;
+  color: #f8fafc !important;
+  background: rgba(147, 197, 253, 0.13) !important;
+  box-shadow:
+    0 16px 30px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 /* ========================================================================== */
@@ -777,7 +821,7 @@ html:has(.homepage-body) {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 0.85rem !important;
   margin-top: auto !important;
-  padding-top: 0.95rem !important;
+  padding-top: 1rem !important;
 }
 
 .homepage-body .vm-hero .vm-hero-mini-card {
@@ -808,6 +852,28 @@ html:has(.homepage-body) {
   color: #cbd5e1 !important;
   font-size: 0.72rem !important;
   line-height: 1.32 !important;
+}
+
+/* ========================================================================== */
+/* HERO — RESPONSIVO DESKTOP MENOR                                             */
+/* ========================================================================== */
+
+@media (max-width: 1199.98px) {
+  .homepage-body .vm-hero-container {
+    align-items: start !important;
+  }
+
+  .homepage-body .vm-hero-left,
+  .homepage-body .vm-hero-right {
+    height: auto !important;
+    align-self: auto !important;
+  }
+
+  .homepage-body .vm-hero-buttons,
+  .homepage-body .vm-hero .vm-hero-buttons {
+    margin-top: 0 !important;
+    justify-content: center !important;
+  }
 }
 
 /* ========================================================================== */
@@ -857,10 +923,11 @@ html:has(.homepage-body) {
     text-align: center !important;
   }
 
-  .vm-hero-buttons {
-    margin-top: 0;
-    justify-content: center;
-    padding-top: 0.9rem;
+  .vm-hero-buttons,
+  .homepage-body .vm-hero .vm-hero-buttons {
+    margin-top: 0 !important;
+    justify-content: center !important;
+    padding-top: 1rem !important;
   }
 
   .vm-hero-right {
@@ -915,12 +982,30 @@ html:has(.homepage-body) {
     text-align: center !important;
   }
 
-  .vm-hero-buttons {
-    width: 100%;
+  .vm-hero-buttons,
+  .homepage-body .vm-hero .vm-hero-buttons {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    margin-top: 0 !important;
+    padding-top: 1rem !important;
   }
 
-  .vm-hero-buttons .btn {
-    width: 100%;
+  .vm-hero-buttons .btn,
+  .homepage-body .vm-hero .vm-hero-buttons .btn,
+  .vm-hero-buttons .btn-primary,
+  .homepage-body .vm-hero .vm-hero-buttons .btn-primary,
+  .vm-hero-buttons .btn-outline-light,
+  .homepage-body .vm-hero .vm-hero-buttons .btn-outline-light {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+    padding: 0 1rem !important;
+    font-size: 0.94rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.15 !important;
   }
 
   .vm-panel {
@@ -1397,10 +1482,12 @@ html:has(.homepage-body) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #bfdbfe;
-  background: rgba(255, 255, 255, 0.08);
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.18);
   flex: 0 0 auto;
 }
+
 
 .homepage-body .vm-ba-icon svg {
   width: 42px;
@@ -1410,6 +1497,7 @@ html:has(.homepage-body) {
 .homepage-body .vm-ba-icon-after {
   color: #86efac;
   background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(134, 239, 172, 0.16);
 }
 
 .homepage-body .vm-before.reveal-on-scroll {
@@ -1441,13 +1529,15 @@ html:has(.homepage-body) {
 }
 
 .homepage-body .vm-ba-before {
-  color: #bfdbfe;
-  background: rgba(37, 99, 235, 0.18);
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(248, 113, 113, 0.2);
 }
 
 .homepage-body .vm-ba-after {
   color: #dcfce7;
   background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(134, 239, 172, 0.16);
 }
 
 .homepage-body .vm-before ul {
@@ -1489,7 +1579,7 @@ html:has(.homepage-body) {
   margin-top: 0.45rem;
   border-radius: 999px;
   flex: 0 0 10px;
-  background: rgba(191, 219, 254, 0.9);
+  background: #dc2626 !important;
 }
 
 .homepage-body .vm-after li::before {
@@ -1519,6 +1609,7 @@ html:has(.homepage-body) {
 .homepage-body .vm-transform .vm-section-heading h2 {
   max-width: 20ch;
 }
+
 
 /* ==========================================================================
    07 — SEÇÃO PAINEL GERENCIAL / DASHBOARD SHOWCASE
@@ -1780,12 +1871,15 @@ html:has(.homepage-body) {
 
 .vm-dashboard-carousel .carousel-item {
   position: relative !important;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(243, 247, 252, 0.96) 100%) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(243, 247, 252, 0.96) 100%
+  ) !important;
 }
 
 .vm-dashboard-carousel .carousel-item::before {
-  content: "" !important;
+  content: '' !important;
   position: absolute !important;
   inset: 0.9rem 0.9rem 3.9rem 0.9rem !important;
   border-radius: 20px !important;
@@ -2901,11 +2995,7 @@ html:has(.homepage-body) {
       rgba(37, 99, 235, 0.18),
       transparent 28%
     ),
-    radial-gradient(
-      circle at 88% 18%,
-      rgba(34, 197, 94, 0.1),
-      transparent 24%
-    ),
+    radial-gradient(circle at 88% 18%, rgba(34, 197, 94, 0.1), transparent 24%),
     linear-gradient(
       180deg,
       rgba(7, 18, 35, 0.98) 0%,
@@ -3112,15 +3202,15 @@ html:has(.homepage-body) {
    Mantém controle fino do enquadramento de cada operador.
    ========================================================================== */
 
-.homepage-body .vm-proof-author img[src*="joao-ribeiro"] {
+.homepage-body .vm-proof-author img[src*='joao-ribeiro'] {
   object-position: center 36% !important;
 }
 
-.homepage-body .vm-proof-author img[src*="marcelo-costa"] {
+.homepage-body .vm-proof-author img[src*='marcelo-costa'] {
   object-position: center 36% !important;
 }
 
-.homepage-body .vm-proof-author img[src*="antonio-ferreira"] {
+.homepage-body .vm-proof-author img[src*='antonio-ferreira'] {
   object-position: center 36% !important;
 }
 
@@ -3213,7 +3303,10 @@ html:has(.homepage-body) {
     gap: 1rem !important;
   }
 
-  .homepage-body .vm-proof-section .vm-proof-grid-3 .vm-proof-card:nth-child(3) {
+  .homepage-body
+    .vm-proof-section
+    .vm-proof-grid-3
+    .vm-proof-card:nth-child(3) {
     grid-column: auto !important;
     width: 100% !important;
     justify-self: stretch !important;
@@ -3748,7 +3841,6 @@ html:has(.homepage-body) {
   text-decoration: underline !important;
 }
 
-
 /* ========================================================================== */
 /* 13 — FOOTER                                                                */
 /* ========================================================================== */
@@ -3845,6 +3937,13 @@ html:has(.homepage-body) {
   text-decoration: none !important;
   font-weight: 900 !important;
   box-shadow: 0 18px 38px rgba(22, 163, 74, 0.34) !important;
+}
+
+.homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 20px !important;
 }
 
 .vm-card::before {
@@ -4051,52 +4150,138 @@ html:has(.homepage-body) {
   text-transform: uppercase !important;
 }
 
+/* ========================================================================== */
+/* BADGES EM FUNDO ESCURO — VERDE PREMIUM                                      */
+/* ========================================================================== */
+
 .vm-section-dark .vm-kicker {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .dark-bg .vm-kicker {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .vm-transform .vm-kicker {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .vm-products-section .vm-kicker {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .vm-section-dark .vm-section-tag {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .dark-bg .vm-section-tag {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .vm-products-section .vm-section-tag {
-  color: #dbeafe !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 .vm-section-heading .vm-section-tag {
   margin-left: auto !important;
   margin-right: auto !important;
   margin-bottom: 1.05rem !important;
+}
+
+/* ========================================================================== */
+/* CORREÇÃO ESPECÍFICA — BADGE "DIFERENCIAL PRINCIPAL"                        */
+/* ========================================================================== */
+
+.homepage-body .vm-module-card--highlight .vm-module-badge,
+.homepage-body .vm-modules .vm-module-card--highlight .vm-module-badge,
+.homepage-body .vm-module-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  min-height: 34px !important;
+  margin: 0 0 1.05rem !important;
+  padding: 0.58rem 1.05rem !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(74, 222, 128, 0.42) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  color: #bbf7d0 !important;
+  font-size: 0.68rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
 }
 
 /* ========================================================================== */
@@ -4195,10 +4380,11 @@ html:has(.homepage-body) {
     line-height: 1.55 !important;
   }
 
-  .vm-hero-buttons {
-    margin-top: 0;
-    justify-content: center;
-    padding-top: 0.9rem;
+  .vm-hero-buttons,
+  .homepage-body .vm-hero .vm-hero-buttons {
+    margin-top: 0 !important;
+    justify-content: center !important;
+    padding-top: 1rem !important;
   }
 
   .vm-panel {
@@ -4290,8 +4476,6 @@ html:has(.homepage-body) {
   .site-footer .row {
     gap: 2rem;
   }
-
-
 
   .homepage-body .vm-hero-right {
     max-width: 720px !important;
@@ -5922,14 +6106,43 @@ html:has(.homepage-body) {
   border-radius: 26px !important;
 }
 
-.homepage-body .homepage-login-link {
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.14) 0%,
-    rgba(34, 197, 94, 0.14) 100%
-  ) !important;
-  color: #2563eb !important;
-  box-shadow: none !important;
+/* Botão Entrar consolidado: mantém destaque no estado normal e no hover. */
+.homepage-body .homepage-login-link,
+.homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0.72rem 1.25rem !important;
+  border-radius: 16px !important;
+  white-space: nowrap !important;
+  border: 1px solid rgba(34, 197, 94, 0.45) !important;
+  background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
+  color: #ffffff !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.01em !important;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.24) !important;
+}
+
+.homepage-body .homepage-login-link:hover,
+.homepage-body
+  .homepage-topbar
+  .homepage-login-item
+  .homepage-login-link:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(34, 197, 94, 0.7) !important;
+  background: linear-gradient(135deg, #1d4ed8 0%, #15803d 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.32) !important;
+}
+
+.homepage-body .homepage-login-link:focus-visible,
+.homepage-body
+  .homepage-topbar
+  .homepage-login-item
+  .homepage-login-link:focus-visible {
+  outline: 3px solid rgba(34, 197, 94, 0.35) !important;
+  outline-offset: 3px !important;
 }
 
 .homepage-body .vm-hero {
@@ -6076,6 +6289,10 @@ html:has(.homepage-body) {
     min-height: 38px !important;
     padding: 0.62rem 0.9rem !important;
     font-size: 0.74rem !important;
+    background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
+    color: #ffffff !important;
+    border-color: rgba(34, 197, 94, 0.45) !important;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22) !important;
   }
 
   .homepage-body .vm-hero {
@@ -6177,6 +6394,12 @@ html:has(.homepage-body) {
     font-size: 0.82rem !important;
     box-shadow: 0 12px 26px rgba(22, 163, 74, 0.28) !important;
   }
+
+  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
+    width: 20px !important;
+    height: 20px !important;
+    flex-basis: 20px !important;
+  }
 }
 
 @media (max-width: 380px) {
@@ -6201,8 +6424,16 @@ html:has(.homepage-body) {
 .vm-founder-section {
   padding-block: clamp(4rem, 7vw, 6rem);
   background:
-    radial-gradient(circle at 14% 16%, rgba(37, 99, 235, 0.08), transparent 28%),
-    radial-gradient(circle at 86% 86%, rgba(34, 197, 94, 0.06), transparent 26%),
+    radial-gradient(
+      circle at 14% 16%,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 86% 86%,
+      rgba(34, 197, 94, 0.06),
+      transparent 26%
+    ),
     linear-gradient(180deg, #eaf4ff 0%, #edf6ff 100%);
 }
 
@@ -6216,8 +6447,16 @@ html:has(.homepage-body) {
   padding: clamp(3rem, 5.5vw, 5.2rem) clamp(2.1rem, 4.6vw, 3.9rem);
   border-radius: 32px;
   background:
-    radial-gradient(circle at 16% 18%, rgba(37, 99, 235, 0.06), transparent 32%),
-    radial-gradient(circle at 86% 86%, rgba(34, 197, 94, 0.05), transparent 28%),
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(37, 99, 235, 0.06),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 86% 86%,
+      rgba(34, 197, 94, 0.05),
+      transparent 28%
+    ),
     rgba(248, 252, 255, 0.88);
   box-shadow: 0 26px 70px rgba(15, 23, 42, 0.06);
 }
@@ -6280,7 +6519,11 @@ html:has(.homepage-body) {
   padding: 1.8rem;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.07), transparent 34%),
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.07),
+      transparent 34%
+    ),
     linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
   border: 1px solid rgba(148, 163, 184, 0.2);
   box-shadow: 0 24px 54px rgba(15, 23, 42, 0.1);
@@ -6555,7 +6798,6 @@ html:has(.homepage-body) {
   }
 }
 
-
 /* =========================================================
    CORREÇÃO LIGHTHOUSE — NO_LCP / CAROUSEL
    Garante que o primeiro slide ativo seja considerado visível
@@ -6574,8 +6816,18 @@ html:has(.homepage-body) {
 
 /* =========================================================
    PERFORMANCE — AJUSTE PARA PICTURE DO CARROSSEL
-   Mantém o mesmo comportamento visual das imagens otimizadas.
+   Corrige o corte lateral do slide da rota.
    ========================================================= */
+
+.vm-dashboard-carousel .carousel-item.active {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.vm-dashboard-carousel .carousel-item.active img {
+  display: block !important;
+  opacity: 1 !important;
+}
 
 .vm-dashboard-carousel .carousel-item picture {
   position: absolute !important;
@@ -6584,6 +6836,9 @@ html:has(.homepage-body) {
   height: calc(100% - 5.7rem) !important;
   display: block !important;
   z-index: 2 !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
 }
 
 .vm-dashboard-carousel .carousel-item picture img {
@@ -6598,14 +6853,23 @@ html:has(.homepage-body) {
   background: #ffffff !important;
 }
 
+/* Primeiro slide — dashboard */
 .vm-dashboard-carousel .carousel-item:first-child picture img {
   transform: scale(1.02) !important;
+  transform-origin: center center !important;
 }
 
+/* Segundo slide — rota
+   Reduz o zoom para não cortar a lateral esquerda da imagem. */
 .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-  transform: scale(1.14) !important;
+  transform: scale(1.04) !important;
+  transform-origin: center center !important;
   object-position: center center !important;
 }
+
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 991.98px) {
   .vm-dashboard-carousel .carousel-item picture {
@@ -6619,15 +6883,20 @@ html:has(.homepage-body) {
   }
 
   .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-    transform: scale(1.1) !important;
+    transform: scale(1.03) !important;
   }
 }
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 575.98px) {
   .vm-dashboard-carousel .carousel-item picture {
     inset: 0.8rem 0.8rem 3.9rem 0.8rem !important;
     width: calc(100% - 1.6rem) !important;
     height: calc(100% - 4.7rem) !important;
+    border-radius: 12px !important;
   }
 
   .vm-dashboard-carousel .carousel-item picture img {
@@ -6639,7 +6908,7 @@ html:has(.homepage-body) {
   }
 
   .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-    transform: scale(1.08) !important;
+    transform: scale(1) !important;
   }
 }
 
@@ -6657,7 +6926,6 @@ html:has(.homepage-body) {
   box-shadow: none !important;
 }
 
-
 /* ==========================================================================
    SEÇÃO GARANTIA — 30 DIAS
    ========================================================================== */
@@ -6667,8 +6935,16 @@ html:has(.homepage-body) {
   overflow: hidden !important;
   padding: clamp(4.5rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4.5rem) !important;
   background:
-    radial-gradient(circle at 18% 20%, rgba(37, 99, 235, 0.09), transparent 28%),
-    radial-gradient(circle at 86% 18%, rgba(245, 158, 11, 0.12), transparent 24%),
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(37, 99, 235, 0.09),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 86% 18%,
+      rgba(245, 158, 11, 0.12),
+      transparent 24%
+    ),
     linear-gradient(180deg, #eef5fe 0%, #f8fbff 100%) !important;
 }
 
@@ -6680,7 +6956,11 @@ html:has(.homepage-body) {
   right: -160px !important;
   top: 10% !important;
   border-radius: 999px !important;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.16), transparent 70%) !important;
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.16),
+    transparent 70%
+  ) !important;
   filter: blur(50px) !important;
   pointer-events: none !important;
 }
@@ -6828,8 +7108,12 @@ html:has(.homepage-body) {
   align-items: center !important;
   justify-content: center !important;
   border-radius: 999px !important;
-  background:
-    radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.98), rgba(219, 234, 254, 0.58) 58%, rgba(37, 99, 235, 0.08) 100%) !important;
+  background: radial-gradient(
+    circle at 50% 45%,
+    rgba(255, 255, 255, 0.98),
+    rgba(219, 234, 254, 0.58) 58%,
+    rgba(37, 99, 235, 0.08) 100%
+  ) !important;
   box-shadow:
     0 34px 80px rgba(15, 23, 42, 0.16),
     0 0 0 1px rgba(245, 158, 11, 0.18) inset !important;
@@ -6850,7 +7134,11 @@ html:has(.homepage-body) {
   inset: 9% !important;
   z-index: 1 !important;
   border-radius: 999px !important;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.24), transparent 68%) !important;
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.24),
+    transparent 68%
+  ) !important;
   filter: blur(24px) !important;
   pointer-events: none !important;
 }
