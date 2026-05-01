@@ -1,4 +1,5 @@
   import express from 'express';
+  import compression from 'compression';
   import path from 'path';
   import { fileURLToPath } from 'url';
   import cookieParser from 'cookie-parser';
@@ -44,6 +45,10 @@
   app.set('view engine', 'ejs');
 
   app.use(securityHeaders);
+  app.use(compression({
+      level: 6,
+      threshold: 1024
+  }));
 
   app.use(express.static(path.join(__dirname, 'public'), {
       etag: false
