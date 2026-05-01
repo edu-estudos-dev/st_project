@@ -3744,6 +3744,11 @@ html:has(.homepage-body) {
   text-decoration: underline !important;
 }
 
+
+/* ========================================================================== */
+/* 13 — FOOTER                                                                */
+/* ========================================================================== */
+
 .site-footer {
   background:
     radial-gradient(
@@ -3769,6 +3774,7 @@ html:has(.homepage-body) {
 
 .site-footer a {
   color: #c4f1d4;
+  text-decoration: none;
   transition: color 360ms ease;
 }
 
@@ -3776,15 +3782,42 @@ html:has(.homepage-body) {
   color: #93c5fd;
 }
 
+.site-footer p {
+  color: #bfdbfe;
+}
+
+/* Títulos visuais do footer sem usar h5/h6 no HTML */
+.site-footer .footer-title {
+  display: block;
+  margin: 0 0 0.75rem;
+  color: #f8fafc;
+  font-size: 1.25rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.site-footer .footer-small-title {
+  margin: 1rem 0 0.35rem;
+  color: #f8fafc;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.site-footer .footer-small-text {
+  margin: 0 0 0.35rem;
+  color: #bfdbfe;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Compatibilidade caso ainda exista algum h5/h6 antigo em outra página */
 .site-footer h5 {
   color: #f8fafc;
 }
 
 .site-footer h6 {
-  color: #bfdbfe;
-}
-
-.site-footer p {
   color: #bfdbfe;
 }
 
@@ -4253,6 +4286,8 @@ html:has(.homepage-body) {
   .site-footer .row {
     gap: 2rem;
   }
+
+
 
   .homepage-body .vm-hero-right {
     max-width: 720px !important;
