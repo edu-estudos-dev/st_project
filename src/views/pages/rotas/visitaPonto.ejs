@@ -7,6 +7,80 @@
 
     <div class="page-spacer"></div>
 
+    <%
+        const visitaId = visita?.id || '';
+        const estabelecimentoId = visita?.estabelecimento_id || '';
+        const rotaId = visita?.rota_id || rotaPonto?.rota_id || '';
+        const rotaPontoId = visita?.rota_ponto_id || rotaPonto?.id || '';
+        const retornoUrl = `/rotas/visitas/${visitaId}`;
+
+        const retornoRotaUrl = typeof rotaRetornoUrl !== 'undefined' && rotaRetornoUrl
+            ? rotaRetornoUrl
+            : '/rotas';
+
+        const formatStatus = (status) => {
+            if (status === 'registrado') return 'Registrado';
+            if (status === 'sem_movimentacao') return 'Sem movimentação';
+            if (status === 'nao_realizada') return 'Não realizada';
+            if (status === 'ignorado') return 'Ignorado';
+            return 'Pendente';
+        };
+
+        const getStatusClass = (status) => {
+            if (status === 'registrado') return 'status-success';
+            if (status === 'sem_movimentacao') return 'status-warning';
+            if (status === 'nao_realizada') return 'status-danger';
+            if (status === 'ignorado') return 'status-muted';
+            return 'status-pending';
+        };
+
+        const getProdutoIcon = (produto) => {
+            if (produto === 'BOLINHAS') return 'bi-circle-square';
+            if (produto === 'FIGURINHAS') return 'bi-stickies';
+            if (produto === 'PELUCIAS') return 'bi-gift';
+            return 'bi-box-seam';
+        };
+
+        const getProdutoActionLabel = (produto) => {
+            if (produto === 'BOLINHAS') return 'Registrar bolinhas';
+            if (produto === 'FIGURINHAS') return 'Registrar consignados';
+            if (produto === 'PELUCIAS') return 'Registrar pelúcias';
+            return 'Registrar produto';
+        };
+
+        const getProdutoActionUrl = (produto) => {
+           const queryParams = new URLSearchParams({
+                estabelecimento_id: String(estabelecimentoId),
+                visita_id: String(visitaId),
+                rota_id: String(rotaId || ''),
+                rota_ponto_id: String(rotaPontoId || ''),
+                origem: 'rota',
+                retorno_url: retornoUrl,
+                rota_retorno_url: retornoRotaUrl
+            });
+
+            if (produto === 'BOLINHAS') {
+                return `/bolinhas/sangrias/add?${queryParams.toString()}`;
+            }
+
+            if (produto === 'FIGURINHAS') {
+                return `/figurinhas/sangrias/add?${queryParams.toString()}`;
+            }
+
+            if (produto === 'PELUCIAS') {
+                return `/pelucias/sangrias/add?${queryParams.toString()}`;
+            }
+
+            return '#';
+        };
+
+        const produtosPendentes = (produtosDaVisita || []).filter((item) => item.status === 'pendente');
+        const produtosConcluidos = (produtosDaVisita || []).filter((item) => item.status !== 'pendente');
+        const totalProdutos = (produtosDaVisita || []).length;
+        const totalPendentes = produtosPendentes.length;
+        const totalConcluidos = produtosConcluidos.length;
+    %>
+
     <div class="form-shell form-shell-modern">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visita Guiada' }) %>
 
@@ -20,7 +94,7 @@
                 <h1>Visita guiada ao ponto</h1>
 
                 <p>
-                    Atendimento mobile do ponto selecionado na rota, com registro por produto e avanço controlado da operação.
+                    Registre cada produto deste ponto antes de finalizar a visita e avançar para o próximo destino da rota.
                 </p>
             </div>
 
@@ -70,24 +144,134 @@
             <section class="form-card">
                 <div class="form-card-header">
                     <div>
-                        <span class="form-section-tag">Produtos da visita</span>
+                        <span class="form-section-tag">Progresso da visita</span>
                         <h2>Checklist operacional</h2>
                         <p>
-                            Nesta primeira etapa, estamos apenas validando a abertura da tela de visita.
-                            Na próxima etapa entram os cards de registro de sangria por produto.
+                            Registre os produtos pendentes deste ponto. Quando todos estiverem concluídos, o sistema poderá finalizar a visita e voltar para a rota.
                         </p>
                     </div>
                 </div>
 
                 <div class="form-summary-grid">
-                    <% produtosDaVisita.forEach((item) => { %>
-                        <div class="form-summary-card">
-                            <strong><%= item.label %></strong>
-                            <span>Status: <%= item.status %></span>
-                        </div>
-                    <% }) %>
+                    <div class="form-summary-card">
+                        <strong>Total de produtos</strong>
+                        <span><%= totalProdutos %></span>
+                    </div>
+
+                    <div class="form-summary-card">
+                        <strong>Concluídos</strong>
+                        <span><%= totalConcluidos %></span>
+                    </div>
+
+                    <div class="form-summary-card">
+                        <strong>Pendentes</strong>
+                        <span><%= totalPendentes %></span>
+                    </div>
                 </div>
             </section>
+
+            <section class="form-card">
+                <div class="form-card-header">
+                    <div>
+                        <span class="form-section-tag">Produtos da visita</span>
+                        <h2>Registros do ponto</h2>
+                        <p>
+                            Clique no produto que deseja registrar. O formulário será aberto com o estabelecimento atual já selecionado.
+                        </p>
+                    </div>
+                </div>
+
+                <% if (!produtosDaVisita.length) { %>
+                    <div class="dashboard-empty-state dashboard-empty-state-light">
+                        <h3>Nenhum produto identificado</h3>
+                        <p>Não foi possível identificar quais produtos estão vinculados a este ponto.</p>
+                    </div>
+                <% } else { %>
+                    <div class="form-summary-grid">
+                        <% produtosDaVisita.forEach((item) => { %>
+                            <% const isPendente = item.status === 'pendente'; %>
+                            <% const actionUrl = getProdutoActionUrl(item.produto); %>
+
+                            <article class="form-summary-card">
+                                <strong>
+                                    <i class="bi <%= getProdutoIcon(item.produto) %>"></i>
+                                    <%= item.label %>
+                                </strong>
+
+                                <span>
+                                    Status:
+                                    <strong class="<%= getStatusClass(item.status) %>">
+                                        <%= formatStatus(item.status) %>
+                                    </strong>
+                                </span>
+
+                                <% if (item.sangria_id) { %>
+                                    <small>Registro vinculado: #<%= item.sangria_id %></small>
+                                <% } %>
+
+                                <% if (item.observacoes) { %>
+                                    <small><%= item.observacoes %></small>
+                                <% } %>
+
+                                <% if (isPendente) { %>
+                                    <a
+                                        href="<%= actionUrl %>"
+                                        class="btn-modern mt-3"
+                                    >
+                                        <i class="bi bi-pencil-square"></i>
+                                        <span><%= getProdutoActionLabel(item.produto) %></span>
+                                    </a>
+                                <% } else { %>
+                                    <button type="button" class="btn-modern-secondary mt-3" disabled>
+                                        <i class="bi bi-check2-circle"></i>
+                                        <span>Produto concluído</span>
+                                    </button>
+                                <% } %>
+                            </article>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+
+            <% if (totalProdutos > 0 && totalPendentes === 0) { %>
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Visita completa</span>
+                            <h2>Todos os produtos foram registrados</h2>
+                            <p>
+                                Esta visita já não possui produtos pendentes. O próximo passo é voltar para a rota e seguir para o próximo ponto.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-footer-actions">
+                        <a href="<%= retornoRotaUrl %>" class="btn-modern">
+                            <i class="bi bi-sign-turn-right"></i>
+                            <span>Voltar para a rota</span>
+                        </a>
+                    </div>
+                </section>
+            <% } else { %>
+                <section class="form-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Atenção</span>
+                            <h2>Visita ainda em andamento</h2>
+                            <p>
+                                Ainda existe produto pendente neste ponto. Registre todos os produtos antes de avançar para o próximo destino da rota.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-footer-actions">
+                        <a href="<%= retornoRotaUrl %>" class="btn-modern-secondary"></a>
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Voltar para rota sem finalizar</span>
+                        </a>
+                    </div>
+                </section>
+            <% } %>
         </main>
     </div>
 </body>

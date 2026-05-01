@@ -227,7 +227,11 @@ class RotasController {
     try {
       const { rotaPontoId } = req.params;
 
-      const { latitude_chegada = null, longitude_chegada = null } = req.body;
+      const {
+        latitude_chegada = null,
+        longitude_chegada = null,
+        retorno_url = '/rotas'
+      } = req.body;
 
       const pontoDaRota = await RotasOperacionaisModel.findPontoDaRotaById(
         rotaPontoId,
@@ -276,13 +280,44 @@ class RotasController {
         produtos
       });
 
+      let redirectUrl = `/rotas/visitas/${visita.id}`;
+
+      if (produtos.length === 1) {
+        const retornoUrlSeguro = String(retorno_url || '/rotas').startsWith(
+          '/rotas'
+        )
+          ? String(retorno_url || '/rotas')
+          : '/rotas';
+
+        const queryParams = new URLSearchParams({
+          estabelecimento_id: String(pontoDaRota.estabelecimento_id),
+          visita_id: String(visita.id),
+          rota_id: String(pontoDaRota.rota_id),
+          rota_ponto_id: String(pontoDaRota.id),
+          origem: 'rota',
+          retorno_url: retornoUrlSeguro
+        });
+
+        if (produtos[0] === 'BOLINHAS') {
+          redirectUrl = `/bolinhas/sangrias/add?${queryParams.toString()}`;
+        }
+
+        if (produtos[0] === 'FIGURINHAS') {
+          redirectUrl = `/figurinhas/sangrias/add?${queryParams.toString()}`;
+        }
+
+        if (produtos[0] === 'PELUCIAS') {
+          redirectUrl = `/pelucias/sangrias/add?${queryParams.toString()}`;
+        }
+      }
+
       return res.status(200).json({
         success: true,
         message: 'Chegada registrada. Visita iniciada.',
         ponto: pontoAtualizado,
         visita,
         produtos: visitaProdutos,
-        redirectUrl: `/rotas/visitas/${visita.id}`
+        redirectUrl
       });
     } catch (error) {
       console.error('Erro ao registrar chegada ao ponto:', error);
@@ -316,6 +351,31 @@ class RotasController {
           )
         : null;
 
+      const rotaOperacional = visita.rota_id
+        ? await RotasOperacionaisModel.findRotaById(
+            visita.rota_id,
+            usuario.assinante_id
+          )
+        : null;
+
+      let rotaRetornoUrl = '/rotas';
+
+      if (rotaOperacional) {
+        const params = new URLSearchParams();
+
+        params.set('produto', rotaOperacional.produto_filtro || 'todos');
+
+        String(rotaOperacional.bairros || '')
+          .split(',')
+          .map(item => item.trim())
+          .filter(Boolean)
+          .forEach(bairro => {
+            params.append('bairros', bairro);
+          });
+
+        rotaRetornoUrl = `/rotas?${params.toString()}`;
+      }
+
       const produtosDoPonto = extractProdutosFromString(visita.produto);
 
       const produtosStatusMap = new Map(
@@ -345,6 +405,8 @@ class RotasController {
         usuario,
         visita,
         rotaPonto,
+        rotaOperacional,
+        rotaRetornoUrl,
         produtosDaVisita
       });
     } catch (error) {

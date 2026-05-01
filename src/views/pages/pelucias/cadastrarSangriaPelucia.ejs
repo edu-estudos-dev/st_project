@@ -2,444 +2,493 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Registrar Sangria de Pelúcias' }) %>
 
-<body class="form-page-body">
-    <%- include('../../partials/header') %>
-    <div class="page-spacer"></div>
+    <body class="form-page-body">
+        <%- include('../../partials/header') %>
+            <div class="page-spacer"></div>
 
-    <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelúcias' }) %>
+            <div class="form-shell form-shell-modern">
+                <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelúcias' }) %>
 
-        <section class="page-titlebar page-titlebar-violet">
-            <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
-                <h1>Registrar sangria de pelúcias</h1>
-                <p>Modernizei a tela para destacar coleta, leitura, estoque e previsão de saldo em uma interface mais clara, elegante e fácil de conferir durante a visita.</p>
+                    <section class="page-titlebar page-titlebar-violet">
+                        <div class="page-titlebar-content">
+                            <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
+                            <h1>Registrar sangria de pelúcias</h1>
+                            <p>Modernizei a tela para destacar coleta, leitura, estoque e previsão de saldo em uma
+                                interface mais clara, elegante e fácil de conferir durante a visita.</p>
+                        </div>
+
+                        <div class="page-titlebar-side">
+                            <div class="page-titlebar-stat">
+                                <strong>Produto</strong>
+                                <span>Pelúcias</span>
+                            </div>
+                            <div class="page-titlebar-stat">
+                                <strong>Destaque</strong>
+                                <span>Leitura, vendido e estoque previsto atualizados em tempo real</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <main class="form-stage">
+                        <form action="/pelucias/sangrias/add" method="POST" class="modern-form" id="peluciaForm">
+                            <input type="hidden" name="visita_id" value="<%= visitaId || '' %>">
+                            <input type="hidden" name="rota_id" value="<%= rotaId || '' %>">
+                            <input type="hidden" name="rota_ponto_id" value="<%= rotaPontoId || '' %>">
+                            <input type="hidden" name="origem" value="<%= origem || '' %>">
+                            <input type="hidden" name="retorno_url" value="<%= retornoUrl || '/rotas' %>">
+                            <input type="hidden" name="rota_retorno_url"
+                                value="<%= rotaRetornoUrl || retornoUrl || '/rotas' %>">
+                            <section class="form-card">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Visita</span>
+                                        <h2>Dados da coleta</h2>
+                                        <p>Escolha o estabelecimento, registre a data da sangria e informe como o
+                                            recebimento foi feito antes de avançar para os cálculos.</p>
+                                    </div>
+                                    <button type="button" class="form-inline-action form-inline-action-warning"
+                                        id="toggleAberturaInicial">
+                                        <i class="bi bi-plus-circle"></i>
+                                        <span>Criar novo</span>
+                                    </button>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-lg-6">
+                                        <label for="estabelecimento">Estabelecimento</label>
+                                        <select class="form-select" id="estabelecimento" name="estabelecimento_id"
+                                            required>
+                                            <option value="" <%=selectedEstabelecimentoId ? '' : 'selected' %> disabled
+                                                hidden>Selecione um estabelecimento</option>
+
+                                            <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                                <option value="<%= estabelecimento.id %>"
+                                                    <%=String(estabelecimento.id)===String(selectedEstabelecimentoId
+                                                    || '' ) ? 'selected' : '' %>
+                                                    >
+                                                    <%= estabelecimento.estabelecimento %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="data_sangria" id="dataSangriaLabel">Data da sangria</label>
+                                        <input type="date" class="form-control text-center" id="data_sangria"
+                                            name="data_sangria" required>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3" id="tipoPagamentoField">
+                                        <label for="tipo_pagamento">Tipo de pagamento</label>
+                                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
+                                            <option value="especie">Espécie</option>
+                                            <option value="pix">PIX</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <input class="form-check-input d-none" type="checkbox" id="abertura_inicial"
+                                    name="abertura_inicial">
+
+                                <div class="row g-3 mt-1">
+                                    <div class="col-12">
+                                        <small class="modern-note" id="modoRegistroHint">Use "Criar novo" para cadastrar
+                                            a abertura inicial de um ponto sem histórico anterior.</small>
+                                    </div>
+                                </div>
+
+                                <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="leitura_inicial">Leitura atual inicial</label>
+                                        <input type="number" class="form-control text-center" id="leitura_inicial"
+                                            name="leitura_inicial" min="0">
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="estoque_inicial">Abastecido inicial</label>
+                                        <input type="number" class="form-control text-center" id="estoque_inicial"
+                                            name="estoque_inicial" min="0">
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-card" id="financeiroCard">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Financeiro</span>
+                                        <h2>Apuração e comissão</h2>
+                                        <p>Preencha valor apurado e comissão para visualizar imediatamente a parte do
+                                            comerciante e o valor líquido.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_apurado">Valor apurado</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01" class="form-control text-center"
+                                                id="valor_apurado" name="valor_apurado" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="comissao">Comissão (%)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">%</span>
+                                            <input type="number" step="0.01" class="form-control text-center"
+                                                id="comissao" name="comissao" value="15" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_comerciante">Valor do comerciante</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01"
+                                                class="form-control text-center readonly-input" id="valor_comerciante"
+                                                name="valor_comerciante" readonly disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_liquido">Valor líquido</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01"
+                                                class="form-control text-center readonly-input" id="valor_liquido"
+                                                name="valor_liquido" readonly disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-card" id="leiturasCard">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Leituras</span>
+                                        <h2>Controle operacional da máquina</h2>
+                                        <p>Com a última leitura e o estoque atual carregados automaticamente, a tela
+                                            calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="leitura_atual">Leitura atual</label>
+                                        <input type="number" class="form-control text-center" id="leitura_atual"
+                                            name="leitura_atual" required>
+                                    </div>
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="ultima_leitura">Última leitura</label>
+                                        <input type="number" class="form-control text-center readonly-input"
+                                            id="ultima_leitura" name="ultima_leitura" value="<%= ultimaLeitura %>"
+                                            readonly disabled>
+                                    </div>
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="abastecido">Abastecido</label>
+                                        <input type="number" class="form-control text-center" id="abastecido"
+                                            name="abastecido" required>
+                                    </div>
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="qtde_vendido">Vendido</label>
+                                        <input type="number" class="form-control text-center readonly-input"
+                                            id="qtde_vendido" name="qtde_vendido" readonly disabled>
+                                    </div>
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="estoque_atual">Estoque anterior</label>
+                                        <input type="number" class="form-control text-center readonly-input"
+                                            id="estoque_atual" value="<%= ultimoEstoque %>" readonly disabled>
+                                    </div>
+                                    <div class="col-6 col-md-4 col-lg-2 compact-field">
+                                        <label for="estoque_previsto">Estoque previsto</label>
+                                        <input type="number" class="form-control text-center readonly-input"
+                                            id="estoque_previsto" readonly disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-summary-grid mt-4">
+                                    <div class="form-summary-card">
+                                        <strong>Última leitura</strong>
+                                        <span id="ultimaLeituraResumo">
+                                            <%= ultimaLeitura %>
+                                        </span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Estoque anterior</strong>
+                                        <span id="estoqueAtualResumo">
+                                            <%= ultimoEstoque %>
+                                        </span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Qtde. vendida</strong>
+                                        <span id="qtdeVendidaResumo">0</span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Estoque previsto</strong>
+                                        <span id="estoquePrevistoResumo">0</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-card">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Observações</span>
+                                        <h2>Anotações complementares</h2>
+                                        <p>Registre qualquer detalhe relevante para a próxima coleta, abastecimento ou
+                                            conferência do ponto.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="observacoes">Observações</label>
+                                        <textarea class="form-control" id="observacoes" name="observacoes" rows="5"
+                                            placeholder="Ex.: precisou de reposição maior, leitura conferida com o ponto, saldo acima do esperado..."></textarea>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-actions-bar">
+                                <div class="form-actions-copy">
+                                    <strong>Concluir registro</strong>
+                                    <span>Revise a leitura atual, os valores financeiros e o estoque previsto antes de
+                                        salvar.</span>
+                                </div>
+
+                                <div class="form-actions-buttons">
+                                    <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                                        <i class="bi bi-arrow-left"></i>
+                                        <span>Cancelar</span>
+                                    </a>
+                                    <button type="submit" class="btn-modern">
+                                        <i class="bi bi-save2"></i>
+                                        <span id="peluciaSubmitLabel">Registrar sangria</span>
+                                    </button>
+                                </div>
+                            </section>
+                        </form>
+                    </main>
             </div>
 
-            <div class="page-titlebar-side">
-                <div class="page-titlebar-stat">
-                    <strong>Produto</strong>
-                    <span>Pelúcias</span>
-                </div>
-                <div class="page-titlebar-stat">
-                    <strong>Destaque</strong>
-                    <span>Leitura, vendido e estoque previsto atualizados em tempo real</span>
-                </div>
-            </div>
-        </section>
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <main class="form-stage">
-            <form action="/pelucias/sangrias/add" method="POST" class="modern-form" id="peluciaForm">
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Visita</span>
-                            <h2>Dados da coleta</h2>
-                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avançar para os cálculos.</p>
-                        </div>
-                        <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Criar novo</span>
-                        </button>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-lg-6">
-                            <label for="estabelecimento">Estabelecimento</label>
-                            <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                                <option value="" selected disabled hidden>Selecione um estabelecimento</option>
-                                <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                    <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
-                                <% }); %>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="data_sangria" id="dataSangriaLabel">Data da sangria</label>
-                            <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3" id="tipoPagamentoField">
-                            <label for="tipo_pagamento">Tipo de pagamento</label>
-                            <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie">Espécie</option>
-                                <option value="pix">PIX</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <input class="form-check-input d-none" type="checkbox" id="abertura_inicial" name="abertura_inicial">
-
-                    <div class="row g-3 mt-1">
-                        <div class="col-12">
-                            <small class="modern-note" id="modoRegistroHint">Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.</small>
-                        </div>
-                    </div>
-
-                    <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="leitura_inicial">Leitura atual inicial</label>
-                            <input type="number" class="form-control text-center" id="leitura_inicial" name="leitura_inicial" min="0">
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="estoque_inicial">Abastecido inicial</label>
-                            <input type="number" class="form-control text-center" id="estoque_inicial" name="estoque_inicial" min="0">
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card" id="financeiroCard">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Financeiro</span>
-                            <h2>Apuração e comissão</h2>
-                            <p>Preencha valor apurado e comissão para visualizar imediatamente a parte do comerciante e o valor líquido.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_apurado">Valor apurado</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="comissao">Comissão (%)</label>
-                            <div class="input-group">
-                                <span class="input-group-text">%</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_comerciante">Valor do comerciante</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" readonly disabled>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_liquido">Valor líquido</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card" id="leiturasCard">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Leituras</span>
-                            <h2>Controle operacional da máquina</h2>
-                            <p>Com a última leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="leitura_atual">Leitura atual</label>
-                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="ultima_leitura">Última leitura</label>
-                            <input type="number" class="form-control text-center readonly-input" id="ultima_leitura" name="ultima_leitura" value="<%= ultimaLeitura %>" readonly disabled>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="qtde_vendido">Vendido</label>
-                            <input type="number" class="form-control text-center readonly-input" id="qtde_vendido" name="qtde_vendido" readonly disabled>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="estoque_atual">Estoque anterior</label>
-                            <input type="number" class="form-control text-center readonly-input" id="estoque_atual" value="<%= ultimoEstoque %>" readonly disabled>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-2 compact-field">
-                            <label for="estoque_previsto">Estoque previsto</label>
-                            <input type="number" class="form-control text-center readonly-input" id="estoque_previsto" readonly disabled>
-                        </div>
-                    </div>
-
-                    <div class="form-summary-grid mt-4">
-                        <div class="form-summary-card">
-                            <strong>Última leitura</strong>
-                            <span id="ultimaLeituraResumo"><%= ultimaLeitura %></span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Estoque anterior</strong>
-                            <span id="estoqueAtualResumo"><%= ultimoEstoque %></span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Qtde. vendida</strong>
-                            <span id="qtdeVendidaResumo">0</span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Estoque previsto</strong>
-                            <span id="estoquePrevistoResumo">0</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Observações</span>
-                            <h2>Anotações complementares</h2>
-                            <p>Registre qualquer detalhe relevante para a próxima coleta, abastecimento ou conferência do ponto.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="observacoes">Observações</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: precisou de reposição maior, leitura conferida com o ponto, saldo acima do esperado..."></textarea>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-actions-bar">
-                    <div class="form-actions-copy">
-                        <strong>Concluir registro</strong>
-                        <span>Revise a leitura atual, os valores financeiros e o estoque previsto antes de salvar.</span>
-                    </div>
-
-                    <div class="form-actions-buttons">
-                        <a href="/pelucias/sangrias" class="btn-modern-secondary">
-                            <i class="bi bi-arrow-left"></i>
-                            <span>Cancelar</span>
-                        </a>
-                        <button type="submit" class="btn-modern">
-                            <i class="bi bi-save2"></i>
-                            <span id="peluciaSubmitLabel">Registrar sangria</span>
-                        </button>
-                    </div>
-                </section>
-            </form>
-        </main>
-    </div>
-
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        window.peluciaHasHistorico = false;
-
-        function updateResumoOperacional() {
-            document.getElementById('ultimaLeituraResumo').textContent = document.getElementById('ultima_leitura').value || '0';
-            document.getElementById('estoqueAtualResumo').textContent = document.getElementById('estoque_atual').value || '0';
-            document.getElementById('qtdeVendidaResumo').textContent = document.getElementById('qtde_vendido').value || '0';
-            document.getElementById('estoquePrevistoResumo').textContent = document.getElementById('estoque_previsto').value || '0';
-        }
-
-        function calculateValues() {
-            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-            const valorDaComissao = valorApurado * (comissao / 100);
-            const valorComerciante = valorDaComissao;
-            const valorLiquido = valorApurado - valorComerciante;
-
-            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-        }
-
-        function calculateEstoquePrevisto() {
-            const estabelecimentoId = document.getElementById('estabelecimento').value;
-            const estoquePrevistoInput = document.getElementById('estoque_previsto');
-
-            if (!estabelecimentoId) {
-                estoquePrevistoInput.value = '';
-                updateResumoOperacional();
-                return;
-            }
-
-            const estoqueAtual = parseFloat(document.getElementById('estoque_atual').value) || 0;
-            const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
-            const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
-            const estoquePrevisto = estoqueAtual - qtdeVendido + abastecido;
-
-            estoquePrevistoInput.value = estoquePrevisto;
-            updateResumoOperacional();
-        }
-
-        function calculateVendido() {
-            const estabelecimentoId = document.getElementById('estabelecimento').value;
-            const qtdeVendidoInput = document.getElementById('qtde_vendido');
-
-            if (!estabelecimentoId) {
-                qtdeVendidoInput.value = '';
-                calculateEstoquePrevisto();
-                return;
-            }
-
-            const leituraAtual = parseFloat(document.getElementById('leitura_atual').value) || 0;
-            const ultimaLeitura = parseFloat(document.getElementById('ultima_leitura').value) || 0;
-            const qtdeVendido = leituraAtual >= ultimaLeitura ? leituraAtual - ultimaLeitura : 0;
-
-            qtdeVendidoInput.value = qtdeVendido;
-            calculateEstoquePrevisto();
-        }
-
-        function syncModoAberturaInicial() {
-            const isAbertura = document.getElementById('abertura_inicial').checked;
-            const hasSelectedEstabelecimento = Boolean(document.getElementById('estabelecimento').value);
-            const hasHistorico = window.peluciaHasHistorico === true;
-            const aberturaBox = document.getElementById('aberturaInicialBox');
-            const leituraInicialField = document.getElementById('leitura_inicial');
-            const estoqueInicialField = document.getElementById('estoque_inicial');
-            const aberturaInicialCheckbox = document.getElementById('abertura_inicial');
-            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
-            const submitLabel = document.getElementById('peluciaSubmitLabel');
-            const hint = document.getElementById('modoRegistroHint');
-            const dataSangriaLabel = document.getElementById('dataSangriaLabel');
-            const tipoPagamentoField = document.getElementById('tipoPagamentoField');
-
-            aberturaBox.classList.toggle('d-none', !isAbertura);
-            tipoPagamentoField.classList.toggle('d-none', isAbertura);
-            dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
-            leituraInicialField.required = isAbertura;
-            estoqueInicialField.required = isAbertura;
-            toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
-
-            ['tipo_pagamento', 'valor_apurado', 'comissao', 'leitura_atual', 'abastecido'].forEach((id) => {
-                const field = document.getElementById(id);
-                field.required = !isAbertura;
-                if (isAbertura && field.tagName === 'INPUT') field.value = id === 'comissao' ? '15' : '';
-            });
-
-            document.getElementById('financeiroCard').classList.toggle('opacity-50', isAbertura);
-            document.getElementById('leiturasCard').classList.toggle('opacity-50', isAbertura);
-            document.getElementById('financeiroCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
-            document.getElementById('leiturasCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
-            submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
-
-            if (hasSelectedEstabelecimento && !hasHistorico) {
-                aberturaInicialCheckbox.checked = true;
-                toggleAberturaInicialButton.disabled = true;
-                hint.textContent = 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
-            } else {
-                toggleAberturaInicialButton.disabled = false;
-                hint.textContent = 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
-            }
-
-            if (isAbertura) {
-                document.getElementById('qtde_vendido').value = '0';
-                document.getElementById('ultima_leitura').value = '0';
-                document.getElementById('estoque_atual').value = '0';
-                document.getElementById('estoque_previsto').value = estoqueInicialField.value || '0';
-                updateResumoOperacional();
-                calculateValues();
-            } else {
-                calculateVendido();
-                calculateValues();
-            }
-        }
-
-        async function loadUltimosDados(estabelecimentoId) {
-            const ultimaLeituraInput = document.getElementById('ultima_leitura');
-            const estoqueAtualInput = document.getElementById('estoque_atual');
-            const estoquePrevistoInput = document.getElementById('estoque_previsto');
-
-            if (!estabelecimentoId) {
-                ultimaLeituraInput.value = '';
-                estoqueAtualInput.value = '';
-                estoquePrevistoInput.value = '';
-                document.getElementById('leitura_atual').value = '';
-                document.getElementById('abastecido').value = '';
-                document.getElementById('qtde_vendido').value = '';
-                calculateVendido();
-                return;
-            }
-
-            try {
-                const response = await fetch(`/pelucias/sangrias/get-ultimos-dados/${estabelecimentoId}`);
-                if (!response.ok) {
-                    throw new Error('Falha ao consultar os últimos dados');
-                }
-
-                const data = await response.json();
-                window.peluciaHasHistorico = Boolean(data.hasHistorico);
-                if (window.peluciaHasHistorico) {
-                    document.getElementById('abertura_inicial').checked = false;
-                    document.getElementById('leitura_inicial').value = '';
-                    document.getElementById('estoque_inicial').value = '';
-                }
-                ultimaLeituraInput.value = Number(data.ultima_leitura || 0);
-                estoqueAtualInput.value = Number(data.estoque || 0);
-                calculateVendido();
-                updateResumoOperacional();
-                syncModoAberturaInicial();
-            } catch (error) {
-                console.error('Erro ao buscar os últimos dados:', error);
+            <script>
                 window.peluciaHasHistorico = false;
-                ultimaLeituraInput.value = '';
-                estoqueAtualInput.value = '';
-                estoquePrevistoInput.value = '';
-                document.getElementById('qtde_vendido').value = '';
-                updateResumoOperacional();
-                window.AppAlerts?.error('Não foi possível carregar a última leitura e o estoque deste estabelecimento.');
-            }
-        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const estabelecimentoSelect = document.getElementById('estabelecimento');
-            const leituraAtualInput = document.getElementById('leitura_atual');
-            const abastecidoInput = document.getElementById('abastecido');
-            const valorApuradoInput = document.getElementById('valor_apurado');
-            const comissaoInput = document.getElementById('comissao');
-            const aberturaInicialInput = document.getElementById('abertura_inicial');
-            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
-
-            estabelecimentoSelect.addEventListener('change', function () {
-                loadUltimosDados(this.value);
-            });
-
-            leituraAtualInput.addEventListener('input', calculateVendido);
-            abastecidoInput.addEventListener('input', calculateEstoquePrevisto);
-            valorApuradoInput.addEventListener('input', calculateValues);
-            comissaoInput.addEventListener('input', calculateValues);
-            aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
-            toggleAberturaInicialButton.addEventListener('click', function () {
-                if (aberturaInicialInput.disabled) return;
-                aberturaInicialInput.checked = !aberturaInicialInput.checked;
-                syncModoAberturaInicial();
-            });
-            document.getElementById('leitura_inicial').addEventListener('input', syncModoAberturaInicial);
-            document.getElementById('estoque_inicial').addEventListener('input', syncModoAberturaInicial);
-
-            document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
-
-            document.getElementById('peluciaForm').addEventListener('submit', (event) => {
-                const isAbertura = aberturaInicialInput.checked;
-                const hasHistorico = window.peluciaHasHistorico === true;
-                const leituraInicial = document.getElementById('leitura_inicial').value;
-                const estoqueInicial = document.getElementById('estoque_inicial').value;
-
-                if (!estabelecimentoSelect.value) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Selecione um estabelecimento antes de salvar.');
-                    return;
+                function updateResumoOperacional() {
+                    document.getElementById('ultimaLeituraResumo').textContent = document.getElementById('ultima_leitura').value || '0';
+                    document.getElementById('estoqueAtualResumo').textContent = document.getElementById('estoque_atual').value || '0';
+                    document.getElementById('qtdeVendidaResumo').textContent = document.getElementById('qtde_vendido').value || '0';
+                    document.getElementById('estoquePrevistoResumo').textContent = document.getElementById('estoque_previsto').value || '0';
                 }
 
-                if (!hasHistorico && !isAbertura) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe leitura inicial e abastecido inicial.');
-                    return;
+                function calculateValues() {
+                    const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
+                    const comissao = parseFloat(document.getElementById('comissao').value) || 0;
+                    const valorDaComissao = valorApurado * (comissao / 100);
+                    const valorComerciante = valorDaComissao;
+                    const valorLiquido = valorApurado - valorComerciante;
+
+                    document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
+                    document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
                 }
 
-                if (isAbertura && (!leituraInicial || !estoqueInicial)) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Informe leitura inicial e abastecido inicial antes de salvar a abertura de pelúcias.');
-                }
-            });
+                function calculateEstoquePrevisto() {
+                    const estabelecimentoId = document.getElementById('estabelecimento').value;
+                    const estoquePrevistoInput = document.getElementById('estoque_previsto');
 
-            calculateValues();
-            calculateEstoquePrevisto();
-            updateResumoOperacional();
-            syncModoAberturaInicial();
-        });
-    </script>
-</body>
+                    if (!estabelecimentoId) {
+                        estoquePrevistoInput.value = '';
+                        updateResumoOperacional();
+                        return;
+                    }
+
+                    const estoqueAtual = parseFloat(document.getElementById('estoque_atual').value) || 0;
+                    const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
+                    const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
+                    const estoquePrevisto = estoqueAtual - qtdeVendido + abastecido;
+
+                    estoquePrevistoInput.value = estoquePrevisto;
+                    updateResumoOperacional();
+                }
+
+                function calculateVendido() {
+                    const estabelecimentoId = document.getElementById('estabelecimento').value;
+                    const qtdeVendidoInput = document.getElementById('qtde_vendido');
+
+                    if (!estabelecimentoId) {
+                        qtdeVendidoInput.value = '';
+                        calculateEstoquePrevisto();
+                        return;
+                    }
+
+                    const leituraAtual = parseFloat(document.getElementById('leitura_atual').value) || 0;
+                    const ultimaLeitura = parseFloat(document.getElementById('ultima_leitura').value) || 0;
+                    const qtdeVendido = leituraAtual >= ultimaLeitura ? leituraAtual - ultimaLeitura : 0;
+
+                    qtdeVendidoInput.value = qtdeVendido;
+                    calculateEstoquePrevisto();
+                }
+
+                function syncModoAberturaInicial() {
+                    const isAbertura = document.getElementById('abertura_inicial').checked;
+                    const hasSelectedEstabelecimento = Boolean(document.getElementById('estabelecimento').value);
+                    const hasHistorico = window.peluciaHasHistorico === true;
+                    const aberturaBox = document.getElementById('aberturaInicialBox');
+                    const leituraInicialField = document.getElementById('leitura_inicial');
+                    const estoqueInicialField = document.getElementById('estoque_inicial');
+                    const aberturaInicialCheckbox = document.getElementById('abertura_inicial');
+                    const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
+                    const submitLabel = document.getElementById('peluciaSubmitLabel');
+                    const hint = document.getElementById('modoRegistroHint');
+                    const dataSangriaLabel = document.getElementById('dataSangriaLabel');
+                    const tipoPagamentoField = document.getElementById('tipoPagamentoField');
+
+                    aberturaBox.classList.toggle('d-none', !isAbertura);
+                    tipoPagamentoField.classList.toggle('d-none', isAbertura);
+                    dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
+                    leituraInicialField.required = isAbertura;
+                    estoqueInicialField.required = isAbertura;
+                    toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
+
+                    ['tipo_pagamento', 'valor_apurado', 'comissao', 'leitura_atual', 'abastecido'].forEach((id) => {
+                        const field = document.getElementById(id);
+                        field.required = !isAbertura;
+                        if (isAbertura && field.tagName === 'INPUT') field.value = id === 'comissao' ? '15' : '';
+                    });
+
+                    document.getElementById('financeiroCard').classList.toggle('opacity-50', isAbertura);
+                    document.getElementById('leiturasCard').classList.toggle('opacity-50', isAbertura);
+                    document.getElementById('financeiroCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
+                    document.getElementById('leiturasCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
+                    submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
+
+                    if (hasSelectedEstabelecimento && !hasHistorico) {
+                        aberturaInicialCheckbox.checked = true;
+                        toggleAberturaInicialButton.disabled = true;
+                        hint.textContent = 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
+                    } else {
+                        toggleAberturaInicialButton.disabled = false;
+                        hint.textContent = 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
+                    }
+
+                    if (isAbertura) {
+                        document.getElementById('qtde_vendido').value = '0';
+                        document.getElementById('ultima_leitura').value = '0';
+                        document.getElementById('estoque_atual').value = '0';
+                        document.getElementById('estoque_previsto').value = estoqueInicialField.value || '0';
+                        updateResumoOperacional();
+                        calculateValues();
+                    } else {
+                        calculateVendido();
+                        calculateValues();
+                    }
+                }
+
+                async function loadUltimosDados(estabelecimentoId) {
+                    const ultimaLeituraInput = document.getElementById('ultima_leitura');
+                    const estoqueAtualInput = document.getElementById('estoque_atual');
+                    const estoquePrevistoInput = document.getElementById('estoque_previsto');
+
+                    if (!estabelecimentoId) {
+                        ultimaLeituraInput.value = '';
+                        estoqueAtualInput.value = '';
+                        estoquePrevistoInput.value = '';
+                        document.getElementById('leitura_atual').value = '';
+                        document.getElementById('abastecido').value = '';
+                        document.getElementById('qtde_vendido').value = '';
+                        calculateVendido();
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`/pelucias/sangrias/get-ultimos-dados/${estabelecimentoId}`);
+                        if (!response.ok) {
+                            throw new Error('Falha ao consultar os últimos dados');
+                        }
+
+                        const data = await response.json();
+                        window.peluciaHasHistorico = Boolean(data.hasHistorico);
+                        if (window.peluciaHasHistorico) {
+                            document.getElementById('abertura_inicial').checked = false;
+                            document.getElementById('leitura_inicial').value = '';
+                            document.getElementById('estoque_inicial').value = '';
+                        }
+                        ultimaLeituraInput.value = Number(data.ultima_leitura || 0);
+                        estoqueAtualInput.value = Number(data.estoque || 0);
+                        calculateVendido();
+                        updateResumoOperacional();
+                        syncModoAberturaInicial();
+                    } catch (error) {
+                        console.error('Erro ao buscar os últimos dados:', error);
+                        window.peluciaHasHistorico = false;
+                        ultimaLeituraInput.value = '';
+                        estoqueAtualInput.value = '';
+                        estoquePrevistoInput.value = '';
+                        document.getElementById('qtde_vendido').value = '';
+                        updateResumoOperacional();
+                        window.AppAlerts?.error('Não foi possível carregar a última leitura e o estoque deste estabelecimento.');
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const estabelecimentoSelect = document.getElementById('estabelecimento');
+                    const leituraAtualInput = document.getElementById('leitura_atual');
+                    const abastecidoInput = document.getElementById('abastecido');
+                    const valorApuradoInput = document.getElementById('valor_apurado');
+                    const comissaoInput = document.getElementById('comissao');
+                    const aberturaInicialInput = document.getElementById('abertura_inicial');
+                    const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
+
+                    estabelecimentoSelect.addEventListener('change', function () {
+                        loadUltimosDados(this.value);
+                    });
+
+                    if (estabelecimentoSelect.value) {
+                        loadUltimosDados(estabelecimentoSelect.value);
+                    }
+
+                    leituraAtualInput.addEventListener('input', calculateVendido);
+                    abastecidoInput.addEventListener('input', calculateEstoquePrevisto);
+                    valorApuradoInput.addEventListener('input', calculateValues);
+                    comissaoInput.addEventListener('input', calculateValues);
+                    aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
+                    toggleAberturaInicialButton.addEventListener('click', function () {
+                        if (aberturaInicialInput.disabled) return;
+                        aberturaInicialInput.checked = !aberturaInicialInput.checked;
+                        syncModoAberturaInicial();
+                    });
+                    document.getElementById('leitura_inicial').addEventListener('input', syncModoAberturaInicial);
+                    document.getElementById('estoque_inicial').addEventListener('input', syncModoAberturaInicial);
+
+                    document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
+
+                    document.getElementById('peluciaForm').addEventListener('submit', (event) => {
+                        const isAbertura = aberturaInicialInput.checked;
+                        const hasHistorico = window.peluciaHasHistorico === true;
+                        const leituraInicial = document.getElementById('leitura_inicial').value;
+                        const estoqueInicial = document.getElementById('estoque_inicial').value;
+
+                        if (!estabelecimentoSelect.value) {
+                            event.preventDefault();
+                            window.AppAlerts?.warning('Selecione um estabelecimento antes de salvar.');
+                            return;
+                        }
+
+                        if (!hasHistorico && !isAbertura) {
+                            event.preventDefault();
+                            window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe leitura inicial e abastecido inicial.');
+                            return;
+                        }
+
+                        if (isAbertura && (!leituraInicial || !estoqueInicial)) {
+                            event.preventDefault();
+                            window.AppAlerts?.warning('Informe leitura inicial e abastecido inicial antes de salvar a abertura de pelúcias.');
+                        }
+                    });
+
+                    calculateValues();
+                    calculateEstoquePrevisto();
+                    updateResumoOperacional();
+                    syncModoAberturaInicial();
+                });
+            </script>
+    </body>
+
 </html>
-

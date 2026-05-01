@@ -2,182 +2,210 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Registrar Sangria de Bolinhas' }) %>
 
-<body class="form-page-body">
-    <%- include('../../partials/header') %>
-    <div class="page-spacer"></div>
+    <body class="form-page-body">
+        <%- include('../../partials/header') %>
+            <div class="page-spacer"></div>
 
-    <div class="form-shell form-shell-modern">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Bolinhas' }) %>
+            <div class="form-shell form-shell-modern">
+                <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Bolinhas' }) %>
 
-        <section class="page-titlebar page-titlebar-green">
-            <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-circle-square"></i> Operacional</span>
-                <h1>Registrar sangria de bolinhas</h1>
-                <p>Uma tela mais clara para registrar visita, pagamento e resultado financeiro da coleta, com cálculos automáticos aparecendo de forma mais amigável.</p>
+                    <section class="page-titlebar page-titlebar-green">
+                        <div class="page-titlebar-content">
+                            <span class="form-kicker"><i class="bi bi-circle-square"></i> Operacional</span>
+                            <h1>Registrar sangria de bolinhas</h1>
+                            <p>Uma tela mais clara para registrar visita, pagamento e resultado financeiro da coleta,
+                                com cálculos automáticos aparecendo de forma mais amigável.</p>
+                        </div>
+
+                        <div class="page-titlebar-side">
+                            <div class="page-titlebar-stat">
+                                <strong>Produto</strong>
+                                <span>Bolinhas</span>
+                            </div>
+                            <div class="page-titlebar-stat">
+                                <strong>Foco</strong>
+                                <span>Coleta rápida com valores calculados em tempo real</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <main class="form-stage">
+                        <form action="/bolinhas/sangrias/add" class="modern-form" method="POST">
+                            <input type="hidden" name="visita_id" value="<%= visitaId || '' %>">
+                            <input type="hidden" name="rota_id" value="<%= rotaId || '' %>">
+                            <input type="hidden" name="rota_ponto_id" value="<%= rotaPontoId || '' %>">
+                            <input type="hidden" name="origem" value="<%= origem || '' %>">
+                            <input type="hidden" name="retorno_url" value="<%= retornoUrl || '/rotas' %>">
+                            <section class="form-card">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Visita</span>
+                                        <h2>Informações da coleta</h2>
+                                        <p>Selecione o estabelecimento, informe a data da sangria e escolha como o
+                                            pagamento foi realizado.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-lg-6">
+                                        <label for="estabelecimento">Estabelecimento</label>
+                                        <select class="form-select" id="estabelecimento" name="estabelecimento_id"
+                                            required>
+                                            <option value="" <%=selectedEstabelecimentoId ? '' : 'selected' %> disabled
+                                                hidden>Selecione um estabelecimento</option>
+
+                                            <% estabelecimentos.forEach(function(estabelecimento) { %>
+                                                <option value="<%= estabelecimento.id %>"
+                                                    <%=String(estabelecimento.id)===String(selectedEstabelecimentoId
+                                                    || '' ) ? 'selected' : '' %>
+                                                    >
+                                                    <%= estabelecimento.estabelecimento %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="data_sangria">Data da sangria</label>
+                                        <input type="date" class="form-control text-center" id="data_sangria"
+                                            name="data_sangria" required>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="tipo_pagamento">Tipo de pagamento</label>
+                                        <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
+                                            <option value="especie">Espécie</option>
+                                            <option value="pix">PIX</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-card">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Resultado</span>
+                                        <h2>Valores apurados</h2>
+                                        <p>Ao preencher valor apurado e comissão, o sistema calcula automaticamente
+                                            quanto fica com o comerciante e qual é o valor líquido.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_apurado">Valor apurado</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01" class="form-control text-center"
+                                                id="valor_apurado" name="valor_apurado" required
+                                                oninput="calculateValues()">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="comissao">Comissão (%)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">%</span>
+                                            <input type="number" step="0.01" class="form-control text-center"
+                                                id="comissao" name="comissao" value="10" required
+                                                oninput="calculateValues()">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_comerciante">Valor do comerciante</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01"
+                                                class="form-control text-center readonly-input" id="valor_comerciante"
+                                                name="valor_comerciante" readonly disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label for="valor_liquido">Valor líquido</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">R$</span>
+                                            <input type="number" step="0.01"
+                                                class="form-control text-center readonly-input" id="valor_liquido"
+                                                name="valor_liquido" readonly disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-summary-grid mt-4">
+                                    <div class="form-summary-card">
+                                        <strong>Status</strong>
+                                        <span>Cálculo automático</span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Comissão inicial</strong>
+                                        <span>10%</span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Pagamento</strong>
+                                        <span>Espécie ou PIX</span>
+                                    </div>
+                                    <div class="form-summary-card">
+                                        <strong>Fluxo</strong>
+                                        <span>Registro rápido</span>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-card">
+                                <div class="form-card-header">
+                                    <div>
+                                        <span class="form-section-tag">Observações</span>
+                                        <h2>Anotações da visita</h2>
+                                        <p>Use esse campo para registrar qualquer informação útil sobre o ponto ou a
+                                            coleta realizada.</p>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="observacoes">Observações</label>
+                                        <textarea class="form-control" id="observacoes" name="observacoes" rows="5"
+                                            placeholder="Ex.: máquina cheia, local movimentado, comerciante preferiu PIX..."></textarea>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="form-actions-bar">
+                                <div class="form-actions-copy">
+                                    <strong>Fechar registro</strong>
+                                    <span>Confirme estabelecimento, data e valores antes de salvar esta sangria.</span>
+                                </div>
+
+                                <div class="form-actions-buttons">
+                                    <a href="/bolinhas/sangrias" class="btn-modern-secondary">
+                                        <i class="bi bi-arrow-left"></i>
+                                        <span>Cancelar</span>
+                                    </a>
+                                    <button type="submit" class="btn-modern">
+                                        <i class="bi bi-save2"></i>
+                                        <span>Registrar sangria</span>
+                                    </button>
+                                </div>
+                            </section>
+                        </form>
+                    </main>
             </div>
 
-            <div class="page-titlebar-side">
-                <div class="page-titlebar-stat">
-                    <strong>Produto</strong>
-                    <span>Bolinhas</span>
-                </div>
-                <div class="page-titlebar-stat">
-                    <strong>Foco</strong>
-                    <span>Coleta rápida com valores calculados em tempo real</span>
-                </div>
-            </div>
-        </section>
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script>
+                function calculateValues() {
+                    const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
+                    const comissao = parseFloat(document.getElementById('comissao').value) || 0;
+                    const valorDaComissao = valorApurado * (comissao / 100);
+                    const valorComerciante = valorDaComissao;
+                    const valorLiquido = valorApurado - valorComerciante;
 
-        <main class="form-stage">
-            <form action="/bolinhas/sangrias/add" class="modern-form" method="POST">
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Visita</span>
-                            <h2>Informações da coleta</h2>
-                            <p>Selecione o estabelecimento, informe a data da sangria e escolha como o pagamento foi realizado.</p>
-                        </div>
-                    </div>
+                    document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
+                    document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
+                }
 
-                    <div class="row g-3">
-                        <div class="col-12 col-lg-6">
-                            <label for="estabelecimento">Estabelecimento</label>
-                            <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                                <option value="" selected disabled hidden>Selecione um estabelecimento</option>
-                                <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                    <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
-                                <% }); %>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="data_sangria">Data da sangria</label>
-                            <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="tipo_pagamento">Tipo de pagamento</label>
-                            <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
-                                <option value="especie">Espécie</option>
-                                <option value="pix">PIX</option>
-                            </select>
-                        </div>
-                    </div>
-                </section>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
+                    calculateValues();
+                });
+            </script>
+    </body>
 
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Resultado</span>
-                            <h2>Valores apurados</h2>
-                            <p>Ao preencher valor apurado e comissão, o sistema calcula automaticamente quanto fica com o comerciante e qual é o valor líquido.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_apurado">Valor apurado</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required oninput="calculateValues()">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="comissao">Comissão (%)</label>
-                            <div class="input-group">
-                                <span class="input-group-text">%</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="10" required oninput="calculateValues()">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_comerciante">Valor do comerciante</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" readonly disabled>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="valor_liquido">Valor líquido</label>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" readonly disabled>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-summary-grid mt-4">
-                        <div class="form-summary-card">
-                            <strong>Status</strong>
-                            <span>Cálculo automático</span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Comissão inicial</strong>
-                            <span>10%</span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Pagamento</strong>
-                            <span>Espécie ou PIX</span>
-                        </div>
-                        <div class="form-summary-card">
-                            <strong>Fluxo</strong>
-                            <span>Registro rápido</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Observações</span>
-                            <h2>Anotações da visita</h2>
-                            <p>Use esse campo para registrar qualquer informação útil sobre o ponto ou a coleta realizada.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="observacoes">Observações</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: máquina cheia, local movimentado, comerciante preferiu PIX..."></textarea>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-actions-bar">
-                    <div class="form-actions-copy">
-                        <strong>Fechar registro</strong>
-                        <span>Confirme estabelecimento, data e valores antes de salvar esta sangria.</span>
-                    </div>
-
-                    <div class="form-actions-buttons">
-                        <a href="/bolinhas/sangrias" class="btn-modern-secondary">
-                            <i class="bi bi-arrow-left"></i>
-                            <span>Cancelar</span>
-                        </a>
-                        <button type="submit" class="btn-modern">
-                            <i class="bi bi-save2"></i>
-                            <span>Registrar sangria</span>
-                        </button>
-                    </div>
-                </section>
-            </form>
-        </main>
-    </div>
-
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function calculateValues() {
-            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-            const valorDaComissao = valorApurado * (comissao / 100);
-            const valorComerciante = valorDaComissao;
-            const valorLiquido = valorApurado - valorComerciante;
-
-            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
-            calculateValues();
-        });
-    </script>
-</body>
 </html>

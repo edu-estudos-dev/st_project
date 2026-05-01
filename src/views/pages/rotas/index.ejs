@@ -536,6 +536,10 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 let routeItems = Array.from(document.querySelectorAll('[data-route-item]'));
+
+                const selectedBairrosData = <%- JSON.stringify(selectedBairros || []) %>;
+                const selectedProdutoData = <%- JSON.stringify(selectedProduto || 'todos') %>;
+
                 const routePointList = document.getElementById('routePointList');
                 const startButton = document.getElementById('startSmartRouteButton');
                 const markVisitedButton = document.getElementById('markVisitedButton');
@@ -561,11 +565,15 @@
                 const routeGoogleMapFrame = document.getElementById('routeGoogleMapFrame');
                 const googleMapsEmbedApiKey = <%- JSON.stringify(mapsEmbedApiKey || '') %>;
 
-                const routeStorageKey = `vendmaster:rota:${<%- JSON.stringify(selectedBairros || []) %>}:${<%- JSON.stringify(selectedProduto || 'todos') %>}`;
+                const routeStorageKey = `vendmaster:rota:${JSON.stringify(selectedBairrosData)}:${selectedProdutoData}`;
+                const routeUrlParams = new URLSearchParams(window.location.search);
+                const rotaPontoFinalizadoId = routeUrlParams.get('rota_ponto_finalizado');
 
                 let routeState = {
                     currentIndex: -1,
-                    started: false
+                    started: false,
+                    rotaId: null,
+                    rotaPontos: []
                 };
 
                 const geocodeAddress = async (address) => {
@@ -643,6 +651,7 @@
                         .map((card) => card.dataset.address)
                         .filter(Boolean)
                         .join('|');
+
                     const params = new URLSearchParams({
                         key: googleMapsEmbedApiKey,
                         origin,
@@ -737,6 +746,91 @@
 
                 const getCurrentCardId = () => getCurrentCard()?.dataset.id || null;
 
+                const getRotaPontoForCard = (card) => {
+                    if (!card || !Array.isArray(routeState.rotaPontos)) return null;
+
+                    const estabelecimentoId = Number(card.dataset.id);
+
+                    return routeState.rotaPontos.find((ponto) => {
+                        return Number(ponto.estabelecimento_id) === estabelecimentoId;
+                    }) || null;
+                };
+
+                const getCurrentPositionSafe = async () => {
+                    return new Promise((resolve) => {
+                        if (!navigator.geolocation) {
+                            resolve(null);
+                            return;
+                        }
+
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                resolve({
+                                    lat: position.coords.latitude,
+                                    lon: position.coords.longitude
+                                });
+                            },
+                            () => resolve(null),
+                            {
+                                enableHighAccuracy: true,
+                                timeout: 8000,
+                                maximumAge: 60000
+                            }
+                        );
+                    });
+                };
+
+                const iniciarRotaOperacionalNoBanco = async (startPosition, orderedCards) => {
+                    const response = await fetch('/rotas/operacional/iniciar', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json'
+                        },
+                        body: JSON.stringify({
+                            bairros: selectedBairrosData,
+                            produto: selectedProdutoData,
+                            origem_latitude: startPosition?.lat ?? null,
+                            origem_longitude: startPosition?.lon ?? null,
+                            pontos: orderedCards.map((card, index) => ({
+                                estabelecimento_id: Number(card.dataset.id),
+                                ordem: index + 1
+                            }))
+                        })
+                    });
+
+                    const data = await response.json().catch(() => null);
+
+                    if (!response.ok || !data?.success) {
+                        throw new Error(data?.message || 'Não foi possível salvar a rota operacional.');
+                    }
+
+                    return data;
+                };
+
+                const registrarChegadaNoBanco = async (rotaPontoId, position = null) => {
+                    const response = await fetch(`/rotas/pontos/${rotaPontoId}/chegada`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json'
+                        },
+                        body: JSON.stringify({
+                            latitude_chegada: position?.lat ?? null,
+                            longitude_chegada: position?.lon ?? null,
+                            retorno_url: `${window.location.pathname}${window.location.search}`
+                        })
+                    });
+
+                    const data = await response.json().catch(() => null);
+
+                    if (!response.ok || !data?.success) {
+                        throw new Error(data?.message || 'Não foi possível registrar a chegada ao ponto.');
+                    }
+
+                    return data;
+                };
+
                 const updateRouteButtonsState = () => {
                     routeItems.forEach((card, index) => {
                         const upButton = card.querySelector('[data-route-move="up"]');
@@ -761,7 +855,7 @@
                     }
 
                     if (startButton) {
-                        startButton.disabled = routeItems.length === 0;
+                        startButton.disabled = routeItems.length === 0 || routeState.started;
                     }
 
                     if (routeCircuitStops) {
@@ -778,6 +872,8 @@
                     localStorage.setItem(routeStorageKey, JSON.stringify({
                         currentIndex: routeState.currentIndex,
                         started: routeState.started,
+                        rotaId: routeState.rotaId,
+                        rotaPontos: routeState.rotaPontos,
                         orderedIds: routeItems.map((card) => card.dataset.id),
                         savedAt: new Date().toISOString()
                     }));
@@ -885,6 +981,7 @@
 
                         markVisitedButton.disabled = true;
                         saveRouteState();
+                        updateRouteButtonsState();
                         return;
                     }
 
@@ -893,16 +990,19 @@
                     const name = currentCard.dataset.name;
 
                     titleEl.textContent = `Rota em andamento: ${routeState.currentIndex + 1}/${routeItems.length}`;
-                    textEl.textContent = 'Quando chegar ao ponto atual, clique em "Cheguei neste ponto" para liberar o próximo destino.';
-                    helperTextEl.textContent = 'O botão "Cheguei neste ponto" já está liberado para esta parada.';
+                    textEl.textContent = 'Quando chegar ao ponto atual, toque em "Cheguei neste ponto" para abrir a visita guiada.';
+                    helperTextEl.textContent = routeState.rotaId
+                        ? 'A rota operacional já foi salva. Ao chegar, o sistema abre a tela de visita do ponto.'
+                        : 'Inicie a rota inteligente para salvar a rota operacional antes da visita.';
                     nextStopNameEl.textContent = name;
                     nextStopMetaEl.textContent = address;
 
                     setActionLinkState(googleButton, buildGoogleRoute(address));
                     setActionLinkState(wazeButton, buildWazeRoute(address));
 
-                    markVisitedButton.disabled = false;
+                    markVisitedButton.disabled = !routeState.rotaId;
                     saveRouteState();
+                    updateRouteButtonsState();
                 };
 
                 const reorderCards = () => {
@@ -927,7 +1027,9 @@
                     if (!routeItems.length) {
                         routeState = {
                             currentIndex: -1,
-                            started: false
+                            started: false,
+                            rotaId: null,
+                            rotaPontos: []
                         };
 
                         localStorage.removeItem(routeStorageKey);
@@ -950,6 +1052,7 @@
 
                         routeCircuitMap?.classList.remove('has-route', 'has-google-map');
                         routeCircuitLine?.setAttribute('points', '');
+
                         if (routeGoogleMapFrame) {
                             routeGoogleMapFrame.src = '';
                         }
@@ -1110,7 +1213,9 @@
 
                         routeState = {
                             currentIndex: typeof saved.currentIndex === 'number' ? saved.currentIndex : -1,
-                            started: Boolean(saved.started)
+                            started: Boolean(saved.started),
+                            rotaId: saved.rotaId || null,
+                            rotaPontos: Array.isArray(saved.rotaPontos) ? saved.rotaPontos : []
                         };
 
                         if (routeState.currentIndex > routeItems.length) {
@@ -1129,10 +1234,154 @@
                     }
                 };
 
+                const showRouteCompletedCelebration = () => {
+
+                const celebrationKey = `vendmaster:rota-concluida:${routeState.rotaId || routeStorageKey}`;
+
+                if (sessionStorage.getItem(celebrationKey)) {
+                    return;
+                }
+
+                sessionStorage.setItem(celebrationKey, 'true');
+
+                const launchConfetti = () => {
+                    const confettiLayer = document.createElement('div');
+
+                    confettiLayer.style.position = 'fixed';
+                    confettiLayer.style.inset = '0';
+                    confettiLayer.style.pointerEvents = 'none';
+                    confettiLayer.style.zIndex = '99999';
+                    confettiLayer.style.overflow = 'hidden';
+
+                    document.body.appendChild(confettiLayer);
+
+                    const colors = ['#2563eb', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+
+                    for (let i = 0; i < 90; i += 1) {
+                        const particle = document.createElement('span');
+                        const size = Math.floor(Math.random() * 8) + 6;
+                        const left = Math.random() * 100;
+                        const delay = Math.random() * 0.7;
+                        const duration = Math.random() * 1.8 + 2.6;
+                        const rotate = Math.random() * 720;
+
+                        particle.style.position = 'absolute';
+                        particle.style.top = '-20px';
+                        particle.style.left = `${left}%`;
+                        particle.style.width = `${size}px`;
+                        particle.style.height = `${size * 1.6}px`;
+                        particle.style.borderRadius = '3px';
+                        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        particle.style.opacity = '0.95';
+                        particle.style.transform = `rotate(${rotate}deg)`;
+                        particle.style.animation = `vendmasterConfettiFall ${duration}s ease-in ${delay}s forwards`;
+
+                        confettiLayer.appendChild(particle);
+                    }
+
+                    if (!document.getElementById('vendmasterConfettiStyle')) {
+                        const style = document.createElement('style');
+
+                        style.id = 'vendmasterConfettiStyle';
+                        style.textContent = `
+                            @keyframes vendmasterConfettiFall {
+                                0% {
+                                    transform: translateY(-30px) rotate(0deg);
+                                    opacity: 1;
+                                }
+
+                                100% {
+                                    transform: translateY(110vh) rotate(900deg);
+                                    opacity: 0;
+                                }
+                            }
+                        `;
+
+                        document.head.appendChild(style);
+                    }
+
+                    setTimeout(() => {
+                        confettiLayer.remove();
+                    }, 5200);
+                };
+
+                    launchConfetti();
+
+                    if (window.Swal) {
+                        window.Swal.fire({
+                            icon: 'success',
+                            title: 'Rota concluída!',
+                            html: `
+                                <strong>Parabéns!</strong><br>
+                                Todos os pontos desta rota foram visitados com sucesso.
+                            `,
+                            confirmButtonText: 'Excelente',
+                            confirmButtonColor: '#2563eb',
+                            timer: 5200,
+                            timerProgressBar: true,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        });
+
+                        return;
+                    }
+
+                    window.AppAlerts?.success?.('Rota concluída! Todos os pontos foram visitados com sucesso.');
+                };
+
+                const applyFinishedRoutePointFromUrl = () => {
+                    if (!rotaPontoFinalizadoId || !routeState.started || !Array.isArray(routeState.rotaPontos)) {
+                        return false;
+                    }
+
+                    const pontoFinalizado = routeState.rotaPontos.find((ponto) => {
+                        return String(ponto.id) === String(rotaPontoFinalizadoId);
+                    });
+
+                    if (!pontoFinalizado) {
+                        return false;
+                    }
+
+                    const finishedCardIndex = routeItems.findIndex((card) => {
+                        return String(card.dataset.id) === String(pontoFinalizado.estabelecimento_id);
+                    });
+
+                    if (finishedCardIndex < 0) {
+                        return false;
+                    }
+
+                    routeState.currentIndex = Math.max(routeState.currentIndex, finishedCardIndex + 1);
+                    saveRouteState();
+                    renderQueue();
+                    syncCurrentStop();
+
+                    if (routeState.currentIndex >= routeItems.length) {
+                        showRouteCompletedCelebration();
+                    }
+
+                    const cleanUrl = new URL(window.location.href);
+                    cleanUrl.searchParams.delete('rota_ponto_finalizado');
+                    cleanUrl.searchParams.delete('success');
+
+                    window.history.replaceState(
+                        {},
+                        document.title,
+                        `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`
+                    );
+
+                    return true;
+                };
+
                 const resetRouteState = () => {
                     routeState = {
                         currentIndex: -1,
-                        started: false
+                        started: false,
+                        rotaId: null,
+                        rotaPontos: []
                     };
 
                     localStorage.removeItem(routeStorageKey);
@@ -1141,6 +1390,7 @@
 
                     routeCircuitMap?.classList.remove('has-route', 'has-google-map');
                     routeCircuitLine?.setAttribute('points', '');
+
                     if (routeGoogleMapFrame) {
                         routeGoogleMapFrame.src = '';
                     }
@@ -1225,14 +1475,19 @@
                     setActionLinkState(routeOpenFullMapButton, buildFullGoogleRoute(currentPosition, ordered));
 
                     const googleEmbedRouteUrl = buildGoogleEmbedRoute(currentPosition, ordered);
+
                     if (routeGoogleMapFrame && googleEmbedRouteUrl) {
                         routeGoogleMapFrame.src = googleEmbedRouteUrl;
                         routeCircuitMap?.classList.add('has-google-map');
                     }
 
+                    const rotaOperacional = await iniciarRotaOperacionalNoBanco(currentPosition, ordered);
+
                     routeState = {
                         currentIndex: 0,
-                        started: true
+                        started: true,
+                        rotaId: rotaOperacional.rota?.id || null,
+                        rotaPontos: Array.isArray(rotaOperacional.pontos) ? rotaOperacional.pontos : []
                     };
 
                     ordered.forEach((card, index) => {
@@ -1240,6 +1495,9 @@
                     });
 
                     reorderCards();
+                    saveRouteState();
+
+                    window.AppAlerts?.success?.('Rota operacional iniciada com sucesso.');
                 };
 
                 const generateRoutePdf = () => {
@@ -1310,7 +1568,7 @@
                         textEl.textContent = 'Permita a localização e tente novamente para organizar os pontos.';
                         helperTextEl.textContent = 'Se preferir, cadastre latitude e longitude nos estabelecimentos para melhorar a precisão.';
                     } finally {
-                        startButton.disabled = false;
+                        updateRouteButtonsState();
                     }
                 });
 
@@ -1318,21 +1576,45 @@
                     if (!routeState.started) return;
 
                     const currentCard = routeItems[routeState.currentIndex];
-                    const currentName = currentCard?.dataset.name;
+                    const currentName = currentCard?.dataset.name || 'este ponto';
+                    const rotaPonto = getRotaPontoForCard(currentCard);
+
+                    if (!rotaPonto?.id) {
+                        window.AppAlerts?.error('Não encontrei o vínculo deste ponto com a rota operacional. Reinicie a rota e tente novamente.');
+                        return;
+                    }
 
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Confirmar chegada',
-                        text: `Você já concluiu a visita em ${currentName}?`,
-                        confirmButtonText: 'Sim, seguir para o próximo',
-                        cancelButtonText: 'Ainda não'
+                        text: `Você chegou em ${currentName}? Vamos abrir a visita guiada deste ponto.`,
+                        confirmButtonText: 'Abrir visita',
+                        cancelButtonText: 'Cancelar'
                     });
 
                     if (!confirmed) return;
 
-                    routeState.currentIndex += 1;
+                    try {
+                        markVisitedButton.disabled = true;
+                        helperTextEl.textContent = 'Registrando chegada e abrindo a visita guiada...';
 
-                    renderQueue();
-                    syncCurrentStop();
+                        const position = await getCurrentPositionSafe();
+
+                        const chegada = await registrarChegadaNoBanco(rotaPonto.id, position);
+
+                        saveRouteState();
+
+                        if (chegada.redirectUrl) {
+                            window.location.href = chegada.redirectUrl;
+                            return;
+                        }
+
+                        window.AppAlerts?.error('Chegada registrada, mas a tela de visita não foi retornada.');
+                    } catch (error) {
+                        console.error(error);
+                        window.AppAlerts?.error(error.message || 'Não foi possível abrir a visita guiada.');
+                        markVisitedButton.disabled = false;
+                        syncCurrentStop();
+                    }
                 });
 
                 resetRouteButton.addEventListener('click', async () => {
@@ -1354,7 +1636,11 @@
                 updateProgress();
                 updateRouteButtonsState();
 
-                if (!restoreSavedRoute()) {
+                const restoredRoute = restoreSavedRoute();
+
+                if (restoredRoute) {
+                    applyFinishedRoutePointFromUrl();
+                } else {
                     syncCurrentStop();
                 }
             });
