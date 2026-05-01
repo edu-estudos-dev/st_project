@@ -6532,3 +6532,74 @@ html:has(.homepage-body) {
   display: block;
   opacity: 1;
 }
+
+/* =========================================================
+   PERFORMANCE — AJUSTE PARA PICTURE DO CARROSSEL
+   Mantém o mesmo comportamento visual das imagens otimizadas.
+   ========================================================= */
+
+.vm-dashboard-carousel .carousel-item picture {
+  position: absolute !important;
+  inset: 1.25rem 1.25rem 4.45rem 1.25rem !important;
+  width: calc(100% - 2.5rem) !important;
+  height: calc(100% - 5.7rem) !important;
+  display: block !important;
+  z-index: 2 !important;
+}
+
+.vm-dashboard-carousel .carousel-item picture img {
+  position: static !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+}
+
+.vm-dashboard-carousel .carousel-item:first-child picture img {
+  transform: scale(1.02) !important;
+}
+
+.vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
+  transform: scale(1.14) !important;
+  object-position: center center !important;
+}
+
+@media (max-width: 991.98px) {
+  .vm-dashboard-carousel .carousel-item picture {
+    inset: 1.05rem 1.05rem 4.1rem 1.05rem !important;
+    width: calc(100% - 2.1rem) !important;
+    height: calc(100% - 5.15rem) !important;
+  }
+
+  .vm-dashboard-carousel .carousel-item:first-child picture img {
+    transform: scale(1.01) !important;
+  }
+
+  .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
+    transform: scale(1.1) !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .vm-dashboard-carousel .carousel-item picture {
+    inset: 0.8rem 0.8rem 3.9rem 0.8rem !important;
+    width: calc(100% - 1.6rem) !important;
+    height: calc(100% - 4.7rem) !important;
+  }
+
+  .vm-dashboard-carousel .carousel-item picture img {
+    border-radius: 12px !important;
+  }
+
+  .vm-dashboard-carousel .carousel-item:first-child picture img {
+    transform: scale(1) !important;
+  }
+
+  .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
+    transform: scale(1.08) !important;
+  }
+}

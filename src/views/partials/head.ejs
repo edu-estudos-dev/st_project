@@ -107,7 +107,10 @@
 
     <!-- CSS CRÍTICO DA APLICAÇÃO -->
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
+
+    <% if (typeof skipGlobalStyles === 'undefined' || !skipGlobalStyles) { %>
+        <link rel="stylesheet" href="/css/styles.css">
+    <% } %>
 
     <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
         <% extraStyles.forEach((href) => { %>
