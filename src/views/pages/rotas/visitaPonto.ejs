@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', { title: 'Visita Guiada' }) %>
+
+<body class="form-page-body">
+    <%- include('../../partials/header') %>
+
+    <div class="page-spacer"></div>
+
+    <div class="form-shell form-shell-modern">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Visita Guiada' }) %>
+
+        <section class="page-titlebar page-titlebar-neutral">
+            <div class="page-titlebar-content">
+                <span class="form-kicker">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    Operação em campo
+                </span>
+
+                <h1>Visita guiada ao ponto</h1>
+
+                <p>
+                    Atendimento mobile do ponto selecionado na rota, com registro por produto e avanço controlado da operação.
+                </p>
+            </div>
+
+            <div class="page-titlebar-side">
+                <div class="page-titlebar-stat">
+                    <strong>Status</strong>
+                    <span><%= visita.status || 'em andamento' %></span>
+                </div>
+
+                <div class="page-titlebar-stat">
+                    <strong>Ponto</strong>
+                    <span><%= rotaPonto?.ordem ? `${rotaPonto.ordem}º da rota` : 'Visita direta' %></span>
+                </div>
+            </div>
+        </section>
+
+        <main class="form-stage">
+            <section class="form-card">
+                <div class="form-card-header">
+                    <div>
+                        <span class="form-section-tag">Estabelecimento</span>
+                        <h2><%= visita.estabelecimento %></h2>
+                        <p>
+                            <%= [visita.endereco, visita.bairro].filter(Boolean).join(', ') || 'Endereço não informado' %>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-summary-grid">
+                    <div class="form-summary-card">
+                        <strong>Produtos</strong>
+                        <span><%= produtosDaVisita.map(item => item.label).join(' • ') || 'Nenhum produto identificado' %></span>
+                    </div>
+
+                    <div class="form-summary-card">
+                        <strong>Responsável</strong>
+                        <span><%= visita.responsavel_nome || 'Não informado' %></span>
+                    </div>
+
+                    <div class="form-summary-card">
+                        <strong>Contato</strong>
+                        <span><%= visita.telefone_contato || 'Não informado' %></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-card">
+                <div class="form-card-header">
+                    <div>
+                        <span class="form-section-tag">Produtos da visita</span>
+                        <h2>Checklist operacional</h2>
+                        <p>
+                            Nesta primeira etapa, estamos apenas validando a abertura da tela de visita.
+                            Na próxima etapa entram os cards de registro de sangria por produto.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-summary-grid">
+                    <% produtosDaVisita.forEach((item) => { %>
+                        <div class="form-summary-card">
+                            <strong><%= item.label %></strong>
+                            <span>Status: <%= item.status %></span>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -62,12 +62,18 @@ class RotasController {
         : [req.query.bairros ?? req.query.bairro].filter(Boolean);
 
     const selectedBairros = rawBairros
-      .map(item => String(item ?? '').trim().toUpperCase())
+      .map(item =>
+        String(item ?? '')
+          .trim()
+          .toUpperCase()
+      )
       .filter(Boolean);
 
     const bairro = selectedBairros[0] || '';
     const produto =
-      String(req.query.produto ?? 'todos').trim().toUpperCase() || 'TODOS';
+      String(req.query.produto ?? 'todos')
+        .trim()
+        .toUpperCase() || 'TODOS';
 
     try {
       const bairros = await EstabelecimentoModel.getRouteBairros(
@@ -96,7 +102,9 @@ class RotasController {
         .filter(Boolean);
 
       const routeItems = routePoints.map((point, index) => {
-        const address = [point.endereco, point.bairro].filter(Boolean).join(', ');
+        const address = [point.endereco, point.bairro]
+          .filter(Boolean)
+          .join(', ');
         const latitude =
           point.latitude === null || point.latitude === undefined
             ? null
@@ -219,10 +227,7 @@ class RotasController {
     try {
       const { rotaPontoId } = req.params;
 
-      const {
-        latitude_chegada = null,
-        longitude_chegada = null
-      } = req.body;
+      const { latitude_chegada = null, longitude_chegada = null } = req.body;
 
       const pontoDaRota = await RotasOperacionaisModel.findPontoDaRotaById(
         rotaPontoId,
@@ -236,12 +241,13 @@ class RotasController {
         });
       }
 
-      const pontoAtualizado = await RotasOperacionaisModel.marcarPontoEmAndamento({
-        rota_ponto_id: rotaPontoId,
-        assinante_id: usuario.assinante_id,
-        latitude_chegada,
-        longitude_chegada
-      });
+      const pontoAtualizado =
+        await RotasOperacionaisModel.marcarPontoEmAndamento({
+          rota_ponto_id: rotaPontoId,
+          assinante_id: usuario.assinante_id,
+          latitude_chegada,
+          longitude_chegada
+        });
 
       if (!pontoAtualizado) {
         return res.status(400).json({
@@ -285,6 +291,65 @@ class RotasController {
         success: false,
         message: 'Erro ao registrar chegada ao ponto.'
       });
+    }
+  };
+
+  visitaPonto = async (req, res) => {
+    const usuario = req.user;
+
+    try {
+      const { visitaId } = req.params;
+
+      const visita = await VisitasModel.findVisitaCompletaById(
+        visitaId,
+        usuario.assinante_id
+      );
+
+      if (!visita) {
+        return res.status(404).send('Visita não encontrada.');
+      }
+
+      const rotaPonto = visita.rota_ponto_id
+        ? await RotasOperacionaisModel.findPontoDaRotaById(
+            visita.rota_ponto_id,
+            usuario.assinante_id
+          )
+        : null;
+
+      const produtosDoPonto = extractProdutosFromString(visita.produto);
+
+      const produtosStatusMap = new Map(
+        (visita.produtos || []).map(produto => [produto.produto, produto])
+      );
+
+      const produtosDaVisita = produtosDoPonto.map(produto => {
+        const registro = produtosStatusMap.get(produto);
+
+        let label = produto;
+
+        if (produto === 'BOLINHAS') label = 'Bolinhas';
+        if (produto === 'FIGURINHAS') label = 'Consignados';
+        if (produto === 'PELUCIAS') label = 'Pelúcias';
+
+        return {
+          produto,
+          label,
+          status: registro?.status || 'pendente',
+          sangria_id: registro?.sangria_id || null,
+          observacoes: registro?.observacoes || ''
+        };
+      });
+
+      return res.render('pages/rotas/visitaPonto', {
+        title: 'Visita Guiada',
+        usuario,
+        visita,
+        rotaPonto,
+        produtosDaVisita
+      });
+    } catch (error) {
+      console.error('Erro ao carregar visita guiada:', error);
+      return res.status(500).send('Erro ao carregar visita guiada.');
     }
   };
 }
