@@ -1,154 +1,162 @@
 <head>
-    <script>
-        document.documentElement.classList.add('app-booting');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken || '' %>">
-    <% const pageTitle=typeof title !=='undefined' && title ? title
-        : 'VendMaster | Roteiro Inteligente para M\u00e1quinas Recreativas' ; %>
-        <% const pageDescription=typeof metaDescription !=='undefined' && metaDescription ? metaDescription
-            : 'Pare de improvisar a rota. O VendMaster organiza pontos, sangrias e financeiro para voc\u00ea sair sabendo onde coletar, sem planilha e sem achismo.'
-            ; %>
-            <% const pageCanonical=typeof canonicalUrl !=='undefined' && canonicalUrl ? canonicalUrl
-                : 'https://vendmaster.com.br/' ; %>
-                <% const pageOgImage=typeof ogImage !=='undefined' && ogImage ? ogImage
-                    : 'https://vendmaster.com.br/images/og-image.png' ; %>
 
-                    <!-- SEO PRINCIPAL -->
-                    <title>
-                        <%= pageTitle %>
-                    </title>
+    <% const pageTitle = typeof title !== 'undefined' && title ? title
+        : 'VendMaster | Roteiro Inteligente para M\u00e1quinas Recreativas'; %>
 
-                    <meta name="description" content="<%= pageDescription %>">
+    <% const pageDescription = typeof metaDescription !== 'undefined' && metaDescription ? metaDescription
+        : 'Pare de improvisar a rota. O VendMaster organiza pontos, sangrias e financeiro para voc\u00ea sair sabendo onde coletar, sem planilha e sem achismo.'; %>
 
-                    <link rel="canonical" href="<%= pageCanonical %>">
+    <% const pageCanonical = typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl
+        : 'https://vendmaster.com.br/'; %>
 
-                    <link rel="preload" as="image" href="/images/dashboard-vendmaster.webp" fetchpriority="high">
+    <% const pageOgImage = typeof ogImage !== 'undefined' && ogImage ? ogImage
+        : 'https://vendmaster.com.br/images/og-image.png'; %>
 
-                    <!-- OPEN GRAPH (WHATSAPP / LINKEDIN) -->
-                    <meta property="og:title" content="<%= pageTitle %>">
-                    <meta property="og:description" content="<%= pageDescription %>">
-                    <meta property="og:url" content="<%= pageCanonical %>">
-                    <meta property="og:image" content="<%= pageOgImage %>">
-                    <meta property="og:type" content="website">
-                    <meta property="og:site_name" content="VendMaster">
-                    <meta property="og:locale" content="pt_BR">
+    <!-- SEO PRINCIPAL -->
+    <title><%= pageTitle %></title>
+    <meta name="description" content="<%= pageDescription %>">
+    <link rel="canonical" href="<%= pageCanonical %>">
 
-                    <!-- TWITTER -->
-                    <meta name="twitter:card" content="summary_large_image">
-                    <meta name="twitter:title" content="<%= pageTitle %>">
-                    <meta name="twitter:description" content="<%= pageDescription %>">
-                    <meta name="twitter:image" content="<%= pageOgImage %>">
+    <!-- PRELOAD DA IMAGEM PRINCIPAL DO LCP -->
+    <link
+        rel="preload"
+        as="image"
+        href="/images/dashboard-vendmaster.webp"
+        fetchpriority="high"
+    >
 
+    <!-- OPEN GRAPH / WHATSAPP / LINKEDIN -->
+    <meta property="og:title" content="<%= pageTitle %>">
+    <meta property="og:description" content="<%= pageDescription %>">
+    <meta property="og:url" content="<%= pageCanonical %>">
+    <meta property="og:image" content="<%= pageOgImage %>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="VendMaster">
+    <meta property="og:locale" content="pt_BR">
 
-                    <% if (typeof faqJsonLd !=='undefined' && faqJsonLd) { %>
-                        <script
-                            type="application/ld+json"><%- JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') %></script>
-                        <% } %>
-                            <!-- FAVICONS -->
-                            <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-                            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-                            <link rel="shortcut icon" href="/favicon.ico" />
-                            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                            <link rel="manifest" href="/site.webmanifest" />
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= pageTitle %>">
+    <meta name="twitter:description" content="<%= pageDescription %>">
+    <meta name="twitter:image" content="<%= pageOgImage %>">
 
-                            <!-- FONTES -->
-                            <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2"
-                                as="font" type="font/woff2" crossorigin>
-                            <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-600-normal.woff2"
-                                as="font" type="font/woff2" crossorigin>
-                            <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-700-normal.woff2"
-                                as="font" type="font/woff2" crossorigin>
-                            <link rel="preload" href="/vendor/fontsource/urbanist/files/urbanist-latin-800-normal.woff2"
-                                as="font" type="font/woff2" crossorigin>
+    <% if (typeof faqJsonLd !== 'undefined' && faqJsonLd) { %>
+        <script type="application/ld+json"><%- JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') %></script>
+    <% } %>
 
-                            <link rel="stylesheet" href="/vendor/fontsource/urbanist/latin.css">
-                            <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
-                            <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-                            <link rel="stylesheet" href="/css/styles.css">
+    <!-- FAVICONS -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
-                            <% if (typeof extraStyles !=='undefined' && extraStyles) { %>
-                                <% extraStyles.forEach((href)=> { %>
-                                    <link rel="stylesheet" href="<%= href %>">
-                                    <% }) %>
-                                        <% } %>
+    <!-- FONTES -->
+    <link
+        rel="preload"
+        href="/vendor/fontsource/urbanist/files/urbanist-latin-400-normal.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+    >
 
-                                            <!-- SCRIPTS -->
-                                            <script defer src="/vendor/inputmask/inputmask.min.js"></script>
-                                            <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-                                            <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-                                            <script defer src="/js/appAlerts.js"></script>
-                                            <script defer src="/js/csrf.js"></script>
+    <link
+        rel="preload"
+        href="/vendor/fontsource/urbanist/files/urbanist-latin-700-normal.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin
+    >
 
-                                            <!-- BOOT CONTROL -->
-                                            <script>
-                                                (() => {
-                                                    const root = document.documentElement;
-                                                    const finishBoot = () => {
-                                                        root.classList.remove('app-booting');
-                                                        root.classList.add('app-ready');
-                                                    };
+    <link rel="stylesheet" href="/vendor/fontsource/urbanist/latin.css">
 
-                                                    const fallbackTimeout = 1200;
-                                                    const fallback = new Promise((resolve) => window.setTimeout(resolve, fallbackTimeout));
+    <!-- CSS CRÍTICO DA APLICAÇÃO -->
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
-                                                    if (document.fonts?.ready) {
-                                                        Promise.race([document.fonts.ready, fallback]).then(finishBoot);
-                                                    } else {
-                                                        window.addEventListener('DOMContentLoaded', finishBoot, { once: true });
-                                                        window.addEventListener('load', finishBoot, { once: true });
-                                                    }
-                                                })();
-                                            </script>
+    <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
+        <% extraStyles.forEach((href) => { %>
+            <link rel="stylesheet" href="<%= href %>">
+        <% }) %>
+    <% } %>
 
-                                            <!-- INPUT NUMBER CONTROL -->
-                                            <script>
-                                                document.addEventListener('DOMContentLoaded', () => {
-                                                    const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
+    <!-- ÍCONES: CARREGAMENTO NÃO CRÍTICO -->
+    <link
+        rel="preload"
+        href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+    >
+    <noscript>
+        <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    </noscript>
 
-                                                    numericInputs.forEach((input) => {
-                                                        const step = input.getAttribute('step');
-                                                        const allowsDecimal = step && step !== '1';
+    <!-- SCRIPTS NÃO BLOQUEANTES -->
+    <script defer src="/vendor/inputmask/inputmask.min.js"></script>
+    <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script defer src="/js/appAlerts.js"></script>
+    <script defer src="/js/csrf.js"></script>
 
-                                                        input.addEventListener('wheel', (event) => {
-                                                            if (document.activeElement === input) {
-                                                                event.preventDefault();
-                                                            }
-                                                        }, { passive: false });
+    <!-- INPUT NUMBER CONTROL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
 
-                                                        input.addEventListener('keydown', (event) => {
-                                                            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            numericInputs.forEach((input) => {
+                const step = input.getAttribute('step');
+                const allowsDecimal = step && step !== '1';
 
-                                                            if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) return;
-                                                            if (/^\d$/.test(event.key)) return;
+                input.addEventListener('wheel', (event) => {
+                    if (document.activeElement === input) {
+                        event.preventDefault();
+                    }
+                }, { passive: false });
 
-                                                            if (allowsDecimal && (event.key === '.' || event.key === ',')) {
-                                                                if (input.value.includes('.') || input.value.includes(',')) event.preventDefault();
-                                                                return;
-                                                            }
+                input.addEventListener('keydown', (event) => {
+                    const allowedKeys = [
+                        'Backspace',
+                        'Delete',
+                        'Tab',
+                        'Escape',
+                        'Enter',
+                        'ArrowLeft',
+                        'ArrowRight',
+                        'Home',
+                        'End'
+                    ];
 
-                                                            event.preventDefault();
-                                                        });
+                    if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) return;
+                    if (/^\d$/.test(event.key)) return;
 
-                                                        input.addEventListener('input', () => {
-                                                            let value = input.value;
+                    if (allowsDecimal && (event.key === '.' || event.key === ',')) {
+                        if (input.value.includes('.') || input.value.includes(',')) event.preventDefault();
+                        return;
+                    }
 
-                                                            if (allowsDecimal) {
-                                                                value = value.replace(',', '.').replace(/[^\d.]/g, '');
-                                                                const firstDotIndex = value.indexOf('.');
-                                                                if (firstDotIndex !== -1) {
-                                                                    value = `${value.slice(0, firstDotIndex + 1)}${value.slice(firstDotIndex + 1).replace(/\./g, '')}`;
-                                                                }
-                                                            } else {
-                                                                value = value.replace(/\D/g, '');
-                                                            }
+                    event.preventDefault();
+                });
 
-                                                            if (input.value !== value) input.value = value;
-                                                        });
-                                                    });
-                                                });
-                                            </script>
+                input.addEventListener('input', () => {
+                    let value = input.value;
 
+                    if (allowsDecimal) {
+                        value = value.replace(',', '.').replace(/[^\d.]/g, '');
+                        const firstDotIndex = value.indexOf('.');
+
+                        if (firstDotIndex !== -1) {
+                            value = `${value.slice(0, firstDotIndex + 1)}${value.slice(firstDotIndex + 1).replace(/\./g, '')}`;
+                        }
+                    } else {
+                        value = value.replace(/\D/g, '');
+                    }
+
+                    if (input.value !== value) input.value = value;
+                });
+            });
+        });
+    </script>
 </head>
