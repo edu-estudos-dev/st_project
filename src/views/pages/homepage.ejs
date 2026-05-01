@@ -83,7 +83,7 @@
 
               <div class="vm-panel-metrics">
                 <div>
-                  <strong>R$ 4.820</strong>
+                  <strong>R$ 2.820</strong>
                   <span>Receita hoje</span>
                 </div>
                 <div>
@@ -855,7 +855,7 @@
     </main>
 
     <a class="vm-whatsapp-float" href="https://wa.me/5585986992706" target="_blank" rel="noopener"
-      aria-label="Falar com o VendMaster pelo WhatsApp"><i class="bi bi-whatsapp"></i><span>Falar no WhatsApp</span></a>
+  aria-label="Falar com o VendMaster pelo WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i><span>Falar no WhatsApp</span></a>
 
     <script type="application/ld+json">
       {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://vendmaster.com.br/","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro.","offers":{"@type":"Offer","price":"19.90","priceCurrency":"BRL","description":"Planos a partir de R$ 19,90 por mês por produto para operações menores. Demonstração gratuita e proposta personalizada conforme o tamanho da operação."}}
@@ -911,7 +911,6 @@
           const payload = {
             nome: String(formData.get('nome') || '').trim(),
             telefone: String(formData.get('telefone') || '').trim(),
-            email: String(formData.get('email') || '').trim(),
             produtos: formData.getAll('produtos[]'),
             preferenciaContato: String(formData.get('preferenciaContato') || '').trim()
           };
@@ -949,75 +948,6 @@
             submitButton.disabled = false;
           }
         });
-
-        const slider = document.querySelector('[data-modules-slider]');
-
-        if (slider) {
-          const track = slider.querySelector('[data-slider-track]');
-          const prevButton = slider.querySelector('[data-slider-prev]');
-          const nextButton = slider.querySelector('[data-slider-next]');
-          const cards = Array.from(track.querySelectorAll('.vm-module-card'));
-
-          let currentIndex = 0;
-          let autoplayId = null;
-
-          function getVisibleCards() {
-            if (window.innerWidth <= 576) return 1;
-            if (window.innerWidth <= 992) return 2;
-            return 3;
-          }
-
-          function updateSlider() {
-            const trackStyles = window.getComputedStyle(track);
-            const gap = parseFloat(trackStyles.columnGap || trackStyles.gap || 0);
-            const cardWidth = cards[0].getBoundingClientRect().width;
-            const offset = currentIndex * (cardWidth + gap);
-
-            track.style.transform = `translateX(-${offset}px)`;
-          }
-
-          function goNext() {
-            const maxIndex = cards.length - getVisibleCards();
-            currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
-            updateSlider();
-          }
-
-          function goPrev() {
-            const maxIndex = cards.length - getVisibleCards();
-            currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
-            updateSlider();
-          }
-
-          function startAutoplay() {
-            stopAutoplay();
-            autoplayId = setInterval(goNext, 5000);
-          }
-
-          function stopAutoplay() {
-            if (autoplayId) clearInterval(autoplayId);
-          }
-
-          nextButton.addEventListener('click', () => {
-            goNext();
-            startAutoplay();
-          });
-
-          prevButton.addEventListener('click', () => {
-            goPrev();
-            startAutoplay();
-          });
-
-          slider.addEventListener('mouseenter', stopAutoplay);
-          slider.addEventListener('mouseleave', startAutoplay);
-
-          window.addEventListener('resize', () => {
-            currentIndex = 0;
-            updateSlider();
-          });
-
-          updateSlider();
-          startAutoplay();
-        }
       });
     </script>
 
