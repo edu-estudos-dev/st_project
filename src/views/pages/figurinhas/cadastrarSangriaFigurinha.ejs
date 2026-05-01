@@ -6,6 +6,17 @@
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
+    <%
+        const selectedId = typeof selectedEstabelecimentoId !== 'undefined' ? selectedEstabelecimentoId : '';
+        const currentVisitaId = typeof visitaId !== 'undefined' ? visitaId : '';
+        const currentRotaId = typeof rotaId !== 'undefined' ? rotaId : '';
+        const currentRotaPontoId = typeof rotaPontoId !== 'undefined' ? rotaPontoId : '';
+        const currentOrigem = typeof origem !== 'undefined' ? origem : '';
+        const currentRetornoUrl = typeof retornoUrl !== 'undefined' && retornoUrl ? retornoUrl : '/rotas';
+        const currentRotaRetornoUrl = typeof rotaRetornoUrl !== 'undefined' && rotaRetornoUrl ? rotaRetornoUrl : currentRetornoUrl;
+        const cancelarUrl = currentOrigem === 'rota' ? currentRetornoUrl : '/figurinhas/sangrias';
+    %>
+
     <div class="form-shell form-shell-modern">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Consignados' }) %>
 
@@ -30,6 +41,13 @@
 
         <main class="form-stage">
             <form action="/figurinhas/sangrias/add" method="POST" class="modern-form" id="figurinhaForm">
+                <input type="hidden" name="visita_id" value="<%= currentVisitaId || '' %>">
+                <input type="hidden" name="rota_id" value="<%= currentRotaId || '' %>">
+                <input type="hidden" name="rota_ponto_id" value="<%= currentRotaPontoId || '' %>">
+                <input type="hidden" name="origem" value="<%= currentOrigem || '' %>">
+                <input type="hidden" name="retorno_url" value="<%= currentRetornoUrl || '/rotas' %>">
+                <input type="hidden" name="rota_retorno_url" value="<%= currentRotaRetornoUrl || currentRetornoUrl || '/rotas' %>">
+
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
@@ -37,22 +55,33 @@
                             <h2>Dados do atendimento</h2>
                             <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.</p>
                         </div>
-                        <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Criar novo</span>
-                        </button>
+
+                        <% if (currentOrigem !== 'rota') { %>
+                            <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Criar novo</span>
+                            </button>
+                        <% } %>
                     </div>
 
                     <div class="row g-3 align-items-end">
                         <div class="col-12 col-lg-8">
                             <label for="estabelecimento">Estabelecimento</label>
+
                             <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                                <option value="" selected disabled hidden>Selecione um estabelecimento</option>
+                                <option value="" <%= selectedId ? '' : 'selected' %> disabled hidden>Selecione um estabelecimento</option>
+
                                 <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                    <option value="<%= estabelecimento.id %>"><%= estabelecimento.estabelecimento %></option>
+                                    <option
+                                        value="<%= estabelecimento.id %>"
+                                        <%= String(estabelecimento.id) === String(selectedId || '') ? 'selected' : '' %>
+                                    >
+                                        <%= estabelecimento.estabelecimento %>
+                                    </option>
                                 <% }); %>
                             </select>
                         </div>
+
                         <div class="col-12 col-lg-4">
                             <label for="data_sangria" id="dataSangriaLabel">Data da sangria</label>
                             <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" required>
@@ -79,14 +108,17 @@
                             <strong>Última visita</strong>
                             <span id="ultimaVisitaResumo">Aguardando seleção</span>
                         </div>
+
                         <div class="form-summary-card">
                             <strong>Estoque anterior</strong>
                             <span id="estoqueAnteriorResumo">0 unidades</span>
                         </div>
+
                         <div class="form-summary-card">
                             <strong>Resultado</strong>
                             <span id="qtdeDeixadaResumo">0 unidades</span>
                         </div>
+
                         <div class="form-summary-card">
                             <strong>Pagamento</strong>
                             <span id="pagamentoResumo">Espécie ou PIX</span>
@@ -108,18 +140,22 @@
                             <label for="valor_apurado">Valor apurado</label>
                             <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="qtde_vendido">Qtde. vendida</label>
                             <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" required oninput="calculateQuantidadeDeixada()">
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="abastecido">Abastecido</label>
                             <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required oninput="calculateQuantidadeDeixada()">
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="qtde_deixada">Quantidade deixada</label>
                             <input type="number" class="form-control text-center readonly-input" id="qtde_deixada" readonly disabled>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4" id="tipoPagamentoField">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
@@ -127,6 +163,7 @@
                                 <option value="pix">PIX</option>
                             </select>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="ultima_visita">Última visita</label>
                             <input type="date" class="form-control text-center readonly-input" id="ultima_visita" readonly disabled>
@@ -158,10 +195,11 @@
                     </div>
 
                     <div class="form-actions-buttons">
-                        <a href="/figurinhas/sangrias" class="btn-modern-secondary">
+                        <a href="<%= cancelarUrl %>" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Cancelar</span>
                         </a>
+
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-save2"></i>
                             <span id="figurinhaSubmitLabel">Registrar sangria</span>
@@ -176,15 +214,27 @@
         window.estoqueAnterior = 0;
         window.figurinhaHasHistorico = false;
 
+        const estabelecimentoSelect = document.getElementById('estabelecimento');
+        const aberturaInicialInput = document.getElementById('abertura_inicial');
+        const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
+        const quantidadeInicialInput = document.getElementById('quantidade_inicial');
+        const isRouteFlow = '<%= currentOrigem %>' === 'rota';
+
         function formatDateToBrazilian(dateString) {
             if (!dateString) return '';
+
             const parts = dateString.split('-');
+
             if (parts.length !== 3) return dateString;
+
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
         function updateResumoUltimaVisita(data, estoque) {
-            document.getElementById('ultimaVisitaResumo').textContent = data ? formatDateToBrazilian(data) : 'Sem histórico';
+            document.getElementById('ultimaVisitaResumo').textContent = data
+                ? formatDateToBrazilian(data)
+                : 'Sem histórico';
+
             document.getElementById('estoqueAnteriorResumo').textContent = `${estoque || 0} unidades`;
         }
 
@@ -193,14 +243,19 @@
             document.getElementById('qtdeDeixadaResumo').textContent = `${resultado} unidades`;
         }
 
+        function calculateQuantidadeDeixada() {
+            const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
+            const vendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
+            const resultado = window.estoqueAnterior - vendido + abastecido;
+
+            updateResumoQuantidade(resultado);
+        }
+
         function syncModoAberturaInicial() {
-            const isAbertura = document.getElementById('abertura_inicial').checked;
-            const hasSelectedEstabelecimento = Boolean(document.getElementById('estabelecimento').value);
+            const isAbertura = aberturaInicialInput.checked;
+            const hasSelectedEstabelecimento = Boolean(estabelecimentoSelect.value);
             const hasHistorico = window.figurinhaHasHistorico === true;
             const aberturaBox = document.getElementById('aberturaInicialBox');
-            const quantidadeInicialInput = document.getElementById('quantidade_inicial');
-            const aberturaInicialCheckbox = document.getElementById('abertura_inicial');
-            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
             const submitLabel = document.getElementById('figurinhaSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
             const dataSangriaLabel = document.getElementById('dataSangriaLabel');
@@ -211,12 +266,16 @@
             tipoPagamentoField.classList.toggle('d-none', isAbertura);
             dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
             quantidadeInicialInput.required = isAbertura;
-            toggleAberturaInicialButton.classList.toggle('is-active', isAbertura);
+            toggleAberturaInicialButton?.classList.toggle('is-active', isAbertura);
 
             camposNormais.forEach((id) => {
                 const field = document.getElementById(id);
+
                 field.required = !isAbertura;
-                if (isAbertura && field.tagName === 'INPUT') field.value = '';
+
+                if (isAbertura && field.tagName === 'INPUT') {
+                    field.value = '';
+                }
             });
 
             document.getElementById('movimentacaoCard').classList.toggle('opacity-50', isAbertura);
@@ -225,12 +284,23 @@
             submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
 
             if (hasSelectedEstabelecimento && !hasHistorico) {
-                aberturaInicialCheckbox.checked = true;
-                toggleAberturaInicialButton.disabled = true;
-                hint.textContent = 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
+                aberturaInicialInput.checked = true;
+
+                if (toggleAberturaInicialButton) {
+                    toggleAberturaInicialButton.disabled = true;
+                }
+
+                hint.textContent = isRouteFlow
+                    ? 'Este ponto ainda não tem histórico inicial de consignados. Cadastre a abertura inicial fora da rota antes de registrar a visita guiada.'
+                    : 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
             } else {
-                toggleAberturaInicialButton.disabled = false;
-                hint.textContent = 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
+                if (toggleAberturaInicialButton) {
+                    toggleAberturaInicialButton.disabled = false;
+                }
+
+                hint.textContent = isRouteFlow
+                    ? 'Visita guiada em andamento. Registre apenas a sangria do ponto já inicializado.'
+                    : 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
             }
 
             if (isAbertura) {
@@ -241,11 +311,18 @@
             }
         }
 
-        document.getElementById('estabelecimento').addEventListener('change', async function () {
-            const id = this.value;
+        async function loadUltimaSangriaFigurinha(estabelecimentoId) {
+            if (!estabelecimentoId) {
+                window.figurinhaHasHistorico = false;
+                window.estoqueAnterior = 0;
+                document.getElementById('ultima_visita').value = '';
+                updateResumoUltimaVisita('', 0);
+                syncModoAberturaInicial();
+                return;
+            }
 
             try {
-                const response = await fetch(`/figurinhas/sangrias/ultima-sangria/${id}`);
+                const response = await fetch(`/figurinhas/sangrias/ultima-sangria/${estabelecimentoId}`);
                 const data = await response.json();
 
                 if (data.data) {
@@ -258,41 +335,79 @@
                 }
 
                 window.figurinhaHasHistorico = Boolean(data.hasHistorico);
+
                 if (window.figurinhaHasHistorico) {
-                    document.getElementById('abertura_inicial').checked = false;
-                    document.getElementById('quantidade_inicial').value = '';
+                    aberturaInicialInput.checked = false;
+                    quantidadeInicialInput.value = '';
                 }
+
                 window.estoqueAnterior = data.estoque || 0;
+
                 syncModoAberturaInicial();
             } catch (error) {
                 console.error(error);
-                window.figurinhaHasHistorico = false;
-                updateResumoUltimaVisita('', 0);
-            }
-        });
 
-        function calculateQuantidadeDeixada() {
-            const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
-            const vendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
-            const resultado = window.estoqueAnterior - vendido + abastecido;
-            updateResumoQuantidade(resultado);
+                window.figurinhaHasHistorico = false;
+                window.estoqueAnterior = 0;
+                updateResumoUltimaVisita('', 0);
+                syncModoAberturaInicial();
+            }
         }
+
+        estabelecimentoSelect.addEventListener('change', function () {
+            loadUltimaSangriaFigurinha(this.value);
+        });
 
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
             updateResumoUltimaVisita('', 0);
 
-            document.getElementById('abertura_inicial').addEventListener('change', syncModoAberturaInicial);
-            document.getElementById('toggleAberturaInicial').addEventListener('click', function () {
-                const aberturaInicialInput = document.getElementById('abertura_inicial');
+            aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
+
+            toggleAberturaInicialButton?.addEventListener('click', function () {
                 if (aberturaInicialInput.disabled) return;
+
                 aberturaInicialInput.checked = !aberturaInicialInput.checked;
                 syncModoAberturaInicial();
             });
-            document.getElementById('quantidade_inicial').addEventListener('input', syncModoAberturaInicial);
-            syncModoAberturaInicial();
+
+            quantidadeInicialInput.addEventListener('input', syncModoAberturaInicial);
+
+            document.getElementById('figurinhaForm').addEventListener('submit', (event) => {
+                const isAbertura = aberturaInicialInput.checked;
+                const hasHistorico = window.figurinhaHasHistorico === true;
+                const quantidadeInicial = quantidadeInicialInput.value;
+
+                if (!estabelecimentoSelect.value) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Selecione um estabelecimento antes de salvar.');
+                    return;
+                }
+
+                if (isRouteFlow && !hasHistorico) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial de consignados. Cadastre a abertura inicial fora da rota antes de usar a visita guiada.');
+                    return;
+                }
+
+                if (!hasHistorico && !isAbertura) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe a quantidade inicial.');
+                    return;
+                }
+
+                if (isAbertura && !quantidadeInicial) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Informe a quantidade inicial antes de salvar a abertura de consignados.');
+                }
+            });
+
+            if (estabelecimentoSelect.value) {
+                loadUltimaSangriaFigurinha(estabelecimentoSelect.value);
+            } else {
+                syncModoAberturaInicial();
+            }
         });
     </script>
 </body>
 </html>
-

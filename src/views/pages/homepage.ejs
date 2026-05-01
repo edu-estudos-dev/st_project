@@ -68,7 +68,7 @@
 
             <div class="vm-hero-buttons">
               <%# ALTERAÇÃO: CTA unificado %>
-              <a href="#contato" class="btn btn-primary btn-lg">Quero ver o sistema</a>
+              <a href="#contato" class="btn btn-primary btn-lg">Começar minha demonstração</a>
               <a href="https://wa.me/5585986992706" target="_blank" rel="noopener"
                 class="btn btn-outline-light btn-lg">Falar no WhatsApp</a>
             </div>
@@ -83,7 +83,7 @@
 
               <div class="vm-panel-metrics">
                 <div>
-                  <strong>R$ 2.820</strong>
+                  <strong>R$ 3.820</strong>
                   <span>Receita hoje</span>
                 </div>
                 <div>
@@ -758,7 +758,7 @@
       <%# =========================================================
           SEÇÃO GARANTIA — 30 DIAS
           ========================================================= %>
-      <section class="vm-section vm-section-light vm-guarantee-section">
+      <section id="garantia" class="vm-section vm-section-light vm-guarantee-section">
         <div class="vm-guarantee-container">
           <div class="vm-guarantee-copy">
             <span class="vm-kicker">Garantia VendMaster</span>
@@ -769,7 +769,7 @@
             </h2>
 
             <p class="vm-guarantee-text">
-              Eu sei que trocar planilha, anotações e controles antigos por um sistema novo exige confiança.
+              Sabemos que trocar planilha, anotações e controles antigos por um sistema novo exige confiança.
               Por isso, você tem 30 dias para testar o VendMaster na prática, acompanhar sua rotina e ver se ele
               realmente faz sentido para a sua operação.
             </p>
@@ -777,7 +777,9 @@
             <div class="vm-guarantee-points">
               <div class="vm-guarantee-point">
                 <span class="vm-guarantee-point-icon">
-                  <i class="bi bi-check2-circle"></i>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
                 </span>
 
                 <div>
@@ -788,7 +790,10 @@
 
               <div class="vm-guarantee-point">
                 <span class="vm-guarantee-point-icon">
-                  <i class="bi bi-shield-check"></i>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 3 5 6v5c0 4.2 2.7 8.1 7 10 4.3-1.9 7-5.8 7-10V6l-7-3Z" />
+                    <path d="m9 12 2 2 4-5" />
+                  </svg>
                 </span>
 
                 <div>
@@ -799,12 +804,15 @@
 
               <div class="vm-guarantee-point">
                 <span class="vm-guarantee-point-icon">
-                  <i class="bi bi-whatsapp"></i>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M5.2 19 6.3 15.6a7.2 7.2 0 1 1 2.8 2.8L5.2 19Z" />
+                    <path d="M9.5 8.8c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.3c.1.2.1.4-.1.6l-.4.5c.6 1 1.4 1.8 2.5 2.3l.6-.6c.2-.2.4-.2.7-.1l1.2.6c.3.1.4.3.4.6v.5c0 .3-.2.6-.5.8-.6.3-1.6.3-2.8-.2-2.1-.8-3.8-2.5-4.6-4.6-.4-1.1-.4-2.1-.1-2.7Z" />
+                  </svg>
                 </span>
 
                 <div>
                   <strong>Suporte direto para começar</strong>
-                  <p>Você não fica sozinho: eu te ajudo a entender o sistema e dar os primeiros passos com segurança.</p>
+                  <p>Você não fica sozinho: nossa equipe ajuda a entender o sistema e dar os primeiros passos com segurança.</p>
                 </div>
               </div>
             </div>
@@ -829,7 +837,13 @@
                 alt="Selo de garantia de 30 dias do VendMaster com satisfação garantida"
                 loading="lazy"
                 decoding="async"
+                onerror="this.hidden=true; this.closest('.vm-guarantee-seal-card')?.classList.add('is-image-missing');"
               >
+
+              <div class="vm-guarantee-seal-fallback" aria-hidden="true">
+                <strong>30 dias</strong>
+                <span>Garantia VendMaster</span>
+              </div>
 
               <div class="vm-guarantee-glow" aria-hidden="true"></div>
             </div>

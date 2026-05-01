@@ -569,11 +569,12 @@
                 const routeUrlParams = new URLSearchParams(window.location.search);
                 const rotaPontoFinalizadoId = routeUrlParams.get('rota_ponto_finalizado');
 
-                let routeState = {
+               let routeState = {
                     currentIndex: -1,
                     started: false,
                     rotaId: null,
-                    rotaPontos: []
+                    rotaPontos: [],
+                    visitedIds: []
                 };
 
                 const geocodeAddress = async (address) => {
@@ -874,13 +875,17 @@
                         started: routeState.started,
                         rotaId: routeState.rotaId,
                         rotaPontos: routeState.rotaPontos,
+                        visitedIds: routeState.visitedIds,
                         orderedIds: routeItems.map((card) => card.dataset.id),
                         savedAt: new Date().toISOString()
                     }));
                 };
 
                 const updateProgress = () => {
-                    const done = routeState.started ? Math.min(routeState.currentIndex, routeItems.length) : 0;
+                    const done = routeState.started
+                        ? Math.min(getVisitedIdSet().size, routeItems.length)
+                        : 0;
+
                     const pending = Math.max(routeItems.length - done, 0);
 
                     progressDoneEl.textContent = done;
@@ -895,13 +900,43 @@
                     }
                 };
 
+                const getVisitedIdSet = () => {
+                    return new Set((routeState.visitedIds || []).map(String));
+                };
+
+                const findNextPendingIndex = (startIndex = 0) => {
+                    const visitedIds = getVisitedIdSet();
+
+                    for (let offset = 0; offset < routeItems.length; offset += 1) {
+                        const index = (startIndex + offset) % routeItems.length;
+                        const card = routeItems[index];
+
+                        if (!visitedIds.has(String(card.dataset.id))) {
+                            return index;
+                        }
+                    }
+
+                    return routeItems.length;
+                };
+
                 const renderQueue = () => {
+                    const visitedIds = getVisitedIdSet();
+                    const currentCard = getCurrentCard();
+                    const currentCardId = currentCard ? String(currentCard.dataset.id) : null;
+
                     routeItems.forEach((card, index) => {
                         const orderEl = card.querySelector('[data-route-order]');
                         const statusEl = card.querySelector('[data-route-status]');
-                        const isCurrent = routeState.started && index === routeState.currentIndex;
-                        const isVisited = routeState.started && index < routeState.currentIndex;
-                        const isPending = routeState.started && index > routeState.currentIndex;
+                        const cardId = String(card.dataset.id);
+
+                        const isVisited = routeState.started && visitedIds.has(cardId);
+                        const isCurrent =
+                            routeState.started &&
+                            currentCardId === cardId &&
+                            !isVisited &&
+                            routeState.currentIndex < routeItems.length;
+
+                        const isPending = routeState.started && !isVisited && !isCurrent;
 
                         card.classList.toggle('route-point-card-current', isCurrent);
                         card.classList.toggle('route-point-card-visited', isVisited);
@@ -913,7 +948,7 @@
                         if (!statusEl) return;
 
                         if (!routeState.started) {
-                            statusEl.textContent = 'Aguardando início da rota';
+                            statusEl.textContent = 'Aguardando organização da rota';
                         } else if (isVisited) {
                             statusEl.textContent = 'Visita concluída';
                         } else if (isCurrent) {
@@ -1013,23 +1048,20 @@
                     scrollToCurrentCard();
                 };
 
-                const syncRouteAfterManualChange = (previousCurrentCardId = null) => {
-                    if (routeState.started && previousCurrentCardId) {
-                        const newCurrentIndex = routeItems.findIndex((card) => card.dataset.id === previousCurrentCardId);
+                const syncNextPendingFromVisualOrder = () => {
+                    if (!routeState.started) return;
 
-                        if (newCurrentIndex >= 0) {
-                            routeState.currentIndex = newCurrentIndex;
-                        } else {
-                            routeState.currentIndex = Math.min(routeState.currentIndex, routeItems.length);
-                        }
-                    }
+                    routeState.currentIndex = findNextPendingIndex(0);
+                };
 
+                const syncRouteAfterManualChange = () => {
                     if (!routeItems.length) {
                         routeState = {
                             currentIndex: -1,
                             started: false,
                             rotaId: null,
-                            rotaPontos: []
+                            rotaPontos: [],
+                            visitedIds: []
                         };
 
                         localStorage.removeItem(routeStorageKey);
@@ -1073,13 +1105,13 @@
                         return;
                     }
 
+                    syncNextPendingFromVisualOrder();
                     renderQueue();
                     syncCurrentStop();
                     updateRouteButtonsState();
                 };
 
                 const moveRouteCard = (card, direction) => {
-                    const previousCurrentCardId = getCurrentCardId();
                     const currentIndex = routeItems.indexOf(card);
 
                     if (currentIndex < 0) return;
@@ -1094,10 +1126,10 @@
                     routeItems.forEach((item) => routePointList.appendChild(item));
 
                     helperTextEl.textContent = routeState.started
-                        ? 'Ordem ajustada manualmente. O próximo ponto foi preservado.'
+                        ? 'Ordem ajustada manualmente. O próximo destino agora segue a nova ordem da fila.'
                         : 'Ordem ajustada manualmente. Você ainda pode iniciar a rota inteligente ou seguir esta ordem.';
 
-                    syncRouteAfterManualChange(previousCurrentCardId);
+                    syncRouteAfterManualChange();
                     saveRouteState();
                 };
 
@@ -1113,26 +1145,16 @@
 
                     if (!confirmed) return;
 
-                    const previousCurrentCardId = getCurrentCardId();
                     const removedIndex = routeItems.indexOf(card);
-                    const removedWasCurrent = previousCurrentCardId === card.dataset.id;
 
                     if (removedIndex < 0) return;
 
                     routeItems.splice(removedIndex, 1);
                     card.remove();
 
-                    if (routeState.started) {
-                        if (removedWasCurrent) {
-                            routeState.currentIndex = Math.min(removedIndex, routeItems.length);
-                        } else if (removedIndex < routeState.currentIndex) {
-                            routeState.currentIndex -= 1;
-                        }
-                    }
-
                     helperTextEl.textContent = `${pointName} foi removido apenas desta rota.`;
 
-                    syncRouteAfterManualChange(removedWasCurrent ? null : previousCurrentCardId);
+                    syncRouteAfterManualChange();
                     saveRouteState();
                 };
 
@@ -1211,11 +1233,12 @@
 
                         if (!orderApplied) return false;
 
-                        routeState = {
+                       routeState = {
                             currentIndex: typeof saved.currentIndex === 'number' ? saved.currentIndex : -1,
                             started: Boolean(saved.started),
                             rotaId: saved.rotaId || null,
-                            rotaPontos: Array.isArray(saved.rotaPontos) ? saved.rotaPontos : []
+                            rotaPontos: Array.isArray(saved.rotaPontos) ? saved.rotaPontos : [],
+                            visitedIds: Array.isArray(saved.visitedIds) ? saved.visitedIds.map(String) : []
                         };
 
                         if (routeState.currentIndex > routeItems.length) {
@@ -1354,7 +1377,17 @@
                         return false;
                     }
 
-                    routeState.currentIndex = Math.max(routeState.currentIndex, finishedCardIndex + 1);
+                    const finishedEstabelecimentoId = String(pontoFinalizado.estabelecimento_id);
+
+                    routeState.visitedIds = Array.from(
+                        new Set([
+                            ...(routeState.visitedIds || []).map(String),
+                            finishedEstabelecimentoId
+                        ])
+                    );
+
+                    routeState.currentIndex = findNextPendingIndex(finishedCardIndex + 1);
+
                     saveRouteState();
                     renderQueue();
                     syncCurrentStop();
@@ -1377,12 +1410,13 @@
                 };
 
                 const resetRouteState = () => {
-                    routeState = {
-                        currentIndex: -1,
-                        started: false,
-                        rotaId: null,
-                        rotaPontos: []
-                    };
+                   routeState = {
+                    currentIndex: -1,
+                    started: false,
+                    rotaId: null,
+                    rotaPontos: [],
+                    visitedIds: []
+                };
 
                     localStorage.removeItem(routeStorageKey);
 
@@ -1487,7 +1521,8 @@
                         currentIndex: 0,
                         started: true,
                         rotaId: rotaOperacional.rota?.id || null,
-                        rotaPontos: Array.isArray(rotaOperacional.pontos) ? rotaOperacional.pontos : []
+                        rotaPontos: Array.isArray(rotaOperacional.pontos) ? rotaOperacional.pontos : [],
+                        visitedIds: []
                     };
 
                     ordered.forEach((card, index) => {

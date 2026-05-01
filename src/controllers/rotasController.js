@@ -34,6 +34,20 @@ const extractProdutosFromString = produto => {
     .filter(item => ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'].includes(item));
 };
 
+const filterProdutosByRouteFilter = (produtos, produtoFiltro = 'todos') => {
+  const filtro = String(produtoFiltro || 'todos')
+    .trim()
+    .toUpperCase();
+
+  if (!Array.isArray(produtos)) return [];
+
+  if (filtro === 'TODOS' || filtro === 'ALL') {
+    return produtos;
+  }
+
+  return produtos.filter(produto => produto === filtro);
+};
+
 const buildGoogleMapsRoute = addresses => {
   if (!addresses.length) return null;
 
@@ -55,6 +69,7 @@ const buildWazeLink = address => {
 class RotasController {
   index = async (req, res) => {
     const usuario = req.user;
+
     const rawBairros = Array.isArray(req.query.bairros)
       ? req.query.bairros
       : Array.isArray(req.query.bairro)
@@ -70,6 +85,7 @@ class RotasController {
       .filter(Boolean);
 
     const bairro = selectedBairros[0] || '';
+
     const produto =
       String(req.query.produto ?? 'todos')
         .trim()
@@ -105,6 +121,7 @@ class RotasController {
         const address = [point.endereco, point.bairro]
           .filter(Boolean)
           .join(', ');
+
         const latitude =
           point.latitude === null || point.latitude === undefined
             ? null
@@ -245,6 +262,27 @@ class RotasController {
         });
       }
 
+      const rotaOperacional = pontoDaRota.rota_id
+        ? await RotasOperacionaisModel.findRotaById(
+            pontoDaRota.rota_id,
+            usuario.assinante_id
+          )
+        : null;
+
+      const produtosDoPonto = extractProdutosFromString(pontoDaRota.produto);
+
+      const produtos = filterProdutosByRouteFilter(
+        produtosDoPonto,
+        rotaOperacional?.produto_filtro || 'todos'
+      );
+
+      if (!produtos.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'Nenhum produto deste ponto corresponde ao filtro da rota.'
+        });
+      }
+
       const pontoAtualizado =
         await RotasOperacionaisModel.marcarPontoEmAndamento({
           rota_ponto_id: rotaPontoId,
@@ -272,30 +310,29 @@ class RotasController {
         longitude_chegada
       });
 
-      const produtos = extractProdutosFromString(pontoDaRota.produto);
-
       const visitaProdutos = await VisitasModel.iniciarProdutosDaVisita({
         visita_id: visita.id,
         assinante_id: usuario.assinante_id,
         produtos
       });
 
+      const retornoUrlSeguro = String(retorno_url || '/rotas').startsWith(
+        '/rotas'
+      )
+        ? String(retorno_url || '/rotas')
+        : '/rotas';
+
       let redirectUrl = `/rotas/visitas/${visita.id}`;
 
       if (produtos.length === 1) {
-        const retornoUrlSeguro = String(retorno_url || '/rotas').startsWith(
-          '/rotas'
-        )
-          ? String(retorno_url || '/rotas')
-          : '/rotas';
-
         const queryParams = new URLSearchParams({
           estabelecimento_id: String(pontoDaRota.estabelecimento_id),
           visita_id: String(visita.id),
           rota_id: String(pontoDaRota.rota_id),
           rota_ponto_id: String(pontoDaRota.id),
           origem: 'rota',
-          retorno_url: retornoUrlSeguro
+          retorno_url: retornoUrlSeguro,
+          rota_retorno_url: retornoUrlSeguro
         });
 
         if (produtos[0] === 'BOLINHAS') {
@@ -378,11 +415,16 @@ class RotasController {
 
       const produtosDoPonto = extractProdutosFromString(visita.produto);
 
+      const produtosFiltradosDaRota = filterProdutosByRouteFilter(
+        produtosDoPonto,
+        rotaOperacional?.produto_filtro || 'todos'
+      );
+
       const produtosStatusMap = new Map(
         (visita.produtos || []).map(produto => [produto.produto, produto])
       );
 
-      const produtosDaVisita = produtosDoPonto.map(produto => {
+      const produtosDaVisita = produtosFiltradosDaRota.map(produto => {
         const registro = produtosStatusMap.get(produto);
 
         let label = produto;

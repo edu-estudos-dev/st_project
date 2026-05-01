@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <%- include('../../partials/head', { title: 'Visita Guiada' }) %>
 
-<body class="form-page-body">
+<body class="form-page-body guided-visit-page">
     <%- include('../../partials/header') %>
 
     <div class="page-spacer"></div>
@@ -24,6 +24,13 @@
             if (status === 'nao_realizada') return 'Não realizada';
             if (status === 'ignorado') return 'Ignorado';
             return 'Pendente';
+        };
+
+        const formatVisitaStatus = (status) => {
+            if (status === 'em_andamento') return 'em andamento';
+            if (status === 'finalizada') return 'finalizada';
+            if (status === 'cancelada') return 'cancelada';
+            return status || 'em andamento';
         };
 
         const getStatusClass = (status) => {
@@ -49,7 +56,7 @@
         };
 
         const getProdutoActionUrl = (produto) => {
-           const queryParams = new URLSearchParams({
+            const queryParams = new URLSearchParams({
                 estabelecimento_id: String(estabelecimentoId),
                 visita_id: String(visitaId),
                 rota_id: String(rotaId || ''),
@@ -101,7 +108,7 @@
             <div class="page-titlebar-side">
                 <div class="page-titlebar-stat">
                     <strong>Status</strong>
-                    <span><%= visita.status || 'em andamento' %></span>
+                    <span><%= formatVisitaStatus(visita.status) %></span>
                 </div>
 
                 <div class="page-titlebar-stat">
@@ -188,11 +195,18 @@
                     </div>
                 <% } else { %>
                     <div class="form-summary-grid">
-                        <% produtosDaVisita.forEach((item) => { %>
+                       <% produtosDaVisita.forEach((item) => { %>
                             <% const isPendente = item.status === 'pendente'; %>
                             <% const actionUrl = getProdutoActionUrl(item.produto); %>
+                            <%
+                                let productThemeClass = 'produto-theme-neutral';
 
-                            <article class="form-summary-card">
+                                if (item.produto === 'BOLINHAS') productThemeClass = 'produto-theme-bolinhas';
+                                if (item.produto === 'FIGURINHAS') productThemeClass = 'produto-theme-figurinhas';
+                                if (item.produto === 'PELUCIAS') productThemeClass = 'produto-theme-pelucias';
+                            %>
+
+                            <article class="form-summary-card guided-visit-product-card <%= productThemeClass %>">
                                 <strong>
                                     <i class="bi <%= getProdutoIcon(item.produto) %>"></i>
                                     <%= item.label %>
@@ -216,13 +230,13 @@
                                 <% if (isPendente) { %>
                                     <a
                                         href="<%= actionUrl %>"
-                                        class="btn-modern mt-3"
+                                        class="btn-modern mt-3 guided-visit-product-button <%= productThemeClass %>"
                                     >
                                         <i class="bi bi-pencil-square"></i>
                                         <span><%= getProdutoActionLabel(item.produto) %></span>
                                     </a>
                                 <% } else { %>
-                                    <button type="button" class="btn-modern-secondary mt-3" disabled>
+                                    <button type="button" class="btn-modern-secondary mt-3 guided-visit-product-button is-completed <%= productThemeClass %>" disabled>
                                         <i class="bi bi-check2-circle"></i>
                                         <span>Produto concluído</span>
                                     </button>
@@ -246,7 +260,7 @@
                     </div>
 
                     <div class="form-footer-actions">
-                        <a href="<%= retornoRotaUrl %>" class="btn-modern">
+                        <a href="<%= retornoRotaUrl || '/rotas' %>" class="btn-modern">
                             <i class="bi bi-sign-turn-right"></i>
                             <span>Voltar para a rota</span>
                         </a>
@@ -265,7 +279,7 @@
                     </div>
 
                     <div class="form-footer-actions">
-                        <a href="<%= retornoRotaUrl %>" class="btn-modern-secondary"></a>
+                        <a href="<%= retornoRotaUrl || '/rotas' %>" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar para rota sem finalizar</span>
                         </a>
