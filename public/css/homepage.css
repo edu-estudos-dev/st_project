@@ -6515,3 +6515,20 @@ html:has(.homepage-body) {
     width: 100%;
   }
 }
+
+
+/* =========================================================
+   CORREÇÃO LIGHTHOUSE — NO_LCP / CAROUSEL
+   Garante que o primeiro slide ativo seja considerado visível
+   imediatamente pelo navegador e pelo Lighthouse.
+   ========================================================= */
+
+.vm-dashboard-carousel .carousel-item.active {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.vm-dashboard-carousel .carousel-item.active img {
+  display: block;
+  opacity: 1;
+}
