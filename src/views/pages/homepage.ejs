@@ -5,7 +5,7 @@
   metaDescription,
   canonicalUrl,
   faqJsonLd,
-  extraStyles: ['/css/homepage.css']
+  extraStyles: ['/css/homepage.css?v=20260501-guarantee']
 }) %>
 
   <body class="homepage-body" id="topo">
@@ -36,6 +36,7 @@
         <ul>
           <li><a href="#solucao">Solução</a></li>
           <li><a href="#modulos">Módulos</a></li>
+          <li><a href="#garantia">Garantia</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
           <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
@@ -317,7 +318,7 @@
             </div>
           </div>
 
-          <div class="vm-dashboard-image-card">
+                    <div class="vm-dashboard-image-card">
             <div id="vmDashboardCarousel" class="carousel slide carousel-fade vm-dashboard-carousel" data-bs-ride="carousel"
               data-bs-interval="5200" data-bs-pause="hover" data-bs-touch="true">
 
@@ -327,6 +328,9 @@
 
                 <button type="button" data-bs-target="#vmDashboardCarousel" data-bs-slide-to="1"
                   aria-label="Rota inteligente"></button>
+
+                <button type="button" data-bs-target="#vmDashboardCarousel" data-bs-slide-to="2"
+                  aria-label="Painel VendMaster"></button>
               </div>
 
               <div class="carousel-inner vm-dashboard-carousel-inner">
@@ -395,6 +399,34 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="carousel-item">
+                  <div class="vm-dashboard-slide vm-dashboard-slide-panel">
+                    <div class="vm-dashboard-browser-bar" aria-hidden="true">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+
+                    <div class="vm-dashboard-print-frame">
+                      <picture>
+                        <img
+                          src="/images/painel-vendmaster.webp"
+                          width="668"
+                          height="838"
+                          alt="Painel do VendMaster com visão geral da operação, indicadores e informações organizadas"
+                          loading="lazy"
+                          decoding="async"
+                        >
+                      </picture>
+                    </div>
+
+                    <div class="vm-dashboard-slide-caption">
+                      <span>Visão da operação</span>
+                      <strong>Dados importantes organizados para acompanhar a rotina com clareza.</strong>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <button class="carousel-control-prev vm-dashboard-carousel-control" type="button"
@@ -408,6 +440,7 @@
               </button>
             </div>
           </div>
+
         </div>
 
         <div class="vm-section-cta vm-dashboard-integrated-cta">
@@ -815,6 +848,11 @@
                   <p>Você não fica sozinho: nossa equipe ajuda a entender o sistema e dar os primeiros passos com segurança.</p>
                 </div>
               </div>
+            </div>
+
+            <div class="vm-guarantee-cancel-note">
+              <i class="bi bi-shield-check"></i>
+              <span>Cancelamento feito pelo WhatsApp, sem burocracia e sem letras miúdas.</span>
             </div>
 
             <div class="vm-guarantee-actions">

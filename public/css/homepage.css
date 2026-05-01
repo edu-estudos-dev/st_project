@@ -1488,7 +1488,6 @@ html:has(.homepage-body) {
   flex: 0 0 auto;
 }
 
-
 .homepage-body .vm-ba-icon svg {
   width: 42px;
   height: 42px;
@@ -1609,7 +1608,6 @@ html:has(.homepage-body) {
 .homepage-body .vm-transform .vm-section-heading h2 {
   max-width: 20ch;
 }
-
 
 /* ==========================================================================
    07 — SEÇÃO PAINEL GERENCIAL / DASHBOARD SHOWCASE
@@ -6930,6 +6928,34 @@ html:has(.homepage-body) {
    SEÇÃO GARANTIA — 30 DIAS
    ========================================================================== */
 
+.homepage-body .vm-guarantee-cancel-note {
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: 1.2rem 0 0 !important;
+  padding: 0.8rem 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.55rem !important;
+  border-radius: 999px !important;
+  color: #166534 !important;
+  background: rgba(34, 197, 94, 0.1) !important;
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  font-size: 0.9rem !important;
+  font-weight: 850 !important;
+  line-height: 1.3 !important;
+}
+
+.homepage-body .vm-guarantee-cancel-note i {
+  color: #16a34a !important;
+  font-size: 1.05rem !important;
+  line-height: 1 !important;
+  flex: 0 0 auto !important;
+}
+
+.homepage-body .vm-guarantee-cancel-note span {
+  display: block !important;
+}
+
 .homepage-body .vm-guarantee-section {
   position: relative !important;
   overflow: hidden !important;
@@ -7173,7 +7199,9 @@ html:has(.homepage-body) {
   text-transform: uppercase !important;
 }
 
-.homepage-body .vm-guarantee-seal-card.is-image-missing .vm-guarantee-seal-fallback {
+.homepage-body
+  .vm-guarantee-seal-card.is-image-missing
+  .vm-guarantee-seal-fallback {
   display: flex !important;
 }
 
@@ -7279,5 +7307,14 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-guarantee-seal-card img {
     width: min(285px, 92%) !important;
+  }
+
+  .homepage-body .vm-guarantee-cancel-note {
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    border-radius: 18px !important;
+    text-align: left !important;
+    font-size: 0.88rem !important;
   }
 }
