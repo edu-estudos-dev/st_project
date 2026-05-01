@@ -119,7 +119,17 @@
     <% } %>
 
     <!-- ÍCONES BOOTSTRAP — CARREGAMENTO NORMAL PARA GARANTIR WHATSAPP -->
-    <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <!-- ÍCONES BOOTSTRAP — CARREGAMENTO NÃO BLOQUEANTE -->
+    <link
+        rel="preload"
+        href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+    >
+
+    <noscript>
+        <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    </noscript>
 
     <!-- SCRIPTS NÃO BLOQUEANTES -->
     <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
