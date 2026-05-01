@@ -46,12 +46,12 @@ const buildDescription = (produto, ano, mes) => {
   const mesIndex = Number(mes) - 1;
   const mesTexto = MONTH_NAMES[mesIndex] || String(mes).padStart(2, '0');
   const labels = {
-    bolinhas: 'bolinhas',
-    figurinhas: 'consignados',
-    pelucias: 'pelúcias'
+    bolinhas: 'das bolinhas',
+    figurinhas: 'dos consignados',
+    pelucias: 'das pelucias'
   };
 
-  return `Lucro Líquido das ${labels[produto] || produto} do mês ${mesTexto} no ano ${ano}`;
+  return `Receita ${labels[produto] || `de ${produto}`} do mes ${mesTexto} no ano ${ano}`;
 };
 
 const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId }) => {

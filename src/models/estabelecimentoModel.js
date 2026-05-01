@@ -477,6 +477,394 @@ class EstabelecimentoModel {
     }
   };
 
+  getDashboardInsights = async (assinanteId) => {
+    const emptyInsights = {
+      totals: {
+        current: 0,
+        previous: 0,
+        delta: 0,
+        deltaPercent: null,
+        visits: 0,
+        averagePerVisit: 0
+      },
+      productBreakdown: [],
+      topPoints: [],
+      pointTrends: [],
+      staleValue: {
+        totalEstimated: 0,
+        items: []
+      },
+      cashFlow: {
+        entradas: 0,
+        saidas: 0,
+        saldo: 0,
+        pendenteSaidas: 0,
+        pendenteCount: 0,
+        atrasadoSaidas: 0,
+        atrasadoCount: 0,
+        comprometimentoPercent: null
+      },
+      recommendedAction: null
+    };
+
+    try {
+      await this.ensureEstabelecimentoColumns();
+      await connection.query(`
+        ALTER TABLE lancamentos
+        ADD COLUMN IF NOT EXISTS pago BOOLEAN NOT NULL DEFAULT FALSE
+      `);
+
+      const SQL = `
+        WITH params AS (
+          SELECT
+            date_trunc('month', CURRENT_DATE)::date AS current_start,
+            (date_trunc('month', CURRENT_DATE) - INTERVAL '1 month')::date AS previous_start,
+            (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')::date AS next_start
+        ),
+        active_products AS (
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Bolinhas' AS produto
+          FROM estabelecimentos e
+          WHERE e.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%BOLINHAS%'
+
+          UNION ALL
+
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Consignados' AS produto
+          FROM estabelecimentos e
+          WHERE e.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+
+          UNION ALL
+
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Pelúcias' AS produto
+          FROM estabelecimentos e
+          WHERE e.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%PELUCIAS%'
+        ),
+        movements AS (
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Bolinhas' AS produto,
+            sb.data_sangria::date AS data_movimentacao,
+            COALESCE(sb.valor_liquido, sb.valor_apurado, 0)::numeric AS valor
+          FROM sangrias_bolinha sb
+          JOIN estabelecimentos e
+            ON e.id = sb.estabelecimento_id
+           AND e.assinante_id = sb.assinante_id
+          WHERE sb.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%BOLINHAS%'
+
+          UNION ALL
+
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Consignados' AS produto,
+            sf.data_sangria::date AS data_movimentacao,
+            COALESCE(sf.valor_apurado, 0)::numeric AS valor
+          FROM sangrias_figurinhas sf
+          JOIN estabelecimentos e
+            ON e.id = sf.estabelecimento_id
+           AND e.assinante_id = sf.assinante_id
+          WHERE sf.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+            AND COALESCE(sf.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
+
+          UNION ALL
+
+          SELECT
+            e.id AS estabelecimento_id,
+            e.estabelecimento,
+            'Pelúcias' AS produto,
+            sp.data_sangria::date AS data_movimentacao,
+            COALESCE(sp.valor_liquido, sp.valor_apurado, 0)::numeric AS valor
+          FROM sangrias_pelucias sp
+          JOIN estabelecimentos e
+            ON e.id = sp.estabelecimento_id
+           AND e.assinante_id = sp.assinante_id
+          WHERE sp.assinante_id = $1
+            AND e.status = 'ativo'
+            AND UPPER(e.produto) LIKE '%PELUCIAS%'
+            AND sp.valor_apurado <> 0
+        ),
+        period_summary AS (
+          SELECT
+            COALESCE(SUM(valor) FILTER (
+              WHERE data_movimentacao >= params.current_start
+                AND data_movimentacao < params.next_start
+            ), 0) AS current_total,
+            COALESCE(SUM(valor) FILTER (
+              WHERE data_movimentacao >= params.previous_start
+                AND data_movimentacao < params.current_start
+            ), 0) AS previous_total,
+            COUNT(*) FILTER (
+              WHERE data_movimentacao >= params.current_start
+                AND data_movimentacao < params.next_start
+            ) AS current_visits
+          FROM movements, params
+        ),
+        product_current AS (
+          SELECT
+            produto,
+            COALESCE(SUM(valor), 0) AS total,
+            COUNT(*) AS visits
+          FROM movements, params
+          WHERE data_movimentacao >= params.current_start
+            AND data_movimentacao < params.next_start
+          GROUP BY produto
+        ),
+        top_points AS (
+          SELECT
+            estabelecimento_id,
+            estabelecimento,
+            COALESCE(SUM(valor), 0) AS total,
+            COUNT(*) AS visits
+          FROM movements, params
+          WHERE data_movimentacao >= params.current_start
+            AND data_movimentacao < params.next_start
+          GROUP BY estabelecimento_id, estabelecimento
+          ORDER BY total DESC, estabelecimento ASC
+          LIMIT 5
+        ),
+        point_months AS (
+          SELECT
+            estabelecimento_id,
+            estabelecimento,
+            COALESCE(SUM(valor) FILTER (
+              WHERE data_movimentacao >= params.current_start
+                AND data_movimentacao < params.next_start
+            ), 0) AS current_total,
+            COALESCE(SUM(valor) FILTER (
+              WHERE data_movimentacao >= params.previous_start
+                AND data_movimentacao < params.current_start
+            ), 0) AS previous_total
+          FROM movements, params
+          GROUP BY estabelecimento_id, estabelecimento
+        ),
+        point_trends AS (
+          SELECT
+            estabelecimento_id,
+            estabelecimento,
+            current_total,
+            previous_total,
+            current_total - previous_total AS delta,
+            CASE
+              WHEN previous_total > 0 THEN ROUND(((current_total - previous_total) / previous_total) * 100, 1)
+              ELSE NULL
+            END AS delta_percent
+          FROM point_months
+          WHERE previous_total > 0
+            AND current_total <> previous_total
+          ORDER BY ABS(current_total - previous_total) DESC, estabelecimento ASC
+          LIMIT 6
+        ),
+        movement_profile AS (
+          SELECT
+            estabelecimento_id,
+            produto,
+            MAX(data_movimentacao) AS last_movement,
+            COALESCE(SUM(valor), 0) AS total_value,
+            COUNT(*) AS visits,
+            GREATEST((CURRENT_DATE - MIN(data_movimentacao))::int, 1) AS active_days
+          FROM movements
+          GROUP BY estabelecimento_id, produto
+        ),
+        stale_items AS (
+          SELECT
+            ap.estabelecimento_id,
+            ap.estabelecimento,
+            ap.produto,
+            mp.last_movement,
+            COALESCE((CURRENT_DATE - mp.last_movement)::int, 9999) AS days_without_visit,
+            COALESCE(mp.total_value / NULLIF(mp.active_days, 0), 0) AS average_daily,
+            COALESCE((mp.total_value / NULLIF(mp.active_days, 0)) * GREATEST((CURRENT_DATE - mp.last_movement)::int, 0), 0) AS estimated_value
+          FROM active_products ap
+          LEFT JOIN movement_profile mp
+            ON mp.estabelecimento_id = ap.estabelecimento_id
+           AND mp.produto = ap.produto
+          WHERE mp.last_movement IS NULL
+             OR (CURRENT_DATE - mp.last_movement)::int >= 30
+          ORDER BY estimated_value DESC, days_without_visit DESC, ap.estabelecimento ASC
+          LIMIT 5
+        ),
+        financial_month AS (
+          SELECT
+            COALESCE(SUM(valor) FILTER (
+              WHERE entrada_saida = 'Entrada'
+                AND COALESCE(vencimento, data) >= params.current_start
+                AND COALESCE(vencimento, data) < params.next_start
+            ), 0) AS entradas,
+            COALESCE(SUM(valor) FILTER (
+              WHERE entrada_saida = 'Saida'
+                AND COALESCE(vencimento, data) >= params.current_start
+                AND COALESCE(vencimento, data) < params.next_start
+            ), 0) AS saidas,
+            COALESCE(SUM(valor) FILTER (
+              WHERE entrada_saida = 'Saida'
+                AND COALESCE(pago, FALSE) = FALSE
+                AND COALESCE(vencimento, data) >= params.current_start
+                AND COALESCE(vencimento, data) < params.next_start
+            ), 0) AS pendente_saidas,
+            COUNT(*) FILTER (
+              WHERE entrada_saida = 'Saida'
+                AND COALESCE(pago, FALSE) = FALSE
+                AND COALESCE(vencimento, data) >= params.current_start
+                AND COALESCE(vencimento, data) < params.next_start
+            ) AS pendente_count,
+            COALESCE(SUM(valor) FILTER (
+              WHERE entrada_saida = 'Saida'
+                AND COALESCE(pago, FALSE) = FALSE
+                AND vencimento IS NOT NULL
+                AND vencimento < CURRENT_DATE
+            ), 0) AS atrasado_saidas,
+            COUNT(*) FILTER (
+              WHERE entrada_saida = 'Saida'
+                AND COALESCE(pago, FALSE) = FALSE
+                AND vencimento IS NOT NULL
+                AND vencimento < CURRENT_DATE
+            ) AS atrasado_count
+          FROM lancamentos, params
+          WHERE assinante_id = $1
+        )
+        SELECT
+          (
+            SELECT json_build_object(
+              'current', current_total,
+              'previous', previous_total,
+              'visits', current_visits
+            )
+            FROM period_summary
+          ) AS totals,
+          COALESCE((
+            SELECT json_agg(product_current ORDER BY total DESC, produto ASC)
+            FROM product_current
+          ), '[]'::json) AS product_breakdown,
+          COALESCE((
+            SELECT json_agg(top_points ORDER BY total DESC, estabelecimento ASC)
+            FROM top_points
+          ), '[]'::json) AS top_points,
+          COALESCE((
+            SELECT json_agg(point_trends ORDER BY ABS(delta) DESC, estabelecimento ASC)
+            FROM point_trends
+          ), '[]'::json) AS point_trends,
+          COALESCE((
+            SELECT json_agg(stale_items ORDER BY estimated_value DESC, days_without_visit DESC, estabelecimento ASC)
+            FROM stale_items
+          ), '[]'::json) AS stale_items,
+          COALESCE((
+            SELECT SUM(estimated_value)
+            FROM stale_items
+          ), 0) AS stale_estimated_total,
+          (
+            SELECT json_build_object(
+              'entradas', entradas,
+              'saidas', saidas,
+              'saldo', entradas - saidas,
+              'pendenteSaidas', pendente_saidas,
+              'pendenteCount', pendente_count,
+              'atrasadoSaidas', atrasado_saidas,
+              'atrasadoCount', atrasado_count
+            )
+            FROM financial_month
+          ) AS cash_flow
+      `;
+
+      const result = await connection.query(SQL, [assinanteId]);
+      const row = result.rows[0] || {};
+      const totals = row.totals || {};
+      const current = Number(totals.current || 0);
+      const previous = Number(totals.previous || 0);
+      const visits = Number(totals.visits || 0);
+      const delta = current - previous;
+
+      const insights = {
+        totals: {
+          current,
+          previous,
+          delta,
+          deltaPercent: previous > 0 ? (delta / previous) * 100 : null,
+          visits,
+          averagePerVisit: visits > 0 ? current / visits : 0
+        },
+        productBreakdown: (row.product_breakdown || []).map(item => ({
+          produto: item.produto,
+          total: Number(item.total || 0),
+          visits: Number(item.visits || 0),
+          percent: current > 0 ? (Number(item.total || 0) / current) * 100 : 0
+        })),
+        topPoints: (row.top_points || []).map(item => ({
+          estabelecimentoId: item.estabelecimento_id,
+          estabelecimento: item.estabelecimento,
+          total: Number(item.total || 0),
+          visits: Number(item.visits || 0)
+        })),
+        pointTrends: (row.point_trends || []).map(item => ({
+          estabelecimentoId: item.estabelecimento_id,
+          estabelecimento: item.estabelecimento,
+          currentTotal: Number(item.current_total || 0),
+          previousTotal: Number(item.previous_total || 0),
+          delta: Number(item.delta || 0),
+          deltaPercent:
+            item.delta_percent === null || item.delta_percent === undefined
+              ? null
+              : Number(item.delta_percent)
+        })),
+        staleValue: {
+          totalEstimated: Number(row.stale_estimated_total || 0),
+          items: (row.stale_items || []).map(item => ({
+            estabelecimentoId: item.estabelecimento_id,
+            estabelecimento: item.estabelecimento,
+            produto: item.produto,
+            lastMovement: item.last_movement,
+            daysWithoutVisit: Number(item.days_without_visit || 0),
+            averageDaily: Number(item.average_daily || 0),
+            estimatedValue: Number(item.estimated_value || 0)
+          }))
+        },
+        cashFlow: {
+          entradas: Number(row.cash_flow?.entradas || 0),
+          saidas: Number(row.cash_flow?.saidas || 0),
+          saldo: Number(row.cash_flow?.saldo || 0),
+          pendenteSaidas: Number(row.cash_flow?.pendenteSaidas || 0),
+          pendenteCount: Number(row.cash_flow?.pendenteCount || 0),
+          atrasadoSaidas: Number(row.cash_flow?.atrasadoSaidas || 0),
+          atrasadoCount: Number(row.cash_flow?.atrasadoCount || 0),
+          comprometimentoPercent:
+            Number(row.cash_flow?.entradas || 0) > 0
+              ? (Number(row.cash_flow?.saidas || 0) / Number(row.cash_flow?.entradas || 0)) * 100
+              : null
+        },
+        recommendedAction: null
+      };
+
+      insights.recommendedAction =
+        insights.staleValue.items[0] ||
+        insights.pointTrends.find(item => item.delta < 0) ||
+        insights.topPoints[0] ||
+        null;
+
+      return insights;
+    } catch (error) {
+      console.error('Erro ao carregar insights do dashboard:', error);
+      return emptyInsights;
+    }
+  };
+
   getOperationalPendingItems = async (assinanteId, staleDays = 7, limit = 6) => {
     try {
       await this.ensureEstabelecimentoColumns();

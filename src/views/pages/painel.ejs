@@ -8,6 +8,15 @@
    <% const financialData = financialNotifications || { proximos: [], atrasados: [], total: 0 }; %>
    <% const operationalData = operationalNotifications || { visitasAtrasadas: [], total: 0 }; %>
    <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
+   <% const insights = dashboardInsights || {
+      totals: { currentLabel: 'R$ 0,00', previousLabel: 'R$ 0,00', deltaLabel: '+R$ 0,00', deltaPercentLabel: 'Sem base anterior', averagePerVisitLabel: 'R$ 0,00', visits: 0, revenueDirection: 'neutral' },
+      productBreakdown: [],
+      topPoints: [],
+      pointTrends: [],
+      staleValue: { totalEstimatedLabel: 'R$ 0,00', items: [] },
+      cashFlow: { saldoLabel: '+R$ 0,00', saldoTone: 'neutral', entradasLabel: 'R$ 0,00', saidasLabel: 'R$ 0,00', pendenteSaidasLabel: 'R$ 0,00', pendenteCount: 0, comprometimentoLabel: 'Sem base anterior' },
+      recommendedAction: null
+   }; %>
    <% const visitAlert = typeof dashboardVisitAlert !== 'undefined'
       ? dashboardVisitAlert
       : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto crítico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
@@ -40,7 +49,7 @@
          ? `${financialData.proximos.length} vencimento(s) chegam nos próximos 5 dias.`
          : 'Nenhum vencimento urgente nos próximos 5 dias.'; %>
    <% const titlebarSummary = summary.totalAtivos
-      ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com o painel focado nas prioridades mais úteis do dia.`
+      ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com receita, visitas e prioridades acompanhadas em tempo real.`
       : 'Sem pontos ativos cadastrados ainda. O primeiro cadastro libera a operação do sistema.'; %>
 
    <main class="dashboard-shell">
@@ -73,21 +82,179 @@
             </div>
 
             <div class="dashboard-titlebar-insights">
-               <a href="/lancamentos/vencimentos" class="dashboard-titlebar-card dashboard-titlebar-card-action">
-                  <span class="dashboard-titlebar-card-tag">Financeiro</span>
-                  <strong><%= financeTitle %></strong>
-                  <p><%= financeDescription %></p>
-                  <em>Ver alertas</em>
+               <a href="/relatorios" class="dashboard-titlebar-card dashboard-titlebar-card-action">
+                  <span class="dashboard-titlebar-card-tag">Receita do mês</span>
+                  <strong><%= insights.totals.currentLabel %></strong>
+                  <p><%= insights.totals.deltaPercentLabel %> frente ao mês anterior (<%= insights.totals.deltaLabel %>).</p>
+                  <em>Ver relatórios</em>
                </a>
 
                <a href="/rotas" class="dashboard-titlebar-card dashboard-titlebar-card-action">
-                  <span class="dashboard-titlebar-card-tag">Rotas</span>
-                  <strong>Planejar visita por bairro</strong>
-                  <p>Abra a central de rotas para montar o deslocamento do dia com Google Maps e Waze.</p>
+                  <span class="dashboard-titlebar-card-tag">Ação recomendada</span>
+                  <strong><%= insights.recommendedAction ? insights.recommendedAction.title : 'Operação sem ação crítica' %></strong>
+                  <p><%= insights.recommendedAction ? insights.recommendedAction.description : 'Nenhum ponto com urgência forte foi identificado neste momento.' %></p>
                   <em>Abrir rotas</em>
                </a>
             </div>
          </div>
+      </section>
+
+      <section class="dashboard-intelligence-grid">
+         <article class="dashboard-revenue-hero dashboard-revenue-hero-<%= insights.totals.revenueDirection %>">
+            <div>
+               <span class="dashboard-section-tag">Consolidado operacional</span>
+               <h2><%= insights.totals.currentLabel %></h2>
+               <p>Receita consolidada do mês atual somando bolinhas, consignados e pelúcias.</p>
+            </div>
+            <div class="dashboard-revenue-hero-meta">
+               <strong><%= insights.totals.deltaPercentLabel %></strong>
+               <span><%= insights.totals.deltaLabel %> vs. mês anterior</span>
+            </div>
+         </article>
+
+         <article class="dashboard-kpi-card">
+            <span>Média por visita</span>
+            <strong><%= insights.totals.averagePerVisitLabel %></strong>
+            <p><%= insights.totals.visits || 0 %> visita(s) com receita no mês.</p>
+         </article>
+
+         <article class="dashboard-kpi-card dashboard-kpi-card-<%= insights.cashFlow.saldoTone %>">
+            <span>Fluxo de caixa do mês</span>
+            <strong><%= insights.cashFlow.saldoLabel %></strong>
+            <p>Entradas <%= insights.cashFlow.entradasLabel %> | saídas <%= insights.cashFlow.saidasLabel %>.</p>
+         </article>
+
+         <article class="dashboard-kpi-card">
+            <span>Compromissos do mês</span>
+            <strong><%= insights.cashFlow.pendenteSaidasLabel %></strong>
+            <p><%= insights.cashFlow.pendenteCount || 0 %> saída(s) pendente(s). Saídas equivalem a <%= insights.cashFlow.comprometimentoLabel %> das entradas.</p>
+         </article>
+      </section>
+
+      <section class="dashboard-insight-layout">
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Receita por produto</span>
+                  <h2>Onde o mês está acontecendo</h2>
+               </div>
+               <p>Participação de cada frente na receita consolidada.</p>
+            </div>
+
+            <% if (insights.productBreakdown.length) { %>
+               <div class="dashboard-product-bars">
+                  <% insights.productBreakdown.forEach((item) => { %>
+                     <div class="dashboard-product-row">
+                        <div class="dashboard-product-row-head">
+                           <strong><%= item.produto %></strong>
+                           <span><%= item.totalLabel %></span>
+                        </div>
+                        <div class="dashboard-product-track">
+                           <span style="width: <%= Math.max(6, Math.min(100, Math.round(item.percent || 0))) %>%"></span>
+                        </div>
+                        <small><%= item.percentLabel %> do mês | média de <%= item.averageLabel %> por visita</small>
+                     </div>
+                  <% }) %>
+               </div>
+            <% } else { %>
+               <div class="dashboard-empty-state-light">
+                  <h3>Sem receita no mês atual</h3>
+                  <p>Quando as primeiras sangrias forem registradas, os produtos aparecem aqui.</p>
+               </div>
+            <% } %>
+         </article>
+
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Top pontos</span>
+                  <h2>Melhores do mês</h2>
+               </div>
+               <p>Os pontos que mais contribuíram para o resultado atual.</p>
+            </div>
+
+            <% if (insights.topPoints.length) { %>
+               <div class="dashboard-ranking-list">
+                  <% insights.topPoints.forEach((item) => { %>
+                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-ranking-item">
+                        <span>#<%= item.position %></span>
+                        <div>
+                           <strong><%= item.estabelecimento %></strong>
+                           <small><%= item.visits %> visita(s) | média <%= item.averageLabel %></small>
+                        </div>
+                        <em><%= item.totalLabel %></em>
+                     </a>
+                  <% }) %>
+               </div>
+            <% } else { %>
+               <div class="dashboard-empty-state-light">
+                  <h3>Nenhum ranking ainda</h3>
+                  <p>O ranking aparece assim que houver receita registrada neste mês.</p>
+               </div>
+            <% } %>
+         </article>
+      </section>
+
+      <section class="dashboard-insight-layout">
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Alta e queda</span>
+                  <h2>Variação por ponto</h2>
+               </div>
+               <p>Comparativo do mês atual contra o mês anterior.</p>
+            </div>
+
+            <% if (insights.pointTrends.length) { %>
+               <div class="dashboard-trend-list">
+                  <% insights.pointTrends.forEach((item) => { %>
+                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-trend-item dashboard-trend-item-<%= item.tone %>">
+                        <div>
+                           <strong><%= item.estabelecimento %></strong>
+                           <small>Atual <%= item.currentLabel %> | anterior <%= item.previousLabel %></small>
+                        </div>
+                        <span><%= item.deltaPercentLabel %></span>
+                        <em><%= item.deltaLabel %></em>
+                     </a>
+                  <% }) %>
+               </div>
+            <% } else { %>
+               <div class="dashboard-empty-state-light">
+                  <h3>Sem comparação suficiente</h3>
+                  <p>Quando houver dados no mês atual e anterior, as variações aparecem aqui.</p>
+               </div>
+            <% } %>
+         </article>
+
+         <article class="dashboard-panel dashboard-panel-primary">
+            <div class="dashboard-panel-header">
+               <div>
+                  <span class="dashboard-section-tag">Valor parado</span>
+                  <h2>Pontos com visita atrasada</h2>
+               </div>
+               <p>Estimativa baseada no histórico de arrecadação e dias sem visita.</p>
+            </div>
+
+            <% if (insights.staleValue.items.length) { %>
+               <div class="dashboard-stale-list">
+                  <% insights.staleValue.items.forEach((item) => { %>
+                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-stale-item">
+                        <div>
+                           <strong><%= item.estabelecimento %></strong>
+                           <small><%= item.produto %> | última visita: <%= item.lastMovementLabel %></small>
+                        </div>
+                        <span><%= item.daysWithoutVisit %> dia(s)</span>
+                        <em><%= item.estimatedValueLabel %></em>
+                     </a>
+                  <% }) %>
+               </div>
+            <% } else { %>
+               <div class="dashboard-empty-state-light">
+                  <h3>Sem valor parado relevante</h3>
+                  <p>Não há pontos com atraso de visita suficiente para estimativa agora.</p>
+               </div>
+            <% } %>
+         </article>
       </section>
 
       <section class="dashboard-grid">
