@@ -33,10 +33,7 @@
         </div>
 
         <div class="blog-category-list" aria-label="Categoria atual">
-          <a
-            href="/blog/categoria/<%= normalizarCategoriaParaUrl(categoria) %>"
-            class="is-active"
-          >
+          <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(categoria) %>" class="is-active">
             <%= categoria %>
             <span><%= posts ? posts.length : 0 %></span>
           </a>
@@ -52,8 +49,7 @@
           <h2>Todos os artigos desta categoria</h2>
 
           <p>
-            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog
-            VendMaster.
+            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog VendMaster.
           </p>
         </div>
 
@@ -61,17 +57,9 @@
           <div class="blog-grid blog-articles-grid">
             <% posts.forEach((post) => { %>
               <article class="blog-card">
-                <a
-                  href="/blog/<%= post.slug %>"
-                  class="blog-card-image"
-                  aria-label="Ler artigo: <%= post.titulo %>"
-                >
+                <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
                   <% if (post.imagem_capa) { %>
-                    <img
-                      src="<%= post.imagem_capa %>"
-                      alt="<%= post.titulo %>"
-                      loading="lazy"
-                    >
+                    <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
                   <% } else { %>
                     <div class="blog-card-image-placeholder">
                       <span>VendMaster</span>
