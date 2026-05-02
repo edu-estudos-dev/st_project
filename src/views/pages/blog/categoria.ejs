@@ -32,40 +32,46 @@
           </p>
         </div>
 
-        <% if (categorias && categorias.length) { %>
-          <div class="blog-category-list" aria-label="Categorias do blog">
-            <% categorias.forEach((item) => { %>
-              <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>"
-                 class="<%= item.categoria === categoria ? 'is-active' : '' %>">
-                <%= item.categoria %>
-                <span><%= item.total %></span>
-              </a>
-            <% }) %>
-          </div>
-        <% } %>
+        <div class="blog-category-list" aria-label="Categoria atual">
+          <a
+            href="/blog/categoria/<%= normalizarCategoriaParaUrl(categoria) %>"
+            class="is-active"
+          >
+            <%= categoria %>
+            <span><%= posts ? posts.length : 0 %></span>
+          </a>
+        </div>
       </div>
     </section>
 
-    <section class="blog-section">
+    <section class="blog-section blog-articles-section">
       <div class="blog-container">
-        <div class="blog-section-header">
-          <div>
-            <span class="blog-eyebrow">Publicações</span>
-            <h2>Todos os artigos desta categoria</h2>
-          </div>
+        <div class="blog-section-header blog-articles-header blog-category-posts-header">
+          <span class="blog-eyebrow">Publicações</span>
+
+          <h2>Todos os artigos desta categoria</h2>
 
           <p>
-            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog VendMaster.
+            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog
+            VendMaster.
           </p>
         </div>
 
         <% if (posts && posts.length) { %>
-          <div class="blog-grid">
+          <div class="blog-grid blog-articles-grid">
             <% posts.forEach((post) => { %>
               <article class="blog-card">
-                <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
+                <a
+                  href="/blog/<%= post.slug %>"
+                  class="blog-card-image"
+                  aria-label="Ler artigo: <%= post.titulo %>"
+                >
                   <% if (post.imagem_capa) { %>
-                    <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
+                    <img
+                      src="<%= post.imagem_capa %>"
+                      alt="<%= post.titulo %>"
+                      loading="lazy"
+                    >
                   <% } else { %>
                     <div class="blog-card-image-placeholder">
                       <span>VendMaster</span>
@@ -101,14 +107,22 @@
             <% }) %>
           </div>
         <% } else { %>
-          <div class="blog-empty">
-            <h3>Nenhum artigo encontrado nesta categoria.</h3>
-            <p>
-              Quando houver artigos publicados sobre <%= categoria %>, eles aparecerão aqui.
-            </p>
+          <div class="blog-empty blog-empty-premium">
+            <div class="blog-empty-icon">VM</div>
 
-            <a href="/blog" class="blog-read-more">
-              Voltar para o blog
+            <div>
+              <span class="blog-eyebrow">Categoria vazia</span>
+
+              <h3>Nenhum artigo publicado nesta categoria ainda.</h3>
+
+              <p>
+                Assim que novos conteúdos forem publicados em
+                <strong><%= categoria %></strong>, eles aparecerão aqui.
+              </p>
+            </div>
+
+            <a href="/blog" class="blog-empty-link">
+              Ver todas as publicações
               <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -118,12 +132,15 @@
 
     <section class="blog-cta-section">
       <div class="blog-container">
-        <div class="blog-cta-card">
+        <div class="blog-cta-card blog-cta-card-premium">
           <div>
             <span class="blog-eyebrow">VendMaster</span>
+
             <h2>Transforme organização em rotina na sua operação</h2>
+
             <p>
-              Controle pontos, sangrias, rotas, estoque e financeiro com mais clareza.
+              Controle pontos, sangrias, rotas, estoque e financeiro com mais
+              clareza.
             </p>
           </div>
 
