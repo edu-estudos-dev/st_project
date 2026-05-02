@@ -9,6 +9,7 @@
 /* ========================================================================== */
 
 .homepage-body {
+  outline: 8px solid red !important;
   background:
     radial-gradient(
       circle at 14% 8%,
