@@ -19,6 +19,7 @@ const blogModel = {
         data_atualizacao
       FROM blog_posts
       WHERE status = 'publicado'
+        AND data_publicacao <= NOW()
       ORDER BY data_publicacao DESC NULLS LAST, data_criacao DESC
     `;
 
@@ -46,6 +47,7 @@ const blogModel = {
       FROM blog_posts
       WHERE slug = $1
         AND status = 'publicado'
+        AND data_publicacao <= NOW()
       LIMIT 1
     `;
 
@@ -71,7 +73,22 @@ const blogModel = {
         data_atualizacao
       FROM blog_posts
       WHERE status = 'publicado'
-        AND LOWER(categoria) = LOWER($1)
+        AND data_publicacao <= NOW()
+        AND btrim(
+          regexp_replace(
+            lower(
+              translate(
+                categoria,
+                'áàâãäéèêëíìîïóòôõöúùûüçÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ',
+                'aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC'
+              )
+            ),
+            '[^a-z0-9]+',
+            '-',
+            'g'
+          ),
+          '-'
+        ) = lower($1)
       ORDER BY data_publicacao DESC NULLS LAST, data_criacao DESC
     `;
 
@@ -91,6 +108,7 @@ const blogModel = {
         data_publicacao
       FROM blog_posts
       WHERE status = 'publicado'
+        AND data_publicacao <= NOW()
         AND LOWER(categoria) = LOWER($1)
         AND slug <> $2
       ORDER BY data_publicacao DESC NULLS LAST, data_criacao DESC
@@ -108,6 +126,7 @@ const blogModel = {
         COUNT(*)::int AS total
       FROM blog_posts
       WHERE status = 'publicado'
+        AND data_publicacao <= NOW()
       GROUP BY categoria
       ORDER BY categoria ASC
     `;

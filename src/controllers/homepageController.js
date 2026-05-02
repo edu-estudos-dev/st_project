@@ -1,3 +1,5 @@
+import blogModel from '../models/blogModel.js';
+
 const homepageFaqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -53,27 +55,31 @@ const homepageFaqJsonLd = {
     ]
 };
 
-const postsRecentes = [
-    {
-        titulo: 'Como organizar rota de máquinas recreativas sem depender do improviso',
-        slug: 'como-organizar-rota-maquinas-recreativas',
-        categoria: 'Rotas',
-        resumo: 'Entenda como priorizar pontos, reduzir deslocamentos desnecessários e criar uma rotina mais lucrativa.',
-        imagem: '/images/blog/capa-rota-maquinas-recreativas.webp'
-    }
-];
-
 class HomepageController {
-    renderHomepage(req, res) {
-        console.log('Renderizando pagina inicial');
+    async renderHomepage(req, res, next) {
+        try {
+            console.log('Renderizando pagina inicial');
 
-        res.render('pages/homepage', {
-            title: 'Sistema de gestão para máquinas recreativas e consignados | VendMaster',
-            metaDescription: 'Sistema de gestão para máquinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comissões e financeiro.',
-            canonicalUrl: 'https://vendmaster.com.br/',
-            faqJsonLd: homepageFaqJsonLd,
-            postsRecentes
-        });
+            const postsPublicados = await blogModel.buscarPostsPublicados();
+
+            const postsRecentes = postsPublicados.slice(0, 2).map((post) => ({
+                titulo: post.titulo,
+                slug: post.slug,
+                categoria: post.categoria,
+                resumo: post.resumo,
+                imagem: post.imagem_capa || '/images/brand/logo.webp'
+            }));
+
+            return res.render('pages/homepage', {
+                title: 'Sistema de gestão para máquinas recreativas e consignados | VendMaster',
+                metaDescription: 'Sistema de gestão para máquinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comissões e financeiro.',
+                canonicalUrl: 'https://vendmaster.com.br/',
+                faqJsonLd: homepageFaqJsonLd,
+                postsRecentes
+            });
+        } catch (error) {
+            return next(error);
+        }
     }
 
     renderPrivacyPolicy(req, res) {
