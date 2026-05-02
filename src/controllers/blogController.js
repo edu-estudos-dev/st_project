@@ -108,7 +108,7 @@ const blogController = {
         description: post.meta_description || post.resumo,
         image: post.imagem_capa
           ? `https://vendmaster.com.br${post.imagem_capa}`
-          : 'https://vendmaster.com.br/images/logo.webp',
+          : 'https://vendmaster.com.br/images/brand/logo.webp',
         author: {
           '@type': 'Organization',
           name: post.autor || 'VendMaster'
@@ -118,7 +118,7 @@ const blogController = {
           name: 'VendMaster',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://vendmaster.com.br/images/logo.webp'
+            url: 'https://vendmaster.com.br/images/brand/logo.webp'
           }
         },
         datePublished: post.data_publicacao || post.data_criacao,
@@ -135,7 +135,7 @@ const blogController = {
         canonicalUrl: `https://vendmaster.com.br/blog/${post.slug}`,
         ogImage: post.imagem_capa
           ? `https://vendmaster.com.br${post.imagem_capa}`
-          : 'https://vendmaster.com.br/images/logo.webp',
+          : 'https://vendmaster.com.br/images/brand/logo.webp',
         articleJsonLd,
         extraStyles: ['/css/blog.css'],
         post,

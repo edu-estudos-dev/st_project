@@ -1823,15 +1823,30 @@ html:has(.homepage-body) {
   line-height: 1.45 !important;
 }
 
-
 /* ==========================================================================
    07.12 — CTA DO BLOG DENTRO DA HOMEPAGE
    Link estratégico para levar o usuário ao blog após entender o sistema.
    ========================================================================== */
 
-.vm-blog-inline-cta {
-  width: min(1180px, calc(100% - 1.5rem)) !important;
-  margin: 1.35rem auto 0 !important;
+.homepage-body .vm-blog-support-section {
+  width: min(1120px, calc(100% - 2rem)) !important;
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.homepage-body .vm-blog-support-section.vm-section {
+  padding-top: clamp(4.5rem, 7vw, 6rem) !important;
+  padding-bottom: clamp(4.5rem, 7vw, 6rem) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.homepage-body .vm-blog-inline-cta {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
   padding: 1.25rem 1.35rem !important;
   display: flex !important;
   align-items: center !important;
@@ -1840,22 +1855,26 @@ html:has(.homepage-body) {
   border-radius: 24px !important;
   border: 1px solid rgba(37, 99, 235, 0.14) !important;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.09), transparent 32%),
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.09),
+      transparent 32%
+    ),
     linear-gradient(135deg, #ffffff 0%, #f1f7ff 100%) !important;
   box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08) !important;
 }
 
-.vm-blog-inline-cta-copy {
+.homepage-body .vm-blog-inline-cta-copy {
   min-width: 0 !important;
 }
 
-.vm-blog-inline-cta .vm-kicker {
+.homepage-body .vm-blog-inline-cta .vm-kicker {
   margin: 0 0 0.45rem !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
 
-.vm-blog-inline-cta h3 {
+.homepage-body .vm-blog-inline-cta h3 {
   margin: 0 !important;
   color: #0f172a !important;
   font-size: clamp(1.35rem, 2vw, 1.9rem) !important;
@@ -1864,7 +1883,7 @@ html:has(.homepage-body) {
   letter-spacing: -0.04em !important;
 }
 
-.vm-blog-inline-cta p {
+.homepage-body .vm-blog-inline-cta p {
   max-width: 680px !important;
   margin: 0.55rem 0 0 !important;
   color: #475569 !important;
@@ -1872,7 +1891,7 @@ html:has(.homepage-body) {
   line-height: 1.65 !important;
 }
 
-.vm-blog-inline-cta-link {
+.homepage-body .vm-blog-inline-cta-link {
   min-height: 48px !important;
   padding: 0.85rem 1.15rem !important;
   display: inline-flex !important;
@@ -1896,7 +1915,7 @@ html:has(.homepage-body) {
     box-shadow 0.25s ease !important;
 }
 
-.vm-blog-inline-cta-link:hover {
+.homepage-body .vm-blog-inline-cta-link:hover {
   transform: translateY(-2px) !important;
   border-color: rgba(34, 197, 94, 0.5) !important;
   background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
@@ -1905,29 +1924,38 @@ html:has(.homepage-body) {
 }
 
 @media (max-width: 767.98px) {
-  .vm-blog-inline-cta {
+  .homepage-body .vm-blog-support-section {
+    width: calc(100% - 1rem) !important;
+    max-width: none !important;
+  }
+
+  .homepage-body .vm-blog-support-section.vm-section {
+    padding-top: 3.5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  .homepage-body .vm-blog-inline-cta {
     padding: 1.2rem !important;
     flex-direction: column !important;
     align-items: stretch !important;
     text-align: center !important;
   }
 
-  .vm-blog-inline-cta .vm-kicker {
+  .homepage-body .vm-blog-inline-cta .vm-kicker {
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
-  .vm-blog-inline-cta p {
+  .homepage-body .vm-blog-inline-cta p {
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
-  .vm-blog-inline-cta-link {
+  .homepage-body .vm-blog-inline-cta-link {
     width: 100% !important;
     min-height: 52px !important;
   }
 }
-
 
 /* ==========================================================================
    CARD DO CARROSSEL

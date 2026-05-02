@@ -54,6 +54,7 @@
             <div class="blog-hero-topic-list">
               <div class="blog-hero-topic">
                 <span>01</span>
+
                 <div>
                   <h2>Rotas mais inteligentes</h2>
                   <p>Organização de visitas, prioridades e pontos que precisam de atenção.</p>
@@ -62,6 +63,7 @@
 
               <div class="blog-hero-topic">
                 <span>02</span>
+
                 <div>
                   <h2>Sangrias e comissões</h2>
                   <p>Controle de valores apurados, repasses, lucro líquido e registros.</p>
@@ -70,6 +72,7 @@
 
               <div class="blog-hero-topic">
                 <span>03</span>
+
                 <div>
                   <h2>Estoque e reposição</h2>
                   <p>Boas práticas para reduzir improviso e evitar falta de produto nos pontos.</p>
@@ -78,6 +81,7 @@
 
               <div class="blog-hero-topic">
                 <span>04</span>
+
                 <div>
                   <h2>Gestão financeira</h2>
                   <p>Visão sobre entradas, saídas, margem, recorrência e crescimento.</p>
@@ -121,22 +125,21 @@
       </div>
     </section>
 
-    <section class="blog-section" id="artigos">
+    <section class="blog-section blog-articles-section" id="artigos">
       <div class="blog-container">
-        <div class="blog-section-header">
-          <div>
-            <span class="blog-eyebrow">Artigos</span>
-            <h2>Publicações mais recentes</h2>
-          </div>
+        <div class="blog-section-header blog-articles-header">
+          <span class="blog-eyebrow">Artigos</span>
+
+          <h2>Publicações mais recentes</h2>
 
           <p>
-            Materiais criados para ajudar operadores a saírem do controle manual
-            e tomarem decisões com mais clareza.
+            Materiais criados para ajudar operadores a saírem do controle manual,
+            organizarem melhor a rotina e tomarem decisões com mais clareza.
           </p>
         </div>
 
         <% if (posts && posts.length) { %>
-          <div class="blog-grid">
+          <div class="blog-grid blog-articles-grid">
             <% posts.forEach((post) => { %>
               <article class="blog-card">
                 <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
@@ -202,22 +205,23 @@
 
     <section class="blog-topic-section">
       <div class="blog-container">
-        <div class="blog-section-header">
-          <div>
-            <span class="blog-eyebrow">Pilares do conteúdo</span>
-            <h2>O que você vai encontrar no blog</h2>
-          </div>
+        <div class="blog-section-header blog-topic-header">
+          <span class="blog-eyebrow">Pilares do conteúdo</span>
+
+          <h2>O que você vai encontrar no blog</h2>
 
           <p>
-            O blog foi pensado para atrair operadores que sentem dificuldade
-            em organizar a operação no dia a dia.
+            Conteúdos práticos para ajudar operadores a organizar rotas, sangrias,
+            estoque e financeiro com mais clareza no dia a dia.
           </p>
         </div>
 
         <div class="blog-topic-grid">
           <article class="blog-topic-card">
             <span>01</span>
+
             <h3>Rotas e visitas</h3>
+
             <p>
               Como priorizar pontos, reduzir deslocamentos desnecessários
               e evitar visitas no improviso.
@@ -226,7 +230,9 @@
 
           <article class="blog-topic-card">
             <span>02</span>
+
             <h3>Sangrias e apuração</h3>
+
             <p>
               Como registrar coletas, comissões, valores do comerciante
               e lucro líquido com mais clareza.
@@ -235,7 +241,9 @@
 
           <article class="blog-topic-card">
             <span>03</span>
+
             <h3>Estoque e reposição</h3>
+
             <p>
               Como evitar falta de produto, excesso parado e perda de controle
               entre os pontos.
@@ -244,7 +252,9 @@
 
           <article class="blog-topic-card">
             <span>04</span>
+
             <h3>Financeiro operacional</h3>
+
             <p>
               Como acompanhar entradas, saídas, recorrência, margem e resultado
               por produto.
