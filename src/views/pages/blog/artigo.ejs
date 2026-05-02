@@ -1,192 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('../../partials/head', {
-  title,
-  metaDescription,
-  canonicalUrl,
-  ogImage,
-  articleJsonLd,
-  extraStyles
-}) %>
+<%- include('../../partials/head', { title, metaDescription, canonicalUrl, ogImage, articleJsonLd, extraStyles }) %>
 
-<body class="blog-page blog-article-page">
-  <%- include('../../partials/blogPublicHeader') %>
+  <body class="blog-page blog-article-page">
+    <%- include('../../partials/blogPublicHeader') %>
 
-  <main class="blog-main blog-article-main">
-    <article class="blog-article">
-      <section class="blog-article-hero" aria-labelledby="blog-article-title">
-        <div class="blog-container blog-article-container">
-          <nav class="blog-breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Início</a>
-            <span aria-hidden="true">/</span>
-            <a href="/blog">Blog</a>
-            <span aria-hidden="true">/</span>
-            <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
-              <%= post.categoria %>
-            </a>
-          </nav>
-
-          <div class="blog-article-heading">
-            <span class="blog-eyebrow"><%= post.categoria %></span>
-
-            <h1 id="blog-article-title"><%= post.titulo %></h1>
-
-            <% if (post.resumo) { %>
-              <p><%= post.resumo %></p>
-            <% } %>
-
-            <div class="blog-article-meta">
-              <span class="blog-article-author-name">
-                <%= post.autor || 'VendMaster' %>
-              </span>
-
-              <% if (post.data_publicacao) { %>
-                <span aria-hidden="true">•</span>
-                <time datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>">
-                  <%= formatarDataPost(post.data_publicacao) %>
-                </time>
-              <% } %>
-
-              <span aria-hidden="true">•</span>
-              <span>Leitura estratégica</span>
-            </div>
-          </div>
-        </div>
-
-        <% if (post.imagem_capa) { %>
-          <div class="blog-container">
-            <div class="blog-article-cover" role="figure" aria-label="<%= post.titulo %>">
-              <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>">
-            </div>
-          </div>
-        <% } %>
-      </section>
-
-      <div class="blog-container blog-article-layout">
-        <aside class="blog-article-sidebar" aria-label="Navegação lateral do artigo">
-          <div class="blog-sidebar-card">
-            <h2>Categorias</h2>
-
-            <% if (categorias && categorias.length) { %>
-              <nav class="blog-sidebar-categories">
-                <% categorias.forEach((item) => { %>
-                  <a
-                    href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>"
-                    class="<%= item.categoria === post.categoria ? 'is-active' : '' %>"
-                  >
-                    <span><%= item.categoria %></span>
-                    <strong><%= item.total %></strong>
-                  </a>
-                <% }) %>
-              </nav>
-            <% } else { %>
-              <p>Nenhuma categoria disponível.</p>
-            <% } %>
-          </div>
-
-          <div class="blog-sidebar-card blog-sidebar-cta">
-            <span class="blog-eyebrow">VendMaster</span>
-
-            <h2>Controle sua operação com mais clareza</h2>
-
-            <p>
-              Organize pontos, rotas, sangrias, estoque e financeiro em um só sistema.
-            </p>
-
-            <a href="/#contato">Conhecer o VendMaster</a>
-          </div>
-        </aside>
-
-        <section class="blog-article-content">
-          <%- post.conteudo %>
-        </section>
-      </div>
-    </article>
-
-    <% if (postsRelacionados && postsRelacionados.length) { %>
-      <section class="blog-section blog-related-section">
-        <div class="blog-container">
-          <div class="blog-section-header">
-            <div>
-              <span class="blog-eyebrow">Leia também</span>
-              <h2>Artigos relacionados</h2>
-            </div>
-
-            <p>
-              Outros conteúdos sobre <%= post.categoria %> que podem ajudar na sua operação.
-            </p>
-          </div>
-
-          <div class="blog-grid">
-            <% postsRelacionados.forEach((postRelacionado) => { %>
-              <article class="blog-card">
-                <a
-                  href="/blog/<%= postRelacionado.slug %>"
-                  class="blog-card-image"
-                  aria-label="Ler artigo: <%= postRelacionado.titulo %>"
-                >
-                  <% if (postRelacionado.imagem_capa) { %>
-                    <img src="<%= postRelacionado.imagem_capa %>" alt="<%= postRelacionado.titulo %>" loading="lazy">
-                  <% } else { %>
-                    <div class="blog-card-image-placeholder">
-                      <span>VendMaster</span>
-                    </div>
-                  <% } %>
+      <main class="blog-main blog-article-main">
+        <article class="blog-article">
+          <section class="blog-article-hero" aria-labelledby="blog-article-title">
+            <div class="blog-container blog-article-container">
+              <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Início</a>
+                <span aria-hidden="true">/</span>
+                <a href="/blog">Blog</a>
+                <span aria-hidden="true">/</span>
+                <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
+                  <%= post.categoria %>
                 </a>
+              </nav>
 
-                <div class="blog-card-body">
-                  <div class="blog-card-meta">
-                    <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(postRelacionado.categoria) %>">
-                      <%= postRelacionado.categoria %>
+              <div class="blog-article-heading">
+                <span class="blog-eyebrow">
+                  <%= post.categoria %>
+                </span>
+
+                <h1 id="blog-article-title">
+                  <%= post.titulo %>
+                </h1>
+
+                <% if (post.resumo) { %>
+                  <p>
+                    <%= post.resumo %>
+                  </p>
+                  <% } %>
+
+                    <div class="blog-article-meta">
+                      <span class="blog-article-author-name">
+                        <%= post.autor || 'VendMaster' %>
+                      </span>
+
+                      <% if (post.data_publicacao) { %>
+                        <span aria-hidden="true">•</span>
+                        <time
+                          datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>">
+                          <%= formatarDataPost(post.data_publicacao) %>
+                        </time>
+                        <% } %>
+
+                          <span aria-hidden="true">•</span>
+                          <span>Leitura estratégica</span>
+                    </div>
+              </div>
+            </div>
+
+            <% if (post.imagem_capa) { %>
+              <div class="blog-container">
+                <div class="blog-article-cover" role="figure" aria-label="<%= post.titulo %>">
+                  <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>">
+                </div>
+              </div>
+              <% } %>
+          </section>
+
+          <div class="blog-container blog-article-layout">
+            <aside class="blog-article-sidebar" aria-label="Navegação lateral do artigo">
+              <div class="blog-sidebar-card">
+                <h2>Categorias</h2>
+
+                <% if (categorias && categorias.length) { %>
+                  <nav class="blog-sidebar-categories">
+                    <% categorias.forEach((item)=> { %>
+                      <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>"
+                        class="<%= item.categoria === post.categoria ? 'is-active' : '' %>">
+                        <span>
+                          <%= item.categoria %>
+                        </span>
+                        <strong>
+                          <%= item.total %>
+                        </strong>
+                      </a>
+                      <% }) %>
+                  </nav>
+                  <% } else { %>
+                    <p>Nenhuma categoria disponível.</p>
+                    <% } %>
+              </div>
+
+              <div class="blog-sidebar-card blog-sidebar-cta">
+                <span class="blog-eyebrow">VendMaster</span>
+
+                <h2>Controle sua operação com mais clareza</h2>
+
+                <p>
+                  Organize pontos, rotas, sangrias, estoque e financeiro em um só sistema.
+                </p>
+
+                <a href="/#contato">Conhecer o VendMaster</a>
+              </div>
+            </aside>
+
+            <section class="blog-article-content">
+              <%- post.conteudo %>
+            </section>
+          </div>
+        </article>
+
+        <% if (postsRelacionados && postsRelacionados.length) { %>
+          <section class="blog-section blog-related-section">
+            <div class="blog-container">
+              <div class="blog-section-header">
+                <div>
+                  <span class="blog-eyebrow">Leia também</span>
+                  <h2>Artigos relacionados</h2>
+                </div>
+
+                <p>
+                  Outros conteúdos sobre <%= post.categoria %> que podem ajudar na sua operação.
+                </p>
+              </div>
+
+              <div class="blog-grid">
+                <% postsRelacionados.forEach((postRelacionado)=> { %>
+                  <article class="blog-card">
+                    <a href="/blog/<%= postRelacionado.slug %>" class="blog-card-image"
+                      aria-label="Ler artigo: <%= postRelacionado.titulo %>">
+                      <% if (postRelacionado.imagem_capa) { %>
+                        <img src="<%= postRelacionado.imagem_capa %>" alt="<%= postRelacionado.titulo %>"
+                          loading="lazy">
+                        <% } else { %>
+                          <div class="blog-card-image-placeholder">
+                            <span>VendMaster</span>
+                          </div>
+                          <% } %>
                     </a>
 
-                    <% if (postRelacionado.data_publicacao) { %>
-                      <span><%= formatarDataPost(postRelacionado.data_publicacao) %></span>
-                    <% } %>
+                    <div class="blog-card-body">
+                      <div class="blog-card-meta">
+                        <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(postRelacionado.categoria) %>">
+                          <%= postRelacionado.categoria %>
+                        </a>
+
+                        <% if (postRelacionado.data_publicacao) { %>
+                          <span>
+                            <%= formatarDataPost(postRelacionado.data_publicacao) %>
+                          </span>
+                          <% } %>
+                      </div>
+
+                      <h3>
+                        <a href="/blog/<%= postRelacionado.slug %>">
+                          <%= postRelacionado.titulo %>
+                        </a>
+                      </h3>
+
+                      <p>
+                        <%= postRelacionado.resumo %>
+                      </p>
+
+                      <a href="/blog/<%= postRelacionado.slug %>" class="blog-read-more">
+                        Ler artigo
+                        <span aria-hidden="true">→</span>
+                      </a>
+                    </div>
+                  </article>
+                  <% }) %>
+              </div>
+            </div>
+          </section>
+          <% } %>
+
+            <section class="blog-cta-section">
+              <div class="blog-container">
+                <div class="blog-cta-card blog-cta-card-premium">
+                  <div>
+                    <span class="blog-eyebrow">VendMaster</span>
+
+                    <h2>Pronto para profissionalizar sua operação?</h2>
+
+                    <p>
+                      O VendMaster ajuda você a controlar máquinas, pontos, sangrias,
+                      estoque, rotas e financeiro com mais organização.
+                    </p>
                   </div>
 
-                  <h3>
-                    <a href="/blog/<%= postRelacionado.slug %>">
-                      <%= postRelacionado.titulo %>
-                    </a>
-                  </h3>
-
-                  <p><%= postRelacionado.resumo %></p>
-
-                  <a href="/blog/<%= postRelacionado.slug %>" class="blog-read-more">
-                    Ler artigo
-                    <span aria-hidden="true">→</span>
+                  <a href="/#contato" class="blog-cta-button">
+                    Conhecer o VendMaster
                   </a>
                 </div>
-              </article>
-            <% }) %>
-          </div>
-        </div>
-      </section>
-    <% } %>
+              </div>
+            </section>
+      </main>
 
-    <section class="blog-cta-section">
-      <div class="blog-container">
-        <div class="blog-cta-card blog-cta-card-premium">
-          <div>
-            <span class="blog-eyebrow">VendMaster</span>
+      <%- include('../../partials/footer') %>
+  </body>
 
-            <h2>Pronto para profissionalizar sua operação?</h2>
-
-            <p>
-              O VendMaster ajuda você a controlar máquinas, pontos, sangrias,
-              estoque, rotas e financeiro com mais organização.
-            </p>
-          </div>
-
-          <a href="/#contato" class="blog-cta-button">
-            Conhecer o VendMaster
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <%- include('../../partials/footer') %>
-</body>
 </html>

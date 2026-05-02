@@ -58,7 +58,7 @@ const blogController = {
         posts[0]?.categoria ||
         categoria
           .split('-')
-          .map((parte) => parte.charAt(0).toUpperCase() + parte.slice(1))
+          .map(parte => parte.charAt(0).toUpperCase() + parte.slice(1))
           .join(' ');
 
       return res.render('pages/blog/categoria', {
@@ -86,7 +86,8 @@ const blogController = {
       if (!post) {
         return res.status(404).render('pages/404', {
           title: 'Artigo não encontrado | VendMaster',
-          metaDescription: 'O artigo que você tentou acessar não foi encontrado.',
+          metaDescription:
+            'O artigo que você tentou acessar não foi encontrado.',
           canonicalUrl: 'https://vendmaster.com.br/blog',
           extraStyles: ['/css/blog.css']
         });
@@ -103,7 +104,7 @@ const blogController = {
 
       const articleJsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'Article',
+        '@type': 'BlogPosting',
         headline: post.titulo,
         description: post.meta_description || post.resumo,
         image: post.imagem_capa
@@ -122,7 +123,8 @@ const blogController = {
           }
         },
         datePublished: post.data_publicacao || post.data_criacao,
-        dateModified: post.data_atualizacao || post.data_publicacao || post.data_criacao,
+        dateModified:
+          post.data_atualizacao || post.data_publicacao || post.data_criacao,
         mainEntityOfPage: {
           '@type': 'WebPage',
           '@id': `https://vendmaster.com.br/blog/${post.slug}`
