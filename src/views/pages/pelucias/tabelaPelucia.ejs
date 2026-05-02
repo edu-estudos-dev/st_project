@@ -93,7 +93,7 @@
         function loadSelectValue(selectElement) { const savedValue = localStorage.getItem(selectElement.id); if (savedValue) { selectElement.value = savedValue; updateSelectColor(selectElement); } }
         function updateSelectColor(selectElement) { selectElement.classList.remove('select-sim', 'select-nao'); if (selectElement.value === 'SIM') selectElement.classList.add('select-sim'); else if (selectElement.value === 'NAO') selectElement.classList.add('select-nao'); }
         document.querySelectorAll('.form-select.color-select').forEach(select => { loadSelectValue(select); select.addEventListener('change', () => { updateSelectColor(select); saveSelectValue(select); }); });
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async function() {
                     const idSangria = this.getAttribute('data-id');
@@ -114,9 +114,32 @@
             const urlParams = new URLSearchParams(window.location.search);
             const successMessage = urlParams.get('success');
             const errorMessage = urlParams.get('error');
-            if (successMessage) window.AppAlerts?.success(successMessage);
-            if (errorMessage) window.AppAlerts?.error(errorMessage);
-            if (successMessage || errorMessage) window.history.replaceState({}, document.title, window.location.pathname);
+            const reciboUrl = urlParams.get('recibo_url');
+
+            if (successMessage) {
+                await window.AppAlerts?.success(successMessage);
+            }
+
+            if (errorMessage) {
+                await window.AppAlerts?.error(errorMessage);
+            }
+
+            if (reciboUrl) {
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Gerar recibo em PDF?',
+                    text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
+                    confirmButtonText: 'Gerar recibo',
+                    cancelButtonText: 'Agora não'
+                });
+
+                if (confirmed) {
+                    window.open(reciboUrl, '_blank', 'noopener,noreferrer');
+                }
+            }
+
+            if (successMessage || errorMessage || reciboUrl) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         });
     </script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

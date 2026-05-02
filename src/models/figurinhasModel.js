@@ -85,11 +85,16 @@ class FigurinhasModel {
     return result.rows;
   };
 
-  getSangriaById = async (id, assinanteId) => {
+    getSangriaById = async (id, assinanteId) => {
     const query = `
       SELECT
         s.*,
         e.estabelecimento,
+        e.endereco,
+        e.bairro,
+        e.responsavel_nome,
+        e.telefone_contato,
+        e.maquina,
         prev.data_sangria AS data_sangria_anterior,
         prev.qtde_deixada AS qtde_anterior,
         prev.observacoes AS observacoes_anteriores

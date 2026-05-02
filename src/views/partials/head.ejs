@@ -224,4 +224,41 @@
             });
         });
     </script>
+
+        <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const reciboUrl = urlParams.get('recibo_url');
+
+            if (!reciboUrl) return;
+
+            const storageKey = `vendmaster-recibo-modal:${reciboUrl}`;
+
+            if (sessionStorage.getItem(storageKey)) return;
+
+            sessionStorage.setItem(storageKey, 'shown');
+
+            const abrirRecibo = async () => {
+                if (window.AppAlerts?.confirm) {
+                    return await window.AppAlerts.confirm({
+                        title: 'Gerar recibo em PDF?',
+                        text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
+                        confirmButtonText: 'Gerar recibo',
+                        cancelButtonText: 'Agora não'
+                    });
+                }
+
+                return window.confirm(
+                    'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?'
+                );
+            };
+
+            const confirmed = await abrirRecibo();
+
+            if (confirmed) {
+                window.open(reciboUrl, '_blank', 'noopener,noreferrer');
+            }
+        });
+    </script>
 </head>

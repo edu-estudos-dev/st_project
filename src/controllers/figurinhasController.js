@@ -1,6 +1,10 @@
 import figurinhasModel from '../models/figurinhasModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
+import {
+  gerarNomeArquivoRecibo,
+  gerarReciboPdfBuffer
+} from '../utils/reciboPdf.js';
 
 class FigurinhasController {
   addSangriaForm = async (req, res) => {
@@ -150,6 +154,10 @@ class FigurinhasController {
 
       const sangriaId = sangriaResult?.rows?.[0]?.id || null;
 
+      const reciboUrl = sangriaId
+        ? `/figurinhas/sangrias/recibo/${sangriaId}`
+        : '';
+
       if (origem === 'rota' && visita_id && rota_ponto_id) {
         const retornoSeguro =
           retorno_url && String(retorno_url).startsWith('/rotas')
@@ -191,8 +199,12 @@ class FigurinhasController {
 
           const separador = rotaRetornoSeguro.includes('?') ? '&' : '?';
 
-          return res.redirect(
-            `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(rota_ponto_id)}&success=${encodeURIComponent('Visita finalizada com sucesso')}`
+         return res.redirect(
+            `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
+              rota_ponto_id
+            )}&success=${encodeURIComponent(
+              'Visita finalizada com sucesso'
+            )}&recibo_url=${encodeURIComponent(reciboUrl)}`
           );
         } catch (finalizarError) {
           if (
@@ -202,7 +214,9 @@ class FigurinhasController {
             const separador = retornoSeguro.includes('?') ? '&' : '?';
 
             return res.redirect(
-              `${retornoSeguro}${separador}success=${encodeURIComponent('Consignados registrado. Ainda existem produtos pendentes nesta visita.')}`
+              `${retornoSeguro}${separador}success=${encodeURIComponent(
+                'Consignados registrado. Ainda existem produtos pendentes nesta visita.'
+              )}&recibo_url=${encodeURIComponent(reciboUrl)}`
             );
           }
 
@@ -210,8 +224,10 @@ class FigurinhasController {
         }
       }
 
-      return res.redirect(
-        '/figurinhas/sangrias?success=Sangria adicionada com sucesso'
+     return res.redirect(
+        `/figurinhas/sangrias?success=${encodeURIComponent(
+          'Sangria adicionada com sucesso'
+        )}&recibo_url=${encodeURIComponent(reciboUrl)}`
       );
     } catch (error) {
       console.error('Erro ao adicionar sangria de consignados:', error);
@@ -401,7 +417,7 @@ class FigurinhasController {
     }
   };
 
-  getUltimaSangria = async (req, res) => {
+    getUltimaSangria = async (req, res) => {
     try {
       const usuario = req.user;
       const estabelecimentoId = req.params.id;
@@ -429,6 +445,43 @@ class FigurinhasController {
       res.status(500).json({ error: 'Erro interno' });
     }
   };
+
+  gerarRecibo = async (req, res) => {
+    const usuario = req.user;
+
+    try {
+      const { id } = req.params;
+
+      const sangria = await figurinhasModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangria) {
+        return res.status(404).send('Sangria de consignados não encontrada.');
+      }
+
+      const pdfBuffer = gerarReciboPdfBuffer({
+        produto: 'Consignados',
+        sangria,
+        usuario
+      });
+
+      const filename = gerarNomeArquivoRecibo({
+        produto: 'consignados',
+        sangria
+      });
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+
+      return res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Erro ao gerar recibo de consignados:', error);
+      return res.status(500).send('Erro ao gerar recibo de consignados.');
+    }
+  };
 }
+
 
 export default new FigurinhasController();

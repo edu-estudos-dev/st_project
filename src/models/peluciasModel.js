@@ -141,9 +141,16 @@ class PeluciasModel {
     return result.rows;
   };
 
-  getSangriaById = async (id, assinanteId) => {
+   getSangriaById = async (id, assinanteId) => {
     const query = `
-      SELECT s.*, e.estabelecimento
+      SELECT
+        s.*,
+        e.estabelecimento,
+        e.endereco,
+        e.bairro,
+        e.responsavel_nome,
+        e.telefone_contato,
+        e.maquina
       FROM sangrias_pelucias s
       JOIN estabelecimentos e
         ON s.estabelecimento_id = e.id

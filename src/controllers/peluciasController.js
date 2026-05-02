@@ -1,7 +1,10 @@
 import peluciasModel from '../models/peluciasModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
-
+import {
+  gerarNomeArquivoRecibo,
+  gerarReciboPdfBuffer
+} from '../utils/reciboPdf.js';
 class PeluciasController {
   addSangriaForm = async (req, res) => {
     const usuario = req.user || null;
@@ -212,6 +215,10 @@ class PeluciasController {
 
       const sangriaId = sangriaResult?.rows?.[0]?.id || null;
 
+      const reciboUrl = sangriaId
+        ? `/pelucias/sangrias/recibo/${sangriaId}`
+        : '';
+
       if (origem === 'rota' && visita_id && rota_ponto_id) {
         const retornoSeguro =
           retorno_url && String(retorno_url).startsWith('/rotas')
@@ -256,7 +263,9 @@ class PeluciasController {
           return res.redirect(
             `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
               rota_ponto_id
-            )}&success=${encodeURIComponent('Visita finalizada com sucesso')}`
+            )}&success=${encodeURIComponent(
+              'Visita finalizada com sucesso'
+            )}&recibo_url=${encodeURIComponent(reciboUrl)}`
           );
         } catch (finalizarError) {
           if (
@@ -267,10 +276,10 @@ class PeluciasController {
           ) {
             const separador = retornoSeguro.includes('?') ? '&' : '?';
 
-            return res.redirect(
+           return res.redirect(
               `${retornoSeguro}${separador}success=${encodeURIComponent(
                 'Pelúcias registrada. Ainda existem produtos pendentes nesta visita.'
-              )}`
+              )}&recibo_url=${encodeURIComponent(reciboUrl)}`
             );
           }
 
@@ -279,7 +288,9 @@ class PeluciasController {
       }
 
       return res.redirect(
-        '/pelucias/sangrias?success=Sangria adicionada com sucesso'
+        `/pelucias/sangrias?success=${encodeURIComponent(
+          'Sangria adicionada com sucesso'
+        )}&recibo_url=${encodeURIComponent(reciboUrl)}`
       );
     } catch (error) {
       console.error('Erro ao adicionar sangria:', error);
@@ -494,7 +505,7 @@ class PeluciasController {
     }
   };
 
-  getUltimosDados = async (req, res) => {
+    getUltimosDados = async (req, res) => {
     const { estabelecimentoId } = req.params;
 
     try {
@@ -514,6 +525,42 @@ class PeluciasController {
     } catch (error) {
       console.error('Erro ao buscar os últimos dados:', error);
       res.status(500).json({ error: 'Erro ao buscar os últimos dados' });
+    }
+  };
+
+  gerarRecibo = async (req, res) => {
+    const usuario = req.user;
+
+    try {
+      const { id } = req.params;
+
+      const sangria = await peluciasModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangria) {
+        return res.status(404).send('Sangria de pelúcias não encontrada.');
+      }
+
+      const pdfBuffer = gerarReciboPdfBuffer({
+        produto: 'Pelúcias',
+        sangria,
+        usuario
+      });
+
+      const filename = gerarNomeArquivoRecibo({
+        produto: 'pelucias',
+        sangria
+      });
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+
+      return res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Erro ao gerar recibo de pelúcias:', error);
+      return res.status(500).send('Erro ao gerar recibo de pelúcias.');
     }
   };
 }
