@@ -1957,6 +1957,177 @@ html:has(.homepage-body) {
   }
 }
 
+/* ========================================================================== */
+/* BLOG PREVIEW — CHAMADA PARA O BLOG NA HOMEPAGE                             */
+/* ========================================================================== */
+
+.vm-blog-preview-section {
+  position: relative;
+  overflow: hidden;
+  padding-inline: clamp(1rem, 4vw, 4rem);
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 86% 72%,
+      rgba(34, 197, 94, 0.08),
+      transparent 26%
+    ),
+    linear-gradient(180deg, #eef5fe 0%, #e8eef6 100%);
+}
+
+.vm-blog-preview-grid {
+  width: min(1080px, 100%);
+  margin: 2.4rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.vm-blog-preview-card {
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 24px 58px rgba(15, 23, 42, 0.09);
+  transition:
+    transform 380ms ease,
+    box-shadow 380ms ease,
+    border-color 380ms ease;
+}
+
+.vm-blog-preview-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.28);
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.13);
+}
+
+.vm-blog-preview-image-link {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #dbeafe;
+}
+
+.vm-blog-preview-image-link img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 520ms ease;
+}
+
+.vm-blog-preview-card:hover .vm-blog-preview-image-link img {
+  transform: scale(1.045);
+}
+
+.vm-blog-preview-content {
+  padding: clamp(1.25rem, 2vw, 1.65rem);
+}
+
+.vm-blog-preview-category {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 0.85rem;
+  padding: 0.42rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vm-blog-preview-content h3 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 950;
+  line-height: 1.16;
+  letter-spacing: -0.035em;
+}
+
+.vm-blog-preview-content h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vm-blog-preview-content h3 a:hover {
+  color: #2563eb;
+}
+
+.vm-blog-preview-content p {
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.vm-blog-preview-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1.1rem;
+  color: #16a34a;
+  font-size: 0.95rem;
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.vm-blog-preview-link::after {
+  content: "→";
+  transition: transform 260ms ease;
+}
+
+.vm-blog-preview-link:hover {
+  color: #15803d;
+}
+
+.vm-blog-preview-link:hover::after {
+  transform: translateX(3px);
+}
+
+.vm-blog-preview-cta {
+  width: min(1080px, 100%);
+  margin: 2rem auto 0;
+  display: flex;
+  justify-content: center;
+}
+
+.vm-blog-preview-cta .btn {
+  min-height: 52px;
+  padding-inline: 1.45rem;
+  border-radius: 16px;
+  font-weight: 950;
+}
+
+@media (max-width: 767.98px) {
+  .vm-blog-preview-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .vm-blog-preview-content {
+    padding: 1.2rem;
+  }
+
+  .vm-blog-preview-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .vm-blog-preview-cta .btn {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
 /* ==========================================================================
    CARD DO CARROSSEL
    ========================================================================== */

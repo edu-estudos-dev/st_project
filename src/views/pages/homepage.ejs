@@ -900,25 +900,68 @@
       </section>
 
 
-      <%# ALTERAÇÃO: chamada discreta para o blog posicionada no fim da narrativa, sem competir com o CTA principal %>
-      <section class="vm-section vm-section-light vm-blog-support-section">
-        <div class="vm-blog-inline-cta">
-          <div class="vm-blog-inline-cta-copy">
-            <span class="vm-kicker">Conteúdo para operadores</span>
+      <%# =========================================================
+          SEÇÃO BLOG — ÚLTIMOS ARTIGOS
+          Renderiza automaticamente os artigos enviados pelo HomepageController
+          na variável postsRecentes.
+          ========================================================= %>
+      <% if (typeof postsRecentes !== 'undefined' && postsRecentes.length > 0) { %>
+        <section id="blog-preview" class="vm-section vm-section-light vm-blog-preview-section">
+          <div class="vm-section-heading">
+            <span class="vm-kicker">Leia no blog</span>
 
-            <h3>Conteúdos práticos para melhorar sua operação.</h3>
+            <h2 class="titulo-servicos">
+              Conteúdos para organizar melhor sua operação.
+            </h2>
 
-            <p>
-              Veja artigos sobre rotas, sangrias, controle financeiro, gestão de pontos e decisões do dia a dia de quem
-              trabalha com máquinas recreativas.
+            <p class="vm-subtext">
+              Veja dicas práticas sobre rotas, sangrias, controle financeiro e gestão de pontos
+              para operadores de máquinas recreativas.
             </p>
           </div>
 
-          <a href="/blog" class="vm-blog-inline-cta-link">
-            Acessar o blog
-          </a>
-        </div>
-      </section>
+          <div class="vm-blog-preview-grid <%= postsRecentes.length === 1 ? 'vm-blog-preview-grid-single' : '' %>">
+            <% postsRecentes.slice(0, 2).forEach((post) => { %>
+              <article class="vm-blog-preview-card">
+                <a href="/blog/<%= post.slug %>" class="vm-blog-preview-image-link">
+                  <img
+                    src="<%= post.imagem %>"
+                    width="640"
+                    height="420"
+                    alt="<%= post.titulo %>"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                </a>
+
+                <div class="vm-blog-preview-content">
+                  <span class="vm-blog-preview-category"><%= post.categoria %></span>
+
+                  <h3>
+                    <a href="/blog/<%= post.slug %>">
+                      <%= post.titulo %>
+                    </a>
+                  </h3>
+
+                  <p>
+                    <%= post.resumo %>
+                  </p>
+
+                  <a href="/blog/<%= post.slug %>" class="vm-blog-preview-link">
+                    Ler artigo
+                  </a>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+
+          <div class="vm-blog-preview-cta">
+            <a href="/blog" class="btn btn-primary btn-lg">
+              Ver todos os artigos
+            </a>
+          </div>
+        </section>
+      <% } %>
 
       <section id="faq" class="vm-section vm-section-light vm-faq-section">
         <div class="vm-section-heading">

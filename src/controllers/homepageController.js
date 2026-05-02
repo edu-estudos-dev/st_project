@@ -15,23 +15,23 @@ const homepageFaqJsonLd = {
             name: 'Preciso instalar aplicativo?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'N\u00e3o. O acesso \u00e9 feito pelo navegador, com login e senha.'
+                text: 'Não. O acesso é feito pelo navegador, com login e senha.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Serve para bolinhas, pel\u00facias e consignados?',
+            name: 'Serve para bolinhas, pelúcias e consignados?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Sim. Cada frente pode ter controles pr\u00f3prios, mantendo uma vis\u00e3o geral da opera\u00e7\u00e3o.'
+                text: 'Sim. Cada frente pode ter controles próprios, mantendo uma visão geral da operação.'
             }
         },
         {
             '@type': 'Question',
-            name: 'Consigo controlar comiss\u00e3o do parceiro?',
+            name: 'Consigo controlar comissão do parceiro?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Sim. O objetivo \u00e9 registrar vendido, reposto, comiss\u00e3o e valor l\u00edquido de forma clara para facilitar o acerto.'
+                text: 'Sim. O objetivo é registrar vendido, reposto, comissão e valor líquido de forma clara para facilitar o acerto.'
             }
         },
         {
@@ -39,7 +39,7 @@ const homepageFaqJsonLd = {
             name: 'Quanto custa?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Os planos come\u00e7am a partir de R$ 19,90 por m\u00eas por produto para opera\u00e7\u00f5es menores. A proposta final depende da quantidade de pontos e frentes utilizadas.'
+                text: 'Os planos começam a partir de R$ 19,90 por mês por produto para operações menores. A proposta final depende da quantidade de pontos e frentes utilizadas.'
             }
         },
         {
@@ -47,27 +47,39 @@ const homepageFaqJsonLd = {
             name: 'Em quanto tempo recebo retorno?',
             acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Respondemos em at\u00e9 24h, preferencialmente pelo WhatsApp informado no formul\u00e1rio.'
+                text: 'Respondemos em até 24h, preferencialmente pelo WhatsApp informado no formulário.'
             }
         }
     ]
 };
 
+const postsRecentes = [
+    {
+        titulo: 'Como organizar rota de máquinas recreativas sem depender do improviso',
+        slug: 'como-organizar-rota-maquinas-recreativas',
+        categoria: 'Rotas',
+        resumo: 'Entenda como priorizar pontos, reduzir deslocamentos desnecessários e criar uma rotina mais lucrativa.',
+        imagem: '/images/blog/capa-rota-maquinas-recreativas.webp'
+    }
+];
+
 class HomepageController {
     renderHomepage(req, res) {
         console.log('Renderizando pagina inicial');
+
         res.render('pages/homepage', {
-            title: 'Sistema de gest\u00e3o para m\u00e1quinas recreativas e consignados | VendMaster',
-            metaDescription: 'Sistema de gest\u00e3o para m\u00e1quinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comiss\u00f5es e financeiro.',
+            title: 'Sistema de gestão para máquinas recreativas e consignados | VendMaster',
+            metaDescription: 'Sistema de gestão para máquinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comissões e financeiro.',
             canonicalUrl: 'https://vendmaster.com.br/',
-            faqJsonLd: homepageFaqJsonLd
+            faqJsonLd: homepageFaqJsonLd,
+            postsRecentes
         });
     }
 
     renderPrivacyPolicy(req, res) {
         res.render('pages/legal/politicaDePrivacidade', {
-            title: 'Pol\u00edtica de Privacidade | VendMaster',
-            metaDescription: 'Entenda como o VendMaster trata dados enviados por formul\u00e1rios, contatos comerciais e uso do sistema.',
+            title: 'Política de Privacidade | VendMaster',
+            metaDescription: 'Entenda como o VendMaster trata dados enviados por formulários, contatos comerciais e uso do sistema.',
             canonicalUrl: 'https://vendmaster.com.br/politica-de-privacidade'
         });
     }
@@ -75,7 +87,7 @@ class HomepageController {
     renderTermsOfUse(req, res) {
         res.render('pages/legal/termosDeUso', {
             title: 'Termos de Uso | VendMaster',
-            metaDescription: 'Condi\u00e7\u00f5es gerais de uso do VendMaster, sistema de gest\u00e3o para m\u00e1quinas recreativas e consignados.',
+            metaDescription: 'Condições gerais de uso do VendMaster, sistema de gestão para máquinas recreativas e consignados.',
             canonicalUrl: 'https://vendmaster.com.br/termos-de-uso'
         });
     }
