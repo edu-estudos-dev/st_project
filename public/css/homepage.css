@@ -9,7 +9,6 @@
 /* ========================================================================== */
 
 .homepage-body {
-  outline: 8px solid red !important;
   background:
     radial-gradient(
       circle at 14% 8%,
@@ -164,10 +163,10 @@ html:has(.homepage-body) {
   gap: 1rem !important;
 }
 
-.vm-logo-link {
+.homepage-body .vm-logo-link {
   display: inline-flex !important;
   align-items: center !important;
-  flex: 0 0 auto !important;
+  flex: 0 1 auto !important;
   min-width: 0 !important;
 }
 
@@ -265,8 +264,9 @@ html:has(.homepage-body) {
   margin-left: auto;
   border: 1px solid rgba(37, 99, 235, 0.18);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.86);
   cursor: pointer;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
 .homepage-menu-toggle span {
@@ -292,11 +292,15 @@ html:has(.homepage-body) {
 }
 
 @media (max-width: 991.98px) {
+  html:has(.homepage-body) {
+    scroll-padding-top: 92px;
+  }
+
   .homepage-body .homepage-topbar {
     top: 0.65rem !important;
     width: min(100% - 1rem, 760px) !important;
     min-height: 68px !important;
-    padding: 0.62rem 0.72rem !important;
+    padding: 0.58rem 0.7rem !important;
     border-radius: 22px !important;
     display: flex !important;
     flex-direction: row !important;
@@ -305,13 +309,21 @@ html:has(.homepage-body) {
     flex-wrap: nowrap !important;
   }
 
+  .homepage-body .vm-logo-link {
+    order: 1 !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+  }
+
   .homepage-menu-toggle {
+    order: 2 !important;
     display: inline-flex !important;
+    margin-left: auto !important;
   }
 
   .homepage-body .homepage-nav {
     position: absolute !important;
-    top: calc(100% + 0.65rem) !important;
+    top: calc(100% + 0.62rem) !important;
     left: 0 !important;
     right: 0 !important;
     display: block !important;
@@ -319,18 +331,18 @@ html:has(.homepage-body) {
     overflow: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
-    border-radius: 22px !important;
-    border: 1px solid rgba(148, 163, 184, 0.2) !important;
-    background: rgba(248, 251, 255, 0.96) !important;
-    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.16) !important;
-    backdrop-filter: blur(16px) saturate(1.15) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(148, 163, 184, 0.26) !important;
+    background: rgba(248, 251, 255, 0.98) !important;
+    box-shadow: 0 24px 54px rgba(15, 23, 42, 0.22) !important;
+    backdrop-filter: blur(18px) saturate(1.12) !important;
     transition:
       max-height 0.28s ease,
       opacity 0.22s ease !important;
   }
 
   body.homepage-menu-open .homepage-nav {
-    max-height: 460px !important;
+    max-height: 520px !important;
     opacity: 1 !important;
     pointer-events: auto !important;
   }
@@ -339,9 +351,10 @@ html:has(.homepage-body) {
   .homepage-body .homepage-topbar nav ul {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 0.55rem !important;
+    gap: 0.5rem !important;
     width: 100% !important;
-    padding: 0.75rem !important;
+    margin: 0 !important;
+    padding: 0.9rem !important;
   }
 
   .homepage-body .homepage-nav li,
@@ -350,36 +363,40 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .homepage-nav li > a,
-  .homepage-body .homepage-topbar li > a,
+  .homepage-body .homepage-topbar li > a {
+    width: 100% !important;
+    min-height: 46px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.82rem 1rem !important;
+    border-radius: 16px !important;
+    font-size: 0.96rem !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    background: rgba(255, 255, 255, 0.88) !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(148, 163, 184, 0.18) !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045) !important;
+  }
+
   .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link,
   .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
     width: 100% !important;
-    min-height: 46px !important;
+    min-height: 50px !important;
+    display: flex !important;
+    align-items: center !important;
     justify-content: center !important;
-    padding: 0.78rem 0.9rem !important;
-    border-radius: 16px !important;
-    font-size: 0.92rem !important;
+    padding: 0.86rem 1rem !important;
+    border-radius: 18px !important;
+    font-size: 0.98rem !important;
+    font-weight: 950 !important;
     line-height: 1 !important;
     text-align: center !important;
-    background: rgba(255, 255, 255, 0.78) !important;
-    border: 1px solid rgba(148, 163, 184, 0.16) !important;
-  }
-
-  .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
-    background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
-    color: #fff !important;
     border: 0 !important;
-  }
-
-  .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
+    color: #fff !important;
     background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
-    color: #ffffff !important;
-    border-color: rgba(34, 197, 94, 0.45) !important;
-    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22) !important;
-  }
-
-  .homepage-body .vm-hero {
-    padding-top: 6.4rem !important;
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22) !important;
   }
 
   .vm-section-cta .vm-kicker {
@@ -396,7 +413,7 @@ html:has(.homepage-body) {
     width: calc(100% - 1rem) !important;
     max-width: none !important;
     min-height: 64px !important;
-    padding: 0.55rem 0.65rem !important;
+    padding: 0.52rem 0.62rem !important;
     border-radius: 20px !important;
   }
 
@@ -407,9 +424,36 @@ html:has(.homepage-body) {
   }
 
   .homepage-menu-toggle {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .homepage-body .homepage-nav {
+    border-radius: 22px !important;
+  }
+
+  .homepage-body .homepage-nav ul,
+  .homepage-body .homepage-topbar nav ul {
+    gap: 0.42rem !important;
+    padding: 0.78rem !important;
+  }
+
+  .homepage-body .homepage-nav li > a,
+  .homepage-body .homepage-topbar li > a {
+    min-height: 44px !important;
+    border-radius: 15px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link,
+  .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
+    min-height: 48px !important;
+    border-radius: 17px !important;
+  }
+
+  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n/**/+5) {
+    display: flex !important;
   }
 
   .homepage-body .vm-whatsapp-float span {
@@ -441,7 +485,7 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 .vm-hero {
-  min-height: auto;
+  min-height: 100svh;
   height: auto;
   display: flex;
   justify-content: center;
@@ -534,10 +578,6 @@ html:has(.homepage-body) {
   z-index: 1;
 }
 
-/* ========================================================================== */
-/* HERO — COLUNA ESQUERDA                                                      */
-/* ========================================================================== */
-
 .vm-hero-left {
   width: 100%;
   max-width: 560px;
@@ -546,6 +586,17 @@ html:has(.homepage-body) {
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
+}
+
+.vm-hero-right {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  padding-top: 0;
 }
 
 /* ========================================================================== */
@@ -604,113 +655,88 @@ html:has(.homepage-body) {
 /* HERO — DESCRIÇÃO                                                            */
 /* ========================================================================== */
 
-.vm-hero-description,
-.homepage-body .vm-hero .vm-hero-description,
-.homepage-body .vm-hero .vm-hero-left > .vm-hero-description {
-  width: 100% !important;
-  max-width: 45ch !important;
-  margin: 0 0 1.1rem !important;
-  color: #dbe7f7 !important;
-  opacity: 0.96 !important;
-  font-size: clamp(1.03rem, 1.05vw, 1.14rem) !important;
-  line-height: 1.72 !important;
-  letter-spacing: -0.012em !important;
+.vm-hero-description {
+  width: 100%;
+  max-width: 45ch;
+  margin: 0 0 1.1rem;
+  color: #dbe7f7;
+  opacity: 0.96;
+  font-size: clamp(1.03rem, 1.05vw, 1.14rem);
+  line-height: 1.72;
+  letter-spacing: -0.012em;
 }
 
 /* ========================================================================== */
 /* HERO — BOTÕES                                                               */
 /* ========================================================================== */
 
-.vm-hero-buttons,
-.homepage-body .vm-hero .vm-hero-buttons {
-  width: 100% !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 0.75rem !important;
-  margin-top: auto !important;
-  padding-top: 1rem !important;
+.vm-hero-buttons {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
-.vm-hero-buttons .btn,
-.homepage-body .vm-hero .vm-hero-buttons .btn {
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 52px !important;
-  padding: 0 1.35rem !important;
-  border-radius: 14px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 0.94rem !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
-  letter-spacing: -0.01em !important;
-  white-space: nowrap !important;
-  text-decoration: none !important;
+.vm-hero-buttons .btn {
+  width: auto;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 1.35rem;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.94rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
   transition:
     transform 520ms ease,
     background-color 650ms ease,
     border-color 650ms ease,
     color 520ms ease,
     box-shadow 650ms ease,
-    opacity 650ms ease !important;
+    opacity 650ms ease;
 }
 
-.vm-hero-buttons .btn-primary,
-.homepage-body .vm-hero .vm-hero-buttons .btn-primary {
-  min-width: 230px !important;
-  border: 0 !important;
-  color: #ffffff !important;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
-  box-shadow: 0 18px 34px rgba(34, 197, 94, 0.24) !important;
+.vm-hero-buttons .btn-primary {
+  min-width: 230px;
+  border: 0;
+  color: #ffffff;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 18px 34px rgba(34, 197, 94, 0.24);
 }
 
-.vm-hero-buttons .btn-primary:hover,
-.homepage-body .vm-hero .vm-hero-buttons .btn-primary:hover {
-  transform: translateY(-2px) !important;
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
-  box-shadow: 0 22px 40px rgba(34, 197, 94, 0.28) !important;
+.vm-hero-buttons .btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  box-shadow: 0 22px 40px rgba(34, 197, 94, 0.28);
 }
 
-.vm-hero-buttons .btn-outline-light,
-.vm-hero .btn-outline-light,
-.homepage-body .vm-hero .vm-hero-buttons .btn-outline-light {
-  min-width: 176px !important;
-  border: 1px solid rgba(203, 213, 225, 0.48) !important;
-  color: #f8fafc !important;
-  background: rgba(255, 255, 255, 0.045) !important;
+.vm-hero-buttons .btn-outline-light {
+  min-width: 176px;
+  border: 1px solid rgba(203, 213, 225, 0.48);
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.045);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 26px rgba(15, 23, 42, 0.12) !important;
+    0 12px 26px rgba(15, 23, 42, 0.12);
 }
 
-.vm-hero-buttons .btn-outline-light:hover,
-.vm-hero .btn-outline-light:hover,
-.homepage-body .vm-hero .vm-hero-buttons .btn-outline-light:hover {
-  transform: translateY(-2px) !important;
-  border-color: rgba(147, 197, 253, 0.78) !important;
-  color: #f8fafc !important;
-  background: rgba(147, 197, 253, 0.13) !important;
+.vm-hero-buttons .btn-outline-light:hover {
+  transform: translateY(-2px);
+  border-color: rgba(147, 197, 253, 0.78);
+  color: #f8fafc;
+  background: rgba(147, 197, 253, 0.13);
   box-shadow:
     0 16px 30px rgba(15, 23, 42, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-}
-
-/* ========================================================================== */
-/* HERO — COLUNA DIREITA                                                       */
-/* ========================================================================== */
-
-.vm-hero-right {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 1rem;
-  padding-top: 0;
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* ========================================================================== */
@@ -719,8 +745,8 @@ html:has(.homepage-body) {
 
 .vm-panel {
   width: 100%;
-  min-height: 500px;
-  padding: 1.5rem;
+  min-height: 530px;
+  padding: 1.75rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -747,9 +773,9 @@ html:has(.homepage-body) {
 .vm-panel-header strong {
   max-width: 14ch;
   color: #f8fafc;
-  font-size: 1.22rem;
+  font-size: 1.34rem;
   font-weight: 950;
-  line-height: 1.08;
+  line-height: 1.06;
 }
 
 .vm-live {
@@ -786,16 +812,16 @@ html:has(.homepage-body) {
 .vm-panel-metrics strong {
   display: block;
   color: #f8fafc;
-  font-size: 1.32rem;
+  font-size: 1.5rem;
   font-weight: 950;
   line-height: 1.05;
   text-align: center;
 }
 
 .vm-panel-metrics span {
-  margin-top: 0.3rem;
+  margin-top: 0.34rem;
   color: #dbeafe;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-align: center;
 }
@@ -811,8 +837,8 @@ html:has(.homepage-body) {
 }
 
 .vm-card-mini {
-  min-height: 118px;
-  padding: 0.95rem;
+  min-height: 132px;
+  padding: 1.05rem;
   border-radius: 16px;
   text-align: left;
   background: rgba(255, 255, 255, 0.08);
@@ -821,11 +847,11 @@ html:has(.homepage-body) {
 
 .vm-card-mini .tag {
   display: block;
-  margin-bottom: 0.34rem;
+  margin-bottom: 0.36rem;
   padding: 0;
   background: none;
   color: #93c5fd;
-  font-size: 0.66rem;
+  font-size: 0.74rem;
   font-weight: 900;
 }
 
@@ -839,61 +865,61 @@ html:has(.homepage-body) {
 
 .vm-card-mini strong {
   display: block;
-  margin-bottom: 0.42rem;
+  margin-bottom: 0.46rem;
   color: #f8fafc;
-  font-size: 0.94rem;
+  font-size: 1.16rem;
   font-weight: 950;
-  line-height: 1.15;
+  line-height: 1.18;
 }
 
 .vm-card-mini p {
   margin: 0;
   color: #dbeafe;
-  font-size: 0.74rem;
-  line-height: 1.42;
+  font-size: 0.96rem;
+  line-height: 1.6;
 }
 
 /* ========================================================================== */
 /* HERO — CAIXINHAS INFERIORES DO PAINEL                                       */
 /* ========================================================================== */
 
-.homepage-body .vm-hero .vm-hero-bottom-cards {
+.vm-hero-bottom-cards {
   width: 100%;
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 0.85rem !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 0;
+  padding-top: 0;
 }
 
-.homepage-body .vm-hero .vm-hero-mini-card {
-  min-height: 76px !important;
-  padding: 0.8rem 0.9rem !important;
-  border-radius: 16px !important;
-  text-align: left !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(147, 197, 253, 0.22) !important;
-  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.16) !important;
+.vm-hero-mini-card {
+  min-height: 76px;
+  padding: 0.8rem 0.9rem;
+  border-radius: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(147, 197, 253, 0.22);
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.16);
 }
 
-.homepage-body .vm-hero .vm-hero-mini-card strong {
-  display: block !important;
-  margin: 0 0 0.24rem !important;
-  color: #f8fafc !important;
-  font-size: 0.8rem !important;
-  font-weight: 900 !important;
-  line-height: 1.1 !important;
+.vm-hero-mini-card strong {
+  display: block;
+  margin: 0 0 0.28rem;
+  color: #f8fafc;
+  font-size: 0.92rem;
+  font-weight: 900;
+  line-height: 1.12;
 }
 
-.homepage-body .vm-hero .vm-hero-mini-card span {
-  display: block !important;
-  margin: 0 !important;
-  color: #cbd5e1 !important;
-  font-size: 0.72rem !important;
-  line-height: 1.32 !important;
+.vm-hero-mini-card span {
+  display: block;
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  line-height: 1.38;
 }
 
 /* ========================================================================== */
@@ -901,21 +927,20 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 @media (max-width: 1199.98px) {
-  .homepage-body .vm-hero-container {
-    align-items: stretch !important;
+  .vm-hero-container {
+    align-items: stretch;
   }
 
-  .homepage-body .vm-hero-left,
-  .homepage-body .vm-hero-right {
-    height: auto !important;
-    align-self: stretch !important;
+  .vm-hero-left,
+  .vm-hero-right {
+    height: auto;
+    align-self: stretch;
   }
 
-  .homepage-body .vm-hero-buttons,
-  .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: auto !important;
-    justify-content: flex-start !important;
-    padding-top: 1rem !important;
+  .vm-hero-buttons {
+    margin-top: auto;
+    justify-content: flex-start;
+    padding-top: 1rem;
   }
 }
 
@@ -957,20 +982,17 @@ html:has(.homepage-body) {
     line-height: 1.02;
   }
 
-  .vm-hero-description,
-  .homepage-body .vm-hero .vm-hero-description,
-  .homepage-body .vm-hero .vm-hero-left > .vm-hero-description {
-    max-width: 58ch !important;
-    font-size: 0.98rem !important;
-    line-height: 1.58 !important;
-    text-align: center !important;
+  .vm-hero-description {
+    max-width: 58ch;
+    font-size: 0.98rem;
+    line-height: 1.58;
+    text-align: center;
   }
 
-  .vm-hero-buttons,
-  .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: 1rem !important;
-    justify-content: center !important;
-    padding-top: 0 !important;
+  .vm-hero-buttons {
+    margin-top: 1rem;
+    justify-content: center;
+    padding-top: 0;
   }
 
   .vm-hero-right {
@@ -981,8 +1003,8 @@ html:has(.homepage-body) {
     min-height: auto;
   }
 
-  .homepage-body .vm-hero .vm-hero-bottom-cards {
-    margin-top: 0 !important;
+  .vm-hero-bottom-cards {
+    margin-top: 0;
   }
 }
 
@@ -992,81 +1014,172 @@ html:has(.homepage-body) {
 
 @media (max-width: 575.98px) {
   .vm-hero {
-    padding: 7rem 0.75rem 2rem;
+    min-height: auto;
+    padding: 6.4rem 0.75rem 2.25rem;
     align-items: flex-start;
   }
 
-  .vm-hero-container {
-    padding: 1.3rem;
-    border-radius: 22px;
-    transform: none;
-  }
+ .vm-hero-container {
+  padding: 1.1rem 0.9rem 1rem;
+  border-radius: 22px;
+  transform: none;
+  gap: 1.25rem;
+}
 
-  .vm-hero-badge {
-    max-width: 100%;
-    padding: 0.58rem 1rem;
-    font-size: 0.6rem;
-    line-height: 1.2;
+  .vm-hero-left {
+    align-items: center;
+    text-align: center;
   }
 
   .vm-hero-title {
     max-width: 12.5ch;
-    font-size: clamp(2rem, 10vw, 2.65rem);
-    line-height: 1.03;
-    letter-spacing: -0.05em;
+    margin-bottom: 1rem;
+    font-size: clamp(2.35rem, 11.2vw, 2.85rem);
+    line-height: 1.02;
+    letter-spacing: -0.055em;
   }
 
-  .vm-hero-description,
-  .homepage-body .vm-hero .vm-hero-description,
-  .homepage-body .vm-hero .vm-hero-left > .vm-hero-description {
-    max-width: 34ch !important;
-    font-size: 0.92rem !important;
-    line-height: 1.5 !important;
-    text-align: center !important;
+  .vm-hero-title .text-accent {
+    display: block;
+    width: 9.8ch;
+    max-width: 9.8ch;
+    margin: 0.18rem auto 0;
   }
 
-  .vm-hero-buttons,
-  .homepage-body .vm-hero .vm-hero-buttons {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
-    margin-top: 1rem !important;
-    padding-top: 0 !important;
+  .vm-hero-badge {
+    width: min(100%, 17.5rem);
+    max-width: 100%;
+    margin: 0.9rem 0 1.2rem;
+    padding: 0.78rem 1.05rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    line-height: 1.22;
+    letter-spacing: 0.04em;
+  }
+
+  .vm-hero-badge span {
+    display: none;
+  }
+
+  .vm-hero-badge::before {
+    content: 'Gestão para máquinas recreativas\A Por operador, para operadores';
+    display: block;
+    white-space: pre-line;
+  }
+
+  .vm-hero-description {
+    max-width: 31ch;
+    margin-bottom: 1.35rem;
+    font-size: 1rem;
+    line-height: 1.62;
+    text-align: center;
+    letter-spacing: -0.018em;
+  }
+
+  .vm-hero-buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .vm-hero-buttons .btn,
-  .homepage-body .vm-hero .vm-hero-buttons .btn,
   .vm-hero-buttons .btn-primary,
-  .homepage-body .vm-hero .vm-hero-buttons .btn-primary,
-  .vm-hero-buttons .btn-outline-light,
-  .homepage-body .vm-hero .vm-hero-buttons .btn-outline-light {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 54px !important;
-    padding: 0 1rem !important;
-    font-size: 0.94rem !important;
-    white-space: normal !important;
-    text-align: center !important;
-    line-height: 1.15 !important;
+  .vm-hero-buttons .btn-outline-light {
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    padding: 0 1rem;
+    font-size: 0.94rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.15;
   }
 
-  .vm-panel {
-    padding: 1rem;
+ .vm-panel {
+  padding: 0.8rem;
+  border-radius: 20px;
+  max-width: 100%;
+  overflow: hidden;
+  min-height: auto;
+}
+
+.vm-panel-header {
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0.7rem;
+  flex-direction: column;
+  text-align: center;
+}
+
+  .vm-panel-header strong {
+    max-width: 100%;
+    font-size: 1.08rem;
+    line-height: 1.15;
+    text-align: center;
   }
 
-  .vm-panel-header {
-    flex-direction: column;
+  .vm-live {
+    display: none;
   }
 
-  .vm-panel-metrics,
-  .vm-panel-cards,
-  .homepage-body .vm-hero .vm-hero-bottom-cards {
-    grid-template-columns: 1fr !important;
+ .vm-panel-metrics {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-bottom: 0.65rem;
+}
+
+  .vm-panel-metrics div:nth-child(2),
+  .vm-panel-metrics div:nth-child(3) {
+    display: none;
   }
 
-  .homepage-body .vm-hero .vm-hero-mini-card {
-    min-height: 82px !important;
+ .vm-panel-metrics div:first-child {
+  min-height: 74px;
+  padding: 0.8rem;
+}
+
+  .vm-panel-metrics div:first-child strong {
+    font-size: 1.45rem;
+  }
+
+  .vm-panel-metrics div:first-child span {
+    font-size: 0.9rem;
+  }
+
+  .vm-panel-cards {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .vm-panel-cards .vm-card-mini:not(.vm-card-alert) {
+    display: none;
+  }
+
+ .vm-card-alert {
+  min-height: auto;
+  padding: 0.85rem;
+}
+
+  .vm-card-alert .tag {
+    font-size: 0.78rem;
+  }
+
+  .vm-card-alert strong {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .vm-card-alert p {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .vm-hero-bottom-cards {
+    display: none;
   }
 }
 
@@ -1362,11 +1475,6 @@ html:has(.homepage-body) {
   color: #64748b;
   font-size: 0.95rem;
   line-height: 1.55;
-}
-
-.homepage-body .vm-card-mini p {
-  font-size: clamp(1rem, 0.95vw, 1.08rem) !important;
-  line-height: 1.68 !important;
 }
 
 .homepage-body .vm-before-after li {
@@ -4662,11 +4770,6 @@ html:has(.homepage-body) {
   color: rgba(226, 232, 240, 0.9) !important;
 }
 
-.homepage-body section:not(.vm-hero) {
-  padding-top: clamp(4rem, 6vw, 6rem) !important;
-  padding-bottom: clamp(4rem, 6vw, 6rem) !important;
-}
-
 /* ========================================================================== */
 /* 07.7 — OVERRIDE FINAL DO DASHBOARD                                          */
 /* Garante que regras globais de seção e parágrafo não aumentem o padding.     */
@@ -4694,50 +4797,6 @@ html:has(.homepage-body) {
 /* 18 — RESPONSIVO GERAL / TABLET                                              */
 /* ========================================================================== */
 @media (max-width: 991.98px) {
-  .vm-hero {
-    padding: 8.8rem 1rem 3rem !important;
-  }
-
-  .vm-hero-container {
-    min-height: auto;
-    grid-template-columns: 1fr;
-    padding: 2rem;
-    gap: 2.2rem;
-  }
-
-  .vm-hero-left {
-    max-width: 100%;
-    align-items: center;
-    text-align: center;
-    height: auto;
-  }
-
-  .vm-hero-title {
-    max-width: 12ch;
-    font-size: clamp(2.45rem, 9vw, 3.5rem) !important;
-    line-height: 1 !important;
-  }
-
-  .vm-hero-description {
-    max-width: 58ch !important;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 0.95rem !important;
-    line-height: 1.55 !important;
-  }
-
-  .vm-hero-buttons,
-  .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: 0 !important;
-    justify-content: center !important;
-    padding-top: 1rem !important;
-  }
-
-  .vm-panel {
-    min-height: auto !important;
-    max-width: 100%;
-  }
-
   .vm-modules-grid {
     grid-template-columns: 1fr;
   }
@@ -4754,19 +4813,6 @@ html:has(.homepage-body) {
     min-height: auto !important;
   }
 
-  .homepage-topbar {
-    position: static;
-    transform: none;
-    width: calc(100% - 1.5rem) !important;
-    margin: 0.75rem auto 0;
-    border-radius: 24px !important;
-  }
-
-  .homepage-body .vm-hero {
-    padding: 8.8rem 1rem 4rem !important;
-    min-height: auto !important;
-  }
-
   .homepage-body .vm-section {
     padding: 56px 0;
   }
@@ -4774,27 +4820,6 @@ html:has(.homepage-body) {
   .homepage-body .vm-contact-form {
     width: calc(100% - 1rem);
     padding: 2rem 1.4rem;
-  }
-
-  .homepage-body .vm-hero-container {
-    width: min(760px, calc(100% - 1rem)) !important;
-    padding: 1.6rem !important;
-    grid-template-columns: 1fr !important;
-    gap: 2rem !important;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-hero-buttons {
-    grid-template-columns: 1fr;
-    flex-direction: column;
-    gap: 1.15rem;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    justify-content: center !important;
-  }
-
-  .homepage-body .vm-panel-cards {
-    grid-template-columns: 1fr;
   }
 
   .homepage-body .vm-pains-grid {
@@ -4823,66 +4848,6 @@ html:has(.homepage-body) {
     gap: 2rem;
   }
 
-  .homepage-body .vm-hero-right {
-    max-width: 720px !important;
-    min-height: auto !important;
-    justify-self: center !important;
-    text-align: center !important;
-  }
-  .vm-hero-right {
-    height: auto;
-    padding-top: 0;
-  }
-
-  .homepage-body .vm-hero-left {
-    max-width: 720px !important;
-    min-height: auto !important;
-    justify-self: center !important;
-    text-align: center !important;
-    align-items: center !important;
-  }
-
-  .homepage-body .vm-hero-badge {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    justify-content: center !important;
-  }
-
-  .homepage-body .vm-hero-title {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    max-width: 13ch !important;
-    font-size: clamp(2.9rem, 8vw, 4.1rem) !important;
-  }
-
-  .homepage-body .vm-hero-description {
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .homepage-body .vm-hero-bottom-cards {
-    max-width: 560px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .vm-hero-bottom-cards {
-    margin-top: 0;
-  }
-
-  .homepage-body .vm-hero-right .vm-hero-trust {
-    max-width: 560px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .homepage-body .vm-panel {
-    max-width: 560px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    min-height: auto !important;
-  }
-
   .homepage-body .vm-modules-grid-visible {
     grid-template-columns: 1fr !important;
   }
@@ -4899,97 +4864,11 @@ html:has(.homepage-body) {
     grid-template-columns: 1fr !important;
     width: min(100% - 2rem, 720px) !important;
   }
-
-  .homepage-body .homepage-topbar {
-    width: calc(100% - 1.5rem) !important;
-    border-radius: 24px !important;
-  }
-
-  .homepage-body .vm-hero .vm-hero-description {
-    max-width: 58ch !important;
-    font-size: 0.95rem !important;
-    line-height: 1.55 !important;
-  }
 }
 
 /* ========================================================================== */
 /* 19 — RESPONSIVO GERAL / MOBILE                                              */
 /* ========================================================================== */
-@media (max-width: 575.98px) {
-  .vm-hero {
-    padding: 8.2rem 0.75rem 2rem !important;
-  }
-
-  .vm-hero-container {
-    padding: 1.3rem !important;
-    border-radius: 22px !important;
-  }
-
-  .vm-hero-badge {
-    font-size: 0.62rem;
-  }
-
-  .vm-hero-title {
-    max-width: 11ch !important;
-    font-size: clamp(2.15rem, 11vw, 3rem) !important;
-    line-height: 1 !important;
-  }
-
-  .vm-hero-description {
-    font-size: 0.9rem !important;
-    line-height: 1.5 !important;
-  }
-
-  .vm-hero-buttons {
-    width: 100% !important;
-  }
-
-  .vm-hero-buttons .btn {
-    width: 100% !important;
-  }
-
-  .vm-panel {
-    padding: 1rem;
-  }
-
-  .vm-panel-header {
-    flex-direction: column;
-  }
-
-  .vm-panel-metrics {
-    grid-template-columns: 1fr !important;
-  }
-
-  .vm-panel-cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .vm-hero-bottom-cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .homepage-topbar {
-    top: 0.75rem !important;
-    width: calc(100% - 1rem) !important;
-    padding: 0.75rem 0.85rem !important;
-  }
-
-  .homepage-topbar {
-    top: 0.75rem !important;
-    width: calc(100% - 1rem) !important;
-    padding: 0.75rem 0.85rem !important;
-  }
-
-  .homepage-body .vm-hero {
-    padding: 8.2rem 0.75rem 2rem !important;
-  }
-
-  .homepage-body .vm-hero .vm-hero-description {
-    font-size: 0.96rem !important;
-    line-height: 1.55 !important;
-    max-width: 45ch;
-  }
-}
 
 /* ========================================================================== */
 /* @media (max-width: 992px) */
@@ -5068,82 +4947,6 @@ html:has(.homepage-body) {
 /* @media (max-width: 767.98px) */
 /* ========================================================================== */
 @media (max-width: 767.98px) {
-  .homepage-topbar {
-    position: fixed;
-    top: 0.75rem;
-    width: calc(100% - 1rem);
-    padding: 0.8rem 0.85rem 0.9rem;
-    border-radius: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    align-items: stretch;
-  }
-
-  .homepage-topbar nav {
-    width: 100%;
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .homepage-topbar nav ul {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    justify-content: center;
-    align-items: center;
-    gap: 0.45rem;
-    width: 100%;
-    padding: 0;
-    margin-top: 0.35rem;
-  }
-
-  .homepage-topbar nav li:last-child {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    margin-top: 0.05rem;
-  }
-
-  .homepage-topbar nav a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 34px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .homepage-login-link {
-    min-height: 40px;
-    min-width: 122px;
-    padding: 0.58rem 1rem;
-    border-radius: 999px;
-    background: linear-gradient(
-      135deg,
-      var(--home-blue) 0%,
-      #1d4ed8 100%
-    ) !important;
-    color: #ffffff !important;
-    border-color: transparent !important;
-  }
-
-  .vm-hero {
-    padding: 8.4rem 0.75rem 2.5rem !important;
-  }
-
-  .vm-hero-card {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
-  .vm-hero-metrics {
-    grid-template-columns: 1fr;
-    gap: 0.55rem;
-  }
-
   .vm-mini-card {
     min-height: 160px;
     padding: 1.25rem 1.15rem;
@@ -5156,10 +4959,6 @@ html:has(.homepage-body) {
   .vm-mini-card span {
     font-size: 1.12rem;
     line-height: 1.5;
-  }
-
-  .vm-hero-copy h2 {
-    max-width: none;
   }
 
   .vm-radio-card {
@@ -5294,35 +5093,6 @@ html:has(.homepage-body) {
     padding: 1.5rem 1rem;
   }
 
-  .homepage-body .vm-hero {
-    padding: 8.4rem 0.75rem 2.5rem !important;
-  }
-
-  .homepage-body .vm-hero-container {
-    padding: 1.15rem !important;
-    gap: 1.15rem;
-    border-radius: 24px !important;
-    max-width: 100%;
-  }
-
-  .homepage-body .vm-hero-title {
-    font-size: clamp(2.45rem, 10vw, 3.35rem) !important;
-    max-width: 12.5ch !important;
-    margin: 0.9rem 0 0.7rem;
-    margin-inline: 0;
-    text-align: left;
-    line-height: 0.92;
-    letter-spacing: 0;
-  }
-
-  .homepage-body .vm-hero-buttons {
-    flex-direction: column;
-    gap: 0.65rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    margin: 0;
-  }
-
   .homepage-body .vm-products-section .vm-product-card {
     padding: 1.35rem !important;
     min-height: auto !important;
@@ -5389,20 +5159,6 @@ html:has(.homepage-body) {
     line-height: 1.68;
   }
 
-  .homepage-body .vm-hero-description {
-    font-size: 1.1rem;
-    line-height: 1.68 !important;
-    max-width: 100%;
-    margin: 0 0 0.75rem;
-    margin-inline: 0;
-    text-align: left !important;
-  }
-
-  .homepage-body .vm-card-mini p {
-    font-size: 1.02rem !important;
-    line-height: 1.65 !important;
-  }
-
   .homepage-body .vm-before-after li {
     font-size: 1.02rem !important;
     line-height: 1.65 !important;
@@ -5430,60 +5186,6 @@ html:has(.homepage-body) {
 
   .homepage-body * {
     box-sizing: border-box;
-  }
-
-  .homepage-body .vm-hero-left {
-    text-align: left;
-    align-items: flex-start;
-  }
-
-  .homepage-body .vm-hero-badge {
-    margin-inline: 0;
-    font-size: 0.68rem;
-    padding: 0.34rem 0.72rem;
-    line-height: 1.18;
-    max-width: 32ch;
-    white-space: normal;
-    overflow-wrap: normal;
-  }
-
-  .homepage-topbar .vm-logo-link {
-    align-self: flex-start;
-  }
-
-  .homepage-body .img-logo {
-    height: 42px;
-  }
-
-  .homepage-topbar li {
-    width: 100%;
-  }
-
-  .homepage-topbar li > a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 36px;
-    width: 100%;
-    padding: 0.52rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(148, 163, 184, 0.16);
-  }
-
-  .homepage-topbar .homepage-login-item {
-    display: block;
-    width: 100%;
-  }
-
-  .homepage-topbar .homepage-login-item .homepage-login-link {
-    width: 100%;
-    min-height: 40px;
-    justify-content: center;
-    padding-inline: 1rem;
   }
 
   .homepage-body .vm-section {
@@ -5661,70 +5363,6 @@ html:has(.homepage-body) {
     font-size: 0.7rem;
   }
 
-  .homepage-body .vm-hero-buttons .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 56px;
-    height: 100%;
-    padding: 0.8rem 0.7rem;
-    font-size: 0.88rem;
-    line-height: 1.2;
-    text-align: center;
-    border-radius: 14px;
-    min-width: 0;
-    overflow-wrap: anywhere;
-    white-space: normal;
-  }
-
-  .homepage-body .vm-panel {
-    padding: 1rem !important;
-    border-radius: 22px !important;
-    max-width: 100% !important;
-    overflow: hidden;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-panel-header {
-    display: flex;
-    align-items: flex-start !important;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 0.9rem;
-    flex-direction: column !important;
-  }
-
-  .homepage-body .vm-panel-header strong {
-    font-size: 1.05rem;
-  }
-
-  .homepage-body .vm-live {
-    font-size: 0.82rem;
-    white-space: normal;
-    text-align: right;
-  }
-
-  .homepage-body .vm-panel-metrics {
-    grid-template-columns: 1fr !important;
-    gap: 0.58rem !important;
-  }
-
-  .homepage-body .vm-panel-metrics div {
-    padding: 0.95rem 0.75rem;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-panel-metrics strong {
-    font-size: 1.1rem;
-    line-height: 1.1;
-  }
-
-  .homepage-body .vm-panel-metrics span {
-    font-size: 0.82rem;
-    line-height: 1.3;
-  }
-
   .homepage-body .vm-module-card {
     min-height: auto;
     padding: 1.3rem;
@@ -5866,22 +5504,6 @@ html:has(.homepage-body) {
     padding-right: 1rem !important;
   }
 
-  .homepage-body .vm-panel-cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .vm-hero-bottom-cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .vm-hero-right .vm-hero-trust {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .vm-card-mini {
-    min-height: auto !important;
-  }
-
   .homepage-body .vm-product-grid {
     grid-template-columns: 1fr !important;
   }
@@ -5901,14 +5523,6 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-proof-author {
     justify-content: center !important;
-  }
-
-  .homepage-body .vm-hero-mini-card {
-    min-height: 84px;
-  }
-
-  .homepage-body .vm-hero-right .vm-hero-trust > div {
-    min-height: auto !important;
   }
 }
 
@@ -5971,10 +5585,6 @@ html:has(.homepage-body) {
 /* @media (max-width: 1199.98px) */
 /* ========================================================================== */
 @media (max-width: 1199.98px) {
-  .vm-hero {
-    padding-top: 120px;
-  }
-
   .vm-modules-wrapper {
     padding: 3rem 2rem;
   }
@@ -5985,11 +5595,6 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-proof-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .homepage-body .vm-hero-container {
-    grid-template-columns: 1fr;
-    gap: 1.8rem;
   }
 
   .homepage-body .vm-product-grid {
@@ -6014,61 +5619,11 @@ html:has(.homepage-body) {
     overflow-x: hidden;
   }
 
-  .homepage-body .vm-hero-left {
-    text-align: left;
-    align-items: flex-start;
-  }
-
-  .homepage-body .vm-hero-badge {
-    font-size: 0.6rem;
-    padding: 0.28rem 0.6rem;
-    line-height: 1.14;
-    letter-spacing: 0.07em;
-  }
-
-  .homepage-body .vm-hero {
-    padding: 1.1rem 0 2.5rem;
-  }
-
-  .homepage-body .vm-hero-container {
-    width: calc(100% - 0.75rem);
-    max-width: 100%;
-  }
-
   .homepage-body .vm-contact-form {
     width: calc(100% - 0.75rem);
     max-width: 100%;
     padding: 1.3rem 0.85rem 1.05rem;
     border-radius: 18px;
-  }
-
-  .homepage-topbar {
-    width: calc(100% - 0.75rem);
-    gap: 0.62rem;
-    padding: 0.76rem 0.72rem 0.82rem;
-    border-radius: 18px;
-    max-width: 100%;
-  }
-
-  .homepage-body .img-logo {
-    height: 36px;
-  }
-
-  .homepage-topbar nav ul {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.36rem;
-  }
-
-  .homepage-topbar li > a {
-    min-height: 34px;
-    padding: 0.46rem 0.42rem;
-    font-size: 0.64rem;
-  }
-
-  .homepage-login-link {
-    min-height: 36px;
-    padding: 0.5rem 0.9rem;
-    font-size: 0.82rem;
   }
 
   .homepage-body .vm-section {
@@ -6152,68 +5707,6 @@ html:has(.homepage-body) {
   .homepage-body .vm-modules-subtitle {
     font-size: 1.04rem;
     line-height: 1.66;
-  }
-
-  .homepage-body .vm-hero-title {
-    font-size: clamp(2.8rem, 10.8vw, 3.2rem);
-    max-width: 100%;
-    margin: 0.78rem 0 0.62rem;
-    margin-inline: 0;
-    text-align: left;
-    line-height: 0.91;
-    letter-spacing: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .homepage-body .vm-hero-description {
-    font-size: 1.08rem;
-    line-height: 1.7;
-    max-width: 100%;
-    margin: 0 0 0.75rem;
-    margin-inline: 0;
-    text-align: left !important;
-    overflow-wrap: anywhere;
-  }
-
-  .homepage-body .vm-hero-buttons {
-    grid-template-columns: 1fr;
-    margin-top: 0;
-    gap: 0.55rem;
-  }
-
-  .homepage-body .vm-hero-buttons .btn {
-    min-height: 48px;
-    padding: 0.82rem 0.9rem;
-    font-size: 0.92rem;
-    line-height: 1.18;
-  }
-
-  .homepage-body .vm-panel {
-    padding: 1.1rem;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .homepage-body .vm-panel-header strong {
-    font-size: 0.98rem;
-  }
-
-  .homepage-body .vm-live {
-    font-size: 0.76rem;
-  }
-
-  .homepage-body .vm-panel-metrics div {
-    min-height: 98px;
-    padding: 0.85rem 0.55rem;
-    border-radius: 16px;
-  }
-
-  .homepage-body .vm-panel-metrics strong {
-    font-size: 0.96rem;
-  }
-
-  .homepage-body .vm-panel-metrics span {
-    font-size: 0.76rem;
   }
 
   .homepage-body .vm-pain-card {
@@ -6405,359 +5898,10 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 /* @media (max-width: 1100px) */
 /* ========================================================================== */
-@media (max-width: 1100px) {
-  .homepage-body .vm-hero-container {
-    gap: 1.75rem !important;
-    padding: 2.4rem !important;
-  }
-
-  .homepage-body .vm-hero-title {
-    font-size: clamp(2.85rem, 4.55vw, 3.8rem) !important;
-  }
-
-  .homepage-body .vm-panel {
-    max-width: 480px !important;
-  }
-
-  .homepage-body .vm-card-mini {
-    min-height: 120px !important;
-  }
-}
 
 /* ========================================================================== */
 /* @media (max-width: 1180px) */
 /* ========================================================================== */
-@media (max-width: 1180px) {
-  .homepage-body .homepage-topbar {
-    width: min(1060px, calc(100% - 1.5rem)) !important;
-  }
-
-  .homepage-body .vm-hero-container {
-    width: min(1060px, calc(100% - 1.5rem)) !important;
-    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr) !important;
-    gap: 2.3rem !important;
-    min-height: 720px !important;
-  }
-
-  .homepage-body .vm-hero-title {
-    font-size: clamp(3.45rem, 5.4vw, 4.65rem) !important;
-  }
-}
-
-/* ========================================================================== */
-/* 99 — AJUSTES FINAIS / CORREÇÕES DE CONFLITO                                */
-/* ========================================================================== */
-
-.homepage-body .homepage-topbar {
-  border-radius: 26px !important;
-}
-
-/* Botão Entrar consolidado: mantém destaque no estado normal e no hover. */
-.homepage-body .homepage-login-link,
-.homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 44px !important;
-  padding: 0.72rem 1.25rem !important;
-  border-radius: 16px !important;
-  white-space: nowrap !important;
-  border: 1px solid rgba(34, 197, 94, 0.45) !important;
-  background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.01em !important;
-  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.24) !important;
-}
-
-.homepage-body .homepage-login-link:hover,
-.homepage-body
-  .homepage-topbar
-  .homepage-login-item
-  .homepage-login-link:hover {
-  transform: translateY(-1px) !important;
-  border-color: rgba(34, 197, 94, 0.7) !important;
-  background: linear-gradient(135deg, #1d4ed8 0%, #15803d 100%) !important;
-  color: #ffffff !important;
-  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.32) !important;
-}
-
-.homepage-body .homepage-login-link:focus-visible,
-.homepage-body
-  .homepage-topbar
-  .homepage-login-item
-  .homepage-login-link:focus-visible {
-  outline: 3px solid rgba(34, 197, 94, 0.35) !important;
-  outline-offset: 3px !important;
-}
-
-.homepage-body .vm-hero {
-  padding-top: 6.9rem !important;
-}
-
-.homepage-body .vm-hero-container {
-  align-items: start !important;
-}
-
-.homepage-body .vm-hero-right {
-  padding-top: 0 !important;
-  justify-content: flex-start !important;
-}
-
-.homepage-body .vm-hero .vm-hero-description {
-  font-size: 0.96rem !important;
-  line-height: 1.55 !important;
-  max-width: 45ch !important;
-}
-
-.homepage-body .vm-hero-buttons .btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-}
-
-.homepage-body .vm-hero .vm-hero-bottom-cards {
-  width: 100% !important;
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 0.85rem !important;
-  margin-top: 1rem !important;
-}
-
-.homepage-body .vm-hero .vm-hero-mini-card {
-  min-height: 88px !important;
-  padding: 0.9rem 0.95rem !important;
-  border-radius: 16px !important;
-  text-align: left !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(147, 197, 253, 0.22) !important;
-  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.16) !important;
-}
-
-.homepage-body .vm-hero .vm-hero-mini-card strong {
-  display: block !important;
-  margin: 0 0 0.3rem !important;
-  color: #f8fafc !important;
-  font-size: 0.82rem !important;
-  font-weight: 900 !important;
-  line-height: 1.1 !important;
-}
-
-.homepage-body .vm-hero .vm-hero-mini-card span {
-  display: block !important;
-  margin: 0 !important;
-  color: #cbd5e1 !important;
-  font-size: 0.74rem !important;
-  line-height: 1.35 !important;
-}
-
-@media (max-width: 1199.98px) {
-  .homepage-body .vm-hero-container {
-    grid-template-columns: 1fr !important;
-    min-height: auto !important;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .homepage-body .vm-hero {
-    padding-top: 8.4rem !important;
-  }
-
-  .homepage-body .vm-hero-container {
-    width: min(760px, calc(100% - 1rem)) !important;
-    grid-template-columns: 1fr !important;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-hero-left,
-  .homepage-body .vm-hero-right {
-    max-width: 720px !important;
-    height: auto !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .homepage-body .vm-hero .vm-hero-bottom-cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .vm-hero .vm-hero-mini-card {
-    min-height: 84px !important;
-  }
-}
-
-/* ========================================================================== */
-/* Mobile UX cleanup - homepage                                                */
-/* ========================================================================== */
-@media (max-width: 767.98px) {
-  .homepage-body .homepage-topbar {
-    width: min(100% - 1rem, 390px) !important;
-    padding: 0.78rem !important;
-    gap: 0.7rem !important;
-    border-radius: 22px !important;
-  }
-
-  .homepage-body .homepage-topbar nav,
-  .homepage-body .homepage-topbar nav ul {
-    width: 100% !important;
-  }
-
-  .homepage-body .homepage-topbar nav ul {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 0.42rem !important;
-  }
-
-  .homepage-body .homepage-topbar li,
-  .homepage-body .homepage-topbar li > a {
-    min-width: 0 !important;
-  }
-
-  .homepage-body .homepage-topbar li > a {
-    min-height: 34px !important;
-    padding: 0.48rem 0.4rem !important;
-    font-size: 0.66rem !important;
-    line-height: 1 !important;
-  }
-
-  .homepage-body .homepage-topbar .homepage-login-item {
-    grid-column: 1 / -1 !important;
-  }
-
-  .homepage-body .homepage-login-link,
-  .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
-    min-height: 38px !important;
-    padding: 0.62rem 0.9rem !important;
-    font-size: 0.74rem !important;
-    background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
-    color: #ffffff !important;
-    border-color: rgba(34, 197, 94, 0.45) !important;
-    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22) !important;
-  }
-
-  .homepage-body .vm-hero {
-    padding: 8.25rem 0.75rem 2rem !important;
-  }
-
-  .homepage-body .vm-hero-container {
-    width: 100% !important;
-    min-height: auto !important;
-    padding: 1.05rem !important;
-    gap: 1.25rem !important;
-    border-radius: 22px !important;
-  }
-
-  .homepage-body .vm-hero-left {
-    gap: 0.72rem !important;
-  }
-
-  .homepage-body .vm-hero-title {
-    max-width: 10.8ch !important;
-    margin: 0.35rem 0 0 !important;
-    font-size: clamp(2.3rem, 12.2vw, 3.05rem) !important;
-    line-height: 1.02 !important;
-    letter-spacing: 0 !important;
-    text-wrap: balance !important;
-  }
-
-  .homepage-body .vm-hero-title .text-accent {
-    max-width: 11.4ch !important;
-    margin-top: 0.22rem !important;
-    line-height: 1.02 !important;
-  }
-
-  .homepage-body .vm-hero-description {
-    max-width: 30ch !important;
-    font-size: 0.94rem !important;
-    line-height: 1.5 !important;
-  }
-
-  .homepage-body .vm-panel {
-    padding: 0.95rem !important;
-    border-radius: 18px !important;
-  }
-
-  .homepage-body .vm-panel-metrics div,
-  .homepage-body .vm-card-mini {
-    min-height: auto !important;
-    padding: 0.82rem !important;
-    border-radius: 15px !important;
-  }
-
-  .homepage-body #dores,
-  .homepage-body .vm-transform,
-  .homepage-body .vm-modules-wrapper,
-  .homepage-body .vm-contact-layout,
-  .homepage-body .vm-contact-form {
-    width: min(100% - 1.25rem, 390px) !important;
-    margin-inline: auto !important;
-  }
-
-  .homepage-body .vm-section-heading {
-    margin-bottom: 1.1rem !important;
-    gap: 0.45rem !important;
-  }
-
-  .homepage-body .vm-section-heading h2,
-  .homepage-body .vm-section-heading .titulo-servicos,
-  .homepage-body .vm-modules-title,
-  .homepage-body .vm-contact-title {
-    max-width: 15ch !important;
-    font-size: clamp(1.72rem, 8.3vw, 2.18rem) !important;
-    line-height: 1.08 !important;
-    text-wrap: balance !important;
-  }
-
-  .homepage-body .vm-section-heading p,
-  .homepage-body .vm-products-intro,
-  .homepage-body .vm-modules-subtitle {
-    max-width: 30ch !important;
-    font-size: 0.95rem !important;
-    line-height: 1.55 !important;
-  }
-
-  .homepage-body .vm-pains-grid,
-  .homepage-body .vm-proof-grid,
-  .homepage-body .vm-product-grid,
-  .homepage-body .vm-modules-grid,
-  .homepage-body .vm-modules-grid-visible,
-  .homepage-body .vm-before-after {
-    grid-template-columns: 1fr !important;
-    gap: 0.85rem !important;
-  }
-
-  .homepage-body .vm-whatsapp-float {
-    right: 0.75rem !important;
-    bottom: 0.75rem !important;
-    min-height: 44px !important;
-    padding: 0 0.86rem !important;
-    font-size: 0.82rem !important;
-    box-shadow: 0 12px 26px rgba(22, 163, 74, 0.28) !important;
-  }
-
-  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
-    width: 20px !important;
-    height: 20px !important;
-    flex-basis: 20px !important;
-  }
-}
-
-@media (max-width: 380px) {
-  .homepage-body .vm-hero-title {
-    max-width: 10.4ch !important;
-    font-size: clamp(2.12rem, 11.8vw, 2.75rem) !important;
-  }
-
-  .homepage-body .homepage-topbar li > a {
-    font-size: 0.61rem !important;
-  }
-}
 
 /* ==========================================================================
    SEÇÃO FOUNDER — QUEM CRIOU O VENDMASTER
@@ -6878,7 +6022,7 @@ html:has(.homepage-body) {
 }
 
 .vm-founder-card::before {
-  content: '\201C';
+  content: '“';
   position: absolute;
   top: -0.75rem;
   right: 1.35rem;
