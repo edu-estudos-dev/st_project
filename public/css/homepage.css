@@ -589,8 +589,8 @@ html:has(.homepage-body) {
   align-items: center !important;
   justify-content: flex-start !important;
   gap: 0.75rem !important;
-  margin-top: 1.1rem !important;
-  padding-top: 0 !important;
+  margin-top: auto !important;
+  padding-top: 1rem !important;
 }
 
 .vm-hero-buttons .btn,
@@ -873,8 +873,9 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-hero-buttons,
   .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: 1.1rem !important;
+    margin-top: auto !important;
     justify-content: flex-start !important;
+    padding-top: 1rem !important;
   }
 }
 
@@ -2083,7 +2084,7 @@ html:has(.homepage-body) {
 }
 
 .vm-blog-preview-link::after {
-  content: "→";
+  content: '→';
   transition: transform 260ms ease;
 }
 

@@ -1,0 +1,9 @@
+<!-- FAVICONS / PWA - VENDMASTER -->
+<link rel="icon" href="/images/system/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/system/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/system/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/images/system/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/images/system/favicon-96x96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/system/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#052e7a">
