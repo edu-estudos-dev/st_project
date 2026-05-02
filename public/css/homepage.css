@@ -1823,6 +1823,112 @@ html:has(.homepage-body) {
   line-height: 1.45 !important;
 }
 
+
+/* ==========================================================================
+   07.12 — CTA DO BLOG DENTRO DA HOMEPAGE
+   Link estratégico para levar o usuário ao blog após entender o sistema.
+   ========================================================================== */
+
+.vm-blog-inline-cta {
+  width: min(1180px, calc(100% - 1.5rem)) !important;
+  margin: 1.35rem auto 0 !important;
+  padding: 1.25rem 1.35rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.25rem !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.09), transparent 32%),
+    linear-gradient(135deg, #ffffff 0%, #f1f7ff 100%) !important;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08) !important;
+}
+
+.vm-blog-inline-cta-copy {
+  min-width: 0 !important;
+}
+
+.vm-blog-inline-cta .vm-kicker {
+  margin: 0 0 0.45rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.vm-blog-inline-cta h3 {
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: clamp(1.35rem, 2vw, 1.9rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.vm-blog-inline-cta p {
+  max-width: 680px !important;
+  margin: 0.55rem 0 0 !important;
+  color: #475569 !important;
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+.vm-blog-inline-cta-link {
+  min-height: 48px !important;
+  padding: 0.85rem 1.15rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  border-radius: 15px !important;
+  border: 1px solid rgba(37, 99, 235, 0.22) !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #1d4ed8 !important;
+  font-size: 0.94rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease !important;
+}
+
+.vm-blog-inline-cta-link:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22) !important;
+}
+
+@media (max-width: 767.98px) {
+  .vm-blog-inline-cta {
+    padding: 1.2rem !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+  }
+
+  .vm-blog-inline-cta .vm-kicker {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .vm-blog-inline-cta p {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .vm-blog-inline-cta-link {
+    width: 100% !important;
+    min-height: 52px !important;
+  }
+}
+
+
 /* ==========================================================================
    CARD DO CARROSSEL
    ========================================================================== */

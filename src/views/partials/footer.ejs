@@ -1,3 +1,137 @@
+<style>
+  .site-footer {
+    background: linear-gradient(135deg, #071225 0%, #0f2f63 100%);
+    color: #e5edf8;
+  }
+
+  .site-footer hr {
+    border-color: rgba(148, 163, 184, 0.18);
+    opacity: 1;
+  }
+
+  .site-footer .footer-title {
+    display: block;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .site-footer .footer-small-title {
+    margin-bottom: 0.45rem;
+    color: #f8fafc;
+    font-size: 0.94rem;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .site-footer .footer-small-text {
+    margin-bottom: 0.35rem;
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .site-footer a {
+    color: #c7f9dc;
+    text-decoration: none;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  .site-footer a:hover {
+    color: #22c55e;
+  }
+
+  .brand-mark-footer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem;
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    text-decoration: none;
+  }
+
+  .brand-mark-primary {
+    color: #2563eb;
+  }
+
+  .brand-mark-accent {
+    color: #22c55e;
+  }
+
+  .footer-links-list {
+    width: 100%;
+    max-width: none;
+    margin: 1rem auto 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    list-style: none;
+  }
+
+  .footer-links-list li {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .footer-links-list a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #dbeafe;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .footer-links-list a:hover {
+    color: #22c55e;
+  }
+
+  .footer-contact-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    color: #c7f9dc;
+    font-weight: 800;
+  }
+
+  @media (max-width: 991.98px) {
+    .footer-links-list {
+      max-width: 320px;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.2rem;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .site-footer .row {
+      gap: 1.6rem;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .footer-links-list {
+      max-width: 260px;
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      justify-content: center;
+      gap: 0.75rem 1.2rem;
+    }
+  }
+</style>
+
 <footer class="py-5 site-footer">
 
   <div>
@@ -5,7 +139,7 @@
   </div>
 
   <div class="container">
-    <div class="row d-flex align-items-center">
+    <div class="row align-items-center gy-4">
 
       <!-- LOGO / MARCA -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -16,40 +150,42 @@
 
           <p class="footer-small-title mt-3">&copy; 2026 - Todos os direitos reservados.</p>
           <p class="footer-small-text">Criado por Eduardo Praciano</p>
-          <p class="footer-small-text">CNPJ: informar antes da publicação</p>
+          <!-- <p class="footer-small-text">CNPJ: informar antes da publicação</p> -->
         </div>
       </div>
 
       <!-- LINKS -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <div class="text-center w-100 mt-3">
-
+        <div class="text-center w-100 mt-5">
           <strong class="footer-title">Links Úteis</strong>
 
-          <ul class="mt-3 list-inline d-flex justify-content-around">
-            <li class="list-inline-item"><a href="#topo">Home</a></li>
-            <li class="list-inline-item"><a href="#solucao">Solução</a></li>
-            <li class="list-inline-item"><a href="#contato">Contato</a></li>
-            <li class="list-inline-item"><a href="/politica-de-privacidade">Privacidade</a></li>
-            <li class="list-inline-item"><a href="/termos-de-uso">Termos</a></li>
+          <ul class="footer-links-list">
+            <li><a href="#topo">Home</a></li>
+            <li><a href="#solucao">Solução</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="#contato">Contato</a></li>
+            <li><a href="/politica-de-privacidade">Privacidade</a></li>
+            <li><a href="/termos-de-uso">Termos</a></li>
           </ul>
 
-          <p class="footer-small-text mt-3">E-mail: suporte@vendmaster.com</p>
-
+          <p class="footer-small-text mt-4 mb-0">
+            E-mail:<br>
+            suporte@vendmaster.com
+          </p>
         </div>
       </div>
 
       <!-- CONTATO -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <div class="text-center p-3 mt-3">
+        <div class="text-center">
           <strong class="footer-title">Telefone de Contato</strong>
 
-          <p class="mt-3">
-            <a href="https://wa.me/5585986992706" target="_blank" rel="noopener">
-              <i class="bi bi-whatsapp" aria-hidden="true"></i> (85) 9 8699-2706
+          <p class="mt-3 mb-0">
+            <a href="https://wa.me/5585986992706" target="_blank" rel="noopener" class="footer-contact-link">
+              <i class="bi bi-whatsapp" aria-hidden="true"></i>
+              <span>(85) 9 8699-2706</span>
             </a>
           </p>
-
         </div>
       </div>
 
@@ -57,7 +193,7 @@
   </div>
 
   <div>
-    <hr class="w-50 mx-auto">
+    <hr class="w-50 mx-auto mt-5 mb-0">
   </div>
 
 </footer>
