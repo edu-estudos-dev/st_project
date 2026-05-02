@@ -26,6 +26,7 @@ import {
 import loginLogoutRoutes from './src/routes/loginLogoutRoutes.js';
 import homepageRoutes from './src/routes/homepageRoutes.js';
 import blogRoutes from './src/routes/blogRoutes.js';
+import sitemapRoutes from './src/routes/sitemapRoutes.js';
 import estabelecimentoRoutes from './src/routes/estabelecimentoRoutes.js';
 import lancamentoRoutes from './src/routes/lancamentoRoutes.js';
 import searchRoutes from './src/routes/searchRoutes.js';
@@ -64,25 +65,23 @@ app.use(
   })
 );
 
+/*
+  Sitemap dinâmico.
+  Precisa ficar antes do express.static para garantir que /sitemap.xml
+  seja gerado pela rota dinâmica e não pelo arquivo public/sitemap.xml.
+*/
+app.use(sitemapRoutes);
+
 app.use(
   express.static(path.join(__dirname, 'public'), {
     etag: false
   })
 );
+
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
-app.get('/sitemap.xml', (req, res) => {
-  res.type('application/xml');
-  res.send(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://vendmaster.com.br/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`);
-});
+
 app.get('/favicon.ico', (req, res) => {
   res.redirect(301, '/favicon.svg');
 });
@@ -97,55 +96,63 @@ app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
-    res.locals.navigationProducts = res.locals.navigationProducts || {
-        bolinhas: false,
-        figurinhas: false,
-        pelucias: false,
-        hasAny: false
-    };
+  res.locals.navigationProducts = res.locals.navigationProducts || {
+    bolinhas: false,
+    figurinhas: false,
+    pelucias: false,
+    hasAny: false
+  };
 
-    res.locals.assinaturaSomenteLeitura = res.locals.assinaturaSomenteLeitura || false;
+  res.locals.assinaturaSomenteLeitura =
+    res.locals.assinaturaSomenteLeitura || false;
 
-    res.locals.financialNotifications = res.locals.financialNotifications || {
-        total: 0,
-        items: []
-    };
+  res.locals.financialNotifications = res.locals.financialNotifications || {
+    total: 0,
+    items: []
+  };
 
-    res.locals.operationalNotifications = res.locals.operationalNotifications || {
-        total: 0,
-        items: []
-    };
+  res.locals.operationalNotifications = res.locals.operationalNotifications || {
+    total: 0,
+    items: []
+  };
 
-    next();
+  next();
 });
+
 app.use(
   '/vendor/sweetalert2',
   express.static(path.join(__dirname, 'node_modules', 'sweetalert2', 'dist'))
 );
+
 app.use(
   '/vendor/bootstrap',
   express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist'))
 );
+
 app.use(
   '/vendor/bootstrap-icons',
   express.static(
     path.join(__dirname, 'node_modules', 'bootstrap-icons', 'font')
   )
 );
+
 app.use(
   '/vendor/inputmask',
   express.static(path.join(__dirname, 'node_modules', 'inputmask', 'dist'))
 );
+
 app.use(
   '/vendor/jspdf',
   express.static(path.join(__dirname, 'node_modules', 'jspdf', 'dist'))
 );
+
 app.use(
   '/vendor/jspdf-autotable',
   express.static(
     path.join(__dirname, 'node_modules', 'jspdf-autotable', 'dist')
   )
 );
+
 app.use(
   '/vendor/fontsource/urbanist',
   express.static(
@@ -157,6 +164,7 @@ app.use(loginLogoutRoutes);
 app.use(homepageRoutes);
 app.use(blogRoutes);
 app.use(interessadosRoutes);
+
 const requireAuthenticatedSubscription = [
   isAuthenticated,
   attachSubscriptionStatus,
@@ -165,44 +173,53 @@ const requireAuthenticatedSubscription = [
 ];
 
 app.use('/search', requireAuthenticatedSubscription, searchRoutes);
+
 app.use(
   '/estabelecimentos',
   requireAuthenticatedSubscription,
   estabelecimentoRoutes
 );
+
 app.use('/lancamentos', requireAuthenticatedSubscription, lancamentoRoutes);
 app.use('/painel', requireAuthenticatedSubscription, painelRoutes);
+
 app.use(
   '/fluxo-de-caixa',
   requireAuthenticatedSubscription,
   fluxoDeCaixaRoutes
 );
+
 app.use('/rotas', requireAuthenticatedSubscription, rotasRoutes);
 app.use('/relatorios', requireAuthenticatedSubscription, relatoriosRoutes);
 app.use('/assinatura', requireAuthenticatedSubscription, assinaturaRoutes);
+
 app.use(
   '/admin/assinantes',
   requireAuthenticatedSubscription,
   adminAssinantesRoutes
 );
+
 app.use(
   '/bolinhas',
   requireAuthenticatedSubscription,
   requireProductAvailable('bolinhas'),
   receitaBolinhaRoutes
 );
+
 app.use(
   '/figurinhas',
   requireAuthenticatedSubscription,
   requireProductAvailable('figurinhas'),
   receitaFigurinhaRoutes
 );
+
 app.use(
   '/bolinhas/sangrias',
   requireAuthenticatedSubscription,
   requireProductAvailable('bolinhas'),
   bolinhasSangriaRoutes
 );
+
 app.use(
   '/figurinhas/sangrias',
   requireAuthenticatedSubscription,
@@ -216,6 +233,7 @@ app.use(
   requireProductAvailable('pelucias'),
   receitaPeluciaRoutes
 );
+
 app.use(
   '/pelucias',
   requireAuthenticatedSubscription,
