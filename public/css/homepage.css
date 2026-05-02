@@ -401,12 +401,12 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 .vm-hero {
-  min-height: 100svh;
+  min-height: auto;
   height: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 6.9rem 1rem 3.2rem;
+  align-items: flex-start;
+  padding: 7.5rem 1rem 5rem;
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -460,15 +460,15 @@ html:has(.homepage-body) {
   position: relative;
   z-index: 1;
   width: min(1180px, 100%);
-  min-height: 645px;
+  min-height: auto;
   margin: 0 auto;
-  padding: 2rem 2.4rem 2rem;
+  padding: 2rem 2.4rem;
   display: grid;
   grid-template-columns: minmax(420px, 0.96fr) minmax(500px, 1.04fr);
   gap: 2.1rem;
   align-items: stretch;
   border-radius: 28px;
-  transform: translateY(0.9rem);
+  transform: none;
   background:
     radial-gradient(circle at 20% 45%, rgba(37, 99, 235, 0.1), transparent 32%),
     linear-gradient(
@@ -480,11 +480,15 @@ html:has(.homepage-body) {
   box-shadow: 0 30px 80px rgba(2, 6, 23, 0.34);
 }
 
+/* ========================================================================== */
+/* HERO — COLUNAS                                                              */
+/* ========================================================================== */
+
 .vm-hero-left,
 .vm-hero-right {
   min-width: 0;
   min-height: 0;
-  height: 100%;
+  height: auto;
   align-self: stretch;
   position: relative;
   z-index: 1;
@@ -497,12 +501,31 @@ html:has(.homepage-body) {
 .vm-hero-left {
   width: 100%;
   max-width: 560px;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
+}
+
+/* ========================================================================== */
+/* HERO — TÍTULO PRINCIPAL                                                     */
+/* ========================================================================== */
+
+.vm-hero-title {
+  max-width: 16.2ch;
+  margin: 0 0 1.2rem;
+  color: #f8fafc;
+  font-size: clamp(2.85rem, 3.75vw, 3.9rem);
+  font-weight: 950;
+  line-height: 1.06;
+  letter-spacing: -0.055em;
+}
+
+.vm-hero-title .text-accent {
+  display: block;
+  color: #4ade80;
+  margin-top: 0.12rem;
 }
 
 /* ========================================================================== */
@@ -538,26 +561,6 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
-/* HERO — TÍTULO PRINCIPAL                                                     */
-/* ========================================================================== */
-
-.vm-hero-title {
-  max-width: 16.2ch;
-  margin: 0 0 1.2rem;
-  color: #f8fafc;
-  font-size: clamp(2.85rem, 3.75vw, 3.9rem);
-  font-weight: 950;
-  line-height: 1.06;
-  letter-spacing: -0.055em;
-}
-
-.vm-hero-title .text-accent {
-  display: block;
-  color: #4ade80;
-  margin-top: 0.12rem;
-}
-
-/* ========================================================================== */
 /* HERO — DESCRIÇÃO                                                            */
 /* ========================================================================== */
 
@@ -576,7 +579,6 @@ html:has(.homepage-body) {
 
 /* ========================================================================== */
 /* HERO — BOTÕES                                                               */
-/* Botões com peso visual equilibrado e alinhados com a base da coluna direita.*/
 /* ========================================================================== */
 
 .vm-hero-buttons,
@@ -587,8 +589,8 @@ html:has(.homepage-body) {
   align-items: center !important;
   justify-content: flex-start !important;
   gap: 0.75rem !important;
-  margin-top: auto !important;
-  padding-top: 1rem !important;
+  margin-top: 1.1rem !important;
+  padding-top: 0 !important;
 }
 
 .vm-hero-buttons .btn,
@@ -606,6 +608,7 @@ html:has(.homepage-body) {
   line-height: 1 !important;
   letter-spacing: -0.01em !important;
   white-space: nowrap !important;
+  text-decoration: none !important;
   transition:
     transform 520ms ease,
     background-color 650ms ease,
@@ -662,7 +665,6 @@ html:has(.homepage-body) {
 .vm-hero-right {
   width: 100%;
   max-width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -820,8 +822,8 @@ html:has(.homepage-body) {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 0.85rem !important;
-  margin-top: auto !important;
-  padding-top: 1rem !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 .homepage-body .vm-hero .vm-hero-mini-card {
@@ -860,19 +862,19 @@ html:has(.homepage-body) {
 
 @media (max-width: 1199.98px) {
   .homepage-body .vm-hero-container {
-    align-items: start !important;
+    align-items: stretch !important;
   }
 
   .homepage-body .vm-hero-left,
   .homepage-body .vm-hero-right {
     height: auto !important;
-    align-self: auto !important;
+    align-self: stretch !important;
   }
 
   .homepage-body .vm-hero-buttons,
   .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: 0 !important;
-    justify-content: center !important;
+    margin-top: 1.1rem !important;
+    justify-content: flex-start !important;
   }
 }
 
@@ -925,9 +927,9 @@ html:has(.homepage-body) {
 
   .vm-hero-buttons,
   .homepage-body .vm-hero .vm-hero-buttons {
-    margin-top: 0 !important;
+    margin-top: 1rem !important;
     justify-content: center !important;
-    padding-top: 1rem !important;
+    padding-top: 0 !important;
   }
 
   .vm-hero-right {
@@ -988,8 +990,8 @@ html:has(.homepage-body) {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 0.75rem !important;
-    margin-top: 0 !important;
-    padding-top: 1rem !important;
+    margin-top: 1rem !important;
+    padding-top: 0 !important;
   }
 
   .vm-hero-buttons .btn,
