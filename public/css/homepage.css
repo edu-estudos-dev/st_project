@@ -150,27 +150,39 @@ body.homepage-body {
 /* ========================================================================== */
 /* 02.1 — HEADER STICKY / MENU MOBILE / CTA DO TOPO                           */
 /* ========================================================================== */
+
 html:has(.homepage-body) {
   scroll-behavior: smooth;
   scroll-padding-top: 110px;
 }
+
 .homepage-body .homepage-topbar {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 1rem !important;
 }
+
+.vm-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+}
+
 .homepage-body .img-logo {
   width: auto !important;
   height: 44px !important;
   display: block !important;
 }
+
 .homepage-body .homepage-nav {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
   min-width: 0 !important;
 }
+
 .homepage-body .homepage-topbar nav ul,
 .homepage-body .homepage-nav ul {
   display: flex !important;
@@ -182,11 +194,13 @@ html:has(.homepage-body) {
   padding: 0 !important;
   list-style: none !important;
 }
+
 .homepage-body .homepage-topbar li,
 .homepage-body .homepage-nav li {
   width: auto !important;
   list-style: none !important;
 }
+
 .homepage-body .homepage-topbar li > a,
 .homepage-body .homepage-nav li > a {
   width: auto !important;
@@ -201,10 +215,12 @@ html:has(.homepage-body) {
   line-height: 1 !important;
   white-space: nowrap !important;
 }
+
 .homepage-body .homepage-cta-item,
 .homepage-body .homepage-cta-link {
   display: inline-flex !important;
 }
+
 .homepage-body .homepage-cta-link,
 .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
   display: inline-flex !important;
@@ -219,6 +235,7 @@ html:has(.homepage-body) {
   font-weight: 950 !important;
   box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18) !important;
 }
+
 .homepage-body .homepage-login-link,
 .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
   display: inline-flex !important;
@@ -234,6 +251,7 @@ html:has(.homepage-body) {
   font-weight: 950 !important;
   box-shadow: 0 12px 26px rgba(37, 99, 235, 0.24) !important;
 }
+
 .homepage-menu-toggle {
   display: none;
   width: 46px;
@@ -243,11 +261,13 @@ html:has(.homepage-body) {
   justify-content: center;
   flex-direction: column;
   gap: 5px;
+  margin-left: auto;
   border: 1px solid rgba(37, 99, 235, 0.18);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.82);
   cursor: pointer;
 }
+
 .homepage-menu-toggle span {
   width: 20px;
   height: 2px;
@@ -257,25 +277,37 @@ html:has(.homepage-body) {
     transform 0.22s ease,
     opacity 0.22s ease;
 }
+
 .homepage-menu-open .homepage-menu-toggle span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
+
 .homepage-menu-open .homepage-menu-toggle span:nth-child(2) {
   opacity: 0;
 }
+
 .homepage-menu-open .homepage-menu-toggle span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
+
 @media (max-width: 991.98px) {
   .homepage-body .homepage-topbar {
-    top: 0.75rem !important;
+    top: 0.65rem !important;
     width: min(100% - 1rem, 760px) !important;
-    padding: 0.7rem !important;
+    min-height: 68px !important;
+    padding: 0.62rem 0.72rem !important;
     border-radius: 22px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
   }
+
   .homepage-menu-toggle {
     display: inline-flex !important;
   }
+
   .homepage-body .homepage-nav {
     position: absolute !important;
     top: calc(100% + 0.65rem) !important;
@@ -295,11 +327,13 @@ html:has(.homepage-body) {
       max-height 0.28s ease,
       opacity 0.22s ease !important;
   }
+
   body.homepage-menu-open .homepage-nav {
     max-height: 460px !important;
     opacity: 1 !important;
     pointer-events: auto !important;
   }
+
   .homepage-body .homepage-nav ul,
   .homepage-body .homepage-topbar nav ul {
     display: grid !important;
@@ -308,10 +342,12 @@ html:has(.homepage-body) {
     width: 100% !important;
     padding: 0.75rem !important;
   }
+
   .homepage-body .homepage-nav li,
   .homepage-body .homepage-topbar li {
     width: 100% !important;
   }
+
   .homepage-body .homepage-nav li > a,
   .homepage-body .homepage-topbar li > a,
   .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link,
@@ -327,55 +363,58 @@ html:has(.homepage-body) {
     background: rgba(255, 255, 255, 0.78) !important;
     border: 1px solid rgba(148, 163, 184, 0.16) !important;
   }
+
   .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
     background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
     color: #fff !important;
     border: 0 !important;
   }
+
   .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link {
     background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%) !important;
     color: #ffffff !important;
     border-color: rgba(34, 197, 94, 0.45) !important;
     box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22) !important;
   }
+
   .homepage-body .vm-hero {
-    padding-top: 7.25rem !important;
+    padding-top: 6.4rem !important;
   }
+
   .vm-section-cta .vm-kicker {
     margin-inline: auto !important;
   }
 }
+
 @media (max-width: 575.98px) {
   html:has(.homepage-body) {
-    scroll-padding-top: 96px;
+    scroll-padding-top: 88px;
   }
+
   .homepage-body .homepage-topbar {
     width: calc(100% - 1rem) !important;
     max-width: none !important;
+    min-height: 64px !important;
+    padding: 0.55rem 0.65rem !important;
+    border-radius: 20px !important;
   }
+
   .homepage-body .img-logo {
-    height: 38px !important;
-    max-width: 178px !important;
+    height: 34px !important;
+    max-width: 172px !important;
     object-fit: contain !important;
   }
+
   .homepage-menu-toggle {
     width: 42px;
     height: 42px;
     border-radius: 14px;
   }
-  .homepage-body .vm-hero-title {
-    max-width: 11.8ch !important;
-    letter-spacing: -0.035em !important;
-  }
-  .homepage-body .vm-hero-description {
-    max-width: 32ch !important;
-  }
-  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n/**/+5) {
-    display: flex !important;
-  }
+
   .homepage-body .vm-whatsapp-float span {
     display: none !important;
   }
+
   .homepage-body .vm-whatsapp-float {
     width: 50px !important;
     min-width: 50px !important;
