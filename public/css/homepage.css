@@ -1,7 +1,7 @@
 /* ==========================================================================
    HOMEPAGE.CSS — VENDMASTER
    Arquivo consolidado, corrigido e organizado por blocos comentados.
-   Último ajuste: tipografia mobile ampliada em aproximadamente 10%.
+   Último ajuste: seção Painel Gerencial reorganizada, consolidada e corrigida no mobile.
    ========================================================================== */
 
 /* ========================================================================== */
@@ -371,7 +371,7 @@ html:has(.homepage-body) {
     justify-content: center !important;
     padding: 0.82rem 1rem !important;
     border-radius: 16px !important;
-    font-size: 1.056rem !important;
+    font-size: 0.96rem !important;
     line-height: 1 !important;
     text-align: center !important;
     background: rgba(255, 255, 255, 0.88) !important;
@@ -389,7 +389,7 @@ html:has(.homepage-body) {
     justify-content: center !important;
     padding: 0.86rem 1rem !important;
     border-radius: 18px !important;
-    font-size: 1.078rem !important;
+    font-size: 0.98rem !important;
     font-weight: 950 !important;
     line-height: 1 !important;
     text-align: center !important;
@@ -443,17 +443,13 @@ html:has(.homepage-body) {
   .homepage-body .homepage-topbar li > a {
     min-height: 44px !important;
     border-radius: 15px !important;
-    font-size: 1.045rem !important;
+    font-size: 1.04rem !important;
   }
 
   .homepage-body .homepage-topbar .homepage-login-item .homepage-login-link,
   .homepage-body .homepage-topbar .homepage-cta-item .homepage-cta-link {
     min-height: 48px !important;
     border-radius: 17px !important;
-  }
-
-  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n/**/+5) {
-    display: flex !important;
   }
 
   .homepage-body .vm-whatsapp-float span {
@@ -1052,7 +1048,7 @@ html:has(.homepage-body) {
     margin: 0.9rem 0 1.2rem;
     padding: 0.78rem 1.05rem;
     border-radius: 999px;
-    font-size: 0.76rem;
+    font-size: 0.84rem;
     line-height: 1.22;
     letter-spacing: 0.04em;
   }
@@ -1070,7 +1066,7 @@ html:has(.homepage-body) {
   .vm-hero-description {
     max-width: 31ch;
     margin-bottom: 1.35rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.62;
     text-align: center;
     letter-spacing: -0.018em;
@@ -1092,7 +1088,7 @@ html:has(.homepage-body) {
     min-width: 0;
     min-height: 54px;
     padding: 0 1rem;
-    font-size: 1.034rem;
+    font-size: 1.03rem;
     white-space: normal;
     text-align: center;
     line-height: 1.15;
@@ -1117,7 +1113,7 @@ html:has(.homepage-body) {
 
   .vm-panel-header strong {
     max-width: 100%;
-    font-size: 1.08rem;
+    font-size: 1.19rem;
     line-height: 1.15;
     text-align: center;
   }
@@ -1165,16 +1161,16 @@ html:has(.homepage-body) {
   }
 
   .vm-card-alert .tag {
-    font-size: 0.858rem;
+    font-size: 0.86rem;
   }
 
   .vm-card-alert strong {
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.2;
   }
 
   .vm-card-alert p {
-    font-size: 0.968rem;
+    font-size: 0.97rem;
     line-height: 1.45;
   }
 
@@ -1420,126 +1416,45 @@ html:has(.homepage-body) {
 /* 05 — SEÇÃO O PROBLEMA REAL / DORES                                          */
 /* ========================================================================== */
 
-.vm-pains-section {
+.homepage-body .vm-pains-section {
   text-align: center;
+  background: transparent;
+  padding-left: clamp(2.25rem, 4.5vw, 4.5rem) !important;
+  padding-right: clamp(2.25rem, 4.5vw, 4.5rem) !important;
+  padding-inline: clamp(2.25rem, 4.5vw, 4.5rem);
 }
 
-.vm-pains-section .vm-section-heading {
+.homepage-body .vm-pains-section .vm-section-heading {
   max-width: 980px;
   margin-inline: auto;
 }
 
-.vm-pains-section .vm-subtext {
+.homepage-body .vm-pains-section .vm-subtext {
   max-width: 760px;
   margin: 1rem auto 0;
+  color: #64748b;
   font-size: 1.05rem;
   line-height: 1.7;
-  color: #64748b;
-}
-
-.vm-pains-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  width: min(1080px, 100%);
-  margin: 2.5rem auto 0;
-}
-
-.vm-pain-card {
-  text-align: left;
-  padding: 1.4rem;
-  border-radius: 22px;
-  background: #ffffff;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.06);
-}
-
-.vm-pain-marker {
-  display: inline-flex;
-  margin-bottom: 0.8rem;
-  color: #2563eb;
-  font-size: 0.82rem;
-  font-weight: 900;
-}
-
-.vm-pain-card h3 {
-  margin-bottom: 0.65rem;
-  color: #0f172a;
-  font-size: 1.1rem;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.vm-pain-card p {
-  margin: 0;
-  color: #64748b;
-  font-size: 0.95rem;
-  line-height: 1.55;
-}
-
-.homepage-body .vm-before-after li {
-  font-size: clamp(1rem, 0.95vw, 1.08rem) !important;
-  line-height: 1.68 !important;
-}
-
-.homepage-body .vm-pain-card p {
-  font-size: 1.04rem;
-  line-height: 1.75;
-  margin: 0;
-  color: var(--home-muted);
-}
-
-.homepage-body .vm-products-section .vm-product-card p {
-  min-height: 108px !important;
-  max-width: 31ch !important;
-  margin: 0 auto 1.35rem !important;
-  color: #475569 !important;
-  font-size: 0.94rem !important;
-  line-height: 1.58 !important;
-  text-align: center !important;
-}
-
-.homepage-body .vm-products-section .vm-product-points li {
-  min-height: 22px !important;
-  padding-left: 1.4rem !important;
-  color: #0f172a !important;
-  font-size: 0.88rem !important;
-  font-weight: 750 !important;
-  line-height: 1.38 !important;
-  text-align: left !important;
-  position: relative !important;
-}
-
-.homepage-body .vm-module-card p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: rgba(226, 232, 240, 0.9);
-}
-
-.homepage-body .vm-pains-section {
-  background: transparent;
-  padding-inline: clamp(2.25rem, 4.5vw, 4.5rem);
-  padding-left: clamp(2.25rem, 4.5vw, 4.5rem) !important;
-  padding-right: clamp(2.25rem, 4.5vw, 4.5rem) !important;
 }
 
 .homepage-body .vm-pains-grid {
   width: 100% !important;
+  max-width: 1080px !important;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
-  max-width: 1080px !important;
 }
 
 .homepage-body .vm-pain-card {
+  min-height: 240px;
+  padding: 1.7rem;
   display: flex;
   flex-direction: column;
   gap: 0.95rem;
-  min-height: 240px;
-  padding: 1.7rem;
-  border: 1px solid var(--home-line);
+  text-align: left;
   border-radius: 26px;
+  border: 1px solid var(--home-line);
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.98) 0%,
@@ -1554,29 +1469,116 @@ html:has(.homepage-body) {
 
 .homepage-body .vm-pain-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 28px 58px rgba(15, 23, 42, 0.12);
   border-color: rgba(96, 165, 250, 0.24);
+  box-shadow: 0 28px 58px rgba(15, 23, 42, 0.12);
 }
 
 .homepage-body .vm-pain-marker {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
   border-radius: 14px;
+  color: var(--home-blue);
+  background: rgba(37, 99, 235, 0.08);
   font-size: 0.86rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: var(--home-blue);
-  background: rgba(37, 99, 235, 0.08);
 }
 
 .homepage-body .vm-pain-card h3 {
   margin: 0;
-  font-size: 1.38rem;
-  line-height: 1.15;
   color: var(--home-text);
+  font-size: 1.38rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.homepage-body .vm-pain-card p {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 1.04rem;
+  line-height: 1.75;
+}
+
+/* ========================================================================== */
+/* 05.1 — SEÇÃO O PROBLEMA REAL / DORES — MOBILE                              */
+/* ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .homepage-body #dores.vm-section.vm-pains-section {
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+    padding-top: 2.6rem !important;
+    padding-bottom: 2.8rem !important;
+    padding-left: 0.95rem !important;
+    padding-right: 0.95rem !important;
+    padding-inline: 0.95rem !important;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-section-heading {
+    max-width: 100%;
+    margin-inline: auto;
+    margin-bottom: 1.2rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-subtext {
+    max-width: 31ch;
+    margin-top: 0.7rem;
+    font-size: 1.08rem;
+    line-height: 1.62;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pains-grid {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    gap: 0.95rem;
+    margin: 1.25rem auto 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pain-card {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    padding: 1.2rem 1rem;
+    border-radius: 20px;
+    gap: 0.8rem;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pain-card:hover {
+    transform: none;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pain-marker {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    font-size: 0.82rem;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pain-card h3 {
+    font-size: 1.2rem;
+    line-height: 1.18;
+  }
+
+  .homepage-body #dores.vm-section.vm-pains-section .vm-pain-card p {
+    font-size: 1.04rem;
+    line-height: 1.65;
+  }
+
+  .homepage-body
+    #dores.vm-section.vm-pains-section
+    .vm-pain-card:nth-child(n + 5) {
+    display: none;
+  }
 }
 
 /* ========================================================================== */
@@ -1765,12 +1767,10 @@ html:has(.homepage-body) {
    ========================================================================== */
 
 /* ==========================================================================
-   07.1 — FUNDO E ESPAÇAMENTO GERAL DA SEÇÃO
-   Reduz o padding vertical para aproximar o título do conteúdo e dar mais
-   destaque ao print do dashboard.
+   07.1 — FUNDO E CABEÇALHO DA SEÇÃO
    ========================================================================== */
 
-.vm-dashboard-showcase {
+.homepage-body #solucao.vm-section.vm-dashboard-showcase {
   padding: 3.25rem 1rem 3.75rem !important;
   background:
     radial-gradient(
@@ -1778,129 +1778,46 @@ html:has(.homepage-body) {
       rgba(3, 89, 191, 0.08),
       transparent 28%
     ),
-    linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%) !important;
 }
 
-/* ==========================================================================
-   07.2 — CABEÇALHO DA SEÇÃO
-   Controla título e subtítulo para reduzir espaço vazio antes do layout.
-   ========================================================================== */
-
-.vm-dashboard-showcase .vm-section-heading {
+.homepage-body #solucao .vm-section-heading {
   max-width: 900px !important;
   margin: 0 auto 2rem !important;
   text-align: center !important;
 }
 
-.vm-dashboard-showcase .titulo-servicos {
-  max-width: 720px !important;
-  margin: 0 auto !important;
+.homepage-body #solucao .vm-section-heading .vm-kicker {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-.vm-dashboard-showcase .vm-subtext {
+.homepage-body #solucao .titulo-servicos {
+  max-width: 720px !important;
+  margin: 0 auto !important;
+  color: #0f172a !important;
+  font-size: clamp(2.25rem, 3.5vw, 3.6rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.055em !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.homepage-body #solucao .vm-subtext {
   max-width: 720px !important;
   margin: 0.9rem auto 0 !important;
+  color: #64748b !important;
   font-size: 1rem !important;
   line-height: 1.55 !important;
-  color: #64748b !important;
   text-align: center !important;
 }
 
 /* ==========================================================================
-   07.3 — LAYOUT PRINCIPAL DO DASHBOARD
-   Aumenta a área útil do print e mantém a coluna esquerda proporcional.
+   07.2 — LAYOUT PRINCIPAL DO PAINEL
    ========================================================================== */
 
-.vm-dashboard-layout {
-  width: min(1180px, calc(100% - 1.5rem)) !important;
-  margin: 0 auto !important;
-  display: grid !important;
-  grid-template-columns: minmax(300px, 0.72fr) minmax(660px, 1.28fr) !important;
-  gap: 1.45rem !important;
-  align-items: stretch !important;
-}
-
-/* ==========================================================================
-   07.4 — CARD DE TEXTO DA COLUNA ESQUERDA
-   Mantém o texto legível sem deixar a coluna exageradamente larga.
-   ========================================================================== */
-
-.vm-dashboard-copy {
-  width: 100% !important;
-  max-width: none !important;
-  justify-self: stretch !important;
-  align-self: stretch !important;
-  padding: 1.45rem !important;
-  border-radius: 26px !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(148, 163, 184, 0.18) !important;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-}
-
-.vm-dashboard-copy .vm-kicker {
-  width: fit-content !important;
-  margin: 0 0 1rem !important;
-}
-
-.vm-dashboard-copy h3 {
-  margin: 0 0 1rem !important;
-  color: #0f172a !important;
-  font-size: clamp(1.65rem, 2.1vw, 2.15rem) !important;
-  line-height: 1.06 !important;
-  font-weight: 950 !important;
-  letter-spacing: -0.045em !important;
-}
-
-.vm-dashboard-copy p {
-  margin: 0 0 1.25rem !important;
-  color: #64748b !important;
-  font-size: 1rem !important;
-  line-height: 1.62 !important;
-}
-
-/* ==========================================================================
-   07.5 — CARDS INTERNOS DA COLUNA ESQUERDA
-   Compacta os cards para acompanhar melhor a altura do print.
-   ========================================================================== */
-
-.vm-dashboard-points {
-  display: grid !important;
-  gap: 0.8rem !important;
-  margin-top: auto !important;
-}
-
-.vm-dashboard-points div {
-  padding: 0.95rem 1rem !important;
-  border-radius: 16px !important;
-  background: #f8fbff !important;
-  border: 1px solid rgba(148, 163, 184, 0.2) !important;
-}
-
-.vm-dashboard-points strong {
-  display: block !important;
-  margin-bottom: 0.3rem !important;
-  color: #0f172a !important;
-  font-size: 0.9rem !important;
-  font-weight: 900 !important;
-}
-
-.vm-dashboard-points span {
-  display: block !important;
-  color: #64748b !important;
-  font-size: 0.9rem !important;
-  line-height: 1.45 !important;
-}
-
-/* ==========================================================================
-   07.6 — SHOWCASE / CARROSSEL DO DASHBOARD E ROTA
-   Ajuste de UI/UX para harmonizar a seção, melhorar proporção visual
-   dos prints e dar mais destaque ao print da rota.
-   ========================================================================== */
-
-.vm-dashboard-layout {
+.homepage-body #solucao .vm-dashboard-layout {
   width: min(1120px, 100%) !important;
   margin: 0 auto !important;
   display: grid !important;
@@ -1909,26 +1826,36 @@ html:has(.homepage-body) {
   align-items: stretch !important;
 }
 
-.vm-dashboard-copy {
+/* ==========================================================================
+   07.3 — CARD DE TEXTO / CLAREZA PARA DECIDIR
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-copy {
+  width: 100% !important;
+  max-width: none !important;
+  justify-self: stretch !important;
+  align-self: stretch !important;
+  padding: 1.35rem 1.2rem !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  padding: 1.35rem 1.2rem !important;
   border-radius: 24px !important;
+  border: 1px solid rgba(148, 163, 184, 0.16) !important;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.98) 0%,
     rgba(247, 250, 255, 0.98) 100%
   ) !important;
-  border: 1px solid rgba(148, 163, 184, 0.16) !important;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08) !important;
+  text-align: left !important;
 }
 
-.vm-dashboard-copy .vm-kicker {
+.homepage-body #solucao .vm-dashboard-copy .vm-kicker {
+  width: fit-content !important;
   margin: 0 0 0.75rem !important;
 }
 
-.vm-dashboard-copy h3 {
+.homepage-body #solucao .vm-dashboard-copy h3 {
   margin: 0 0 1rem !important;
   color: #0f172a !important;
   font-size: clamp(1.6rem, 2.1vw, 2.15rem) !important;
@@ -1938,27 +1865,32 @@ html:has(.homepage-body) {
   text-wrap: balance !important;
 }
 
-.vm-dashboard-copy p {
+.homepage-body #solucao .vm-dashboard-copy p {
   margin: 0 0 1rem !important;
   color: #64748b !important;
   font-size: 0.96rem !important;
   line-height: 1.68 !important;
 }
 
-.vm-dashboard-points {
+/* ==========================================================================
+   07.4 — PONTOS INTERNOS DO CARD DE TEXTO
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-points {
   display: grid !important;
   gap: 0.75rem !important;
   margin-top: 0.2rem !important;
 }
 
-.vm-dashboard-points > div {
+.homepage-body #solucao .vm-dashboard-points > div {
   padding: 0.9rem 0.95rem !important;
   border-radius: 16px !important;
-  background: #f8fafc !important;
   border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  background: #f8fafc !important;
+  text-align: left !important;
 }
 
-.vm-dashboard-points strong {
+.homepage-body #solucao .vm-dashboard-points strong {
   display: block !important;
   margin-bottom: 0.3rem !important;
   color: #0f172a !important;
@@ -1967,7 +1899,7 @@ html:has(.homepage-body) {
   line-height: 1.2 !important;
 }
 
-.vm-dashboard-points span {
+.homepage-body #solucao .vm-dashboard-points span {
   display: block !important;
   color: #64748b !important;
   font-size: 0.8rem !important;
@@ -1975,8 +1907,663 @@ html:has(.homepage-body) {
 }
 
 /* ==========================================================================
-   07.12 — CTA DO BLOG DENTRO DA HOMEPAGE
-   Link estratégico para levar o usuário ao blog após entender o sistema.
+   07.5 — CARD DO CARROSSEL / PRINTS DO SISTEMA
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-image-card {
+  width: 100% !important;
+  min-height: 600px !important;
+  padding: 0.28rem !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
+  background: linear-gradient(
+    135deg,
+    #dbeafe 0%,
+    #ffffff 55%,
+    #dcfce7 100%
+  ) !important;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel {
+  width: 100% !important;
+  min-height: 600px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  background: #f8fbff !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel-inner,
+.homepage-body #solucao .vm-dashboard-carousel .carousel-item {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 600px !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel .carousel-item {
+  position: relative !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(243, 247, 252, 0.96) 100%
+  ) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel .carousel-item.active {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 600px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   07.6 — BARRA VISUAL DO TOPO DO PRINT
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-browser-bar {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: 1rem !important;
+  z-index: 5 !important;
+  height: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  pointer-events: none !important;
+}
+
+.homepage-body #solucao .vm-dashboard-browser-bar span {
+  display: block !important;
+  width: 30px !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, 0.2) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-browser-bar span:nth-child(2) {
+  width: 44px !important;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
+}
+
+/* ==========================================================================
+   07.7 — ÁREA DO PRINT / IMAGENS DO CARROSSEL
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-print-frame {
+  position: absolute !important;
+  inset: 3rem 1.15rem 4.45rem 1.15rem !important;
+  z-index: 2 !important;
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(148, 163, 184, 0.16) !important;
+  background: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-print-frame picture {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  border-radius: 16px !important;
+}
+
+.homepage-body #solucao .vm-dashboard-print-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.homepage-body
+  #solucao
+  .vm-dashboard-slide-panel
+  .vm-dashboard-print-frame
+  img {
+  object-position: center top !important;
+}
+
+.homepage-body
+  #solucao
+  .vm-dashboard-slide-route
+  .vm-dashboard-print-frame
+  img {
+  object-position: center top !important;
+}
+
+/* ==========================================================================
+   07.8 — LEGENDA DO CARROSSEL
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-slide-caption {
+  position: absolute !important;
+  left: 1rem !important;
+  right: 1rem !important;
+  bottom: 0.95rem !important;
+  z-index: 4 !important;
+  min-height: 86px !important;
+  padding: 0.75rem 0.9rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.7rem !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.2) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-caption span {
+  flex: 0 0 auto !important;
+  min-height: 28px !important;
+  padding: 0.36rem 0.65rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
+  color: #ffffff !important;
+  font-size: 0.62rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-caption strong {
+  display: block !important;
+  margin: 0 !important;
+  color: #f8fafc !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  text-align: left !important;
+}
+
+/* ==========================================================================
+   07.9 — INDICADORES E CONTROLES DO CARROSSEL
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-carousel-indicators {
+  display: none !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel-control {
+  width: 42px !important;
+  height: 42px !important;
+  top: 50% !important;
+  z-index: 5 !important;
+  opacity: 0 !important;
+  transform: translateY(-50%) !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, 0.36) !important;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background 0.25s ease !important;
+}
+
+.homepage-body
+  #solucao
+  .vm-dashboard-image-card:hover
+  .vm-dashboard-carousel-control {
+  opacity: 1 !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel-control:hover {
+  transform: translateY(-50%) scale(1.04) !important;
+  background: rgba(15, 23, 42, 0.62) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel .carousel-control-prev {
+  left: 0.9rem !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel .carousel-control-next {
+  right: 0.9rem !important;
+}
+
+.homepage-body #solucao .vm-dashboard-carousel .carousel-control-prev-icon,
+.homepage-body #solucao .vm-dashboard-carousel .carousel-control-next-icon {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+/* ==========================================================================
+   07.10 — CTA INTEGRADO DA SEÇÃO
+   ========================================================================== */
+
+.homepage-body #solucao .vm-dashboard-integrated-cta {
+  width: min(1120px, 100%) !important;
+  margin: 1.25rem auto 0 !important;
+  padding: 1.25rem 1.35rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.25rem !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.09),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #ffffff 0%, #f1f7ff 100%) !important;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08) !important;
+}
+
+.homepage-body #solucao .vm-dashboard-integrated-cta .vm-section-cta-copy {
+  min-width: 0 !important;
+}
+
+.homepage-body #solucao .vm-dashboard-integrated-cta .vm-kicker {
+  margin: 0 0 0.45rem !important;
+}
+
+.homepage-body #solucao .vm-dashboard-integrated-cta h3 {
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: clamp(1.35rem, 2vw, 1.9rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.homepage-body #solucao .vm-dashboard-integrated-cta p {
+  max-width: 680px !important;
+  margin: 0.55rem 0 0 !important;
+  color: #475569 !important;
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+.homepage-body #solucao .vm-dashboard-integrated-cta .btn {
+  min-height: 50px !important;
+  padding: 0.85rem 1.15rem !important;
+  flex: 0 0 auto !important;
+  border-radius: 15px !important;
+  font-size: 0.94rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   07.11 — PAINEL GERENCIAL / DASHBOARD SHOWCASE — TABLET
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+  .homepage-body #solucao.vm-section.vm-dashboard-showcase {
+    padding: 3rem 1rem 3.4rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy {
+    max-width: 720px !important;
+    justify-self: center !important;
+    padding: 1.2rem !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy .vm-kicker {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy h3 {
+    max-width: 24ch !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: clamp(1.45rem, 4.4vw, 2rem) !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy p {
+    max-width: 58ch !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-points > div {
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-image-card {
+    max-width: 720px !important;
+    min-height: 540px !important;
+    justify-self: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-carousel,
+  .homepage-body #solucao .vm-dashboard-carousel-inner,
+  .homepage-body #solucao .vm-dashboard-carousel .carousel-item,
+  .homepage-body #solucao .vm-dashboard-slide {
+    min-height: 540px !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-print-frame {
+    inset: 2.8rem 0.95rem 4.25rem 0.95rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta {
+    max-width: 720px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta .vm-kicker {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta p {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta .btn {
+    width: 100% !important;
+  }
+}
+
+/* ==========================================================================
+   07.12 — PAINEL GERENCIAL / DASHBOARD SHOWCASE — MOBILE
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .homepage-body #solucao.vm-section.vm-dashboard-showcase {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+    padding-left: 0.45rem !important;
+    padding-right: 0.45rem !important;
+    padding-inline: 0.45rem !important;
+  }
+
+  .homepage-body #solucao .vm-section-heading {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto 1.25rem !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .homepage-body #solucao .titulo-servicos {
+    max-width: 12.5ch !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: clamp(2rem, 9vw, 2.55rem) !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-subtext {
+    max-width: 27ch !important;
+    margin: 1rem auto 0 !important;
+    font-size: 1.08rem !important;
+    line-height: 1.58 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.8rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.85rem 0.75rem !important;
+    border-radius: 18px !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy .vm-kicker {
+    width: fit-content !important;
+    margin: 0 auto 0.7rem !important;
+    align-self: center !important;
+    justify-self: center !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy h3 {
+    max-width: 15ch !important;
+    margin: 0 auto 0.75rem !important;
+    font-size: clamp(1.55rem, 7vw, 2rem) !important;
+    line-height: 1.06 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-copy p {
+    max-width: 27ch !important;
+    margin: 0 auto 0.8rem !important;
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-points {
+    gap: 0.6rem !important;
+    margin-top: 0.65rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-points > div {
+    padding: 0.68rem 0.7rem !important;
+    border-radius: 14px !important;
+    text-align: center !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-points strong {
+    margin-bottom: 0.25rem !important;
+    font-size: 0.92rem !important;
+    line-height: 1.18 !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-points span {
+    font-size: 0.88rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-image-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 500px !important;
+    min-height: 500px !important;
+    padding: 0.25rem !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-carousel,
+  .homepage-body #solucao .vm-dashboard-carousel-inner,
+  .homepage-body #solucao .vm-dashboard-carousel .carousel-item {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0.32rem !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-browser-bar {
+    position: static !important;
+    flex: 0 0 18px !important;
+    height: 18px !important;
+    padding: 0 0.42rem !important;
+    margin-bottom: 0.28rem !important;
+    border-radius: 12px !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-browser-bar span {
+    width: 28px !important;
+    height: 5px !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-browser-bar span:nth-child(2) {
+    width: 40px !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-print-frame {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    background: #ffffff !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-print-frame picture {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-print-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+    border-radius: 14px !important;
+    object-fit: contain !important;
+    object-position: center top !important;
+    transform: none !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-panel
+    .vm-dashboard-print-frame
+    img {
+    transform: scale(1.14) !important;
+    transform-origin: center top !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-route
+    .vm-dashboard-print-frame
+    img {
+    transform: scale(1.03) !important;
+    transform-origin: center top !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-caption {
+    width: 100% !important;
+    height: 104px !important;
+    min-height: 104px !important;
+    flex: 0 0 104px !important;
+    margin: 0.35rem 0 0 !important;
+    padding: 0.72rem 0.8rem !important;
+    border-radius: 15px !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-caption span {
+    width: fit-content !important;
+    max-width: 100% !important;
+    min-height: 28px !important;
+    padding: 0.38rem 0.7rem !important;
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-caption strong {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 0.92rem !important;
+    line-height: 1.28 !important;
+    text-align: left !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-carousel-control {
+    display: none !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 0.95rem !important;
+    padding: 1rem 0.9rem !important;
+    border-radius: 18px !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta h3 {
+    font-size: 1.45rem !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-integrated-cta p {
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+  }
+}
+
+/* ==========================================================================
+   08 — CTA DO BLOG DENTRO DA HOMEPAGE
    ========================================================================== */
 
 .homepage-body .vm-blog-support-section {
@@ -2269,7 +2856,7 @@ html:has(.homepage-body) {
   }
 
   .vm-blog-preview-content p {
-    font-size: 1.045rem;
+    font-size: 1.04rem;
     line-height: 1.6;
   }
 
@@ -2279,425 +2866,6 @@ html:has(.homepage-body) {
   }
 }
 
-/* ==========================================================================
-   CARD DO CARROSSEL
-   ========================================================================== */
-
-.vm-dashboard-image-card {
-  width: 100% !important;
-  min-height: 600px !important;
-  display: flex !important;
-  align-items: stretch !important;
-  justify-content: center !important;
-  padding: 0.28rem !important;
-  border-radius: 28px !important;
-  background: linear-gradient(
-    135deg,
-    #dbeafe 0%,
-    #ffffff 55%,
-    #dcfce7 100%
-  ) !important;
-  border: 1px solid rgba(37, 99, 235, 0.14) !important;
-  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12) !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-.vm-dashboard-carousel {
-  width: 100% !important;
-  min-height: 600px !important;
-  border-radius: 24px !important;
-  overflow: hidden !important;
-  background: #f8fbff !important;
-  position: relative !important;
-}
-
-.vm-dashboard-carousel-inner,
-.vm-dashboard-carousel .carousel-item {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 600px !important;
-}
-
-/* ==========================================================================
-   ÁREA INTERNA DE CADA SLIDE
-   ========================================================================== */
-
-.vm-dashboard-carousel .carousel-item {
-  position: relative !important;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(243, 247, 252, 0.96) 100%
-  ) !important;
-}
-
-.vm-dashboard-carousel .carousel-item::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0.9rem 0.9rem 3.9rem 0.9rem !important;
-  border-radius: 20px !important;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(246, 249, 253, 0.98) 100%
-  ) !important;
-  border: 1px solid rgba(148, 163, 184, 0.16) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
-  z-index: 1 !important;
-}
-
-.vm-dashboard-carousel .carousel-item img {
-  position: absolute !important;
-  inset: 1.25rem 1.25rem 4.45rem 1.25rem !important;
-  width: calc(100% - 2.5rem) !important;
-  height: calc(100% - 5.7rem) !important;
-  display: block !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  border-radius: 16px !important;
-  background: #ffffff !important;
-  z-index: 2 !important;
-  transition: transform 0.35s ease !important;
-}
-
-/* ==========================================================================
-   TRATAMENTO INDIVIDUAL DOS PRINTS
-   - Primeiro slide: dashboard
-   - Segundo slide: rota
-   O print da rota recebe um zoom maior para ganhar altura visual
-   sem distorção.
-   ========================================================================== */
-
-.vm-dashboard-carousel .carousel-item:first-child img {
-  transform: scale(1.02) !important;
-}
-
-.vm-dashboard-carousel .carousel-item:nth-child(2) img {
-  transform: scale(1.14) !important;
-  object-position: center center !important;
-}
-
-/* ==========================================================================
-   LEGENDA DO SLIDE
-   ========================================================================== */
-
-.vm-dashboard-slide-caption {
-  position: absolute !important;
-  left: 1rem !important;
-  right: 1rem !important;
-  bottom: 0.95rem !important;
-  z-index: 4 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 0.7rem !important;
-  padding: 0.75rem 0.9rem !important;
-  border-radius: 16px !important;
-  background: rgba(15, 23, 42, 0.78) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: blur(10px) !important;
-  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.2) !important;
-}
-
-.vm-dashboard-slide-caption span {
-  flex: 0 0 auto !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 28px !important;
-  padding: 0.36rem 0.65rem !important;
-  border-radius: 999px !important;
-  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
-  color: #ffffff !important;
-  font-size: 0.62rem !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
-  white-space: nowrap !important;
-}
-
-.vm-dashboard-slide-caption strong {
-  display: block !important;
-  margin: 0 !important;
-  color: #f8fafc !important;
-  font-size: 0.78rem !important;
-  font-weight: 800 !important;
-  line-height: 1.3 !important;
-  text-align: left !important;
-}
-
-/* ==========================================================================
-   INDICADORES
-   ========================================================================== */
-
-.vm-dashboard-carousel-indicators {
-  position: absolute !important;
-  top: 1rem !important;
-  left: 1rem !important;
-  right: auto !important;
-  bottom: auto !important;
-  z-index: 5 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 0.35rem !important;
-  margin: 0 !important;
-}
-
-.vm-dashboard-carousel-indicators [data-bs-target] {
-  width: 30px !important;
-  height: 6px !important;
-  margin: 0 !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  background: rgba(15, 23, 42, 0.22) !important;
-  opacity: 1 !important;
-}
-
-.vm-dashboard-carousel-indicators .active {
-  width: 44px !important;
-  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%) !important;
-}
-
-/* ==========================================================================
-   CONTROLES LATERAIS
-   ========================================================================== */
-
-.vm-dashboard-carousel-control {
-  width: 42px !important;
-  height: 42px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  border-radius: 999px !important;
-  background: rgba(15, 23, 42, 0.36) !important;
-  opacity: 0 !important;
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    background 0.25s ease !important;
-  z-index: 5 !important;
-}
-
-.vm-dashboard-image-card:hover .vm-dashboard-carousel-control {
-  opacity: 1 !important;
-}
-
-.vm-dashboard-carousel-control:hover {
-  background: rgba(15, 23, 42, 0.62) !important;
-  transform: translateY(-50%) scale(1.04) !important;
-}
-
-.vm-dashboard-carousel .carousel-control-prev {
-  left: 0.9rem !important;
-}
-
-.vm-dashboard-carousel .carousel-control-next {
-  right: 0.9rem !important;
-}
-
-.vm-dashboard-carousel .carousel-control-prev-icon,
-.vm-dashboard-carousel .carousel-control-next-icon {
-  width: 1.1rem !important;
-  height: 1.1rem !important;
-}
-
-/* ==========================================================================
-   CTA INTEGRADO DA SEÇÃO
-   ========================================================================== */
-
-.vm-dashboard-integrated-cta {
-  width: min(1120px, 100%) !important;
-  margin: 1.25rem auto 0 !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 1rem !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-.vm-dashboard-integrated-cta .vm-section-cta-copy {
-  max-width: 760px !important;
-}
-
-.vm-dashboard-integrated-cta .vm-section-cta-copy h3 {
-  margin: 0 0 0.45rem !important;
-  color: #0f172a !important;
-  font-size: clamp(1.5rem, 2vw, 2rem) !important;
-  font-weight: 900 !important;
-  line-height: 1.1 !important;
-}
-
-.vm-dashboard-integrated-cta .vm-section-cta-copy p {
-  margin: 0 !important;
-  color: #64748b !important;
-  font-size: 0.95rem !important;
-  line-height: 1.65 !important;
-}
-
-/* ==========================================================================
-   RESPONSIVO — TABLET
-   ========================================================================== */
-
-@media (max-width: 991.98px) {
-  .vm-dashboard-layout {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-
-  .vm-dashboard-copy {
-    padding: 1.2rem !important;
-  }
-
-  .vm-dashboard-copy h3 {
-    font-size: clamp(1.45rem, 4.4vw, 2rem) !important;
-  }
-
-  .vm-dashboard-image-card {
-    min-height: 520px !important;
-  }
-
-  .vm-dashboard-carousel,
-  .vm-dashboard-carousel-inner,
-  .vm-dashboard-carousel .carousel-item {
-    min-height: 520px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item::before {
-    inset: 0.8rem 0.8rem 3.6rem 0.8rem !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item img {
-    inset: 1.05rem 1.05rem 4.1rem 1.05rem !important;
-    width: calc(100% - 2.1rem) !important;
-    height: calc(100% - 5.15rem) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:first-child img {
-    transform: scale(1.01) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:nth-child(2) img {
-    transform: scale(1.1) !important;
-  }
-
-  .vm-dashboard-integrated-cta {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-}
-
-/* ==========================================================================
-   RESPONSIVO — MOBILE
-   ========================================================================== */
-
-@media (max-width: 575.98px) {
-  .vm-dashboard-copy {
-    padding: 1rem !important;
-    border-radius: 20px !important;
-  }
-
-  .vm-dashboard-copy h3 {
-    font-size: 1.5rem !important;
-    line-height: 1.1 !important;
-  }
-
-  .vm-dashboard-copy p {
-    font-size: 1.012rem !important;
-  }
-
-  .vm-dashboard-points > div {
-    padding: 0.8rem 0.85rem !important;
-    border-radius: 14px !important;
-  }
-
-  .vm-dashboard-image-card {
-    min-height: 390px !important;
-    padding: 0.2rem !important;
-    border-radius: 22px !important;
-  }
-
-  .vm-dashboard-carousel,
-  .vm-dashboard-carousel-inner,
-  .vm-dashboard-carousel .carousel-item {
-    min-height: 390px !important;
-    border-radius: 18px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item::before {
-    inset: 0.55rem 0.55rem 3.35rem 0.55rem !important;
-    border-radius: 16px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item img {
-    inset: 0.8rem 0.8rem 3.9rem 0.8rem !important;
-    width: calc(100% - 1.6rem) !important;
-    height: calc(100% - 4.7rem) !important;
-    border-radius: 12px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:first-child img {
-    transform: scale(1) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:nth-child(2) img {
-    transform: scale(1.08) !important;
-  }
-
-  .vm-dashboard-slide-caption {
-    left: 0.65rem !important;
-    right: 0.65rem !important;
-    bottom: 0.65rem !important;
-    padding: 0.65rem 0.7rem !important;
-    gap: 0.45rem !important;
-    border-radius: 14px !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-
-  .vm-dashboard-slide-caption span {
-    min-height: 26px !important;
-    font-size: 0.594rem !important;
-    padding: 0.32rem 0.55rem !important;
-  }
-
-  .vm-dashboard-slide-caption strong {
-    font-size: 0.72rem !important;
-    line-height: 1.28 !important;
-  }
-
-  .vm-dashboard-carousel-indicators {
-    top: 0.65rem !important;
-    left: 0.65rem !important;
-  }
-
-  .vm-dashboard-carousel-indicators [data-bs-target] {
-    width: 24px !important;
-    height: 5px !important;
-  }
-
-  .vm-dashboard-carousel-indicators .active {
-    width: 34px !important;
-  }
-
-  .vm-dashboard-carousel-control {
-    display: none !important;
-  }
-
-  .vm-dashboard-integrated-cta .vm-section-cta-copy h3 {
-    font-size: 1.35rem !important;
-  }
-
-  .vm-dashboard-integrated-cta .vm-section-cta-copy p {
-    font-size: 0.99rem !important;
-  }
-}
-
-/* ========================================================================== */
 /* 08 — SEÇÃO PRODUTOS                                                         */
 /* ========================================================================== */
 
@@ -3791,7 +3959,7 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-proof-section .vm-subtext,
   .homepage-body .vm-proof-section .vm-section-heading p {
-    font-size: 1.034rem !important;
+    font-size: 1.03rem !important;
     line-height: 1.55 !important;
   }
 
@@ -3815,7 +3983,7 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-proof-content blockquote {
     min-height: auto !important;
-    font-size: 1.034rem !important;
+    font-size: 1.03rem !important;
     line-height: 1.6 !important;
   }
 
@@ -4771,29 +4939,6 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
-/* 07.7 — OVERRIDE FINAL DO DASHBOARD                                          */
-/* Garante que regras globais de seção e parágrafo não aumentem o padding.     */
-/* ========================================================================== */
-.homepage-body .vm-dashboard-showcase {
-  padding-top: 4rem !important;
-  padding-bottom: 4rem !important;
-}
-
-.homepage-body .vm-dashboard-showcase .vm-section-heading {
-  margin-bottom: 2.1rem !important;
-}
-
-.homepage-body .vm-dashboard-showcase .vm-dashboard-copy p {
-  font-size: 1rem !important;
-  line-height: 1.62 !important;
-}
-
-.homepage-body .vm-dashboard-showcase .vm-dashboard-points span {
-  font-size: 0.9rem !important;
-  line-height: 1.45 !important;
-}
-
-/* ========================================================================== */
 /* 18 — RESPONSIVO GERAL / TABLET                                              */
 /* ========================================================================== */
 @media (max-width: 991.98px) {
@@ -4882,26 +5027,6 @@ html:has(.homepage-body) {
     white-space: normal;
   }
 
-  .vm-dashboard-layout {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .vm-dashboard-image-card {
-    max-width: 720px;
-    justify-self: center;
-  }
-
-  .vm-dashboard-copy {
-    max-width: 720px;
-    justify-self: center;
-    text-align: center;
-  }
-
-  .vm-dashboard-points div {
-    text-align: left;
-  }
-
   .homepage-body .vm-product-grid {
     grid-template-columns: 1fr;
   }
@@ -4916,30 +5041,7 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 @media (max-width: 576px) {
   .vm-pains-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .vm-dashboard-layout {
-    width: min(100% - 1rem, 1180px);
-    gap: 1rem;
-  }
-
-  .vm-dashboard-copy {
-    padding: 1.25rem;
-    border-radius: 22px;
-  }
-
-  .vm-dashboard-copy h3 {
-    font-size: 1.6rem;
-  }
-
-  .vm-dashboard-image-card {
-    padding: 0.45rem;
-    border-radius: 20px;
-  }
-
-  .vm-dashboard-image-card img {
-    border-radius: 16px;
+    grid-template-columns: 1fr !important;
   }
 }
 
@@ -4957,7 +5059,7 @@ html:has(.homepage-body) {
   }
 
   .vm-mini-card span {
-    font-size: 1.232rem;
+    font-size: 1.23rem;
     line-height: 1.5;
   }
 
@@ -4985,7 +5087,7 @@ html:has(.homepage-body) {
     border: 1px solid rgba(148, 163, 184, 0.22);
     background: rgba(255, 255, 255, 0.06);
     color: #e2e8f0;
-    font-size: 1.155rem;
+    font-size: 1.16rem;
     font-weight: 800;
     line-height: 1.25;
     text-align: center;
@@ -5011,7 +5113,7 @@ html:has(.homepage-body) {
   }
 
   .vm-radio-card i {
-    font-size: 1.1rem;
+    font-size: 1.21rem;
     line-height: 1;
   }
 
@@ -5039,7 +5141,7 @@ html:has(.homepage-body) {
   }
 
   .vm-options-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-align: left;
   }
 
@@ -5049,7 +5151,7 @@ html:has(.homepage-body) {
   }
 
   .vm-check-chip span {
-    font-size: 1.155rem;
+    font-size: 1.16rem;
   }
 
   .vm-submit-btn {
@@ -5101,7 +5203,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-products-section .vm-product-card h3 {
-    font-size: 1.18rem !important;
+    font-size: 1.3rem !important;
     min-height: auto !important;
   }
 
@@ -5114,73 +5216,56 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-module-card p {
-    font-size: 1.166rem;
+    font-size: 1.17rem;
     line-height: 1.72;
   }
 
   .homepage-body .vm-module-card--highlight p {
-    font-size: 1.166rem;
+    font-size: 1.17rem;
     line-height: 1.72;
   }
 
   .homepage-body {
-    font-size: 16.5px;
+    font-size: 18.2px;
     box-sizing: border-box;
     overflow-x: hidden;
   }
 
   .homepage-body p {
-    font-size: 1.166rem !important;
+    font-size: 1.17rem !important;
     line-height: 1.68 !important;
   }
 
   .homepage-body .vm-subtext {
-    font-size: 1.166rem !important;
+    font-size: 1.17rem !important;
     line-height: 1.68 !important;
   }
-
-  .homepage-body .vm-dashboard-copy p {
-    font-size: 1.166rem !important;
-    line-height: 1.68 !important;
-  }
-
   .homepage-body .vm-contact-header h3 {
-    font-size: 1.06rem !important;
+    font-size: 1.17rem !important;
     line-height: 1.68 !important;
   }
 
   .homepage-body .vm-products-intro {
-    font-size: 1.188rem;
+    font-size: 1.19rem;
     line-height: 1.68;
   }
 
   .homepage-body .vm-modules-subtitle {
-    font-size: 1.08rem;
+    font-size: 1.19rem;
     line-height: 1.68;
   }
 
   .homepage-body .vm-before-after li {
-    font-size: 1.122rem !important;
+    font-size: 1.12rem !important;
     line-height: 1.65 !important;
   }
-
-  .homepage-body .vm-dashboard-points span {
-    font-size: 1.122rem !important;
-    line-height: 1.65 !important;
-  }
-
-  .homepage-body .vm-pain-card p {
-    font-size: 1.122rem;
-    line-height: 1.66;
-  }
-
   .homepage-body .vm-products-section .vm-product-card p {
-    font-size: 1.034rem !important;
+    font-size: 1.03rem !important;
     line-height: 1.58 !important;
   }
 
   .homepage-body .vm-products-section .vm-product-points li {
-    font-size: 0.968rem !important;
+    font-size: 0.97rem !important;
     line-height: 1.38 !important;
   }
 
@@ -5192,15 +5277,6 @@ html:has(.homepage-body) {
     margin-bottom: 1rem;
     padding: 48px 0;
   }
-
-  .homepage-body #solucao {
-    display: block;
-    width: calc(100% - 0.75rem);
-    margin-inline: auto;
-    padding: 1.6rem 1rem 1.15rem;
-    border-radius: 26px;
-  }
-
   .homepage-body .vm-proof {
     display: block;
     width: calc(100% - 0.75rem);
@@ -5214,86 +5290,23 @@ html:has(.homepage-body) {
     padding-inline: 1rem;
     border-radius: 26px;
   }
-
-  .homepage-body #solucao .vm-section-heading {
-    width: 100%;
-    margin-bottom: 1.2rem;
-    padding-inline: 0.1rem;
-  }
-
-  .homepage-body #solucao .vm-section-heading .titulo-servicos {
-    max-width: 16ch;
-    margin-inline: auto;
-    font-size: clamp(2.05rem, 7vw, 2.45rem);
-    line-height: 1.12;
-  }
-
-  .homepage-body #solucao .vm-section-heading h2 {
-    max-width: 16ch;
-    margin-inline: auto;
-    font-size: clamp(2.05rem, 7vw, 2.45rem);
-    line-height: 1.12;
-  }
-
-  .homepage-body #solucao .vm-section-heading p {
-    max-width: 100%;
-    margin-inline: auto;
-    padding-inline: 0.2rem;
-  }
-
-  .homepage-body #solucao .vm-grid {
-    width: 100%;
-    gap: 0.9rem;
-  }
-
-  .homepage-body #dores {
-    width: calc(100% - 0.75rem);
-    margin-inline: auto;
-  }
-
   .homepage-body .vm-transform {
     width: calc(100% - 0.75rem);
     margin-inline: auto;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
-
-  .homepage-body .vm-pains-grid {
-    gap: 0.9rem;
-  }
-
   .homepage-body .vm-proof-grid {
     gap: 0.9rem;
   }
-
-  .homepage-body .vm-pain-card {
-    min-height: auto;
-    padding: 1.15rem 1rem;
-    border-radius: 20px;
-  }
-
   .homepage-body .vm-proof-item {
     min-height: auto;
     padding: 1.15rem 1rem;
     border-radius: 20px;
   }
 
-  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n + 5) {
-    display: flex;
-  }
-
-  .homepage-body .vm-pain-card h3 {
-    width: 100%;
-    max-width: 100%;
-    font-size: 1.12rem;
-    line-height: 1.14;
-    letter-spacing: 0;
-    overflow-wrap: anywhere;
-    text-wrap: balance;
-  }
-
   .homepage-body .vm-proof-item p {
-    font-size: 1.122rem;
+    font-size: 1.12rem;
     line-height: 1.66;
   }
 
@@ -5349,12 +5362,12 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-section-heading p {
-    font-size: 1.188rem;
+    font-size: 1.19rem;
     line-height: 1.68;
   }
 
   .homepage-body .vm-section-heading h3 {
-    font-size: 1.08rem;
+    font-size: 1.19rem;
     line-height: 1.68;
   }
 
@@ -5384,7 +5397,7 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-product-chip {
     padding: 0.38rem 0.62rem;
-    font-size: 0.748rem;
+    font-size: 0.75rem;
   }
 
   .homepage-body .vm-modules-header {
@@ -5456,19 +5469,19 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-contact-fields label {
-    font-size: 1.012rem;
+    font-size: 1.01rem;
   }
 
   .homepage-body .vm-input {
     min-height: 48px;
     padding: 0.78rem 0.9rem;
-    font-size: 1.056rem;
+    font-size: 1.06rem;
     border-radius: 14px;
   }
 
   .homepage-body .vm-options-title {
     margin-bottom: 0.7rem;
-    font-size: 0.98rem;
+    font-size: 1.08rem;
   }
 
   .homepage-body .vm-check-chip {
@@ -5492,16 +5505,11 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-form-note {
-    font-size: 0.968rem;
+    font-size: 0.97rem;
   }
 
   .homepage-body .vm-status {
-    font-size: 0.968rem;
-  }
-
-  .homepage-body .vm-pains-section {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    font-size: 0.97rem;
   }
 
   .homepage-body .vm-product-grid {
@@ -5584,15 +5592,10 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 /* @media (max-width: 1199.98px) */
 /* ========================================================================== */
-@media (max-width: 1199.98px) {
+@media (min-width: 768px) and (max-width: 1199.98px) {
   .vm-modules-wrapper {
     padding: 3rem 2rem;
   }
-
-  .homepage-body .vm-pains-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .homepage-body .vm-proof-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -5629,45 +5632,15 @@ html:has(.homepage-body) {
   .homepage-body .vm-section {
     padding: 40px 0;
   }
-
   .homepage-body .vm-proof {
     display: block;
   }
-
-  .homepage-body #solucao {
-    display: block;
-    width: calc(100% - 0.5rem);
-    padding: 1.4rem 0.82rem 1rem;
-    border-radius: 22px;
-    max-width: 100%;
-  }
-
   .homepage-body .vm-products-section {
     display: block;
     width: calc(100% - 0.5rem);
     padding-inline: 0.82rem;
     border-radius: 22px;
     max-width: 100%;
-  }
-
-  .homepage-body #solucao .vm-section-heading {
-    margin-bottom: 1rem;
-  }
-
-  .homepage-body #solucao .vm-section-heading .titulo-servicos {
-    max-width: 14ch;
-    font-size: clamp(1.85rem, 7.2vw, 2.1rem);
-    line-height: 1.12;
-  }
-
-  .homepage-body #solucao .vm-section-heading h2 {
-    max-width: 14ch;
-    font-size: clamp(1.85rem, 7.2vw, 2.1rem);
-    line-height: 1.12;
-  }
-
-  .homepage-body #solucao .vm-section-heading p {
-    padding-inline: 0.1rem;
   }
 
   .homepage-body .vm-section-heading {
@@ -5690,32 +5663,24 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-section-heading p {
-    font-size: 1.144rem;
+    font-size: 1.14rem;
     line-height: 1.66;
   }
 
   .homepage-body .vm-section-heading h3 {
-    font-size: 1.04rem;
+    font-size: 1.14rem;
     line-height: 1.66;
   }
 
   .homepage-body .vm-products-intro {
-    font-size: 1.144rem;
+    font-size: 1.14rem;
     line-height: 1.66;
   }
 
   .homepage-body .vm-modules-subtitle {
-    font-size: 1.04rem;
+    font-size: 1.14rem;
     line-height: 1.66;
   }
-
-  .homepage-body .vm-pain-card {
-    padding: 1.05rem;
-    border-radius: 18px;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
   .homepage-body .vm-product-card {
     padding: 1.05rem;
     border-radius: 18px;
@@ -5744,65 +5709,41 @@ html:has(.homepage-body) {
     overflow: hidden;
   }
 
-  .homepage-body .vm-pains-grid .vm-pain-card:nth-child(n + 5) {
-    display: flex;
-  }
-
-  .homepage-body .vm-pain-marker {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    font-size: 0.836rem;
-  }
-
   .homepage-body .vm-products-section .vm-product-card h3 {
-    font-size: 1.12rem !important;
+    font-size: 1.23rem !important;
     min-height: auto !important;
   }
 
   .homepage-body .vm-module-card h3 {
-    font-size: 1.12rem;
+    font-size: 1.23rem;
   }
 
   .homepage-body .vm-module-card--highlight h3 {
-    font-size: 1.12rem;
-  }
-
-  .homepage-body .vm-pain-card h3 {
-    font-size: 1.08rem;
-    width: 100%;
-    max-width: 100%;
-    line-height: 1.14;
-    letter-spacing: 0;
-    text-wrap: balance;
-  }
-  .homepage-body .vm-pain-card p {
-    font-size: 1.188rem;
-    line-height: 1.72;
+    font-size: 1.23rem;
   }
 
   .homepage-body .vm-products-section .vm-product-card p {
-    font-size: 1.034rem !important;
+    font-size: 1.03rem !important;
     line-height: 1.58 !important;
   }
 
   .homepage-body .vm-module-card p {
-    font-size: 1.188rem;
+    font-size: 1.19rem;
     line-height: 1.72;
   }
 
   .homepage-body .vm-module-card--highlight p {
-    font-size: 1.188rem;
+    font-size: 1.19rem;
     line-height: 1.72;
   }
 
   .homepage-body .vm-proof-item p {
-    font-size: 1.188rem;
+    font-size: 1.19rem;
     line-height: 1.72;
   }
 
   .homepage-body .vm-products-section .vm-product-points li {
-    font-size: 0.968rem !important;
+    font-size: 0.97rem !important;
     line-height: 1.38 !important;
   }
 
@@ -5841,7 +5782,7 @@ html:has(.homepage-body) {
   .homepage-body .vm-ba-label {
     min-height: 36px;
     padding: 0.5rem 0.75rem;
-    font-size: 0.748rem;
+    font-size: 0.75rem;
   }
 
   .homepage-body .vm-modules-header {
@@ -5849,7 +5790,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-product-chip {
-    font-size: 0.704rem;
+    font-size: 0.7rem;
   }
 
   .homepage-body .vm-module-icon {
@@ -5864,7 +5805,7 @@ html:has(.homepage-body) {
 
   .homepage-body .vm-input {
     min-height: 44px;
-    font-size: 1.012rem;
+    font-size: 1.01rem;
   }
 
   .homepage-body .vm-check-chip {
@@ -5886,7 +5827,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-options-title {
-    font-size: 0.9rem;
+    font-size: 0.99rem;
   }
 
   .homepage-body .vm-submit-btn {
@@ -6266,7 +6207,7 @@ html:has(.homepage-body) {
   }
 
   .vm-founder-quote {
-    font-size: 1.078rem;
+    font-size: 1.08rem;
     padding: 1rem 1.1rem;
   }
 
@@ -6275,7 +6216,7 @@ html:has(.homepage-body) {
   }
 
   .vm-founder-tag {
-    font-size: 0.748rem;
+    font-size: 0.75rem;
     padding: 0.26rem 0.6rem;
   }
 
@@ -6285,120 +6226,6 @@ html:has(.homepage-body) {
 
   .vm-founder-actions .btn-founder-cta {
     width: 100%;
-  }
-}
-
-/* =========================================================
-   CORREÇÃO LIGHTHOUSE — NO_LCP / CAROUSEL
-   Garante que o primeiro slide ativo seja considerado visível
-   imediatamente pelo navegador e pelo Lighthouse.
-   ========================================================= */
-
-.vm-dashboard-carousel .carousel-item.active {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.vm-dashboard-carousel .carousel-item.active img {
-  display: block;
-  opacity: 1;
-}
-
-/* =========================================================
-   PERFORMANCE — AJUSTE PARA PICTURE DO CARROSSEL
-   Corrige o corte lateral do slide da rota.
-   ========================================================= */
-
-.vm-dashboard-carousel .carousel-item.active {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.vm-dashboard-carousel .carousel-item.active img {
-  display: block !important;
-  opacity: 1 !important;
-}
-
-.vm-dashboard-carousel .carousel-item picture {
-  position: absolute !important;
-  inset: 1.25rem 1.25rem 4.45rem 1.25rem !important;
-  width: calc(100% - 2.5rem) !important;
-  height: calc(100% - 5.7rem) !important;
-  display: block !important;
-  z-index: 2 !important;
-  overflow: hidden !important;
-  border-radius: 16px !important;
-  background: #ffffff !important;
-}
-
-.vm-dashboard-carousel .carousel-item picture img {
-  position: static !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  border-radius: 16px !important;
-  background: #ffffff !important;
-}
-
-/* Primeiro slide — dashboard */
-.vm-dashboard-carousel .carousel-item:first-child picture img {
-  transform: scale(1.02) !important;
-  transform-origin: center center !important;
-}
-
-/* Segundo slide — rota
-   Reduz o zoom para não cortar a lateral esquerda da imagem. */
-.vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-  transform: scale(1.04) !important;
-  transform-origin: center center !important;
-  object-position: center center !important;
-}
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 991.98px) {
-  .vm-dashboard-carousel .carousel-item picture {
-    inset: 1.05rem 1.05rem 4.1rem 1.05rem !important;
-    width: calc(100% - 2.1rem) !important;
-    height: calc(100% - 5.15rem) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:first-child picture img {
-    transform: scale(1.01) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-    transform: scale(1.03) !important;
-  }
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 575.98px) {
-  .vm-dashboard-carousel .carousel-item picture {
-    inset: 0.8rem 0.8rem 3.9rem 0.8rem !important;
-    width: calc(100% - 1.6rem) !important;
-    height: calc(100% - 4.7rem) !important;
-    border-radius: 12px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item picture img {
-    border-radius: 12px !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:first-child picture img {
-    transform: scale(1) !important;
-  }
-
-  .vm-dashboard-carousel .carousel-item:nth-child(2) picture img {
-    transform: scale(1) !important;
   }
 }
 
@@ -6770,7 +6597,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body .vm-guarantee-text {
-    font-size: 0.95rem !important;
+    font-size: 1.04rem !important;
     line-height: 1.62 !important;
   }
 
@@ -6807,63 +6634,7 @@ html:has(.homepage-body) {
     align-items: flex-start !important;
     border-radius: 18px !important;
     text-align: left !important;
-    font-size: 0.88rem !important;
-  }
-}
-
-/* ========================================================================== */
-/* 20 — TIPOGRAFIA MOBILE / LEGIBILIDADE                                      */
-/* Ajuste apenas para celular: textos auxiliares, parágrafos, spans e listas  */
-/* recebem leitura mais confortável sem alterar a versão desktop.             */
-/* ========================================================================== */
-
-@media (max-width: 575.98px) {
-  .homepage-body .vm-subtext,
-  .homepage-body .vm-products-intro,
-  .homepage-body .vm-modules-subtitle,
-  .homepage-body .vm-section-heading p,
-  .homepage-body .vm-dashboard-copy p,
-  .homepage-body .vm-dashboard-points span,
-  .homepage-body .vm-product-card p,
-  .homepage-body .vm-product-points li,
-  .homepage-body .vm-module-card p,
-  .homepage-body .vm-before-after li,
-  .homepage-body .vm-proof-content blockquote,
-  .homepage-body .vm-proof-author p,
-  .homepage-body .vm-blog-preview-content p,
-  .homepage-body .vm-blog-card-excerpt,
-  .homepage-body .vm-blog-inline-cta p,
-  .homepage-body .vm-founder-quote,
-  .homepage-body .vm-guarantee-text,
-  .homepage-body .vm-guarantee-cancel-note,
-  .homepage-body .vm-footer p,
-  .homepage-body .vm-footer span,
-  .homepage-body .footer-links-list a {
-    font-size: 1.18rem !important;
-    line-height: 1.76 !important;
-  }
-
-  .homepage-body .vm-kicker,
-  .homepage-body .vm-product-chip,
-  .homepage-body .vm-founder-tag,
-  .homepage-body .vm-ba-label,
-  .homepage-body .vm-card-mini .tag,
-  .homepage-body .vm-card-alert .tag,
-  .homepage-body .vm-dashboard-slide-caption span {
-    font-size: 0.82rem !important;
-    line-height: 1.32 !important;
-  }
-
-  .homepage-body .vm-panel-metrics span,
-  .homepage-body .vm-card-alert p,
-  .homepage-body .vm-hero-mini-card span,
-  .homepage-body .vm-mini-card span,
-  .homepage-body .vm-radio-card span,
-  .homepage-body .vm-check-chip span,
-  .homepage-body .vm-form-note,
-  .homepage-body .vm-status {
-    font-size: 0.98rem !important;
-    line-height: 1.55 !important;
+    font-size: 0.97rem !important;
   }
 }
 
