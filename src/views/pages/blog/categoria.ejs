@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', {
+  title,
+  metaDescription,
+  canonicalUrl,
+  extraStyles
+}) %>
+
+<body class="blog-page">
+  <%- include('../../partials/blogPublicHeader') %>
+
+  <main class="blog-main">
+    <section class="blog-hero blog-hero-compact">
+      <div class="blog-container">
+        <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="/blog">Blog</a>
+          <span aria-hidden="true">/</span>
+          <span><%= categoria %></span>
+        </nav>
+
+        <div class="blog-hero-content">
+          <span class="blog-eyebrow">Categoria</span>
+
+          <h1>Artigos sobre <%= categoria %></h1>
+
+          <p>
+            Conteúdos selecionados para ajudar você a melhorar a operação,
+            o controle e a gestão dos seus pontos.
+          </p>
+        </div>
+
+        <% if (categorias && categorias.length) { %>
+          <div class="blog-category-list" aria-label="Categorias do blog">
+            <% categorias.forEach((item) => { %>
+              <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>"
+                 class="<%= item.categoria === categoria ? 'is-active' : '' %>">
+                <%= item.categoria %>
+                <span><%= item.total %></span>
+              </a>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="blog-section">
+      <div class="blog-container">
+        <div class="blog-section-header">
+          <div>
+            <span class="blog-eyebrow">Publicações</span>
+            <h2>Todos os artigos desta categoria</h2>
+          </div>
+
+          <p>
+            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog VendMaster.
+          </p>
+        </div>
+
+        <% if (posts && posts.length) { %>
+          <div class="blog-grid">
+            <% posts.forEach((post) => { %>
+              <article class="blog-card">
+                <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
+                  <% if (post.imagem_capa) { %>
+                    <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
+                  <% } else { %>
+                    <div class="blog-card-image-placeholder">
+                      <span>VendMaster</span>
+                    </div>
+                  <% } %>
+                </a>
+
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
+                      <%= post.categoria %>
+                    </a>
+
+                    <% if (post.data_publicacao) { %>
+                      <span><%= formatarDataPost(post.data_publicacao) %></span>
+                    <% } %>
+                  </div>
+
+                  <h3>
+                    <a href="/blog/<%= post.slug %>">
+                      <%= post.titulo %>
+                    </a>
+                  </h3>
+
+                  <p><%= post.resumo %></p>
+
+                  <a href="/blog/<%= post.slug %>" class="blog-read-more">
+                    Ler artigo
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="blog-empty">
+            <h3>Nenhum artigo encontrado nesta categoria.</h3>
+            <p>
+              Quando houver artigos publicados sobre <%= categoria %>, eles aparecerão aqui.
+            </p>
+
+            <a href="/blog" class="blog-read-more">
+              Voltar para o blog
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="blog-cta-section">
+      <div class="blog-container">
+        <div class="blog-cta-card">
+          <div>
+            <span class="blog-eyebrow">VendMaster</span>
+            <h2>Transforme organização em rotina na sua operação</h2>
+            <p>
+              Controle pontos, sangrias, rotas, estoque e financeiro com mais clareza.
+            </p>
+          </div>
+
+          <a href="/#contato" class="blog-cta-button">
+            Conhecer o VendMaster
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>

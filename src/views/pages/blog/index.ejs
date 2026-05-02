@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', {
+  title,
+  metaDescription,
+  canonicalUrl,
+  extraStyles
+}) %>
+
+<body class="blog-page">
+  <%- include('../../partials/blogPublicHeader') %>
+
+  <main class="blog-main">
+    <section class="blog-hero blog-home-hero">
+      <div class="blog-container">
+        <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <span>Blog</span>
+        </nav>
+
+        <div class="blog-home-hero-grid">
+          <div class="blog-hero-content">
+            <span class="blog-eyebrow">Blog VendMaster</span>
+
+            <h1>Conteúdos para operadores de máquinas recreativas e pontos consignados</h1>
+
+            <p>
+              Estratégias práticas para melhorar rotas, sangrias, estoque,
+              financeiro e controle operacional de quem trabalha com máquinas
+              de bolinhas, figurinhas, pelúcias e produtos consignados.
+            </p>
+
+            <div class="blog-hero-actions">
+              <a href="#artigos" class="blog-primary-link">
+                Ver artigos
+              </a>
+
+              <a href="/#contato" class="blog-secondary-link">
+                Conhecer o VendMaster
+              </a>
+            </div>
+          </div>
+
+          <aside class="blog-hero-panel" aria-label="Temas do Blog VendMaster">
+            <div class="blog-hero-panel-header">
+              <span class="blog-hero-panel-label">Conteúdos focados em operação real</span>
+
+              <strong class="blog-brand-mark" aria-label="VendMaster">
+                <span class="blog-brand-primary">Vend</span><span class="blog-brand-accent">Master</span>
+              </strong>
+            </div>
+
+            <div class="blog-hero-topic-list">
+              <div class="blog-hero-topic">
+                <span>01</span>
+                <div>
+                  <h2>Rotas mais inteligentes</h2>
+                  <p>Organização de visitas, prioridades e pontos que precisam de atenção.</p>
+                </div>
+              </div>
+
+              <div class="blog-hero-topic">
+                <span>02</span>
+                <div>
+                  <h2>Sangrias e comissões</h2>
+                  <p>Controle de valores apurados, repasses, lucro líquido e registros.</p>
+                </div>
+              </div>
+
+              <div class="blog-hero-topic">
+                <span>03</span>
+                <div>
+                  <h2>Estoque e reposição</h2>
+                  <p>Boas práticas para reduzir improviso e evitar falta de produto nos pontos.</p>
+                </div>
+              </div>
+
+              <div class="blog-hero-topic">
+                <span>04</span>
+                <div>
+                  <h2>Gestão financeira</h2>
+                  <p>Visão sobre entradas, saídas, margem, recorrência e crescimento.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <% if (categorias && categorias.length) { %>
+          <div class="blog-category-list blog-home-category-list" aria-label="Categorias do blog">
+            <% categorias.forEach((item) => { %>
+              <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>">
+                <%= item.categoria %>
+                <span><%= item.total %></span>
+              </a>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="blog-intro-strip">
+      <div class="blog-container">
+        <div class="blog-intro-grid">
+          <div class="blog-intro-item">
+            <strong>Operação</strong>
+            <span>Conteúdos para melhorar a rotina de campo.</span>
+          </div>
+
+          <div class="blog-intro-item">
+            <strong>Controle</strong>
+            <span>Ideias para organizar sangrias, estoque e financeiro.</span>
+          </div>
+
+          <div class="blog-intro-item">
+            <strong>Crescimento</strong>
+            <span>Boas práticas para escalar com mais previsibilidade.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-section" id="artigos">
+      <div class="blog-container">
+        <div class="blog-section-header">
+          <div>
+            <span class="blog-eyebrow">Artigos</span>
+            <h2>Publicações mais recentes</h2>
+          </div>
+
+          <p>
+            Materiais criados para ajudar operadores a saírem do controle manual
+            e tomarem decisões com mais clareza.
+          </p>
+        </div>
+
+        <% if (posts && posts.length) { %>
+          <div class="blog-grid">
+            <% posts.forEach((post) => { %>
+              <article class="blog-card">
+                <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
+                  <% if (post.imagem_capa) { %>
+                    <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
+                  <% } else { %>
+                    <div class="blog-card-image-placeholder">
+                      <span>VendMaster</span>
+                    </div>
+                  <% } %>
+                </a>
+
+                <div class="blog-card-body">
+                  <div class="blog-card-meta">
+                    <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
+                      <%= post.categoria %>
+                    </a>
+
+                    <% if (post.data_publicacao) { %>
+                      <span><%= formatarDataPost(post.data_publicacao) %></span>
+                    <% } %>
+                  </div>
+
+                  <h3>
+                    <a href="/blog/<%= post.slug %>">
+                      <%= post.titulo %>
+                    </a>
+                  </h3>
+
+                  <p><%= post.resumo %></p>
+
+                  <a href="/blog/<%= post.slug %>" class="blog-read-more">
+                    Ler artigo
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="blog-empty blog-empty-premium">
+            <div class="blog-empty-icon">VM</div>
+
+            <div>
+              <span class="blog-eyebrow">Em breve</span>
+
+              <h3>Nenhum artigo publicado ainda.</h3>
+
+              <p>
+                A estrutura do blog já está pronta. Quando os primeiros conteúdos forem publicados,
+                eles aparecerão aqui com foco em rotas, sangrias, estoque, financeiro e gestão de pontos.
+              </p>
+            </div>
+
+            <a href="/#contato" class="blog-empty-link">
+              Conhecer o sistema enquanto isso
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="blog-topic-section">
+      <div class="blog-container">
+        <div class="blog-section-header">
+          <div>
+            <span class="blog-eyebrow">Pilares do conteúdo</span>
+            <h2>O que você vai encontrar no blog</h2>
+          </div>
+
+          <p>
+            O blog foi pensado para atrair operadores que sentem dificuldade
+            em organizar a operação no dia a dia.
+          </p>
+        </div>
+
+        <div class="blog-topic-grid">
+          <article class="blog-topic-card">
+            <span>01</span>
+            <h3>Rotas e visitas</h3>
+            <p>
+              Como priorizar pontos, reduzir deslocamentos desnecessários
+              e evitar visitas no improviso.
+            </p>
+          </article>
+
+          <article class="blog-topic-card">
+            <span>02</span>
+            <h3>Sangrias e apuração</h3>
+            <p>
+              Como registrar coletas, comissões, valores do comerciante
+              e lucro líquido com mais clareza.
+            </p>
+          </article>
+
+          <article class="blog-topic-card">
+            <span>03</span>
+            <h3>Estoque e reposição</h3>
+            <p>
+              Como evitar falta de produto, excesso parado e perda de controle
+              entre os pontos.
+            </p>
+          </article>
+
+          <article class="blog-topic-card">
+            <span>04</span>
+            <h3>Financeiro operacional</h3>
+            <p>
+              Como acompanhar entradas, saídas, recorrência, margem e resultado
+              por produto.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-cta-section">
+      <div class="blog-container">
+        <div class="blog-cta-card blog-cta-card-premium">
+          <div>
+            <span class="blog-eyebrow">VendMaster</span>
+
+            <h2>Quer organizar suas rotas, sangrias e estoque em um só lugar?</h2>
+
+            <p>
+              O VendMaster foi criado para operadores que precisam controlar pontos,
+              máquinas, sangrias, estoque, comissões e financeiro sem depender de planilhas soltas.
+            </p>
+          </div>
+
+          <a href="/#contato" class="blog-cta-button">
+            Conhecer o VendMaster
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>
