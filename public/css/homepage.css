@@ -1172,6 +1172,10 @@ html:has(.homepage-body) {
   background: rgba(67, 19, 27, 0.34);
 }
 
+/* ========================================================================== */
+/* 02.1 — HERO / RESPONSIVO TABLET                                            */
+/* ========================================================================== */
+
 @media (max-width: 1199.98px) {
   .vm-hero-container {
     align-items: stretch;
@@ -1250,18 +1254,22 @@ html:has(.homepage-body) {
   }
 }
 
+/* ========================================================================== */
+/* 02.2 — HERO / MOBILE                                                       */
+/* ========================================================================== */
+
 @media (max-width: 575.98px) {
   .vm-hero {
     min-height: auto;
-    padding: 6.4rem 0.75rem 2.25rem;
+    padding: 5.85rem 0.72rem 1.65rem;
     align-items: flex-start;
   }
 
   .vm-hero-container {
-    padding: 1.1rem 0.9rem 1rem;
+    padding: 1rem 0.82rem 0.85rem;
     border-radius: 22px;
     transform: none;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   .vm-hero-left {
@@ -1270,29 +1278,29 @@ html:has(.homepage-body) {
   }
 
   .vm-hero-title {
-    max-width: 12.5ch;
-    margin-bottom: 1rem;
-    font-size: clamp(2.35rem, 11.2vw, 2.85rem);
-    line-height: 1.02;
+    max-width: 12.8ch;
+    margin-bottom: 0.72rem;
+    font-size: clamp(2.08rem, 10.2vw, 2.52rem);
+    line-height: 1.03;
     letter-spacing: -0.055em;
   }
 
   .vm-hero-title .text-accent {
     display: block;
-    width: 9.8ch;
-    max-width: 9.8ch;
-    margin: 0.18rem auto 0;
+    width: 10.2ch;
+    max-width: 10.2ch;
+    margin: 0.14rem auto 0;
   }
 
   .vm-hero-badge {
-    width: min(100%, 17.5rem);
+    width: min(100%, 16.8rem);
     max-width: 100%;
-    margin: 0.9rem 0 1.2rem;
-    padding: 0.78rem 1.05rem;
+    margin: 0.62rem 0 0.82rem;
+    padding: 0.62rem 0.9rem;
     border-radius: 999px;
-    font-size: 0.84rem;
+    font-size: 0.74rem;
     line-height: 1.22;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.035em;
   }
 
   .vm-hero-badge span {
@@ -1306,10 +1314,10 @@ html:has(.homepage-body) {
   }
 
   .vm-hero-description {
-    max-width: 31ch;
-    margin-bottom: 1.35rem;
-    font-size: 1.1rem;
-    line-height: 1.62;
+    max-width: 30ch;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.55;
     text-align: center;
     letter-spacing: -0.018em;
   }
@@ -1318,7 +1326,7 @@ html:has(.homepage-body) {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.62rem;
     margin-top: 0;
     padding-top: 0;
   }
@@ -1328,17 +1336,22 @@ html:has(.homepage-body) {
   .vm-hero-buttons .btn-outline-light {
     width: 100%;
     min-width: 0;
-    min-height: 54px;
-    padding: 0 1rem;
-    font-size: 1.03rem;
+    min-height: 50px;
+    padding: 0 0.9rem;
+    border-radius: 14px;
+    font-size: 0.98rem;
     white-space: normal;
     text-align: center;
     line-height: 1.15;
   }
 
+  .vm-hero-right {
+    gap: 0.72rem;
+  }
+
   .vm-panel {
-    padding: 0.8rem;
-    border-radius: 20px;
+    padding: 0.72rem;
+    border-radius: 18px;
     max-width: 100%;
     overflow: hidden;
     min-height: auto;
@@ -1348,14 +1361,14 @@ html:has(.homepage-body) {
     align-items: center;
     justify-content: center;
     gap: 0;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.58rem;
     flex-direction: column;
     text-align: center;
   }
 
   .vm-panel-header strong {
     max-width: 100%;
-    font-size: 1.19rem;
+    font-size: 1.05rem;
     line-height: 1.15;
     text-align: center;
   }
@@ -1367,7 +1380,7 @@ html:has(.homepage-body) {
   .vm-panel-metrics {
     grid-template-columns: 1fr;
     gap: 0;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.55rem;
   }
 
   .vm-panel-metrics div:nth-child(2),
@@ -1376,16 +1389,18 @@ html:has(.homepage-body) {
   }
 
   .vm-panel-metrics div:first-child {
-    min-height: 74px;
-    padding: 0.8rem;
+    min-height: 66px;
+    padding: 0.68rem;
+    border-radius: 14px;
   }
 
   .vm-panel-metrics div:first-child strong {
-    font-size: 1.45rem;
+    font-size: 1.32rem;
   }
 
   .vm-panel-metrics div:first-child span {
-    font-size: 0.99rem;
+    margin-top: 0.24rem;
+    font-size: 0.92rem;
   }
 
   .vm-panel-cards {
@@ -1399,21 +1414,24 @@ html:has(.homepage-body) {
 
   .vm-card-alert {
     min-height: auto;
-    padding: 0.85rem;
+    padding: 0.72rem;
+    border-radius: 14px;
   }
 
   .vm-card-alert .tag {
-    font-size: 0.86rem;
+    margin-bottom: 0.28rem;
+    font-size: 0.78rem;
   }
 
   .vm-card-alert strong {
-    font-size: 1.1rem;
-    line-height: 1.2;
+    margin-bottom: 0.32rem;
+    font-size: 1rem;
+    line-height: 1.18;
   }
 
   .vm-card-alert p {
-    font-size: 0.97rem;
-    line-height: 1.45;
+    font-size: 0.88rem;
+    line-height: 1.42;
   }
 
   .vm-hero-bottom-cards {
@@ -6495,6 +6513,7 @@ html:has(.homepage-body) {
   z-index: 999 !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 0.55rem !important;
   min-height: 52px !important;
   padding: 0 1rem !important;
@@ -6504,6 +6523,19 @@ html:has(.homepage-body) {
   text-decoration: none !important;
   font-weight: 900 !important;
   box-shadow: 0 18px 38px rgba(22, 163, 74, 0.34) !important;
+  transition:
+    opacity 260ms ease,
+    visibility 260ms ease,
+    transform 260ms ease,
+    box-shadow 360ms ease,
+    background 360ms ease !important;
+}
+
+.homepage-body .vm-whatsapp-float:hover {
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 22px 44px rgba(22, 163, 74, 0.42) !important;
 }
 
 .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
@@ -6511,38 +6543,52 @@ html:has(.homepage-body) {
   width: 20px !important;
   height: 20px !important;
   flex: 0 0 20px !important;
-}
-
-.vm-whatsapp-float {
-  gap: 0.55rem !important;
-}
-
-.vm-whatsapp-float .vm-whatsapp-svg {
-  display: block !important;
-  width: 20px !important;
-  height: 20px !important;
-  flex: 0 0 20px !important;
   color: currentColor !important;
 }
 
+.homepage-body .vm-whatsapp-float span {
+  display: inline-block !important;
+  color: currentColor !important;
+  font-size: 0.94rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+/* ========================================================================== */
+/* 15.1 — BOTÃO FLUTUANTE DO WHATSAPP — MOBILE                                */
+/* ========================================================================== */
+
 @media (max-width: 575.98px) {
+  .homepage-body .vm-whatsapp-float {
+    right: 0.85rem !important;
+    bottom: 0.85rem !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    padding: 0 !important;
+    border-radius: 999px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
   .homepage-body .vm-whatsapp-float span {
     display: none !important;
   }
 
-  .homepage-body .vm-whatsapp-float {
-    width: 50px !important;
-    min-width: 50px !important;
-    height: 50px !important;
-    padding: 0 !important;
-    justify-content: center !important;
-    border-radius: 999px !important;
+  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
+    width: 22px !important;
+    height: 22px !important;
+    flex: 0 0 22px !important;
   }
 
-  .homepage-body .vm-whatsapp-float .vm-whatsapp-svg {
-    width: 24px !important;
-    height: 24px !important;
-    flex-basis: 24px !important;
+  .homepage-body.homepage-hero-visible .vm-whatsapp-float {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(10px) !important;
   }
 }
 

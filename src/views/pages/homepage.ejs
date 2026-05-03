@@ -1088,6 +1088,28 @@
         const homepageNav = document.querySelector('[data-homepage-nav]');
         const homepageHeader = document.querySelector('[data-homepage-header]');
 
+        const heroSection = document.querySelector('.vm-hero');
+        const whatsappFloat = document.querySelector('.vm-whatsapp-float');
+
+        if (heroSection && whatsappFloat) {
+          const toggleWhatsappFloat = () => {
+            const isMobile = window.matchMedia('(max-width: 575.98px)').matches;
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+
+            if (!isMobile) {
+              document.body.classList.remove('homepage-hero-visible');
+              return;
+            }
+
+            document.body.classList.toggle('homepage-hero-visible', heroBottom > 80);
+          };
+
+          toggleWhatsappFloat();
+
+          window.addEventListener('scroll', toggleWhatsappFloat, { passive: true });
+          window.addEventListener('resize', toggleWhatsappFloat);
+        }
+
         function closeHomepageMenu() {
           document.body.classList.remove('homepage-menu-open');
           menuToggle?.setAttribute('aria-expanded', 'false');
