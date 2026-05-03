@@ -156,7 +156,7 @@
           </h2>
 
           <p class="vm-subtext">
-            A operação cresce, os pontos se multiplicam e a rotina começa a depender <br> demais de memória,
+            A operação cresce, os pontos se multiplicam e a rotina começa a depender demais de memória,
             planilhas e improviso.
           </p>
         </div>
@@ -184,7 +184,7 @@
 
           <div class="vm-pain-card">
             <span class="vm-pain-marker">04</span>
-            <h3>Rotas montadas <br>na hora</h3>
+            <h3>Rotas montadas na hora</h3>
             <p>O dia começa sem prioridade clara, com deslocamento maior do que deveria e visitas pouco estratégicas.</p>
           </div>
 
@@ -235,11 +235,10 @@
               </div>
 
               <ul>
-                <li>Você sai para a rua sem saber onde o dinheiro está — decide no caminho e torce para dar certo</li>
-                <li>Gasta combustível e tempo visitando pontos que ainda nem precisavam de coleta</li>
-                <li>Descobre problema tarde demais: máquina parada, ponto fraco ou queda de faturamento dias depois</li>
-                <li>Fecha o caixa no escuro, com anotações soltas e sem clareza do lucro real</li>
-                <li>Enquanto isso, oportunidades passam: pontos bons poderiam estar rendendo mais e você nem sabe</li>
+                <li>Você sai para a rua sem saber onde o dinheiro está — decide no caminho e torce para dar certo.</li>
+                <li>Gasta tempo e combustível visitando pontos que ainda nem precisavam de coleta.</li>
+                <li>Descobre tarde demais máquina parada, ponto em queda ou perda de faturamento.</li>
+                <li>Fecha o caixa no escuro, com anotações soltas e sem clareza do lucro real.</li>
               </ul>
             </div>
 
@@ -263,13 +262,12 @@
                 <span class="vm-ba-label vm-ba-after">Com VendMaster</span>
               </div>
 
-              <ul>
-                <li>O sistema mostra exatamente onde o dinheiro está parado — você sai já sabendo para onde ir</li>
-                <li>Você roda menos e fatura mais: cada parada tem um motivo claro e retorno esperado</li>
-                <li>Alertas inteligentes mostram quedas e problemas antes de virarem prejuízo</li>
-                <li>Seu financeiro se organiza sozinho: cada coleta vira dado, cada dado vira decisão</li>
-                <li>Você passa a priorizar o que dá lucro — e começa a crescer com estratégia, não no improviso</li>
-              </ul>
+            <ul>
+              <li>O sistema mostra onde o dinheiro está parado — você sai sabendo para onde ir.</li>
+              <li>Você roda menos e fatura mais: cada parada tem motivo claro.</li>
+              <li>Alertas mostram quedas e problemas antes de virarem prejuízo.</li>
+              <li>Histórico, coletas e financeiro viram dados para decidir melhor.</li>
+            </ul>
             </div>
           </div>
         </div>
@@ -291,15 +289,15 @@
 
         <div class="vm-dashboard-layout">
           <div class="vm-dashboard-copy">
-            <span class="vm-kicker">Clareza para decidir</span>
+            <span class="vm-kicker">Clareza para decidir.</span>
 
             <h3>
-              O painel mostra onde está o lucro, onde está o gargalo e quais pontos pedem atenção.
+              O painel mostra lucro, gargalos e pontos que pedem atenção.
             </h3>
 
             <p>
-              Em vez de abrir várias abas, conferir anotações ou tentar lembrar a última visita,
-              você começa o dia com uma visão direta da operação.
+              Você começa o dia com uma visão direta da operação, sem depender de abas,
+  anotações ou memória.
             </p>
 
             <div class="vm-dashboard-points">
@@ -1088,20 +1086,32 @@
         const homepageNav = document.querySelector('[data-homepage-nav]');
         const homepageHeader = document.querySelector('[data-homepage-header]');
 
-        const heroSection = document.querySelector('.vm-hero');
+       const heroSection = document.querySelector('.vm-hero');
+        const dashboardSection = document.querySelector('#solucao');
         const whatsappFloat = document.querySelector('.vm-whatsapp-float');
 
-        if (heroSection && whatsappFloat) {
+        if (whatsappFloat) {
           const toggleWhatsappFloat = () => {
             const isMobile = window.matchMedia('(max-width: 575.98px)').matches;
-            const heroBottom = heroSection.getBoundingClientRect().bottom;
 
             if (!isMobile) {
-              document.body.classList.remove('homepage-hero-visible');
+              document.body.classList.remove('homepage-hide-whatsapp-float');
               return;
             }
 
-            document.body.classList.toggle('homepage-hero-visible', heroBottom > 80);
+            const isHeroVisible = heroSection
+              ? heroSection.getBoundingClientRect().bottom > 80
+              : false;
+
+            const isDashboardVisible = dashboardSection
+              ? dashboardSection.getBoundingClientRect().top < window.innerHeight - 120 &&
+                dashboardSection.getBoundingClientRect().bottom > 120
+              : false;
+
+            document.body.classList.toggle(
+              'homepage-hide-whatsapp-float',
+              isHeroVisible || isDashboardVisible
+            );
           };
 
           toggleWhatsappFloat();
