@@ -77,6 +77,17 @@
                         <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
 
                         <div class="route-planner-actions">
+                            <% if (selectedBairros?.length || routeItems?.length) { %>
+                                <button
+                                    type="button"
+                                    class="btn-route-ghost route-planner-clear-button"
+                                    id="clearRouteButton"
+                                >
+                                    <i class="bi bi-x-circle"></i>
+                                    <span>Desmontar rota</span>
+                                </button>
+                            <% } %>
+
                             <button type="submit" class="btn-modern route-planner-submit-button">
                                 <i class="bi bi-search"></i>
                                 <span>Gerar rota</span>
@@ -117,18 +128,33 @@
                             <% } %>
                         </div>
 
-                        <div class="route-journey-actions">
-                            <button type="button" class="btn-modern" id="startSmartRouteButton" <%= routeSummary.total ? '' : 'disabled' %>>
+                        <div class="route-next-stop route-next-stop-featured route-next-stop-priority" id="routeNextStopCard">
+                            <div class="route-next-stop-heading">
+                                <strong>Próximo ponto</strong>
+                                <small>Destino atual da rota</small>
+                            </div>
+
+                            <span id="routeNextStopName">Aguardando início da rota</span>
+                            <small id="routeNextStopMeta">O sistema vai calcular a melhor próxima visita com base na sua posição atual.</small>
+
+                            <div class="route-next-stop-actions route-next-stop-actions-priority">
+                                <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenGoogleButton" aria-disabled="true">Abrir no Google Maps</a>
+                                <a href="#" class="table-btn table-btn-edit is-disabled" id="routeOpenWazeButton" aria-disabled="true">Abrir no Waze</a>
+
+                                <button type="button" class="btn-modern route-next-stop-arrival-button" id="markVisitedButton" disabled>
+                                    <i class="bi bi-check2-circle"></i>
+                                    <span>Cheguei neste ponto</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="route-journey-actions route-journey-actions-secondary">
+                            <button type="button" class="btn-modern" id="startSmartRouteButton">
                                 <i class="bi bi-geo-alt-fill"></i>
                                 <span>Iniciar rota inteligente</span>
                             </button>
 
-                            <button type="button" class="btn-route-secondary" id="markVisitedButton" disabled>
-                                <i class="bi bi-check2-circle"></i>
-                                <span>Cheguei neste ponto</span>
-                            </button>
-
-                            <button type="button" class="btn-route-ghost" id="resetRouteButton" disabled>
+                            <button type="button" class="btn-route-ghost" id="resetRouteButton" disabled hidden>
                                 <i class="bi bi-arrow-counterclockwise"></i>
                                 <span>Reiniciar rota</span>
                             </button>
@@ -157,18 +183,6 @@
                                 <span>estado atual</span>
                             </div>
                         </div>
-
-                        <div class="route-next-stop" id="routeNextStopCard">
-                            <strong>Próximo ponto</strong>
-                            <span id="routeNextStopName">Aguardando início da rota</span>
-                            <small id="routeNextStopMeta">O sistema vai calcular a melhor próxima visita com base na sua posição atual.</small>
-
-                            <div class="route-next-stop-actions">
-                                <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenGoogleButton" aria-disabled="true">Abrir no Google Maps</a>
-                                <a href="#" class="table-btn table-btn-edit is-disabled" id="routeOpenWazeButton" aria-disabled="true">Abrir no Waze</a>
-                            </div>
-                        </div>
-
                     </section>
                 </article>
 
@@ -414,6 +428,200 @@
         </div>
     </section>
 
+    <style>
+    .route-next-stop-priority {
+        padding: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.34);
+        background: #f8fbff;
+        box-shadow: none;
+        transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .route-next-stop-priority.route-next-stop-active {
+        border-color: rgba(37, 99, 235, 0.34);
+        background: linear-gradient(135deg, rgba(219, 234, 254, 0.98), rgba(239, 246, 255, 0.98));
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.10);
+    }
+
+    .route-next-stop-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .route-next-stop-heading strong {
+        color: #1d4ed8;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .route-next-stop-heading small {
+        color: #64748b;
+        font-size: 0.75rem;
+    }
+
+    .route-next-stop-priority #routeNextStopName {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: #0f172a;
+        font-size: 1.18rem;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .route-next-stop-priority #routeNextStopMeta {
+        display: block;
+        color: #475569;
+        line-height: 1.45;
+    }
+
+    .route-next-stop-actions-priority {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.7rem;
+        margin-top: 1rem;
+    }
+
+    .route-next-stop-actions-priority .table-btn {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .route-next-stop-arrival-button {
+        grid-column: 1 / -1;
+        width: max-content;
+        min-width: 230px;
+        min-height: 48px;
+        padding-inline: 1.15rem;
+        border: 1px solid rgba(148, 163, 184, 0.42) !important;
+        background: #e2e8f0 !important;
+        color: #64748b !important;
+        box-shadow: none !important;
+        font-weight: 800;
+    }
+
+    .route-next-stop-arrival-button i,
+    .route-next-stop-arrival-button span {
+        color: inherit !important;
+    }
+
+    .route-next-stop-arrival-button:disabled {
+        cursor: not-allowed;
+        opacity: 1;
+        filter: none;
+    }
+
+    .route-next-stop-arrival-button.route-next-stop-arrival-button-ready {
+        border-color: rgba(37, 99, 235, 0.42) !important;
+        background: #2563eb !important;
+        color: #ffffff !important;
+        box-shadow: 0 12px 22px rgba(37, 99, 235, 0.22) !important;
+        cursor: pointer;
+    }
+
+    .route-next-stop-arrival-button.route-next-stop-arrival-button-ready i,
+    .route-next-stop-arrival-button.route-next-stop-arrival-button-ready span {
+        color: #ffffff !important;
+    }
+
+    .route-journey-actions {
+        width: 100%;
+    }
+
+    .route-journey-actions-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-top: 0.95rem;
+    }
+
+    .route-journey-actions-secondary .btn-modern,
+    .route-journey-actions-secondary .btn-route-secondary,
+    .route-journey-actions-secondary .btn-route-ghost {
+        width: auto;
+        min-width: 210px;
+        min-height: 46px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .route-journey-actions-secondary #startSmartRouteButton[hidden],
+    .route-journey-actions-secondary #resetRouteButton[hidden] {
+        display: none !important;
+    }
+
+    .route-journey-actions-secondary #startSmartRouteButton {
+        border-color: rgba(37, 99, 235, 0.42) !important;
+        background: #2563eb !important;
+        color: #ffffff !important;
+        box-shadow: 0 12px 22px rgba(37, 99, 235, 0.18) !important;
+    }
+
+    .route-journey-actions-secondary #startSmartRouteButton i,
+    .route-journey-actions-secondary #startSmartRouteButton span {
+        color: #ffffff !important;
+    }
+
+    .route-journey-actions-secondary #resetRouteButton {
+        border: 1px dashed rgba(100, 116, 139, 0.45) !important;
+        background: #ffffff !important;
+        color: #334155 !important;
+        box-shadow: none !important;
+    }
+
+    .route-journey-actions-secondary #resetRouteButton i,
+    .route-journey-actions-secondary #resetRouteButton span {
+        color: #334155 !important;
+    }
+
+    @media (max-width: 640px) {
+        .route-next-stop-heading {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .route-next-stop-actions-priority {
+            grid-template-columns: 1fr;
+        }
+
+        .route-next-stop-actions-priority > *,
+        .route-next-stop-arrival-button {
+            width: 100%;
+            min-width: 0;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .route-journey-actions-secondary {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        .route-journey-actions-secondary .btn-modern,
+        .route-journey-actions-secondary .btn-route-secondary,
+        .route-journey-actions-secondary .btn-route-ghost {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+</style>
+
     <% if (routeItems?.length) { %>
         <script src="/vendor/jspdf/jspdf.umd.min.js"></script>
         <script src="/vendor/jspdf-autotable/jspdf.plugin.autotable.min.js"></script>
@@ -422,6 +630,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const plannerForm = document.querySelector('.route-planner-form');
+            const clearRouteButton = document.getElementById('clearRouteButton');
+            const startSmartRouteButton = document.getElementById('startSmartRouteButton');
+            const hasGeneratedRouteItems = <%- JSON.stringify(Boolean(routeItems?.length)) %>;
             const picker = document.querySelector('[data-route-neighborhood-picker]');
             const trigger = document.querySelector('[data-route-neighborhood-trigger]');
             const summaryEl = document.querySelector('[data-route-neighborhood-summary]');
@@ -437,13 +648,116 @@
             const clearButton = document.querySelector('[data-route-clear-selection]');
             const checkboxes = Array.from(document.querySelectorAll('input[name="bairros"]'));
 
+            const showNeighborhoodRequiredAlert = async () => {
+                const message = 'Selecione ao menos um bairro para gerar a rota.';
+
+                if (window.Swal) {
+                    await window.Swal.fire({
+                        icon: 'warning',
+                        title: 'Atenção',
+                        text: message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#2563eb'
+                    });
+
+                    return;
+                }
+
+                if (window.AppAlerts?.warning) {
+                    await window.AppAlerts.warning(message);
+                    return;
+                }
+
+                if (window.AppAlerts?.error) {
+                    await window.AppAlerts.error(message);
+                    return;
+                }
+
+                window.alert(message);
+            };
+
+            const showStartRouteHelpAlert = async () => {
+                const message = 'Primeiro selecione os bairros e clique em "Gerar rota" para carregar os pontos. Depois disso, clique em "Iniciar rota inteligente".';
+
+                if (window.Swal) {
+                    await window.Swal.fire({
+                        icon: 'warning',
+                        title: 'Atenção',
+                        text: message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#2563eb'
+                    });
+
+                    return;
+                }
+
+                if (window.AppAlerts?.warning) {
+                    await window.AppAlerts.warning(message);
+                    return;
+                }
+
+                if (window.AppAlerts?.error) {
+                    await window.AppAlerts.error(message);
+                    return;
+                }
+
+                window.alert(message);
+            };
+
+            const clearAllRouteProgressStorage = () => {
+                Object.keys(localStorage).forEach((key) => {
+                    if (key.startsWith('vendmaster:rota:')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
+                Object.keys(sessionStorage).forEach((key) => {
+                    if (
+                        key.startsWith('vendmaster:rota-concluida:') ||
+                        key.startsWith('vendmaster:recibo-url:')
+                    ) {
+                        sessionStorage.removeItem(key);
+                    }
+                });
+            };
+
+            clearRouteButton?.addEventListener('click', async () => {
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Desmontar rota?',
+                    text: 'Isso vai limpar os bairros selecionados, apagar o progresso salvo desta rota e voltar para a tela inicial de rotas.',
+                    confirmButtonText: 'Desmontar rota',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (!confirmed) return;
+
+                clearAllRouteProgressStorage();
+                window.location.href = '/rotas';
+            });
+
+            startSmartRouteButton?.addEventListener('click', async (event) => {
+                if (hasGeneratedRouteItems) return;
+
+                event.preventDefault();
+                await showStartRouteHelpAlert();
+            });
+
             if (!plannerForm || !picker || !trigger || !modal || !backdrop || !checkboxes.length) return;
 
-            const openNeighborhoodModal = () => {
+            let shouldSubmitAfterNeighborhoodApply = false;
+
+            const hasSelectedNeighborhood = () => {
+                return checkboxes.some((checkbox) => checkbox.checked);
+            };
+
+            const openNeighborhoodModal = (options = {}) => {
+                shouldSubmitAfterNeighborhoodApply = Boolean(options.submitAfterApply);
+
                 document.body.classList.add('route-neighborhood-modal-open');
                 modal.setAttribute('aria-hidden', 'false');
                 picker.classList.remove('route-neighborhood-picker-empty');
                 trigger.setAttribute('aria-expanded', 'true');
+
                 setTimeout(() => filterInput?.focus(), 80);
             };
 
@@ -476,7 +790,9 @@
                 }
             };
 
-            trigger.addEventListener('click', openNeighborhoodModal);
+            trigger.addEventListener('click', () => {
+                openNeighborhoodModal();
+            });
 
             checkboxes.forEach((checkbox) => {
                 checkbox.addEventListener('change', syncNeighborhoodState);
@@ -507,25 +823,51 @@
                 });
             });
 
-            closeButton?.addEventListener('click', closeNeighborhoodModal);
-            applyButton?.addEventListener('click', closeNeighborhoodModal);
-            backdrop.addEventListener('click', closeNeighborhoodModal);
+            closeButton?.addEventListener('click', () => {
+                shouldSubmitAfterNeighborhoodApply = false;
+                closeNeighborhoodModal();
+            });
+
+            backdrop.addEventListener('click', () => {
+                shouldSubmitAfterNeighborhoodApply = false;
+                closeNeighborhoodModal();
+            });
+
+            applyButton?.addEventListener('click', async () => {
+                syncNeighborhoodState();
+
+                if (!hasSelectedNeighborhood()) {
+                    picker.classList.add('route-neighborhood-picker-empty');
+                    await showNeighborhoodRequiredAlert();
+                    return;
+                }
+
+                closeNeighborhoodModal();
+
+                if (shouldSubmitAfterNeighborhoodApply) {
+                    shouldSubmitAfterNeighborhoodApply = false;
+                    plannerForm.requestSubmit();
+                }
+            });
 
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
+                    shouldSubmitAfterNeighborhoodApply = false;
                     closeNeighborhoodModal();
                 }
             });
 
-            plannerForm.addEventListener('submit', (event) => {
-                const hasSelectedNeighborhood = checkboxes.some((checkbox) => checkbox.checked);
-
-                if (hasSelectedNeighborhood) return;
+            plannerForm.addEventListener('submit', async (event) => {
+                if (hasSelectedNeighborhood()) return;
 
                 event.preventDefault();
-                window.AppAlerts?.error('Selecione ao menos um bairro para gerar a rota.');
                 picker.classList.add('route-neighborhood-picker-empty');
-                openNeighborhoodModal();
+
+                await showNeighborhoodRequiredAlert();
+
+                openNeighborhoodModal({
+                    submitAfterApply: true
+                });
             });
 
             syncNeighborhoodState();
@@ -549,6 +891,7 @@
                 const helperTextEl = document.getElementById('routeJourneyHelperText');
                 const nextStopNameEl = document.getElementById('routeNextStopName');
                 const nextStopMetaEl = document.getElementById('routeNextStopMeta');
+                const routeNextStopCard = document.getElementById('routeNextStopCard');
                 const googleButton = document.getElementById('routeOpenGoogleButton');
                 const wazeButton = document.getElementById('routeOpenWazeButton');
                 const progressDoneEl = document.getElementById('routeProgressDone');
@@ -568,13 +911,48 @@
                 const routeStorageKey = `vendmaster:rota:${JSON.stringify(selectedBairrosData)}:${selectedProdutoData}`;
                 const routeUrlParams = new URLSearchParams(window.location.search);
                 const rotaPontoFinalizadoId = routeUrlParams.get('rota_ponto_finalizado');
+                const reciboUrl = routeUrlParams.get('recibo_url');
 
-               let routeState = {
+                let routeState = {
                     currentIndex: -1,
                     started: false,
                     rotaId: null,
                     rotaPontos: [],
                     visitedIds: []
+                };
+
+                const createEmptyRouteState = () => ({
+                    currentIndex: -1,
+                    started: false,
+                    rotaId: null,
+                    rotaPontos: [],
+                    visitedIds: []
+                });
+
+                const clearSavedRouteState = () => {
+                    localStorage.removeItem(routeStorageKey);
+                };
+
+                const getActiveEstabelecimentoIdsFromRotaPontos = (rotaPontos = []) => {
+                    if (!Array.isArray(rotaPontos)) return [];
+
+                    return rotaPontos
+                        .map((ponto) => ponto?.estabelecimento_id)
+                        .filter((id) => id !== undefined && id !== null && String(id).trim() !== '')
+                        .map(String);
+                };
+
+                const isRouteStateFinished = (state) => {
+                    if (!state?.started) return false;
+
+                    const visitedCount = Array.isArray(state.visitedIds)
+                        ? new Set(state.visitedIds.map(String)).size
+                        : 0;
+
+                    return (
+                        routeItems.length > 0 &&
+                        (state.currentIndex >= routeItems.length || visitedCount >= routeItems.length)
+                    );
                 };
 
                 const geocodeAddress = async (address) => {
@@ -855,8 +1233,26 @@
                         routePdfButton.disabled = routeItems.length === 0;
                     }
 
+                    const hasActiveStop = Boolean(
+                        routeState.started &&
+                        routeState.rotaId &&
+                        routeState.currentIndex >= 0 &&
+                        routeState.currentIndex < routeItems.length
+                    );
+
+                    routeNextStopCard?.classList.toggle('route-next-stop-active', hasActiveStop);
+
                     if (startButton) {
                         startButton.disabled = routeItems.length === 0 || routeState.started;
+                        startButton.hidden = routeState.started;
+                    }
+
+                    if (resetRouteButton) {
+                        resetRouteButton.hidden = !routeState.started;
+                    }
+
+                    if (markVisitedButton) {
+                        markVisitedButton.classList.toggle('route-next-stop-arrival-button-ready', hasActiveStop);
                     }
 
                     if (routeCircuitStops) {
@@ -1025,9 +1421,9 @@
                     const name = currentCard.dataset.name;
 
                     titleEl.textContent = `Rota em andamento: ${routeState.currentIndex + 1}/${routeItems.length}`;
-                    textEl.textContent = 'Quando chegar ao ponto atual, toque em "Cheguei neste ponto" para abrir a visita guiada.';
+                    textEl.textContent = 'Confira o destino em destaque e, ao chegar, clique em "Cheguei neste ponto" para abrir a visita guiada.';
                     helperTextEl.textContent = routeState.rotaId
-                        ? 'A rota operacional já foi salva. Ao chegar, o sistema abre a tela de visita do ponto.'
+                        ? 'A ação principal agora é confirmar a chegada no próximo ponto destacado acima.'
                         : 'Inicie a rota inteligente para salvar a rota operacional antes da visita.';
                     nextStopNameEl.textContent = name;
                     nextStopMetaEl.textContent = address;
@@ -1192,27 +1588,52 @@
                     return geocodeAddress(card.dataset.address);
                 };
 
-                const applySavedOrder = (orderedIds) => {
+                const applySavedOrder = (orderedIds, options = {}) => {
+                    const { keepOnlySaved = false, activeEstabelecimentoIds = null } = options;
+
                     if (!Array.isArray(orderedIds) || !orderedIds.length) return false;
 
-                    const cardById = new Map(routeItems.map((card) => [card.dataset.id, card]));
+                    const orderedIdSet = new Set(orderedIds.map(String));
+                    const activeIdSet = Array.isArray(activeEstabelecimentoIds)
+                        ? new Set(activeEstabelecimentoIds.map(String))
+                        : null;
+
+                    const cardById = new Map(routeItems.map((card) => [String(card.dataset.id), card]));
                     const orderedCards = [];
 
                     for (const id of orderedIds) {
-                        const card = cardById.get(id);
+                        const normalizedId = String(id);
+                        const card = cardById.get(normalizedId);
 
-                        if (card) {
-                            orderedCards.push(card);
+                        if (!card) continue;
+
+                        if (activeIdSet && !activeIdSet.has(normalizedId)) {
+                            continue;
                         }
+
+                        orderedCards.push(card);
                     }
 
                     if (!orderedCards.length) return false;
 
-                    routeItems.forEach((card) => {
-                        if (!orderedIds.includes(card.dataset.id)) {
-                            orderedCards.push(card);
-                        }
-                    });
+                    if (!keepOnlySaved && !activeIdSet) {
+                        routeItems.forEach((card) => {
+                            if (!orderedIdSet.has(String(card.dataset.id))) {
+                                orderedCards.push(card);
+                            }
+                        });
+                    } else {
+                        routeItems.forEach((card) => {
+                            const cardId = String(card.dataset.id);
+                            const shouldKeep = activeIdSet
+                                ? activeIdSet.has(cardId)
+                                : orderedIdSet.has(cardId);
+
+                            if (!shouldKeep) {
+                                card.remove();
+                            }
+                        });
+                    }
 
                     routeItems = orderedCards;
 
@@ -1227,19 +1648,54 @@
 
                         const saved = JSON.parse(raw);
 
-                        if (!saved || !Array.isArray(saved.orderedIds)) return false;
+                        if (!saved || !Array.isArray(saved.orderedIds)) {
+                            clearSavedRouteState();
+                            return false;
+                        }
 
-                        const orderApplied = applySavedOrder(saved.orderedIds);
-
-                        if (!orderApplied) return false;
-
-                       routeState = {
+                        const restoredState = {
                             currentIndex: typeof saved.currentIndex === 'number' ? saved.currentIndex : -1,
                             started: Boolean(saved.started),
                             rotaId: saved.rotaId || null,
                             rotaPontos: Array.isArray(saved.rotaPontos) ? saved.rotaPontos : [],
-                            visitedIds: Array.isArray(saved.visitedIds) ? saved.visitedIds.map(String) : []
+                            visitedIds: Array.isArray(saved.visitedIds)
+                                ? saved.visitedIds.map(String)
+                                : []
                         };
+
+                        const activeEstabelecimentoIds = getActiveEstabelecimentoIdsFromRotaPontos(
+                            restoredState.rotaPontos
+                        );
+
+                        if (restoredState.started && !activeEstabelecimentoIds.length) {
+                            clearSavedRouteState();
+                            routeState = createEmptyRouteState();
+                            return false;
+                        }
+
+                        const orderApplied = applySavedOrder(saved.orderedIds, {
+                            keepOnlySaved: restoredState.started,
+                            activeEstabelecimentoIds: restoredState.started
+                                ? activeEstabelecimentoIds
+                                : null
+                        });
+
+                        if (!orderApplied) {
+                            clearSavedRouteState();
+                            return false;
+                        }
+
+                        if (isRouteStateFinished(restoredState)) {
+                            clearSavedRouteState();
+                            routeState = createEmptyRouteState();
+
+                            helperTextEl.textContent =
+                                'A rota anterior já estava concluída. Inicie uma nova rota inteligente para começar novamente.';
+
+                            return false;
+                        }
+
+                        routeState = restoredState;
 
                         if (routeState.currentIndex > routeItems.length) {
                             routeState.currentIndex = routeItems.length;
@@ -1250,83 +1706,127 @@
                             : 'Ordem manual retomada automaticamente. Você pode iniciar a rota quando quiser.';
 
                         reorderCards();
+
                         return true;
                     } catch (error) {
                         console.error(error);
+
+                        clearSavedRouteState();
+                        routeState = createEmptyRouteState();
+
                         return false;
                     }
                 };
 
-                const showRouteCompletedCelebration = () => {
 
-                const celebrationKey = `vendmaster:rota-concluida:${routeState.rotaId || routeStorageKey}`;
+                const waitForActiveAlertToClose = async () => {
+                    if (!window.Swal?.isVisible) return;
 
-                if (sessionStorage.getItem(celebrationKey)) {
-                    return;
-                }
+                    for (let attempt = 0; attempt < 30; attempt += 1) {
+                        if (!window.Swal.isVisible()) return;
 
-                sessionStorage.setItem(celebrationKey, 'true');
-
-                const launchConfetti = () => {
-                    const confettiLayer = document.createElement('div');
-
-                    confettiLayer.style.position = 'fixed';
-                    confettiLayer.style.inset = '0';
-                    confettiLayer.style.pointerEvents = 'none';
-                    confettiLayer.style.zIndex = '99999';
-                    confettiLayer.style.overflow = 'hidden';
-
-                    document.body.appendChild(confettiLayer);
-
-                    const colors = ['#2563eb', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
-
-                    for (let i = 0; i < 90; i += 1) {
-                        const particle = document.createElement('span');
-                        const size = Math.floor(Math.random() * 8) + 6;
-                        const left = Math.random() * 100;
-                        const delay = Math.random() * 0.7;
-                        const duration = Math.random() * 1.8 + 2.6;
-                        const rotate = Math.random() * 720;
-
-                        particle.style.position = 'absolute';
-                        particle.style.top = '-20px';
-                        particle.style.left = `${left}%`;
-                        particle.style.width = `${size}px`;
-                        particle.style.height = `${size * 1.6}px`;
-                        particle.style.borderRadius = '3px';
-                        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                        particle.style.opacity = '0.95';
-                        particle.style.transform = `rotate(${rotate}deg)`;
-                        particle.style.animation = `vendmasterConfettiFall ${duration}s ease-in ${delay}s forwards`;
-
-                        confettiLayer.appendChild(particle);
+                        await new Promise((resolve) => {
+                            setTimeout(resolve, 250);
+                        });
                     }
-
-                    if (!document.getElementById('vendmasterConfettiStyle')) {
-                        const style = document.createElement('style');
-
-                        style.id = 'vendmasterConfettiStyle';
-                        style.textContent = `
-                            @keyframes vendmasterConfettiFall {
-                                0% {
-                                    transform: translateY(-30px) rotate(0deg);
-                                    opacity: 1;
-                                }
-
-                                100% {
-                                    transform: translateY(110vh) rotate(900deg);
-                                    opacity: 0;
-                                }
-                            }
-                        `;
-
-                        document.head.appendChild(style);
-                    }
-
-                    setTimeout(() => {
-                        confettiLayer.remove();
-                    }, 5200);
                 };
+
+                const askToGenerateReceiptFromUrl = async () => {
+                    if (!reciboUrl) return false;
+
+                    const storageKey = `vendmaster:recibo-url:${reciboUrl}`;
+
+                    if (sessionStorage.getItem(storageKey)) {
+                        return false;
+                    }
+
+                    sessionStorage.setItem(storageKey, 'true');
+
+                    await waitForActiveAlertToClose();
+
+                    const confirmed = await window.AppAlerts?.confirm({
+                        title: 'Gerar recibo em PDF?',
+                        text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
+                        confirmButtonText: 'Gerar recibo',
+                        cancelButtonText: 'Agora não'
+                    });
+
+                    if (confirmed) {
+                        window.open(reciboUrl, '_blank', 'noopener,noreferrer');
+                    }
+
+                    return true;
+                };
+
+                const showRouteCompletedCelebration = () => {
+                    const celebrationKey = `vendmaster:rota-concluida:${routeState.rotaId || routeStorageKey}`;
+
+                    if (sessionStorage.getItem(celebrationKey)) {
+                        return;
+                    }
+
+                    sessionStorage.setItem(celebrationKey, 'true');
+
+                    const launchConfetti = () => {
+                        const confettiLayer = document.createElement('div');
+
+                        confettiLayer.style.position = 'fixed';
+                        confettiLayer.style.inset = '0';
+                        confettiLayer.style.pointerEvents = 'none';
+                        confettiLayer.style.zIndex = '99999';
+                        confettiLayer.style.overflow = 'hidden';
+
+                        document.body.appendChild(confettiLayer);
+
+                        const colors = ['#2563eb', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+
+                        for (let i = 0; i < 90; i += 1) {
+                            const particle = document.createElement('span');
+                            const size = Math.floor(Math.random() * 8) + 6;
+                            const left = Math.random() * 100;
+                            const delay = Math.random() * 0.7;
+                            const duration = Math.random() * 1.8 + 2.6;
+                            const rotate = Math.random() * 720;
+
+                            particle.style.position = 'absolute';
+                            particle.style.top = '-20px';
+                            particle.style.left = `${left}%`;
+                            particle.style.width = `${size}px`;
+                            particle.style.height = `${size * 1.6}px`;
+                            particle.style.borderRadius = '3px';
+                            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                            particle.style.opacity = '0.95';
+                            particle.style.transform = `rotate(${rotate}deg)`;
+                            particle.style.animation = `vendmasterConfettiFall ${duration}s ease-in ${delay}s forwards`;
+
+                            confettiLayer.appendChild(particle);
+                        }
+
+                        if (!document.getElementById('vendmasterConfettiStyle')) {
+                            const style = document.createElement('style');
+
+                            style.id = 'vendmasterConfettiStyle';
+                            style.textContent = `
+                                @keyframes vendmasterConfettiFall {
+                                    0% {
+                                        transform: translateY(-30px) rotate(0deg);
+                                        opacity: 1;
+                                    }
+
+                                    100% {
+                                        transform: translateY(110vh) rotate(900deg);
+                                        opacity: 0;
+                                    }
+                                }
+                            `;
+
+                            document.head.appendChild(style);
+                        }
+
+                        setTimeout(() => {
+                            confettiLayer.remove();
+                        }, 5200);
+                    };
 
                     launchConfetti();
 
@@ -1357,7 +1857,11 @@
                 };
 
                 const applyFinishedRoutePointFromUrl = () => {
-                    if (!rotaPontoFinalizadoId || !routeState.started || !Array.isArray(routeState.rotaPontos)) {
+                    if (
+                        !rotaPontoFinalizadoId ||
+                        !routeState.started ||
+                        !Array.isArray(routeState.rotaPontos)
+                    ) {
                         return false;
                     }
 
@@ -1388,17 +1892,41 @@
 
                     routeState.currentIndex = findNextPendingIndex(finishedCardIndex + 1);
 
-                    saveRouteState();
-                    renderQueue();
-                    syncCurrentStop();
-
                     if (routeState.currentIndex >= routeItems.length) {
+                        renderQueue();
                         showRouteCompletedCelebration();
+                        clearSavedRouteState();
+
+                        titleEl.textContent = 'Rota concluída';
+                        textEl.textContent =
+                            'Todos os pontos desta rota foram visitados. Você já pode gerar uma nova rota ou iniciar outra sequência.';
+                        helperTextEl.textContent =
+                            'O progresso antigo foi limpo para evitar que um ponto já visitado seja iniciado novamente.';
+                        nextStopNameEl.textContent = 'Nenhum ponto pendente';
+                        nextStopMetaEl.textContent = 'Rota finalizada com sucesso.';
+
+                        progressDoneEl.textContent = routeItems.length;
+                        progressPendingEl.textContent = '0';
+                        progressModeEl.textContent = 'Finalizada';
+
+                        markVisitedButton.disabled = true;
+                        resetRouteButton.disabled = true;
+
+                        setActionLinkState(googleButton, null);
+                        setActionLinkState(wazeButton, null);
+
+                        updateRouteButtonsState();
+                    } else {
+                        saveRouteState();
+                        renderQueue();
+                        syncCurrentStop();
                     }
 
                     const cleanUrl = new URL(window.location.href);
+
                     cleanUrl.searchParams.delete('rota_ponto_finalizado');
                     cleanUrl.searchParams.delete('success');
+                    cleanUrl.searchParams.delete('recibo_url');
 
                     window.history.replaceState(
                         {},
@@ -1410,17 +1938,13 @@
                 };
 
                 const resetRouteState = () => {
-                   routeState = {
-                    currentIndex: -1,
-                    started: false,
-                    rotaId: null,
-                    rotaPontos: [],
-                    visitedIds: []
-                };
+                    routeState = createEmptyRouteState();
 
-                    localStorage.removeItem(routeStorageKey);
+                    clearSavedRouteState();
 
-                    routeItems.sort((left, right) => Number(left.dataset.routeIndex) - Number(right.dataset.routeIndex));
+                    routeItems.sort((left, right) => {
+                        return Number(left.dataset.routeIndex) - Number(right.dataset.routeIndex);
+                    });
 
                     routeCircuitMap?.classList.remove('has-route', 'has-google-map');
                     routeCircuitLine?.setAttribute('points', '');
@@ -1516,6 +2040,20 @@
                     }
 
                     const rotaOperacional = await iniciarRotaOperacionalNoBanco(currentPosition, ordered);
+                    const activeEstabelecimentoIds = getActiveEstabelecimentoIdsFromRotaPontos(
+                        rotaOperacional.pontos
+                    );
+                    const activeIdSet = new Set(activeEstabelecimentoIds);
+
+                    routeItems.forEach((card) => {
+                        if (!activeIdSet.has(String(card.dataset.id))) {
+                            card.remove();
+                        }
+                    });
+
+                    routeItems = activeEstabelecimentoIds.length
+                        ? ordered.filter((card) => activeIdSet.has(String(card.dataset.id)))
+                        : ordered;
 
                     routeState = {
                         currentIndex: 0,
@@ -1524,10 +2062,6 @@
                         rotaPontos: Array.isArray(rotaOperacional.pontos) ? rotaOperacional.pontos : [],
                         visitedIds: []
                     };
-
-                    ordered.forEach((card, index) => {
-                        routeItems[index] = card;
-                    });
 
                     reorderCards();
                     saveRouteState();
@@ -1678,6 +2212,10 @@
                 } else {
                     syncCurrentStop();
                 }
+
+                setTimeout(() => {
+                    askToGenerateReceiptFromUrl();
+                }, 300);
             });
         </script>
     <% } %>

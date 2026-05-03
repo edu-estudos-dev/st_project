@@ -449,7 +449,8 @@ class RotasController {
         rotaPonto,
         rotaOperacional,
         rotaRetornoUrl,
-        produtosDaVisita
+        produtosDaVisita,
+        query: req.query || {}
       });
     } catch (error) {
       console.error('Erro ao carregar visita guiada:', error);

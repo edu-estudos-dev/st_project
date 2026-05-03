@@ -2,30 +2,761 @@
 <html lang="pt-BR">
 <%- include('../../partials/head', { title, metaDescription, canonicalUrl, extraStyles: ['/css/homepage.css'] }) %>
 
-<body class="homepage-body">
-  <main class="vm-section vm-section-light">
-    <div class="vm-section-heading">
-      <span class="vm-kicker">VendMaster</span>
-      <h1 class="titulo-servicos">Política de Privacidade</h1>
-      <p class="vm-subtext">Tratamos dados de contato apenas para retorno comercial, demonstração do sistema e suporte relacionado ao VendMaster.</p>
-    </div>
+  <body class="homepage-body legal-page-body">
+    <style>
+      /* ========================================================================== */
+      /* 00 — HEADER PÚBLICO / PÁGINA LEGAL                                         */
+      /* ========================================================================== */
 
-    <div class="vm-faq-grid">
-      <details open>
-        <summary>Quais dados coletamos?</summary>
-        <p>Nome, WhatsApp, e dados enviados voluntariamente em formulários ou conversas comerciais.</p>
-      </details>
-      <details open>
-        <summary>Para que usamos esses dados?</summary>
-        <p>Para responder solicitações, agendar demonstrações, apresentar proposta comercial e prestar suporte.</p>
-      </details>
-      <details open>
-        <summary>Como solicitar remoção?</summary>
-        <p>Envie uma solicitação para suporte@vendmaster.com ou pelo WhatsApp informado no rodapé.</p>
-      </details>
-    </div>
-  </main>
+      .legal-public-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: 100%;
+        min-height: 78px;
+        padding: 0.85rem clamp(1rem, 3vw, 2.2rem);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        background:
+          linear-gradient(180deg,
+            rgba(239, 246, 255, 0.96) 0%,
+            rgba(226, 239, 255, 0.9) 100%);
+        border-bottom: 1px solid rgba(147, 197, 253, 0.22);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(14px);
+      }
 
-  <%- include('../../partials/footer') %>
-</body>
+      .legal-public-brand {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .legal-public-brand .legal-brand {
+        display: inline-flex;
+        align-items: baseline;
+        font-size: 1.35rem;
+        font-weight: 950;
+        line-height: 1;
+        letter-spacing: -0.06em;
+        white-space: nowrap;
+      }
+
+      .legal-public-nav {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.6rem;
+      }
+
+      .legal-public-nav a {
+        min-height: 38px;
+        padding: 0.55rem 0.82rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        color: #0f172a;
+        font-size: 0.92rem;
+        font-weight: 850;
+        line-height: 1;
+        text-decoration: none;
+        transition:
+          color 220ms ease,
+          background-color 220ms ease,
+          transform 220ms ease,
+          box-shadow 220ms ease;
+      }
+
+      .legal-public-nav a:hover {
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.08);
+        transform: translateY(-1px);
+      }
+
+      .legal-public-nav a:first-child {
+        color: #ffffff;
+        background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+        box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+      }
+
+      .legal-public-nav a:first-child:hover {
+        color: #ffffff;
+        background: linear-gradient(135deg, #1d4ed8 0%, #16a34a 100%);
+      }
+
+      /* ========================================================================== */
+      /* 01 — BASE DA PÁGINA LEGAL                                                  */
+      /* ========================================================================== */
+
+      .legal-page-body {
+        background:
+          radial-gradient(circle at 12% 10%,
+            rgba(37, 99, 235, 0.1),
+            transparent 26%),
+          radial-gradient(circle at 88% 28%,
+            rgba(34, 197, 94, 0.08),
+            transparent 24%),
+          linear-gradient(180deg, #eef5fe 0%, #e7f0fb 100%) !important;
+      }
+
+      .legal-page-main {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 1.65rem auto 0;
+        padding: 0 0 clamp(2.6rem, 5vw, 4.2rem);
+        border-radius: 34px;
+        overflow: hidden;
+      }
+
+      /* ========================================================================== */
+      /* 02 — HERO LEGAL                                                            */
+      /* ========================================================================== */
+
+      .legal-hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(3.1rem, 5vw, 4.5rem) clamp(1.4rem, 4vw, 3.6rem);
+        border-radius: 34px;
+        text-align: center;
+        background:
+          radial-gradient(circle at 14% 18%,
+            rgba(37, 99, 235, 0.12),
+            transparent 30%),
+          radial-gradient(circle at 86% 84%,
+            rgba(34, 197, 94, 0.08),
+            transparent 28%),
+          linear-gradient(180deg,
+            rgba(255, 255, 255, 0.92) 0%,
+            rgba(239, 246, 255, 0.94) 100%);
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        box-shadow:
+          0 26px 62px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      .legal-hero h1 {
+        max-width: 760px;
+        margin: 1rem auto 0;
+        color: #0f172a;
+        font-size: clamp(2.6rem, 4.4vw, 4.25rem);
+        font-weight: 950;
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        text-align: center;
+        text-wrap: balance;
+      }
+
+      .legal-hero p {
+        max-width: 760px;
+        margin: 1.05rem auto 0;
+        color: #475569;
+        font-size: clamp(1.02rem, 1.25vw, 1.15rem);
+        line-height: 1.68;
+        text-align: center;
+      }
+
+      /* ========================================================================== */
+      /* 03 — CARD DE CONTEÚDO LEGAL                                                */
+      /* ========================================================================== */
+
+      .legal-content-card {
+        margin-top: clamp(1.15rem, 2.4vw, 1.65rem);
+        padding: clamp(2.15rem, 4vw, 3.2rem);
+        border-radius: 34px;
+        background:
+          radial-gradient(circle at 12% 10%,
+            rgba(37, 99, 235, 0.08),
+            transparent 30%),
+          radial-gradient(circle at 90% 92%,
+            rgba(34, 197, 94, 0.07),
+            transparent 28%),
+          linear-gradient(180deg,
+            rgba(255, 255, 255, 0.97) 0%,
+            rgba(248, 251, 255, 0.97) 100%);
+        border: 1px solid rgba(147, 197, 253, 0.18);
+        box-shadow:
+          0 26px 62px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      .legal-content-header {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+        gap: clamp(1.35rem, 3vw, 2.4rem);
+        align-items: end;
+        margin-bottom: clamp(1.55rem, 3vw, 2.3rem);
+      }
+
+      .legal-eyebrow {
+        display: inline-flex;
+        width: fit-content;
+        min-height: 32px;
+        padding: 0.46rem 0.88rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.1);
+        border: 1px solid rgba(37, 99, 235, 0.14);
+        font-size: 0.74rem;
+        font-weight: 950;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .legal-brand {
+        display: inline-flex;
+        align-items: baseline;
+        font-weight: 950;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+      }
+
+      .legal-brand-inline {
+        display: inline-flex;
+        vertical-align: baseline;
+        font-size: 1em;
+        line-height: inherit;
+      }
+
+      .legal-brand-primary {
+        color: #2563eb;
+      }
+
+      .legal-brand-accent {
+        color: #22c55e;
+      }
+
+      .legal-brand-light .legal-brand-primary {
+        color: #60a5fa;
+      }
+
+      .legal-brand-light .legal-brand-accent {
+        color: #4ade80;
+      }
+
+      .legal-content-header h2,
+      .legal-contact-box h2 {
+        margin: 0.82rem 0 0;
+        color: #0f172a;
+        font-size: clamp(2.15rem, 3.45vw, 3.25rem);
+        font-weight: 950;
+        line-height: 1.05;
+        letter-spacing: -0.058em;
+        text-wrap: balance;
+      }
+
+      .legal-content-header p {
+        margin: 0;
+        color: #475569;
+        font-size: clamp(1rem, 1.16vw, 1.1rem);
+        line-height: 1.68;
+      }
+
+      /* ========================================================================== */
+      /* 04 — CARDS INFORMATIVOS                                                    */
+      /* ========================================================================== */
+
+      .legal-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-bottom: clamp(1.5rem, 3vw, 2.2rem);
+      }
+
+      .legal-info-box {
+        min-height: 205px;
+        padding: 1.35rem 1.25rem;
+        border-radius: 22px;
+        background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        box-shadow:
+          0 18px 40px rgba(15, 23, 42, 0.07),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      .legal-info-number {
+        display: inline-flex;
+        width: 38px;
+        height: 34px;
+        margin-bottom: 0.9rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.09);
+        border: 1px solid rgba(37, 99, 235, 0.12);
+        font-size: 0.74rem;
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .legal-info-box h3,
+      .legal-policy-item h3 {
+        margin: 0 0 0.62rem;
+        color: #0f172a;
+        font-size: clamp(1.15rem, 1.45vw, 1.32rem);
+        font-weight: 950;
+        line-height: 1.16;
+        letter-spacing: -0.035em;
+      }
+
+      .legal-info-box p,
+      .legal-policy-item p {
+        margin: 0;
+        color: #475569;
+        font-size: clamp(0.98rem, 1.05vw, 1.04rem);
+        line-height: 1.64;
+      }
+
+      /* ========================================================================== */
+      /* 05 — LISTA DA POLÍTICA                                                     */
+      /* ========================================================================== */
+
+      .legal-policy-list {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .legal-policy-item {
+        padding: 1.18rem 1.25rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(147, 197, 253, 0.16);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.045);
+      }
+
+      /* ========================================================================== */
+      /* 06 — CONTATO LEGAL                                                         */
+      /* ========================================================================== */
+
+      .legal-contact-box {
+        margin-top: clamp(1.5rem, 3vw, 2.2rem);
+        padding: clamp(1.45rem, 3vw, 2rem);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1.4rem;
+        align-items: center;
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at 90% 10%,
+            rgba(34, 197, 94, 0.14),
+            transparent 32%),
+          linear-gradient(135deg, #071225 0%, #0d2a56 100%);
+        border: 1px solid rgba(147, 197, 253, 0.22);
+        box-shadow: 0 22px 46px rgba(15, 23, 42, 0.12);
+      }
+
+      .legal-contact-box .legal-eyebrow {
+        color: #bbf7d0;
+        background: rgba(34, 197, 94, 0.14);
+        border-color: rgba(134, 239, 172, 0.24);
+      }
+
+      .legal-contact-box h2 {
+        color: #f8fafc;
+      }
+
+      .legal-contact-box p {
+        max-width: 58ch;
+        margin: 0.82rem 0 0;
+        color: rgba(226, 232, 240, 0.88);
+        font-size: clamp(0.98rem, 1.06vw, 1.04rem);
+        line-height: 1.58;
+      }
+
+      .legal-contact-actions {
+        min-width: 280px;
+        display: grid;
+        gap: 0.72rem;
+      }
+
+      .legal-contact-link,
+      .legal-contact-button {
+        min-height: 50px;
+        padding: 0 1.15rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        font-size: 0.95rem;
+        font-weight: 950;
+        line-height: 1;
+        text-align: center;
+        text-decoration: none;
+        transition:
+          transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .legal-contact-link {
+        color: #c7f9dc;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(134, 239, 172, 0.2);
+      }
+
+      .legal-contact-button {
+        color: #ffffff;
+        background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+        border: 0;
+        box-shadow: 0 16px 32px rgba(37, 99, 235, 0.24);
+      }
+
+      .legal-contact-link:hover,
+      .legal-contact-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .legal-last-update {
+        margin: 1.2rem 0 0;
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        text-align: center;
+      }
+
+      /* ========================================================================== */
+      /* 07 — TABLET                                                                */
+      /* ========================================================================== */
+
+      @media (max-width: 991.98px) {
+        .legal-page-main {
+          width: min(100% - 1rem, 760px);
+          padding-top: 1.8rem;
+        }
+
+        .legal-content-header,
+        .legal-info-grid,
+        .legal-contact-box {
+          grid-template-columns: 1fr;
+        }
+
+        .legal-content-header,
+        .legal-contact-box {
+          text-align: center;
+        }
+
+        .legal-eyebrow {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .legal-content-header p,
+        .legal-contact-box p {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .legal-info-grid {
+          max-width: 620px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .legal-contact-actions {
+          width: min(100%, 360px);
+          min-width: 0;
+          margin: 0 auto;
+        }
+      }
+
+      /* ========================================================================== */
+      /* 08 — MOBILE                                                                */
+      /* ========================================================================== */
+
+      @media (max-width: 575.98px) {
+        .legal-public-header {
+          min-height: 68px;
+          padding: 0.72rem 0.82rem;
+          gap: 0.75rem;
+        }
+
+        .legal-public-brand .legal-brand {
+          font-size: 1.12rem;
+        }
+
+        .legal-public-nav {
+          gap: 0.35rem;
+        }
+
+        .legal-public-nav a {
+          min-height: 34px;
+          padding: 0.5rem 0.58rem;
+          font-size: 0.82rem;
+          font-weight: 850;
+        }
+
+        .legal-public-nav a:nth-child(2) {
+          display: none;
+        }
+
+        .legal-page-main {
+          width: calc(100% - 1rem);
+          margin-top: 1rem;
+          padding: 0 0 2rem;
+        }
+
+        .legal-hero,
+        .legal-content-card {
+          border-radius: 26px;
+        }
+
+        .legal-hero {
+          padding: 2.7rem 0.9rem;
+        }
+
+        .legal-hero h1 {
+          max-width: 12ch;
+          font-size: var(--vm-font-section-title);
+          line-height: 1.06;
+        }
+
+        .legal-hero p {
+          max-width: 29ch;
+          font-size: var(--vm-font-section-text);
+          line-height: 1.54;
+        }
+
+        .legal-content-card {
+          padding: 1.05rem 0.86rem 1.15rem;
+        }
+
+        .legal-content-header {
+          margin-bottom: 1.15rem;
+        }
+
+        .legal-content-header h2,
+        .legal-contact-box h2 {
+          max-width: 13ch;
+          margin-left: auto;
+          margin-right: auto;
+          font-size: var(--vm-font-section-title);
+          line-height: 1.08;
+        }
+
+        .legal-content-header p {
+          max-width: 29ch;
+          font-size: var(--vm-font-section-text);
+          line-height: 1.52;
+        }
+
+        .legal-info-grid {
+          gap: 0.82rem;
+        }
+
+        .legal-info-box {
+          min-height: auto;
+          padding: 1rem 0.95rem;
+          border-radius: 18px;
+        }
+
+        .legal-policy-item {
+          padding: 1rem 0.95rem;
+          border-radius: 16px;
+        }
+
+        .legal-info-box h3,
+        .legal-policy-item h3 {
+          font-size: var(--vm-font-card-title);
+          line-height: 1.16;
+        }
+
+        .legal-info-box p,
+        .legal-policy-item p,
+        .legal-contact-box p {
+          font-size: var(--vm-font-body);
+          line-height: 1.5;
+        }
+
+        .legal-contact-box {
+          padding: 1.1rem 0.95rem;
+          border-radius: 20px;
+        }
+
+        .legal-contact-actions {
+          width: 100%;
+        }
+
+        .legal-contact-link,
+        .legal-contact-button {
+          width: 100%;
+          min-height: 48px;
+          font-size: var(--vm-font-button);
+        }
+      }
+    </style>
+
+    <header class="legal-public-header">
+      <a href="/" class="legal-public-brand" aria-label="Voltar para a página inicial do VendMaster">
+        <span class="legal-brand">
+          <span class="legal-brand-primary">Vend</span><span class="legal-brand-accent">Master</span>
+        </span>
+      </a>
+
+      <nav class="legal-public-nav" aria-label="Navegação da página legal">
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/#contato">Contato</a>
+      </nav>
+    </header>
+
+    <main class="legal-page-main" id="topo">
+      <section class="legal-hero">
+        <span class="vm-kicker">VendMaster</span>
+
+        <h1>Política de Privacidade</h1>
+
+        <p>
+          Esta política explica, de forma simples, quais dados coletamos,
+          por que usamos essas informações e como você pode solicitar acesso,
+          correção ou remoção dos seus dados.
+        </p>
+      </section>
+
+      <section class="legal-content-card" aria-labelledby="privacy-title">
+        <div class="legal-content-header">
+          <div>
+            <span class="legal-eyebrow">Privacidade e transparência</span>
+
+            <h2 id="privacy-title">
+              Como o
+              <span class="legal-brand">
+                <span class="legal-brand-primary">Vend</span><span class="legal-brand-accent">Master</span>
+              </span>
+              trata seus dados
+            </h2>
+          </div>
+
+          <p>
+            Usamos dados de contato apenas para retorno comercial, demonstração
+            do sistema, suporte e comunicação relacionada a VendMaster.
+          </p>
+        </div>
+
+        <div class="legal-info-grid">
+          <article class="legal-info-box">
+            <span class="legal-info-number">01</span>
+            <h3>Quais dados coletamos?</h3>
+            <p>
+              Podemos coletar nome, telefone/WhatsApp, e-mail e informações
+              enviadas voluntariamente por formulários, WhatsApp, e-mail ou
+              conversas comerciais.
+            </p>
+          </article>
+
+          <article class="legal-info-box">
+            <span class="legal-info-number">02</span>
+            <h3>Para que usamos esses dados?</h3>
+            <p>
+              Usamos essas informações para responder solicitações, agendar
+              demonstrações, apresentar proposta comercial, prestar suporte e
+              manter contato sobre o uso do sistema.
+            </p>
+          </article>
+
+          <article class="legal-info-box">
+            <span class="legal-info-number">03</span>
+            <h3>O que não fazemos?</h3>
+            <p>
+              Não vendemos seus dados pessoais. Também não usamos suas informações
+              para envio de mensagens sem relação com a VendMaster ou com uma
+              solicitação feita por você.
+            </p>
+          </article>
+        </div>
+
+        <div class="legal-policy-list">
+          <article class="legal-policy-item">
+            <h3>Compartilhamento de dados</h3>
+            <p>
+              Os dados podem ser tratados por ferramentas necessárias à operação,
+              como formulário de contato, e-mail, WhatsApp, hospedagem, banco de
+              dados e serviços usados para atendimento. Esse uso ocorre apenas
+              quando necessário para prestar o serviço, responder uma solicitação
+              ou manter a operação funcionando.
+            </p>
+          </article>
+
+          <article class="legal-policy-item">
+            <h3>Armazenamento e segurança</h3>
+            <p>
+              Mantemos os dados pelo tempo necessário para atender à finalidade
+              informada, cumprir obrigações aplicáveis e preservar registros
+              relacionados ao relacionamento comercial. Adotamos cuidados
+              razoáveis para evitar acesso indevido, perda, alteração ou uso
+              inadequado das informações.
+            </p>
+          </article>
+
+          <article class="legal-policy-item">
+            <h3>Direitos do titular</h3>
+            <p>
+              Você pode solicitar informações sobre seus dados, pedir correção,
+              atualização ou remoção, quando aplicável. Para isso, entre em contato
+              pelo e-mail ou WhatsApp informados nesta página e no rodapé do site.
+            </p>
+          </article>
+
+          <article class="legal-policy-item">
+            <h3>Cookies e tecnologias semelhantes</h3>
+            <p>
+              O site pode utilizar recursos técnicos básicos para funcionamento,
+              segurança, melhoria da experiência e análise de acesso. Caso sejam
+              usadas ferramentas adicionais de medição ou marketing, elas deverão
+              respeitar a finalidade informada ao usuário.
+            </p>
+          </article>
+
+          <article class="legal-policy-item">
+            <h3>Atualizações desta política</h3>
+            <p>
+              Esta política pode ser atualizada para refletir melhorias na VendMaster,
+              mudanças operacionais ou ajustes legais. Quando houver alteração
+              relevante, a versão mais recente ficará disponível nesta página.
+            </p>
+          </article>
+        </div>
+
+        <div class="legal-contact-box">
+          <div>
+            <span class="legal-eyebrow">Solicitações de privacidade</span>
+
+            <h2>Quer falar sobre seus dados?</h2>
+
+            <p>
+              Para solicitar acesso, correção ou remoção de dados pessoais, fale
+              com o
+              <span class="legal-brand legal-brand-inline legal-brand-light">
+                <span class="legal-brand-primary">Vend</span><span class="legal-brand-accent">Master</span>
+              </span>
+              pelos canais abaixo.
+            </p>
+          </div>
+
+          <div class="legal-contact-actions">
+            <a href="mailto:suporte@vendmaster.com" class="legal-contact-link">
+              suporte@vendmaster.com
+            </a>
+
+            <a href="https://wa.me/5585986992706" target="_blank" rel="noopener" class="legal-contact-button">
+              Falar no WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <p class="legal-last-update">
+          Última atualização: maio de 2026.
+        </p>
+      </section>
+    </main>
+
+    <%- include('../../partials/footer') %>
+  </body>
+
 </html>

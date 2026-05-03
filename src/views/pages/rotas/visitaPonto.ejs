@@ -14,9 +14,36 @@
         const rotaPontoId = visita?.rota_ponto_id || rotaPonto?.id || '';
         const retornoUrl = `/rotas/visitas/${visitaId}`;
 
-        const retornoRotaUrl = typeof rotaRetornoUrl !== 'undefined' && rotaRetornoUrl
+        const retornoRotaUrlBase = typeof rotaRetornoUrl !== 'undefined' && rotaRetornoUrl
             ? rotaRetornoUrl
             : '/rotas';
+
+        const rotaPontoFinalizadoQuery = typeof query !== 'undefined' && query?.rota_ponto_finalizado
+            ? String(query.rota_ponto_finalizado)
+            : '';
+
+        const successQuery = typeof query !== 'undefined' && query?.success
+            ? String(query.success)
+            : '';
+
+
+        const buildUrlWithParams = (baseUrl, params = {}) => {
+            const [path, currentQueryString = ''] = String(baseUrl || '/rotas').split('?');
+            const searchParams = new URLSearchParams(currentQueryString);
+
+            Object.entries(params).forEach(([key, value]) => {
+                if (value) searchParams.set(key, value);
+            });
+
+            const queryString = searchParams.toString();
+
+            return queryString ? `${path}?${queryString}` : path;
+        };
+
+        const retornoRotaUrl = buildUrlWithParams(retornoRotaUrlBase, {
+            rota_ponto_finalizado: rotaPontoFinalizadoQuery,
+            success: successQuery
+        });
 
         const formatStatus = (status) => {
             if (status === 'registrado') return 'Registrado';
@@ -79,6 +106,20 @@
             }
 
             return '#';
+        };
+
+        const getProdutoReceiptUrl = (produto, sangriaId) => {
+            if (!sangriaId) return '';
+
+            if (produto === 'FIGURINHAS') {
+                return `/figurinhas/sangrias/recibo/${sangriaId}`;
+            }
+
+            if (produto === 'PELUCIAS') {
+                return `/pelucias/sangrias/recibo/${sangriaId}`;
+            }
+
+            return '';
         };
 
         const produtosPendentes = (produtosDaVisita || []).filter((item) => item.status === 'pendente');
@@ -195,10 +236,12 @@
                     </div>
                 <% } else { %>
                     <div class="form-summary-grid">
-                       <% produtosDaVisita.forEach((item) => { %>
-                            <% const isPendente = item.status === 'pendente'; %>
-                            <% const actionUrl = getProdutoActionUrl(item.produto); %>
+                        <% produtosDaVisita.forEach((item) => { %>
                             <%
+                                const isPendente = item.status === 'pendente';
+                                const actionUrl = getProdutoActionUrl(item.produto);
+                                const receiptUrl = getProdutoReceiptUrl(item.produto, item.sangria_id);
+
                                 let productThemeClass = 'produto-theme-neutral';
 
                                 if (item.produto === 'BOLINHAS') productThemeClass = 'produto-theme-bolinhas';
@@ -236,10 +279,26 @@
                                         <span><%= getProdutoActionLabel(item.produto) %></span>
                                     </a>
                                 <% } else { %>
-                                    <button type="button" class="btn-modern-secondary mt-3 guided-visit-product-button is-completed <%= productThemeClass %>" disabled>
+                                    <button
+                                        type="button"
+                                        class="btn-modern-secondary mt-3 guided-visit-product-button is-completed <%= productThemeClass %>"
+                                        disabled
+                                    >
                                         <i class="bi bi-check2-circle"></i>
                                         <span>Produto concluído</span>
                                     </button>
+
+                                    <% if (receiptUrl) { %>
+                                        <a
+                                            href="<%= receiptUrl %>"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn-modern mt-2 guided-visit-product-button <%= productThemeClass %>"
+                                        >
+                                            <i class="bi bi-file-earmark-pdf"></i>
+                                            <span>Gerar recibo</span>
+                                        </a>
+                                    <% } %>
                                 <% } %>
                             </article>
                         <% }) %>
@@ -288,5 +347,64 @@
             <% } %>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tratarReciboDaSangria = async () => {
+                const url = new URL(window.location.href);
+                const reciboUrl = url.searchParams.get('recibo_url');
+
+                if (!reciboUrl) return;
+
+                const storageKey = `vendmaster-recibo-visita:${reciboUrl}`;
+
+                if (sessionStorage.getItem(storageKey)) {
+                    url.searchParams.delete('recibo_url');
+
+                    window.history.replaceState(
+                        {},
+                        document.title,
+                        `${url.pathname}${url.search}${url.hash}`
+                    );
+
+                    return;
+                }
+
+                sessionStorage.setItem(storageKey, 'shown');
+
+                const abrirConfirmacaoRecibo = async () => {
+                    if (window.AppAlerts?.confirm) {
+                        return await window.AppAlerts.confirm({
+                            title: 'Gerar recibo em PDF?',
+                            text: 'A sangria foi registrada com sucesso. Deseja gerar o recibo em PDF para entregar ao comerciante agora?',
+                            confirmButtonText: 'Gerar recibo',
+                            cancelButtonText: 'Agora não'
+                        });
+                    }
+
+                    return window.confirm(
+                        'A sangria foi registrada com sucesso. Deseja gerar o recibo em PDF para entregar ao comerciante agora?'
+                    );
+                };
+
+                const confirmed = await abrirConfirmacaoRecibo();
+
+                if (confirmed) {
+                    window.open(reciboUrl, '_blank', 'noopener,noreferrer');
+                }
+
+                url.searchParams.delete('recibo_url');
+
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    `${url.pathname}${url.search}${url.hash}`
+                );
+            };
+
+            setTimeout(tratarReciboDaSangria, 300);
+        });
+    </script>
+
 </body>
 </html>

@@ -434,7 +434,7 @@
       </section>
       <section class="vm-section vm-section-dark vm-products-section dark-bg">
         <div class="vm-section-heading">
-          <span class="vm-kicker vm-kicker-light">Produtos</span>
+          <span class="vm-kicker vm-kicker-light">Frentes da operação</span>
 
           <h2 class="titulo-servicos">
             Gestão completa para máquinas recreativas e consignados.
@@ -926,7 +926,7 @@
               <section id="faq" class="vm-section vm-section-light vm-faq-section">
                 <div class="vm-section-heading">
                   <span class="vm-kicker">Perguntas frequentes</span>
-                  <h2 class="titulo-servicos">Dúvidas que aparecem antes<br>da demonstração.</h2>
+                  <h2 class="titulo-servicos">Dúvidas que aparecem antes da demonstração.</h2>
                 </div>
 
                 <div class="vm-faq-grid">
@@ -1056,39 +1056,69 @@
           const menuToggle = document.querySelector('[data-menu-toggle]');
           const homepageNav = document.querySelector('[data-homepage-nav]');
           const homepageHeader = document.querySelector('[data-homepage-header]');
-
-          const heroSection = document.querySelector('.vm-hero');
-          const dashboardSection = document.querySelector('#solucao');
           const whatsappFloat = document.querySelector('.vm-whatsapp-float');
 
           if (whatsappFloat) {
+            const whatsappLinkSelector = [
+              'a[href*="wa.me"]',
+              'a[href*="api.whatsapp.com"]',
+              'a[href*="whatsapp"]'
+            ].join(',');
+
+            const getSectionsToCheck = () => [
+              ...document.querySelectorAll('main section'),
+              ...document.querySelectorAll('.site-footer')
+            ];
+
+            const sectionHasWhatsappButton = (section) => {
+              return Boolean(section.querySelector(whatsappLinkSelector));
+            };
+
+            const sectionIsInFocus = (section) => {
+              const rect = section.getBoundingClientRect();
+              const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+              const focusLine = viewportHeight * 0.62;
+
+              return rect.top <= focusLine && rect.bottom >= focusLine;
+            };
+
+            const hideWhatsappFloat = () => {
+              whatsappFloat.style.setProperty('display', 'none', 'important');
+            };
+
+            const showWhatsappFloat = () => {
+              whatsappFloat.style.removeProperty('display');
+            };
+
             const toggleWhatsappFloat = () => {
               const isMobile = window.matchMedia('(max-width: 575.98px)').matches;
 
               if (!isMobile) {
-                document.body.classList.remove('homepage-hide-whatsapp-float');
+                showWhatsappFloat();
                 return;
               }
 
-              const isHeroVisible = heroSection
-                ? heroSection.getBoundingClientRect().bottom > 80
-                : false;
+              const focusedSection = getSectionsToCheck().find(sectionIsInFocus);
 
-              const isDashboardVisible = dashboardSection
-                ? dashboardSection.getBoundingClientRect().top < window.innerHeight - 120 &&
-                dashboardSection.getBoundingClientRect().bottom > 120
-                : false;
+              if (!focusedSection) {
+                showWhatsappFloat();
+                return;
+              }
 
-              document.body.classList.toggle(
-                'homepage-hide-whatsapp-float',
-                isHeroVisible || isDashboardVisible
-              );
+              const shouldHideFloat = sectionHasWhatsappButton(focusedSection);
+
+              if (shouldHideFloat) {
+                hideWhatsappFloat();
+              } else {
+                showWhatsappFloat();
+              }
             };
 
             toggleWhatsappFloat();
 
             window.addEventListener('scroll', toggleWhatsappFloat, { passive: true });
             window.addEventListener('resize', toggleWhatsappFloat);
+            window.addEventListener('orientationchange', toggleWhatsappFloat);
           }
 
           function closeHomepageMenu() {
@@ -1102,7 +1132,9 @@
               menuToggle.setAttribute('aria-expanded', String(isOpen));
             });
 
-            homepageNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeHomepageMenu));
+            homepageNav.querySelectorAll('a').forEach((link) => {
+              link.addEventListener('click', closeHomepageMenu);
+            });
 
             document.addEventListener('click', (event) => {
               if (!document.body.classList.contains('homepage-menu-open')) return;
@@ -1146,7 +1178,7 @@
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Accept': 'application/json',
+                  Accept: 'application/json',
                   'X-CSRF-Token': csrfToken
                 },
                 body: JSON.stringify(payload)
@@ -1154,7 +1186,9 @@
 
               const data = await response.json();
 
-              if (!response.ok) throw new Error(data.message || 'Não foi possível enviar sua solicitação agora.');
+              if (!response.ok) {
+                throw new Error(data.message || 'Não foi possível enviar sua solicitação agora.');
+              }
 
               form.reset();
               statusElement.textContent = data.message || 'Solicitação enviada com sucesso.';
