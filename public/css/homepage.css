@@ -1,7 +1,7 @@
 /* ==========================================================================
    HOMEPAGE.CSS — VENDMASTER
    Arquivo reorganizado por seções conforme a ordem do homepage.ejs.
-   Ajuste incluído: produtos com marcadores corrigidos no li, sem pseudo-elemento fora do lugar.
+   Ajuste incluído: seção Produtos reorganizada por blocos; grid mobile corrigido para uma coluna; tipografia mobile preservada.
    ========================================================================== */
 
 /* ========================================================================== */
@@ -3174,99 +3174,88 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 05.13 — PAINEL GERENCIAL — TIPOGRAFIA MOBILE                               */
+/* ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .homepage-body #solucao.vm-section.vm-dashboard-showcase .vm-subtext,
+  .homepage-body #solucao.vm-section.vm-dashboard-showcase p {
+    font-size: 1.13rem !important;
+    line-height: 1.64 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-copy
+    p {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-points
+    strong {
+    font-size: 1.03rem !important;
+    line-height: 1.22 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-points
+    span {
+    font-size: 1.02rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-slide-caption
+    span {
+    font-size: 0.84rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-slide-caption
+    strong {
+    font-size: 1.02rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-integrated-cta
+    p {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body
+    #solucao.vm-section.vm-dashboard-showcase
+    .vm-dashboard-integrated-cta
+    .btn {
+    font-size: 1.03rem !important;
+  }
+}
+
+/* ========================================================================== */
 /* 06 — SEÇÃO PRODUTOS                                                        */
 /* ========================================================================== */
 
-.vm-products-intro {
-  max-width: 760px !important;
-  margin: 1rem auto 0 !important;
-  color: #64748b !important;
-  font-size: clamp(1rem, 1.25vw, 1.15rem) !important;
-  line-height: 1.7 !important;
-  text-align: center !important;
-}
-
-.vm-section-dark .vm-products-intro {
-  color: rgba(226, 232, 240, 0.9) !important;
-}
-
-.dark-bg .vm-products-intro {
-  color: rgba(226, 232, 240, 0.9) !important;
-}
-
-.vm-products-section .titulo-servicos {
-  max-width: 720px;
-  color: #f8fafc !important;
-}
-
-.vm-product-grid {
-  margin-top: 1.75rem;
-}
-
-.vm-product-card {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(241, 247, 255, 0.98) 100%
-  );
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 24px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.1);
-  min-height: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition:
-    transform 0.28s ease,
-    box-shadow 0.28s ease,
-    border-color 0.28s ease,
-    background 0.28s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.vm-product-card h3 {
-  margin-bottom: 0.6rem;
-  color: #0f172a;
-  font-size: clamp(1.25rem, 2vw, 1.55rem);
-  position: relative;
-  z-index: 1;
-}
-
-.vm-product-card p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.62;
-  margin-top: auto;
-  font-size: clamp(0.98rem, 1.2vw, 1.06rem);
-  position: relative;
-  z-index: 1;
-}
-
-.vm-product-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(37, 99, 235, 0.26);
-  box-shadow: 0 24px 46px rgba(15, 23, 42, 0.14);
-}
-
-.vm-product-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(59, 130, 246, 0.06),
-    transparent 45%
-  );
-  pointer-events: none;
-}
+/* ========================================================================== */
+/* 06.1 — PRODUTOS — ESTRUTURA GERAL / DESKTOP                                */
+/* ========================================================================== */
 
 .homepage-body .vm-products-section {
   padding-top: clamp(3.5rem, 6vw, 5rem) !important;
   padding-bottom: clamp(3.5rem, 6vw, 5rem) !important;
-  padding-inline: 0.75rem;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  padding-inline: 0.75rem !important;
   background:
     radial-gradient(
       circle at 85% 12%,
@@ -3284,43 +3273,130 @@ html:has(.homepage-body) {
 }
 
 .homepage-body .vm-products-section .vm-section-heading {
+  width: min(100%, 880px) !important;
   min-height: auto !important;
-  margin-bottom: 1.75rem !important;
-  width: min(100%, 880px);
+  margin: 0 auto 1.75rem !important;
 }
 
+.homepage-body .vm-products-section .vm-kicker,
+.homepage-body .vm-products-section .vm-section-tag {
+  color: #bbf7d0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.24) 0%,
+    rgba(16, 185, 129, 0.16) 100%
+  ) !important;
+  border-color: rgba(74, 222, 128, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(34, 197, 94, 0.18) !important;
+}
+
+.homepage-body .vm-products-section .titulo-servicos {
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color: #f8fafc !important;
+  text-align: center !important;
+}
+
+.homepage-body .vm-products-section .vm-products-intro {
+  max-width: 760px !important;
+  margin: 1rem auto 0 !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  font-size: clamp(1rem, 1.25vw, 1.15rem) !important;
+  line-height: 1.7 !important;
+  text-align: center !important;
+}
+
+.homepage-body .vm-products-section .vm-grid.vm-product-grid,
 .homepage-body .vm-products-section .vm-product-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 1.15rem !important;
   width: min(1040px, 100%) !important;
   max-width: 1040px !important;
-  display: grid !important;
   margin: 1.75rem auto 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 1.15rem !important;
   align-items: stretch !important;
 }
 
 .homepage-body .vm-products-section .vm-product-card {
+  width: 100% !important;
   min-height: 430px !important;
+  height: 100% !important;
   padding: 1.75rem 1.55rem 1.45rem !important;
+  position: relative;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
   border-radius: 22px !important;
   border: 1px solid var(--home-line);
   background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%) !important;
   box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  text-align: center !important;
   transition:
     transform 420ms ease,
     box-shadow 420ms ease,
     border-color 420ms ease;
-  height: 100% !important;
-  justify-content: flex-start !important;
 }
+
+.homepage-body .vm-products-section .vm-product-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(96, 165, 250, 0.24);
+  box-shadow: 0 28px 58px rgba(15, 23, 42, 0.12);
+}
+
+.homepage-body .vm-products-section .vm-product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.06),
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+/* ========================================================================== */
+/* 06.2 — PRODUTOS — IMAGENS DOS CARDS                                        */
+/* ========================================================================== */
+
+.homepage-body .vm-products-section .vm-product-image-box {
+  width: 100% !important;
+  height: 104px !important;
+  min-height: 104px !important;
+  margin-bottom: 1rem !important;
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.homepage-body .vm-products-section .vm-product-image-box img,
+.homepage-body .vm-products-section .vm-product-card img {
+  width: auto !important;
+  max-width: 118px !important;
+  height: auto !important;
+  max-height: 92px !important;
+  display: block !important;
+  object-fit: contain !important;
+  margin: 0 auto !important;
+  filter: drop-shadow(0 18px 22px rgba(15, 23, 42, 0.18));
+}
+
+/* ========================================================================== */
+/* 06.3 — PRODUTOS — TEXTOS DOS CARDS                                         */
+/* ========================================================================== */
 
 .homepage-body .vm-products-section .vm-product-card h3 {
   min-height: 56px !important;
   margin: 0 0 1rem !important;
+  position: relative;
+  z-index: 1;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3332,11 +3408,25 @@ html:has(.homepage-body) {
   text-align: center !important;
 }
 
+.homepage-body .vm-products-section .vm-product-card p {
+  min-height: 108px !important;
+  max-width: 31ch !important;
+  margin: 0 auto 1.35rem !important;
+  position: relative;
+  z-index: 1;
+  color: #475569 !important;
+  font-size: 0.94rem !important;
+  line-height: 1.58 !important;
+  text-align: center !important;
+}
+
 .homepage-body .vm-products-section .vm-product-points {
   width: 100% !important;
   max-width: 31ch !important;
   margin: auto auto 0 !important;
   padding: 0 !important;
+  position: relative;
+  z-index: 1;
   display: grid !important;
   gap: 0.72rem !important;
   list-style: none !important;
@@ -3366,225 +3456,192 @@ html:has(.homepage-body) {
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12) !important;
 }
 
-.homepage-body .vm-product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 28px 58px rgba(15, 23, 42, 0.12);
-  border-color: rgba(96, 165, 250, 0.24);
-}
-
-.homepage-body .vm-products-section .vm-product-image-box {
-  width: 100%;
-  height: 104px !important;
-  min-height: 104px !important;
-  margin-bottom: 1rem !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.homepage-body .vm-products-section .vm-product-image-box img {
-  display: block;
-  width: auto;
-  max-width: 100%;
-  max-height: 92px !important;
-  object-fit: contain;
-  filter: drop-shadow(0 18px 22px rgba(15, 23, 42, 0.18));
-}
-
-.homepage-body .vm-products-section .vm-product-card img {
-  display: block !important;
-  width: auto !important;
-  max-width: 118px !important;
-  height: auto !important;
-  max-height: 92px !important;
-  object-fit: contain !important;
-  margin: 0 auto !important;
-}
-
-.vm-products-section .vm-kicker {
-  color: #bbf7d0 !important;
-  background: linear-gradient(
-    135deg,
-    rgba(34, 197, 94, 0.24) 0%,
-    rgba(16, 185, 129, 0.16) 100%
-  ) !important;
-  border-color: rgba(74, 222, 128, 0.42) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 24px rgba(34, 197, 94, 0.18) !important;
-}
-
-.vm-products-section .vm-section-tag {
-  color: #bbf7d0 !important;
-  background: linear-gradient(
-    135deg,
-    rgba(34, 197, 94, 0.24) 0%,
-    rgba(16, 185, 129, 0.16) 100%
-  ) !important;
-  border-color: rgba(74, 222, 128, 0.42) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 24px rgba(34, 197, 94, 0.18) !important;
-}
-
-.vm-products-section .vm-products-intro {
-  color: rgba(226, 232, 240, 0.9) !important;
-}
+/* ========================================================================== */
+/* 06.4 — PRODUTOS — TABLET                                                   */
+/* ========================================================================== */
 
 @media (min-width: 768px) and (max-width: 1199.98px) {
-  .homepage-body .vm-product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 992px) {
-  .homepage-body .vm-product-grid {
-    grid-template-columns: 1fr;
+  .homepage-body .vm-products-section .vm-grid.vm-product-grid,
+  .homepage-body .vm-products-section .vm-product-grid {
+    width: min(720px, 100%) !important;
+    max-width: 720px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
   }
 
   .homepage-body .vm-products-section .vm-product-card {
     min-height: auto !important;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .vm-product-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .homepage-body .vm-product-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card {
-    min-height: auto !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .vm-product-card {
-    min-height: auto;
-  }
-
-  .homepage-body .vm-products-section {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-
-  .homepage-body .vm-product-image-box {
-    min-height: 135px;
-  }
-
-  .homepage-body .vm-product-image-box img {
-    max-height: 120px;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .vm-product-card {
-    min-height: auto;
-    padding: 1.2rem;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card {
-    padding: 1.35rem !important;
-    min-height: auto !important;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card h3 {
-    font-size: 1.3rem !important;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-products-intro {
-    font-size: 1.19rem;
-    line-height: 1.68;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card p {
-    font-size: 1.03rem !important;
-    line-height: 1.58 !important;
-  }
-
-  .homepage-body .vm-products-section .vm-product-points li {
-    font-size: 0.97rem !important;
-    line-height: 1.38 !important;
-    position: relative !important;
-  }
-
-  .homepage-body .vm-products-section {
-    display: block;
-    width: calc(100% - 0.75rem);
-    margin-inline: auto;
-    padding-inline: 1rem;
-    border-radius: 26px;
-  }
-
-  .homepage-body .vm-product-points {
-    gap: 0.55rem;
-    justify-items: start;
-  }
-
-  .homepage-body .vm-product-chip {
-    padding: 0.38rem 0.62rem;
-    font-size: 0.75rem;
-  }
-
-  .homepage-body .vm-product-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (max-width: 479.98px) {
-  .homepage-body .vm-products-section {
-    display: block;
-    width: calc(100% - 0.5rem);
-    padding-inline: 0.82rem;
-    border-radius: 22px;
-    max-width: 100%;
-  }
-
-  .homepage-body .vm-products-intro {
-    font-size: 1.14rem;
-    line-height: 1.66;
-  }
-
-  .homepage-body .vm-product-card {
-    padding: 1.05rem;
-    border-radius: 18px;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card h3 {
-    font-size: 1.23rem !important;
-    min-height: auto !important;
-  }
-
-  .homepage-body .vm-products-section .vm-product-card p {
-    font-size: 1.03rem !important;
-    line-height: 1.58 !important;
-  }
-
-  .homepage-body .vm-products-section .vm-product-points li {
-    font-size: 0.97rem !important;
-    line-height: 1.38 !important;
-    position: relative !important;
-  }
-
-  .homepage-body .vm-products-section .vm-product-points {
-    justify-items: start;
-    margin-top: 1.2rem !important;
-  }
-
-  .homepage-body .vm-product-chip {
-    font-size: 0.7rem;
   }
 }
 
 /* ========================================================================== */
+/* 06.5 — PRODUTOS — MOBILE                                                   */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-products-section {
+    display: block !important;
+    width: calc(100% - 0.75rem) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    padding-top: 70px !important;
+    padding-bottom: 70px !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-inline: 1rem !important;
+    border-radius: 26px !important;
+  }
+
+  .homepage-body .vm-products-section .vm-section-heading {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1.4rem !important;
+  }
+
+  .homepage-body .vm-products-section .titulo-servicos {
+    max-width: 12.5ch !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: clamp(2rem, 9vw, 2.55rem) !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body .vm-products-section .vm-products-intro {
+    max-width: 28ch !important;
+    margin: 1rem auto 0 !important;
+    font-size: 1.19rem !important;
+    line-height: 1.68 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body .vm-products-section .vm-grid.vm-product-grid,
+  .homepage-body .vm-products-section .vm-product-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1.35rem auto 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: 1.35rem !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card:hover {
+    transform: none;
+  }
+
+  .homepage-body .vm-products-section .vm-product-image-box {
+    width: 100% !important;
+    height: 135px !important;
+    min-height: 135px !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-image-box img,
+  .homepage-body .vm-products-section .vm-product-card img {
+    width: auto !important;
+    max-width: 130px !important;
+    height: auto !important;
+    max-height: 120px !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card h3 {
+    min-height: auto !important;
+    margin-bottom: 0.85rem !important;
+    font-size: 1.3rem !important;
+    line-height: 1.18 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card p {
+    min-height: auto !important;
+    max-width: 31ch !important;
+    margin: 0 auto 1rem !important;
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+    text-align: center !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-points {
+    width: 100% !important;
+    max-width: 31ch !important;
+    margin: 1.2rem auto 0 !important;
+    gap: 0.65rem !important;
+    justify-items: start !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-points li,
+  .homepage-body .vm-products-section .vm-product-points span {
+    position: relative !important;
+    font-size: 1.04rem !important;
+    line-height: 1.48 !important;
+  }
+}
+
+/* ========================================================================== */
+/* 06.6 — PRODUTOS — MOBILE PEQUENO                                           */
+/* ========================================================================== */
+
+@media (max-width: 479.98px) {
+  .homepage-body .vm-products-section {
+    width: calc(100% - 0.5rem) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    padding-left: 0.82rem !important;
+    padding-right: 0.82rem !important;
+    padding-inline: 0.82rem !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-body .vm-products-section .vm-grid.vm-product-grid,
+  .homepage-body .vm-products-section .vm-product-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  .homepage-body .vm-products-section .vm-products-intro {
+    font-size: 1.14rem !important;
+    line-height: 1.66 !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card {
+    padding: 1.05rem !important;
+    border-radius: 18px !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card h3 {
+    min-height: auto !important;
+    font-size: 1.23rem !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-card p {
+    font-size: 1.03rem !important;
+    line-height: 1.58 !important;
+  }
+
+  .homepage-body .vm-products-section .vm-product-points li,
+  .homepage-body .vm-products-section .vm-product-points span {
+    position: relative !important;
+    font-size: 0.97rem !important;
+    line-height: 1.38 !important;
+  }
+}
+
 /* 07 — SEÇÃO MÓDULOS                                                         */
 /* ========================================================================== */
 
@@ -4195,6 +4252,39 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 07.4 — MÓDULOS — TIPOGRAFIA MOBILE                                         */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body #modulos.vm-modules-grid-section .vm-modules-subtitle,
+  .homepage-body #modulos.vm-modules-grid-section p {
+    font-size: 1.13rem !important;
+    line-height: 1.64 !important;
+  }
+
+  .homepage-body #modulos.vm-modules-grid-section .vm-module-card p,
+  .homepage-body #modulos.vm-modules-grid-section .vm-module-card li {
+    font-size: 1.06rem !important;
+    line-height: 1.58 !important;
+  }
+
+  .homepage-body
+    #modulos.vm-modules-grid-section
+    .vm-module-card
+    span:not(.vm-module-badge),
+  .homepage-body #modulos.vm-modules-grid-section .vm-module-card label {
+    font-size: 1.02rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .homepage-body #modulos.vm-modules-grid-section .vm-module-badge {
+    font-size: 0.84rem !important;
+    line-height: 1.18 !important;
+  }
+}
+
 /* 08 — SEÇÃO FOUNDER / QUEM CRIOU O VENDMASTER                               */
 /* ========================================================================== */
 
@@ -4517,6 +4607,31 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 08.4 — FOUNDER — TIPOGRAFIA MOBILE                                         */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-founder-section p,
+  .homepage-body .vm-founder-section span,
+  .homepage-body .vm-founder-section label {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body .vm-founder-section .vm-founder-text p,
+  .homepage-body .vm-founder-section .vm-founder-copy p,
+  .homepage-body .vm-founder-section .vm-founder-card p {
+    font-size: 1.09rem !important;
+    line-height: 1.66 !important;
+  }
+
+  .homepage-body .vm-founder-section .btn-founder-cta {
+    font-size: 1.03rem !important;
+  }
+}
+
 /* 09 — SEÇÃO PROVA SOCIAL / DEPOIMENTOS                                      */
 /* ========================================================================== */
 
@@ -5009,6 +5124,33 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 09.4 — PROVA SOCIAL — TIPOGRAFIA MOBILE                                    */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-proof-section p,
+  .homepage-body .vm-proof-section span,
+  .homepage-body .vm-proof-section label {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-proof-card p,
+  .homepage-body .vm-proof-section .vm-proof-text,
+  .homepage-body .vm-proof-section .vm-proof-quote {
+    font-size: 1.09rem !important;
+    line-height: 1.66 !important;
+  }
+
+  .homepage-body .vm-proof-section .vm-proof-author,
+  .homepage-body .vm-proof-section .vm-proof-author span {
+    font-size: 1.03rem !important;
+    line-height: 1.45 !important;
+  }
+}
+
 /* 10 — SEÇÃO GARANTIA                                                        */
 /* ========================================================================== */
 
@@ -5410,6 +5552,27 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 10.4 — GARANTIA — TIPOGRAFIA MOBILE                                        */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body #garantia.vm-guarantee-section p,
+  .homepage-body #garantia.vm-guarantee-section span,
+  .homepage-body #garantia.vm-guarantee-section label {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body #garantia.vm-guarantee-section .vm-guarantee-points li,
+  .homepage-body #garantia.vm-guarantee-section .vm-guarantee-points span,
+  .homepage-body #garantia.vm-guarantee-section .vm-guarantee-card p {
+    font-size: 1.08rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
 /* 11 — SEÇÃO BLOG PREVIEW                                                    */
 /* ========================================================================== */
 
@@ -5708,6 +5871,27 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 11.4 — BLOG PREVIEW — TIPOGRAFIA MOBILE                                    */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body #blog-preview.vm-blog-preview-section p,
+  .homepage-body #blog-preview.vm-blog-preview-section span,
+  .homepage-body #blog-preview.vm-blog-preview-section label {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body #blog-preview.vm-blog-preview-section .vm-blog-card p,
+  .homepage-body #blog-preview.vm-blog-preview-section .vm-blog-preview-card p,
+  .homepage-body #blog-preview.vm-blog-preview-section .vm-blog-excerpt {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+}
+
 /* 12 — SEÇÃO FAQ                                                             */
 /* ========================================================================== */
 
@@ -5779,6 +5963,26 @@ html:has(.homepage-body) {
 }
 
 /* ========================================================================== */
+
+/* ========================================================================== */
+/* 12.3 — FAQ — TIPOGRAFIA MOBILE                                             */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body #faq.vm-faq-section p,
+  .homepage-body #faq.vm-faq-section span,
+  .homepage-body #faq.vm-faq-section label,
+  .homepage-body #faq.vm-faq-section .accordion-body,
+  .homepage-body #faq.vm-faq-section .accordion-button {
+    font-size: 1.08rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .homepage-body #faq.vm-faq-section .accordion-button {
+    line-height: 1.35 !important;
+  }
+}
+
 /* 13 — SEÇÃO CONTATO / FORMULÁRIO                                            */
 /* ========================================================================== */
 
@@ -6462,5 +6666,33 @@ html:has(.homepage-body) {
 
   .vm-check-chip span {
     font-size: 1.16rem;
+  }
+}
+
+/* ========================================================================== */
+/* 13.4 — CONTATO / FORMULÁRIO — TIPOGRAFIA MOBILE                            */
+/* ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .homepage-body #contato.vm-contact p,
+  .homepage-body #contato.vm-contact span,
+  .homepage-body #contato.vm-contact label,
+  .homepage-body #contato.vm-contact input,
+  .homepage-body #contato.vm-contact textarea,
+  .homepage-body #contato.vm-contact select {
+    font-size: 1.08rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .homepage-body #contato.vm-contact .vm-contact-card p,
+  .homepage-body #contato.vm-contact .vm-contact-copy p,
+  .homepage-body #contato.vm-contact .vm-contact-info p {
+    font-size: 1.09rem !important;
+    line-height: 1.66 !important;
+  }
+
+  .homepage-body #contato.vm-contact .btn,
+  .homepage-body #contato.vm-contact button {
+    font-size: 1.04rem !important;
   }
 }
