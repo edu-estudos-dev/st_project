@@ -492,7 +492,7 @@
           font-weight: 850;
         }
 
-        .legal-public-nav a:nth-child(2) {
+        .legal-public-nav a[data-legal-nav-optional] {
           display: none;
         }
 
@@ -601,8 +601,13 @@
 
       <nav class="legal-public-nav" aria-label="Navegação da página legal">
         <a href="/">Home</a>
+        <a href="/#solucao">Solução</a>
+        <a href="/#modulos" data-legal-nav-optional>Módulos</a>
         <a href="/blog">Blog</a>
+        <a href="/#garantia" data-legal-nav-optional>Garantia</a>
+        <a href="/#faq" data-legal-nav-optional>FAQ</a>
         <a href="/#contato">Contato</a>
+        <a href="/login">Entrar</a>
       </nav>
     </header>
 
@@ -636,6 +641,8 @@
           <p>
             Usamos dados de contato apenas para retorno comercial, demonstração
             do sistema, suporte e comunicação relacionada a VendMaster.
+            Esta Política de Privacidade segue princípios da Lei Geral de Proteção
+            de Dados Pessoais - LGPD, Lei nº 13.709/2018.
           </p>
         </div>
 
