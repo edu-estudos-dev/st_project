@@ -104,26 +104,38 @@
       </div>
     </section>
 
-    <section class="blog-intro-strip">
+    <section class="blog-intro-strip" aria-label="Categorias em destaque do blog">
       <div class="blog-container">
-        <div class="blog-intro-grid">
-          <div class="blog-intro-item">
-            <strong>Operação</strong>
-            <span>Conteúdos para melhorar a rotina de campo.</span>
-          </div>
+        <% if (categorias && categorias.length) { %>
+          <div class="blog-intro-grid">
+            <% categorias.slice(0, 3).forEach((item) => { %>
+              <a
+                href="/blog/categoria/<%= normalizarCategoriaParaUrl(item.categoria) %>"
+                class="blog-intro-item"
+                aria-label="Ver artigos da categoria <%= item.categoria %>"
+              >
+                <strong><%= item.categoria %></strong>
 
-          <div class="blog-intro-item">
-            <strong>Controle</strong>
-            <span>Ideias para organizar sangrias, estoque e financeiro.</span>
+                <span>
+                  <% if (item.categoria === 'Operação') { %>
+                    Conteúdos para melhorar a rotina de campo.
+                  <% } else if (item.categoria === 'Financeiro') { %>
+                    Ideias para organizar sangrias, comissões e resultados.
+                  <% } else if (item.categoria === 'Rotas') { %>
+                    Boas práticas para priorizar visitas e reduzir improviso.
+                  <% } else if (item.categoria === 'Ferramentas') { %>
+                    Recursos para sair da planilha e melhorar o controle.
+                  <% } else { %>
+                    Conteúdos para melhorar a gestão da sua operação.
+                  <% } %>
+                </span>
+              </a>
+            <% }) %>
           </div>
-
-          <div class="blog-intro-item">
-            <strong>Crescimento</strong>
-            <span>Boas práticas para escalar com mais previsibilidade.</span>
-          </div>
-        </div>
+        <% } %>
       </div>
     </section>
+
 
     <section class="blog-section blog-articles-section" id="artigos">
       <div class="blog-container">

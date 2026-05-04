@@ -4,10 +4,10 @@
     <meta name="csrf-token" content="<%= csrfToken || '' %>">
 
     <% const pageTitle = typeof title !== 'undefined' && title ? title
-        : 'VendMaster | Roteiro Inteligente para M\u00e1quinas Recreativas'; %>
+        : 'VendMaster | Roteiro Inteligente para Máquinas Recreativas'; %>
 
     <% const pageDescription = typeof metaDescription !== 'undefined' && metaDescription ? metaDescription
-        : 'Pare de improvisar a rota. O VendMaster organiza pontos, sangrias e financeiro para voc\u00ea sair sabendo onde coletar, sem planilha e sem achismo.'; %>
+        : 'Pare de improvisar a rota. O VendMaster organiza pontos, sangrias e financeiro para você sair sabendo onde coletar, sem planilha e sem achismo.'; %>
 
     <% const pageCanonical = typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl
         : 'https://vendmaster.com.br/'; %>
@@ -45,7 +45,7 @@
     <meta name="twitter:description" content="<%= pageDescription %>">
     <meta name="twitter:image" content="<%= pageOgImage %>">
 
-   <% if (typeof faqJsonLd !== 'undefined' && faqJsonLd) { %>
+    <% if (typeof faqJsonLd !== 'undefined' && faqJsonLd) { %>
         <script type="application/ld+json"><%- JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
@@ -114,8 +114,10 @@
         }
     </style>
 
-    <!-- CSS CRÍTICO DA APLICAÇÃO -->
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- CSS DA APLICAÇÃO -->
+    <% if (typeof disableBootstrap === 'undefined' || !disableBootstrap) { %>
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <% } %>
 
     <% if (typeof skipGlobalStyles === 'undefined' || !skipGlobalStyles) { %>
         <link rel="stylesheet" href="/css/styles.css">
@@ -123,7 +125,20 @@
 
     <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
         <% extraStyles.forEach((href) => { %>
-            <link rel="stylesheet" href="<%= href %>">
+            <% if (typeof preloadExtraStyles !== 'undefined' && preloadExtraStyles) { %>
+                <link
+                    rel="preload"
+                    href="<%= href %>"
+                    as="style"
+                    onload="this.onload=null;this.rel='stylesheet'"
+                >
+
+                <noscript>
+                    <link rel="stylesheet" href="<%= href %>">
+                </noscript>
+            <% } else { %>
+                <link rel="stylesheet" href="<%= href %>">
+            <% } %>
         <% }) %>
     <% } %>
 
@@ -234,7 +249,7 @@
         });
     </script>
 
-        <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
+    <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);

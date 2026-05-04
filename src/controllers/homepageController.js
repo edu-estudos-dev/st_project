@@ -71,12 +71,14 @@ class HomepageController {
             }));
 
             return res.render('pages/homepage', {
-                title: 'Sistema de gestão para máquinas recreativas e consignados | VendMaster',
-                metaDescription: 'Sistema de gestão para máquinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comissões e financeiro.',
-                canonicalUrl: 'https://vendmaster.com.br/',
-                faqJsonLd: homepageFaqJsonLd,
-                postsRecentes
-            });
+              title: 'Sistema de gestão para máquinas recreativas e consignados | VendMaster',
+              metaDescription: 'Sistema de gestão para máquinas recreativas, bolinhas, gruas e consignados. Organize pontos, sangrias, rotas, estoque, comissões e financeiro.',
+              canonicalUrl: 'https://vendmaster.com.br/',
+              faqJsonLd: homepageFaqJsonLd,
+              postsRecentes,
+              skipGlobalStyles: true,
+              preloadExtraStyles: true
+          });
         } catch (error) {
             return next(error);
         }

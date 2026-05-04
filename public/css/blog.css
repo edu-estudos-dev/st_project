@@ -511,13 +511,13 @@
 }
 
 /* =========================
-   STRIP
+   STRIP / CATEGORIAS EM DESTAQUE
 ========================= */
 
 .blog-intro-strip {
   position: relative;
   z-index: 2;
-  margin-top: -28px;
+  margin-top: -30px;
 }
 
 .blog-intro-grid {
@@ -529,7 +529,7 @@
   background:
     radial-gradient(
       circle at top left,
-      rgba(37, 99, 235, 0.06),
+      rgba(37, 99, 235, 0.07),
       transparent 34%
     ),
     linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
@@ -538,8 +538,8 @@
 
 .blog-intro-item {
   position: relative;
-  min-height: 132px;
-  padding: 28px 30px 26px;
+  min-height: 124px;
+  padding: 26px 30px 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -547,13 +547,36 @@
   border-right: 1px solid rgba(148, 163, 184, 0.18);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(248, 251, 255, 0.82) 100%
+    rgba(255, 255, 255, 0.86) 0%,
+    rgba(248, 251, 255, 0.86) 100%
   );
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 320ms ease,
+    background 320ms ease,
+    box-shadow 320ms ease;
 }
 
 .blog-intro-item:last-child {
   border-right: 0;
+}
+
+.blog-intro-item:hover {
+  transform: translateY(-2px);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.09),
+      transparent 38%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.1);
+}
+
+.blog-intro-item:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: -3px;
 }
 
 .blog-intro-item::before {
@@ -561,6 +584,8 @@
   width: 34px;
   height: 34px;
   margin-bottom: 4px;
+  display: inline-grid;
+  place-items: center;
   border-radius: 12px;
   background: linear-gradient(
     135deg,
@@ -568,6 +593,10 @@
     rgba(34, 197, 94, 0.12)
   );
   border: 1px solid rgba(37, 99, 235, 0.12);
+  color: var(--blog-blue);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
@@ -583,15 +612,6 @@
   content: '03';
 }
 
-.blog-intro-item::before {
-  display: inline-grid;
-  place-items: center;
-  color: var(--blog-blue);
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: -0.02em;
-}
-
 .blog-intro-item strong {
   display: block;
   margin: 0;
@@ -604,32 +624,14 @@
 
 .blog-intro-item span {
   display: block;
-  max-width: 30ch;
+  max-width: 34ch;
   color: var(--blog-muted-soft);
   font-size: 0.96rem;
   line-height: 1.58;
 }
 
-@media (max-width: 768px) {
-  .blog-intro-grid {
-    grid-template-columns: 1fr;
-    border-radius: 24px;
-  }
-
-  .blog-intro-item {
-    min-height: auto;
-    padding: 24px;
-    border-right: 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-  }
-
-  .blog-intro-item:last-child {
-    border-bottom: 0;
-  }
-
-  .blog-intro-item span {
-    max-width: 100%;
-  }
+.blog-intro-item:hover strong {
+  color: #1d4ed8;
 }
 
 /* =========================
@@ -726,6 +728,14 @@
 .blog-articles-grid .blog-card:only-child {
   width: min(430px, 100%);
   justify-self: center;
+}
+
+.blog-articles-grid .blog-card:first-child:nth-last-child(2) {
+  justify-self: end;
+}
+
+.blog-articles-grid .blog-card:nth-child(2):last-child {
+  justify-self: start;
 }
 
 .blog-card {
@@ -1604,15 +1614,22 @@
 
   .blog-intro-grid {
     grid-template-columns: 1fr;
+    border-radius: 24px;
   }
 
   .blog-intro-item {
+    min-height: auto;
+    padding: 24px;
     border-right: 0;
-    border-bottom: 1px solid var(--blog-line);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
   }
 
   .blog-intro-item:last-child {
     border-bottom: 0;
+  }
+
+  .blog-intro-item span {
+    max-width: 100%;
   }
 
   .blog-section {
@@ -1725,8 +1742,11 @@
     gap: 20px;
   }
 
-  .blog-articles-grid .blog-card:only-child {
+  .blog-articles-grid .blog-card:only-child,
+  .blog-articles-grid .blog-card:first-child:nth-last-child(2),
+  .blog-articles-grid .blog-card:nth-child(2):last-child {
     width: 100%;
+    justify-self: stretch;
   }
 
   .blog-topic-grid {
