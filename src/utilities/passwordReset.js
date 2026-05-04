@@ -50,15 +50,26 @@ export const dispatchPasswordResetLink = async ({ user, resetUrl }) => {
     console.log(`[Password Reset] Link gerado para ${user.email}: ${resetUrl}`);
 
     const emailPayload = buildPasswordResetEmail({ user, resetUrl });
-    const delivery = await sendMail({
-        to: user.email,
-        subject: emailPayload.subject,
-        text: emailPayload.text,
-        html: emailPayload.html
-    });
+
+    let delivery = {
+        delivered: false,
+        skipped: true,
+        reason: 'not_attempted'
+    };
+
+    try {
+        delivery = await sendMail({
+            to: user.email,
+            subject: emailPayload.subject,
+            text: emailPayload.text,
+            html: emailPayload.html
+        });
+    } catch (error) {
+        console.error('[Password Reset] Falha ao enviar e-mail:', error);
+    }
 
     return {
-        delivered: delivery.delivered,
-        previewUrl: !delivery.delivered && shouldExposePasswordResetLink() ? resetUrl : null
+        delivered: Boolean(delivery?.delivered),
+        previewUrl: shouldExposePasswordResetLink() ? resetUrl : null
     };
 };
