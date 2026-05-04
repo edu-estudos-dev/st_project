@@ -1,5 +1,8 @@
 import blogModel from '../models/blogModel.js';
 
+const SITE_URL = 'https://vendmaster.com.br';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/images/brand/logo.webp`;
+
 function formatarDataPost(data) {
   if (!data) return '';
 
@@ -21,6 +24,30 @@ function normalizarCategoriaParaUrl(categoria) {
     .replace(/^-+|-+$/g, '');
 }
 
+function montarUrlImagem(caminhoImagem) {
+  if (!caminhoImagem) return DEFAULT_OG_IMAGE;
+
+  const imagem = String(caminhoImagem);
+
+  if (imagem.startsWith('http://') || imagem.startsWith('https://')) {
+    return imagem;
+  }
+
+  return `${SITE_URL}${imagem}`;
+}
+
+function formatarDataJsonLd(data) {
+  if (!data) return undefined;
+
+  const dataConvertida = new Date(data);
+
+  if (Number.isNaN(dataConvertida.getTime())) {
+    return undefined;
+  }
+
+  return dataConvertida.toISOString();
+}
+
 const blogController = {
   async index(req, res, next) {
     try {
@@ -33,7 +60,7 @@ const blogController = {
         title: 'Blog VendMaster | Gestão para máquinas recreativas',
         metaDescription:
           'Conteúdos sobre gestão de máquinas recreativas, sangrias, rotas, estoque, financeiro e operação.',
-        canonicalUrl: 'https://vendmaster.com.br/blog',
+        canonicalUrl: `${SITE_URL}/blog`,
         extraStyles: ['/css/blog.css'],
         posts,
         categorias,
@@ -64,7 +91,7 @@ const blogController = {
       return res.render('pages/blog/categoria', {
         title: `Artigos sobre ${categoriaFormatada} | Blog VendMaster`,
         metaDescription: `Veja artigos sobre ${categoriaFormatada} para melhorar a gestão da sua operação com máquinas recreativas, sangrias, rotas e estoque.`,
-        canonicalUrl: `https://vendmaster.com.br/blog/categoria/${categoria}`,
+        canonicalUrl: `${SITE_URL}/blog/categoria/${categoria}`,
         extraStyles: ['/css/blog.css'],
         categoria: categoriaFormatada,
         posts,
@@ -88,7 +115,7 @@ const blogController = {
           title: 'Artigo não encontrado | VendMaster',
           metaDescription:
             'O artigo que você tentou acessar não foi encontrado.',
-          canonicalUrl: 'https://vendmaster.com.br/blog',
+          canonicalUrl: `${SITE_URL}/blog`,
           extraStyles: ['/css/blog.css']
         });
       }
@@ -102,14 +129,34 @@ const blogController = {
         blogModel.buscarCategoriasPublicadas()
       ]);
 
+      const title = post.meta_title || `${post.titulo} | VendMaster`;
+
+      const metaDescription =
+        post.meta_description ||
+        post.resumo ||
+        'Conteúdo do blog VendMaster sobre gestão de máquinas recreativas, sangrias, rotas, estoque e financeiro.';
+
+      const canonicalUrl = `${SITE_URL}/blog/${post.slug}`;
+
+      const ogImage = montarUrlImagem(post.imagem_capa);
+
+      const preloadImage = post.imagem_capa || null;
+
+      const dataPublished =
+        formatarDataJsonLd(post.data_publicacao) ||
+        formatarDataJsonLd(post.data_criacao);
+
+      const dataModified =
+        formatarDataJsonLd(post.data_atualizacao) ||
+        formatarDataJsonLd(post.data_publicacao) ||
+        formatarDataJsonLd(post.data_criacao);
+
       const articleJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: post.titulo,
-        description: post.meta_description || post.resumo,
-        image: post.imagem_capa
-          ? `https://vendmaster.com.br${post.imagem_capa}`
-          : 'https://vendmaster.com.br/images/brand/logo.webp',
+        description: metaDescription,
+        image: ogImage,
         author: {
           '@type': 'Organization',
           name: post.autor || 'VendMaster'
@@ -119,25 +166,23 @@ const blogController = {
           name: 'VendMaster',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://vendmaster.com.br/images/brand/logo.webp'
+            url: DEFAULT_OG_IMAGE
           }
         },
-        datePublished: post.data_publicacao || post.data_criacao,
-        dateModified:
-          post.data_atualizacao || post.data_publicacao || post.data_criacao,
+        datePublished: dataPublished,
+        dateModified: dataModified,
         mainEntityOfPage: {
           '@type': 'WebPage',
-          '@id': `https://vendmaster.com.br/blog/${post.slug}`
+          '@id': canonicalUrl
         }
       };
 
       return res.render('pages/blog/artigo', {
-        title: post.meta_title || `${post.titulo} | VendMaster`,
-        metaDescription: post.meta_description || post.resumo,
-        canonicalUrl: `https://vendmaster.com.br/blog/${post.slug}`,
-        ogImage: post.imagem_capa
-          ? `https://vendmaster.com.br${post.imagem_capa}`
-          : 'https://vendmaster.com.br/images/brand/logo.webp',
+        title,
+        metaDescription,
+        canonicalUrl,
+        ogImage,
+        preloadImage,
         articleJsonLd,
         extraStyles: ['/css/blog.css'],
         post,

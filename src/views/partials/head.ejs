@@ -21,19 +21,21 @@
     <link rel="canonical" href="<%= pageCanonical %>">
 
     <!-- PRELOAD DA IMAGEM PRINCIPAL DO LCP -->
-    <link
-        rel="preload"
-        as="image"
-        href="/images/home/dashboard-vendmaster.webp"
-        fetchpriority="high"
-    >
+    <% if (typeof preloadImage !== 'undefined' && preloadImage) { %>
+        <link
+            rel="preload"
+            as="image"
+            href="<%= preloadImage %>"
+            fetchpriority="high"
+        >
+    <% } %>
 
     <!-- OPEN GRAPH / WHATSAPP / LINKEDIN -->
     <meta property="og:title" content="<%= pageTitle %>">
     <meta property="og:description" content="<%= pageDescription %>">
     <meta property="og:url" content="<%= pageCanonical %>">
     <meta property="og:image" content="<%= pageOgImage %>">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="<%= typeof articleJsonLd !== 'undefined' && articleJsonLd ? 'article' : 'website' %>">
     <meta property="og:site_name" content="VendMaster">
     <meta property="og:locale" content="pt_BR">
 
