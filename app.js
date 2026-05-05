@@ -122,7 +122,7 @@ Object.entries(legacyImageRedirects).forEach(([from, to]) => {
 });
 
 app.get('/favicon.ico', (req, res) => {
-  res.redirect(301, '/images/system/favicon.svg');
+  res.redirect(301, '/images/system/favicon.ico');
 });
 
 app.use(express.json({ limit: '100kb' }));
