@@ -347,8 +347,12 @@ body.homepage-body {
   }
 
   .homepage-body .vm-section {
-    margin-bottom: 1rem;
-    padding: 48px 0;
+    margin: 0 auto 1.15rem !important;
+    padding: 48px 0 !important;
+  }
+
+  .homepage-body .vm-section + .vm-section {
+    margin-top: 0 !important;
   }
 
   .homepage-body .vm-section-heading {
@@ -428,7 +432,8 @@ body.homepage-body {
   }
 
   .homepage-body .vm-section {
-    padding: 40px 0;
+    margin-bottom: 1rem !important;
+    padding: 40px 0 !important;
   }
 
   .homepage-body .vm-section-heading {
@@ -1876,7 +1881,7 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-top: 2.05rem !important;
-    padding-bottom: 2.1rem !important;
+    padding-bottom: 1.15rem !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -1969,7 +1974,7 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body #dores.vm-section.vm-pains-section {
     padding-top: 1.9rem !important;
-    padding-bottom: 2rem !important;
+    padding-bottom: 1rem !important;
     padding-left: 0.78rem !important;
     padding-right: 0.78rem !important;
     padding-inline: 0.78rem !important;
@@ -2261,7 +2266,7 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-top: 2.12rem !important;
-    padding-bottom: 2.22rem !important;
+    padding-bottom: 1.15rem !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -3031,7 +3036,7 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-top: 2.25rem !important;
-    padding-bottom: 2.45rem !important;
+    padding-bottom: 1.15rem !important;
     padding-left: 0.88rem !important;
     padding-right: 0.88rem !important;
     padding-inline: 0.88rem !important;
@@ -3783,10 +3788,12 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 @media (max-width: 767.98px) {
-  .homepage-body .vm-products-section {
+  .homepage-body .vm-section.vm-products-section {
     display: block !important;
     width: calc(100% - 0.75rem) !important;
     max-width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.15rem !important;
     margin-inline: auto !important;
     padding-top: 2.25rem !important;
     padding-bottom: 2.3rem !important;
@@ -3921,9 +3928,10 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 @media (max-width: 479.98px) {
-  .homepage-body .vm-products-section {
+  .homepage-body .vm-section.vm-products-section {
     width: calc(100% - 0.5rem) !important;
     max-width: 100% !important;
+    margin-top: 0.95rem !important;
     margin-inline: auto !important;
     padding-top: 2.08rem !important;
     padding-bottom: 2.15rem !important;
@@ -4268,6 +4276,7 @@ html:has(.homepage-body) {
     max-width: 720px !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.18rem 0 1.15rem !important;
     border-radius: 28px !important;
     background:
@@ -4382,6 +4391,7 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body #modulos.vm-modules-grid-section {
     width: min(100% - 0.7rem, 720px) !important;
+    margin-bottom: 1rem !important;
     padding-top: 2.05rem !important;
     padding-bottom: 1rem !important;
     border-radius: 24px !important;
@@ -4776,6 +4786,7 @@ html:has(.homepage-body) {
     width: min(100% - 1rem, 720px) !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.18rem 0 1rem !important;
     border-radius: 28px !important;
     background:
@@ -5465,7 +5476,10 @@ html:has(.homepage-body) {
   .homepage-body .vm-proof-section {
     width: calc(100% - 0.75rem) !important;
     max-width: 100% !important;
-    margin: 0 auto !important;
+    margin-top: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.18rem 0.78rem 1.28rem !important;
     border-radius: 26px !important;
   }
@@ -5564,6 +5578,7 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body .vm-proof-section {
     width: calc(100% - 0.5rem) !important;
+    margin-bottom: 1rem !important;
     padding: 2.02rem 0.66rem 1.12rem !important;
     border-radius: 24px !important;
   }
@@ -6070,7 +6085,10 @@ html:has(.homepage-body) {
   .homepage-body #garantia.vm-guarantee-section {
     width: calc(100% - 0.75rem) !important;
     max-width: 100% !important;
-    margin: 0 auto !important;
+    margin-top: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.2rem 0.86rem 1.45rem !important;
     border-radius: 28px !important;
   }
@@ -6228,6 +6246,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #garantia.vm-guarantee-section {
     width: calc(100% - 0.5rem) !important;
+    margin-bottom: 1rem !important;
     padding: 2.05rem 0.72rem 1.28rem !important;
     border-radius: 26px !important;
   }
@@ -6801,6 +6820,7 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.28rem 0.82rem 1.32rem !important;
     border-radius: 28px !important;
   }
@@ -7446,6 +7466,7 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    margin-bottom: 1.15rem !important;
     padding: 2.28rem 0.82rem 1.45rem !important;
     border-radius: 28px !important;
   }
@@ -8595,4 +8616,52 @@ html:has(.homepage-body) {
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
+}
+
+/* ========================================================================== */
+/* 99 — PADRÃO FINAL DE ESPAÇAMENTO MOBILE ENTRE SEÇÕES                       */
+/* ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .homepage-body {
+    --vm-mobile-section-gap: 1.15rem;
+  }
+
+  .homepage-body .homepage-main > section {
+    margin-top: 0 !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+  }
+
+  .homepage-body .homepage-main > section.vm-section + section.vm-section,
+  .homepage-body .homepage-main > section + section {
+    margin-top: 0 !important;
+  }
+
+  .homepage-body .homepage-main > section:is(
+    .vm-hero,
+    #dores,
+    .vm-transform,
+    #solucao,
+    .vm-products-section,
+    #modulos,
+    .vm-founder-section,
+    .vm-proof-section,
+    #garantia,
+    #blog-preview,
+    #faq,
+    #contato
+  ) {
+    margin-top: 0 !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+  }
+
+  .homepage-body .homepage-main > section:last-of-type {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .homepage-body {
+    --vm-mobile-section-gap: 1.05rem;
+  }
 }
