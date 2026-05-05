@@ -38,10 +38,7 @@ function normalizarCategoriaParaUrl(categoria) {
 }
 
 function criarUrlSitemap({ loc, lastmod, changefreq, priority }) {
-  const linhas = [
-    '  <url>',
-    `    <loc>${escaparXml(loc)}</loc>`
-  ];
+  const linhas = ['  <url>', `    <loc>${escaparXml(loc)}</loc>`];
 
   if (lastmod) {
     linhas.push(`    <lastmod>${escaparXml(lastmod)}</lastmod>`);
@@ -74,6 +71,11 @@ router.get('/sitemap.xml', async (req, res) => {
         priority: '1.0'
       },
       {
+        loc: `${SITE_URL}/precos`,
+        changefreq: 'monthly',
+        priority: '0.9'
+      },
+      {
         loc: `${SITE_URL}/blog`,
         changefreq: 'weekly',
         priority: '0.8'
@@ -81,14 +83,14 @@ router.get('/sitemap.xml', async (req, res) => {
     ];
 
     const urlsCategorias = categorias
-      .filter((item) => item?.categoria)
-      .map((item) => ({
+      .filter(item => item?.categoria)
+      .map(item => ({
         loc: `${SITE_URL}/blog/categoria/${normalizarCategoriaParaUrl(item.categoria)}`,
         changefreq: 'weekly',
         priority: '0.7'
       }));
 
-    const urlsArtigos = posts.map((post) => ({
+    const urlsArtigos = posts.map(post => ({
       loc: `${SITE_URL}/blog/${post.slug}`,
       lastmod: formatarDataSitemap(
         post.data_atualizacao || post.data_publicacao || post.data_criacao
@@ -97,11 +99,7 @@ router.get('/sitemap.xml', async (req, res) => {
       priority: '0.9'
     }));
 
-    const urls = [
-      ...urlsFixas,
-      ...urlsCategorias,
-      ...urlsArtigos
-    ];
+    const urls = [...urlsFixas, ...urlsCategorias, ...urlsArtigos];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

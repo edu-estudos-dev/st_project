@@ -86,6 +86,21 @@ class HomepageController {
     }
   }
 
+  renderPricingPage(req, res) {
+    return res.render('pages/precos', {
+      title: 'Preços | VendMaster',
+      metaDescription:
+        'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos a partir de R$ 19,90 por mês.',
+      canonicalUrl: 'https://vendmaster.com.br/precos',
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/precos.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',
