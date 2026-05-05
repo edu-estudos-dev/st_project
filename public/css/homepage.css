@@ -1,7 +1,7 @@
 /* ==========================================================================
     HOMEPAGE.CSS — VENDMASTER
     Arquivo reorganizado por seções conforme a ordem do homepage.ejs.
-    Ajuste incluído: refinamento mobile de espaçamento, densidade visual, CTA, garantia, blog e FAQ sem bloco final de sobrescrita.
+    Ajuste incluído: correção criteriosa dos espaçamentos mobile entre seções, mantendo as regras no lugar correto e sem bloco final de sobrescrita.
     ========================================================================== */
 
 /* ========================================================================== */
@@ -49,8 +49,8 @@
   --home-premium-card: rgba(15, 23, 42, 0.72);
   --home-blue-soft: #60a5fa;
   --home-section-width: 1180px;
-  --vm-mobile-section-gap: 1.28rem;
-  --vm-mobile-section-padding-y: 2.52rem;
+  --vm-mobile-section-gap: 1.58rem;
+  --vm-mobile-section-padding-y: 2.68rem;
 
   /* Escala tipográfica única da homepage */
   --vm-root-font-size: 16px;
@@ -332,8 +332,8 @@ body.homepage-body {
     font-size: var(--vm-root-font-size) !important;
     box-sizing: border-box;
     overflow-x: hidden;
-    --vm-mobile-section-gap: 1.28rem;
-    --vm-mobile-section-padding-y: 2.52rem;
+    --vm-mobile-section-gap: 1.58rem;
+    --vm-mobile-section-padding-y: 2.68rem;
   }
 
   .homepage-body p {
@@ -433,8 +433,8 @@ body.homepage-body {
   .homepage-body {
     box-sizing: border-box;
     overflow-x: hidden;
-    --vm-mobile-section-gap: 1.18rem;
-    --vm-mobile-section-padding-y: 2.34rem;
+    --vm-mobile-section-gap: 1.48rem;
+    --vm-mobile-section-padding-y: 2.52rem;
   }
 
   .homepage-body .vm-section {
@@ -484,6 +484,28 @@ body.homepage-body {
 
   .homepage-body .vm-options-title {
     font-size: var(--vm-font-body);
+  }
+}
+
+
+@media (max-width: 767.98px) {
+  .homepage-body .vm-demo-section.vm-section {
+    margin-bottom: 1rem !important;
+    padding-top: 2.62rem !important;
+    padding-bottom: 1.38rem !important;
+  }
+
+  .homepage-body .vm-demo-card {
+    width: min(100% - 1rem, 720px) !important;
+    padding: 1.18rem 0.92rem !important;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .homepage-body .vm-demo-section.vm-section {
+    margin-bottom: 0.92rem !important;
+    padding-top: 2.46rem !important;
+    padding-bottom: 1.22rem !important;
   }
 }
 
@@ -1001,8 +1023,8 @@ html:has(.homepage-body) {
 @media (max-width: 575.98px) {
   .vm-hero {
     min-height: auto;
-    margin-bottom: var(--vm-mobile-section-gap);
-    padding: 1.16rem 0.72rem 1.16rem;
+    margin-bottom: 0;
+    padding: 1.16rem 0.72rem 1.42rem;
     align-items: flex-start;
   }
 
@@ -1190,7 +1212,7 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .vm-hero {
-    padding: 1.14rem 0.56rem 1.14rem;
+    padding: 1.14rem 0.56rem 1.34rem;
   }
 
   .vm-hero-container {
@@ -1887,8 +1909,8 @@ html:has(.homepage-body) {
     margin-inline: 0 !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.82rem !important;
+    padding-bottom: 2.72rem !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -1980,8 +2002,8 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .homepage-body #dores.vm-section.vm-pains-section {
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.62rem !important;
+    padding-bottom: 2.56rem !important;
     padding-left: 0.78rem !important;
     padding-right: 0.78rem !important;
     padding-inline: 0.78rem !important;
@@ -2272,8 +2294,8 @@ html:has(.homepage-body) {
     margin-inline: 0 !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.76rem !important;
+    padding-bottom: 2.86rem !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -2400,8 +2422,8 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .homepage-body .vm-transform.vm-section {
-    padding-top: 2rem !important;
-    padding-bottom: 2.08rem !important;
+    padding-top: 2.52rem !important;
+    padding-bottom: 2.64rem !important;
     padding-left: 0.78rem !important;
     padding-right: 0.78rem !important;
     padding-inline: 0.78rem !important;
@@ -3042,8 +3064,8 @@ html:has(.homepage-body) {
     margin-inline: 0 !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.82rem !important;
+    padding-bottom: 2.58rem !important;
     padding-left: 0.88rem !important;
     padding-right: 0.88rem !important;
     padding-inline: 0.88rem !important;
@@ -3304,8 +3326,8 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .homepage-body #solucao.vm-section.vm-dashboard-showcase {
-    padding-top: 2.08rem !important;
-    padding-bottom: 2.28rem !important;
+    padding-top: 2.62rem !important;
+    padding-bottom: 2.46rem !important;
     padding-left: 0.72rem !important;
     padding-right: 0.72rem !important;
     padding-inline: 0.72rem !important;
@@ -3802,8 +3824,8 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
     margin-inline: auto !important;
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.72rem !important;
+    padding-bottom: 2.7rem !important;
     padding-left: 0.82rem !important;
     padding-right: 0.82rem !important;
     padding-inline: 0.82rem !important;
@@ -3940,8 +3962,8 @@ html:has(.homepage-body) {
     max-width: 100% !important;
     margin-top: 0 !important;
     margin-inline: auto !important;
-    padding-top: var(--vm-mobile-section-padding-y) !important;
-    padding-bottom: var(--vm-mobile-section-padding-y) !important;
+    padding-top: 2.58rem !important;
+    padding-bottom: 2.58rem !important;
     padding-left: 0.72rem !important;
     padding-right: 0.72rem !important;
     padding-inline: 0.72rem !important;
@@ -5486,8 +5508,8 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0.78rem !important;
+    margin-bottom: 1.78rem !important;
+    padding: 2.72rem 0.78rem 2.82rem !important;
     border-radius: 26px !important;
   }
 
@@ -5585,8 +5607,8 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body .vm-proof-section {
     width: calc(100% - 0.5rem) !important;
-    margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0.66rem !important;
+    margin-bottom: 1.64rem !important;
+    padding: 2.58rem 0.66rem 2.68rem !important;
     border-radius: 24px !important;
   }
 
@@ -6254,7 +6276,7 @@ html:has(.homepage-body) {
   .homepage-body #garantia.vm-guarantee-section {
     width: calc(100% - 0.5rem) !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0.72rem !important;
+    padding: 2.56rem 0.72rem 2.62rem !important;
     border-radius: 26px !important;
   }
 
@@ -8180,7 +8202,7 @@ html:has(.homepage-body) {
     margin-right: auto !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0.82rem !important;
+    padding: 2.82rem 0.82rem 2.72rem !important;
     border-radius: 28px !important;
   }
 
@@ -8330,7 +8352,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #contato.vm-contact {
     width: calc(100% - 0.5rem) !important;
-    padding: var(--vm-mobile-section-padding-y) 0.68rem !important;
+    padding: 2.62rem 0.68rem 2.58rem !important;
     border-radius: 26px !important;
   }
 
