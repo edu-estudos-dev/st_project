@@ -20,6 +20,10 @@
     <meta name="description" content="<%= pageDescription %>">
     <link rel="canonical" href="<%= pageCanonical %>">
 
+    <% if (typeof robotsMeta !== 'undefined' && robotsMeta) { %>
+        <meta name="robots" content="<%= robotsMeta %>">
+    <% } %>
+
     <!-- PRELOAD DA IMAGEM PRINCIPAL DO LCP -->
     <% if (typeof preloadImage !== 'undefined' && preloadImage) { %>
         <link

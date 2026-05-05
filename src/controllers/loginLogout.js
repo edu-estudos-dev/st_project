@@ -22,7 +22,8 @@ class LoginLogoutController {
 
         return res.render('pages/login', {
             title: 'Login',
-            erro: req.query.erro
+            erro: req.query.erro,
+            robotsMeta: 'noindex, follow',
         });
     }
 
@@ -32,7 +33,7 @@ class LoginLogoutController {
         }
 
         return res.render('pages/register', {
-            title: 'Cadastro de Usu�rio',
+            title: 'Cadastro de Usu�rio',
             error: req.query.error,
             formData: {
                 user: '',
@@ -232,7 +233,8 @@ class LoginLogoutController {
             if (!usuario) {
                 return res.render('pages/login', {
                     title: 'Login',
-                    erro: 'Credenciais inválidas'
+                    erro: 'Credenciais inválidas',
+                    robotsMeta: 'noindex, follow',
                 });
             }
 
@@ -277,7 +279,7 @@ class LoginLogoutController {
 
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usu�rio',
                     error: 'Preencha nome de usuário, e-mail, senha e confirmação de senha.',
                     formData,
                     productOptions: PRODUCT_OPTIONS
@@ -296,7 +298,7 @@ class LoginLogoutController {
             const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
             if (!emailValido) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usu�rio',
                     error: 'Informe um e-mail válido.',
                     formData,
                     productOptions: PRODUCT_OPTIONS
@@ -305,7 +307,7 @@ class LoginLogoutController {
 
             if (senha.length < 3) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usu�rio',
                     error: 'A senha precisa ter pelo menos 3 caracteres.',
                     formData,
                     productOptions: PRODUCT_OPTIONS
@@ -314,7 +316,7 @@ class LoginLogoutController {
 
             if (senha !== confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usu�rio',
                     error: 'A confirmação de senha não confere.',
                     formData,
                     productOptions: PRODUCT_OPTIONS
@@ -330,7 +332,7 @@ class LoginLogoutController {
 
             if (result?.error) {
                 return res.status(409).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usu�rio',
                     error: result.error,
                     formData,
                     productOptions: PRODUCT_OPTIONS
@@ -349,7 +351,7 @@ class LoginLogoutController {
         } catch (error) {
             console.error('Erro ao processar o cadastro:', error);
             return res.status(500).render('pages/register', {
-                title: 'Cadastro de Usu�rio',
+                title: 'Cadastro de Usu�rio',
                 error: 'Erro no servidor. Tente novamente mais tarde.',
                 formData,
                 productOptions: PRODUCT_OPTIONS
