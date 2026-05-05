@@ -48,6 +48,48 @@ function formatarDataJsonLd(data) {
   return dataConvertida.toISOString();
 }
 
+function montarBreadcrumbJsonLd(itens) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: itens.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url
+    }))
+  };
+}
+
+function montarBlogCollectionJsonLd({
+  name,
+  description,
+  url,
+  posts = []
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    description,
+    url,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'VendMaster',
+      url: SITE_URL
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_URL}/blog/${post.slug}`,
+        name: post.titulo
+      }))
+    }
+  };
+}
+
 const blogController = {
   async index(req, res, next) {
     try {
@@ -56,11 +98,34 @@ const blogController = {
         blogModel.buscarCategoriasPublicadas()
       ]);
 
+      const canonicalUrl = `${SITE_URL}/blog`;
+
+      const breadcrumbJsonLd = montarBreadcrumbJsonLd([
+        {
+          name: 'Início',
+          url: `${SITE_URL}/`
+        },
+        {
+          name: 'Blog',
+          url: canonicalUrl
+        }
+      ]);
+
+      const collectionJsonLd = montarBlogCollectionJsonLd({
+        name: 'Blog VendMaster',
+        description:
+          'Conteúdos sobre gestão de máquinas recreativas, sangrias, rotas, estoque, financeiro e operação.',
+        url: canonicalUrl,
+        posts
+      });
+
       return res.render('pages/blog/index', {
         title: 'Blog VendMaster | Gestão para máquinas recreativas',
         metaDescription:
           'Conteúdos sobre gestão de máquinas recreativas, sangrias, rotas, estoque, financeiro e operação.',
-        canonicalUrl: `${SITE_URL}/blog`,
+        canonicalUrl,
+        breadcrumbJsonLd,
+        collectionJsonLd,
         extraStyles: [
           '/css/blog-public-header.css',
           '/css/blog.css'
@@ -91,10 +156,36 @@ const blogController = {
           .map(parte => parte.charAt(0).toUpperCase() + parte.slice(1))
           .join(' ');
 
+      const canonicalUrl = `${SITE_URL}/blog/categoria/${categoria}`;
+
+      const breadcrumbJsonLd = montarBreadcrumbJsonLd([
+        {
+          name: 'Início',
+          url: `${SITE_URL}/`
+        },
+        {
+          name: 'Blog',
+          url: `${SITE_URL}/blog`
+        },
+        {
+          name: categoriaFormatada,
+          url: canonicalUrl
+        }
+      ]);
+
+      const collectionJsonLd = montarBlogCollectionJsonLd({
+        name: `Artigos sobre ${categoriaFormatada}`,
+        description: `Veja artigos sobre ${categoriaFormatada} para melhorar a gestão da sua operação com máquinas recreativas, sangrias, rotas e estoque.`,
+        url: canonicalUrl,
+        posts
+      });
+
       return res.render('pages/blog/categoria', {
         title: `Artigos sobre ${categoriaFormatada} | Blog VendMaster`,
         metaDescription: `Veja artigos sobre ${categoriaFormatada} para melhorar a gestão da sua operação com máquinas recreativas, sangrias, rotas e estoque.`,
-        canonicalUrl: `${SITE_URL}/blog/categoria/${categoria}`,
+        canonicalUrl,
+        breadcrumbJsonLd,
+        collectionJsonLd,
         extraStyles: [
           '/css/blog-public-header.css',
           '/css/blog.css'
@@ -125,7 +216,7 @@ const blogController = {
           extraStyles: [
             '/css/blog-public-header.css',
             '/css/blog.css'
-          ],
+          ]
         });
       }
 
@@ -160,6 +251,27 @@ const blogController = {
         formatarDataJsonLd(post.data_publicacao) ||
         formatarDataJsonLd(post.data_criacao);
 
+      const categoriaUrl = `${SITE_URL}/blog/categoria/${normalizarCategoriaParaUrl(post.categoria)}`;
+
+      const breadcrumbJsonLd = montarBreadcrumbJsonLd([
+        {
+          name: 'Início',
+          url: `${SITE_URL}/`
+        },
+        {
+          name: 'Blog',
+          url: `${SITE_URL}/blog`
+        },
+        {
+          name: post.categoria || 'Artigo',
+          url: categoriaUrl
+        },
+        {
+          name: post.titulo,
+          url: canonicalUrl
+        }
+      ]);
+
       const articleJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -193,6 +305,7 @@ const blogController = {
         ogImage,
         preloadImage,
         articleJsonLd,
+        breadcrumbJsonLd,
         extraStyles: [
           '/css/blog-public-header.css',
           '/css/blog.css'

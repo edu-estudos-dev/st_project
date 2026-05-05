@@ -26,6 +26,17 @@ function escaparXml(valor) {
     .replaceAll("'", '&apos;');
 }
 
+function normalizarCategoriaParaUrl(categoria) {
+  return String(categoria || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function criarUrlSitemap({ loc, lastmod, changefreq, priority }) {
   const linhas = [
     '  <url>',
@@ -51,7 +62,10 @@ function criarUrlSitemap({ loc, lastmod, changefreq, priority }) {
 
 router.get('/sitemap.xml', async (req, res) => {
   try {
-    const posts = await blogModel.buscarPostsPublicados();
+    const [posts, categorias] = await Promise.all([
+      blogModel.buscarPostsPublicados(),
+      blogModel.buscarCategoriasPublicadas()
+    ]);
 
     const urlsFixas = [
       {
@@ -66,6 +80,14 @@ router.get('/sitemap.xml', async (req, res) => {
       }
     ];
 
+    const urlsCategorias = categorias
+      .filter((item) => item?.categoria)
+      .map((item) => ({
+        loc: `${SITE_URL}/blog/categoria/${normalizarCategoriaParaUrl(item.categoria)}`,
+        changefreq: 'weekly',
+        priority: '0.7'
+      }));
+
     const urlsArtigos = posts.map((post) => ({
       loc: `${SITE_URL}/blog/${post.slug}`,
       lastmod: formatarDataSitemap(
@@ -75,7 +97,11 @@ router.get('/sitemap.xml', async (req, res) => {
       priority: '0.9'
     }));
 
-    const urls = [...urlsFixas, ...urlsArtigos];
+    const urls = [
+      ...urlsFixas,
+      ...urlsCategorias,
+      ...urlsArtigos
+    ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
