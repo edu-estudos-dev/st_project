@@ -65,6 +65,10 @@
         <script type="application/ld+json"><%- JSON.stringify(collectionJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
+    <% if (typeof offerCatalogJsonLd !== 'undefined' && offerCatalogJsonLd) { %>
+        <script type="application/ld+json"><%- JSON.stringify(offerCatalogJsonLd).replace(/</g, '\\u003c') %></script>
+    <% } %>
+
     <!-- FAVICONS / PWA - VENDMASTER -->
     <link rel="icon" href="/images/system/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/system/favicon-16x16.png">

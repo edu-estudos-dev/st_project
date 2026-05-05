@@ -87,15 +87,74 @@ class HomepageController {
   }
 
   renderPricingPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/precos';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Preços',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const offerCatalogJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'OfferCatalog',
+      name: 'Planos VendMaster',
+      url: canonicalUrl,
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          name: 'Plano Essencial - 1 ferramenta',
+          price: '19.90',
+          priceCurrency: 'BRL',
+          availability: 'https://schema.org/InStock',
+          url: canonicalUrl,
+          description:
+            'Plano para operadores que desejam usar uma ferramenta do VendMaster: bolinhas, consignados ou pelúcias.'
+        },
+        {
+          '@type': 'Offer',
+          name: 'Plano Operador - 2 ferramentas',
+          price: '24.90',
+          priceCurrency: 'BRL',
+          availability: 'https://schema.org/InStock',
+          url: canonicalUrl,
+          description:
+            'Plano para operadores que desejam usar duas ferramentas do VendMaster.'
+        },
+        {
+          '@type': 'Offer',
+          name: 'Plano Completo - 3 ferramentas',
+          price: '29.90',
+          priceCurrency: 'BRL',
+          availability: 'https://schema.org/InStock',
+          url: canonicalUrl,
+          description:
+            'Plano completo com controle de bolinhas, consignados e pelúcias no VendMaster.'
+        }
+      ]
+    };
+
     return res.render('pages/precos', {
       title: 'Preços | VendMaster',
       metaDescription:
         'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos a partir de R$ 19,90 por mês.',
-      canonicalUrl: 'https://vendmaster.com.br/precos',
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/precos.css'
-      ],
+      canonicalUrl,
+      breadcrumbJsonLd,
+      offerCatalogJsonLd,
+      extraStyles: ['/css/blog-public-header.css', '/css/precos.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
