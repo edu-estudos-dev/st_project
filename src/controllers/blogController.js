@@ -61,7 +61,10 @@ const blogController = {
         metaDescription:
           'Conteúdos sobre gestão de máquinas recreativas, sangrias, rotas, estoque, financeiro e operação.',
         canonicalUrl: `${SITE_URL}/blog`,
-        extraStyles: ['/css/blog.css'],
+        extraStyles: [
+          '/css/blog-public-header.css',
+          '/css/blog.css'
+        ],
         posts,
         categorias,
         formatarDataPost,
@@ -92,7 +95,10 @@ const blogController = {
         title: `Artigos sobre ${categoriaFormatada} | Blog VendMaster`,
         metaDescription: `Veja artigos sobre ${categoriaFormatada} para melhorar a gestão da sua operação com máquinas recreativas, sangrias, rotas e estoque.`,
         canonicalUrl: `${SITE_URL}/blog/categoria/${categoria}`,
-        extraStyles: ['/css/blog.css'],
+        extraStyles: [
+          '/css/blog-public-header.css',
+          '/css/blog.css'
+        ],
         categoria: categoriaFormatada,
         posts,
         categorias,
@@ -116,7 +122,10 @@ const blogController = {
           metaDescription:
             'O artigo que você tentou acessar não foi encontrado.',
           canonicalUrl: `${SITE_URL}/blog`,
-          extraStyles: ['/css/blog.css']
+          extraStyles: [
+            '/css/blog-public-header.css',
+            '/css/blog.css'
+          ],
         });
       }
 
@@ -184,7 +193,10 @@ const blogController = {
         ogImage,
         preloadImage,
         articleJsonLd,
-        extraStyles: ['/css/blog.css'],
+        extraStyles: [
+          '/css/blog-public-header.css',
+          '/css/blog.css'
+        ],
         post,
         postsRelacionados,
         categorias,

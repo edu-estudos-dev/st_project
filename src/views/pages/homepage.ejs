@@ -1,38 +1,22 @@
-  <!DOCTYPE html>
-  <html lang="pt-BR">
-  <%- include('../partials/head', { title, metaDescription, canonicalUrl, faqJsonLd, extraStyles: ['/css/homepage.css'],
-    disableBootstrapIcons: true }) %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../partials/head', { 
+  title, 
+  metaDescription, 
+  canonicalUrl, 
+  faqJsonLd, 
+  extraStyles: [
+    '/css/blog-public-header.css',
+    '/css/homepage.css'
+  ],
+  disableBootstrapIcons: true 
+}) %>
 
-    <body class="homepage-body" id="topo">
-      <header class="homepage-header homepage-topbar" data-homepage-header>
-        <a href="#topo" class="vm-logo-link" aria-label="VendMaster">
-          <img src="/images/brand/logo-320.webp" srcset="
-              /images/brand/logo-320.webp 320w,
-              /images/brand/logo.webp 1051w
-            " sizes="(max-width: 575px) 178px, 295px" width="320" height="72"
-            alt="VendMaster - sistema de gestão para máquinas recreativas e consignados" class="img-logo"
-            fetchpriority="high" decoding="async">
-        </a>
+<body class="homepage-body" id="topo">
 
-        <button class="homepage-menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"
-          aria-controls="homepageNav" data-menu-toggle>
-          <span></span><span></span><span></span>
-        </button>
+  <%- include('../partials/blogPublicHeader') %>
 
-        <nav id="homepageNav" class="homepage-nav" data-homepage-nav>
-          <ul>
-            <li><a href="#solucao">Solução</a></li>
-            <li><a href="#modulos">Módulos</a></li>
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="#garantia">Garantia</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contato">Contato</a></li>
-            <li class="homepage-login-item"><a class="homepage-login-link" href="/login">Entrar</a></li>
-          </ul>
-        </nav>
-      </header>
-
-      <main class="homepage-main">
+  <main class="homepage-main">
 
         <section class="vm-hero">
           <div class="vm-hero-container">
@@ -200,7 +184,8 @@
               <span class="vm-kicker vm-kicker-light">A virada</span>
 
               <h2 class="titulo-servicos">
-                Do roteiro improvisado à rota que dá lucro.
+                Teste por 30 dias.<br class="vm-title-break-desktop">
+                <span class="text-accent">Sem risco para sua operação.</span>
               </h2>
 
               <p class="vm-subtext">
@@ -661,8 +646,8 @@
             </h2>
 
             <p class="vm-subtext">
-              Operadores de bolinhas, gruas, pelúcias e consignados<br>
-              que trocaram a planilha por uma rota com critério.
+              Operadores de bolinhas, gruas, pelúcias e consignados que deixaram a planilha
+              para trás e passaram a decidir a rota com dados reais.
             </p>
           </div>
 
@@ -670,8 +655,10 @@
             <article class="vm-proof-card vm-proof-card-modern vm-proof-card-highlight">
               <div class="vm-proof-icon" aria-hidden="true">
                 <svg class="vm-proof-svg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path fill="currentColor"
-                    d="M4 4.75A2.75 2.75 0 0 1 6.75 2h10.5A2.75 2.75 0 0 1 20 4.75v7.5A2.75 2.75 0 0 1 17.25 15H9.8l-4.35 3.26A.9.9 0 0 1 4 17.54V4.75Zm2.75-.95a.95.95 0 0 0-.95.95v10.99l3.12-2.34c.16-.12.35-.18.55-.18h7.78a.95.95 0 0 0 .95-.95v-7.5a.95.95 0 0 0-.95-.95H6.75ZM8 7.25h8v1.6H8v-1.6Zm0 3.25h5.8v1.6H8v-1.6Z" />
+                  <path
+                    fill="currentColor"
+                    d="M4 4.75A2.75 2.75 0 0 1 6.75 2h10.5A2.75 2.75 0 0 1 20 4.75v7.5A2.75 2.75 0 0 1 17.25 15H9.8l-4.35 3.26A.9.9 0 0 1 4 17.54V4.75Zm2.75-.95a.95.95 0 0 0-.95.95v10.99l3.12-2.34c.16-.12.35-.18.55-.18h7.78a.95.95 0 0 0 .95-.95v-7.5a.95.95 0 0 0-.95-.95H6.75ZM8 7.25h8v1.6H8v-1.6Zm0 3.25h5.8v1.6H8v-1.6Z"
+                  />
                 </svg>
               </div>
 
@@ -684,9 +671,12 @@
 
                 <div class="vm-proof-author">
                   <span class="vm-proof-avatar">
-                    <img src="/images/home/joao-ribeiro.webp"
-                      alt="João Ribeiro, operador de máquinas de bolinhas em Fortaleza, cliente VendMaster" loading="lazy"
-                      decoding="async">
+                    <img
+                      src="/images/home/joao-ribeiro.webp"
+                      alt="João Ribeiro, operador de máquinas de bolinhas em Fortaleza, cliente VendMaster"
+                      loading="lazy"
+                      decoding="async"
+                    >
                   </span>
 
                   <p>
@@ -700,8 +690,10 @@
             <article class="vm-proof-card vm-proof-card-modern">
               <div class="vm-proof-icon" aria-hidden="true">
                 <svg class="vm-proof-svg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path fill="currentColor"
-                    d="M11.1 3.5a.9.9 0 0 1 1.8 0v1.25h4.85c.24 0 .47.1.64.27l2.1 2.1a.9.9 0 0 1 0 1.27l-2.1 2.1a.9.9 0 0 1-.64.26H12.9v2.5H6.25a.9.9 0 0 1-.64-.26l-2.1-2.1a.9.9 0 0 1 0-1.27l2.1-2.1a.9.9 0 0 1 .64-.27h4.85V3.5Zm1.8 3.05v2.4h4.48l1.2-1.2-1.2-1.2H12.9Zm-6.28 2.5-1.2 1.2 1.2 1.2h4.48v-2.4H6.62Zm4.48 5.95h1.8v5.5a.9.9 0 1 1-1.8 0V15Z" />
+                  <path
+                    fill="currentColor"
+                    d="M11.1 3.5a.9.9 0 0 1 1.8 0v1.25h4.85c.24 0 .47.1.64.27l2.1 2.1a.9.9 0 0 1 0 1.27l-2.1 2.1a.9.9 0 0 1-.64.26H12.9v2.5H6.25a.9.9 0 0 1-.64-.26l-2.1-2.1a.9.9 0 0 1 0-1.27l2.1-2.1a.9.9 0 0 1 .64-.27h4.85V3.5Zm1.8 3.05v2.4h4.48l1.2-1.2-1.2-1.2H12.9Zm-6.28 2.5-1.2 1.2 1.2 1.2h4.48v-2.4H6.62Zm4.48 5.95h1.8v5.5a.9.9 0 1 1-1.8 0V15Z"
+                  />
                 </svg>
               </div>
 
@@ -709,15 +701,17 @@
                 <h3>Rotina mais previsível</h3>
 
                 <blockquote>
-                  "Antes eu decidia a rota na hora. Agora já saio sabendo quais pontos realmente precisam de
-                  visita e quais podem esperar."
+                  "Antes eu montava a rota na correria. Agora vejo os pontos atrasados e já saio sabendo onde vale a pena ir primeiro."
                 </blockquote>
 
                 <div class="vm-proof-author">
                   <span class="vm-proof-avatar">
-                    <img src="/images/home/antonio-ferreira.webp"
+                    <img
+                      src="/images/home/antonio-ferreira.webp"
                       alt="Antônio Ferreira, operador de gruas e máquinas de pelúcias em Maracanaú, cliente VendMaster"
-                      loading="lazy" decoding="async">
+                      loading="lazy"
+                      decoding="async"
+                    >
                   </span>
 
                   <p>
@@ -731,8 +725,10 @@
             <article class="vm-proof-card vm-proof-card-modern">
               <div class="vm-proof-icon" aria-hidden="true">
                 <svg class="vm-proof-svg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path fill="currentColor"
-                    d="M12 3.25a8.75 8.75 0 1 1-8.3 11.52.9.9 0 1 1 1.7-.58A6.95 6.95 0 1 0 6.1 7H8a.9.9 0 0 1 0 1.8H4.25a.9.9 0 0 1-.9-.9V4.15a.9.9 0 1 1 1.8 0v1.39a8.72 8.72 0 0 1 6.85-2.29Zm.9 4.45v4.02l2.8 1.68a.9.9 0 1 1-.93 1.54l-3.24-1.94a.9.9 0 0 1-.43-.77V7.7a.9.9 0 0 1 1.8 0Z" />
+                  <path
+                    fill="currentColor"
+                    d="M12 3.25a8.75 8.75 0 1 1-8.3 11.52.9.9 0 1 1 1.7-.58A6.95 6.95 0 1 0 6.1 7H8a.9.9 0 0 1 0 1.8H4.25a.9.9 0 0 1-.9-.9V4.15a.9.9 0 1 1 1.8 0v1.39a8.72 8.72 0 0 1 6.85-2.29Zm.9 4.45v4.02l2.8 1.68a.9.9 0 1 1-.93 1.54l-3.24-1.94a.9.9 0 0 1-.43-.77V7.7a.9.9 0 0 1 1.8 0Z"
+                  />
                 </svg>
               </div>
 
@@ -740,15 +736,17 @@
                 <h3>Acerto mais organizado</h3>
 
                 <blockquote>
-                  "O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão.
-                  Fica mais fácil explicar o acerto para o parceiro."
+                  "O controle por ponto ajudou muito na hora de conferir venda, reposição e comissão. Fica mais fácil explicar o acerto para o parceiro."
                 </blockquote>
 
                 <div class="vm-proof-author">
                   <span class="vm-proof-avatar">
-                    <img src="/images/home/marcelo-costa.webp"
-                      alt="Marcelo Costa, operador de produtos consignados em Caucaia, cliente VendMaster" loading="lazy"
-                      decoding="async">
+                    <img
+                      src="/images/home/marcelo-costa.webp"
+                      alt="Marcelo Costa, operador de produtos consignados em Caucaia, cliente VendMaster"
+                      loading="lazy"
+                      decoding="async"
+                    >
                   </span>
 
                   <p>
@@ -758,117 +756,122 @@
                 </div>
               </div>
             </article>
-
           </div>
         </section>
 
-        <%#=========================================================SEÇÃO GARANTIA — 30
-          DIAS=========================================================%>
-          <section id="garantia" class="vm-section vm-section-light vm-guarantee-section">
-            <div class="vm-guarantee-container">
-              <div class="vm-guarantee-copy">
-                <span class="vm-kicker">Garantia VendMaster</span>
+        <%#====================SEÇÃO GARANTIA — 30 DIAS==============================%>
+        <section id="garantia" class="vm-section vm-section-light vm-guarantee-section">
+          <div class="vm-guarantee-container">
+            <div class="vm-guarantee-copy">
+              <span class="vm-kicker">Garantia VendMaster</span>
 
-                <h2 class="titulo-servicos">
-                  Teste por 30 dias.
-                  <span class="text-accent">Sem risco para sua operação.</span>
-                </h2>
+              <h2 class="titulo-servicos">
+                Teste por 30 dias.
+                <span class="text-accent">Sem risco para sua operação.</span>
+              </h2>
 
-                <p class="vm-guarantee-text">
-                  Sabemos que trocar planilha, anotações e controles antigos por um sistema novo exige confiança.
-                  Por isso, você tem 30 dias para testar o VendMaster na prática, acompanhar sua rotina e ver se ele
-                  realmente faz sentido para a sua operação.
-                </p>
+              <p class="vm-guarantee-text">
+                Trocar planilhas e controles antigos por um sistema novo exige confiança.
+                Por isso, você pode testar o VendMaster por 30 dias na sua rotina real.
+                Se não fizer sentido para sua operação, basta cancelar.
+              </p>
 
-                <div class="vm-guarantee-points">
-                  <div class="vm-guarantee-point">
-                    <span class="vm-guarantee-point-icon">
-                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M20 6 9 17l-5-5" />
-                      </svg>
-                    </span>
+              <div class="vm-guarantee-points">
+                <div class="vm-guarantee-point">
+                  <span class="vm-guarantee-point-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </span>
 
-                    <div>
-                      <strong>30 dias para testar com tranquilidade</strong>
-                      <p>Use o sistema na sua rotina real e veja se ele ajuda a organizar pontos, rotas, sangrias e
-                        financeiro.</p>
-                    </div>
-                  </div>
-
-                  <div class="vm-guarantee-point">
-                    <span class="vm-guarantee-point-icon">
-                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M12 3 5 6v5c0 4.2 2.7 8.1 7 10 4.3-1.9 7-5.8 7-10V6l-7-3z" />
-                        <path d="m9 12 2 2 4-4" />
-                      </svg>
-                    </span>
-
-                    <div>
-                      <strong>Satisfação garantida</strong>
-                      <p>Se dentro do período você sentir que o VendMaster não é para você, basta solicitar o
-                        cancelamento.</p>
-                    </div>
-                  </div>
-
-                  <div class="vm-guarantee-point">
-                    <span class="vm-guarantee-point-icon">
-                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z" />
-                        <path
-                          d="M9 10.5c.4 1.3 1.4 2.4 2.8 3 .6.3 1.2.4 1.7.2.3-.1.7-.5.8-.8.1-.2 0-.4-.2-.5l-1.1-.5c-.2-.1-.4-.1-.6.1l-.4.4c-.2.2-.4.2-.7.1-.8-.3-1.4-.9-1.8-1.7-.1-.2-.1-.5.1-.7l.3-.4c.2-.2.2-.4.1-.6l-.5-1c-.1-.2-.3-.3-.5-.2-.4.1-.8.4-1 .8-.2.5-.2 1.1 0 1.7z" />
-                      </svg>
-                    </span>
-
-                    <div>
-                      <strong>Suporte direto para começar</strong>
-                      <p>Você não fica sozinho: nossa equipe ajuda a entender o sistema e dar os primeiros passos com
-                        segurança.</p>
-                    </div>
+                  <div>
+                    <strong>30 dias para testar na prática</strong>
+                    <p>Use o sistema na sua rotina real antes de decidir.</p>
                   </div>
                 </div>
-              </div>
 
-              <div class="vm-guarantee-visual">
-                <div class="vm-guarantee-seal-card">
-                  <img src="/images/home/garantia-30-dias-vendmaster.webp" width="1254" height="1254"
-                    alt="Selo de garantia de 30 dias do VendMaster com satisfação garantida" loading="lazy"
-                    decoding="async"
-                    onerror="this.hidden=true; this.closest('.vm-guarantee-seal-card')?.classList.add('is-image-missing');">
+                <div class="vm-guarantee-point">
+                  <span class="vm-guarantee-point-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 3 5 6v5c0 4.2 2.7 8.1 7 10 4.3-1.9 7-5.8 7-10V6l-7-3z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                  </span>
 
-                  <div class="vm-guarantee-seal-fallback" aria-hidden="true">
-                    <strong>30 dias</strong>
-                    <span>Garantia VendMaster</span>
+                  <div>
+                    <strong>Cancelamento sem burocracia</strong>
+                    <p>Se não fizer sentido, peça o cancelamento pelo WhatsApp.</p>
                   </div>
-
-                  <div class="vm-guarantee-glow" aria-hidden="true"></div>
                 </div>
 
-                <div class="vm-guarantee-cancel-note">
-                  <svg class="vm-guarantee-note-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 3 5 6v5c0 4.2 2.7 8.1 7 10 4.3-1.9 7-5.8 7-10V6l-7-3z" />
-                    <path d="m9 12 2 2 4-4" />
-                  </svg>
-                  <span>Cancelamento feito pelo WhatsApp,<br> sem burocracia e sem letras miúdas.</span>
-                </div>
+                <div class="vm-guarantee-point">
+                  <span class="vm-guarantee-point-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z" />
+                      <path
+                        d="M9 10.5c.4 1.3 1.4 2.4 2.8 3 .6.3 1.2.4 1.7.2.3-.1.7-.5.8-.8.1-.2 0-.4-.2-.5l-1.1-.5c-.2-.1-.4-.1-.6.1l-.4.4c-.2.2-.4.2-.7.1-.8-.3-1.4-.9-1.8-1.7-.1-.2-.1-.5.1-.7l.3-.4c.2-.2.2-.4.1-.6l-.5-1c-.1-.2-.3-.3-.5-.2-.4.1-.8.4-1 .8-.2.5-.2 1.1 0 1.7z" />
+                    </svg>
+                  </span>
 
-                <div class="vm-guarantee-actions">
-                  <a href="#contato" class="btn btn-primary btn-lg">
-                    Quero testar com garantia
-                  </a>
-
-                  <a href="https://wa.me/5585986992706" target="_blank" rel="noopener"
-                    class="btn btn-outline-primary btn-lg">
-                    Tirar dúvidas no WhatsApp
-                  </a>
+                  <div>
+                    <strong>Suporte para começar</strong>
+                    <p>Ajudamos você nos primeiros passos do sistema.</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
 
+            <div class="vm-guarantee-visual">
+              <div class="vm-guarantee-seal-card">
+                <img
+                  src="/images/home/garantia-30-dias-vendmaster.webp"
+                  width="1254"
+                  height="1254"
+                  alt="Selo de garantia de 30 dias do VendMaster com satisfação garantida"
+                  loading="lazy"
+                  decoding="async"
+                  onerror="this.hidden=true; this.closest('.vm-guarantee-seal-card')?.classList.add('is-image-missing');"
+                >
 
-          <%#=========================================================SEÇÃO BLOG — ÚLTIMOS ARTIGOS Renderiza
-            automaticamente os artigos enviados pelo HomepageController na variável
-            postsRecentes.=========================================================%>
+                <div class="vm-guarantee-seal-fallback" aria-hidden="true">
+                  <strong>30 dias</strong>
+                  <span>Garantia VendMaster</span>
+                </div>
+
+                <div class="vm-guarantee-glow" aria-hidden="true"></div>
+              </div>
+
+              <div class="vm-guarantee-cancel-note">
+                <svg class="vm-guarantee-note-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 3 5 6v5c0 4.2 2.7 8.1 7 10 4.3-1.9 7-5.8 7-10V6l-7-3z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+
+                <span>
+                  Cancelamento pelo WhatsApp,<br>
+                  sem burocracia e sem letras miúdas.
+                </span>
+              </div>
+
+              <div class="vm-guarantee-actions">
+                <a href="#contato" class="btn btn-primary btn-lg">
+                  Testar o VendMaster por 30 dias
+                </a>
+
+                <a
+                  href="https://wa.me/5585986992706"
+                  target="_blank"
+                  rel="noopener"
+                  class="btn btn-outline-primary btn-lg"
+                >
+                  Tirar dúvidas no WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+          
             <% if (typeof postsRecentes !=='undefined' && postsRecentes.length> 0) { %>
               <section id="blog-preview" class="vm-section vm-section-light vm-blog-preview-section">
                 <div class="vm-section-heading">

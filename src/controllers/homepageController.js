@@ -77,7 +77,7 @@ class HomepageController {
               faqJsonLd: homepageFaqJsonLd,
               postsRecentes,
               skipGlobalStyles: true,
-              preloadExtraStyles: true
+              preloadExtraStyles: false
           });
         } catch (error) {
             return next(error);

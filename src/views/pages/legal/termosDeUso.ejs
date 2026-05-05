@@ -4,100 +4,17 @@
   title,
   metaDescription,
   canonicalUrl,
-  extraStyles: ['/css/homepage.css']
+  extraStyles: [
+  '/css/blog-public-header.css',
+  '/css/homepage.css',
+  '/css/blog.css'
+]
 }) %>
 
-<body class="homepage-body legal-page-body">
+<body class="homepage-body legal-page-body blog-page">
   <style>
     /* ========================================================================== */
-    /* 00 — HEADER PÚBLICO / PÁGINA LEGAL                                         */
-    /* ========================================================================== */
-
-    .legal-public-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      width: 100%;
-      min-height: 78px;
-      padding: 0.85rem clamp(1rem, 3vw, 2.2rem);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.25rem;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(239, 246, 255, 0.96) 0%,
-          rgba(226, 239, 255, 0.9) 100%
-        );
-      border-bottom: 1px solid rgba(147, 197, 253, 0.22);
-      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
-      backdrop-filter: blur(14px);
-    }
-
-    .legal-public-brand {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .legal-public-brand .legal-brand {
-      display: inline-flex;
-      align-items: baseline;
-      font-size: 1.35rem;
-      font-weight: 950;
-      line-height: 1;
-      letter-spacing: -0.06em;
-      white-space: nowrap;
-    }
-
-    .legal-public-nav {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.6rem;
-    }
-
-    .legal-public-nav a {
-      min-height: 38px;
-      padding: 0.55rem 0.82rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      color: #0f172a;
-      font-size: 0.92rem;
-      font-weight: 850;
-      line-height: 1;
-      text-decoration: none;
-      transition:
-        color 220ms ease,
-        background-color 220ms ease,
-        transform 220ms ease,
-        box-shadow 220ms ease;
-    }
-
-    .legal-public-nav a:hover {
-      color: #2563eb;
-      background: rgba(37, 99, 235, 0.08);
-      transform: translateY(-1px);
-    }
-
-    .legal-public-nav a:first-child {
-      color: #ffffff;
-      background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
-      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
-    }
-
-    .legal-public-nav a:first-child:hover {
-      color: #ffffff;
-      background: linear-gradient(135deg, #1d4ed8 0%, #16a34a 100%);
-    }
-
-    /* ========================================================================== */
-    /* 01 — BASE DA PÁGINA LEGAL                                                  */
+    /* 00 — BASE DA PÁGINA LEGAL                                                  */
     /* ========================================================================== */
 
     .legal-page-body {
@@ -499,31 +416,6 @@
     /* ========================================================================== */
 
     @media (max-width: 575.98px) {
-      .legal-public-header {
-        min-height: 68px;
-        padding: 0.72rem 0.82rem;
-        gap: 0.75rem;
-      }
-
-      .legal-public-brand .legal-brand {
-        font-size: 1.12rem;
-      }
-
-      .legal-public-nav {
-        gap: 0.35rem;
-      }
-
-      .legal-public-nav a {
-        min-height: 34px;
-        padding: 0.5rem 0.58rem;
-        font-size: 0.82rem;
-        font-weight: 850;
-      }
-
-      .legal-public-nav a[data-legal-nav-optional] {
-        display: none;
-      }
-
       .legal-page-main {
         width: calc(100% - 1rem);
         margin-top: 1rem;
@@ -622,24 +514,7 @@
     }
   </style>
 
-  <header class="legal-public-header">
-    <a href="/" class="legal-public-brand" aria-label="Voltar para a página inicial do VendMaster">
-      <span class="legal-brand">
-        VendMaster
-      </span>
-    </a>
-
-    <nav class="legal-public-nav" aria-label="Navegação da página legal">
-      <a href="/">Home</a>
-      <a href="/#solucao">Solução</a>
-      <a href="/#modulos" data-legal-nav-optional>Módulos</a>
-      <a href="/blog">Blog</a>
-      <a href="/#garantia" data-legal-nav-optional>Garantia</a>
-      <a href="/#faq" data-legal-nav-optional>FAQ</a>
-      <a href="/#contato">Contato</a>
-      <a href="/login">Entrar</a>
-    </nav>
-  </header>
+  <%- include('../../partials/blogPublicHeader') %>
 
   <main class="legal-page-main" id="topo">
     <section class="legal-hero">

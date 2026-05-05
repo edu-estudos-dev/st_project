@@ -11,7 +11,25 @@
       >
     </a>
 
-    <nav class="blog-public-nav" aria-label="Menu público do blog">
+    <button
+      class="blog-public-menu-toggle"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="blogPublicNav"
+      data-blog-public-menu-toggle
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav
+      id="blogPublicNav"
+      class="blog-public-nav"
+      aria-label="Menu público do blog"
+      data-blog-public-nav
+    >
       <a href="/">Home</a>
       <a href="/#solucao">Solução</a>
       <a href="/#modulos">Módulos</a>
@@ -23,3 +41,37 @@
     </nav>
   </div>
 </header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.querySelector('[data-blog-public-menu-toggle]');
+    const blogPublicNav = document.querySelector('[data-blog-public-nav]');
+    const blogPublicHeader = document.querySelector('.blog-public-header');
+
+    if (!menuToggle || !blogPublicNav) return;
+
+    function closeBlogPublicMenu() {
+      document.body.classList.remove('blog-public-menu-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('blog-public-menu-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    blogPublicNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeBlogPublicMenu);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!document.body.classList.contains('blog-public-menu-open')) return;
+      if (blogPublicHeader?.contains(event.target)) return;
+      closeBlogPublicMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeBlogPublicMenu();
+    });
+  });
+</script>

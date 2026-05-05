@@ -1,0 +1,239 @@
+/* ==========================================================================
+   HEADER PÚBLICO COMPARTILHADO — VENDMASTER
+   Usado em: Homepage, Blog e páginas públicas.
+   ========================================================================== */
+
+.blog-public-header {
+  font-family: 'Urbanist', sans-serif;
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(248, 251, 255, 0.92) 100%
+  );
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.blog-public-header-inner {
+  width: min(1180px, calc(100% - 48px));
+  min-height: 76px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.blog-public-brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  text-decoration: none;
+}
+
+.blog-public-logo {
+  display: block;
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+}
+
+.blog-public-nav {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.blog-public-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #1e293b;
+  font-size: 0.94rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  text-shadow: none;
+  white-space: nowrap;
+  box-shadow: none;
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.blog-public-nav a:hover,
+.blog-public-nav a:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+}
+
+.blog-public-nav .blog-public-login {
+  margin-left: 6px;
+  padding: 0 18px;
+  background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+  color: #ffffff;
+  font-weight: 950;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+}
+
+.blog-public-nav .blog-public-login:hover,
+.blog-public-nav .blog-public-login:focus-visible {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1d4ed8 0%, #15803d 100%);
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+}
+
+/* Botão hambúrguer — escondido no desktop */
+.blog-public-menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.blog-public-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: #0f172a;
+  transition:
+    transform 0.22s ease,
+    opacity 0.22s ease;
+}
+
+body.blog-public-menu-open .blog-public-menu-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+body.blog-public-menu-open .blog-public-menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+body.blog-public-menu-open .blog-public-menu-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .blog-public-header-inner {
+    position: relative;
+    width: min(100% - 28px, 1180px);
+    min-height: 76px;
+    padding: 0;
+    align-items: center;
+    flex-direction: row;
+    gap: 14px;
+  }
+
+  .blog-public-logo {
+    width: 168px;
+  }
+
+  .blog-public-menu-toggle {
+    display: inline-flex;
+  }
+
+  .blog-public-nav {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 24px 54px rgba(15, 23, 42, 0.18);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition:
+      max-height 0.28s ease,
+      padding 0.28s ease,
+      opacity 0.22s ease;
+  }
+
+  body.blog-public-menu-open .blog-public-nav {
+    max-height: 560px;
+    padding: 12px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .blog-public-nav a {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 14px;
+    justify-content: center;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    font-size: 0.92rem;
+  }
+
+  .blog-public-nav .blog-public-login {
+    margin-left: 0;
+    min-height: 46px;
+    border: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-public-header-inner {
+    width: min(100% - 24px, 1180px);
+    min-height: 72px;
+  }
+
+  .blog-public-logo {
+    width: 156px;
+  }
+
+  .blog-public-menu-toggle {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+}
