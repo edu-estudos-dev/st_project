@@ -18,7 +18,7 @@ const blogModel = {
         data_criacao,
         data_atualizacao
       FROM blog_posts
-      WHERE status = 'publicado'
+      WHERE status IN ('publicado', 'agendado')
         AND data_publicacao <= NOW()
       ORDER BY data_publicacao DESC NULLS LAST, data_criacao DESC
     `;
@@ -46,7 +46,7 @@ const blogModel = {
         data_atualizacao
       FROM blog_posts
       WHERE slug = $1
-        AND status = 'publicado'
+        AND status IN ('publicado', 'agendado')
         AND data_publicacao <= NOW()
       LIMIT 1
     `;
@@ -72,7 +72,7 @@ const blogModel = {
         data_criacao,
         data_atualizacao
       FROM blog_posts
-      WHERE status = 'publicado'
+      WHERE status IN ('publicado', 'agendado')
         AND data_publicacao <= NOW()
         AND btrim(
           regexp_replace(
@@ -107,7 +107,7 @@ const blogModel = {
         imagem_capa,
         data_publicacao
       FROM blog_posts
-      WHERE status = 'publicado'
+      WHERE status IN ('publicado', 'agendado')
         AND data_publicacao <= NOW()
         AND LOWER(categoria) = LOWER($1)
         AND slug <> $2
@@ -125,7 +125,7 @@ const blogModel = {
         categoria,
         COUNT(*)::int AS total
       FROM blog_posts
-      WHERE status = 'publicado'
+      WHERE status IN ('publicado', 'agendado')
         AND data_publicacao <= NOW()
       GROUP BY categoria
       ORDER BY categoria ASC
