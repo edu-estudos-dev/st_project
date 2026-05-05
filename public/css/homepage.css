@@ -49,8 +49,8 @@
   --home-premium-card: rgba(15, 23, 42, 0.72);
   --home-blue-soft: #60a5fa;
   --home-section-width: 1180px;
-  --vm-mobile-section-gap: 1.12rem;
-  --vm-mobile-section-padding-y: 2.18rem;
+  --vm-mobile-section-gap: 1.28rem;
+  --vm-mobile-section-padding-y: 2.52rem;
 
   /* Escala tipográfica única da homepage */
   --vm-root-font-size: 16px;
@@ -332,8 +332,8 @@ body.homepage-body {
     font-size: var(--vm-root-font-size) !important;
     box-sizing: border-box;
     overflow-x: hidden;
-    --vm-mobile-section-gap: 1.12rem;
-    --vm-mobile-section-padding-y: 2.18rem;
+    --vm-mobile-section-gap: 1.28rem;
+    --vm-mobile-section-padding-y: 2.52rem;
   }
 
   .homepage-body p {
@@ -433,8 +433,8 @@ body.homepage-body {
   .homepage-body {
     box-sizing: border-box;
     overflow-x: hidden;
-    --vm-mobile-section-gap: 1.05rem;
-    --vm-mobile-section-padding-y: 2.05rem;
+    --vm-mobile-section-gap: 1.18rem;
+    --vm-mobile-section-padding-y: 2.34rem;
   }
 
   .homepage-body .vm-section {
@@ -1002,7 +1002,7 @@ html:has(.homepage-body) {
   .vm-hero {
     min-height: auto;
     margin-bottom: var(--vm-mobile-section-gap);
-    padding: 1.08rem 0.72rem 1.08rem;
+    padding: 1.16rem 0.72rem 1.16rem;
     align-items: flex-start;
   }
 
@@ -1190,7 +1190,7 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .vm-hero {
-    padding: 1.2rem 0.56rem 1.2rem;
+    padding: 1.14rem 0.56rem 1.14rem;
   }
 
   .vm-hero-container {
@@ -1980,8 +1980,8 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .homepage-body #dores.vm-section.vm-pains-section {
-    padding-top: 1.9rem !important;
-    padding-bottom: 1rem !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.78rem !important;
     padding-right: 0.78rem !important;
     padding-inline: 0.78rem !important;
@@ -3802,8 +3802,8 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
     margin-inline: auto !important;
-    padding-top: 2.25rem !important;
-    padding-bottom: 2.3rem !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.82rem !important;
     padding-right: 0.82rem !important;
     padding-inline: 0.82rem !important;
@@ -3938,10 +3938,10 @@ html:has(.homepage-body) {
   .homepage-body .vm-section.vm-products-section {
     width: calc(100% - 0.5rem) !important;
     max-width: 100% !important;
-    margin-top: 0.95rem !important;
+    margin-top: 0 !important;
     margin-inline: auto !important;
-    padding-top: 2.08rem !important;
-    padding-bottom: 2.15rem !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.72rem !important;
     padding-right: 0.72rem !important;
     padding-inline: 0.72rem !important;
@@ -4284,7 +4284,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.18rem 0 1.15rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0 !important;
     border-radius: 28px !important;
     background:
       radial-gradient(
@@ -4399,8 +4399,8 @@ html:has(.homepage-body) {
   .homepage-body #modulos.vm-modules-grid-section {
     width: min(100% - 0.7rem, 720px) !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding-top: 2.05rem !important;
-    padding-bottom: 1rem !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     border-radius: 24px !important;
   }
 
@@ -4794,7 +4794,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.18rem 0 1rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0 !important;
     border-radius: 28px !important;
     background:
       radial-gradient(
@@ -4966,8 +4966,8 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body .vm-founder-section {
     width: min(100% - 0.7rem, 720px) !important;
-    padding-top: 2.02rem !important;
-    padding-bottom: 0.92rem !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     border-radius: 24px !important;
   }
 
@@ -5487,7 +5487,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.18rem 0.78rem 1.28rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.78rem !important;
     border-radius: 26px !important;
   }
 
@@ -5586,7 +5586,7 @@ html:has(.homepage-body) {
   .homepage-body .vm-proof-section {
     width: calc(100% - 0.5rem) !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.02rem 0.66rem 1.12rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.66rem !important;
     border-radius: 24px !important;
   }
 
@@ -6096,7 +6096,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.2rem 0.86rem 1.45rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.86rem !important;
     border-radius: 28px !important;
   }
 
@@ -6254,7 +6254,7 @@ html:has(.homepage-body) {
   .homepage-body #garantia.vm-guarantee-section {
     width: calc(100% - 0.5rem) !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.05rem 0.72rem 1.28rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.72rem !important;
     border-radius: 26px !important;
   }
 
@@ -6828,7 +6828,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.08rem 0.82rem 1.35rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.82rem !important;
     border-radius: 28px !important;
   }
 
@@ -6983,7 +6983,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #blog-preview.vm-blog-preview-section {
     width: calc(100% - 0.5rem) !important;
-    padding: 2.08rem 0.68rem 1.18rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.68rem !important;
     border-radius: 26px !important;
   }
 
@@ -7474,7 +7474,7 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.28rem 0.82rem 1.45rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.82rem !important;
     border-radius: 28px !important;
   }
 
@@ -7572,7 +7572,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #faq.vm-faq-section {
     width: calc(100% - 0.5rem) !important;
-    padding: 2.08rem 0.68rem 1.28rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.68rem !important;
     border-radius: 26px !important;
   }
 
@@ -8180,7 +8180,7 @@ html:has(.homepage-body) {
     margin-right: auto !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: 2.18rem 0.82rem 1.4rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.82rem !important;
     border-radius: 28px !important;
   }
 
@@ -8284,7 +8284,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #contato .vm-contact-price-card {
-    padding: 0.92rem 0.88rem !important;
+    padding: 1.02rem 0.92rem !important;
     border-radius: 16px !important;
   }
 
@@ -8330,7 +8330,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #contato.vm-contact {
     width: calc(100% - 0.5rem) !important;
-    padding: 2.02rem 0.68rem 1.05rem !important;
+    padding: var(--vm-mobile-section-padding-y) 0.68rem !important;
     border-radius: 26px !important;
   }
 
@@ -8393,7 +8393,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #contato .vm-contact-price-card {
-    padding: 0.84rem 0.78rem !important;
+    padding: 0.94rem 0.82rem !important;
     border-radius: 15px !important;
   }
 
