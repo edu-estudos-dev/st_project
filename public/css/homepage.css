@@ -1,7 +1,7 @@
 /* ==========================================================================
     HOMEPAGE.CSS — VENDMASTER
     Arquivo reorganizado por seções conforme a ordem do homepage.ejs.
-    Ajuste incluído: blocos renumerados; componentes comuns posicionados como seção 03; tipografia da Hero corrigida no desktop.
+    Ajuste incluído: refinamento mobile de espaçamento, densidade visual, CTA, garantia, blog e FAQ sem bloco final de sobrescrita.
     ========================================================================== */
 
 /* ========================================================================== */
@@ -49,6 +49,8 @@
   --home-premium-card: rgba(15, 23, 42, 0.72);
   --home-blue-soft: #60a5fa;
   --home-section-width: 1180px;
+  --vm-mobile-section-gap: 1.12rem;
+  --vm-mobile-section-padding-y: 2.18rem;
 
   /* Escala tipográfica única da homepage */
   --vm-root-font-size: 16px;
@@ -330,6 +332,8 @@ body.homepage-body {
     font-size: var(--vm-root-font-size) !important;
     box-sizing: border-box;
     overflow-x: hidden;
+    --vm-mobile-section-gap: 1.12rem;
+    --vm-mobile-section-padding-y: 2.18rem;
   }
 
   .homepage-body p {
@@ -347,8 +351,8 @@ body.homepage-body {
   }
 
   .homepage-body .vm-section {
-    margin: 0 auto 1.15rem !important;
-    padding: 48px 0 !important;
+    margin: 0 auto var(--vm-mobile-section-gap) !important;
+    padding: var(--vm-mobile-section-padding-y) 0 !important;
   }
 
   .homepage-body .vm-section + .vm-section {
@@ -429,11 +433,13 @@ body.homepage-body {
   .homepage-body {
     box-sizing: border-box;
     overflow-x: hidden;
+    --vm-mobile-section-gap: 1.05rem;
+    --vm-mobile-section-padding-y: 2.05rem;
   }
 
   .homepage-body .vm-section {
-    margin-bottom: 1rem !important;
-    padding: 40px 0 !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding: var(--vm-mobile-section-padding-y) 0 !important;
   }
 
   .homepage-body .vm-section-heading {
@@ -995,15 +1001,16 @@ html:has(.homepage-body) {
 @media (max-width: 575.98px) {
   .vm-hero {
     min-height: auto;
-    padding: 1.35rem 0.72rem 1.35rem;
+    margin-bottom: var(--vm-mobile-section-gap);
+    padding: 1.08rem 0.72rem 1.08rem;
     align-items: flex-start;
   }
 
   .vm-hero-container {
-    padding: 0.95rem 0.82rem 0.92rem;
+    padding: 0.88rem 0.82rem 0.9rem;
     border-radius: 22px;
     transform: none;
-    gap: 0.95rem;
+    gap: 0.82rem;
   }
 
   .vm-hero-left {
@@ -1012,8 +1019,8 @@ html:has(.homepage-body) {
   }
 
   .vm-hero-title {
-    max-width: 12.8ch;
-    margin-bottom: 0.7rem;
+    max-width: 13.2ch;
+    margin-bottom: 0.58rem;
     font-size: var(--vm-font-hero-title);
     line-height: 1.03;
     letter-spacing: -0.055em;
@@ -1048,8 +1055,8 @@ html:has(.homepage-body) {
   }
 
   .vm-hero-description {
-    max-width: 31ch;
-    margin-bottom: 0.88rem;
+    max-width: 30ch;
+    margin-bottom: 0.72rem;
     font-size: var(--vm-font-hero-text);
     line-height: 1.54;
     text-align: center;
@@ -1088,7 +1095,7 @@ html:has(.homepage-body) {
   }
 
   .vm-panel {
-    padding: 0.62rem;
+    padding: 0.58rem;
     border-radius: 18px;
     max-width: 100%;
     overflow: hidden;
@@ -1879,9 +1886,9 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-inline: 0 !important;
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 2.05rem !important;
-    padding-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -2264,9 +2271,9 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-inline: 0 !important;
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 2.12rem !important;
-    padding-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.9rem !important;
     padding-right: 0.9rem !important;
     padding-inline: 0.9rem !important;
@@ -3034,9 +3041,9 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-inline: 0 !important;
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 2.25rem !important;
-    padding-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding-top: var(--vm-mobile-section-padding-y) !important;
+    padding-bottom: var(--vm-mobile-section-padding-y) !important;
     padding-left: 0.88rem !important;
     padding-right: 0.88rem !important;
     padding-inline: 0.88rem !important;
@@ -3793,7 +3800,7 @@ html:has(.homepage-body) {
     width: calc(100% - 0.75rem) !important;
     max-width: 100% !important;
     margin-top: 0 !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     margin-inline: auto !important;
     padding-top: 2.25rem !important;
     padding-bottom: 2.3rem !important;
@@ -4276,7 +4283,7 @@ html:has(.homepage-body) {
     max-width: 720px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.18rem 0 1.15rem !important;
     border-radius: 28px !important;
     background:
@@ -4391,7 +4398,7 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body #modulos.vm-modules-grid-section {
     width: min(100% - 0.7rem, 720px) !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding-top: 2.05rem !important;
     padding-bottom: 1rem !important;
     border-radius: 24px !important;
@@ -4786,7 +4793,7 @@ html:has(.homepage-body) {
     width: min(100% - 1rem, 720px) !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.18rem 0 1rem !important;
     border-radius: 28px !important;
     background:
@@ -5479,7 +5486,7 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.18rem 0.78rem 1.28rem !important;
     border-radius: 26px !important;
   }
@@ -5578,7 +5585,7 @@ html:has(.homepage-body) {
 @media (max-width: 390px) {
   .homepage-body .vm-proof-section {
     width: calc(100% - 0.5rem) !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.02rem 0.66rem 1.12rem !important;
     border-radius: 24px !important;
   }
@@ -6088,7 +6095,7 @@ html:has(.homepage-body) {
     margin-top: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.2rem 0.86rem 1.45rem !important;
     border-radius: 28px !important;
   }
@@ -6246,7 +6253,7 @@ html:has(.homepage-body) {
 @media (max-width: 479.98px) {
   .homepage-body #garantia.vm-guarantee-section {
     width: calc(100% - 0.5rem) !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.05rem 0.72rem 1.28rem !important;
     border-radius: 26px !important;
   }
@@ -6820,8 +6827,8 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
-    padding: 2.28rem 0.82rem 1.32rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding: 2.08rem 0.82rem 1.35rem !important;
     border-radius: 28px !important;
   }
 
@@ -6872,7 +6879,7 @@ html:has(.homepage-body) {
   .homepage-body #blog-preview .vm-blog-preview-grid-single {
     width: 100% !important;
     max-width: 100% !important;
-    margin-top: 0.92rem !important;
+    margin-top: 0.82rem !important;
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 0.72rem !important;
@@ -6932,7 +6939,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #blog-preview .vm-blog-preview-content p {
-    margin: 0.58rem 0 0 !important;
+    margin: 0.52rem 0 0 !important;
     color: #475569 !important;
     font-size: var(--vm-font-body) !important;
     line-height: 1.46 !important;
@@ -6951,7 +6958,7 @@ html:has(.homepage-body) {
 
   .homepage-body #blog-preview .vm-blog-preview-cta {
     width: 100% !important;
-    margin: 0.92rem auto 0 !important;
+    margin: 0.78rem auto 0 !important;
     display: flex !important;
     justify-content: center !important;
   }
@@ -7466,7 +7473,7 @@ html:has(.homepage-body) {
     max-width: none !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-bottom: 1.15rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
     padding: 2.28rem 0.82rem 1.45rem !important;
     border-radius: 28px !important;
   }
@@ -8172,8 +8179,8 @@ html:has(.homepage-body) {
     margin-left: auto !important;
     margin-right: auto !important;
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding: 2.18rem 0.82rem 1.18rem !important;
+    margin-bottom: var(--vm-mobile-section-gap) !important;
+    padding: 2.18rem 0.82rem 1.4rem !important;
     border-radius: 28px !important;
   }
 
@@ -8616,52 +8623,4 @@ html:has(.homepage-body) {
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-}
-
-/* ========================================================================== */
-/* 99 — PADRÃO FINAL DE ESPAÇAMENTO MOBILE ENTRE SEÇÕES                       */
-/* ========================================================================== */
-
-@media (max-width: 575.98px) {
-  .homepage-body {
-    --vm-mobile-section-gap: 1.15rem;
-  }
-
-  .homepage-body .homepage-main > section {
-    margin-top: 0 !important;
-    margin-bottom: var(--vm-mobile-section-gap) !important;
-  }
-
-  .homepage-body .homepage-main > section.vm-section + section.vm-section,
-  .homepage-body .homepage-main > section + section {
-    margin-top: 0 !important;
-  }
-
-  .homepage-body .homepage-main > section:is(
-    .vm-hero,
-    #dores,
-    .vm-transform,
-    #solucao,
-    .vm-products-section,
-    #modulos,
-    .vm-founder-section,
-    .vm-proof-section,
-    #garantia,
-    #blog-preview,
-    #faq,
-    #contato
-  ) {
-    margin-top: 0 !important;
-    margin-bottom: var(--vm-mobile-section-gap) !important;
-  }
-
-  .homepage-body .homepage-main > section:last-of-type {
-    margin-bottom: 0 !important;
-  }
-}
-
-@media (max-width: 390px) {
-  .homepage-body {
-    --vm-mobile-section-gap: 1.05rem;
-  }
 }
