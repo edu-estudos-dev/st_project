@@ -160,6 +160,80 @@ class HomepageController {
     });
   }
 
+  renderDemoPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/demonstracao';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Demonstração',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'A demonstração do VendMaster é gratuita?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. A demonstração do VendMaster é gratuita e serve para mostrar como o sistema pode organizar rotas, sangrias, estoque, acertos e financeiro da operação.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Quanto tempo dura a demonstração?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A demonstração é objetiva e focada na realidade do operador, mostrando as ferramentas mais importantes para o tipo de operação informada.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Preciso instalar algum aplicativo para ver a demonstração?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Não. O VendMaster funciona pelo navegador, então a demonstração pode ser feita mostrando o sistema em funcionamento sem instalação de aplicativo.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Para quem é indicado o VendMaster?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'O VendMaster é indicado para operadores de máquinas recreativas, máquinas de bolinhas, consignados e máquinas de pelúcias que precisam controlar pontos, rotas, sangrias, estoque e financeiro.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/demonstracao', {
+      title: 'Demonstração gratuita | VendMaster',
+      metaDescription:
+        'Veja o VendMaster funcionando na prática. Solicite uma demonstração gratuita do sistema para operadores de máquinas recreativas, bolinhas, consignados e pelúcias.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: ['/css/blog-public-header.css', '/css/demonstracao.css'],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',
