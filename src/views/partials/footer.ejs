@@ -98,6 +98,13 @@
     text-align: right !important;
   }
 
+  @media (min-width: 992px) {
+    .site-footer-links,
+    .site-footer-contact {
+      padding-top: 0.32rem !important;
+    }
+  }
+
   .brand-mark-footer {
     display: inline-flex !important;
     align-items: baseline !important;
@@ -211,6 +218,14 @@
     max-width: 620px !important;
   }
 
+  .footer-email-mobile {
+    display: none !important;
+  }
+
+  .footer-email-desktop {
+    display: block !important;
+  }
+
   @media (min-width: 992px) and (max-width: 1160px) {
     .site-footer-main {
       grid-template-columns:
@@ -285,16 +300,20 @@
   .site-footer-divider {
     position: relative !important;
     z-index: 1 !important;
-    width: min(620px, 72%) !important;
+    width: min(1080px, calc(100% - 2rem)) !important;
     height: 1px !important;
-    margin: 1.7rem auto 0 !important;
+    margin: 2rem auto 0 !important;
     background:
       linear-gradient(
         90deg,
         transparent 0%,
-        rgba(148, 163, 184, 0.2) 50%,
+        rgba(148, 163, 184, 0.24) 10%,
+        rgba(219, 234, 254, 0.58) 50%,
+        rgba(148, 163, 184, 0.24) 90%,
         transparent 100%
       ) !important;
+    box-shadow: 0 0 18px rgba(96, 165, 250, 0.18) !important;
+    pointer-events: none !important;
   }
 
   @media (max-width: 991.98px) {
@@ -340,6 +359,14 @@
 
     .footer-contact-card {
       align-items: center !important;
+    }
+
+    .footer-email-mobile {
+      display: block !important;
+    }
+
+    .footer-email-desktop {
+      display: none !important;
     }
 
     .footer-email {
@@ -600,9 +627,20 @@
 
     .site-footer-divider {
       display: block !important;
-      width: min(220px, 64%) !important;
+      width: min(246px, calc(100% - 4rem)) !important;
+      height: 1px !important;
       margin: 1.15rem auto 0 !important;
-      opacity: 0.7 !important;
+      background:
+        linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(96, 165, 250, 0.18) 18%,
+          rgba(226, 232, 240, 0.42) 50%,
+          rgba(96, 165, 250, 0.18) 82%,
+          transparent 100%
+        ) !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
     }
   }
 
@@ -640,7 +678,7 @@
 
 <footer class="site-footer">
   <div class="site-footer-inner">
-    <div class="site-footer-main">
+    <div class="site-footer-main mt-3">
 
       <div class="site-footer-brand">
         <a class="brand-mark brand-mark-footer" href="/" aria-label="VendMaster">
@@ -658,7 +696,7 @@
         </p>
 
         <p class="footer-small-text">
-          Criado e desenvolvido por<span class="footer-mobile-break"></span>
+          Criado e desenvolvido por<br><span class="footer-mobile-break"></span>
           Eduardo Praciano
         </p>
       </div>
@@ -687,7 +725,7 @@
           <li><a href="/controle-consignados-comissao">Consignados e comissão</a></li>
         </ul>
 
-        <div class="footer-email">
+        <div class="footer-email footer-email-mobile">
           <span class="footer-email-label">E-mail de suporte</span>
           <a class="footer-email-link" href="mailto:suporte@vendmaster.com.br">
             suporte@vendmaster.com.br
@@ -717,6 +755,13 @@
 
             <span>(85) 9 8699-2706</span>
           </a>
+
+          <div class="footer-email footer-email-desktop">
+            <span class="footer-email-label">E-mail de suporte</span>
+            <a class="footer-email-link" href="mailto:suporte@vendmaster.com.br">
+              suporte@vendmaster.com.br
+            </a>
+          </div>
         </div>
       </div>
 
