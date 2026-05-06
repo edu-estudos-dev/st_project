@@ -6,9 +6,7 @@ const router = express.Router();
 
 router.use(requireSaasAdmin);
 
-router.get('/', AdminAssinantesController.index);
-router.get('/interessados', AdminAssinantesController.interessados);
-router.get('/:id/edit', AdminAssinantesController.edit);
-router.post('/:id/edit', AdminAssinantesController.update);
+router.get('/', AdminAssinantesController.interessados);
+router.post('/:id/status', AdminAssinantesController.atualizarStatusInteressado);
 
 export default router;

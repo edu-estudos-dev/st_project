@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken || '' %>">
+
+    <title>Verifique seu e-mail - VendMaster</title>
+    <meta name="description" content="Confirme seu e-mail para liberar o acesso ao VendMaster.">
+    <link rel="canonical" href="https://vendmaster.com.br/verifique-email">
+    <meta name="robots" content="noindex, follow">
+
+    <link rel="stylesheet" href="/css/auth.css">
+
+    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script defer src="/js/appAlerts.js"></script>
+</head>
+
+<body class="auth-body">
+    <main class="auth-page">
+        <section class="auth-brand-panel">
+            <div class="auth-brand-content">
+                <a href="/" class="auth-logo-link" aria-label="Voltar para a pagina inicial da VendMaster">
+                    <img src="/images/logo.webp" alt="VendMaster" class="auth-logo-img">
+                </a>
+
+                <div class="auth-brand-copy">
+                    <span class="auth-pill">Acesso protegido</span>
+                    <h1>Antes de entrar, confirme seu e-mail.</h1>
+                    <p>
+                        Enviamos um link para <strong><%= email || 'o e-mail cadastrado' %></strong>.
+                        O acesso ao sistema so sera liberado depois dessa confirmacao.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <span class="auth-card-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 5h18v14H3V5zm2 2v.35l7 4.38 7-4.38V7H5zm14 10V9.7l-7 4.38L5 9.7V17h14z" />
+                        </svg>
+                    </span>
+
+                    <div>
+                        <h2>Verifique sua caixa de entrada</h2>
+                        <p>Clique no link recebido para ativar sua conta e depois faca login.</p>
+                    </div>
+                </div>
+
+                <% if (previewLink) { %>
+                    <div class="auth-local-preview">
+                        <strong>Ambiente local:</strong>
+                        <span>Use este link para confirmar o e-mail.</span>
+                        <a href="<%= previewLink %>"><%= previewLink %></a>
+                    </div>
+                <% } %>
+
+                <p class="auth-register-text">
+                    Nao recebeu?
+                    <a href="/reenviar-verificacao?email=<%= encodeURIComponent(email || '') %>">Reenviar link de verificacao</a>
+                </p>
+
+                <p class="auth-register-text">
+                    <a href="/login">Voltar para o login</a>
+                </p>
+            </div>
+
+            <p class="auth-footer-note">
+                VendMaster &copy; <%= new Date().getFullYear() %> - Gestao simples para maquinas recreativas.
+            </p>
+        </section>
+    </main>
+
+    <% if (success) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.AppAlerts?.success(<%- JSON.stringify(success) %>);
+            });
+        </script>
+    <% } %>
+
+    <% if (error) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.AppAlerts?.error(<%- JSON.stringify(error) %>, 'Verificacao de e-mail');
+            });
+        </script>
+    <% } %>
+</body>
+
+</html>

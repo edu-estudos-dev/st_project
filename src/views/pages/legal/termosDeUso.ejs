@@ -5,10 +5,10 @@
   metaDescription,
   canonicalUrl,
   extraStyles: [
-  '/css/blog-public-header.css',
-  '/css/homepage.css',
-  '/css/blog.css'
-]
+    '/css/blog-public-header.css',
+    '/css/homepage.css',
+    '/css/blog.css'
+  ]
 }) %>
 
 <body class="homepage-body legal-page-body blog-page">
@@ -34,48 +34,101 @@
 
     .legal-page-main {
       width: min(1120px, calc(100% - 2rem));
-      margin: 1.65rem auto 0;
+      margin: clamp(1.35rem, 3vw, 2rem) auto 0;
       padding: 0 0 clamp(2.6rem, 5vw, 4.2rem);
       border-radius: 34px;
       overflow: hidden;
     }
 
     /* ========================================================================== */
-    /* 02 — HERO LEGAL                                                            */
+    /* 01 — HERO LEGAL                                                            */
     /* ========================================================================== */
 
     .legal-hero {
       position: relative;
+      width: 100%;
+      margin: 0;
       overflow: hidden;
-      padding: clamp(3.1rem, 5vw, 4.5rem) clamp(1.4rem, 4vw, 3.6rem);
-      border-radius: 34px;
+      padding: clamp(3.6rem, 6vw, 5.2rem) 1rem clamp(3.2rem, 5vw, 4.4rem);
       text-align: center;
       background:
         radial-gradient(
-          circle at 14% 18%,
-          rgba(37, 99, 235, 0.12),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 86% 84%,
-          rgba(34, 197, 94, 0.08),
+          circle at 12% 82%,
+          rgba(34, 197, 94, 0.16),
           transparent 28%
         ),
+        radial-gradient(
+          circle at 84% 16%,
+          rgba(59, 130, 246, 0.26),
+          transparent 26%
+        ),
         linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.92) 0%,
-          rgba(239, 246, 255, 0.94) 100%
+          90deg,
+          #041326 0%,
+          #0b295a 48%,
+          #18489b 100%
         );
-      border: 1px solid rgba(147, 197, 253, 0.2);
-      box-shadow:
-        0 26px 62px rgba(15, 23, 42, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      border: 0;
+      border-radius: 0;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+      isolation: isolate;
+    }
+
+    .legal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .legal-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 255, 255, 0.06),
+          transparent 48%
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .legal-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .legal-hero .vm-kicker {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 32px;
+      padding: 0.46rem 0.88rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+      font-size: 0.74rem;
+      font-weight: 950;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
     }
 
     .legal-hero h1 {
       max-width: 760px;
       margin: 1rem auto 0;
-      color: #0f172a;
+      color: #f8fafc;
       font-size: clamp(2.6rem, 4.4vw, 4.25rem);
       font-weight: 950;
       line-height: 1.02;
@@ -87,18 +140,17 @@
     .legal-hero p {
       max-width: 760px;
       margin: 1.05rem auto 0;
-      color: #475569;
+      color: rgba(226, 232, 240, 0.92);
       font-size: clamp(1.02rem, 1.25vw, 1.15rem);
       line-height: 1.68;
       text-align: center;
     }
 
     /* ========================================================================== */
-    /* 03 — CARD DE CONTEÚDO LEGAL                                                */
+    /* 02 — CARD DE CONTEÚDO LEGAL                                                */
     /* ========================================================================== */
 
     .legal-content-card {
-      margin-top: clamp(1.15rem, 2.4vw, 1.65rem);
       padding: clamp(2.15rem, 4vw, 3.2rem);
       border-radius: 34px;
       background:
@@ -199,7 +251,7 @@
     }
 
     /* ========================================================================== */
-    /* 04 — CARDS INFORMATIVOS                                                    */
+    /* 03 — CARDS INFORMATIVOS                                                    */
     /* ========================================================================== */
 
     .legal-info-grid {
@@ -255,7 +307,7 @@
     }
 
     /* ========================================================================== */
-    /* 05 — LISTA DOS TERMOS                                                      */
+    /* 04 — LISTA DOS TERMOS                                                      */
     /* ========================================================================== */
 
     .legal-policy-list {
@@ -272,7 +324,7 @@
     }
 
     /* ========================================================================== */
-    /* 06 — CONTATO LEGAL                                                         */
+    /* 05 — CONTATO LEGAL                                                         */
     /* ========================================================================== */
 
     .legal-contact-box {
@@ -364,16 +416,19 @@
     }
 
     /* ========================================================================== */
-    /* 07 — TABLET                                                                */
+    /* 06 — TABLET                                                                */
     /* ========================================================================== */
 
     @media (max-width: 991.98px) {
       .legal-page-main {
         width: min(100% - 1rem, 760px);
-        margin-top: 1.4rem;
+        margin-top: 1.2rem;
         padding: 0 0 2.6rem;
-        border-radius: 34px;
-        overflow: hidden;
+        border-radius: 30px;
+      }
+
+      .legal-content-card {
+        border-radius: 30px;
       }
 
       .legal-content-header,
@@ -412,25 +467,24 @@
     }
 
     /* ========================================================================== */
-    /* 08 — MOBILE                                                                */
+    /* 07 — MOBILE                                                                */
     /* ========================================================================== */
 
     @media (max-width: 575.98px) {
       .legal-page-main {
         width: calc(100% - 1rem);
-        margin-top: 1rem;
+        margin-top: 0.9rem;
         padding: 0 0 2rem;
-        border-radius: 26px;
-        overflow: hidden;
-      }
-
-      .legal-hero,
-      .legal-content-card {
         border-radius: 26px;
       }
 
       .legal-hero {
-        padding: 2.7rem 0.9rem;
+        padding: 2.9rem 0.9rem 2.6rem;
+      }
+
+      .legal-hero::before {
+        background-size: 28px 28px;
+        opacity: 0.18;
       }
 
       .legal-hero h1 {
@@ -447,6 +501,7 @@
 
       .legal-content-card {
         padding: 1.05rem 0.86rem 1.15rem;
+        border-radius: 26px;
       }
 
       .legal-content-header {
@@ -516,18 +571,18 @@
 
   <%- include('../../partials/blogPublicHeader') %>
 
-  <main class="legal-page-main" id="topo">
-    <section class="legal-hero">
-      <span class="vm-kicker">VendMaster</span>
+  <section class="legal-hero" id="topo">
+    <span class="vm-kicker">VendMaster</span>
 
-      <h1>Termos de Uso</h1>
+    <h1>Termos de Uso</h1>
 
-      <p>
-        Estes termos apresentam as condições gerais para demonstração,
-        contratação e uso da VendMaster.
-      </p>
-    </section>
+    <p>
+      Estes termos apresentam as condições gerais para demonstração,
+      contratação e uso da VendMaster.
+    </p>
+  </section>
 
+  <main class="legal-page-main">
     <section class="legal-content-card" aria-labelledby="terms-title">
       <div class="legal-content-header">
         <div>
@@ -551,7 +606,9 @@
       <div class="legal-info-grid">
         <article class="legal-info-box">
           <span class="legal-info-number">01</span>
+
           <h3>Uso do sistema</h3>
+
           <p>
             O sistema deve ser usado para fins operacionais e administrativos
             relacionados à gestão de máquinas recreativas, bolinhas, pelúcias,
@@ -561,7 +618,9 @@
 
         <article class="legal-info-box">
           <span class="legal-info-number">02</span>
+
           <h3>Demonstração e contratação</h3>
+
           <p>
             A demonstração é gratuita. A contratação, valores, prazos,
             funcionalidades disponíveis e condições comerciais são confirmados
@@ -571,7 +630,9 @@
 
         <article class="legal-info-box">
           <span class="legal-info-number">03</span>
+
           <h3>Responsabilidade do usuário</h3>
+
           <p>
             O usuário é responsável pela veracidade dos dados cadastrados,
             pelo uso adequado das informações registradas e pela guarda segura
@@ -583,6 +644,7 @@
       <div class="legal-policy-list">
         <article class="legal-policy-item">
           <h3>Finalidade da plataforma</h3>
+
           <p>
             A VendMaster tem como finalidade auxiliar na organização da operação,
             oferecendo recursos para acompanhamento de pontos, produtos, rotas,
@@ -592,6 +654,7 @@
 
         <article class="legal-policy-item">
           <h3>Dados cadastrados pelo usuário</h3>
+
           <p>
             O usuário deve cadastrar informações corretas e manter seus dados
             atualizados. Informações incorretas, incompletas ou desatualizadas
@@ -602,6 +665,7 @@
 
         <article class="legal-policy-item">
           <h3>Acesso e segurança da conta</h3>
+
           <p>
             O acesso ao sistema é pessoal e deve ser utilizado apenas por pessoas
             autorizadas. O usuário deve preservar suas credenciais, evitar o
@@ -612,6 +676,7 @@
 
         <article class="legal-policy-item">
           <h3>Disponibilidade e melhorias</h3>
+
           <p>
             O sistema pode receber ajustes, correções, melhorias e novas
             funcionalidades ao longo do tempo. Poderão ocorrer interrupções
@@ -622,6 +687,7 @@
 
         <article class="legal-policy-item">
           <h3>Limitações de responsabilidade</h3>
+
           <p>
             A VendMaster é uma ferramenta de apoio à gestão. As decisões comerciais,
             operacionais e financeiras tomadas com base nas informações do
@@ -631,6 +697,7 @@
 
         <article class="legal-policy-item">
           <h3>Pagamentos, planos e cancelamento</h3>
+
           <p>
             Valores, vencimentos, forma de pagamento, período de teste,
             funcionalidades incluídas e condições de cancelamento serão
@@ -641,6 +708,7 @@
 
         <article class="legal-policy-item">
           <h3>Uso inadequado</h3>
+
           <p>
             Não é permitido usar o sistema para fins ilegais, tentativa de acesso
             não autorizado, violação de segurança, cópia indevida, engenharia
@@ -651,6 +719,7 @@
 
         <article class="legal-policy-item">
           <h3>Alterações destes termos</h3>
+
           <p>
             Estes termos podem ser atualizados para refletir mudanças no
             sistema, na operação comercial ou em exigências legais. A versão

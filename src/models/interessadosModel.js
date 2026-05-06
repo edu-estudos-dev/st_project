@@ -23,7 +23,16 @@ const ensureInteressadosTable = async () => {
     ALTER TABLE interessados
       ADD COLUMN IF NOT EXISTS email VARCHAR(160),
       ADD COLUMN IF NOT EXISTS preferencia_contato VARCHAR(40),
-      ADD COLUMN IF NOT EXISTS data TIMESTAMPTZ DEFAULT NOW();
+      ADD COLUMN IF NOT EXISTS data TIMESTAMPTZ DEFAULT NOW(),
+      ADD COLUMN IF NOT EXISTS contato_status VARCHAR(24) DEFAULT 'pendente',
+      ADD COLUMN IF NOT EXISTS contato_realizado_em TIMESTAMPTZ NULL,
+      ADD COLUMN IF NOT EXISTS contato_atualizado_em TIMESTAMPTZ NULL;
+  `);
+
+  await connection.query(`
+    UPDATE interessados
+    SET contato_status = 'pendente'
+    WHERE contato_status IS NULL
   `);
 
   await connection.query(`
@@ -64,4 +73,74 @@ export const salvarContato = async contato => {
     console.error('Erro ao salvar contato:', error);
     throw error;
   }
+};
+
+export const listarContatos = async ({ limit = 200 } = {}) => {
+  await ensureInteressadosTable();
+
+  const safeLimit = Math.min(Math.max(Number(limit) || 200, 1), 1000);
+  const result = await connection.query(
+    `SELECT
+        id,
+        nome,
+        telefone,
+        email,
+        produtos,
+        preferencia_contato,
+        data,
+        contato_status,
+        contato_realizado_em,
+        contato_atualizado_em
+     FROM interessados
+     ORDER BY data DESC, id DESC
+     LIMIT $1`,
+    [safeLimit]
+  );
+
+  return result.rows.map(row => {
+    let produtosLista = [];
+
+    try {
+      const parsed = JSON.parse(row.produtos || '[]');
+      produtosLista = Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      produtosLista = row.produtos ? [row.produtos] : [];
+    }
+
+    return {
+      ...row,
+      produtos_lista: produtosLista
+    };
+  });
+};
+
+export const atualizarStatusContato = async ({ id, status }) => {
+  await ensureInteressadosTable();
+
+  const normalizedId = Number(id);
+  const normalizedStatus = String(status || '').trim().toLowerCase();
+
+  if (!Number.isInteger(normalizedId) || normalizedId <= 0) {
+    throw new Error('Contato invalido.');
+  }
+
+  if (!['pendente', 'contatado'].includes(normalizedStatus)) {
+    throw new Error('Status invalido.');
+  }
+
+  const result = await connection.query(
+    `UPDATE interessados
+     SET
+       contato_status = $2::varchar,
+       contato_realizado_em = CASE
+         WHEN $2::text = 'contatado' THEN COALESCE(contato_realizado_em, NOW())
+         ELSE NULL
+       END,
+       contato_atualizado_em = NOW()
+     WHERE id = $1
+     RETURNING id`,
+    [normalizedId, normalizedStatus]
+  );
+
+  return result.rowCount > 0;
 };

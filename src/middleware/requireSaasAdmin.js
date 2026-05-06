@@ -6,11 +6,7 @@ const acceptsJson = req =>
   req.get('accept')?.includes('application/json');
 
 export const requireSaasAdmin = (req, res, next) => {
-  console.log('REQ.USER NO ADMIN:', req.user);
-
-  const userId = Number(req.user?.user_id || req.user?.id);
-
-  if (userId !== 1) {
+  if (!isSaasAdminUser(req.user)) {
     return res
       .status(403)
       .send('Acesso negado. Apenas o administrador pode acessar esta area.');

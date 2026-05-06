@@ -182,6 +182,13 @@
                     Ainda não tem cadastro?
                     <a href="/register">Criar conta agora</a>
                 </p>
+
+                <% if (typeof resendVerificationEmail !== 'undefined' && resendVerificationEmail) { %>
+                    <p class="auth-register-text">
+                        Precisa de outro link?
+                        <a href="/reenviar-verificacao?email=<%= encodeURIComponent(resendVerificationEmail) %>">Reenviar verificacao</a>
+                    </p>
+                <% } %>
             </div>
 
             <p class="auth-footer-note">
@@ -219,6 +226,14 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 window.AppAlerts?.error(<%- JSON.stringify(erro) %>, 'Falha no login');
+            });
+        </script>
+    <% } %>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.AppAlerts?.success(<%- JSON.stringify(success) %>);
             });
         </script>
     <% } %>

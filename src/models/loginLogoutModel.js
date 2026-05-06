@@ -10,6 +10,8 @@ const TRIAL_PRODUCTS = ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'];
 class LoginLogout {
   constructor() {
     this.passwordResetTableReady = false;
+    this.emailVerificationTableReady = false;
+    this.userEmailVerificationColumnReady = false;
   }
 
   buildTrialDates() {
@@ -70,6 +72,59 @@ class LoginLogout {
     this.passwordResetTableReady = true;
   }
 
+  async ensureUserEmailVerificationColumn() {
+    if (this.userEmailVerificationColumnReady) return;
+
+    await connection.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMPTZ NULL,
+      ADD COLUMN IF NOT EXISTS email_verification_sent_at TIMESTAMPTZ NULL
+    `);
+
+    await connection.query(`
+      UPDATE users
+      SET email_verified_at = NOW()
+      WHERE email_verified_at IS NULL
+        AND email_verification_sent_at IS NULL
+        AND id IN (
+          SELECT u.id
+          FROM users u
+          INNER JOIN assinantes a ON a.user_id = u.id
+        )
+    `);
+
+    this.userEmailVerificationColumnReady = true;
+  }
+
+  async ensureEmailVerificationTable() {
+    if (this.emailVerificationTableReady) return;
+
+    await this.ensureUserEmailVerificationColumn();
+
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS email_verification_tokens (
+        id BIGSERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        token_hash TEXT NOT NULL UNIQUE,
+        expires_at TIMESTAMPTZ NOT NULL,
+        used_at TIMESTAMPTZ NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `);
+
+    await connection.query(`
+      CREATE INDEX IF NOT EXISTS idx_email_verification_tokens_user_id
+      ON email_verification_tokens (user_id)
+    `);
+
+    await connection.query(`
+      CREATE INDEX IF NOT EXISTS idx_email_verification_tokens_expires_at
+      ON email_verification_tokens (expires_at)
+    `);
+
+    this.emailVerificationTableReady = true;
+  }
+
   /**
    * Verifica se a senha está no formato bcrypt
    */
@@ -117,6 +172,8 @@ class LoginLogout {
    * LOGIN PRINCIPAL
    */
   async login(user, senha) {
+    await this.ensureUserEmailVerificationColumn();
+
     const normalizedUser = this.normalizeUser(user);
     const normalizedEmail = this.normalizeEmail(user);
     if (!normalizedUser || !senha) {
@@ -129,6 +186,8 @@ class LoginLogout {
           u.id,
           u.username,
           u.senha,
+          u.email,
+          u.email_verified_at,
           a.id AS assinante_id,
           a.status_assinatura
         FROM users u
@@ -160,6 +219,14 @@ class LoginLogout {
 
       if (!senhaValida) return null;
 
+      if (!usuario.email_verified_at) {
+        return {
+          error: 'email_not_verified',
+          email: usuario.email,
+          username: usuario.username
+        };
+      }
+
       const assinante = await this.ensureAssinanteForUser(usuario.id, {
         username: usuario.username
       });
@@ -181,11 +248,13 @@ class LoginLogout {
    * Busca usuário por username OU e-mail
    */
   async findUserByUsernameOrEmail(user, email) {
+    await this.ensureUserEmailVerificationColumn();
+
     const normalizedUser = this.normalizeUser(user);
     const normalizedEmail = this.normalizeEmail(email);
 
     const result = await connection.query(
-      `SELECT id, username, email
+      `SELECT id, username, email, email_verified_at
        FROM users
        WHERE LOWER(TRIM(username)) = LOWER($1)
           OR LOWER(TRIM(email)) = $2
@@ -200,6 +269,8 @@ class LoginLogout {
    * Cria novo usuário (com hash bcrypt)
    */
   async createUser({ user, email, senha, produtos_habilitados }) {
+    await this.ensureEmailVerificationTable();
+
     const normalizedUser = this.normalizeUser(user);
     const normalizedEmail = this.normalizeEmail(email);
     const normalizedPassword = String(senha ?? '');
@@ -227,7 +298,9 @@ class LoginLogout {
       await client.query('BEGIN');
 
       const result = await client.query(
-        'INSERT INTO users (username, email, senha) VALUES ($1, $2, $3) RETURNING id',
+        `INSERT INTO users (username, email, senha, email_verification_sent_at)
+         VALUES ($1, $2, $3, NOW())
+         RETURNING id`,
         [normalizedUser, normalizedEmail, senhaHash]
       );
 
@@ -347,11 +420,13 @@ class LoginLogout {
   }
 
   async findUserByEmail(email) {
+    await this.ensureUserEmailVerificationColumn();
+
     const normalizedEmail = this.normalizeEmail(email);
     if (!normalizedEmail) return null;
 
     const result = await connection.query(
-      'SELECT id, username, email FROM users WHERE email = $1 LIMIT 1',
+      'SELECT id, username, email, email_verified_at FROM users WHERE email = $1 LIMIT 1',
       [normalizedEmail]
     );
 
@@ -382,6 +457,92 @@ class LoginLogout {
       user,
       token: rawToken
     };
+  }
+
+  hashEmailVerificationToken(token) {
+    return this.hashResetToken(token);
+  }
+
+  async createEmailVerificationToken(userId) {
+    await this.ensureEmailVerificationTable();
+
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const tokenHash = this.hashEmailVerificationToken(rawToken);
+
+    await connection.query(
+      'UPDATE email_verification_tokens SET used_at = NOW() WHERE user_id = $1 AND used_at IS NULL',
+      [userId]
+    );
+
+    await connection.query(
+      'UPDATE users SET email_verification_sent_at = NOW() WHERE id = $1 AND email_verified_at IS NULL',
+      [userId]
+    );
+
+    await connection.query(
+      `INSERT INTO email_verification_tokens (user_id, token_hash, expires_at)
+       VALUES ($1, $2, NOW() + INTERVAL '24 hours')`,
+      [userId, tokenHash]
+    );
+
+    return rawToken;
+  }
+
+  async createEmailVerificationTokenByEmail(email) {
+    const user = await this.findUserByEmail(email);
+    if (!user || user.email_verified_at) return null;
+
+    const token = await this.createEmailVerificationToken(user.id);
+
+    return {
+      user,
+      token
+    };
+  }
+
+  async verifyEmailWithToken(rawToken) {
+    await this.ensureEmailVerificationTable();
+
+    const client = await connection.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      const tokenHash = this.hashEmailVerificationToken(rawToken);
+      const tokenResult = await client.query(
+        `SELECT evt.id, evt.user_id, evt.expires_at, evt.used_at
+         FROM email_verification_tokens evt
+         WHERE evt.token_hash = $1
+         FOR UPDATE`,
+        [tokenHash]
+      );
+
+      const tokenRecord = tokenResult.rows[0];
+      if (!tokenRecord) {
+        await client.query('ROLLBACK');
+        return { success: false, error: 'Token invalido.' };
+      }
+
+      const expiresAt = new Date(tokenRecord.expires_at);
+      if (tokenRecord.used_at || Number.isNaN(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+        await client.query('ROLLBACK');
+        return { success: false, error: 'Este link de verificacao expirou. Solicite um novo.' };
+      }
+
+      await client.query('UPDATE users SET email_verified_at = NOW() WHERE id = $1', [tokenRecord.user_id]);
+      await client.query(
+        'UPDATE email_verification_tokens SET used_at = NOW() WHERE user_id = $1 AND used_at IS NULL',
+        [tokenRecord.user_id]
+      );
+
+      await client.query('COMMIT');
+      return { success: true };
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async getPasswordResetTokenRecord(rawToken) {

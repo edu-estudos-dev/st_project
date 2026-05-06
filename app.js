@@ -36,6 +36,7 @@ import fluxoDeCaixaRoutes from './src/routes/fluxoDeCaixaRoutes.js';
 import rotasRoutes from './src/routes/rotasRoutes.js';
 import relatoriosRoutes from './src/routes/relatoriosRoutes.js';
 import adminAssinantesRoutes from './src/routes/adminAssinantesRoutes.js';
+import adminInteressadosRoutes from './src/routes/adminInteressadosRoutes.js';
 import assinaturaRoutes from './src/routes/assinaturaRoutes.js';
 
 import bolinhasSangriaRoutes from './src/routes/bolinhasRoutes.js';
@@ -240,6 +241,12 @@ app.use(
   '/admin/assinantes',
   requireAuthenticatedSubscription,
   adminAssinantesRoutes
+);
+
+app.use(
+  '/admin/interessados',
+  requireAuthenticatedSubscription,
+  adminInteressadosRoutes
 );
 
 app.use(

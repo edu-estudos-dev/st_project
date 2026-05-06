@@ -125,8 +125,27 @@
                 </li>
 
                 <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
-                <li class="nav-item">
-                    <a class="nav-link btn-header fs-6" href="/admin/assinantes">Assinantes</a>
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownAdministrativo" aria-expanded="false">
+                        Administrativo
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdministrativo">
+                        <li class="menu-group-label">Gestão do SaaS</li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/admin/assinantes">
+                                <span class="menu-link-title">Assinantes</span>
+                                <small class="menu-link-text">Status, cobrança, produtos e vencimentos.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/admin/interessados">
+                                <span class="menu-link-title">Interessados</span>
+                                <small class="menu-link-text">Fila comercial dos formulários do site.</small>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <% } %>
 
@@ -244,6 +263,7 @@
                         <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
                         <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
                             <a href="/admin/assinantes"><i class="bi bi-shield-check"></i><span>Assinantes</span></a>
+                            <a href="/admin/interessados"><i class="bi bi-person-lines-fill"></i><span>Interessados</span></a>
                         <% } %>
                         <div class="nav-account-divider"></div>
                         <form action="/logout" method="POST">

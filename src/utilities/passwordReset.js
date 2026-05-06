@@ -47,7 +47,7 @@ const buildPasswordResetEmail = ({ user, resetUrl }) => {
 };
 
 export const dispatchPasswordResetLink = async ({ user, resetUrl }) => {
-    console.log(`[Password Reset] Link gerado para ${user.email}: ${resetUrl}`);
+    console.log(`[Password Reset] Solicitacao gerada para ${user.email}.`);
 
     const emailPayload = buildPasswordResetEmail({ user, resetUrl });
 

@@ -1,4 +1,8 @@
 import LoginLogout from '../models/loginLogoutModel.js';
+import {
+    buildEmailVerificationUrl,
+    dispatchEmailVerificationLink
+} from '../utilities/emailVerification.js';
 import { buildPasswordResetUrl, dispatchPasswordResetLink } from '../utilities/passwordReset.js';
 import {
     getAuthCookieName,
@@ -14,6 +18,7 @@ const PRODUCT_OPTIONS = [
 ];
 
 const TRIAL_PRODUCTS = PRODUCT_OPTIONS.map((produto) => produto.value);
+const MIN_PASSWORD_LENGTH = 8;
 
 class LoginLogoutController {
     login(req, res) {
@@ -24,6 +29,8 @@ class LoginLogoutController {
         return res.render('pages/login', {
             title: 'Login',
             erro: req.query.erro,
+            success: req.query.success,
+            resendVerificationEmail: null,
             robotsMeta: 'noindex, follow',
         });
     }
@@ -57,6 +64,113 @@ class LoginLogoutController {
                 email: ''
             }
         });
+    }
+
+    emailVerificationNotice(req, res) {
+        if (req.user) {
+            return res.redirect('/painel');
+        }
+
+        return res.render('pages/emailVerificationNotice', {
+            title: 'Verifique seu e-mail',
+            email: req.query.email || '',
+            previewLink: null,
+            success: req.query.success || null,
+            error: req.query.error || null
+        });
+    }
+
+    resendVerification(req, res) {
+        if (req.user) {
+            return res.redirect('/painel');
+        }
+
+        return res.render('pages/resendVerification', {
+            title: 'Reenviar verificacao',
+            error: req.query.error || null,
+            success: req.query.success || null,
+            previewLink: null,
+            formData: {
+                email: req.query.email || ''
+            }
+        });
+    }
+
+    async processResendVerification(req, res) {
+        const email = String(req.body.email ?? '').trim().toLowerCase();
+
+        if (!email) {
+            return res.status(400).render('pages/resendVerification', {
+                title: 'Reenviar verificacao',
+                error: 'Informe o e-mail cadastrado.',
+                success: null,
+                previewLink: null,
+                formData: { email }
+            });
+        }
+
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!emailValido) {
+            return res.status(400).render('pages/resendVerification', {
+                title: 'Reenviar verificacao',
+                error: 'Informe um e-mail valido.',
+                success: null,
+                previewLink: null,
+                formData: { email }
+            });
+        }
+
+        try {
+            const verificationData = await LoginLogout.createEmailVerificationTokenByEmail(email);
+            let previewLink = null;
+
+            if (verificationData?.token) {
+                const verificationUrl = buildEmailVerificationUrl(req, verificationData.token);
+                const dispatchResult = await dispatchEmailVerificationLink({
+                    user: verificationData.user,
+                    verificationUrl
+                });
+                previewLink = dispatchResult.previewUrl;
+            }
+
+            return res.render('pages/resendVerification', {
+                title: 'Reenviar verificacao',
+                error: null,
+                success: 'Se existir uma conta pendente para este e-mail, enviamos um novo link de verificacao.',
+                previewLink,
+                formData: { email: '' }
+            });
+        } catch (error) {
+            console.error('Erro ao reenviar verificacao de e-mail:', error);
+            return res.status(500).render('pages/resendVerification', {
+                title: 'Reenviar verificacao',
+                error: 'Nao foi possivel reenviar a verificacao. Tente novamente.',
+                success: null,
+                previewLink: null,
+                formData: { email }
+            });
+        }
+    }
+
+    async verifyEmail(req, res) {
+        const token = String(req.query.token ?? '').trim();
+
+        if (!token) {
+            return res.redirect('/login?erro=Link de verificacao invalido.');
+        }
+
+        try {
+            const result = await LoginLogout.verifyEmailWithToken(token);
+
+            if (!result.success) {
+                return res.redirect(`/reenviar-verificacao?error=${encodeURIComponent(result.error || 'Link de verificacao invalido ou expirado.')}`);
+            }
+
+            return res.redirect('/login?success=E-mail confirmado com sucesso. Faca login para continuar.');
+        } catch (error) {
+            console.error('Erro ao verificar e-mail:', error);
+            return res.redirect('/login?erro=Nao foi possivel confirmar o e-mail. Tente novamente.');
+        }
     }
 
     async processForgotPassword(req, res) {
@@ -178,10 +292,10 @@ class LoginLogoutController {
             });
         }
 
-        if (senha.length < 3) {
+        if (senha.length < MIN_PASSWORD_LENGTH) {
             return res.status(400).render('pages/resetPassword', {
                 title: 'Redefinir Senha',
-                error: 'A senha precisa ter pelo menos 3 caracteres.',
+                error: `A senha precisa ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`,
                 success: null,
                 token,
                 isTokenValid: true
@@ -233,6 +347,18 @@ class LoginLogoutController {
                 return res.render('pages/login', {
                     title: 'Login',
                     erro: 'Credenciais inválidas',
+                    success: null,
+                    resendVerificationEmail: null,
+                    robotsMeta: 'noindex, follow',
+                });
+            }
+
+            if (usuario.error === 'email_not_verified') {
+                return res.status(403).render('pages/login', {
+                    title: 'Login',
+                    erro: 'Confirme seu e-mail antes de acessar o sistema. Se necessario, reenvie o link de verificacao.',
+                    success: null,
+                    resendVerificationEmail: usuario.email,
                     robotsMeta: 'noindex, follow',
                 });
             }
@@ -240,7 +366,9 @@ class LoginLogoutController {
             if (usuario.status_assinatura === 'bloqueado') {
                 return res.status(403).render('pages/login', {
                     title: 'Login',
-                    erro: 'Assinatura bloqueada. Entre em contato com o suporte.'
+                    erro: 'Assinatura bloqueada. Entre em contato com o suporte.',
+                    success: null,
+                    resendVerificationEmail: null
                 });
             }
 
@@ -257,7 +385,9 @@ class LoginLogoutController {
             console.error('Erro ao processar o login:', error);
             return res.status(500).render('pages/login', {
                 title: 'Login',
-                erro: 'Erro no servidor. Tente novamente mais tarde.'
+                erro: 'Erro no servidor. Tente novamente mais tarde.',
+                success: null,
+                resendVerificationEmail: null
             });
         }
     }
@@ -304,10 +434,10 @@ class LoginLogoutController {
                 });
             }
 
-            if (senha.length < 3) {
+            if (senha.length < MIN_PASSWORD_LENGTH) {
                 return res.status(400).render('pages/register', {
                     title: 'Cadastro de Usu�rio',
-                    error: 'A senha precisa ter pelo menos 3 caracteres.',
+                    error: `A senha precisa ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`,
                     formData,
                     productOptions: PRODUCT_OPTIONS
                 });
@@ -338,15 +468,20 @@ class LoginLogoutController {
                 });
             }
 
-            const authToken = signAuthToken({
-                sub: result.user_id,
-                username: result.username,
-                assinante_id: result.assinante_id,
-                status_assinatura: result.status_assinatura
+            const verificationToken = await LoginLogout.createEmailVerificationToken(result.user_id);
+            const verificationUrl = buildEmailVerificationUrl(req, verificationToken);
+            const dispatchResult = await dispatchEmailVerificationLink({
+                user: result,
+                verificationUrl
             });
 
-            res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
-            return res.redirect('/painel?success=Cadastro realizado com sucesso');
+            return res.render('pages/emailVerificationNotice', {
+                title: 'Verifique seu e-mail',
+                email: result.email,
+                previewLink: dispatchResult.previewUrl,
+                success: 'Cadastro criado. Enviamos um link para confirmar seu e-mail antes do primeiro acesso.',
+                error: null
+            });
         } catch (error) {
             console.error('Erro ao processar o cadastro:', error);
             return res.status(500).render('pages/register', {

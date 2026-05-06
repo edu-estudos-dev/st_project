@@ -1,4 +1,5 @@
 import AssinanteModel from '../models/assinanteModel.js';
+import { atualizarStatusContato, listarContatos } from '../models/interessadosModel.js';
 
 const STATUS_OPTIONS = ['trial', 'ativo', 'vencido', 'cancelado', 'bloqueado'];
 const BILLING_OPTIONS = ['', 'mensal', 'anual'];
@@ -124,6 +125,44 @@ class AdminAssinantesController {
       console.error('Erro ao atualizar assinante:', error);
       const message = error.message || 'Erro ao atualizar assinante.';
       return res.redirect(`/admin/assinantes/${req.params.id}/edit?error=${encodeURIComponent(message)}`);
+    }
+  };
+
+  interessados = async (req, res) => {
+    try {
+      const contatos = await listarContatos({ limit: 500 });
+
+      return res.render('pages/admin/interessados', {
+        title: 'Interessados',
+        usuario: req.user,
+        contatos,
+        success: req.query.success,
+        error: req.query.error
+      });
+    } catch (error) {
+      console.error('Erro ao listar interessados:', error);
+      return res.status(500).send('Erro ao listar interessados.');
+    }
+  };
+
+  atualizarStatusInteressado = async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const status = String(req.body.status || '').trim().toLowerCase();
+
+      const updated = await atualizarStatusContato({ id, status });
+      if (!updated) {
+        return res.redirect('/admin/interessados?error=Contato nao encontrado.');
+      }
+
+      const successMessage = status === 'contatado'
+        ? 'Contato marcado como contatado.'
+        : 'Contato marcado como pendente.';
+
+      return res.redirect(`/admin/interessados?success=${encodeURIComponent(successMessage)}`);
+    } catch (error) {
+      console.error('Erro ao atualizar status do interessado:', error);
+      return res.redirect(`/admin/interessados?error=${encodeURIComponent(error.message || 'Erro ao atualizar contato.')}`);
     }
   };
 }

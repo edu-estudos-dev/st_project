@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title }) %>
+
+  <body class="list-page-body">
+    <style>
+      .admin-leads-table {
+        min-width: 960px;
+      }
+
+      .admin-lead-contact {
+        display: grid;
+        gap: 0.32rem;
+        min-width: 220px;
+      }
+
+      .admin-lead-contact strong {
+        color: #111827;
+        font-size: 0.98rem;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+
+      .admin-lead-contact a,
+      .admin-lead-contact span {
+        font-size: 0.92rem;
+        line-height: 1.35;
+      }
+
+      .admin-lead-products {
+        max-width: 180px;
+        white-space: normal;
+      }
+
+      .admin-lead-status {
+        display: grid;
+        gap: 0.35rem;
+        min-width: 122px;
+      }
+
+      .admin-lead-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+        width: 172px;
+        margin: 0 auto;
+      }
+
+      .admin-lead-actions .table-btn {
+        width: 100%;
+        min-height: 38px;
+        justify-content: center;
+        white-space: nowrap;
+      }
+
+      .admin-lead-actions form {
+        width: 100%;
+      }
+
+      .admin-leads-table th:last-child,
+      .admin-leads-table td:last-child {
+        text-align: center;
+      }
+
+      @media (max-width: 991.98px) {
+        .admin-leads-table {
+          min-width: 900px;
+        }
+      }
+    </style>
+
+    <%- include('../../partials/header') %>
+      <div class="page-spacer"></div>
+
+      <div class="list-shell">
+        <%- include('../../partials/breadcrumb', { pageTitle: 'Interessados' }) %>
+
+          <section class="page-titlebar page-titlebar-neutral">
+            <div class="page-titlebar-content">
+              <span class="list-kicker"><i class="bi bi-person-lines-fill"></i> Comercial</span>
+              <h1>Contatos interessados</h1>
+              <p>Pessoas que preencheram o formulario de demonstracao ou interesse no site.</p>
+            </div>
+            <div class="page-titlebar-side">
+              <div class="list-stat">
+                <strong>Total</strong>
+                <span><%= contatos.length %> contato(s)</span>
+              </div>
+            </div>
+          </section>
+
+          <main class="list-stage">
+            <section class="list-panel">
+              <div class="list-toolbar">
+                <div class="list-toolbar-copy">
+                  <h2>Fila de retorno</h2>
+                  <p>Abra o canal de atendimento e marque o contato como realizado para manter a fila limpa.</p>
+                </div>
+              </div>
+
+              <div class="modern-table-wrap">
+                <div class="modern-table-scroll">
+                  <table class="modern-table">
+                    <thead>
+                      <tr>
+                        <th>Data</th>
+                        <th>Contato</th>
+                        <th>Produtos</th>
+                        <th>Preferencia</th>
+                        <th>Status</th>
+                        <th class="table-actions-heading">Atendimento</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (contatos.length) { %>
+                        <% contatos.forEach((contato)=> { %>
+                          <tr>
+                            <td>
+                              <span class="table-muted">
+                                <%= contato.data ? new Date(contato.data).toLocaleDateString('pt-BR') : '-' %>
+                              </span>
+                              <span class="table-muted d-block">
+                                <%= contato.data ? new Date(contato.data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '' %>
+                              </span>
+                            </td>
+                            <td>
+                              <div class="admin-lead-contact">
+                                <strong><%= contato.nome %></strong>
+                                <a href="https://wa.me/55<%= String(contato.telefone || '').replace(/\D/g, '') %>" target="_blank" rel="noopener">
+                                  <%= contato.telefone %>
+                                </a>
+                                <% if (contato.email) { %>
+                                  <a href="mailto:<%= contato.email %>"><%= contato.email %></a>
+                                <% } else { %>
+                                  <span class="table-muted">E-mail nao informado</span>
+                                <% } %>
+                              </div>
+                            </td>
+                            <td>
+                              <span class="table-muted admin-lead-products">
+                                <%= contato.produtos_lista?.length ? contato.produtos_lista.join(', ') : 'Nao informado' %>
+                              </span>
+                            </td>
+                            <td>
+                              <%= contato.preferencia_contato || 'WhatsApp' %>
+                            </td>
+                            <td>
+                              <% const contatoStatus = String(contato.contato_status || 'pendente').toLowerCase(); %>
+                              <% const statusClass = contatoStatus === 'contatado' ? 'table-badge-green' : 'table-badge-amber'; %>
+                              <div class="admin-lead-status">
+                                <span class="table-badge <%= statusClass %>">
+                                  <%= contatoStatus === 'contatado' ? 'CONTATADO' : 'PENDENTE' %>
+                                </span>
+                                <% if (contato.contato_realizado_em) { %>
+                                  <small class="table-muted">
+                                    <%= new Date(contato.contato_realizado_em).toLocaleDateString('pt-BR') %>
+                                  </small>
+                                <% } %>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="admin-lead-actions">
+                                <a class="table-btn table-btn-edit" href="https://wa.me/55<%= String(contato.telefone || '').replace(/\D/g, '') %>" target="_blank" rel="noopener">WhatsApp</a>
+                                <% if (contato.email) { %>
+                                  <a class="table-btn" href="mailto:<%= contato.email %>">E-mail</a>
+                                <% } %>
+                                <form action="/admin/interessados/<%= contato.id %>/status" method="POST">
+                                  <input type="hidden" name="status" value="<%= contatoStatus === 'contatado' ? 'pendente' : 'contatado' %>">
+                                  <button class="table-btn <%= contatoStatus === 'contatado' ? '' : 'table-btn-edit' %>" type="submit">
+                                    <%= contatoStatus === 'contatado' ? 'Reabrir lead' : 'Marcar contatado' %>
+                                  </button>
+                                </form>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="6">
+                            <span class="table-muted">Nenhum contato interessado registrado ainda.</span>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </main>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+      <% if (typeof success !== 'undefined' && success) { %> window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");<% } %>
+      <% if (typeof error !== 'undefined' && error) { %> window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");<% } %>
+    });
+      </script>
+  </body>
+
+</html>
