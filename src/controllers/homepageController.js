@@ -311,6 +311,83 @@ class HomepageController {
     });
   }
 
+  renderControleSangriaBolinhasPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/controle-sangria-maquinas-bolinhas';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Controle de sangria de máquinas de bolinhas',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'O que é controle de sangria de máquinas de bolinhas?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'É o registro organizado das coletas feitas em cada ponto, com histórico por estabelecimento, data, valor, abastecimento e observações importantes da visita.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Por que controlar sangrias por ponto?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'O controle por ponto ajuda o operador a entender onde coletou, quando coletou, quais locais precisam de atenção e quais máquinas estão com melhor ou pior desempenho.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'O VendMaster substitui planilhas de sangria?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster ajuda a substituir anotações soltas e planilhas por registros organizados, com histórico e visão operacional mais clara.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso ver uma demonstração do controle de sangria?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. Você pode solicitar uma demonstração gratuita para ver como o controle de sangria funciona na prática dentro do VendMaster.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/controleSangriaMaquinasBolinhas', {
+      title: 'Controle de sangria de máquinas de bolinhas | VendMaster',
+      metaDescription:
+        'Controle de sangria de máquinas de bolinhas. Organize coletas, abastecimentos, histórico por ponto, rotas e acertos com o VendMaster.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/controle-sangria-maquinas-bolinhas.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',

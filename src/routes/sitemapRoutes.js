@@ -86,6 +86,11 @@ router.get('/sitemap.xml', async (req, res) => {
         priority: '0.9'
       },
       {
+        loc: `${SITE_URL}/controle-sangria-maquinas-bolinhas`,
+        changefreq: 'monthly',
+        priority: '0.9'
+      },
+      {
         loc: `${SITE_URL}/blog`,
         changefreq: 'weekly',
         priority: '0.8'
