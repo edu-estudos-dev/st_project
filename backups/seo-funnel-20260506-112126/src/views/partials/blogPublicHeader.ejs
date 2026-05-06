@@ -1,0 +1,78 @@
+<header class="blog-public-header">
+  <div class="blog-public-header-inner">
+    <a href="/" class="blog-public-brand" aria-label="VendMaster">
+      <img
+        src="/images/brand/logo-320.webp"
+        width="180"
+        height="41"
+        alt="VendMaster"
+        class="blog-public-logo"
+        decoding="async"
+      >
+    </a>
+
+    <button
+      class="blog-public-menu-toggle"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="blogPublicNav"
+      data-blog-public-menu-toggle
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav
+      id="blogPublicNav"
+      class="blog-public-nav"
+      aria-label="Menu público do blog"
+      data-blog-public-nav
+    >
+      <a href="/">Home</a>
+      <a href="/#solucao">Solução</a>
+      <a href="/#modulos">Módulos</a>
+      <a href="/blog">Blog</a>
+      <a href="/precos">Preços</a>
+      <a href="/#garantia">Garantia</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/demonstracao">Demonstração</a>
+      <a href="/login" class="blog-public-login">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.querySelector('[data-blog-public-menu-toggle]');
+    const blogPublicNav = document.querySelector('[data-blog-public-nav]');
+    const blogPublicHeader = document.querySelector('.blog-public-header');
+
+    if (!menuToggle || !blogPublicNav) return;
+
+    function closeBlogPublicMenu() {
+      document.body.classList.remove('blog-public-menu-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('blog-public-menu-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    blogPublicNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeBlogPublicMenu);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!document.body.classList.contains('blog-public-menu-open')) return;
+      if (blogPublicHeader?.contains(event.target)) return;
+      closeBlogPublicMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeBlogPublicMenu();
+    });
+  });
+</script>

@@ -1,20 +1,107 @@
-  <?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-      <loc>https://vendmaster.com.br/</loc>
-      <changefreq>weekly</changefreq>
-      <priority>1.0</priority>
-    </url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://vendmaster.com.br/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 
-    <url>
-      <loc>https://vendmaster.com.br/blog</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
+  <url>
+    <loc>https://vendmaster.com.br/precos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 
-    <url>
-      <loc>https://vendmaster.com.br/blog/como-organizar-rota-maquinas-recreativas</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.9</priority>
-    </url>
-  </urlset>
+  <url>
+    <loc>https://vendmaster.com.br/demonstracao</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/sistema-gestao-maquinas-recreativas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/controle-sangria-maquinas-bolinhas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/rota-inteligente-maquinas-recreativas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/sistema-para-maquinas-de-pelucias</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/controle-consignados-comissao</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/categoria/ferramentas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/categoria/operacao</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/categoria/rotas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/planilha-maquinas-bolinhas-controle</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/controle-de-sangria-maquinas-bolinhas</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/blog/como-organizar-rota-maquinas-recreativas</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/politica-de-privacidade</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://vendmaster.com.br/termos-de-uso</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

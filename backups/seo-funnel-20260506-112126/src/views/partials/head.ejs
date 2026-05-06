@@ -173,14 +173,10 @@
     <% } %>
 
     <!-- SCRIPTS NÃO BLOQUEANTES -->
-    <% if (typeof disableBootstrap === 'undefined' || !disableBootstrap) { %>
-        <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <% } %>
-    <% if (typeof disableInteractionScripts === 'undefined' || !disableInteractionScripts) { %>
-        <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-        <script defer src="/js/appAlerts.js"></script>
-        <script defer src="/js/csrf.js"></script>
-    <% } %>
+    <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script defer src="/js/appAlerts.js"></script>
+    <script defer src="/js/csrf.js"></script>
 
     <!-- MÁSCARA DE TELEFONE SEM BIBLIOTECA EXTERNA -->
     <script>

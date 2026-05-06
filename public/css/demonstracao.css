@@ -526,6 +526,174 @@ html:has(.demo-page) {
 /* 04 — FERRAMENTAS DISPONÍVEIS                                               */
 /* ========================================================================== */
 
+.demo-contact-section {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(34, 197, 94, 0.12), transparent 28%),
+    rgba(255, 255, 255, 0.82);
+}
+
+.demo-contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.demo-contact-form,
+.demo-contact-aside {
+  min-width: 0;
+  border-radius: var(--demo-radius-md);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+}
+
+.demo-contact-form {
+  padding: clamp(1.25rem, 2.4vw, 2rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  background: #ffffff;
+}
+
+.demo-form-field {
+  min-width: 0;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.demo-form-field-full,
+.demo-form-products,
+.demo-form-status,
+.demo-submit-btn {
+  grid-column: 1 / -1;
+}
+
+.demo-form-field label,
+.demo-form-products legend {
+  margin: 0;
+  color: var(--demo-text);
+  font-size: 0.84rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.demo-form-field input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  background: #f8fafc;
+  color: var(--demo-text);
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 700;
+  outline: 0;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.demo-form-field input:focus {
+  border-color: rgba(37, 99, 235, 0.65);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.demo-form-products {
+  margin: 0;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.72rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 18px;
+  background: rgba(241, 245, 249, 0.66);
+}
+
+.demo-form-products legend {
+  padding: 0 0.35rem;
+}
+
+.demo-form-products label {
+  min-height: 48px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.demo-form-products input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  accent-color: var(--demo-green-dark);
+}
+
+.demo-form-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--demo-muted);
+  font-size: 0.9rem;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.demo-submit-btn {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+
+.demo-submit-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.demo-contact-aside {
+  padding: clamp(1.35rem, 2.6vw, 2.1rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.16), transparent 28%),
+    linear-gradient(135deg, #081326 0%, #0d2144 100%);
+  color: #f8fafc;
+}
+
+.demo-contact-aside span {
+  color: #bbf7d0;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-contact-aside h3 {
+  margin: 0.7rem 0 0;
+  color: #ffffff;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  font-weight: 950;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.demo-contact-aside p {
+  margin: 0.85rem 0 1.35rem;
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
 .demo-tools-section {
   background:
     radial-gradient(
@@ -762,6 +930,12 @@ html:has(.demo-page) {
   .demo-tools-grid article {
     min-height: auto;
   }
+
+  .demo-contact-layout {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+    margin-inline: auto;
+  }
 }
 
 /* ========================================================================== */
@@ -925,6 +1099,31 @@ html:has(.demo-page) {
 
   .demo-tools-grid article p {
     line-height: 1.58;
+  }
+
+  .demo-contact-layout {
+    gap: 0.9rem;
+  }
+
+  .demo-contact-form {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .demo-form-products {
+    grid-template-columns: 1fr;
+    padding: 0.82rem;
+  }
+
+  .demo-form-products label {
+    min-height: 46px;
+    padding: 0.68rem;
+  }
+
+  .demo-contact-aside {
+    padding: 1.15rem;
+    border-radius: 20px;
   }
 
   .demo-faq-list {

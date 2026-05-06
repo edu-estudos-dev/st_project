@@ -109,16 +109,6 @@ router.get('/sitemap.xml', async (req, res) => {
         loc: `${SITE_URL}/blog`,
         changefreq: 'weekly',
         priority: '0.8'
-      },
-      {
-        loc: `${SITE_URL}/politica-de-privacidade`,
-        changefreq: 'yearly',
-        priority: '0.3'
-      },
-      {
-        loc: `${SITE_URL}/termos-de-uso`,
-        changefreq: 'yearly',
-        priority: '0.3'
       }
     ];
 

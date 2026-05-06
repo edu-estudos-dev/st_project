@@ -9,7 +9,6 @@
     extraStyles,
     skipGlobalStyles,
     preloadExtraStyles,
-    disableBootstrap: true,
     disableBootstrapIcons: true
 }) %>
 
@@ -30,7 +29,7 @@
                 </p>
 
                 <div class="demo-hero-actions">
-                    <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
+                    <a href="/#contato" class="demo-btn demo-btn-primary">
                         Solicitar demonstração
                     </a>
 
@@ -246,79 +245,6 @@
             </div>
         </section>
 
-        <section id="solicitar-demonstracao" class="demo-section demo-contact-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">Solicitar demonstração</span>
-
-                    <h2>Receba uma demonstração direcionada para sua operação</h2>
-
-                    <p>
-                        Preencha seus dados e informe quais frentes deseja controlar.
-                        O contato será feito preferencialmente pelo WhatsApp informado.
-                    </p>
-                </div>
-
-                <div class="demo-contact-layout">
-                    <form id="demoContactForm" class="demo-contact-form" action="/enviar-contato" method="POST" novalidate>
-                        <input type="hidden" name="preferenciaContato" value="WhatsApp">
-
-                        <div class="demo-form-field">
-                            <label for="demoNome">Nome</label>
-                            <input type="text" id="demoNome" name="nome" autocomplete="name" required>
-                        </div>
-
-                        <div class="demo-form-field">
-                            <label for="demoTelefone">WhatsApp</label>
-                            <input type="tel" id="demoTelefone" name="telefone" autocomplete="tel" data-phone-mask required>
-                        </div>
-
-                        <div class="demo-form-field demo-form-field-full">
-                            <label for="demoEmail">E-mail</label>
-                            <input type="email" id="demoEmail" name="email" autocomplete="email">
-                        </div>
-
-                        <fieldset class="demo-form-products">
-                            <legend>Frentes da operação</legend>
-
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Bolinhas">
-                                <span>Máquinas de bolinhas</span>
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Pelucias">
-                                <span>Máquinas de pelúcias</span>
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Consignados">
-                                <span>Consignados e comissão</span>
-                            </label>
-                        </fieldset>
-
-                        <p id="demoContactStatus" class="demo-form-status" aria-live="polite"></p>
-
-                        <button type="submit" class="demo-btn demo-btn-primary demo-submit-btn">
-                            Solicitar demonstração gratuita
-                        </button>
-                    </form>
-
-                    <aside class="demo-contact-aside">
-                        <span>Atendimento comercial</span>
-                        <h3>Prefere falar direto?</h3>
-                        <p>
-                            Você também pode chamar no WhatsApp e tirar dúvidas sobre planos,
-                            módulos e funcionamento antes da demonstração.
-                        </p>
-                        <a href="https://wa.me/5585986992706" target="_blank" rel="noopener" class="demo-btn demo-btn-secondary">
-                            Falar no WhatsApp
-                        </a>
-                    </aside>
-                </div>
-            </div>
-        </section>
-
         <section class="demo-final-cta">
             <div class="demo-container">
                 <h2>Quer ver se o VendMaster faz sentido para sua operação?</h2>
@@ -328,7 +254,7 @@
                     de campo, seus acertos e seus controles em um único sistema.
                 </p>
 
-                <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
+                <a href="/#contato" class="demo-btn demo-btn-primary">
                     Solicitar demonstração gratuita
                 </a>
             </div>
@@ -336,58 +262,6 @@
     </main>
 
     <%- include('../partials/footer') %>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('demoContactForm');
-            const statusElement = document.getElementById('demoContactStatus');
-            const submitButton = form?.querySelector('button[type="submit"]');
-
-            if (!form || !statusElement || !submitButton) return;
-
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const formData = new FormData(form);
-                const nome = String(formData.get('nome') || '').trim();
-                const telefone = String(formData.get('telefone') || '').trim();
-
-                if (!nome || !telefone) {
-                    statusElement.textContent = 'Preencha nome e WhatsApp para solicitar a demonstração.';
-                    window.AppAlerts?.warning('Preencha nome e WhatsApp para solicitar a demonstração.');
-                    return;
-                }
-
-                submitButton.disabled = true;
-                statusElement.textContent = 'Enviando suas informações...';
-
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new URLSearchParams(formData),
-                        headers: {
-                            Accept: 'application/json'
-                        }
-                    });
-
-                    const result = await response.json().catch(() => ({}));
-
-                    if (!response.ok) {
-                        throw new Error(result.message || 'Não foi possível enviar sua solicitação agora.');
-                    }
-
-                    form.reset();
-                    statusElement.textContent = result.message || 'Solicitação recebida. Em breve entraremos em contato.';
-                    window.AppAlerts?.success(statusElement.textContent);
-                } catch (error) {
-                    statusElement.textContent = error.message || 'Erro ao enviar as informações.';
-                    window.AppAlerts?.error(statusElement.textContent);
-                } finally {
-                    submitButton.disabled = false;
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

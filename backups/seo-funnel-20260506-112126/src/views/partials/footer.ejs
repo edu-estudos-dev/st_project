@@ -73,10 +73,10 @@
   .site-footer-main {
     display: grid !important;
     grid-template-columns:
-      minmax(220px, 0.8fr)
-      minmax(620px, 1.7fr)
-      minmax(220px, 0.8fr) !important;
-    gap: 1.5rem !important;
+      minmax(240px, 0.95fr)
+      minmax(420px, 1.25fr)
+      minmax(240px, 0.9fr) !important;
+    gap: 2rem !important;
     align-items: start !important;
   }
 
@@ -161,12 +161,6 @@
     list-style: none !important;
   }
 
-  .site-footer-links > .footer-links-list:not(.footer-solutions-list) {
-    max-width: none !important;
-    flex-wrap: nowrap !important;
-    gap: 0.55rem 0.92rem !important;
-  }
-
   .footer-links-list li {
     margin: 0 !important;
     padding: 0 !important;
@@ -200,33 +194,6 @@
   .footer-links-list a:hover {
     transform: translateY(-1px) !important;
     color: #22c55e !important;
-  }
-
-  .site-footer .footer-solutions-title {
-    margin-top: 1.35rem !important;
-    margin-bottom: 0.8rem !important;
-  }
-
-  .footer-solutions-list {
-    max-width: 620px !important;
-  }
-
-  @media (min-width: 992px) and (max-width: 1160px) {
-    .site-footer-main {
-      grid-template-columns:
-        minmax(190px, 0.72fr)
-        minmax(560px, 1.8fr)
-        minmax(190px, 0.72fr) !important;
-      gap: 1.2rem !important;
-    }
-
-    .site-footer-links > .footer-links-list:not(.footer-solutions-list) {
-      gap: 0.5rem 0.72rem !important;
-    }
-
-    .footer-links-list a {
-      font-size: 0.84rem !important;
-    }
   }
 
   .footer-contact-card {
@@ -332,10 +299,6 @@
       max-width: 430px !important;
       justify-content: center !important;
       gap: 0.72rem 1rem !important;
-    }
-
-    .footer-solutions-list {
-      max-width: 500px !important;
     }
 
     .footer-contact-card {
@@ -540,11 +503,6 @@
       border-bottom: 0 !important;
     }
 
-    .footer-solutions-list li:last-child {
-      grid-column: 1 / -1 !important;
-      border-right: 0 !important;
-    }
-
     .footer-links-list a {
       width: 100% !important;
       min-height: 45px !important;
@@ -675,16 +633,6 @@
           <li><a href="/#faq">FAQ</a></li>
           <li><a href="/politica-de-privacidade">Privacidade</a></li>
           <li><a href="/termos-de-uso">Termos</a></li>
-        </ul>
-
-        <strong class="footer-title footer-solutions-title">Soluções</strong>
-
-        <ul class="footer-links-list footer-solutions-list">
-          <li><a href="/sistema-gestao-maquinas-recreativas">Gestão de máquinas</a></li>
-          <li><a href="/controle-sangria-maquinas-bolinhas">Sangria de bolinhas</a></li>
-          <li><a href="/rota-inteligente-maquinas-recreativas">Rota inteligente</a></li>
-          <li><a href="/sistema-para-maquinas-de-pelucias">Máquinas de pelúcias</a></li>
-          <li><a href="/controle-consignados-comissao">Consignados e comissão</a></li>
         </ul>
 
         <div class="footer-email">

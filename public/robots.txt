@@ -3,7 +3,17 @@ Allow: /
 
 Disallow: /admin/
 Disallow: /dashboard/
-Disallow: /login/
+Disallow: /painel/
+Disallow: /search/
+Disallow: /estabelecimentos/
+Disallow: /lancamentos/
+Disallow: /fluxo-de-caixa/
+Disallow: /rotas/
+Disallow: /relatorios/
+Disallow: /assinatura/
+Disallow: /bolinhas/
+Disallow: /figurinhas/
+Disallow: /pelucias/
 Disallow: /api/
 
 Sitemap: https://vendmaster.com.br/sitemap.xml
