@@ -96,6 +96,11 @@ router.get('/sitemap.xml', async (req, res) => {
         priority: '0.9'
       },
       {
+        loc: `${SITE_URL}/sistema-para-maquinas-de-pelucias`,
+        changefreq: 'monthly',
+        priority: '0.9'
+      },
+      {
         loc: `${SITE_URL}/blog`,
         changefreq: 'weekly',
         priority: '0.8'

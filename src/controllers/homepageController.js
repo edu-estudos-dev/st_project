@@ -465,6 +465,83 @@ class HomepageController {
     });
   }
 
+  renderSistemaPeluciasPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/sistema-para-maquinas-de-pelucias';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Sistema para máquinas de pelúcias',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'O que é um sistema para máquinas de pelúcias?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'É uma ferramenta para organizar pontos, estoque, reposição de prêmios, visitas, movimentações e histórico das máquinas de pelúcias.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'O VendMaster ajuda no controle de estoque de pelúcias?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster ajuda a acompanhar estoque, reposições, saídas e movimentações relacionadas às máquinas de pelúcias.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso controlar visitas e pontos das máquinas?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O sistema ajuda a organizar pontos, visitas, histórico e informações importantes de cada estabelecimento.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso ver uma demonstração antes de contratar?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. Você pode solicitar uma demonstração gratuita para ver como o controle de máquinas de pelúcias funciona dentro do VendMaster.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/sistemaParaMaquinasDePelucias', {
+      title: 'Sistema para máquinas de pelúcias | VendMaster',
+      metaDescription:
+        'Sistema para máquinas de pelúcias. Controle pontos, estoque, reposição de prêmios, visitas, movimentações e histórico com o VendMaster.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/sistema-para-maquinas-de-pelucias.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',
