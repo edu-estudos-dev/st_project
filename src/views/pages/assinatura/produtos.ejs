@@ -7,13 +7,14 @@
   <div class="page-spacer"></div>
 
   <div class="form-shell form-shell-modern">
+    <% const canManageProducts = assinante?.status_assinatura === 'trial'; %>
     <%- include('../../partials/breadcrumb', { pageTitle: 'Produtos da Operação' }) %>
 
     <section class="page-titlebar page-titlebar-neutral">
       <div class="page-titlebar-content">
         <span class="form-kicker"><i class="bi bi-grid-3x3-gap"></i> Assinatura</span>
         <h1>Produtos da operação</h1>
-        <p>Escolha quais frentes fazem parte da sua rotina para o sistema mostrar apenas os módulos que você realmente usa.</p>
+        <p><% if (canManageProducts) { %>Durante o trial, ajuste quais frentes deseja testar no sistema.<% } else { %>As ferramentas liberadas seguem o plano contratado e sao alteradas pelo administrador.<% } %></p>
       </div>
       <div class="page-titlebar-side">
         <div class="page-titlebar-stat">
@@ -45,12 +46,13 @@
                   name="produtos_habilitados"
                   value="<%= produto.value %>"
                   <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
+                  <%= canManageProducts ? '' : 'disabled' %>
                 >
                 <span><%= produto.label %></span>
               </label>
             <% }) %>
           </div>
-          <small class="modern-note">Se adicionar uma frente nova, depois marque esse produto nos estabelecimentos em que ele existe.</small>
+          <small class="modern-note"><% if (canManageProducts) { %>Se adicionar uma frente nova, depois marque esse produto nos estabelecimentos em que ele existe.<% } else { %>Para incluir ou remover ferramentas, fale com o suporte para ajustar seu plano.<% } %></small>
         </section>
 
         <section class="form-actions-bar">
@@ -63,10 +65,12 @@
               <i class="bi bi-arrow-left"></i>
               <span>Voltar</span>
             </a>
-            <button type="submit" class="btn-modern">
-              <i class="bi bi-check2-circle"></i>
-              <span>Salvar produtos</span>
-            </button>
+            <% if (canManageProducts) { %>
+              <button type="submit" class="btn-modern">
+                <i class="bi bi-check2-circle"></i>
+                <span>Salvar produtos</span>
+              </button>
+            <% } %>
           </div>
         </section>
       </form>

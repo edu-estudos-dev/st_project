@@ -5,6 +5,8 @@ import connection from '../db_config/connection.js';
 import AssinanteModel from './assinanteModel.js';
 import { serializeProdutos } from '../utilities/produtoUtils.js';
 
+const TRIAL_PRODUCTS = ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'];
+
 class LoginLogout {
   constructor() {
     this.passwordResetTableReady = false;
@@ -13,7 +15,7 @@ class LoginLogout {
   buildTrialDates() {
     const trialInicio = new Date();
     const trialFim = new Date(trialInicio);
-    trialFim.setDate(trialFim.getDate() + 7);
+    trialFim.setDate(trialFim.getDate() + 30);
 
     return {
       trialInicio,
@@ -276,7 +278,7 @@ class LoginLogout {
     const dataAtivacao = overrides.data_ativacao ?? null;
     const dataVencimento = overrides.data_vencimento ?? null;
     const dataLimiteExclusao = overrides.data_limite_exclusao ?? null;
-    const produtosHabilitados = serializeProdutos(overrides.produtos_habilitados || []);
+    const produtosHabilitados = serializeProdutos(overrides.produtos_habilitados || TRIAL_PRODUCTS);
 
     await client.query(`
       ALTER TABLE assinantes

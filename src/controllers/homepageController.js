@@ -304,6 +304,7 @@ class HomepageController {
       faqJsonLd,
       extraStyles: [
         '/css/blog-public-header.css',
+        '/css/commercial-page.css',
         '/css/sistema-gestao-maquinas-recreativas.css'
       ],
       skipGlobalStyles: true,
@@ -381,6 +382,7 @@ class HomepageController {
       faqJsonLd,
       extraStyles: [
         '/css/blog-public-header.css',
+        '/css/commercial-page.css',
         '/css/controle-sangria-maquinas-bolinhas.css'
       ],
       skipGlobalStyles: true,
@@ -458,6 +460,7 @@ class HomepageController {
       faqJsonLd,
       extraStyles: [
         '/css/blog-public-header.css',
+        '/css/commercial-page.css',
         '/css/rota-inteligente-maquinas-recreativas.css'
       ],
       skipGlobalStyles: true,
@@ -481,7 +484,7 @@ class HomepageController {
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'Sistema para máquinas de pelúcias',
+          name: 'Sistema para máquinas de pelúcias e gruas',
           item: canonicalUrl
         }
       ]
@@ -535,14 +538,15 @@ class HomepageController {
     };
 
     return res.render('pages/sistemaParaMaquinasDePelucias', {
-      title: 'Sistema para máquinas de pelúcias | VendMaster',
+      title: 'Sistema para máquinas de pelúcias e gruas | VendMaster',
       metaDescription:
-        'Sistema para máquinas de pelúcias. Controle pontos, estoque, reposição de prêmios, visitas, movimentações e histórico com o VendMaster.',
+        'Sistema para máquinas de pelúcias e gruas. Controle pontos, estoque, reposição de prêmios, visitas, movimentações e histórico com o VendMaster.',
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
       extraStyles: [
         '/css/blog-public-header.css',
+        '/css/commercial-page.css',
         '/css/sistema-para-maquinas-de-pelucias.css'
       ],
       skipGlobalStyles: true,
@@ -628,6 +632,7 @@ class HomepageController {
       faqJsonLd,
       extraStyles: [
         '/css/blog-public-header.css',
+        '/css/commercial-page.css',
         '/css/controle-consignados-comissao.css'
       ],
       skipGlobalStyles: true,

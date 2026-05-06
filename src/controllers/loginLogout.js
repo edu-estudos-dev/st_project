@@ -1,5 +1,4 @@
 import LoginLogout from '../models/loginLogoutModel.js';
-import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 import { buildPasswordResetUrl, dispatchPasswordResetLink } from '../utilities/passwordReset.js';
 import {
     getAuthCookieName,
@@ -13,6 +12,8 @@ const PRODUCT_OPTIONS = [
     { value: 'FIGURINHAS', label: 'Consignados' },
     { value: 'PELUCIAS', label: 'Pelúcias' }
 ];
+
+const TRIAL_PRODUCTS = PRODUCT_OPTIONS.map((produto) => produto.value);
 
 class LoginLogoutController {
     login(req, res) {
@@ -37,10 +38,8 @@ class LoginLogoutController {
             error: req.query.error,
             formData: {
                 user: '',
-                email: '',
-                produtos_habilitados: []
-            },
-            productOptions: PRODUCT_OPTIONS
+                email: ''
+            }
         });
     }
 
@@ -275,7 +274,7 @@ class LoginLogoutController {
         try {
             const senha = String(req.body.senha ?? '');
             const confirmarSenha = String(req.body.confirmarSenha ?? '');
-            const produtosHabilitados = normalizeSelectedProdutos(formData.produtos_habilitados);
+            const produtosHabilitados = TRIAL_PRODUCTS;
 
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
@@ -289,7 +288,7 @@ class LoginLogoutController {
             if (!produtosHabilitados.length) {
                 return res.status(400).render('pages/register', {
                     title: 'Cadastro de UsuÃ¡rio',
-                    error: 'Selecione pelo menos um produto da sua operaÃ§Ã£o.',
+                    error: 'Selecione pelo menos uma frente da sua operação.',
                     formData,
                     productOptions: PRODUCT_OPTIONS
                 });
@@ -367,4 +366,3 @@ class LoginLogoutController {
 }
 
 export default new LoginLogoutController();
-

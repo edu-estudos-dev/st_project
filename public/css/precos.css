@@ -1061,3 +1061,47 @@ html:has(.pricing-page) {
   background: rgba(124, 58, 237, 0.18);
   color: #c4b5fd;
 }
+
+/* ==========================================================================
+   AJUSTE MOBILE — LEITURA MAIS CONFORTÁVEL
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .pricing-page {
+    --pricing-font-body: 1rem;
+    --pricing-font-section-text: 1rem;
+    --pricing-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
+    --pricing-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
+    --pricing-font-hero-title: clamp(2.18rem, 10.4vw, 2.82rem);
+  }
+
+  .pricing-hero p,
+  .pricing-section-heading p,
+  .pricing-card > p,
+  .pricing-card li,
+  .pricing-tools-grid article p,
+  .pricing-faq-list details p,
+  .pricing-final-cta p {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .pricing-btn,
+  .pricing-btn-primary,
+  .pricing-btn-secondary,
+  .pricing-card-cta {
+    min-height: 52px !important;
+    padding: 0.88rem 1.05rem !important;
+    font-size: 1rem !important;
+    line-height: 1.15 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .pricing-page {
+    --pricing-font-body: 0.98rem;
+    --pricing-font-section-text: 0.98rem;
+    --pricing-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
+    --pricing-font-hero-title: clamp(2.05rem, 10.5vw, 2.48rem);
+  }
+}

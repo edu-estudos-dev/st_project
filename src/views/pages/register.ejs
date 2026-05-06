@@ -105,7 +105,7 @@
 
                     <div>
                         <h2>Criar conta</h2>
-                        <p>Crie sua conta e escolha quais módulos deseja ativar na sua operação.</p>
+                        <p>Crie sua conta e teste todas as ferramentas por 30 dias. A escolha do plano acontece depois.</p>
                     </div>
                 </div>
 
@@ -233,55 +233,6 @@
                     <small class="auth-note" id="confirmarSenhaHint">
                         A confirmação precisa ser idêntica à senha informada acima.
                     </small>
-
-                    <div class="auth-field">
-                        <div class="auth-section-title">
-                            <span>Produtos da operação</span>
-                            <small>Escolha pelo menos um</small>
-                        </div>
-
-                        <div class="auth-product-grid">
-                            <% const selectedProducts = formData?.produtos_habilitados || []; %>
-
-                            <% (productOptions || []).forEach((produto) => { %>
-                                <label class="auth-product-option" for="produto_<%= produto.value %>">
-                                    <input
-                                        type="checkbox"
-                                        id="produto_<%= produto.value %>"
-                                        name="produtos_habilitados"
-                                        value="<%= produto.value %>"
-                                        <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
-                                    >
-
-                                    <span class="auth-product-check">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M9.2 16.6 4.95 12.35l1.4-1.4 2.85 2.85 8.45-8.45 1.4 1.4L9.2 16.6z" />
-                                        </svg>
-                                    </span>
-
-                                    <span class="auth-product-content">
-                                        <strong><%= produto.label %></strong>
-                                        <small>
-                                            <% if (produto.value === 'BOLINHAS') { %>
-                                                Máquinas de bolinhas
-                                            <% } else if (produto.value === 'PELUCIAS') { %>
-                                                Máquinas de pelúcias
-                                            <% } else if (produto.value === 'FIGURINHAS') { %>
-                                                Consignados
-                                            <% } else { %>
-                                                Módulo operacional
-                                            <% } %>
-                                        </small>
-                                    </span>
-                                </label>
-                            <% }) %>
-                        </div>
-
-                        <small class="auth-note" id="produtosHint">
-                            Essa escolha define quais módulos aparecem no sistema.
-                        </small>
-                    </div>
-
                     <button type="submit" class="auth-submit">
                         <span>Criar conta</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -323,7 +274,6 @@
             const senhaInput = document.getElementById('senha');
             const confirmarSenhaInput = document.getElementById('confirmarSenha');
             const hint = document.getElementById('confirmarSenhaHint');
-            const produtosHint = document.getElementById('produtosHint');
 
             const syncPasswordValidation = () => {
                 const senha = senhaInput.value;
@@ -355,19 +305,6 @@
 
             form.addEventListener('submit', (event) => {
                 syncPasswordValidation();
-
-                const hasProduct = Array.from(document.querySelectorAll('input[name="produtos_habilitados"]'))
-                    .some((checkbox) => checkbox.checked);
-
-                if (!hasProduct) {
-                    event.preventDefault();
-                    produtosHint.textContent = 'Selecione pelo menos um produto para criar sua operação.';
-                    produtosHint.classList.add('is-invalid');
-                    window.AppAlerts?.warning('Selecione pelo menos um produto da sua operação.');
-                    return;
-                }
-
-                produtosHint.classList.remove('is-invalid');
 
                 if (!form.checkValidity()) {
                     event.preventDefault();

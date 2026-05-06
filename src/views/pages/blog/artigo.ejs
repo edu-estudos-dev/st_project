@@ -115,6 +115,34 @@
 
             <section class="blog-article-content">
               <%- post.conteudo %>
+
+              <% const articleCommercialLinks = {
+                'controle-de-sangria-maquinas-bolinhas': {
+                  href: '/controle-sangria-maquinas-bolinhas',
+                  label: 'Ver controle de sangria de máquinas de bolinhas',
+                  text: 'Se você quer controlar coletas por ponto com mais clareza, conheça a página comercial sobre sangria de bolinhas.'
+                },
+                'como-organizar-rota-maquinas-recreativas': {
+                  href: '/rota-inteligente-maquinas-recreativas',
+                  label: 'Ver rota inteligente para máquinas recreativas',
+                  text: 'Para transformar esse planejamento em rotina, veja como funciona a rota inteligente do VendMaster.'
+                },
+                'planilha-maquinas-bolinhas-controle': {
+                  href: '/sistema-gestao-maquinas-recreativas',
+                  label: 'Conhecer o sistema de gestão para máquinas recreativas',
+                  text: 'Quando a planilha começa a limitar a operação, um sistema centralizado ajuda a organizar pontos, rotas, sangrias e financeiro.'
+                }
+              }; %>
+
+              <% const articleCommercialLink = articleCommercialLinks[post.slug]; %>
+
+              <% if (articleCommercialLink) { %>
+                <aside class="blog-article-commercial-link">
+                  <span>Próximo passo</span>
+                  <p><%= articleCommercialLink.text %></p>
+                  <a href="<%= articleCommercialLink.href %>"><%= articleCommercialLink.label %></a>
+                </aside>
+              <% } %>
             </section>
           </div>
         </article>

@@ -28,6 +28,10 @@ class AssinaturaController {
 
   updateProdutos = async (req, res) => {
     try {
+      if (req.user?.status_assinatura !== 'trial') {
+        throw new Error('As ferramentas contratadas sao alteradas pelo administrador apos a escolha do plano.');
+      }
+
       const produtos = normalizeSelectedProdutos(
         Array.isArray(req.body.produtos_habilitados)
           ? req.body.produtos_habilitados
