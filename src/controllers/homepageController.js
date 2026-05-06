@@ -234,6 +234,83 @@ class HomepageController {
     });
   }
 
+  renderSistemaGestaoMaquinasPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/sistema-gestao-maquinas-recreativas';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Sistema de gestão para máquinas recreativas',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'O que é um sistema de gestão para máquinas recreativas?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'É uma ferramenta para organizar pontos, máquinas, rotas, sangrias, estoque, acertos e financeiro da operação em um só lugar.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'O VendMaster serve para máquinas de bolinhas, pelúcias e consignados?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster foi pensado para operadores que trabalham com máquinas de bolinhas, máquinas de pelúcias e produtos consignados.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Preciso abandonar minha rotina atual para usar o sistema?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Não. A ideia é substituir controles soltos e planilhas por uma rotina mais organizada, mantendo o foco na operação de campo.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso ver uma demonstração antes de contratar?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. É possível solicitar uma demonstração gratuita para ver como o VendMaster funciona na prática.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/sistemaGestaoMaquinasRecreativas', {
+      title: 'Sistema de gestão para máquinas recreativas | VendMaster',
+      metaDescription:
+        'Sistema de gestão para máquinas recreativas. Controle pontos, rotas, sangrias, estoque, acertos, comissões e financeiro com o VendMaster.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/sistema-gestao-maquinas-recreativas.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',
