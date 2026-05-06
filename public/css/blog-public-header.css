@@ -3,11 +3,21 @@
    Usado em: Homepage, Blog e páginas públicas.
    ========================================================================== */
 
+:root {
+  --blog-public-header-height: 76px;
+}
+
+body:has(.blog-public-header) {
+  padding-top: var(--blog-public-header-height);
+}
+
 .blog-public-header {
   font-family: 'Urbanist', sans-serif;
-  position: sticky;
-  z-index: 40;
+  position: fixed;
+  z-index: 1000;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: auto;
   display: block;
@@ -222,6 +232,10 @@ body.blog-public-menu-open .blog-public-menu-toggle span:nth-child(3) {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --blog-public-header-height: 72px;
+  }
+
   .blog-public-header-inner {
     width: min(100% - 24px, 1180px);
     min-height: 72px;
