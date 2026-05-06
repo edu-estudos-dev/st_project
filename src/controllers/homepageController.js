@@ -517,6 +517,14 @@ class HomepageController {
         },
         {
           '@type': 'Question',
+          name: 'O sistema gera recibo para entregar ao comerciante?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster permite gerar um recibo da visita para entregar ao comerciante, ajudando no controle do que foi registrado no ponto.'
+          }
+        },
+        {
+          '@type': 'Question',
           name: 'Posso ver uma demonstração antes de contratar?',
           acceptedAnswer: {
             '@type': 'Answer',
@@ -536,6 +544,91 @@ class HomepageController {
       extraStyles: [
         '/css/blog-public-header.css',
         '/css/sistema-para-maquinas-de-pelucias.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
+  renderControleConsignadosPage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/controle-consignados-comissao';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Controle de consignados e comissão',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'O que é controle de consignados e comissão?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'É o controle dos produtos deixados em cada ponto, do que foi vendido, do que foi reposto, da comissão do parceiro e do valor líquido do acerto.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'O VendMaster ajuda a controlar comissão de parceiros?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster ajuda a organizar vendido, reposto, comissão e acerto por estabelecimento, deixando o processo mais claro.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso acompanhar estoque deixado e vendido?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O sistema ajuda a registrar entradas, saídas, reposições e movimentações de produtos consignados por ponto.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'O sistema gera recibo do acerto para o comerciante?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. O VendMaster permite gerar um recibo da visita ou do acerto, ajudando o comerciante a ter um comprovante do que foi registrado.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso ver uma demonstração antes de contratar?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. Você pode solicitar uma demonstração gratuita para ver como o controle de consignados e comissão funciona dentro do VendMaster.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/controleConsignadosComissao', {
+      title: 'Controle de consignados e comissão | VendMaster',
+      metaDescription:
+        'Controle de consignados e comissão. Organize produtos deixados, vendidos, repostos, comissão do parceiro e acertos por ponto com o VendMaster.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/controle-consignados-comissao.css'
       ],
       skipGlobalStyles: true,
       preloadExtraStyles: false
