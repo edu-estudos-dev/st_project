@@ -388,6 +388,83 @@ class HomepageController {
     });
   }
 
+  renderRotaInteligentePage(req, res) {
+    const canonicalUrl = 'https://vendmaster.com.br/rota-inteligente-maquinas-recreativas';
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: 'https://vendmaster.com.br/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Rota inteligente para máquinas recreativas',
+          item: canonicalUrl
+        }
+      ]
+    };
+
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'O que é rota inteligente para máquinas recreativas?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'É uma forma de organizar visitas aos pontos com base em informações da operação, ajudando o operador a decidir quais locais precisam de coleta, reposição ou atenção.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'A rota inteligente substitui minha experiência de campo?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Não. Ela ajuda a organizar dados e prioridades, mas a experiência do operador continua importante para tomar decisões no dia a dia.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'A rota pode ajudar em sangrias e abastecimentos?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. A organização da rota ajuda o operador a visitar pontos com maior necessidade de coleta, abastecimento ou conferência.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Posso ver a rota inteligente em uma demonstração?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Sim. Você pode solicitar uma demonstração gratuita para ver como a rota inteligente funciona dentro do VendMaster.'
+          }
+        }
+      ]
+    };
+
+    return res.render('pages/rotaInteligenteMaquinasRecreativas', {
+      title: 'Rota inteligente para máquinas recreativas | VendMaster',
+      metaDescription:
+        'Rota inteligente para máquinas recreativas. Organize visitas, prioridades, sangrias, abastecimentos e pontos com o VendMaster.',
+      canonicalUrl,
+      breadcrumbJsonLd,
+      faqJsonLd,
+      extraStyles: [
+        '/css/blog-public-header.css',
+        '/css/rota-inteligente-maquinas-recreativas.css'
+      ],
+      skipGlobalStyles: true,
+      preloadExtraStyles: false
+    });
+  }
+
   renderPrivacyPolicy(req, res) {
     res.render('pages/legal/politicaDePrivacidade', {
       title: 'Política de Privacidade | VendMaster',

@@ -9,6 +9,7 @@ router.get('/precos', HomepageController.renderPricingPage);
 router.get('/demonstracao', HomepageController.renderDemoPage);
 router.get('/sistema-gestao-maquinas-recreativas', HomepageController.renderSistemaGestaoMaquinasPage);
 router.get('/controle-sangria-maquinas-bolinhas', HomepageController.renderControleSangriaBolinhasPage);
+router.get('/rota-inteligente-maquinas-recreativas', HomepageController.renderRotaInteligentePage);
 router.get('/politica-de-privacidade', HomepageController.renderPrivacyPolicy);
 router.get('/termos-de-uso', HomepageController.renderTermsOfUse);
 
