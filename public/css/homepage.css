@@ -3801,16 +3801,11 @@ html:has(.homepage-body) {
 
 .homepage-body .vm-products-section .vm-product-card .vm-product-card-link,
 .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link,
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn,
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn-outline-primary,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn-outline-primary {
+.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:visited {
   width: fit-content !important;
   max-width: 100% !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
   margin: 1rem auto 0 !important;
-  padding: 0.42rem 0.22rem !important;
+  padding: 0.42rem 0.2rem !important;
   position: relative !important;
   z-index: 2 !important;
   display: inline-flex !important;
@@ -3824,29 +3819,34 @@ html:has(.homepage-body) {
   box-shadow: none !important;
   outline: none !important;
   font-size: 0.95rem !important;
-  font-weight: 950 !important;
+  font-weight: 900 !important;
   line-height: 1.18 !important;
   letter-spacing: -0.015em !important;
   text-align: center !important;
   text-decoration: none !important;
   white-space: normal !important;
-  appearance: none !important;
   transition:
     color 220ms ease,
     transform 220ms ease !important;
 }
 
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link::before,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link::before {
+.homepage-body .vm-products-section .vm-product-card .vm-product-card-link span,
+.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link span {
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.homepage-body .vm-products-section .vm-product-card .vm-product-card-link span::after,
+.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link span::after {
   content: '' !important;
   position: absolute !important;
-  left: 0.22rem !important;
-  right: 1.52rem !important;
-  bottom: 0.18rem !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: -0.16rem !important;
   height: 2px !important;
   border-radius: 999px !important;
   background: linear-gradient(90deg, #2563eb 0%, #22c55e 100%) !important;
-  opacity: 0.42 !important;
+  opacity: 0.26 !important;
   transform: scaleX(0.72) !important;
   transform-origin: left center !important;
   transition:
@@ -3861,18 +3861,14 @@ html:has(.homepage-body) {
   align-items: center !important;
   justify-content: center !important;
   color: currentColor !important;
-  font-size: 1.08em !important;
-  font-weight: 950 !important;
+  opacity: 0.72 !important;
+  font-size: 0.98em !important;
+  font-weight: 900 !important;
   line-height: 1 !important;
-  text-decoration: none !important;
   transform: translateX(0) !important;
-  transition: transform 220ms ease !important;
-}
-
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link span,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link span {
-  color: inherit !important;
-  text-decoration: none !important;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease !important;
 }
 
 .homepage-body .vm-products-section .vm-product-card .vm-product-card-link:hover,
@@ -3887,11 +3883,11 @@ html:has(.homepage-body) {
   transform: translateY(-1px) !important;
 }
 
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link:hover::before,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:hover::before,
-.homepage-body .vm-products-section .vm-product-card .vm-product-card-link:focus-visible::before,
-.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:focus-visible::before {
-  opacity: 1 !important;
+.homepage-body .vm-products-section .vm-product-card .vm-product-card-link:hover span::after,
+.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:hover span::after,
+.homepage-body .vm-products-section .vm-product-card .vm-product-card-link:focus-visible span::after,
+.homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:focus-visible span::after {
+  opacity: 0.9 !important;
   transform: scaleX(1) !important;
 }
 
@@ -3899,7 +3895,8 @@ html:has(.homepage-body) {
 .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:hover::after,
 .homepage-body .vm-products-section .vm-product-card .vm-product-card-link:focus-visible::after,
 .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:focus-visible::after {
-  transform: translateX(0.18rem) !important;
+  opacity: 1 !important;
+  transform: translateX(0.14rem) !important;
 }
 
 .homepage-body .vm-products-section .vm-product-card .vm-product-card-link:focus-visible,
@@ -3912,30 +3909,19 @@ html:has(.homepage-body) {
 @media (max-width: 767.98px) {
   .homepage-body .vm-products-section .vm-product-card .vm-product-card-link,
   .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link,
-  .homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn,
-  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn,
-  .homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn-outline-primary,
-  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn-outline-primary {
+  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:visited {
     margin-top: 0.84rem !important;
     padding-top: 0.36rem !important;
     padding-bottom: 0.36rem !important;
     font-size: 0.95rem !important;
     line-height: 1.22 !important;
   }
-
-  .homepage-body .vm-products-section .vm-product-card .vm-product-card-link::before,
-  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link::before {
-    bottom: 0.13rem !important;
-  }
 }
 
 @media (max-width: 479.98px) {
   .homepage-body .vm-products-section .vm-product-card .vm-product-card-link,
   .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link,
-  .homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn,
-  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn,
-  .homepage-body .vm-products-section .vm-product-card .vm-product-card-link.btn-outline-primary,
-  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link.btn-outline-primary {
+  .homepage-body .vm-products-section .vm-product-card a.vm-product-card-link:visited {
     margin-top: 0.76rem !important;
     font-size: 0.92rem !important;
   }
