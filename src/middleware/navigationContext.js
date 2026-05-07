@@ -4,6 +4,7 @@ import { syncMonthlyRevenueConsolidation } from '../services/monthlyRevenueConso
 
 const defaultNavigationProducts = {
     bolinhas: false,
+    consignados: false,
     figurinhas: false,
     pelucias: false,
     hasAny: false

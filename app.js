@@ -41,9 +41,9 @@ import adminInteressadosRoutes from './src/routes/adminInteressadosRoutes.js';
 import assinaturaRoutes from './src/routes/assinaturaRoutes.js';
 
 import bolinhasSangriaRoutes from './src/routes/bolinhasRoutes.js';
-import figurinhasRoutes from './src/routes/figurinhasRoutes.js';
+import consignadosRoutes from './src/routes/consignadosRoutes.js';
 import receitaBolinhaRoutes from './src/routes/receitaBolinhaRoutes.js';
-import receitaFigurinhaRoutes from './src/routes/receitaFigurinhaRoutes.js';
+import receitaConsignadosRoutes from './src/routes/receitaConsignadosRoutes.js';
 import peluciasRoutes from './src/routes/peluciasRoutes.js';
 import receitaPeluciaRoutes from './src/routes/receitaPeluciaRoutes.js';
 
@@ -173,6 +173,7 @@ app.use((req, res, next) => {
 
   res.locals.navigationProducts = res.locals.navigationProducts || {
     bolinhas: false,
+    consignados: false,
     figurinhas: false,
     pelucias: false,
     hasAny: false
@@ -272,6 +273,15 @@ app.use('/rotas', requireAuthenticatedSubscription, rotasRoutes);
 app.use('/relatorios', requireAuthenticatedSubscription, relatoriosRoutes);
 app.use('/assinatura', requireAuthenticatedSubscription, assinaturaRoutes);
 
+app.use('/figurinhas', (req, res) => {
+  const legacyBase = '/figurinhas';
+  const suffix = req.originalUrl.startsWith(legacyBase)
+    ? req.originalUrl.slice(legacyBase.length)
+    : '';
+
+  return res.redirect(301, `/consignados${suffix}`);
+});
+
 app.use(
   '/admin/assinantes',
   requireAuthenticatedSubscription,
@@ -292,10 +302,10 @@ app.use(
 );
 
 app.use(
-  '/figurinhas',
+  '/consignados',
   requireAuthenticatedSubscription,
-  requireProductAvailable('figurinhas'),
-  receitaFigurinhaRoutes
+  requireProductAvailable('consignados'),
+  receitaConsignadosRoutes
 );
 
 app.use(
@@ -306,10 +316,10 @@ app.use(
 );
 
 app.use(
-  '/figurinhas/sangrias',
+  '/consignados/sangrias',
   requireAuthenticatedSubscription,
-  requireProductAvailable('figurinhas'),
-  figurinhasRoutes
+  requireProductAvailable('consignados'),
+  consignadosRoutes
 );
 
 app.use(

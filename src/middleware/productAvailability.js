@@ -2,17 +2,23 @@ import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 
 const PRODUCT_LABELS = {
     bolinhas: 'Bolinhas',
-    figurinhas: 'Figurinhas',
+    figurinhas: 'Consignados',
+    consignados: 'Consignados',
     pelucias: 'Pelúcias'
+};
+
+const PRODUCT_KEY_ALIASES = {
+    consignados: 'figurinhas'
 };
 
 export const requireProductAvailable = (productKey) => {
     return async (req, res, next) => {
+        const normalizedProductKey = PRODUCT_KEY_ALIASES[productKey] || productKey;
         const disponibilidade = await EstabelecimentoModel.getMenuProdutosDisponiveis(
             req.user?.assinante_id
         );
 
-        if (disponibilidade[productKey]) {
+        if (disponibilidade[normalizedProductKey]) {
             return next();
         }
 

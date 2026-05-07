@@ -1,5 +1,5 @@
 import EstabelecimentoModel from '../models/estabelecimentoModel.js';
-import figurinhasModel from '../models/figurinhasModel.js';
+import consignadosModel from '../models/consignadosModel.js';
 import peluciasModel from '../models/peluciasModel.js';
 import { formatTelefone } from '../utilities/formatters.js';
 import {
@@ -203,7 +203,7 @@ class EstabelecimentoController {
       }
 
       const hasBolinhas = produtosSelecionados.includes('BOLINHAS');
-      const hasFigurinhas = produtosSelecionados.includes('FIGURINHAS');
+      const hasConsignados = produtosSelecionados.includes('FIGURINHAS');
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
 
       const chaveBolinhas = hasBolinhas
@@ -239,9 +239,10 @@ class EstabelecimentoController {
           )
         : null;
 
-      const figurinhaQuantidadeInicial = hasFigurinhas
+      const consignadoQuantidadeInicial = hasConsignados
         ? parseInitialInteger(
-            req.body.figurinha_quantidade_inicial,
+            req.body.consignado_quantidade_inicial ||
+              req.body.figurinha_quantidade_inicial,
             'Quantidade inicial deixada de consignados'
           )
         : null;
@@ -297,13 +298,13 @@ class EstabelecimentoController {
         });
       }
 
-      if (novoEstabelecimento?.id && hasFigurinhas) {
-        await figurinhasModel.createSangria({
+      if (novoEstabelecimento?.id && hasConsignados) {
+        await consignadosModel.createSangria({
           assinante_id: usuario.assinante_id,
           estabelecimento_id: novoEstabelecimento.id,
           data_sangria: dataInicial,
-          qtde_deixada: figurinhaQuantidadeInicial,
-          abastecido: figurinhaQuantidadeInicial,
+          qtde_deixada: consignadoQuantidadeInicial,
+          abastecido: consignadoQuantidadeInicial,
           estoque: 0,
           qtde_vendido: 0,
           valor_apurado: 0,

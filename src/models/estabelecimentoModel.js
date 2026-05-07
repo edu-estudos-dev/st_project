@@ -380,13 +380,14 @@ class EstabelecimentoModel {
 
       const produtosConfigurados = {
         bolinhas: hasProduto(produtosHabilitados, 'BOLINHAS'),
-        figurinhas: hasProduto(produtosHabilitados, 'FIGURINHAS'),
+        consignados: hasProduto(produtosHabilitados, 'FIGURINHAS'),
         pelucias: hasProduto(produtosHabilitados, 'PELUCIAS')
       };
+      produtosConfigurados.figurinhas = produtosConfigurados.consignados;
 
       produtosConfigurados.hasAny =
         produtosConfigurados.bolinhas ||
-        produtosConfigurados.figurinhas ||
+        produtosConfigurados.consignados ||
         produtosConfigurados.pelucias;
 
       if (produtosConfigurados.hasAny) {
@@ -406,7 +407,7 @@ class EstabelecimentoModel {
 
       const disponibilidade = {
         bolinhas: false,
-        figurinhas: false,
+        consignados: false,
         pelucias: false
       };
 
@@ -415,8 +416,8 @@ class EstabelecimentoModel {
           disponibilidade.bolinhas = true;
         }
 
-        if (!disponibilidade.figurinhas && hasProduto(row.produto, 'FIGURINHAS')) {
-          disponibilidade.figurinhas = true;
+        if (!disponibilidade.consignados && hasProduto(row.produto, 'FIGURINHAS')) {
+          disponibilidade.consignados = true;
         }
 
         if (!disponibilidade.pelucias && hasProduto(row.produto, 'PELUCIAS')) {
@@ -424,9 +425,10 @@ class EstabelecimentoModel {
         }
       }
 
+      disponibilidade.figurinhas = disponibilidade.consignados;
       disponibilidade.hasAny =
         disponibilidade.bolinhas ||
-        disponibilidade.figurinhas ||
+        disponibilidade.consignados ||
         disponibilidade.pelucias;
 
       return disponibilidade;
@@ -435,6 +437,7 @@ class EstabelecimentoModel {
 
       return {
         bolinhas: false,
+        consignados: false,
         figurinhas: false,
         pelucias: false,
         hasAny: false
@@ -462,6 +465,7 @@ class EstabelecimentoModel {
       return {
         totalAtivos: Number(row.total_ativos || 0),
         bolinhasAtivas: Number(row.bolinhas_ativas || 0),
+        consignadosAtivos: Number(row.figurinhas_ativas || 0),
         figurinhasAtivas: Number(row.figurinhas_ativas || 0),
         peluciasAtivas: Number(row.pelucias_ativas || 0)
       };
@@ -471,6 +475,7 @@ class EstabelecimentoModel {
       return {
         totalAtivos: 0,
         bolinhasAtivas: 0,
+        consignadosAtivos: 0,
         figurinhasAtivas: 0,
         peluciasAtivas: 0
       };
@@ -897,7 +902,7 @@ class EstabelecimentoModel {
             e.id AS estabelecimento_id,
             e.estabelecimento,
             'Consignados' AS produto,
-            '/figurinhas/sangrias/add' AS action_href,
+            '/consignados/sangrias/add' AS action_href,
             latest.data_sangria AS ultima_movimentacao,
             CURRENT_DATE - latest.data_sangria::date AS dias_sem_registro
           FROM estabelecimentos e
@@ -997,7 +1002,7 @@ class EstabelecimentoModel {
             'Consignados' AS produto,
             e.estabelecimento,
             sf.data_sangria::timestamp AS data_movimentacao,
-            '/figurinhas/sangrias/view/' || sf.id AS href,
+            '/consignados/sangrias/view/' || sf.id AS href,
             COALESCE(sf.valor_apurado, 0) AS valor,
             'Coleta registrada' AS descricao
           FROM sangrias_figurinhas sf

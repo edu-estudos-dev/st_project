@@ -340,7 +340,7 @@ class RotasController {
         }
 
         if (produtos[0] === 'FIGURINHAS') {
-          redirectUrl = `/figurinhas/sangrias/add?${queryParams.toString()}`;
+          redirectUrl = `/consignados/sangrias/add?${queryParams.toString()}`;
         }
 
         if (produtos[0] === 'PELUCIAS') {

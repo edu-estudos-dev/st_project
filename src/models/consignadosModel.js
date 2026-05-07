@@ -1,6 +1,6 @@
 import connection from '../db_config/connection.js';
 
-class FigurinhasModel {
+class ConsignadosModel {
   createSangria = async sangria => {
     const {
       assinante_id,
@@ -265,4 +265,4 @@ class FigurinhasModel {
   };
 }
 
-export default new FigurinhasModel();
+export default new ConsignadosModel();

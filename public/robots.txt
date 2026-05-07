@@ -12,7 +12,7 @@ Disallow: /rotas/
 Disallow: /relatorios/
 Disallow: /assinatura/
 Disallow: /bolinhas/
-Disallow: /figurinhas/
+Disallow: /consignados/
 Disallow: /pelucias/
 Disallow: /api/
 

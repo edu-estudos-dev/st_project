@@ -1,5 +1,5 @@
 import BolinhasModel from '../models/BolinhasModel.js';
-import FigurinhasModel from '../models/figurinhasModel.js';
+import ConsignadosModel from '../models/consignadosModel.js';
 import PeluciasModel from '../models/peluciasModel.js';
 import LancamentoModel from '../models/lancamentoModel.js';
 
@@ -103,7 +103,7 @@ const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId
 
 const MONTHLY_REVENUE_MODELS = {
   bolinhas: BolinhasModel,
-  figurinhas: FigurinhasModel,
+  figurinhas: ConsignadosModel,
   pelucias: PeluciasModel
 };
 
@@ -237,7 +237,7 @@ export const syncMonthlyRevenueConsolidation = async ({ assinanteId, referenceDa
   const runningSync = (async () => {
     const [bolinhas, figurinhas, pelucias] = await Promise.all([
       BolinhasModel.getMonthlyRevenue(assinanteId),
-      FigurinhasModel.getMonthlyRevenue(assinanteId),
+      ConsignadosModel.getMonthlyRevenue(assinanteId),
       PeluciasModel.getMonthlyRevenue(assinanteId)
     ]);
 

@@ -1,13 +1,14 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <%- include('../partials/head', { title }) %>
 
 <body class="dashboard-body">
-   <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+   <% const navProducts = navigationProducts || { bolinhas: false, consignados: false, figurinhas: false, pelucias: false, hasAny: false }; %>
    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
    <% const financialData = financialNotifications || { proximos: [], atrasados: [], total: 0 }; %>
    <% const operationalData = operationalNotifications || { visitasAtrasadas: [], total: 0 }; %>
-   <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
+   <% const summary = dashboardSummary || { totalAtivos: 0, bolinhasAtivas: 0, consignadosAtivos: 0, figurinhasAtivas: 0, peluciasAtivas: 0 }; %>
+   <% const consignadosAtivos = Number(summary.consignadosAtivos ?? summary.figurinhasAtivas ?? 0); %>
    <% const insights = dashboardInsights || {
       totals: { currentLabel: 'R$ 0,00', previousLabel: 'R$ 0,00', deltaLabel: '+R$ 0,00', deltaPercentLabel: 'Sem base anterior', averagePerVisitLabel: 'R$ 0,00', visits: 0, revenueDirection: 'neutral' },
       productBreakdown: [],
@@ -30,7 +31,7 @@
    ]; %>
    <% const operationalShortcuts = [
       { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green', productKey: 'bolinhas' },
-      { href: '/figurinhas/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue', productKey: 'figurinhas' },
+      { href: '/consignados/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue', productKey: 'consignados' },
       { href: '/pelucias/sangrias/add', title: 'Cadastro de pelúcias', description: 'Abrir o formulário operacional de pelúcias.', tone: 'violet', productKey: 'pelucias' }
    ]; %>
    <% const visibleOperationalShortcuts = operationalShortcuts.filter((item) => navProducts[item.productKey]); %>
@@ -46,7 +47,7 @@
    <% const overviewStats = [
       { value: summary.totalAtivos, label: 'pontos ativos' },
       { value: summary.bolinhasAtivas, label: 'pontos com bolinhas' },
-      { value: summary.figurinhasAtivas + summary.peluciasAtivas, label: 'outras frentes ativas' }
+      { value: consignadosAtivos + summary.peluciasAtivas, label: 'outras frentes ativas' }
    ]; %>
    <% const financeTitle = financialData.atrasados.length
       ? `${financialData.atrasados.length} vencimento(s) atrasado(s)`

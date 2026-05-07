@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-lg fixed-top app-nav">
+<nav class="navbar navbar-expand-lg fixed-top app-nav">
     <div class="container-fluid">
         <a href="/painel" style="display:flex; align-items:center;">
             <img src="/images/brand/logo.webp" style="height:50px;" alt="VendMaster">
@@ -9,7 +9,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+        <% const navProducts = navigationProducts || { bolinhas: false, consignados: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+        <% const hasConsignados = Boolean(navProducts.consignados || navProducts.figurinhas); %>
         <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -78,8 +79,8 @@
                                     <% if (navProducts.bolinhas) { %>
                                         <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
                                     <% } %>
-                                    <% if (navProducts.figurinhas) { %>
-                                        <li><a class="dropdown-item" href="/figurinhas/receita-figurinha">Consignados</a></li>
+                                    <% if (hasConsignados) { %>
+                                        <li><a class="dropdown-item" href="/consignados/receita-consignados">Consignados</a></li>
                                     <% } %>
                                     <% if (navProducts.pelucias) { %>
                                         <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
@@ -173,19 +174,19 @@
                             </ul>
                         </li>
                         <% } %>
-                        <% if (navProducts.figurinhas) { %>
+                        <% if (hasConsignados) { %>
                         <li class="dropdown-submenu">
                             <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
-                                id="navbarDropdownFigurinhas" aria-expanded="false">
+                                id="navbarDropdownConsignados" aria-expanded="false">
                                 <span class="menu-link-title">Consignados</span>
                                 <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFigurinhas">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownConsignados">
                                 <% if (!isReadOnly) { %>
-                                    <li><a class="dropdown-item" href="/figurinhas/sangrias/add">Cadastro de receita</a></li>
+                                    <li><a class="dropdown-item" href="/consignados/sangrias/add">Cadastro de receita</a></li>
                                 <% } %>
-                                <li><a class="dropdown-item" href="/figurinhas/sangrias">Registro de vendas</a></li>
-                                <li><a class="dropdown-item" href="/figurinhas/sangrias/controle-geral">Controle geral</a></li>
+                                <li><a class="dropdown-item" href="/consignados/sangrias">Registro de vendas</a></li>
+                                <li><a class="dropdown-item" href="/consignados/sangrias/controle-geral">Controle geral</a></li>
                             </ul>
                         </li>
                         <% } %>

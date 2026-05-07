@@ -98,7 +98,7 @@
             }
 
             if (produto === 'FIGURINHAS') {
-                return `/figurinhas/sangrias/add?${queryParams.toString()}`;
+                return `/consignados/sangrias/add?${queryParams.toString()}`;
             }
 
             if (produto === 'PELUCIAS') {
@@ -112,7 +112,7 @@
             if (!sangriaId) return '';
 
             if (produto === 'FIGURINHAS') {
-                return `/figurinhas/sangrias/recibo/${sangriaId}`;
+                return `/consignados/sangrias/recibo/${sangriaId}`;
             }
 
             if (produto === 'PELUCIAS') {
