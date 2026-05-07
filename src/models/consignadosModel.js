@@ -59,7 +59,16 @@ class ConsignadosModel {
 
   getSangrias = async (assinanteId) => {
     const query = `
-      SELECT s.*, e.estabelecimento
+      SELECT
+        s.*,
+        e.estabelecimento,
+        EXISTS (
+          SELECT 1
+          FROM visita_produtos vp
+          WHERE vp.sangria_id = s.id
+            AND vp.assinante_id = s.assinante_id
+            AND vp.produto = 'FIGURINHAS'
+        ) AS vinculada_visita
       FROM sangrias_figurinhas s
       JOIN estabelecimentos e
         ON s.estabelecimento_id = e.id

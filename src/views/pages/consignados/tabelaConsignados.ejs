@@ -72,7 +72,11 @@
                                                     <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
                                                     <% if (!isReadOnly) { %>
                                                         <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
-                                                        <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                        <% if (sangria.vinculada_visita) { %>
+                                                            <button type="button" class="table-btn table-btn-delete" disabled title="Registro vinculado a uma visita">Vinculado</button>
+                                                        <% } else { %>
+                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                        <% } %>
                                                     <% } %>
                                                 </div>
                                             </td>
@@ -145,4 +149,3 @@
     </script>
 </body>
 </html>
-

@@ -385,9 +385,13 @@ class ConsignadosController {
       const result = await consignadosModel.deleteSangria(id, usuario.assinante_id);
 
       if (result.rowCount === 0) {
+        const message = sangriaAtual
+          ? 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita.'
+          : 'Sangria de consignados nao encontrada.';
+
         return res.status(409).json({
           success: false,
-          message: 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita ou nao foi encontrada.'
+          message
         });
       }
 
