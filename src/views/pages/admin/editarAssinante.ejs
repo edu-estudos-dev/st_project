@@ -34,7 +34,7 @@
               <div class="list-toolbar">
                 <div class="list-toolbar-copy">
                   <h2>Dados da assinatura</h2>
-                  <p>Altere manualmente status, ciclo de cobrança e datas de controle.</p>
+                  <p>Altere manualmente status, plano, ciclo de cobrança e datas de controle.</p>
                 </div>
                 <a class="list-action" href="/admin/assinantes">
                   <i class="bi bi-arrow-left"></i>
@@ -48,10 +48,10 @@
                     <label class="form-label" for="status_assinatura">Status</label>
                     <select class="form-select" id="status_assinatura" name="status_assinatura" required>
                       <% statusOptions.forEach((status)=> { %>
-                        <option value="<%= status %>" <%=assinante.status_assinatura===status ? 'selected' : '' %>><%=
-                            status %>
+                        <option value="<%= status %>" <%= assinante.status_assinatura === status ? 'selected' : '' %>>
+                          <%= status %>
                         </option>
-                        <% }) %>
+                      <% }) %>
                     </select>
                   </div>
 
@@ -59,11 +59,55 @@
                     <label class="form-label" for="tipo_cobranca">Tipo de cobrança</label>
                     <select class="form-select" id="tipo_cobranca" name="tipo_cobranca">
                       <% billingOptions.forEach((tipo)=> { %>
-                        <option value="<%= tipo %>" <%=(assinante.tipo_cobranca || '' )===tipo ? 'selected' : '' %>><%=
-                            tipo || 'Sem cobrança' %>
+                        <option value="<%= tipo %>" <%= (assinante.tipo_cobranca || '') === tipo ? 'selected' : '' %>>
+                          <%= tipo || 'Sem cobrança' %>
                         </option>
-                        <% }) %>
+                      <% }) %>
                     </select>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label" for="plano_codigo">Código do plano</label>
+                    <select class="form-select" id="plano_codigo" name="plano_codigo">
+                      <option value="" <%= !assinante.plano_codigo ? 'selected' : '' %>>Plano não definido</option>
+                      <option value="1-ferramenta" <%= assinante.plano_codigo === '1-ferramenta' ? 'selected' : '' %>>
+                        1-ferramenta
+                      </option>
+                      <option value="2-ferramentas" <%= assinante.plano_codigo === '2-ferramentas' ? 'selected' : '' %>>
+                        2-ferramentas
+                      </option>
+                      <option value="3-ferramentas" <%= assinante.plano_codigo === '3-ferramentas' ? 'selected' : '' %>>
+                        3-ferramentas
+                      </option>
+                    </select>
+                    <small class="modern-note">Código interno usado para identificar o plano escolhido.</small>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label" for="plano_nome">Nome do plano</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="plano_nome"
+                      name="plano_nome"
+                      value="<%= assinante.plano_nome || '' %>"
+                      placeholder="Ex.: Plano Completo"
+                    >
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label" for="valor_mensal">Valor mensal</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="valor_mensal"
+                      name="valor_mensal"
+                      min="0"
+                      step="0.01"
+                      value="<%= assinante.valor_mensal || '' %>"
+                      placeholder="44.90"
+                    >
+                    <small class="modern-note">Use ponto para centavos. Ex.: 44.90</small>
                   </div>
 
                   <div class="col-12">
@@ -84,7 +128,7 @@
                         </label>
                       <% }) %>
                     </div>
-                    <small class="modern-note">Esses produtos definem quais modulos aparecem para o assinante.</small>
+                    <small class="modern-note">Esses produtos definem quais módulos aparecem para o assinante.</small>
                   </div>
 
                   <div class="col-md-3">
@@ -94,7 +138,7 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label class="form-label" for="data_ativacao">Ativa&ccedil;&atilde;o</label>
+                    <label class="form-label" for="data_ativacao">Ativação</label>
                     <input class="form-control" type="date" id="data_ativacao" name="data_ativacao"
                       value="<%= formatDateInput(assinante.data_ativacao) %>">
                   </div>
@@ -106,7 +150,7 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label class="form-label" for="data_limite_exclusao">Limite exclus&atilde;o</label>
+                    <label class="form-label" for="data_limite_exclusao">Limite exclusão</label>
                     <input class="form-control" type="date" id="data_limite_exclusao" name="data_limite_exclusao"
                       value="<%= formatDateInput(assinante.data_limite_exclusao) %>">
                   </div>
@@ -141,9 +185,48 @@
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-      <% if (typeof success !== 'undefined' && success) { %> window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");<% } %>
-      <% if (typeof error !== 'undefined' && error) { %> window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");<% } %>
-    });
+          const planoCodigoSelect = document.getElementById('plano_codigo');
+          const planoNomeInput = document.getElementById('plano_nome');
+          const valorMensalInput = document.getElementById('valor_mensal');
+
+          const planos = {
+            '1-ferramenta': {
+              nome: 'Plano Essencial',
+              valor: '24.90'
+            },
+            '2-ferramentas': {
+              nome: 'Plano Operador',
+              valor: '34.90'
+            },
+            '3-ferramentas': {
+              nome: 'Plano Completo',
+              valor: '44.90'
+            }
+          };
+
+          if (planoCodigoSelect && planoNomeInput && valorMensalInput) {
+            planoCodigoSelect.addEventListener('change', () => {
+              const plano = planos[planoCodigoSelect.value];
+
+              if (!plano) {
+                planoNomeInput.value = '';
+                valorMensalInput.value = '';
+                return;
+              }
+
+              planoNomeInput.value = plano.nome;
+              valorMensalInput.value = plano.valor;
+            });
+          }
+
+          <% if (typeof success !== 'undefined' && success) { %>
+            window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
+          <% } %>
+
+          <% if (typeof error !== 'undefined' && error) { %>
+            window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
+          <% } %>
+        });
       </script>
   </body>
 

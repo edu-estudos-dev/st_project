@@ -3,6 +3,9 @@ import { atualizarStatusContato, listarContatos } from '../models/interessadosMo
 
 const STATUS_OPTIONS = ['trial', 'ativo', 'vencido', 'cancelado', 'bloqueado'];
 const BILLING_OPTIONS = ['', 'mensal', 'anual'];
+
+const PLAN_OPTIONS = ['', '1-ferramenta', '2-ferramentas', '3-ferramentas'];
+
 const PRODUCT_OPTIONS = [
   { value: 'BOLINHAS', label: 'Bolinhas' },
   { value: 'CONSIGNADOS', label: 'Consignados' },
@@ -24,6 +27,20 @@ const normalizeDateTime = (value) => {
 const normalizeText = (value) => {
   const normalized = String(value || '').trim();
   return normalized || null;
+};
+
+const normalizeMoney = (value) => {
+  const normalized = String(value || '').trim().replace(',', '.');
+
+  if (!normalized) return null;
+
+  const amount = Number(normalized);
+
+  if (!Number.isFinite(amount) || amount < 0) {
+    throw new Error('Informe um valor mensal valido.');
+  }
+
+  return amount;
 };
 
 const formatDateInput = (value) => {
@@ -81,6 +98,9 @@ class AdminAssinantesController {
       const id = Number(req.params.id);
       const statusAssinatura = String(req.body.status_assinatura || '').trim();
       const tipoCobranca = String(req.body.tipo_cobranca || '').trim();
+      const planoCodigo = String(req.body.plano_codigo || '').trim();
+      const planoNome = normalizeText(req.body.plano_nome);
+      const valorMensal = normalizeMoney(req.body.valor_mensal);
 
       if (!STATUS_OPTIONS.includes(statusAssinatura)) {
         throw new Error('Status da assinatura invalido.');
@@ -88,6 +108,10 @@ class AdminAssinantesController {
 
       if (!BILLING_OPTIONS.includes(tipoCobranca)) {
         throw new Error('Tipo de cobranca invalido.');
+      }
+
+      if (!PLAN_OPTIONS.includes(planoCodigo)) {
+        throw new Error('Plano invalido.');
       }
 
       const produtosHabilitados = Array.isArray(req.body.produtos_habilitados)
@@ -111,6 +135,9 @@ class AdminAssinantesController {
       await AssinanteModel.updateFromAdmin(id, {
         status_assinatura: statusAssinatura,
         tipo_cobranca: tipoCobranca || null,
+        plano_codigo: planoCodigo || null,
+        plano_nome: planoNome,
+        valor_mensal: valorMensal,
         trial_fim: normalizeDateTime(req.body.trial_fim),
         data_ativacao: normalizeDateTime(req.body.data_ativacao),
         data_vencimento: normalizeDateTime(req.body.data_vencimento),

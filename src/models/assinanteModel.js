@@ -5,6 +5,9 @@ const ADMIN_UPDATE_FIELDS = new Set([
   'status_assinatura',
   'tipo_cobranca',
   'produtos_habilitados',
+  'plano_codigo',
+  'plano_nome',
+  'valor_mensal',
   'trial_fim',
   'data_ativacao',
   'data_vencimento',
@@ -17,7 +20,10 @@ class AssinanteModel {
   async ensureProdutosHabilitadosColumn() {
     await connection.query(`
       ALTER TABLE assinantes
-      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
+      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT,
+      ADD COLUMN IF NOT EXISTS plano_codigo VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS plano_nome VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS valor_mensal NUMERIC(10, 2)
     `);
 
     await connection.query(`
@@ -89,7 +95,10 @@ class AssinanteModel {
         data_ativacao,
         data_vencimento,
         data_limite_exclusao,
-        produtos_habilitados
+        produtos_habilitados,
+        plano_codigo,
+        plano_nome,
+        valor_mensal
       FROM assinantes
       WHERE id = $1
       LIMIT 1`,
@@ -113,7 +122,10 @@ class AssinanteModel {
         data_ativacao,
         data_vencimento,
         data_limite_exclusao,
-        produtos_habilitados
+        produtos_habilitados,
+        plano_codigo,
+        plano_nome,
+        valor_mensal
       FROM assinantes
       WHERE user_id = $1
       LIMIT 1`,
@@ -142,6 +154,9 @@ class AssinanteModel {
         a.gateway_customer_id,
         a.gateway_subscription_id,
         a.produtos_habilitados,
+        a.plano_codigo,
+        a.plano_nome,
+        a.valor_mensal,
         a.created_at,
         a.updated_at
       FROM assinantes a
@@ -171,6 +186,9 @@ class AssinanteModel {
         a.data_vencimento,
         a.data_limite_exclusao,
         a.produtos_habilitados,
+        a.plano_codigo,
+        a.plano_nome,
+        a.valor_mensal,
         a.created_at,
         a.updated_at,
         COUNT(DISTINCT e.id)::int AS estabelecimentos,
