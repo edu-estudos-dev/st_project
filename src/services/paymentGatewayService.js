@@ -8,7 +8,7 @@ function getGatewayConfig() {
     baseUrl:
       process.env.PAYMENT_GATEWAY_ENV === 'production'
         ? 'https://api.asaas.com/v3'
-        : 'https://sandbox.asaas.com/api/v3',
+        : 'https://sandbox.asaas.com/api/v3'
   };
 }
 
@@ -40,11 +40,11 @@ async function createPaymentLink() {
   throw new Error('createPaymentLink ainda não implementado. Integração real pendente.');
 }
 
-module.exports = {
+export {
   getGatewayConfig,
   isGatewayConfigured,
   ensureGatewayConfigured,
   createCustomer,
   createSubscription,
-  createPaymentLink,
+  createPaymentLink
 };
