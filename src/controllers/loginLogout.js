@@ -21,6 +21,33 @@ const PRODUCT_OPTIONS = [
 const TRIAL_PRODUCTS = PRODUCT_OPTIONS.map((produto) => produto.value);
 const MIN_PASSWORD_LENGTH = 8;
 
+const PLAN_OPTIONS = {
+    '1-ferramenta': {
+        codigo: '1-ferramenta',
+        nome: 'Plano Essencial',
+        descricao: '1 ferramenta',
+        preco: 'R$ 24,90/mês',
+        valorMensal: 24.90,
+        limiteFerramentas: 1
+    },
+    '2-ferramentas': {
+        codigo: '2-ferramentas',
+        nome: 'Plano Operador',
+        descricao: '2 ferramentas',
+        preco: 'R$ 34,90/mês',
+        valorMensal: 34.90,
+        limiteFerramentas: 2
+    },
+    '3-ferramentas': {
+        codigo: '3-ferramentas',
+        nome: 'Plano Completo',
+        descricao: '3 ferramentas',
+        preco: 'R$ 44,90/mês',
+        valorMensal: 44.90,
+        limiteFerramentas: 3
+    }
+};
+
 class LoginLogoutController {
     login(req, res) {
         if (req.user) {
@@ -41,15 +68,21 @@ class LoginLogoutController {
             return res.redirect('/painel');
         }
 
+        const planoSelecionado = PLAN_OPTIONS[req.query.plano] || null;
+        const limiteFerramentas = planoSelecionado?.limiteFerramentas || TRIAL_PRODUCTS.length;
+        const produtosSelecionadosNoTrial = TRIAL_PRODUCTS.slice(0, limiteFerramentas);
+
         return res.render('pages/register', {
-            title: 'Cadastro de Usu�rio',
+            title: 'Cadastro de Usuário',
             error: req.query.error,
             formData: {
                 user: '',
                 email: '',
-                produtos_habilitados: TRIAL_PRODUCTS
+                plano: planoSelecionado?.codigo || '',
+                produtos_habilitados: produtosSelecionadosNoTrial
             },
-            productOptions: PRODUCT_OPTIONS
+            productOptions: PRODUCT_OPTIONS,
+            planoSelecionado
         });
     }
 
@@ -113,6 +146,7 @@ class LoginLogoutController {
         }
 
         const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
         if (!emailValido) {
             return res.status(400).render('pages/resendVerification', {
                 title: 'Reenviar verificacao',
@@ -190,6 +224,7 @@ class LoginLogoutController {
         }
 
         const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
         if (!emailValido) {
             return res.status(400).render('pages/forgotPassword', {
                 title: 'Recuperar Senha',
@@ -238,6 +273,7 @@ class LoginLogoutController {
         }
 
         const token = String(req.query.token ?? '').trim();
+
         if (!token) {
             return res.status(400).render('pages/resetPassword', {
                 title: 'Redefinir Senha',
@@ -386,6 +422,7 @@ class LoginLogoutController {
             return res.redirect('/painel?success=Login realizado com sucesso');
         } catch (error) {
             console.error('Erro ao processar o login:', error);
+
             return res.status(500).render('pages/login', {
                 title: 'Login',
                 erro: 'Erro no servidor. Tente novamente mais tarde.',
@@ -396,9 +433,12 @@ class LoginLogoutController {
     }
 
     async processRegister(req, res) {
+        const planoSelecionado = PLAN_OPTIONS[req.body.plano] || null;
+
         const formData = {
             user: String(req.body.user ?? '').trim(),
             email: String(req.body.email ?? '').trim(),
+            plano: planoSelecionado?.codigo || '',
             produtos_habilitados: Array.isArray(req.body.produtos_habilitados)
                 ? req.body.produtos_habilitados
                 : [req.body.produtos_habilitados].filter(Boolean)
@@ -411,47 +451,66 @@ class LoginLogoutController {
 
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usuário',
                     error: 'Preencha nome de usuário, e-mail, senha e confirmação de senha.',
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
             if (!produtosHabilitados.length) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de UsuÃ¡rio',
+                    title: 'Cadastro de Usuário',
                     error: 'Selecione pelo menos uma frente da sua operação.',
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
+                });
+            }
+
+            if (planoSelecionado && produtosHabilitados.length > planoSelecionado.limiteFerramentas) {
+                return res.status(400).render('pages/register', {
+                    title: 'Cadastro de Usuário',
+                    error: `Este plano permite escolher até ${planoSelecionado.limiteFerramentas} ferramenta${planoSelecionado.limiteFerramentas > 1 ? 's' : ''}.`,
+                    formData: {
+                        ...formData,
+                        produtos_habilitados: produtosHabilitados.slice(0, planoSelecionado.limiteFerramentas)
+                    },
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
             const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+
             if (!emailValido) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usuário',
                     error: 'Informe um e-mail válido.',
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
             if (senha.length < MIN_PASSWORD_LENGTH) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usuário',
                     error: `A senha precisa ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`,
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
             if (senha !== confirmarSenha) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usuário',
                     error: 'A confirmação de senha não confere.',
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
@@ -459,15 +518,19 @@ class LoginLogoutController {
                 user: formData.user,
                 email: formData.email,
                 senha,
-                produtos_habilitados: produtosHabilitados
+                produtos_habilitados: produtosHabilitados,
+                plano_codigo: planoSelecionado?.codigo || null,
+                plano_nome: planoSelecionado?.nome || null,
+                valor_mensal: planoSelecionado?.valorMensal || null
             });
 
             if (result?.error) {
                 return res.status(409).render('pages/register', {
-                    title: 'Cadastro de Usu�rio',
+                    title: 'Cadastro de Usuário',
                     error: result.error,
                     formData,
-                    productOptions: PRODUCT_OPTIONS
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
                 });
             }
 
@@ -487,11 +550,13 @@ class LoginLogoutController {
             });
         } catch (error) {
             console.error('Erro ao processar o cadastro:', error);
+
             return res.status(500).render('pages/register', {
-                title: 'Cadastro de Usu�rio',
+                title: 'Cadastro de Usuário',
                 error: 'Erro no servidor. Tente novamente mais tarde.',
                 formData,
-                productOptions: PRODUCT_OPTIONS
+                productOptions: PRODUCT_OPTIONS,
+                planoSelecionado
             });
         }
     }
@@ -499,6 +564,7 @@ class LoginLogoutController {
     logout(req, res) {
         res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
         res.clearCookie('connect.sid');
+
         return res.redirect('/login?success=Logout realizado com sucesso');
     }
 }

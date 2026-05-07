@@ -302,6 +302,19 @@ html:has(.pricing-page) {
   line-height: 1.72;
 }
 
+.pricing-hero .pricing-value-line {
+  width: fit-content;
+  margin-top: 1.15rem;
+  padding: 0.68rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  background: rgba(34, 197, 94, 0.12);
+  color: #dcfce7;
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
 .pricing-hero-actions {
   display: flex;
   flex-wrap: wrap;

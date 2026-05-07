@@ -41,7 +41,7 @@ const homepageFaqJsonLd = {
       name: 'Quanto custa?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Os planos começam em R$ 19,90 por mês para uma ferramenta. Você pode escolher entre controle de máquinas de bolinhas, consignados e pelúcias. Com duas ferramentas, o plano fica R$ 24,90 por mês. Para usar as três, o plano completo fica R$ 29,90 por mês.'
+        text: 'Os planos começam em R$ 24,90 por mês para uma ferramenta. Você pode escolher entre controle de máquinas de bolinhas, consignados e pelúcias. Com duas ferramentas, o plano fica R$ 34,90 por mês. Para usar as três, o plano completo fica R$ 44,90 por mês.'
       }
     },
     {
@@ -117,7 +117,7 @@ class HomepageController {
         {
           '@type': 'Offer',
           name: 'Plano Essencial - 1 ferramenta',
-          price: '19.90',
+          price: '24.90',
           priceCurrency: 'BRL',
           availability: 'https://schema.org/InStock',
           url: canonicalUrl,
@@ -127,7 +127,7 @@ class HomepageController {
         {
           '@type': 'Offer',
           name: 'Plano Operador - 2 ferramentas',
-          price: '24.90',
+          price: '34.90',
           priceCurrency: 'BRL',
           availability: 'https://schema.org/InStock',
           url: canonicalUrl,
@@ -137,7 +137,7 @@ class HomepageController {
         {
           '@type': 'Offer',
           name: 'Plano Completo - 3 ferramentas',
-          price: '29.90',
+          price: '44.90',
           priceCurrency: 'BRL',
           availability: 'https://schema.org/InStock',
           url: canonicalUrl,
@@ -150,7 +150,7 @@ class HomepageController {
     return res.render('pages/precos', {
       title: 'Preços | VendMaster',
       metaDescription:
-        'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos a partir de R$ 19,90 por mês.',
+        'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos a partir de R$ 24,90 por mês.',
       canonicalUrl,
       breadcrumbJsonLd,
       offerCatalogJsonLd,

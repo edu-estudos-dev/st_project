@@ -371,12 +371,12 @@ figure {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.58rem;
   height: calc(100svh - 1.4rem);
   max-height: calc(100svh - 1.4rem);
   min-height: 0;
   overflow: hidden;
-  padding: 1.05rem 0.85rem 0.75rem;
+  padding: 1rem 0.85rem 0.72rem;
   border-radius: 24px;
   color: #fff;
   background:
@@ -471,8 +471,8 @@ figure {
   align-items: center;
   justify-content: space-between;
   gap: 0.65rem;
-  min-height: 39px;
-  padding: 0.58rem 0.68rem;
+  min-height: 36px;
+  padding: 0.5rem 0.68rem;
   border-radius: 13px;
   color: #f8fafc;
   text-decoration: none;
@@ -510,7 +510,7 @@ figure {
 .dashboard-sidebar-alert {
   display: grid;
   gap: 0.18rem;
-  padding: 0.62rem 0.68rem;
+  padding: 0.52rem 0.68rem;
   border-radius: 14px;
   color: #f8fafc;
   text-decoration: none;
@@ -551,6 +551,7 @@ figure {
 .dashboard-sidebar-footer {
   margin-top: 0;
   padding-top: 0.2rem;
+  flex: 0 0 auto;
 }
 
 .dashboard-logout-btn {
@@ -1440,17 +1441,6 @@ figure {
 @media (max-height: 760px) {
   .dashboard-sidebar {
     justify-content: flex-start;
-    overflow-y: auto;
-    scrollbar-width: thin;
-  }
-
-  .dashboard-sidebar::-webkit-scrollbar {
-    width: 7px;
-  }
-
-  .dashboard-sidebar::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.18);
   }
 }
 
@@ -6017,6 +6007,16 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .tab
   font-size: var(--vm-font-inner-title);
   line-height: var(--vm-line-title);
   letter-spacing: -0.032em;
+}
+
+body.dashboard-body .dashboard-sidebar-title {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.75);
+  font-size: 0.72rem;
+  line-height: 1.1;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h3,

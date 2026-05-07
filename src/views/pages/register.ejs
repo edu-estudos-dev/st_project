@@ -105,11 +105,24 @@
 
                     <div>
                         <h2>Criar conta</h2>
-                        <p>Crie sua conta e teste todas as ferramentas por 30 dias. A escolha do plano acontece depois.</p>
+
+                        <% if (typeof planoSelecionado !== 'undefined' && planoSelecionado) { %>
+                            <p>
+                                Plano escolhido:
+                                <strong><%= planoSelecionado.nome %></strong>
+                                — <%= planoSelecionado.descricao %>
+                                — <%= planoSelecionado.preco %>.
+                                Você terá 30 dias grátis para testar antes de assinar.
+                            </p>
+                        <% } else { %>
+                            <p>Crie sua conta e teste todas as ferramentas por 30 dias. A escolha do plano acontece depois.</p>
+                        <% } %>
                     </div>
                 </div>
 
                 <form action="/register" method="POST" class="auth-form" id="registerForm" autocomplete="on" novalidate>
+                    <input type="hidden" name="plano" value="<%= formData?.plano || '' %>">
+
                     <div class="auth-field">
                         <label for="user">Nome</label>
 
@@ -233,10 +246,22 @@
                     <small class="auth-note" id="confirmarSenhaHint">
                         A confirmação precisa ser idêntica à senha informada acima.
                     </small>
+
                     <div class="auth-trial-products">
                         <div class="auth-trial-products-header">
                             <strong>Ferramentas do trial</strong>
-                            <span>Escolha o que deseja testar agora.</span>
+
+                            <span>
+                                <% if (typeof planoSelecionado !== 'undefined' && planoSelecionado?.codigo === '1-ferramenta') { %>
+                                    Escolha 1 ferramenta para testar agora.
+                                <% } else if (typeof planoSelecionado !== 'undefined' && planoSelecionado?.codigo === '2-ferramentas') { %>
+                                    Escolha até 2 ferramentas para testar agora.
+                                <% } else if (typeof planoSelecionado !== 'undefined' && planoSelecionado?.codigo === '3-ferramentas') { %>
+                                    As 3 ferramentas estão incluídas neste plano.
+                                <% } else { %>
+                                    Escolha o que deseja testar agora.
+                                <% } %>
+                            </span>
                         </div>
 
                         <div class="auth-trial-products-grid">
@@ -255,7 +280,7 @@
                             <% }) %>
                         </div>
 
-                        <small class="auth-note">Durante o trial vocÃª pode alterar essa seleÃ§Ã£o depois em Assinatura &gt; Produtos.</small>
+                        <small class="auth-note">Durante o trial você pode alterar essa seleção depois em Assinatura &gt; Produtos.</small>
                     </div>
 
                     <button type="submit" class="auth-submit">
@@ -280,6 +305,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const maxTrialProducts = <%= planoSelecionado?.limiteFerramentas || 0 %>;
+
             document.querySelectorAll('[data-toggle-password]').forEach((button) => {
                 button.addEventListener('click', () => {
                     const targetId = button.getAttribute('data-toggle-password');
@@ -299,6 +326,29 @@
             const senhaInput = document.getElementById('senha');
             const confirmarSenhaInput = document.getElementById('confirmarSenha');
             const hint = document.getElementById('confirmarSenhaHint');
+            const productCheckboxes = Array.from(
+                form.querySelectorAll('input[name="produtos_habilitados"]')
+            );
+
+            const getSelectedProductsCount = () => {
+                return productCheckboxes.filter((checkbox) => checkbox.checked).length;
+            };
+
+            productCheckboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    if (!maxTrialProducts) return;
+
+                    const selectedCount = getSelectedProductsCount();
+
+                    if (selectedCount > maxTrialProducts) {
+                        checkbox.checked = false;
+
+                        window.AppAlerts?.warning(
+                            `Este plano permite escolher até ${maxTrialProducts} ferramenta${maxTrialProducts > 1 ? 's' : ''}.`
+                        );
+                    }
+                });
+            });
 
             const syncPasswordValidation = () => {
                 const senha = senhaInput.value;
@@ -331,13 +381,19 @@
             form.addEventListener('submit', (event) => {
                 syncPasswordValidation();
 
-                const hasSelectedProduct = Array.from(
-                    form.querySelectorAll('input[name="produtos_habilitados"]')
-                ).some((checkbox) => checkbox.checked);
+                const selectedProductsCount = getSelectedProductsCount();
 
-                if (!hasSelectedProduct) {
+                if (!selectedProductsCount) {
                     event.preventDefault();
                     window.AppAlerts?.warning('Selecione pelo menos uma ferramenta para testar no trial.');
+                    return;
+                }
+
+                if (maxTrialProducts && selectedProductsCount > maxTrialProducts) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning(
+                        `Este plano permite escolher até ${maxTrialProducts} ferramenta${maxTrialProducts > 1 ? 's' : ''}.`
+                    );
                     return;
                 }
 

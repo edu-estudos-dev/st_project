@@ -42,7 +42,10 @@ class LoginLogout {
   }
 
   hashResetToken(token) {
-    return crypto.createHash('sha256').update(String(token ?? ''), 'utf8').digest('hex');
+    return crypto
+      .createHash('sha256')
+      .update(String(token ?? ''), 'utf8')
+      .digest('hex');
   }
 
   async ensurePasswordResetTable() {
@@ -176,6 +179,7 @@ class LoginLogout {
 
     const normalizedUser = this.normalizeUser(user);
     const normalizedEmail = this.normalizeEmail(user);
+
     if (!normalizedUser || !senha) {
       throw new Error('User and password must be provided');
     }
@@ -208,10 +212,10 @@ class LoginLogout {
       if (this.isBcryptHash(senhaSalva) && senhaSalva.length >= 60) {
         senhaValida = await bcrypt.compare(String(senha), senhaSalva);
       } else if (this.isBcryptHash(senhaSalva)) {
-        return null; // hash bcrypt inválido (tamanho errado)
+        return null;
       } else {
-        // Senha legacy (texto puro)
         senhaValida = this.comparePlainText(senhaSalva, senha);
+
         if (senhaValida) {
           await this.migrateLegacyPassword(usuario.id, senha);
         }
@@ -268,7 +272,15 @@ class LoginLogout {
   /**
    * Cria novo usuário (com hash bcrypt)
    */
-  async createUser({ user, email, senha, produtos_habilitados }) {
+  async createUser({
+    user,
+    email,
+    senha,
+    produtos_habilitados,
+    plano_codigo = null,
+    plano_nome = null,
+    valor_mensal = null
+  }) {
     await this.ensureEmailVerificationTable();
 
     const normalizedUser = this.normalizeUser(user);
@@ -285,9 +297,13 @@ class LoginLogout {
     );
 
     if (existingUser) {
-      if (this.normalizeUser(existingUser.username).toLowerCase() === normalizedUser.toLowerCase()) {
+      if (
+        this.normalizeUser(existingUser.username).toLowerCase() ===
+        normalizedUser.toLowerCase()
+      ) {
         return { error: 'Este nome de usuário já está em uso.' };
       }
+
       return { error: 'Este e-mail já está cadastrado.' };
     }
 
@@ -305,8 +321,12 @@ class LoginLogout {
       );
 
       const userId = result.rows[0].id;
+
       const assinante = await this.createAssinanteForUser(client, userId, {
-        produtos_habilitados
+        produtos_habilitados,
+        plano_codigo,
+        plano_nome,
+        valor_mensal
       });
 
       await client.query('COMMIT');
@@ -323,7 +343,9 @@ class LoginLogout {
       await client.query('ROLLBACK');
 
       if (error?.code === '23505') {
-        const detail = String(error.detail || error.constraint || '').toLowerCase();
+        const detail = String(
+          error.detail || error.constraint || ''
+        ).toLowerCase();
 
         if (detail.includes('username')) {
           return { error: 'Este nome de usuário já está em uso.' };
@@ -351,11 +373,19 @@ class LoginLogout {
     const dataAtivacao = overrides.data_ativacao ?? null;
     const dataVencimento = overrides.data_vencimento ?? null;
     const dataLimiteExclusao = overrides.data_limite_exclusao ?? null;
-    const produtosHabilitados = serializeProdutos(overrides.produtos_habilitados || TRIAL_PRODUCTS);
+    const produtosHabilitados = serializeProdutos(
+      overrides.produtos_habilitados || TRIAL_PRODUCTS
+    );
+    const planoCodigo = overrides.plano_codigo ?? null;
+    const planoNome = overrides.plano_nome ?? null;
+    const valorMensal = overrides.valor_mensal ?? null;
 
     await client.query(`
       ALTER TABLE assinantes
-      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
+      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT,
+      ADD COLUMN IF NOT EXISTS plano_codigo VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS plano_nome VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS valor_mensal NUMERIC(10, 2)
     `);
 
     const result = await client.query(
@@ -364,6 +394,9 @@ class LoginLogout {
         status_assinatura,
         tipo_cobranca,
         produtos_habilitados,
+        plano_codigo,
+        plano_nome,
+        valor_mensal,
         trial_inicio,
         trial_fim,
         data_ativacao,
@@ -372,14 +405,18 @@ class LoginLogout {
         created_at,
         updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW())
       RETURNING id, user_id, status_assinatura, tipo_cobranca, trial_inicio, trial_fim,
-                data_ativacao, data_vencimento, data_limite_exclusao, produtos_habilitados`,
+                data_ativacao, data_vencimento, data_limite_exclusao,
+                produtos_habilitados, plano_codigo, plano_nome, valor_mensal`,
       [
         userId,
         statusAssinatura,
         tipoCobranca,
         produtosHabilitados,
+        planoCodigo,
+        planoNome,
+        valorMensal,
         trialInicio,
         trialFim,
         dataAtivacao,
@@ -393,6 +430,7 @@ class LoginLogout {
 
   async ensureAssinanteForUser(userId, userInfo = {}) {
     const existingAssinante = await this.findAssinanteByUserId(userId);
+
     if (existingAssinante) {
       return existingAssinante;
     }
@@ -401,7 +439,12 @@ class LoginLogout {
 
     try {
       await client.query('BEGIN');
-      const createdAssinante = await this.createAssinanteForUser(client, userId);
+
+      const createdAssinante = await this.createAssinanteForUser(
+        client,
+        userId
+      );
+
       await client.query('COMMIT');
 
       if (userInfo.username) {
@@ -423,6 +466,7 @@ class LoginLogout {
     await this.ensureUserEmailVerificationColumn();
 
     const normalizedEmail = this.normalizeEmail(email);
+
     if (!normalizedEmail) return null;
 
     const result = await connection.query(
@@ -437,6 +481,7 @@ class LoginLogout {
     await this.ensurePasswordResetTable();
 
     const user = await this.findUserByEmail(email);
+
     if (!user) return null;
 
     const rawToken = crypto.randomBytes(32).toString('hex');
@@ -490,6 +535,7 @@ class LoginLogout {
 
   async createEmailVerificationTokenByEmail(email) {
     const user = await this.findUserByEmail(email);
+
     if (!user || user.email_verified_at) return null;
 
     const token = await this.createEmailVerificationToken(user.id);
@@ -509,6 +555,7 @@ class LoginLogout {
       await client.query('BEGIN');
 
       const tokenHash = this.hashEmailVerificationToken(rawToken);
+
       const tokenResult = await client.query(
         `SELECT evt.id, evt.user_id, evt.expires_at, evt.used_at
          FROM email_verification_tokens evt
@@ -518,25 +565,46 @@ class LoginLogout {
       );
 
       const tokenRecord = tokenResult.rows[0];
+
       if (!tokenRecord) {
         await client.query('ROLLBACK');
-        return { success: false, error: 'Token invalido.' };
+
+        return {
+          success: false,
+          error: 'Token invalido.'
+        };
       }
 
       const expiresAt = new Date(tokenRecord.expires_at);
-      if (tokenRecord.used_at || Number.isNaN(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+
+      if (
+        tokenRecord.used_at ||
+        Number.isNaN(expiresAt.getTime()) ||
+        expiresAt.getTime() <= Date.now()
+      ) {
         await client.query('ROLLBACK');
-        return { success: false, error: 'Este link de verificacao expirou. Solicite um novo.' };
+
+        return {
+          success: false,
+          error: 'Este link de verificacao expirou. Solicite um novo.'
+        };
       }
 
-      await client.query('UPDATE users SET email_verified_at = NOW() WHERE id = $1', [tokenRecord.user_id]);
+      await client.query(
+        'UPDATE users SET email_verified_at = NOW() WHERE id = $1',
+        [tokenRecord.user_id]
+      );
+
       await client.query(
         'UPDATE email_verification_tokens SET used_at = NOW() WHERE user_id = $1 AND used_at IS NULL',
         [tokenRecord.user_id]
       );
 
       await client.query('COMMIT');
-      return { success: true };
+
+      return {
+        success: true
+      };
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
@@ -549,6 +617,7 @@ class LoginLogout {
     await this.ensurePasswordResetTable();
 
     const tokenHash = this.hashResetToken(rawToken);
+
     const result = await connection.query(
       `SELECT prt.id, prt.user_id, prt.expires_at, prt.used_at, u.username, u.email
        FROM password_reset_tokens prt
@@ -563,10 +632,16 @@ class LoginLogout {
 
   async getValidPasswordResetToken(rawToken) {
     const record = await this.getPasswordResetTokenRecord(rawToken);
+
     if (!record) return null;
 
     const expiresAt = new Date(record.expires_at);
-    if (record.used_at || Number.isNaN(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+
+    if (
+      record.used_at ||
+      Number.isNaN(expiresAt.getTime()) ||
+      expiresAt.getTime() <= Date.now()
+    ) {
       return null;
     }
 
@@ -582,6 +657,7 @@ class LoginLogout {
       await client.query('BEGIN');
 
       const tokenHash = this.hashResetToken(rawToken);
+
       const tokenResult = await client.query(
         `SELECT id, user_id, expires_at, used_at
          FROM password_reset_tokens
@@ -591,27 +667,48 @@ class LoginLogout {
       );
 
       const tokenRecord = tokenResult.rows[0];
+
       if (!tokenRecord) {
         await client.query('ROLLBACK');
-        return { success: false, error: 'Token inválido.' };
+
+        return {
+          success: false,
+          error: 'Token inválido.'
+        };
       }
 
       const expiresAt = new Date(tokenRecord.expires_at);
-      if (tokenRecord.used_at || Number.isNaN(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+
+      if (
+        tokenRecord.used_at ||
+        Number.isNaN(expiresAt.getTime()) ||
+        expiresAt.getTime() <= Date.now()
+      ) {
         await client.query('ROLLBACK');
-        return { success: false, error: 'Este link de redefinição expirou. Solicite um novo.' };
+
+        return {
+          success: false,
+          error: 'Este link de redefinição expirou. Solicite um novo.'
+        };
       }
 
       const senhaHash = await bcrypt.hash(String(senha), 12);
 
-      await client.query('UPDATE users SET senha = $1 WHERE id = $2', [senhaHash, tokenRecord.user_id]);
+      await client.query('UPDATE users SET senha = $1 WHERE id = $2', [
+        senhaHash,
+        tokenRecord.user_id
+      ]);
+
       await client.query(
         'UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = $1 AND used_at IS NULL',
         [tokenRecord.user_id]
       );
 
       await client.query('COMMIT');
-      return { success: true };
+
+      return {
+        success: true
+      };
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
