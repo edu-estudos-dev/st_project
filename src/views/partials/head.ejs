@@ -136,7 +136,7 @@
     <% } %>
 
     <% if (typeof skipGlobalStyles === 'undefined' || !skipGlobalStyles) { %>
-        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/styles.css?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>">
     <% } %>
 
     <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>

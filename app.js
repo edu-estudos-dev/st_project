@@ -1,6 +1,7 @@
 import express from 'express';
 import compression from 'compression';
 import path from 'path';
+import { statSync } from 'fs';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
@@ -56,6 +57,11 @@ app.disable('x-powered-by');
 app.set('trust proxy', 1);
 
 const viewsDir = path.join(__dirname, 'src/views');
+const globalStylesPath = path.join(__dirname, 'public/css/styles.css');
+const assetVersion =
+  process.env.ASSET_VERSION ||
+  String(Math.floor(statSync(globalStylesPath).mtimeMs));
+
 app.set('views', viewsDir);
 app.set('view engine', 'ejs');
 
@@ -136,6 +142,8 @@ app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
+  res.locals.assetVersion = assetVersion;
+
   res.locals.navigationProducts = res.locals.navigationProducts || {
     bolinhas: false,
     figurinhas: false,
