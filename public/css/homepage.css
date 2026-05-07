@@ -3219,7 +3219,12 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #solucao .vm-dashboard-slide-wide-panel {
-    min-height: 435px !important;
+    min-height: 625px !important;
+    padding-top: 0 !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-wide-panel .vm-dashboard-browser-bar {
+    display: none !important;
   }
 
   .homepage-body #solucao .vm-dashboard-print-frame {
@@ -3266,9 +3271,10 @@ html:has(.homepage-body) {
      {
     position: relative !important;
     inset: auto !important;
-    width: min(62%, 220px) !important;
-    height: 330px !important;
-    min-height: 330px !important;
+    width: min(86vw, 275px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 335 / 650 !important;
     max-height: none !important;
     margin: 0 auto 0 !important;
     background: #eef5ff !important;
@@ -3326,7 +3332,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #solucao .vm-dashboard-carousel-indicators {
-    display: flex !important;
+    display: none !important;
     top: 0.72rem !important;
     bottom: auto !important;
     margin: 0 !important;
@@ -3466,7 +3472,12 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #solucao .vm-dashboard-slide-wide-panel {
-    min-height: 410px !important;
+    min-height: 595px !important;
+    padding-top: 0 !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-wide-panel .vm-dashboard-browser-bar {
+    display: none !important;
   }
 
   .homepage-body #solucao .vm-dashboard-print-frame {
@@ -3509,9 +3520,10 @@ html:has(.homepage-body) {
      {
     position: relative !important;
     inset: auto !important;
-    width: min(64%, 205px) !important;
-    height: 310px !important;
-    min-height: 310px !important;
+    width: min(86vw, 255px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 335 / 650 !important;
     max-height: none !important;
     margin: 0 auto 0 !important;
     background: #eef5ff !important;
