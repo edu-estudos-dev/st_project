@@ -48,6 +48,18 @@ export const resetPasswordRateLimiter = rateLimit({
     }
 });
 
+export const contactRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    handler: (req, res) => {
+        return res.status(429).json({
+            message: 'Muitas tentativas de contato. Aguarde alguns minutos e tente novamente.'
+        });
+    }
+});
+
 export const disableAuthenticatedCache = (req, res, next) => {
     if (req.user) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');

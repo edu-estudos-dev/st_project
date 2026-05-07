@@ -434,10 +434,10 @@ class EstabelecimentoModel {
       console.error('Erro ao carregar produtos disponiveis para o menu:', error);
 
       return {
-        bolinhas: true,
-        figurinhas: true,
-        pelucias: true,
-        hasAny: true
+        bolinhas: false,
+        figurinhas: false,
+        pelucias: false,
+        hasAny: false
       };
     }
   };

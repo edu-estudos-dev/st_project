@@ -1,8 +1,67 @@
 import LancamentoModel from '../models/lancamentoModel.js';
 import { addMonths } from 'date-fns';
+import { hasProduto } from '../utilities/produtoUtils.js';
 
 const isParcelado = ({ entrada_saida, qtde_de_parcelas }) =>
   entrada_saida === 'Saida' && Number(qtde_de_parcelas || 0) > 1;
+
+const TIPOS_POR_MOVIMENTO = {
+  Entrada: new Set(['receita_dos_pontos', 'incremento_de_capital']),
+  Saida: new Set(['compra', 'extra', 'pro-labore', 'gastos_recorrentes', 'bonus'])
+};
+
+const FORMAS_PAGAMENTO = new Set(['boleto', 'credito', 'pix', 'especie']);
+
+const validateLancamentoPayload = ({
+  payload,
+  usuario,
+  allowCurrentProduct = null
+}) => {
+  const {
+    entrada_saida,
+    tipo_de_lancamento,
+    produto,
+    forma_de_pagamento,
+    qtde_de_parcelas,
+    valor
+  } = payload;
+
+  if (!['Entrada', 'Saida'].includes(entrada_saida)) {
+    throw new Error('Entrada ou saida invalida.');
+  }
+
+  if (!TIPOS_POR_MOVIMENTO[entrada_saida]?.has(tipo_de_lancamento)) {
+    throw new Error('Tipo de lancamento nao corresponde a entrada ou saida.');
+  }
+
+  if (!FORMAS_PAGAMENTO.has(forma_de_pagamento)) {
+    throw new Error('Forma de pagamento invalida.');
+  }
+
+  const parcelas = Number(qtde_de_parcelas);
+  if (!Number.isInteger(parcelas) || parcelas < 1 || parcelas > 120) {
+    throw new Error('Quantidade de parcelas invalida.');
+  }
+
+  const valorNumerico = Number(valor);
+  if (!Number.isFinite(valorNumerico) || valorNumerico <= 0) {
+    throw new Error('Informe um valor maior que zero.');
+  }
+
+  const produtoLiberado = hasProduto(
+    usuario?.assinatura?.produtos_habilitados,
+    produto
+  );
+
+  if (!produtoLiberado && produto !== allowCurrentProduct) {
+    throw new Error('Produto nao liberado para este assinante.');
+  }
+
+  return {
+    parcelas,
+    valorNumerico
+  };
+};
 
 class LancamentoController {
   index = async (req, res) => {
@@ -97,11 +156,16 @@ class LancamentoController {
     }
 
     try {
+      const { parcelas, valorNumerico } = validateLancamentoPayload({
+        payload: req.body,
+        usuario
+      });
+
       if (isParcelado({ entrada_saida, qtde_de_parcelas })) {
-        const valorParcela = valor / qtde_de_parcelas;
+        const valorParcela = valorNumerico / parcelas;
         const baseVencimento = new Date(`${vencimento}T00:00:00`);
 
-        for (let i = 0; i < qtde_de_parcelas; i++) {
+        for (let i = 0; i < parcelas; i++) {
           const vencimentoParcela = addMonths(baseVencimento, i).toISOString().split('T')[0];
           await LancamentoModel.create({
             assinante_id: usuario.assinante_id,
@@ -111,9 +175,9 @@ class LancamentoController {
             produto,
             forma_de_pagamento,
             vencimento: vencimentoParcela,
-            qtde_de_parcelas,
+            qtde_de_parcelas: parcelas,
             valor: valorParcela,
-            descricao: `${descricao} - Parcela ${i + 1}/${qtde_de_parcelas}`,
+            descricao: `${descricao} - Parcela ${i + 1}/${parcelas}`,
             usuario
           });
         }
@@ -126,8 +190,8 @@ class LancamentoController {
           produto,
           forma_de_pagamento,     
           vencimento: vencimento || null,
-          qtde_de_parcelas,
-          valor,
+          qtde_de_parcelas: parcelas,
+          valor: valorNumerico,
           descricao,
           usuario
         });
@@ -204,6 +268,21 @@ class LancamentoController {
     }
 
     try {
+      const lancamentoAtual = await LancamentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!lancamentoAtual) {
+        return res.status(404).send('LanÃ§amento nÃ£o encontrado.');
+      }
+
+      const { parcelas, valorNumerico } = validateLancamentoPayload({
+        payload: req.body,
+        usuario,
+        allowCurrentProduct: lancamentoAtual.produto
+      });
+
       await LancamentoModel.update(id, usuario.assinante_id, {
         entrada_saida,
         data,
@@ -211,8 +290,8 @@ class LancamentoController {
         produto,
         forma_de_pagamento,
         vencimento: vencimento || null,
-        qtde_de_parcelas,
-        valor,
+        qtde_de_parcelas: parcelas,
+        valor: valorNumerico,
         descricao
       });
 
@@ -226,8 +305,8 @@ class LancamentoController {
           produto,
           forma_de_pagamento,
           vencimento,
-          qtde_de_parcelas,
-          valor,
+          qtde_de_parcelas: parcelas,
+          valor: valorNumerico,
           descricao
         },
         success: 'Lançamento atualizado com sucesso!',

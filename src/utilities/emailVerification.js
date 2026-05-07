@@ -1,5 +1,12 @@
 import { sendMail } from './mailer.js';
 
+const escapeHtml = value => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 export const buildEmailVerificationUrl = (req, token) => {
     const configuredBaseUrl = String(process.env.EMAIL_VERIFICATION_BASE_URL || process.env.PASSWORD_RESET_BASE_URL || '')
         .trim()
@@ -15,6 +22,9 @@ export const shouldExposeEmailVerificationLink = () => {
 const buildEmailVerificationEmail = ({ user, verificationUrl }) => {
     const appName = String(process.env.APP_NAME || 'VendMaster').trim();
     const username = String(user?.username || 'usuario').trim();
+    const safeAppName = escapeHtml(appName);
+    const safeUsername = escapeHtml(username);
+    const safeVerificationUrl = escapeHtml(verificationUrl);
     const subject = `${appName} - confirme seu e-mail`;
     const text = [
         `Ola, ${username}.`,
@@ -27,16 +37,16 @@ const buildEmailVerificationEmail = ({ user, verificationUrl }) => {
     ].join('\n');
     const html = `
         <div style="font-family: Arial, sans-serif; color: #1f2a44; line-height: 1.6; max-width: 640px; margin: 0 auto; padding: 24px;">
-            <h1 style="margin: 0 0 16px; font-size: 28px; color: #1b2340;">${appName}</h1>
-            <p>Ola, <strong>${username}</strong>.</p>
+            <h1 style="margin: 0 0 16px; font-size: 28px; color: #1b2340;">${safeAppName}</h1>
+            <p>Ola, <strong>${safeUsername}</strong>.</p>
             <p>Confirme seu e-mail para liberar o acesso ao VendMaster.</p>
             <p style="margin: 24px 0;">
-                <a href="${verificationUrl}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 700;">
+                <a href="${safeVerificationUrl}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 700;">
                     Confirmar e-mail
                 </a>
             </p>
             <p>Se o botao nao abrir, copie e cole este link no navegador:</p>
-            <p><a href="${verificationUrl}">${verificationUrl}</a></p>
+            <p><a href="${safeVerificationUrl}">${safeVerificationUrl}</a></p>
             <p>Se voce nao criou esta conta, ignore este e-mail.</p>
         </div>
     `;

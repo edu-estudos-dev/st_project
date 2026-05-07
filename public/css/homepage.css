@@ -2809,6 +2809,35 @@ html:has(.homepage-body) {
 .homepage-body #solucao .vm-dashboard-slide-panel .vm-dashboard-print-frame img {
   object-fit: cover !important;
   object-position: center top !important;
+  transform: none !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-overview .vm-dashboard-print-frame {
+  background: #ffffff !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-overview .vm-dashboard-print-frame img {
+  object-fit: cover !important;
+  object-position: center top !important;
+  transform: none !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-wide-panel .vm-dashboard-print-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important;
+  object-position: center top !important;
+  transform: none !important;
+}
+
+.homepage-body #solucao .vm-dashboard-slide-wide-panel .vm-dashboard-print-frame {
+  position: absolute !important;
+  inset: 1rem 1rem 4.85rem 1rem !important;
+  width: auto !important;
+  aspect-ratio: auto !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
 }
 
 .homepage-body #solucao .vm-dashboard-slide-route .vm-dashboard-print-frame img {
@@ -3213,7 +3242,43 @@ html:has(.homepage-body) {
     img {
     object-fit: cover !important;
     object-position: center top !important;
-    transform: scale(1.035) !important;
+    transform: none !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-overview
+    .vm-dashboard-print-frame
+    img {
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-wide-panel
+    .vm-dashboard-print-frame
+     {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 225px !important;
+    min-height: 225px !important;
+    max-height: none !important;
+    margin: 0 auto 0 !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-wide-panel
+    .vm-dashboard-print-frame
+    img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    object-position: center top !important;
+    transform: none !important;
   }
 
   .homepage-body
@@ -3411,7 +3476,43 @@ html:has(.homepage-body) {
     img {
     object-fit: cover !important;
     object-position: center top !important;
-    transform: scale(1.03) !important;
+    transform: none !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-overview
+    .vm-dashboard-print-frame
+    img {
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-wide-panel
+    .vm-dashboard-print-frame
+     {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 212px !important;
+    min-height: 212px !important;
+    max-height: none !important;
+    margin: 0 auto 0 !important;
+  }
+
+  .homepage-body
+    #solucao
+    .vm-dashboard-slide-wide-panel
+    .vm-dashboard-print-frame
+    img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    object-position: center top !important;
+    transform: none !important;
   }
 
   .homepage-body

@@ -2,6 +2,7 @@ import BolinhasSangriaModel from '../models/BolinhasModel.js';
 import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
+import { recalculateConsolidatedRevenueForDates } from '../services/monthlyRevenueConsolidation.js';
 
 class BolinhasController {
 
@@ -93,6 +94,12 @@ addSangria = async (req, res) => {
 
     const sangriaId = sangriaResult?.rows?.[0]?.id || null;
 
+    await recalculateConsolidatedRevenueForDates({
+      produto: 'bolinhas',
+      assinanteId: usuario.assinante_id,
+      dates: [data_sangria]
+    });
+
     if (origem === 'rota' && visita_id && rota_ponto_id) {
       const retornoSeguro =
         retorno_url && String(retorno_url).startsWith('/rotas')
@@ -103,6 +110,19 @@ addSangria = async (req, res) => {
         rota_retorno_url && String(rota_retorno_url).startsWith('/rotas')
           ? String(rota_retorno_url)
           : '/rotas';
+
+      const visitaDaRota = await VisitasModel.findVisitaById(
+        visita_id,
+        usuario.assinante_id
+      );
+
+      if (
+        !visitaDaRota ||
+        Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimento_id) ||
+        Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
+      ) {
+        throw new Error('A visita informada nao pertence a este ponto da rota.');
+      }
 
       await VisitasModel.marcarProdutoRegistrado({
         visita_id,
@@ -236,6 +256,15 @@ addSangria = async (req, res) => {
       const valor_da_comissao = valor_apurado * (comissao / 100);
       const valor_liquido = valor_apurado - valor_da_comissao;
 
+      const sangriaAtual = await BolinhasSangriaModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangriaAtual.length) {
+        return res.redirect('/bolinhas/sangrias?error=Sangria nao encontrada');
+      }
+
       await BolinhasSangriaModel.updateSangria({
         assinante_id: usuario.assinante_id,
         id,
@@ -247,6 +276,12 @@ addSangria = async (req, res) => {
         valor_liquido,
         tipo_pagamento,
         observacoes
+      });
+
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'bolinhas',
+        assinanteId: usuario.assinante_id,
+        dates: [sangriaAtual[0].data_sangria, data_sangria]
       });
 
       res.redirect('/bolinhas/sangrias?success=Sangria atualizada com sucesso');
@@ -261,7 +296,25 @@ addSangria = async (req, res) => {
     try {
       const usuario = req.user;
       const id = req.params.id;
-      await BolinhasSangriaModel.deleteSangria(id, usuario.assinante_id);
+      const sangriaAtual = await BolinhasSangriaModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+      const result = await BolinhasSangriaModel.deleteSangria(id, usuario.assinante_id);
+
+      if (result.rowCount === 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita ou nao foi encontrada.'
+        });
+      }
+
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'bolinhas',
+        assinanteId: usuario.assinante_id,
+        dates: [sangriaAtual?.[0]?.data_sangria]
+      });
+
       res
         .status(200)
         .json({ success: true, message: 'Sangria excluída com sucesso' });

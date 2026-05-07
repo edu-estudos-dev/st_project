@@ -55,16 +55,34 @@ const buildDescription = (produto, ano, mes) => {
 };
 
 const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId }) => {
+  if (!Number(total || 0)) {
+    await LancamentoModel.deleteConsolidatedRevenueEntry(produto, ano, mes, assinanteId);
+    return;
+  }
+
   const data = getLastDayOfMonth(ano, mes);
   const descricao = buildDescription(produto, ano, mes);
   const existentes = await LancamentoModel.findMonthlyConsolidatedRevenue(produto, ano, mes, assinanteId);
 
   if (existentes.length > 0) {
-    await LancamentoModel.updateConsolidatedRevenueEntry(existentes[0].id, {
+    const keepId = existentes[0].id;
+
+    await LancamentoModel.updateConsolidatedRevenueEntry(keepId, {
       data,
       valor: total,
       descricao
     }, assinanteId);
+
+    if (existentes.length > 1) {
+      await LancamentoModel.deleteConsolidatedRevenueDuplicates(
+        produto,
+        ano,
+        mes,
+        assinanteId,
+        keepId
+      );
+    }
+
     return;
   }
 
@@ -81,6 +99,101 @@ const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId
     descricao,
     usuario: 'sistema'
   });
+};
+
+const MONTHLY_REVENUE_MODELS = {
+  bolinhas: BolinhasModel,
+  figurinhas: FigurinhasModel,
+  pelucias: PeluciasModel
+};
+
+export const getYearMonthFromDate = (value) => {
+  if (!value) return null;
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return {
+      ano: value.getFullYear(),
+      mes: value.getMonth() + 1
+    };
+  }
+
+  const match = /^(\d{4})-(\d{2})/.exec(String(value));
+  if (match) {
+    return {
+      ano: Number(match[1]),
+      mes: Number(match[2])
+    };
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return {
+    ano: date.getFullYear(),
+    mes: date.getMonth() + 1
+  };
+};
+
+export const recalculateConsolidatedRevenueMonth = async ({
+  produto,
+  ano,
+  mes,
+  assinanteId
+}) => {
+  if (!assinanteId || !produto || !ano || !mes) {
+    return;
+  }
+
+  const now = new Date();
+  const currentMonthKey = now.getFullYear() * 100 + now.getMonth() + 1;
+  const targetMonthKey = Number(ano) * 100 + Number(mes);
+
+  if (targetMonthKey >= currentMonthKey) {
+    return;
+  }
+
+  const model = MONTHLY_REVENUE_MODELS[produto];
+  if (!model) {
+    return;
+  }
+
+  const rows = await model.getMonthlyRevenue(assinanteId);
+  const target = rows.find(row =>
+    Number(row.ano) === Number(ano) &&
+    Number(row.mes) === Number(mes)
+  );
+
+  await upsertConsolidatedRevenue({
+    produto,
+    ano: Number(ano),
+    mes: Number(mes),
+    total: Number(target?.total || 0),
+    assinanteId
+  });
+};
+
+export const recalculateConsolidatedRevenueForDates = async ({
+  produto,
+  assinanteId,
+  dates = []
+}) => {
+  const seen = new Set();
+
+  for (const date of dates) {
+    const yearMonth = getYearMonthFromDate(date);
+    if (!yearMonth) continue;
+
+    const key = `${produto}:${yearMonth.ano}:${yearMonth.mes}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    await recalculateConsolidatedRevenueMonth({
+      produto,
+      ano: yearMonth.ano,
+      mes: yearMonth.mes,
+      assinanteId
+    });
+  }
 };
 
 const syncPreviousMonth = async (produto, rows, referenceDate, assinanteId) => {

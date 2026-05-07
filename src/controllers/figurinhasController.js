@@ -1,6 +1,7 @@
 import figurinhasModel from '../models/figurinhasModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
+import { recalculateConsolidatedRevenueForDates } from '../services/monthlyRevenueConsolidation.js';
 import {
   gerarNomeArquivoRecibo,
   gerarReciboPdfBuffer
@@ -78,6 +79,15 @@ class FigurinhasController {
 
       if (!estabelecimento_id || !data_sangria) {
         throw new Error('Dados obrigatórios faltando.');
+      }
+
+      const sangriaAtual = await figurinhasModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangriaAtual) {
+        return res.redirect('/figurinhas/sangrias?error=Sangria nao encontrada');
       }
 
       const ultimaSangria = await figurinhasModel.getUltimaSangria(
@@ -158,6 +168,12 @@ class FigurinhasController {
         ? `/figurinhas/sangrias/recibo/${sangriaId}`
         : '';
 
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'figurinhas',
+        assinanteId: usuario.assinante_id,
+        dates: [data_sangria]
+      });
+
       if (origem === 'rota' && visita_id && rota_ponto_id) {
         const retornoSeguro =
           retorno_url && String(retorno_url).startsWith('/rotas')
@@ -168,6 +184,19 @@ class FigurinhasController {
           rota_retorno_url && String(rota_retorno_url).startsWith('/rotas')
             ? String(rota_retorno_url)
             : retornoSeguro;
+
+        const visitaDaRota = await VisitasModel.findVisitaById(
+          visita_id,
+          usuario.assinante_id
+        );
+
+        if (
+          !visitaDaRota ||
+          Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimento_id) ||
+          Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
+        ) {
+          throw new Error('A visita informada nao pertence a este ponto da rota.');
+        }
 
         await VisitasModel.marcarProdutoRegistrado({
           visita_id,
@@ -329,6 +358,12 @@ class FigurinhasController {
         observacoes: observacoes || ''
       });
 
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'figurinhas',
+        assinanteId: usuario.assinante_id,
+        dates: [sangriaAtual.data_sangria, data_sangria]
+      });
+
       res.redirect('/figurinhas/sangrias?success=Atualizado com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar:', error);
@@ -342,8 +377,25 @@ class FigurinhasController {
     try {
       const usuario = req.user;
       const id = req.params.id;
+      const sangriaAtual = await figurinhasModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
 
-      await figurinhasModel.deleteSangria(id, usuario.assinante_id);
+      const result = await figurinhasModel.deleteSangria(id, usuario.assinante_id);
+
+      if (result.rowCount === 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita ou nao foi encontrada.'
+        });
+      }
+
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'figurinhas',
+        assinanteId: usuario.assinante_id,
+        dates: [sangriaAtual?.data_sangria]
+      });
 
       res.status(200).json({
         success: true,

@@ -233,6 +233,31 @@
                     <small class="auth-note" id="confirmarSenhaHint">
                         A confirmação precisa ser idêntica à senha informada acima.
                     </small>
+                    <div class="auth-trial-products">
+                        <div class="auth-trial-products-header">
+                            <strong>Ferramentas do trial</strong>
+                            <span>Escolha o que deseja testar agora.</span>
+                        </div>
+
+                        <div class="auth-trial-products-grid">
+                            <% const selectedTrialProducts = formData?.produtos_habilitados || []; %>
+                            <% (typeof productOptions !== 'undefined' ? productOptions : []).forEach((produto) => { %>
+                                <label class="auth-trial-product-option" for="trial_produto_<%= produto.value %>">
+                                    <input
+                                        type="checkbox"
+                                        id="trial_produto_<%= produto.value %>"
+                                        name="produtos_habilitados"
+                                        value="<%= produto.value %>"
+                                        <%= selectedTrialProducts.includes(produto.value) ? 'checked' : '' %>
+                                    >
+                                    <span><%= produto.label %></span>
+                                </label>
+                            <% }) %>
+                        </div>
+
+                        <small class="auth-note">Durante o trial vocÃª pode alterar essa seleÃ§Ã£o depois em Assinatura &gt; Produtos.</small>
+                    </div>
+
                     <button type="submit" class="auth-submit">
                         <span>Criar conta</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -305,6 +330,16 @@
 
             form.addEventListener('submit', (event) => {
                 syncPasswordValidation();
+
+                const hasSelectedProduct = Array.from(
+                    form.querySelectorAll('input[name="produtos_habilitados"]')
+                ).some((checkbox) => checkbox.checked);
+
+                if (!hasSelectedProduct) {
+                    event.preventDefault();
+                    window.AppAlerts?.warning('Selecione pelo menos uma ferramenta para testar no trial.');
+                    return;
+                }
 
                 if (!form.checkValidity()) {
                     event.preventDefault();

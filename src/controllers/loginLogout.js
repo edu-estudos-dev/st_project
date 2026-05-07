@@ -10,6 +10,7 @@ import {
     getClearAuthCookieOptions,
     signAuthToken
 } from '../utilities/authToken.js';
+import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 
 const PRODUCT_OPTIONS = [
     { value: 'BOLINHAS', label: 'Bolinhas' },
@@ -45,8 +46,10 @@ class LoginLogoutController {
             error: req.query.error,
             formData: {
                 user: '',
-                email: ''
-            }
+                email: '',
+                produtos_habilitados: TRIAL_PRODUCTS
+            },
+            productOptions: PRODUCT_OPTIONS
         });
     }
 
@@ -404,7 +407,7 @@ class LoginLogoutController {
         try {
             const senha = String(req.body.senha ?? '');
             const confirmarSenha = String(req.body.confirmarSenha ?? '');
-            const produtosHabilitados = TRIAL_PRODUCTS;
+            const produtosHabilitados = normalizeSelectedProdutos(formData.produtos_habilitados);
 
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {

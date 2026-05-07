@@ -1,5 +1,12 @@
 import { sendMail } from './mailer.js';
 
+const escapeHtml = value => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 export const buildPasswordResetUrl = (req, token) => {
     const configuredBaseUrl = String(process.env.PASSWORD_RESET_BASE_URL || '').trim().replace(/\/$/, '');
     const baseUrl = configuredBaseUrl || `${req.protocol}://${req.get('host')}`;
@@ -13,6 +20,9 @@ export const shouldExposePasswordResetLink = () => {
 const buildPasswordResetEmail = ({ user, resetUrl }) => {
     const appName = String(process.env.APP_NAME || 'VendMaster').trim();
     const username = String(user?.username || 'usuário').trim();
+    const safeAppName = escapeHtml(appName);
+    const safeUsername = escapeHtml(username);
+    const safeResetUrl = escapeHtml(resetUrl);
     const subject = `${appName} - redefinição de senha`;
     const text = [
         `Olá, ${username}.`,
@@ -25,16 +35,16 @@ const buildPasswordResetEmail = ({ user, resetUrl }) => {
     ].join('\n');
     const html = `
         <div style="font-family: Arial, sans-serif; color: #1f2a44; line-height: 1.6; max-width: 640px; margin: 0 auto; padding: 24px;">
-            <h1 style="margin: 0 0 16px; font-size: 28px; color: #1b2340;">${appName}</h1>
-            <p>Olá, <strong>${username}</strong>.</p>
+            <h1 style="margin: 0 0 16px; font-size: 28px; color: #1b2340;">${safeAppName}</h1>
+            <p>Olá, <strong>${safeUsername}</strong>.</p>
             <p>Recebemos uma solicitação para redefinir sua senha.</p>
             <p style="margin: 24px 0;">
-                <a href="${resetUrl}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 700;">
+                <a href="${safeResetUrl}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 700;">
                     Redefinir senha
                 </a>
             </p>
             <p>Se o botão não abrir, copie e cole este link no navegador:</p>
-            <p><a href="${resetUrl}">${resetUrl}</a></p>
+            <p><a href="${safeResetUrl}">${safeResetUrl}</a></p>
             <p>Se você não solicitou essa alteração, ignore este e-mail.</p>
         </div>
     `;

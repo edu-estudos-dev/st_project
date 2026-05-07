@@ -1188,7 +1188,7 @@
                 };
 
                 const registrarChegadaNoBanco = async (rotaPontoId, position = null) => {
-                    const response = await fetch(`/rotas/pontos/${rotaPontoId}/chegada`, {
+                    const requestOptions = {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1199,7 +1199,24 @@
                             longitude_chegada: position?.lon ?? null,
                             retorno_url: `${window.location.pathname}${window.location.search}`
                         })
-                    });
+                    };
+
+                    const chegadaUrl = `/rotas/pontos/${rotaPontoId}/chegada`;
+                    const aguardar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+                    let response;
+
+                    try {
+                        response = await fetch(chegadaUrl, requestOptions);
+                    } catch (error) {
+                        await aguardar(700);
+
+                        try {
+                            response = await fetch(chegadaUrl, requestOptions);
+                        } catch (retryError) {
+                            throw new Error('A conexão com o servidor caiu ao registrar a chegada. Recarregue a página e tente novamente.');
+                        }
+                    }
 
                     const data = await response.json().catch(() => null);
 

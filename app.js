@@ -53,6 +53,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
 
 const viewsDir = path.join(__dirname, 'src/views');
 app.set('views', viewsDir);
@@ -76,8 +77,7 @@ app.use(sitemapRoutes);
 app.use(
   express.static(path.join(__dirname, 'public'), {
     etag: true,
-    maxAge: '30d',
-    immutable: true
+    maxAge: '1h'
   })
 );
 

@@ -493,6 +493,62 @@ svg {
   transform: translateY(0);
 }
 
+.auth-trial-products {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(7, 87, 200, 0.14);
+  border-radius: 18px;
+  background: rgba(239, 246, 255, 0.72);
+}
+
+.auth-trial-products-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.auth-trial-products-header strong {
+  color: #1e293b;
+  font-size: 0.98rem;
+  font-weight: 900;
+}
+
+.auth-trial-products-header span {
+  color: var(--vm-muted);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.auth-trial-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.auth-trial-product-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0.66rem 0.7rem;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 14px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.auth-trial-product-option input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--vm-blue);
+}
+
 .auth-register-text {
   margin: 32px 0 0;
   color: var(--vm-muted);
@@ -857,6 +913,10 @@ svg {
   .auth-product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .auth-trial-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 992px) {
@@ -880,6 +940,10 @@ svg {
   }
 
   .auth-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-trial-products-grid {
     grid-template-columns: 1fr;
   }
 

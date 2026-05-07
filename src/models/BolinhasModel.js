@@ -147,6 +147,13 @@ class BolinhasModel {
       DELETE FROM sangrias_bolinha
       WHERE id = $1
         AND assinante_id = $2
+        AND NOT EXISTS (
+          SELECT 1
+          FROM visita_produtos
+          WHERE sangria_id = $1
+            AND assinante_id = $2
+            AND produto = 'BOLINHAS'
+        )
         AND estabelecimento_id IN (
           SELECT id
           FROM estabelecimentos

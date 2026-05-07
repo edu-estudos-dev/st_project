@@ -57,7 +57,7 @@
                             <tbody>
                                 <tr class="table-row-balance-highlight">
                                     <%
-                                    const currentMonth = new Date().getMonth();
+                                    const currentMonth = typeof resultadoAteMesIndex !== 'undefined' ? resultadoAteMesIndex : new Date().getMonth();
                                     let somaTotalAnualCorrente = 0;
                                     for (let i = 0; i <= currentMonth; i++) {
                                         somaTotalAnualCorrente += somaMensal[i] || 0;

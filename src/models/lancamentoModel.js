@@ -137,6 +137,37 @@ class LancamentoModel {
     await connection.query(SQL, [data, parseFloat(valor), descricao, id, assinanteId]);
   }
 
+  async deleteConsolidatedRevenueEntry(produto, ano, mes, assinanteId) {
+    const SQL = `
+      DELETE FROM lancamentos
+      WHERE assinante_id = $1
+        AND entrada_saida = 'Entrada'
+        AND tipo_de_lancamento = 'receita_dos_pontos'
+        AND usuario = 'sistema'
+        AND produto = $2
+        AND EXTRACT(YEAR FROM data) = $3
+        AND EXTRACT(MONTH FROM data) = $4
+    `;
+
+    await connection.query(SQL, [assinanteId, produto, ano, mes]);
+  }
+
+  async deleteConsolidatedRevenueDuplicates(produto, ano, mes, assinanteId, keepId) {
+    const SQL = `
+      DELETE FROM lancamentos
+      WHERE assinante_id = $1
+        AND entrada_saida = 'Entrada'
+        AND tipo_de_lancamento = 'receita_dos_pontos'
+        AND usuario = 'sistema'
+        AND produto = $2
+        AND EXTRACT(YEAR FROM data) = $3
+        AND EXTRACT(MONTH FROM data) = $4
+        AND id <> $5
+    `;
+
+    await connection.query(SQL, [assinanteId, produto, ano, mes, keepId]);
+  }
+
   async getNotificationAlerts(daysAhead = 5, assinanteId) {
     await this.ensurePaymentColumn();
 

@@ -47,7 +47,17 @@ class VisitasModel {
         longitude_chegada,
         data_chegada
       )
-      VALUES ($1, $2, $3, $4, $5, 'em_andamento', $6, $7, CURRENT_TIMESTAMP)
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        'em_andamento',
+        $6::double precision,
+        $7::double precision,
+        CURRENT_TIMESTAMP
+      )
       RETURNING *
     `;
 

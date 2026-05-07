@@ -234,6 +234,13 @@ class PeluciasModel {
       DELETE FROM sangrias_pelucias
       WHERE id = $1
         AND assinante_id = $2
+        AND NOT EXISTS (
+          SELECT 1
+          FROM visita_produtos
+          WHERE sangria_id = $1
+            AND assinante_id = $2
+            AND produto = 'PELUCIAS'
+        )
         AND estabelecimento_id IN (
           SELECT id
           FROM estabelecimentos

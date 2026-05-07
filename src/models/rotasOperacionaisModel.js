@@ -174,8 +174,8 @@ class RotasOperacionaisModel {
       UPDATE rota_pontos
       SET
         status = 'em_andamento',
-        latitude_chegada = COALESCE($3, latitude_chegada),
-        longitude_chegada = COALESCE($4, longitude_chegada),
+        latitude_chegada = COALESCE($3::double precision, latitude_chegada),
+        longitude_chegada = COALESCE($4::double precision, longitude_chegada),
         iniciado_em = COALESCE(iniciado_em, CURRENT_TIMESTAMP),
         updated_at = CURRENT_TIMESTAMP
       WHERE id = $1

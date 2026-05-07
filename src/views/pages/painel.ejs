@@ -51,41 +51,143 @@
    <% const titlebarSummary = summary.totalAtivos
       ? `${summary.totalAtivos} ponto(s) ativo(s) agora, com receita, visitas e prioridades acompanhadas em tempo real.`
       : 'Sem pontos ativos cadastrados ainda. O primeiro cadastro libera a operação do sistema.'; %>
+   <% const financeAlertTone = financialData.atrasados.length ? 'danger' : financialData.proximos.length ? 'warning' : 'safe'; %>
+   <% const visitAlertHref = visitAlert.actionHref || '/rotas'; %>
 
    <main class="dashboard-shell">
-      <section class="dashboard-titlebar">
-         <div class="dashboard-titlebar-copy dashboard-titlebar-copy--full">
-            <div class="dashboard-brand-row">
-               <a href="/painel" aria-label="VendMaster" class="brand-mark dashboard-brand-mark">
+      <div class="dashboard-layout">
+         <aside class="dashboard-sidebar" aria-label="Navegação do painel">
+            <div class="dashboard-sidebar-head">
+               <a href="/painel" aria-label="VendMaster" class="brand-mark dashboard-sidebar-brand">
                   <span class="brand-mark-primary">Vend</span><span class="brand-mark-accent">Master</span>
                </a>
+            </div>
+
+            <div class="dashboard-sidebar-summary" aria-label="Resumo de pontos ativos">
+               <% overviewStats.forEach((item) => { %>
+                  <div class="dashboard-sidebar-stat">
+                     <strong><%= item.value %></strong>
+                     <span><%= item.label %></span>
+                  </div>
+               <% }) %>
+            </div>
+
+            <div class="dashboard-sidebar-section">
+               <h2 class="dashboard-sidebar-title">Operação</h2>
+               <nav class="dashboard-sidebar-nav" aria-label="Atalhos administrativos">
+                  <% adminShortcuts.forEach((item) => { %>
+                     <% if (isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href)) return; %>
+                     <a href="<%= item.href %>" class="dashboard-sidebar-link">
+                        <span><%= item.title %></span>
+                        <small>&rarr;</small>
+                     </a>
+                  <% }) %>
+               </nav>
+            </div>
+
+            <% if (!isReadOnly) { %>
+               <div class="dashboard-sidebar-section">
+                  <h2 class="dashboard-sidebar-title">Cadastros rápidos</h2>
+                  <nav class="dashboard-sidebar-nav" aria-label="Cadastros operacionais">
+                     <% operationalShortcuts.forEach((item) => { %>
+                        <a href="<%= item.href %>" class="dashboard-sidebar-link">
+                           <span><%= item.title %></span>
+                           <small>&rarr;</small>
+                        </a>
+                     <% }) %>
+                  </nav>
+               </div>
+            <% } %>
+
+            <div class="dashboard-sidebar-section">
+               <h2 class="dashboard-sidebar-title">Atenção</h2>
+               <div class="dashboard-sidebar-alerts">
+                  <a href="/lancamentos/vencimentos" class="dashboard-sidebar-alert dashboard-sidebar-alert-<%= financeAlertTone %>">
+                     <strong><%= financeTitle %></strong>
+                     <p><%= financeDescription %></p>
+                  </a>
+
+                  <a href="<%= visitAlertHref %>" class="dashboard-sidebar-alert dashboard-sidebar-alert-<%= visitAlert.tone %>">
+                     <strong><%= visitAlert.title %></strong>
+                     <span><%= visitAlert.description %></span>
+                  </a>
+               </div>
+            </div>
+
+            <div class="dashboard-sidebar-footer">
                <form action="/logout" method="POST">
                   <button type="submit" class="dashboard-logout-btn">Sair</button>
                </form>
             </div>
+         </aside>
 
-            <div class="dashboard-titlebar-main">
-               <div class="dashboard-titlebar-copy-block">
-                  <span class="dashboard-kicker">Painel central</span>
-                  <h1>Painel de Controle</h1>
-                  <p><%= titlebarSummary %></p>
-               </div>
-
-               <div class="dashboard-overview">
-                  <% overviewStats.forEach((item) => { %>
-                     <div class="dashboard-overview-card">
-                        <strong><%= item.value %></strong>
-                        <span><%= item.label %></span>
+         <div class="dashboard-main">
+            <section class="dashboard-titlebar">
+               <div class="dashboard-titlebar-copy dashboard-titlebar-copy--full">
+                  <div class="dashboard-titlebar-main">
+                     <div class="dashboard-titlebar-copy-block">
+                        <span class="dashboard-kicker">Painel central</span>
+                        <h1>Painel de Controle</h1>
+                        <p><%= titlebarSummary %></p>
                      </div>
-                  <% }) %>
-               </div>
-            </div>
 
-            <div class="dashboard-titlebar-insights">
+                     <div class="dashboard-overview">
+                        <% overviewStats.forEach((item) => { %>
+                           <div class="dashboard-overview-card">
+                              <strong><%= item.value %></strong>
+                              <span><%= item.label %></span>
+                           </div>
+                        <% }) %>
+                     </div>
+                  </div>
+               </div>
+            </section>
+
+            <section class="dashboard-section-heading" aria-labelledby="dashboard-situacao-title">
+               <div>
+                  <span class="dashboard-section-tag">Situação agora</span>
+                  <h2 id="dashboard-situacao-title">O que merece sua atenção</h2>
+               </div>
+               <p>Receita, caixa, compromissos e visitas críticas.</p>
+            </section>
+
+            <section class="dashboard-intelligence-grid">
+               <article class="dashboard-revenue-hero dashboard-revenue-hero-<%= insights.totals.revenueDirection %>">
+                  <div>
+                     <span class="dashboard-section-tag">Consolidado operacional</span>
+                     <h2><%= insights.totals.currentLabel %></h2>
+                     <p>Receita do mês somando bolinhas, consignados e pelúcias.</p>
+                  </div>
+                  <div class="dashboard-revenue-hero-meta">
+                     <strong><%= insights.totals.deltaPercentLabel %></strong>
+                     <span><%= insights.totals.deltaLabel %> vs. mês anterior</span>
+                  </div>
+               </article>
+
+               <article class="dashboard-kpi-card dashboard-kpi-card-<%= insights.cashFlow.saldoTone %>">
+                  <span>Fluxo de caixa</span>
+                  <strong><%= insights.cashFlow.saldoLabel %></strong>
+                  <p>Entradas <%= insights.cashFlow.entradasLabel %> | saídas <%= insights.cashFlow.saidasLabel %>.</p>
+               </article>
+
+               <article class="dashboard-kpi-card dashboard-kpi-card-alert">
+                  <span>Compromissos</span>
+                  <strong><%= insights.cashFlow.pendenteSaidasLabel %></strong>
+                  <p><%= insights.cashFlow.pendenteCount || 0 %> saída(s) pendente(s). Equivale a <%= insights.cashFlow.comprometimentoLabel %> das entradas.</p>
+               </article>
+
+               <article class="dashboard-kpi-card dashboard-kpi-card-<%= visitAlert.tone === 'danger' ? 'negative' : 'positive' %>">
+                  <span>Visitas críticas</span>
+                  <strong><%= operationalData.total || 0 %></strong>
+                  <p><%= visitAlert.title %>. <%= visitAlert.description %></p>
+               </article>
+            </section>
+
+            <section class="dashboard-titlebar-insights">
                <a href="/relatorios" class="dashboard-titlebar-card dashboard-titlebar-card-action">
-                  <span class="dashboard-titlebar-card-tag">Receita do mês</span>
-                  <strong><%= insights.totals.currentLabel %></strong>
-                  <p><%= insights.totals.deltaPercentLabel %> frente ao mês anterior (<%= insights.totals.deltaLabel %>).</p>
+                  <span class="dashboard-titlebar-card-tag">Média por visita</span>
+                  <strong><%= insights.totals.averagePerVisitLabel %></strong>
+                  <p><%= insights.totals.visits || 0 %> visita(s) com receita no mês.</p>
                   <em>Ver relatórios</em>
                </a>
 
@@ -95,244 +197,210 @@
                   <p><%= insights.recommendedAction ? insights.recommendedAction.description : 'Nenhum ponto com urgência forte foi identificado neste momento.' %></p>
                   <em>Abrir rotas</em>
                </a>
-            </div>
-         </div>
-      </section>
+            </section>
 
-      <section class="dashboard-intelligence-grid">
-         <article class="dashboard-revenue-hero dashboard-revenue-hero-<%= insights.totals.revenueDirection %>">
-            <div>
-               <span class="dashboard-section-tag">Consolidado operacional</span>
-               <h2><%= insights.totals.currentLabel %></h2>
-               <p>Receita consolidada do mês atual somando bolinhas, consignados e pelúcias.</p>
-            </div>
-            <div class="dashboard-revenue-hero-meta">
-               <strong><%= insights.totals.deltaPercentLabel %></strong>
-               <span><%= insights.totals.deltaLabel %> vs. mês anterior</span>
-            </div>
-         </article>
-
-         <article class="dashboard-kpi-card">
-            <span>Média por visita</span>
-            <strong><%= insights.totals.averagePerVisitLabel %></strong>
-            <p><%= insights.totals.visits || 0 %> visita(s) com receita no mês.</p>
-         </article>
-
-         <article class="dashboard-kpi-card dashboard-kpi-card-<%= insights.cashFlow.saldoTone %>">
-            <span>Fluxo de caixa do mês</span>
-            <strong><%= insights.cashFlow.saldoLabel %></strong>
-            <p>Entradas <%= insights.cashFlow.entradasLabel %> | saídas <%= insights.cashFlow.saidasLabel %>.</p>
-         </article>
-
-         <article class="dashboard-kpi-card">
-            <span>Compromissos do mês</span>
-            <strong><%= insights.cashFlow.pendenteSaidasLabel %></strong>
-            <p><%= insights.cashFlow.pendenteCount || 0 %> saída(s) pendente(s). Saídas equivalem a <%= insights.cashFlow.comprometimentoLabel %> das entradas.</p>
-         </article>
-      </section>
-
-      <section class="dashboard-insight-layout">
-         <article class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
+            <section class="dashboard-section-heading" aria-labelledby="dashboard-operacao-title">
                <div>
-                  <span class="dashboard-section-tag">Receita por produto</span>
-                  <h2>Onde o mês está acontecendo</h2>
+                  <span class="dashboard-section-tag">Operação</span>
+                  <h2 id="dashboard-operacao-title">Produtos e visitas</h2>
                </div>
-               <p>Participação de cada frente na receita consolidada.</p>
-            </div>
+               <p>Mostra de onde vem a receita e onde pode existir valor parado.</p>
+            </section>
 
-            <% if (insights.productBreakdown.length) { %>
-               <div class="dashboard-product-bars">
-                  <% insights.productBreakdown.forEach((item) => { %>
-                     <div class="dashboard-product-row">
-                        <div class="dashboard-product-row-head">
-                           <strong><%= item.produto %></strong>
-                           <span><%= item.totalLabel %></span>
-                        </div>
-                        <div class="dashboard-product-track">
-                           <span style="width: <%= Math.max(6, Math.min(100, Math.round(item.percent || 0))) %>%"></span>
-                        </div>
-                        <small><%= item.percentLabel %> do mês | média de <%= item.averageLabel %> por visita</small>
+            <section class="dashboard-insight-layout">
+               <article class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Receita por produto</span>
+                        <h2>Onde o mês está acontecendo</h2>
                      </div>
-                  <% }) %>
-               </div>
-            <% } else { %>
-               <div class="dashboard-empty-state-light">
-                  <h3>Sem receita no mês atual</h3>
-                  <p>Quando as primeiras sangrias forem registradas, os produtos aparecem aqui.</p>
-               </div>
-            <% } %>
-         </article>
-
-         <article class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
-               <div>
-                  <span class="dashboard-section-tag">Top pontos</span>
-                  <h2>Melhores do mês</h2>
-               </div>
-               <p>Os pontos que mais contribuíram para o resultado atual.</p>
-            </div>
-
-            <% if (insights.topPoints.length) { %>
-               <div class="dashboard-ranking-list">
-                  <% insights.topPoints.forEach((item) => { %>
-                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-ranking-item">
-                        <span>#<%= item.position %></span>
-                        <div>
-                           <strong><%= item.estabelecimento %></strong>
-                           <small><%= item.visits %> visita(s) | média <%= item.averageLabel %></small>
-                        </div>
-                        <em><%= item.totalLabel %></em>
-                     </a>
-                  <% }) %>
-               </div>
-            <% } else { %>
-               <div class="dashboard-empty-state-light">
-                  <h3>Nenhum ranking ainda</h3>
-                  <p>O ranking aparece assim que houver receita registrada neste mês.</p>
-               </div>
-            <% } %>
-         </article>
-      </section>
-
-      <section class="dashboard-insight-layout">
-         <article class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
-               <div>
-                  <span class="dashboard-section-tag">Alta e queda</span>
-                  <h2>Variação por ponto</h2>
-               </div>
-               <p>Comparativo do mês atual contra o mês anterior.</p>
-            </div>
-
-            <% if (insights.pointTrends.length) { %>
-               <div class="dashboard-trend-list">
-                  <% insights.pointTrends.forEach((item) => { %>
-                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-trend-item dashboard-trend-item-<%= item.tone %>">
-                        <div>
-                           <strong><%= item.estabelecimento %></strong>
-                           <small>Atual <%= item.currentLabel %> | anterior <%= item.previousLabel %></small>
-                        </div>
-                        <span><%= item.deltaPercentLabel %></span>
-                        <em><%= item.deltaLabel %></em>
-                     </a>
-                  <% }) %>
-               </div>
-            <% } else { %>
-               <div class="dashboard-empty-state-light">
-                  <h3>Sem comparação suficiente</h3>
-                  <p>Quando houver dados no mês atual e anterior, as variações aparecem aqui.</p>
-               </div>
-            <% } %>
-         </article>
-
-         <article class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
-               <div>
-                  <span class="dashboard-section-tag">Valor parado</span>
-                  <h2>Pontos com visita atrasada</h2>
-               </div>
-               <p>Estimativa baseada no histórico de arrecadação e dias sem visita.</p>
-            </div>
-
-            <% if (insights.staleValue.items.length) { %>
-               <div class="dashboard-stale-list">
-                  <% insights.staleValue.items.forEach((item) => { %>
-                     <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-stale-item">
-                        <div>
-                           <strong><%= item.estabelecimento %></strong>
-                           <small><%= item.produto %> | última visita: <%= item.lastMovementLabel %></small>
-                        </div>
-                        <span><%= item.daysWithoutVisit %> dia(s)</span>
-                        <em><%= item.estimatedValueLabel %></em>
-                     </a>
-                  <% }) %>
-               </div>
-            <% } else { %>
-               <div class="dashboard-empty-state-light">
-                  <h3>Sem valor parado relevante</h3>
-                  <p>Não há pontos com atraso de visita suficiente para estimativa agora.</p>
-               </div>
-            <% } %>
-         </article>
-      </section>
-
-      <section class="dashboard-grid">
-         <article class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
-               <div>
-                  <span class="dashboard-section-tag">Administrativo</span>
-                  <h2>Atalhos principais</h2>
-               </div>
-               <p>Acesso rápido ao que mais importa na rotina.</p>
-            </div>
-
-            <div class="dashboard-shortcuts">
-               <% adminShortcuts.forEach((item) => { %>
-                  <% if (isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href)) return; %>
-                  <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
-                     <div class="dashboard-shortcut-top">
-                        <span class="dashboard-shortcut-pill">Acesso rápido</span>
-                        <span class="dashboard-shortcut-arrow">&rarr;</span>
-                     </div>
-                     <h3><%= item.title %></h3>
-                     <p><%= item.description %></p>
-                  </a>
-               <% }) %>
-            </div>
-
-            <% if (!isReadOnly) { %>
-               <div class="dashboard-panel-header" style="margin-top: 1.5rem;">
-                  <div>
-                     <span class="dashboard-section-tag">Operacional</span>
-                     <h2>Cadastros dos produtos</h2>
+                     <p>Participação de cada frente na receita consolidada.</p>
                   </div>
-                  <p>Esses acessos continuam disponíveis mesmo quando não há pontos ativos cadastrados.</p>
-               </div>
 
-               <div class="dashboard-shortcuts">
-                  <% operationalShortcuts.forEach((item) => { %>
-                     <a href="<%= item.href %>" class="dashboard-shortcut dashboard-shortcut-<%= item.tone %>">
+                  <% if (insights.productBreakdown.length) { %>
+                     <div class="dashboard-product-bars">
+                        <% insights.productBreakdown.forEach((item) => { %>
+                           <div class="dashboard-product-row">
+                              <div class="dashboard-product-row-head">
+                                 <strong><%= item.produto %></strong>
+                                 <span><%= item.totalLabel %></span>
+                              </div>
+                              <div class="dashboard-product-track">
+                                 <span style="width: <%= Math.max(6, Math.min(100, Math.round(item.percent || 0))) %>%"></span>
+                              </div>
+                              <small><%= item.percentLabel %> do mês | média de <%= item.averageLabel %> por visita</small>
+                           </div>
+                        <% }) %>
+                     </div>
+                  <% } else { %>
+                     <div class="dashboard-empty-state-light">
+                        <h3>Sem receita no mês atual</h3>
+                        <p>Quando as primeiras sangrias forem registradas, os produtos aparecem aqui.</p>
+                     </div>
+                  <% } %>
+               </article>
+
+               <article class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Valor parado</span>
+                        <h2>Pontos com visita atrasada</h2>
+                     </div>
+                     <p>Estimativa baseada no histórico de arrecadação e dias sem visita.</p>
+                  </div>
+
+                  <% if (insights.staleValue.items.length) { %>
+                     <div class="dashboard-stale-list">
+                        <% insights.staleValue.items.forEach((item) => { %>
+                           <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-stale-item">
+                              <div>
+                                 <strong><%= item.estabelecimento %></strong>
+                                 <small><%= item.produto %> | última visita: <%= item.lastMovementLabel %></small>
+                              </div>
+                              <span><%= item.daysWithoutVisit %> dia(s)</span>
+                              <em><%= item.estimatedValueLabel %></em>
+                           </a>
+                        <% }) %>
+                     </div>
+                  <% } else { %>
+                     <div class="dashboard-empty-state-light">
+                        <h3>Sem valor parado relevante</h3>
+                        <p>Não há pontos com atraso de visita suficiente para estimativa agora.</p>
+                     </div>
+                  <% } %>
+               </article>
+            </section>
+
+            <section class="dashboard-section-heading" aria-labelledby="dashboard-desempenho-title">
+               <div>
+                  <span class="dashboard-section-tag">Desempenho</span>
+                  <h2 id="dashboard-desempenho-title">Melhores pontos e variações</h2>
+               </div>
+               <p>Indicadores para entender crescimento, queda e concentração de receita.</p>
+            </section>
+
+            <section class="dashboard-insight-layout">
+               <article class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Top pontos</span>
+                        <h2>Melhores do mês</h2>
+                     </div>
+                     <p>Os pontos que mais contribuíram para o resultado atual.</p>
+                  </div>
+
+                  <% if (insights.topPoints.length) { %>
+                     <div class="dashboard-ranking-list">
+                        <% insights.topPoints.forEach((item) => { %>
+                           <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-ranking-item">
+                              <span>#<%= item.position %></span>
+                              <div>
+                                 <strong><%= item.estabelecimento %></strong>
+                                 <small><%= item.visits %> visita(s) | média <%= item.averageLabel %></small>
+                              </div>
+                              <em><%= item.totalLabel %></em>
+                           </a>
+                        <% }) %>
+                     </div>
+                  <% } else { %>
+                     <div class="dashboard-empty-state-light">
+                        <h3>Nenhum ranking ainda</h3>
+                        <p>O ranking aparece assim que houver receita registrada neste mês.</p>
+                     </div>
+                  <% } %>
+               </article>
+
+               <article class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Alta e queda</span>
+                        <h2>Variação por ponto</h2>
+                     </div>
+                     <p>Comparativo do mês atual contra o mês anterior.</p>
+                  </div>
+
+                  <% if (insights.pointTrends.length) { %>
+                     <div class="dashboard-trend-list">
+                        <% insights.pointTrends.forEach((item) => { %>
+                           <a href="/estabelecimentos/<%= item.estabelecimentoId %>/view" class="dashboard-trend-item dashboard-trend-item-<%= item.tone %>">
+                              <div>
+                                 <strong><%= item.estabelecimento %></strong>
+                                 <small>Atual <%= item.currentLabel %> | anterior <%= item.previousLabel %></small>
+                              </div>
+                              <span><%= item.deltaPercentLabel %></span>
+                              <em><%= item.deltaLabel %></em>
+                           </a>
+                        <% }) %>
+                     </div>
+                  <% } else { %>
+                     <div class="dashboard-empty-state-light">
+                        <h3>Sem comparação suficiente</h3>
+                        <p>Quando houver dados no mês atual e anterior, as variações aparecem aqui.</p>
+                     </div>
+                  <% } %>
+               </article>
+            </section>
+
+            <section class="dashboard-grid">
+               <aside class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Atenção</span>
+                        <h2>Visitas críticas</h2>
+                     </div>
+                     <p>Um resumo direto para não deixar ponto parado por muito tempo.</p>
+                  </div>
+
+                  <div class="dashboard-visit-alert dashboard-visit-alert-<%= visitAlert.tone %>">
+                     <span class="dashboard-visit-alert-tag">Mais de 30 dias sem visita</span>
+                     <strong><%= visitAlert.title %></strong>
+                     <p><%= visitAlert.description %></p>
+
+                     <% if (visitAlert.items.length) { %>
+                        <div class="dashboard-visit-alert-list">
+                           <% visitAlert.items.forEach((item) => { %>
+                              <div class="dashboard-visit-alert-item">
+                                 <strong><%= item.estabelecimento %> <span>(<%= item.produto %>)</span></strong>
+                                 <small><%= item.lastSeenLabel %> | <%= item.daysLabel %></small>
+                              </div>
+                           <% }) %>
+                        </div>
+                     <% } %>
+                  </div>
+               </aside>
+
+               <article class="dashboard-panel dashboard-panel-primary">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Atalhos</span>
+                        <h2>Mais usados</h2>
+                     </div>
+                     <p>A sidebar mantém os acessos principais sempre próximos.</p>
+                  </div>
+
+                  <div class="dashboard-shortcuts">
+                     <a href="/rotas" class="dashboard-shortcut dashboard-shortcut-amber">
                         <div class="dashboard-shortcut-top">
-                           <span class="dashboard-shortcut-pill">Cadastro direto</span>
+                           <span class="dashboard-shortcut-pill">Operação</span>
                            <span class="dashboard-shortcut-arrow">&rarr;</span>
                         </div>
-                        <h3><%= item.title %></h3>
-                        <p><%= item.description %></p>
+                        <h3>Rotas dos pontos</h3>
+                        <p>Monte o trajeto por bairro e abra a navegação no Google Maps ou no Waze.</p>
                      </a>
-                  <% }) %>
-               </div>
-            <% } %>
-         </article>
 
-         <aside class="dashboard-panel dashboard-panel-primary">
-            <div class="dashboard-panel-header">
-               <div>
-                  <span class="dashboard-section-tag">Atenção</span>
-                  <h2>Visitas críticas</h2>
-               </div>
-               <p>Um resumo direto para não deixar ponto parado por muito tempo.</p>
-            </div>
-
-            <div class="dashboard-visit-alert dashboard-visit-alert-<%= visitAlert.tone %>">
-               <span class="dashboard-visit-alert-tag">Mais de 30 dias sem visita</span>
-               <strong><%= visitAlert.title %></strong>
-               <p><%= visitAlert.description %></p>
-
-               <% if (visitAlert.items.length) { %>
-                  <div class="dashboard-visit-alert-list">
-                     <% visitAlert.items.forEach((item) => { %>
-                        <div class="dashboard-visit-alert-item">
-                           <strong><%= item.estabelecimento %> <span>(<%= item.produto %>)</span></strong>
-                           <small><%= item.lastSeenLabel %> | <%= item.daysLabel %></small>
+                     <a href="/lancamentos" class="dashboard-shortcut dashboard-shortcut-violet">
+                        <div class="dashboard-shortcut-top">
+                           <span class="dashboard-shortcut-pill">Financeiro</span>
+                           <span class="dashboard-shortcut-arrow">&rarr;</span>
                         </div>
-                     <% }) %>
+                        <h3>Fluxo financeiro</h3>
+                        <p>Acompanhe lançamentos, entradas, saídas e saldo do período.</p>
+                     </a>
                   </div>
-               <% } %>
-
-            </div>
-         </aside>
-      </section>
+               </article>
+            </section>
+         </div>
+      </div>
    </main>
 
    <script>

@@ -19,8 +19,12 @@ class FluxoDeCaixaController {
 
         fluxoDeCaixa.forEach(lancamento => {
             const tipo = tipos[lancamento.tipo_de_lancamento] || lancamento.tipo_de_lancamento;
-            const mesIndex = lancamento.mes - 1;
+            const mesIndex = Number(lancamento.mes) - 1;
             const valor = parseFloat(lancamento.total) || 0;
+
+            if (mesIndex < 0 || mesIndex > 11) {
+                return;
+            }
 
             if (tiposEntradas.includes(lancamento.tipo_de_lancamento)) {
                 dadosEntradas[tipo][mesIndex] += valor;
@@ -40,7 +44,11 @@ class FluxoDeCaixaController {
 
     showFluxoDeCaixa = async (req, res) => {
         try {
-            const year = req.query.year || new Date().getFullYear();
+            const currentYear = new Date().getFullYear();
+            const requestedYear = Number(req.query.year || currentYear);
+            const year = Number.isInteger(requestedYear) && requestedYear >= 2000 && requestedYear <= 2100
+                ? requestedYear
+                : currentYear;
             const usuario = req.user;
             const fluxoDeCaixa = await FluxoDeCaixaModel.criarFluxo(year, usuario.assinante_id);
     
@@ -66,6 +74,7 @@ class FluxoDeCaixaController {
                 somaMensal, 
                 somaTotalAnual, 
                 year, 
+                resultadoAteMesIndex: year === currentYear ? new Date().getMonth() : 11,
                 usuario 
             });
         } catch (error) {
