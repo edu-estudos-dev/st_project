@@ -1,393 +1,386 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('../partials/head', {
-    title,
-    metaDescription,
-    canonicalUrl,
-    breadcrumbJsonLd,
-    faqJsonLd,
-    extraStyles,
-    skipGlobalStyles,
-    preloadExtraStyles,
-    disableBootstrap: true,
-    disableBootstrapIcons: true
-}) %>
+<%- include('../partials/head', { title, metaDescription, canonicalUrl, breadcrumbJsonLd, faqJsonLd, extraStyles,
+    skipGlobalStyles, preloadExtraStyles, disableBootstrap: true, disableBootstrapIcons: true }) %>
 
-<body class="demo-page">
-    <%- include('../partials/blogPublicHeader') %>
+    <body class="demo-page">
+        <%- include('../partials/blogPublicHeader') %>
 
-    <main class="demo-main">
-        <section class="demo-hero">
-            <div class="demo-container">
-                <span class="demo-kicker">Demonstração gratuita</span>
+            <main class="demo-main">
+                <section class="demo-hero">
+                    <div class="demo-container">
+                        <span class="demo-kicker">Demonstração gratuita</span>
 
-                <h1>Veja o VendMaster funcionando na prática</h1>
+                        <h1>Veja o VendMaster funcionando na prática</h1>
 
-                <p>
-                    Entenda como o sistema ajuda operadores de máquinas recreativas
-                    a controlar rotas, sangrias, estoque, acertos e financeiro sem
-                    depender de planilhas soltas.
-                </p>
+                        <p>
+                            Entenda como o sistema ajuda operadores de máquinas recreativas
+                            a controlar rotas, sangrias, estoque, acertos e financeiro sem
+                            depender de planilhas soltas.
+                        </p>
 
-                <div class="demo-hero-actions">
-                    <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
-                        Solicitar demonstração
-                    </a>
+                        <div class="demo-hero-actions">
+                            <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
+                                Solicitar demonstração
+                            </a>
 
-                    <a href="/precos" class="demo-btn demo-btn-secondary">
-                        Ver planos e preços
-                    </a>
-                </div>
-            </div>
-        </section>
+                            <a href="/precos" class="demo-btn demo-btn-secondary">
+                                Ver planos e preços
+                            </a>
+                        </div>
+                    </div>
+                </section>
 
-        <section id="como-funciona" class="demo-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">Como funciona</span>
+                <section id="como-funciona" class="demo-section">
+                    <div class="demo-container">
+                        <div class="demo-section-heading">
+                            <span class="demo-kicker">Como funciona</span>
 
-                    <h2>Uma demonstração focada na sua operação</h2>
+                            <h2>Uma demonstração focada na sua operação</h2>
 
-                    <p>
-                        A ideia é mostrar o VendMaster aplicado à realidade de quem
-                        trabalha em campo com pontos, máquinas, produtos e acertos.
-                    </p>
-                </div>
-
-                <div class="demo-grid">
-                    <article class="demo-card">
-                        <div class="demo-card-header">
-                            <span>1º passo</span>
-                            <h3>Você informa sua operação</h3>
+                            <p>
+                                A ideia é mostrar o VendMaster aplicado à realidade de quem
+                                trabalha em campo com pontos, máquinas, produtos e acertos.
+                            </p>
                         </div>
 
-                        <p>
-                            Conte se trabalha com bolinhas, consignados, pelúcias ou
-                            mais de uma frente ao mesmo tempo.
-                        </p>
+                        <div class="demo-grid">
+                            <article class="demo-card">
+                                <div class="demo-card-header">
+                                    <span>1º passo</span>
+                                    <h3>Você informa sua operação</h3>
+                                </div>
 
-                        <ul>
-                            <li>Tipo de máquina ou produto</li>
-                            <li>Quantidade aproximada de pontos</li>
-                            <li>Principais dificuldades atuais</li>
-                        </ul>
-                    </article>
+                                <p>
+                                    Conte se trabalha com bolinhas, consignados, pelúcias ou
+                                    mais de uma frente ao mesmo tempo.
+                                </p>
 
-                    <article class="demo-card demo-card-featured">
-                        <div class="demo-badge">Mais importante</div>
+                                <ul>
+                                    <li>Tipo de máquina ou produto</li>
+                                    <li>Quantidade aproximada de pontos</li>
+                                    <li>Principais dificuldades atuais</li>
+                                </ul>
+                            </article>
 
-                        <div class="demo-card-header">
-                            <span>2º passo</span>
-                            <h3>Mostramos o sistema na prática</h3>
+                            <article class="demo-card demo-card-featured">
+                                <div class="demo-badge">Mais importante</div>
+
+                                <div class="demo-card-header">
+                                    <span>2º passo</span>
+                                    <h3>Mostramos o sistema na prática</h3>
+                                </div>
+
+                                <p>
+                                    Você vê como o VendMaster organiza a rotina operacional,
+                                    desde o cadastro dos pontos até os controles de campo.
+                                </p>
+
+                                <ul>
+                                    <li>Rotas e visitas</li>
+                                    <li>Sangrias e acertos</li>
+                                    <li>Estoque e histórico por ponto</li>
+                                </ul>
+                            </article>
+
+                            <article class="demo-card">
+                                <div class="demo-card-header">
+                                    <span>3º passo</span>
+                                    <h3>Você entende o melhor plano</h3>
+                                </div>
+
+                                <p>
+                                    Depois da demonstração, fica mais fácil decidir se precisa
+                                    de uma, duas ou três ferramentas do VendMaster.
+                                </p>
+
+                                <ul>
+                                    <li>Plano Essencial</li>
+                                    <li>Plano Operador</li>
+                                    <li>Plano Completo</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="demo-section demo-tools-section">
+                    <div class="demo-container">
+                        <div class="demo-section-heading">
+                            <span class="demo-kicker">O que será mostrado</span>
+
+                            <h2>Controle operacional sem complicar sua rotina</h2>
+
+                            <p>
+                                A demonstração pode ser direcionada para os módulos que fazem
+                                sentido para o seu negócio.
+                            </p>
                         </div>
 
-                        <p>
-                            Você vê como o VendMaster organiza a rotina operacional,
-                            desde o cadastro dos pontos até os controles de campo.
-                        </p>
+                        <div class="demo-tools-grid">
+                            <article>
+                                <span>Rotas</span>
+                                <h3>Organização de visitas e pontos</h3>
+                                <p>
+                                    Veja como montar uma rotina de visitas mais clara,
+                                    com pontos organizados e histórico da operação.
+                                </p>
+                            </article>
 
-                        <ul>
-                            <li>Rotas e visitas</li>
-                            <li>Sangrias e acertos</li>
-                            <li>Estoque e histórico por ponto</li>
-                        </ul>
-                    </article>
+                            <article>
+                                <span>Sangrias</span>
+                                <h3>Controle de coletas e acertos</h3>
+                                <p>
+                                    Entenda como registrar sangrias, valores, quantidades,
+                                    responsáveis e informações importantes de cada ponto.
+                                </p>
+                            </article>
 
-                    <article class="demo-card">
-                        <div class="demo-card-header">
-                            <span>3º passo</span>
-                            <h3>Você entende o melhor plano</h3>
+                            <article>
+                                <span>Gestão</span>
+                                <h3>Estoque, financeiro e visão da operação</h3>
+                                <p>
+                                    Acompanhe movimentações, produtos, lançamentos e dados
+                                    que ajudam a tomar decisões com mais segurança.
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="demo-section">
+                    <div class="demo-container">
+                        <div class="demo-section-heading">
+                            <span class="demo-kicker">Para quem é</span>
+
+                            <h2>Feito para operadores que querem sair do improviso</h2>
+
+                            <p>
+                                O VendMaster é indicado para quem precisa acompanhar pontos,
+                                máquinas, produtos e dinheiro com mais controle.
+                            </p>
                         </div>
 
-                        <p>
-                            Depois da demonstração, fica mais fácil decidir se precisa
-                            de uma, duas ou três ferramentas do VendMaster.
-                        </p>
+                        <div class="demo-tools-grid">
+                            <article>
+                                <span>Bolinhas</span>
+                                <h3>Máquinas de bolinhas</h3>
+                                <p>
+                                    Controle sangrias, abastecimentos, pontos visitados,
+                                    prioridades e histórico de cada local.
+                                </p>
+                            </article>
 
-                        <ul>
-                            <li>Plano Essencial</li>
-                            <li>Plano Operador</li>
-                            <li>Plano Completo</li>
-                        </ul>
-                    </article>
-                </div>
-            </div>
-        </section>
+                            <article>
+                                <span>Consignados</span>
+                                <h3>Produtos consignados</h3>
+                                <p>
+                                    Registre entradas, saídas, comissões, reposições e acertos
+                                    com parceiros comerciais.
+                                </p>
+                            </article>
 
-        <section class="demo-section demo-tools-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">O que será mostrado</span>
+                            <article>
+                                <span>Pelúcias</span>
+                                <h3>Máquinas de pelúcias</h3>
+                                <p>
+                                    Organize estoque, reposição de prêmios, desempenho por
+                                    ponto e movimentações da operação.
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
 
-                    <h2>Controle operacional sem complicar sua rotina</h2>
+                <section class="demo-section demo-faq-section">
+                    <div class="demo-container">
+                        <div class="demo-section-heading">
+                            <span class="demo-kicker">Dúvidas comuns</span>
 
-                    <p>
-                        A demonstração pode ser direcionada para os módulos que fazem
-                        sentido para o seu negócio.
-                    </p>
-                </div>
-
-                <div class="demo-tools-grid">
-                    <article>
-                        <span>Rotas</span>
-                        <h3>Organização de visitas e pontos</h3>
-                        <p>
-                            Veja como montar uma rotina de visitas mais clara,
-                            com pontos organizados e histórico da operação.
-                        </p>
-                    </article>
-
-                    <article>
-                        <span>Sangrias</span>
-                        <h3>Controle de coletas e acertos</h3>
-                        <p>
-                            Entenda como registrar sangrias, valores, quantidades,
-                            responsáveis e informações importantes de cada ponto.
-                        </p>
-                    </article>
-
-                    <article>
-                        <span>Gestão</span>
-                        <h3>Estoque, financeiro e visão da operação</h3>
-                        <p>
-                            Acompanhe movimentações, produtos, lançamentos e dados
-                            que ajudam a tomar decisões com mais segurança.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">Para quem é</span>
-
-                    <h2>Feito para operadores que querem sair do improviso</h2>
-
-                    <p>
-                        O VendMaster é indicado para quem precisa acompanhar pontos,
-                        máquinas, produtos e dinheiro com mais controle.
-                    </p>
-                </div>
-
-                <div class="demo-tools-grid">
-                    <article>
-                        <span>Bolinhas</span>
-                        <h3>Máquinas de bolinhas</h3>
-                        <p>
-                            Controle sangrias, abastecimentos, pontos visitados,
-                            prioridades e histórico de cada local.
-                        </p>
-                    </article>
-
-                    <article>
-                        <span>Consignados</span>
-                        <h3>Produtos consignados</h3>
-                        <p>
-                            Registre entradas, saídas, comissões, reposições e acertos
-                            com parceiros comerciais.
-                        </p>
-                    </article>
-
-                    <article>
-                        <span>Pelúcias</span>
-                        <h3>Máquinas de pelúcias</h3>
-                        <p>
-                            Organize estoque, reposição de prêmios, desempenho por
-                            ponto e movimentações da operação.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="demo-section demo-faq-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">Dúvidas comuns</span>
-
-                    <h2>Antes de solicitar a demonstração</h2>
-                </div>
-
-                <div class="demo-faq-list">
-                    <details>
-                        <summary>A demonstração do VendMaster é gratuita?</summary>
-                        <p>
-                            Sim. A demonstração é gratuita e serve para você entender
-                            como o sistema funciona antes de contratar.
-                        </p>
-                    </details>
-
-                    <details>
-                        <summary>Quanto tempo dura a demonstração?</summary>
-                        <p>
-                            A demonstração é objetiva e focada nos controles mais
-                            importantes para sua operação.
-                        </p>
-                    </details>
-
-                    <details>
-                        <summary>Preciso instalar aplicativo?</summary>
-                        <p>
-                            Não. O VendMaster funciona pelo navegador, com acesso por
-                            login e senha.
-                        </p>
-                    </details>
-
-                    <details>
-                        <summary>Posso ver apenas uma ferramenta específica?</summary>
-                        <p>
-                            Sim. A demonstração pode focar em bolinhas, consignados,
-                            pelúcias ou na operação completa.
-                        </p>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-        <section id="solicitar-demonstracao" class="demo-section demo-contact-section">
-            <div class="demo-container">
-                <div class="demo-section-heading">
-                    <span class="demo-kicker">Solicitar demonstração</span>
-
-                    <h2>Receba uma demonstração direcionada para sua operação</h2>
-
-                    <p>
-                        Preencha seus dados e informe quais frentes deseja controlar.
-                        O contato será feito preferencialmente pelo WhatsApp informado.
-                    </p>
-                </div>
-
-                <div class="demo-contact-layout">
-                    <form id="demoContactForm" class="demo-contact-form" action="/enviar-contato" method="POST" novalidate>
-                        <input type="hidden" name="preferenciaContato" value="WhatsApp">
-
-                        <div class="demo-form-field">
-                            <label for="demoNome">Nome</label>
-                            <input type="text" id="demoNome" name="nome" autocomplete="name" required>
+                            <h2>Antes de solicitar a demonstração</h2>
                         </div>
 
-                        <div class="demo-form-field">
-                            <label for="demoTelefone">WhatsApp</label>
-                            <input type="tel" id="demoTelefone" name="telefone" autocomplete="tel" data-phone-mask required>
+                        <div class="demo-faq-list">
+                            <details>
+                                <summary>A demonstração do VendMaster é gratuita?</summary>
+                                <p>
+                                    Sim. A demonstração é gratuita e serve para você entender
+                                    como o sistema funciona antes de contratar.
+                                </p>
+                            </details>
+
+                            <details>
+                                <summary>Quanto tempo dura a demonstração?</summary>
+                                <p>
+                                    A demonstração é objetiva e focada nos controles mais
+                                    importantes para sua operação.
+                                </p>
+                            </details>
+
+                            <details>
+                                <summary>Preciso instalar aplicativo?</summary>
+                                <p>
+                                    Não. O VendMaster funciona pelo navegador, com acesso por
+                                    login e senha.
+                                </p>
+                            </details>
+
+                            <details>
+                                <summary>Posso ver apenas uma ferramenta específica?</summary>
+                                <p>
+                                    Sim. A demonstração pode focar em bolinhas, consignados,
+                                    pelúcias ou na operação completa.
+                                </p>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="solicitar-demonstracao" class="demo-section demo-contact-section">
+                    <div class="demo-container">
+                        <div class="demo-section-heading">
+                            <span class="demo-kicker">Solicitar demonstração</span>
+
+                            <h2>Receba uma demonstração direcionada para sua operação</h2>
+
+                            <p>
+                                Preencha seus dados e informe quais frentes deseja controlar.
+                                O contato será feito preferencialmente pelo WhatsApp informado.
+                            </p>
                         </div>
 
-                        <div class="demo-form-field demo-form-field-full">
-                            <label for="demoEmail">E-mail</label>
-                            <input type="email" id="demoEmail" name="email" autocomplete="email">
+                        <div class="demo-contact-layout">
+                            <form id="demoContactForm" class="demo-contact-form" action="/enviar-contato" method="POST"
+                                novalidate>
+                                <input type="hidden" name="preferenciaContato" value="WhatsApp">
+
+                                <div class="demo-form-field">
+                                    <label for="demoNome">Nome</label>
+                                    <input type="text" id="demoNome" name="nome" autocomplete="name" required>
+                                </div>
+
+                                <div class="demo-form-field">
+                                    <label for="demoTelefone">WhatsApp</label>
+                                    <input type="tel" id="demoTelefone" name="telefone" autocomplete="tel"
+                                        data-phone-mask required>
+                                </div>
+
+                                <div class="demo-form-field demo-form-field-full">
+                                    <label for="demoEmail">E-mail</label>
+                                    <input type="email" id="demoEmail" name="email" autocomplete="email">
+                                </div>
+
+                                <fieldset class="demo-form-products">
+                                    <legend>Frentes da operação</legend>
+
+                                    <label>
+                                        <input type="checkbox" name="produtos[]" value="Bolinhas">
+                                        <span>Máquinas de bolinhas</span>
+                                    </label>
+
+                                    <label>
+                                        <input type="checkbox" name="produtos[]" value="Pelucias">
+                                        <span>Máquinas de pelúcias</span>
+                                    </label>
+
+                                    <label>
+                                        <input type="checkbox" name="produtos[]" value="Consignados">
+                                        <span>Consignados e comissão</span>
+                                    </label>
+                                </fieldset>
+
+                                <p id="demoContactStatus" class="demo-form-status" aria-live="polite"></p>
+
+                                <button type="submit" class="demo-btn demo-btn-primary demo-submit-btn">
+                                    Solicitar demonstração gratuita
+                                </button>
+                            </form>
+
+                            <aside class="demo-contact-aside">
+                                <span>Atendimento comercial</span>
+                                <h3>Prefere falar direto?</h3>
+                                <p>
+                                    Você também pode chamar no WhatsApp e tirar dúvidas sobre planos,
+                                    módulos e funcionamento antes da demonstração.
+                                </p>
+                                <a href="https://wa.me/55xxxx-xxxx2706" target="_blank" rel="noopener"
+                                    class="demo-btn demo-btn-secondary">
+                                    Falar no WhatsApp
+                                </a>
+                            </aside>
                         </div>
+                    </div>
+                </section>
 
-                        <fieldset class="demo-form-products">
-                            <legend>Frentes da operação</legend>
+                <section class="demo-final-cta">
+                    <div class="demo-container">
+                        <h2>Quer ver se o VendMaster faz sentido para sua operação?</h2>
 
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Bolinhas">
-                                <span>Máquinas de bolinhas</span>
-                            </label>
+                        <p>
+                            Solicite uma demonstração gratuita e veja como organizar sua rotina
+                            de campo, seus acertos e seus controles em um único sistema.
+                        </p>
 
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Pelucias">
-                                <span>Máquinas de pelúcias</span>
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="produtos[]" value="Consignados">
-                                <span>Consignados e comissão</span>
-                            </label>
-                        </fieldset>
-
-                        <p id="demoContactStatus" class="demo-form-status" aria-live="polite"></p>
-
-                        <button type="submit" class="demo-btn demo-btn-primary demo-submit-btn">
+                        <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
                             Solicitar demonstração gratuita
-                        </button>
-                    </form>
-
-                    <aside class="demo-contact-aside">
-                        <span>Atendimento comercial</span>
-                        <h3>Prefere falar direto?</h3>
-                        <p>
-                            Você também pode chamar no WhatsApp e tirar dúvidas sobre planos,
-                            módulos e funcionamento antes da demonstração.
-                        </p>
-                        <a href="https://wa.me/5585986992706" target="_blank" rel="noopener" class="demo-btn demo-btn-secondary">
-                            Falar no WhatsApp
                         </a>
-                    </aside>
-                </div>
-            </div>
-        </section>
+                    </div>
+                </section>
+            </main>
 
-        <section class="demo-final-cta">
-            <div class="demo-container">
-                <h2>Quer ver se o VendMaster faz sentido para sua operação?</h2>
+            <%- include('../partials/footer') %>
 
-                <p>
-                    Solicite uma demonstração gratuita e veja como organizar sua rotina
-                    de campo, seus acertos e seus controles em um único sistema.
-                </p>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const form = document.getElementById('demoContactForm');
+                        const statusElement = document.getElementById('demoContactStatus');
+                        const submitButton = form?.querySelector('button[type="submit"]');
 
-                <a href="#solicitar-demonstracao" class="demo-btn demo-btn-primary">
-                    Solicitar demonstração gratuita
-                </a>
-            </div>
-        </section>
-    </main>
+                        if (!form || !statusElement || !submitButton) return;
 
-    <%- include('../partials/footer') %>
+                        form.addEventListener('submit', async (event) => {
+                            event.preventDefault();
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('demoContactForm');
-            const statusElement = document.getElementById('demoContactStatus');
-            const submitButton = form?.querySelector('button[type="submit"]');
+                            const formData = new FormData(form);
+                            const nome = String(formData.get('nome') || '').trim();
+                            const telefone = String(formData.get('telefone') || '').trim();
 
-            if (!form || !statusElement || !submitButton) return;
+                            if (!nome || !telefone) {
+                                statusElement.textContent = 'Preencha nome e WhatsApp para solicitar a demonstração.';
+                                window.AppAlerts?.warning('Preencha nome e WhatsApp para solicitar a demonstração.');
+                                return;
+                            }
 
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
+                            submitButton.disabled = true;
+                            statusElement.textContent = 'Enviando suas informações...';
 
-                const formData = new FormData(form);
-                const nome = String(formData.get('nome') || '').trim();
-                const telefone = String(formData.get('telefone') || '').trim();
+                            try {
+                                const response = await fetch(form.action, {
+                                    method: 'POST',
+                                    body: new URLSearchParams(formData),
+                                    headers: {
+                                        Accept: 'application/json'
+                                    }
+                                });
 
-                if (!nome || !telefone) {
-                    statusElement.textContent = 'Preencha nome e WhatsApp para solicitar a demonstração.';
-                    window.AppAlerts?.warning('Preencha nome e WhatsApp para solicitar a demonstração.');
-                    return;
-                }
+                                const result = await response.json().catch(() => ({}));
 
-                submitButton.disabled = true;
-                statusElement.textContent = 'Enviando suas informações...';
+                                if (!response.ok) {
+                                    throw new Error(result.message || 'Não foi possível enviar sua solicitação agora.');
+                                }
 
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new URLSearchParams(formData),
-                        headers: {
-                            Accept: 'application/json'
-                        }
+                                form.reset();
+                                statusElement.textContent = result.message || 'Solicitação recebida. Em breve entraremos em contato.';
+                                window.AppAlerts?.success(statusElement.textContent);
+                            } catch (error) {
+                                statusElement.textContent = error.message || 'Erro ao enviar as informações.';
+                                window.AppAlerts?.error(statusElement.textContent);
+                            } finally {
+                                submitButton.disabled = false;
+                            }
+                        });
                     });
-
-                    const result = await response.json().catch(() => ({}));
-
-                    if (!response.ok) {
-                        throw new Error(result.message || 'Não foi possível enviar sua solicitação agora.');
-                    }
-
-                    form.reset();
-                    statusElement.textContent = result.message || 'Solicitação recebida. Em breve entraremos em contato.';
-                    window.AppAlerts?.success(statusElement.textContent);
-                } catch (error) {
-                    statusElement.textContent = error.message || 'Erro ao enviar as informações.';
-                    window.AppAlerts?.error(statusElement.textContent);
-                } finally {
-                    submitButton.disabled = false;
-                }
-            });
-        });
-    </script>
-</body>
+                </script>
+    </body>
 
 </html>
