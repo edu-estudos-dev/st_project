@@ -5,7 +5,7 @@ import VisitasModel from '../models/visitasModel.js';
 const PRODUCT_OPTIONS = [
   { value: 'todos', label: 'Todos os produtos' },
   { value: 'BOLINHAS', label: 'Bolinhas' },
-  { value: 'FIGURINHAS', label: 'Consignados' },
+  { value: 'CONSIGNADOS', label: 'Consignados' },
   { value: 'PELUCIAS', label: 'Pelúcias' }
 ];
 
@@ -18,7 +18,7 @@ const formatProduto = produto => {
     .filter(Boolean)
     .map(item => {
       if (item === 'BOLINHAS') return 'Bolinhas';
-      if (item === 'FIGURINHAS') return 'Consignados';
+      if (item === 'CONSIGNADOS') return 'Consignados';
       if (item === 'PELUCIAS') return 'Pelúcias';
       return item;
     })
@@ -31,7 +31,7 @@ const extractProdutosFromString = produto => {
   return String(produto)
     .split(',')
     .map(item => item.trim().toUpperCase())
-    .filter(item => ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'].includes(item));
+    .filter(item => ['BOLINHAS', 'CONSIGNADOS', 'PELUCIAS'].includes(item));
 };
 
 const filterProdutosByRouteFilter = (produtos, produtoFiltro = 'todos') => {
@@ -339,8 +339,8 @@ class RotasController {
           redirectUrl = `/bolinhas/sangrias/add?${queryParams.toString()}`;
         }
 
-        if (produtos[0] === 'FIGURINHAS') {
-          redirectUrl = `/figurinhas/sangrias/add?${queryParams.toString()}`;
+        if (produtos[0] === 'CONSIGNADOS') {
+          redirectUrl = `/consignados/sangrias/add?${queryParams.toString()}`;
         }
 
         if (produtos[0] === 'PELUCIAS') {
@@ -430,7 +430,7 @@ class RotasController {
         let label = produto;
 
         if (produto === 'BOLINHAS') label = 'Bolinhas';
-        if (produto === 'FIGURINHAS') label = 'Consignados';
+        if (produto === 'CONSIGNADOS') label = 'Consignados';
         if (produto === 'PELUCIAS') label = 'Pelúcias';
 
         return {

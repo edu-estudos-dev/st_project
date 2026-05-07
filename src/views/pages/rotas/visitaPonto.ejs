@@ -70,14 +70,14 @@
 
         const getProdutoIcon = (produto) => {
             if (produto === 'BOLINHAS') return 'bi-circle-square';
-            if (produto === 'FIGURINHAS') return 'bi-stickies';
+            if (produto === 'CONSIGNADOS') return 'bi-stickies';
             if (produto === 'PELUCIAS') return 'bi-gift';
             return 'bi-box-seam';
         };
 
         const getProdutoActionLabel = (produto) => {
             if (produto === 'BOLINHAS') return 'Registrar bolinhas';
-            if (produto === 'FIGURINHAS') return 'Registrar consignados';
+            if (produto === 'CONSIGNADOS') return 'Registrar consignados';
             if (produto === 'PELUCIAS') return 'Registrar pelúcias';
             return 'Registrar produto';
         };
@@ -97,8 +97,8 @@
                 return `/bolinhas/sangrias/add?${queryParams.toString()}`;
             }
 
-            if (produto === 'FIGURINHAS') {
-                return `/figurinhas/sangrias/add?${queryParams.toString()}`;
+            if (produto === 'CONSIGNADOS') {
+                return `/consignados/sangrias/add?${queryParams.toString()}`;
             }
 
             if (produto === 'PELUCIAS') {
@@ -111,8 +111,8 @@
         const getProdutoReceiptUrl = (produto, sangriaId) => {
             if (!sangriaId) return '';
 
-            if (produto === 'FIGURINHAS') {
-                return `/figurinhas/sangrias/recibo/${sangriaId}`;
+            if (produto === 'CONSIGNADOS') {
+                return `/consignados/sangrias/recibo/${sangriaId}`;
             }
 
             if (produto === 'PELUCIAS') {
@@ -245,7 +245,7 @@
                                 let productThemeClass = 'produto-theme-neutral';
 
                                 if (item.produto === 'BOLINHAS') productThemeClass = 'produto-theme-bolinhas';
-                                if (item.produto === 'FIGURINHAS') productThemeClass = 'produto-theme-figurinhas';
+                                if (item.produto === 'CONSIGNADOS') productThemeClass = 'produto-theme-consignados';
                                 if (item.produto === 'PELUCIAS') productThemeClass = 'produto-theme-pelucias';
                             %>
 

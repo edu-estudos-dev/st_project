@@ -1,4 +1,4 @@
-import figurinhasModel from '../models/figurinhasModel.js';
+import consignadosModel from '../models/consignadosModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
 import { recalculateConsolidatedRevenueForDates } from '../services/monthlyRevenueConsolidation.js';
@@ -7,12 +7,12 @@ import {
   gerarReciboPdfBuffer
 } from '../utils/reciboPdf.js';
 
-class FigurinhasController {
+class ConsignadosController {
   addSangriaForm = async (req, res) => {
     const usuario = req.user || null;
 
     try {
-      const estabelecimentos = await figurinhasModel.getEstabelecimentos(
+      const estabelecimentos = await consignadosModel.getEstabelecimentos(
         usuario.assinante_id
       );
 
@@ -38,7 +38,7 @@ class FigurinhasController {
         ? String(req.query.rota_retorno_url)
         : retornoUrl;
 
-      res.render('pages/figurinhas/cadastrarSangriaFigurinha', {
+      res.render('pages/consignados/cadastrarSangriaConsignado', {
         estabelecimentos,
         usuario,
         selectedEstabelecimentoId,
@@ -81,16 +81,7 @@ class FigurinhasController {
         throw new Error('Dados obrigatórios faltando.');
       }
 
-      const sangriaAtual = await figurinhasModel.getSangriaById(
-        id,
-        usuario.assinante_id
-      );
-
-      if (!sangriaAtual) {
-        return res.redirect('/figurinhas/sangrias?error=Sangria nao encontrada');
-      }
-
-      const ultimaSangria = await figurinhasModel.getUltimaSangria(
+      const ultimaSangria = await consignadosModel.getUltimaSangria(
         estabelecimento_id,
         usuario.assinante_id
       );
@@ -111,7 +102,7 @@ class FigurinhasController {
           throw new Error('A quantidade inicial deve ser um número válido.');
         }
 
-        await figurinhasModel.createSangria({
+        await consignadosModel.createSangria({
           assinante_id: usuario.assinante_id,
           estabelecimento_id,
           data_sangria,
@@ -126,7 +117,7 @@ class FigurinhasController {
         });
 
         return res.redirect(
-          '/figurinhas/sangrias?success=Abertura inicial de consignados cadastrada com sucesso'
+          '/consignados/sangrias?success=Abertura inicial de consignados cadastrada com sucesso'
         );
       }
 
@@ -149,7 +140,7 @@ class FigurinhasController {
         throw new Error('O estoque não pode ficar negativo.');
       }
 
-      const sangriaResult = await figurinhasModel.createSangria({
+      const sangriaResult = await consignadosModel.createSangria({
         assinante_id: usuario.assinante_id,
         estabelecimento_id,
         data_sangria,
@@ -165,11 +156,11 @@ class FigurinhasController {
       const sangriaId = sangriaResult?.rows?.[0]?.id || null;
 
       const reciboUrl = sangriaId
-        ? `/figurinhas/sangrias/recibo/${sangriaId}`
+        ? `/consignados/sangrias/recibo/${sangriaId}`
         : '';
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [data_sangria]
       });
@@ -201,7 +192,7 @@ class FigurinhasController {
         await VisitasModel.marcarProdutoRegistrado({
           visita_id,
           assinante_id: usuario.assinante_id,
-          produto: 'FIGURINHAS',
+          produto: 'CONSIGNADOS',
           sangria_id: sangriaId,
           observacoes: observacoes || null
         });
@@ -254,14 +245,14 @@ class FigurinhasController {
       }
 
      return res.redirect(
-        `/figurinhas/sangrias?success=${encodeURIComponent(
+        `/consignados/sangrias?success=${encodeURIComponent(
           'Sangria adicionada com sucesso'
         )}&recibo_url=${encodeURIComponent(reciboUrl)}`
       );
     } catch (error) {
       console.error('Erro ao adicionar sangria de consignados:', error);
       return res.redirect(
-        `/figurinhas/sangrias?error=${encodeURIComponent(error.message)}`
+        `/consignados/sangrias?error=${encodeURIComponent(error.message)}`
       );
     }
   };
@@ -269,10 +260,10 @@ class FigurinhasController {
   index = async (req, res) => {
     const usuario = req.user;
     try {
-      const sangrias = await figurinhasModel.getSangrias(usuario.assinante_id);
+      const sangrias = await consignadosModel.getSangrias(usuario.assinante_id);
       const { success, error } = req.query;
 
-      res.render('pages/figurinhas/tabelaFigurinha', {
+      res.render('pages/consignados/tabelaConsignados', {
         sangrias,
         usuario,
         success,
@@ -289,10 +280,10 @@ class FigurinhasController {
     try {
       const id = req.params.id;
 
-      const estabelecimentos = await figurinhasModel.getEstabelecimentos(
+      const estabelecimentos = await consignadosModel.getEstabelecimentos(
         usuario.assinante_id
       );
-      const sangria = await figurinhasModel.getSangriaById(
+      const sangria = await consignadosModel.getSangriaById(
         id,
         usuario.assinante_id
       );
@@ -301,7 +292,7 @@ class FigurinhasController {
         return res.status(404).send('Sangria não encontrada.');
       }
 
-      res.render('pages/figurinhas/editarSangriaFigurinha', {
+      res.render('pages/consignados/editarSangriaConsignado', {
         estabelecimentos,
         sangria,
         usuario
@@ -326,7 +317,18 @@ class FigurinhasController {
         observacoes
       } = req.body;
 
-      const ultimaSangria = await figurinhasModel.getUltimaSangria(
+      const sangriaAtual = await consignadosModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangriaAtual) {
+        return res.redirect(
+          '/consignados/sangrias?error=Sangria nao encontrada'
+        );
+      }
+
+      const ultimaSangria = await consignadosModel.getUltimaSangria(
         estabelecimento_id,
         usuario.assinante_id
       );
@@ -344,7 +346,7 @@ class FigurinhasController {
         throw new Error('O estoque não pode ficar negativo.');
       }
 
-      await figurinhasModel.updateSangria({
+      await consignadosModel.updateSangria({
         assinante_id: usuario.assinante_id,
         id,
         estabelecimento_id,
@@ -359,16 +361,16 @@ class FigurinhasController {
       });
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [sangriaAtual.data_sangria, data_sangria]
       });
 
-      res.redirect('/figurinhas/sangrias?success=Atualizado com sucesso');
+      res.redirect('/consignados/sangrias?success=Atualizado com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar:', error);
       res.redirect(
-        `/figurinhas/sangrias?error=${encodeURIComponent(error.message)}`
+        `/consignados/sangrias?error=${encodeURIComponent(error.message)}`
       );
     }
   };
@@ -377,22 +379,26 @@ class FigurinhasController {
     try {
       const usuario = req.user;
       const id = req.params.id;
-      const sangriaAtual = await figurinhasModel.getSangriaById(
+      const sangriaAtual = await consignadosModel.getSangriaById(
         id,
         usuario.assinante_id
       );
 
-      const result = await figurinhasModel.deleteSangria(id, usuario.assinante_id);
+      const result = await consignadosModel.deleteSangria(id, usuario.assinante_id);
 
       if (result.rowCount === 0) {
+        const message = sangriaAtual
+          ? 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita.'
+          : 'Sangria de consignados nao encontrada.';
+
         return res.status(409).json({
           success: false,
-          message: 'Esta sangria nao pode ser excluida porque esta vinculada a uma visita ou nao foi encontrada.'
+          message
         });
       }
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [sangriaAtual?.data_sangria]
       });
@@ -415,7 +421,7 @@ class FigurinhasController {
     try {
       const id = req.params.id;
 
-      const sangria = await figurinhasModel.getSangriaById(
+      const sangria = await consignadosModel.getSangriaById(
         id,
         usuario.assinante_id
       );
@@ -424,7 +430,7 @@ class FigurinhasController {
         return res.status(404).send('Sangria não encontrada.');
       }
 
-      res.render('pages/figurinhas/visualizarDadosFigurinha', {
+      res.render('pages/consignados/visualizarDadosConsignado', {
         sangria,
         usuario
       });
@@ -434,14 +440,14 @@ class FigurinhasController {
     }
   };
 
-  getReceitaFigurinhas = async (req, res) => {
+  getReceitaConsignados = async (req, res) => {
     const usuario = req.user;
     try {
-      const receita = await figurinhasModel.getMonthlyRevenue(
+      const receita = await consignadosModel.getMonthlyRevenue(
         usuario.assinante_id
       );
 
-      res.render('pages/figurinhas/receitaFigurinha', {
+      res.render('pages/consignados/receitaConsignados', {
         receita,
         usuario
       });
@@ -451,15 +457,15 @@ class FigurinhasController {
     }
   };
 
-  renderControleGeralFigurinhas = async (req, res) => {
+  renderControleGeralConsignados = async (req, res) => {
     const usuario = req.user;
     try {
       const dados =
-        await figurinhasModel.getLatestSangriaForAllEstabelecimentos(
+        await consignadosModel.getLatestSangriaForAllEstabelecimentos(
           usuario.assinante_id
         );
 
-      res.render('pages/figurinhas/controleGeralFigurinhas', {
+      res.render('pages/consignados/controleGeralConsignados', {
         estabelecimentos: dados,
         usuario
       });
@@ -474,7 +480,7 @@ class FigurinhasController {
       const usuario = req.user;
       const estabelecimentoId = req.params.id;
 
-      const result = await figurinhasModel.getUltimaSangria(
+      const result = await consignadosModel.getUltimaSangria(
         estabelecimentoId,
         usuario.assinante_id
       );
@@ -504,7 +510,7 @@ class FigurinhasController {
     try {
       const { id } = req.params;
 
-      const sangria = await figurinhasModel.getSangriaById(
+      const sangria = await consignadosModel.getSangriaById(
         id,
         usuario.assinante_id
       );
@@ -536,4 +542,4 @@ class FigurinhasController {
 }
 
 
-export default new FigurinhasController();
+export default new ConsignadosController();

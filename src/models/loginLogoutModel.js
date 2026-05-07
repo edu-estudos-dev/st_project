@@ -5,7 +5,7 @@ import connection from '../db_config/connection.js';
 import AssinanteModel from './assinanteModel.js';
 import { serializeProdutos } from '../utilities/produtoUtils.js';
 
-const TRIAL_PRODUCTS = ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'];
+const TRIAL_PRODUCTS = ['BOLINHAS', 'CONSIGNADOS', 'PELUCIAS'];
 
 class LoginLogout {
   constructor() {

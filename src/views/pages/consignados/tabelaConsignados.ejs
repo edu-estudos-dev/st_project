@@ -30,7 +30,7 @@
                         <p>Consulte valores, acompanhe pagamento e use os atalhos de visualizar, editar e deletar em um layout mais limpo.</p>
                     </div>
                     <% if (!isReadOnly) { %>
-                        <a class="list-action" href="/figurinhas/sangrias/add">
+                        <a class="list-action" href="/consignados/sangrias/add">
                             <i class="bi bi-plus-circle"></i>
                             <span>Novo registro</span>
                         </a>
@@ -69,10 +69,14 @@
                                             </td>
                                             <td>
                                                 <div class="table-actions">
-                                                    <a href="/figurinhas/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
                                                     <% if (!isReadOnly) { %>
-                                                        <a href="/figurinhas/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
-                                                        <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                        <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
+                                                        <% if (sangria.vinculada_visita) { %>
+                                                            <button type="button" class="table-btn table-btn-delete" disabled title="Registro vinculado a uma visita">Vinculado</button>
+                                                        <% } else { %>
+                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                        <% } %>
                                                     <% } %>
                                                 </div>
                                             </td>
@@ -101,7 +105,7 @@
                     const confirmed = await window.AppAlerts?.confirm({ title: 'Excluir sangria', text: 'Tem certeza que deseja excluir este registro de sangria?', confirmButtonText: 'Excluir', cancelButtonText: 'Cancelar' });
                     if (!confirmed) return;
                     try {
-                        const response = await fetch(`/figurinhas/sangrias/delete/${idSangria}`, { method: 'POST' });
+                        const response = await fetch(`/consignados/sangrias/delete/${idSangria}`, { method: 'POST' });
                         const data = await response.json();
                         if (!response.ok || !data.success) throw new Error(data.message || 'Erro ao excluir sangria');
                         await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
@@ -145,4 +149,3 @@
     </script>
 </body>
 </html>
-

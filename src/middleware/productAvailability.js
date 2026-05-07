@@ -2,8 +2,8 @@ import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 
 const PRODUCT_LABELS = {
     bolinhas: 'Bolinhas',
-    figurinhas: 'Figurinhas',
-    pelucias: 'Pelúcias'
+    consignados: 'Consignados',
+    pelucias: 'Pelucias'
 };
 
 export const requireProductAvailable = (productKey) => {
@@ -17,7 +17,7 @@ export const requireProductAvailable = (productKey) => {
         }
 
         const productLabel = PRODUCT_LABELS[productKey] || 'Produto';
-        const message = `${productLabel} não está disponível em nenhum estabelecimento ativo.`;
+        const message = `${productLabel} nao esta disponivel em nenhum estabelecimento ativo.`;
         const acceptsJson = req.xhr || req.get('accept')?.includes('application/json');
 
         if (acceptsJson) {

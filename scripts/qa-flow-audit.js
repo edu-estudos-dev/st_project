@@ -73,7 +73,7 @@ addCheck(
 
 for (const [name, file] of [
   ['Bolinha valida visita da rota antes de vincular produto', 'src/controllers/bolinhaController.js'],
-  ['Consignado valida visita da rota antes de vincular produto', 'src/controllers/figurinhasController.js'],
+  ['Consignado valida visita da rota antes de vincular produto', 'src/controllers/consignadosController.js'],
   ['Pelucia valida visita da rota antes de vincular produto', 'src/controllers/peluciasController.js']
 ]) {
   addCheck(
@@ -86,7 +86,7 @@ for (const [name, file] of [
 
 for (const [name, file] of [
   ['Bolinha nao exclui sangria ligada a visita guiada', 'src/models/BolinhasModel.js'],
-  ['Consignado nao exclui sangria ligada a visita guiada', 'src/models/figurinhasModel.js'],
+  ['Consignado nao exclui sangria ligada a visita guiada', 'src/models/consignadosModel.js'],
   ['Pelucia nao exclui sangria ligada a visita guiada', 'src/models/peluciasModel.js']
 ]) {
   addCheck(
@@ -99,7 +99,7 @@ for (const [name, file] of [
 
 for (const [name, file] of [
   ['Bolinha recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/bolinhaController.js'],
-  ['Consignado recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/figurinhasController.js'],
+  ['Consignado recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/consignadosController.js'],
   ['Pelucia recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/peluciasController.js']
 ]) {
   addCheck(

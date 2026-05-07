@@ -14,7 +14,7 @@
         const currentOrigem = typeof origem !== 'undefined' ? origem : '';
         const currentRetornoUrl = typeof retornoUrl !== 'undefined' && retornoUrl ? retornoUrl : '/rotas';
         const currentRotaRetornoUrl = typeof rotaRetornoUrl !== 'undefined' && rotaRetornoUrl ? rotaRetornoUrl : currentRetornoUrl;
-        const cancelarUrl = currentOrigem === 'rota' ? currentRetornoUrl : '/figurinhas/sangrias';
+        const cancelarUrl = currentOrigem === 'rota' ? currentRetornoUrl : '/consignados/sangrias';
     %>
 
     <div class="form-shell form-shell-modern">
@@ -40,7 +40,7 @@
         </section>
 
         <main class="form-stage">
-            <form action="/figurinhas/sangrias/add" method="POST" class="modern-form" id="figurinhaForm">
+            <form action="/consignados/sangrias/add" method="POST" class="modern-form" id="consignadoForm">
                 <input type="hidden" name="visita_id" value="<%= currentVisitaId || '' %>">
                 <input type="hidden" name="rota_id" value="<%= currentRotaId || '' %>">
                 <input type="hidden" name="rota_ponto_id" value="<%= currentRotaPontoId || '' %>">
@@ -202,7 +202,7 @@
 
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-save2"></i>
-                            <span id="figurinhaSubmitLabel">Registrar sangria</span>
+                            <span id="consignadoSubmitLabel">Registrar sangria</span>
                         </button>
                     </div>
                 </section>
@@ -212,7 +212,7 @@
 
     <script>
         window.estoqueAnterior = 0;
-        window.figurinhaHasHistorico = false;
+        window.consignadoHasHistorico = false;
 
         const estabelecimentoSelect = document.getElementById('estabelecimento');
         const aberturaInicialInput = document.getElementById('abertura_inicial');
@@ -254,9 +254,9 @@
         function syncModoAberturaInicial() {
             const isAbertura = aberturaInicialInput.checked;
             const hasSelectedEstabelecimento = Boolean(estabelecimentoSelect.value);
-            const hasHistorico = window.figurinhaHasHistorico === true;
+            const hasHistorico = window.consignadoHasHistorico === true;
             const aberturaBox = document.getElementById('aberturaInicialBox');
-            const submitLabel = document.getElementById('figurinhaSubmitLabel');
+            const submitLabel = document.getElementById('consignadoSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
             const dataSangriaLabel = document.getElementById('dataSangriaLabel');
             const tipoPagamentoField = document.getElementById('tipoPagamentoField');
@@ -311,9 +311,9 @@
             }
         }
 
-        async function loadUltimaSangriaFigurinha(estabelecimentoId) {
+        async function loadUltimaSangriaConsignado(estabelecimentoId) {
             if (!estabelecimentoId) {
-                window.figurinhaHasHistorico = false;
+                window.consignadoHasHistorico = false;
                 window.estoqueAnterior = 0;
                 document.getElementById('ultima_visita').value = '';
                 updateResumoUltimaVisita('', 0);
@@ -322,7 +322,7 @@
             }
 
             try {
-                const response = await fetch(`/figurinhas/sangrias/ultima-sangria/${estabelecimentoId}`);
+                const response = await fetch(`/consignados/sangrias/ultima-sangria/${estabelecimentoId}`);
                 const data = await response.json();
 
                 if (data.data) {
@@ -334,9 +334,9 @@
                     updateResumoUltimaVisita('', data.estoque || 0);
                 }
 
-                window.figurinhaHasHistorico = Boolean(data.hasHistorico);
+                window.consignadoHasHistorico = Boolean(data.hasHistorico);
 
-                if (window.figurinhaHasHistorico) {
+                if (window.consignadoHasHistorico) {
                     aberturaInicialInput.checked = false;
                     quantidadeInicialInput.value = '';
                 }
@@ -347,7 +347,7 @@
             } catch (error) {
                 console.error(error);
 
-                window.figurinhaHasHistorico = false;
+                window.consignadoHasHistorico = false;
                 window.estoqueAnterior = 0;
                 updateResumoUltimaVisita('', 0);
                 syncModoAberturaInicial();
@@ -355,7 +355,7 @@
         }
 
         estabelecimentoSelect.addEventListener('change', function () {
-            loadUltimaSangriaFigurinha(this.value);
+            loadUltimaSangriaConsignado(this.value);
         });
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -373,9 +373,9 @@
 
             quantidadeInicialInput.addEventListener('input', syncModoAberturaInicial);
 
-            document.getElementById('figurinhaForm').addEventListener('submit', (event) => {
+            document.getElementById('consignadoForm').addEventListener('submit', (event) => {
                 const isAbertura = aberturaInicialInput.checked;
-                const hasHistorico = window.figurinhaHasHistorico === true;
+                const hasHistorico = window.consignadoHasHistorico === true;
                 const quantidadeInicial = quantidadeInicialInput.value;
 
                 if (!estabelecimentoSelect.value) {
@@ -403,7 +403,7 @@
             });
 
             if (estabelecimentoSelect.value) {
-                loadUltimaSangriaFigurinha(estabelecimentoSelect.value);
+                loadUltimaSangriaConsignado(estabelecimentoSelect.value);
             } else {
                 syncModoAberturaInicial();
             }

@@ -1,6 +1,6 @@
 import connection from '../db_config/connection.js';
 
-class FigurinhasModel {
+class ConsignadosModel {
   createSangria = async sangria => {
     const {
       assinante_id,
@@ -16,7 +16,7 @@ class FigurinhasModel {
     } = sangria;
 
     const query = `
-      INSERT INTO sangrias_figurinhas (
+      INSERT INTO sangrias_consignados (
         assinante_id,
         estabelecimento_id,
         data_sangria,
@@ -33,7 +33,7 @@ class FigurinhasModel {
       WHERE e.id = $2
         AND e.assinante_id = $1
         AND e.status = 'ativo'
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
       RETURNING id
     `;
 
@@ -59,13 +59,22 @@ class FigurinhasModel {
 
   getSangrias = async (assinanteId) => {
     const query = `
-      SELECT s.*, e.estabelecimento
-      FROM sangrias_figurinhas s
+      SELECT
+        s.*,
+        e.estabelecimento,
+        EXISTS (
+          SELECT 1
+          FROM visita_produtos vp
+          WHERE vp.sangria_id = s.id
+            AND vp.assinante_id = s.assinante_id
+            AND vp.produto = 'CONSIGNADOS'
+        ) AS vinculada_visita
+      FROM sangrias_consignados s
       JOIN estabelecimentos e
         ON s.estabelecimento_id = e.id
        AND s.assinante_id = e.assinante_id
       WHERE s.assinante_id = $1
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
         AND COALESCE(s.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
       ORDER BY s.data_sangria DESC
     `;
@@ -78,7 +87,7 @@ class FigurinhasModel {
       SELECT *
       FROM estabelecimentos
       WHERE assinante_id = $1
-        AND UPPER(produto) LIKE '%FIGURINHAS%'
+        AND UPPER(produto) LIKE '%CONSIGNADOS%'
         AND status = 'ativo'
     `;
     const result = await connection.query(query, [assinanteId]);
@@ -98,17 +107,17 @@ class FigurinhasModel {
         prev.data_sangria AS data_sangria_anterior,
         prev.qtde_deixada AS qtde_anterior,
         prev.observacoes AS observacoes_anteriores
-      FROM sangrias_figurinhas s
+      FROM sangrias_consignados s
       JOIN estabelecimentos e
         ON s.estabelecimento_id = e.id
        AND s.assinante_id = e.assinante_id
-      LEFT JOIN sangrias_figurinhas prev
+      LEFT JOIN sangrias_consignados prev
         ON prev.estabelecimento_id = s.estabelecimento_id
        AND prev.assinante_id = s.assinante_id
        AND prev.data_sangria < s.data_sangria
       WHERE s.id = $1
         AND s.assinante_id = $2
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
       ORDER BY prev.data_sangria DESC
       LIMIT 1
     `;
@@ -133,7 +142,7 @@ class FigurinhasModel {
     } = sangria;
 
     const query = `
-      UPDATE sangrias_figurinhas s
+      UPDATE sangrias_consignados s
       SET
         estabelecimento_id = e.id,
         data_sangria = $2,
@@ -151,7 +160,7 @@ class FigurinhasModel {
         AND e.id = $1
         AND e.assinante_id = $11
         AND e.status = 'ativo'
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
       RETURNING s.id
     `;
 
@@ -178,7 +187,7 @@ class FigurinhasModel {
 
   deleteSangria = async (id, assinanteId) => {
     const query = `
-      DELETE FROM sangrias_figurinhas
+      DELETE FROM sangrias_consignados
       WHERE id = $1
         AND assinante_id = $2
         AND NOT EXISTS (
@@ -186,13 +195,13 @@ class FigurinhasModel {
           FROM visita_produtos
           WHERE sangria_id = $1
             AND assinante_id = $2
-            AND produto = 'FIGURINHAS'
+            AND produto = 'CONSIGNADOS'
         )
         AND estabelecimento_id IN (
           SELECT id
           FROM estabelecimentos
           WHERE assinante_id = $2
-            AND UPPER(produto) LIKE '%FIGURINHAS%'
+            AND UPPER(produto) LIKE '%CONSIGNADOS%'
         )
     `;
     const result = await connection.query(query, [id, assinanteId]);
@@ -202,7 +211,7 @@ class FigurinhasModel {
   getUltimaSangria = async (estabelecimentoId, assinanteId) => {
     const query = `
       SELECT *
-      FROM sangrias_figurinhas
+      FROM sangrias_consignados
       WHERE estabelecimento_id = $1
         AND assinante_id = $2
       ORDER BY data_sangria DESC, id DESC
@@ -218,13 +227,13 @@ class FigurinhasModel {
         EXTRACT(YEAR FROM data_sangria) AS ano,
         EXTRACT(MONTH FROM data_sangria) AS mes,
         SUM(valor_apurado) AS total
-      FROM sangrias_figurinhas
+      FROM sangrias_consignados
       WHERE assinante_id = $1
         AND estabelecimento_id IN (
           SELECT id
           FROM estabelecimentos
           WHERE assinante_id = $1
-            AND UPPER(produto) LIKE '%FIGURINHAS%'
+            AND UPPER(produto) LIKE '%CONSIGNADOS%'
         )
       GROUP BY ano, mes
       ORDER BY ano, mes
@@ -247,14 +256,14 @@ class FigurinhasModel {
         e.maquina,
         sf.observacoes
       FROM estabelecimentos e
-      JOIN sangrias_figurinhas sf
+      JOIN sangrias_consignados sf
         ON e.id = sf.estabelecimento_id
        AND e.assinante_id = sf.assinante_id
       WHERE e.assinante_id = $1
-        AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+        AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
         AND sf.data_sangria = (
           SELECT MAX(inner_sf.data_sangria)
-          FROM sangrias_figurinhas inner_sf
+          FROM sangrias_consignados inner_sf
           WHERE inner_sf.estabelecimento_id = e.id
             AND inner_sf.assinante_id = e.assinante_id
         )
@@ -265,4 +274,4 @@ class FigurinhasModel {
   };
 }
 
-export default new FigurinhasModel();
+export default new ConsignadosModel();

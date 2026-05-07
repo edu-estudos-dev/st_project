@@ -72,7 +72,7 @@
 
                                 <% if (false) { %>
                                     <label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
+                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="CONSIGNADOS" <%= selectedProducts.includes('CONSIGNADOS') ? 'checked' : '' %>>
                                         <span>Consignados</span>
                                     </label>
                                 <% } %>
@@ -235,7 +235,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12 d-none" data-operational-field="figurinhas-initial">
+                        <div class="col-12 d-none" data-operational-field="consignados-initial">
                             <div class="product-setup-block theme-blue">
                                 <div class="product-setup-header">
                                     <div class="product-setup-badges">
@@ -253,16 +253,16 @@
 
                                 <div class="row g-3">
                                     <div class="col-12 col-md-6 col-lg-4 compact-field centered-field">
-                                        <label for="figurinha_quantidade_inicial">
+                                        <label for="consignado_quantidade_inicial">
                                             Quantidade inicial deixada <span class="required-label">obrigatório</span>
                                         </label>
                                         <input
                                             type="number"
                                             class="form-control text-center"
-                                            id="figurinha_quantidade_inicial"
-                                            name="figurinha_quantidade_inicial"
+                                            id="consignado_quantidade_inicial"
+                                            name="consignado_quantidade_inicial"
                                             min="0"
-                                            value="<%= form.figurinha_quantidade_inicial || '' %>"
+                                            value="<%= form.consignado_quantidade_inicial || form.figurinha_quantidade_inicial || '' %>"
                                             placeholder="Ex.: 100"
                                         >
                                     </div>
@@ -660,13 +660,13 @@
             const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
 
             const bolinhasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="bolinhas-machine"]'));
-            const figurinhasInitialFields = Array.from(document.querySelectorAll('[data-operational-field="figurinhas-initial"]'));
+            const consignadosInitialFields = Array.from(document.querySelectorAll('[data-operational-field="consignados-initial"]'));
             const peluciasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-machine"]'));
             const peluciasInitialFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-initial"]'));
 
             const chaveBolinhasInput = document.getElementById('chave_bolinhas');
             const maquinaBolinhasInput = document.getElementById('maquina_bolinhas');
-            const figurinhaQuantidadeInicialInput = document.getElementById('figurinha_quantidade_inicial');
+            const consignadoQuantidadeInicialInput = document.getElementById('consignado_quantidade_inicial');
             const chavePeluciasInput = document.getElementById('chave_pelucias');
             const maquinaPeluciasInput = document.getElementById('maquina_pelucias');
             const peluciaLeituraInicialInput = document.getElementById('pelucia_leitura_inicial');
@@ -684,11 +684,11 @@
                 const selectedProducts = getSelectedProducts();
 
                 const hasBolinhas = selectedProducts.includes('BOLINHAS');
-                const hasFigurinhas = selectedProducts.includes('FIGURINHAS');
+                const hasConsignados = selectedProducts.includes('CONSIGNADOS');
                 const hasPelucias = selectedProducts.includes('PELUCIAS');
 
                 setGroupVisibility(bolinhasMachineFields, hasBolinhas);
-                setGroupVisibility(figurinhasInitialFields, hasFigurinhas);
+                setGroupVisibility(consignadosInitialFields, hasConsignados);
                 setGroupVisibility(peluciasMachineFields, hasPelucias);
                 setGroupVisibility(peluciasInitialFields, hasPelucias);
 
@@ -697,7 +697,7 @@
                 if (chavePeluciasInput) chavePeluciasInput.required = false;
                 if (maquinaPeluciasInput) maquinaPeluciasInput.required = false;
 
-                if (figurinhaQuantidadeInicialInput) figurinhaQuantidadeInicialInput.required = hasFigurinhas;
+                if (consignadoQuantidadeInicialInput) consignadoQuantidadeInicialInput.required = hasConsignados;
                 if (peluciaLeituraInicialInput) peluciaLeituraInicialInput.required = hasPelucias;
                 if (peluciaAbastecidoInicialInput) peluciaAbastecidoInicialInput.required = hasPelucias;
 
@@ -706,8 +706,8 @@
                     if (maquinaBolinhasInput) maquinaBolinhasInput.value = '';
                 }
 
-                if (!hasFigurinhas && figurinhaQuantidadeInicialInput) {
-                    figurinhaQuantidadeInicialInput.value = '';
+                if (!hasConsignados && consignadoQuantidadeInicialInput) {
+                    consignadoQuantidadeInicialInput.value = '';
                 }
 
                 if (!hasPelucias) {
@@ -784,7 +784,7 @@
                     return;
                 }
 
-                if (selectedProducts.includes('FIGURINHAS') && !figurinhaQuantidadeInicialInput.value) {
+                if (selectedProducts.includes('CONSIGNADOS') && !consignadoQuantidadeInicialInput.value) {
                     e.preventDefault();
                     window.AppAlerts?.warning('Informe a quantidade inicial deixada para consignados.');
                     return;

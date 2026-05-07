@@ -5,7 +5,7 @@ const mainTables = [
   'assinantes',
   'estabelecimentos',
   'sangrias_bolinha',
-  'sangrias_figurinhas',
+  'sangrias_consignados',
   'sangrias_pelucias',
   'lancamentos'
 ];
@@ -67,7 +67,7 @@ await printQuery(
   `
     SELECT 'estabelecimentos' tabela, COUNT(*)::int total FROM estabelecimentos WHERE assinante_id IS NULL
     UNION ALL SELECT 'sangrias_bolinha', COUNT(*)::int FROM sangrias_bolinha WHERE assinante_id IS NULL
-    UNION ALL SELECT 'sangrias_figurinhas', COUNT(*)::int FROM sangrias_figurinhas WHERE assinante_id IS NULL
+    UNION ALL SELECT 'sangrias_consignados', COUNT(*)::int FROM sangrias_consignados WHERE assinante_id IS NULL
     UNION ALL SELECT 'sangrias_pelucias', COUNT(*)::int FROM sangrias_pelucias WHERE assinante_id IS NULL
     UNION ALL SELECT 'lancamentos', COUNT(*)::int FROM lancamentos WHERE assinante_id IS NULL
   `
@@ -81,8 +81,8 @@ await printQuery(
     JOIN estabelecimentos e ON e.id = s.estabelecimento_id
     WHERE s.assinante_id <> e.assinante_id
     UNION ALL
-    SELECT 'figurinhas', COUNT(*)::int
-    FROM sangrias_figurinhas s
+    SELECT 'consignados', COUNT(*)::int
+    FROM sangrias_consignados s
     JOIN estabelecimentos e ON e.id = s.estabelecimento_id
     WHERE s.assinante_id <> e.assinante_id
     UNION ALL
@@ -121,8 +121,8 @@ await printQuery(
     LEFT JOIN estabelecimentos e ON e.id = s.estabelecimento_id
     WHERE e.id IS NULL
     UNION ALL
-    SELECT 'figurinhas_sem_estabelecimento', COUNT(*)::int
-    FROM sangrias_figurinhas s
+    SELECT 'consignados_sem_estabelecimento', COUNT(*)::int
+    FROM sangrias_consignados s
     LEFT JOIN estabelecimentos e ON e.id = s.estabelecimento_id
     WHERE e.id IS NULL
     UNION ALL
@@ -220,13 +220,13 @@ await printQuery(
       COUNT(DISTINCT e.id)::int AS estabelecimentos,
       COUNT(DISTINCT l.id)::int AS lancamentos,
       COUNT(DISTINCT sb.id)::int AS bolinhas,
-      COUNT(DISTINCT sf.id)::int AS figurinhas,
+      COUNT(DISTINCT sf.id)::int AS consignados,
       COUNT(DISTINCT sp.id)::int AS pelucias
     FROM assinantes a
     LEFT JOIN estabelecimentos e ON e.assinante_id = a.id
     LEFT JOIN lancamentos l ON l.assinante_id = a.id
     LEFT JOIN sangrias_bolinha sb ON sb.assinante_id = a.id
-    LEFT JOIN sangrias_figurinhas sf ON sf.assinante_id = a.id
+    LEFT JOIN sangrias_consignados sf ON sf.assinante_id = a.id
     LEFT JOIN sangrias_pelucias sp ON sp.assinante_id = a.id
     GROUP BY a.id, a.user_id, a.status_assinatura
     ORDER BY a.id

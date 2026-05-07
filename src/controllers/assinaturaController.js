@@ -3,7 +3,7 @@ import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 
 const PRODUCT_OPTIONS = [
   { value: 'BOLINHAS', label: 'Bolinhas', className: 'modern-checkbox-green' },
-  { value: 'FIGURINHAS', label: 'Consignados', className: 'modern-checkbox-blue' },
+  { value: 'CONSIGNADOS', label: 'Consignados', className: 'modern-checkbox-blue' },
   { value: 'PELUCIAS', label: 'Pelúcias', className: 'modern-checkbox-violet' }
 ];
 

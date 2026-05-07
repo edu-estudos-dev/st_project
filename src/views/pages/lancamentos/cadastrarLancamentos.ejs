@@ -4,7 +4,8 @@
 
 <body class="form-page-body">
     <%- include('../../partials/header') %>
-    <% const navProducts = navigationProducts || { bolinhas: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+    <% const navProducts = navigationProducts || { bolinhas: false, consignados: false, figurinhas: false, pelucias: false, hasAny: false }; %>
+    <% const hasConsignados = Boolean(navProducts.consignados || navProducts.figurinhas); %>
     <div class="page-spacer"></div>
 
     <div class="form-shell form-shell-modern">
@@ -91,7 +92,7 @@
                             <select required class="form-select text-center" id="produto" name="produto">
                                 <option value="" disabled selected>Selecione um produto</option>
                                 <% if (navProducts.bolinhas) { %><option value="bolinhas">Bolinhas</option><% } %>
-                                <% if (navProducts.figurinhas) { %><option value="figurinhas">Consignados</option><% } %>
+                                <% if (hasConsignados) { %><option value="consignados">Consignados</option><% } %>
                                 <% if (navProducts.pelucias) { %><option value="pelucias">Pelúcias</option><% } %>
                             </select>
                         </div>
