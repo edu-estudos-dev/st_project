@@ -81,15 +81,6 @@ class ConsignadosController {
         throw new Error('Dados obrigatórios faltando.');
       }
 
-      const sangriaAtual = await consignadosModel.getSangriaById(
-        id,
-        usuario.assinante_id
-      );
-
-      if (!sangriaAtual) {
-        return res.redirect('/consignados/sangrias?error=Sangria nao encontrada');
-      }
-
       const ultimaSangria = await consignadosModel.getUltimaSangria(
         estabelecimento_id,
         usuario.assinante_id
@@ -325,6 +316,17 @@ class ConsignadosController {
         tipo_pagamento,
         observacoes
       } = req.body;
+
+      const sangriaAtual = await consignadosModel.getSangriaById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!sangriaAtual) {
+        return res.redirect(
+          '/consignados/sangrias?error=Sangria nao encontrada'
+        );
+      }
 
       const ultimaSangria = await consignadosModel.getUltimaSangria(
         estabelecimento_id,
