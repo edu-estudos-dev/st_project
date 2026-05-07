@@ -1093,8 +1093,10 @@ figure {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
+  min-width: 42px;
+  width: auto;
   height: 30px;
+  padding: 0 0.58rem;
   border-radius: 11px;
   background: #dbeafe;
   color: #1d4ed8;
@@ -6423,6 +6425,22 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .vie
     letter-spacing: 0 !important;
   }
 
+  body.dashboard-body .dashboard-mobile-menu-brand {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 0 !important;
+    font-weight: 950 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-brand span {
+    color: #0b63ce !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-brand strong {
+    color: #2cad45 !important;
+    font-weight: 950 !important;
+  }
+
   body.dashboard-body .dashboard-mobile-menu-head button {
     display: inline-flex !important;
     align-items: center !important;
@@ -6545,6 +6563,8 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .vie
     grid-template-columns: 1fr !important;
     gap: 0.35rem !important;
     margin-top: 0.35rem !important;
+    padding-left: 0.42rem !important;
+    padding-right: 0.16rem !important;
   }
 
   body.dashboard-body .dashboard-section-heading p {
@@ -6593,6 +6613,25 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .vie
     font-size: 1.42rem !important;
     line-height: 1.12 !important;
     letter-spacing: -0.025em !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item {
+    grid-template-columns: minmax(44px, auto) minmax(0, 1fr) !important;
+    align-items: center !important;
+    column-gap: 0.72rem !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item > span {
+    min-width: 44px !important;
+    height: 34px !important;
+    padding: 0 0.62rem !important;
+    border-radius: 12px !important;
+    justify-self: start !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item em {
+    grid-column: 2 !important;
+    justify-self: start !important;
   }
 
   body.dashboard-body .dashboard-revenue-hero h2 {
