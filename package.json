@@ -14,7 +14,9 @@
     "kill:8082": "node scripts/free-port.js 8082",
     "start": "node server.js",
     "qa:flow": "node scripts/qa-flow-audit.js",
-    "db:migrate": "node scripts/run-migrations.js",
+    "db:migrate": "npm run db:migrate:dev",
+    "db:migrate:dev": "node scripts/run-migrations.js dev",
+    "db:migrate:clean": "node scripts/run-migrations.js clean",
     "db:seed-admin": "node scripts/seed-saas-admin.js",
     "predev": "npm run free:port",
     "dev": "node --watch server.js"

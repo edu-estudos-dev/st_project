@@ -1,31 +1,57 @@
 import 'dotenv/config';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import pg from 'pg';
+import { fileURLToPath } from 'url';
 
 const { Client } = pg;
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(dirname, '..');
 const migrationsDir = path.join(rootDir, 'migrations');
-const databaseUrl = process.env.CLEAN_DATABASE_URL || process.env.DATABASE_URL;
-const usingCleanDatabaseUrl = Boolean(process.env.CLEAN_DATABASE_URL);
 
-if (!databaseUrl) {
-  console.error('Defina CLEAN_DATABASE_URL para o banco limpo que recebera o schema.');
-  process.exit(1);
-}
+const migrationTarget = process.argv[2] || process.env.MIGRATION_TARGET;
 
-if (!usingCleanDatabaseUrl && process.env.CONFIRM_CLEAN_DB_INIT !== 'true') {
+const targets = {
+  dev: {
+    envName: 'DATABASE_URL',
+    label: 'DESENVOLVIMENTO/DATABASE_URL'
+  },
+  clean: {
+    envName: 'CLEAN_DATABASE_URL',
+    label: 'LIMPO/CLEAN_DATABASE_URL'
+  }
+};
+
+const targetConfig = targets[migrationTarget];
+
+if (!targetConfig) {
   console.error(
     [
-      'Por seguranca, este script prefere CLEAN_DATABASE_URL.',
-      'Se voce realmente quer usar DATABASE_URL, rode com CONFIRM_CLEAN_DB_INIT=true.'
+      'Informe explicitamente o alvo da migration.',
+      '',
+      'Uso:',
+      '  node scripts/run-migrations.js dev',
+      '  node scripts/run-migrations.js clean',
+      '',
+      'Ou use os scripts:',
+      '  npm run db:migrate:dev',
+      '  npm run db:migrate:clean'
     ].join('\n')
   );
   process.exit(1);
 }
+
+const databaseUrl = process.env[targetConfig.envName];
+
+if (!databaseUrl) {
+  console.error(
+    `Defina ${targetConfig.envName} para aplicar migrations no banco ${targetConfig.label}.`
+  );
+  process.exit(1);
+}
+
+console.log(`Aplicando migrations no banco ${targetConfig.label}...`);
 
 const client = new Client({
   connectionString: databaseUrl,
@@ -44,6 +70,7 @@ async function ensureMigrationsTable() {
 
 async function getAppliedMigrations() {
   const result = await client.query('SELECT filename FROM schema_migrations');
+
   return new Set(result.rows.map(row => row.filename));
 }
 
@@ -60,9 +87,11 @@ async function runMigration(filename) {
       [filename]
     );
     await client.query('COMMIT');
+
     console.log(`Aplicada: ${filename}`);
   } catch (error) {
     await client.query('ROLLBACK');
+
     throw error;
   }
 }
