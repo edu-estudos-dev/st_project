@@ -160,7 +160,7 @@ class ConsignadosController {
         : '';
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [data_sangria]
       });
@@ -192,7 +192,7 @@ class ConsignadosController {
         await VisitasModel.marcarProdutoRegistrado({
           visita_id,
           assinante_id: usuario.assinante_id,
-          produto: 'FIGURINHAS',
+          produto: 'CONSIGNADOS',
           sangria_id: sangriaId,
           observacoes: observacoes || null
         });
@@ -361,7 +361,7 @@ class ConsignadosController {
       });
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [sangriaAtual.data_sangria, data_sangria]
       });
@@ -398,7 +398,7 @@ class ConsignadosController {
       }
 
       await recalculateConsolidatedRevenueForDates({
-        produto: 'figurinhas',
+        produto: 'consignados',
         assinanteId: usuario.assinante_id,
         dates: [sangriaAtual?.data_sangria]
       });

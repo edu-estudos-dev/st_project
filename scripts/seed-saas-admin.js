@@ -82,7 +82,7 @@ async function main() {
         $1,
         'ativo',
         'mensal',
-        'BOLINHAS, FIGURINHAS, PELUCIAS',
+        'BOLINHAS, CONSIGNADOS, PELUCIAS',
         'admin',
         'Administrador SaaS',
         0,

@@ -45,7 +45,7 @@ class RelatoriosController {
       },
       {
         label: 'Consignados',
-        value: estabelecimentos.filter(item => hasProduto(item.produto, 'FIGURINHAS'))
+        value: estabelecimentos.filter(item => hasProduto(item.produto, 'CONSIGNADOS'))
           .length
       },
       {

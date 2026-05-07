@@ -22,4 +22,4 @@ Este projeto nao deve comercializar usando o banco de desenvolvimento com dados 
 
 ## Observacao sobre consignados
 
-O codigo ja mostra "consignados" para o usuario, mas algumas estruturas internas ainda usam nomes historicos como `sangrias_figurinhas` e produto `FIGURINHAS`. Isso foi mantido de proposito para nao quebrar o sistema antes de uma migration especifica de renomeacao.
+O schema novo ja usa `sangrias_consignados` e produto `CONSIGNADOS`. O redirect legado `/figurinhas` pode continuar existindo apenas para nao quebrar links antigos.

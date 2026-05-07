@@ -1,4 +1,4 @@
-const PRODUTOS_VALIDOS = ['BOLINHAS', 'FIGURINHAS', 'PELUCIAS'];
+const PRODUTOS_VALIDOS = ['BOLINHAS', 'CONSIGNADOS', 'PELUCIAS'];
 
 const normalizeText = (value) => String(value ?? '')
     .normalize('NFD')
@@ -8,6 +8,10 @@ const normalizeText = (value) => String(value ?? '')
 
 const normalizeProduto = (produto) => {
     const normalized = normalizeText(produto);
+
+    if (['FIGURINHAS', 'FIGURINHA', 'CONSIGNADO'].includes(normalized)) {
+        return 'CONSIGNADOS';
+    }
 
     if (normalized === 'PELUCIA') {
         return 'PELUCIAS';
@@ -37,7 +41,7 @@ export const hasProduto = (produtos, produto) => {
 
 export const formatProdutoLabel = (produto) => {
     const normalized = normalizeProduto(produto);
-    if (normalized === 'FIGURINHAS') return 'CONSIGNADOS';
+    if (normalized === 'CONSIGNADOS') return 'CONSIGNADOS';
     return normalized === 'PELUCIAS' ? 'PELÚCIAS' : normalized;
 };
 

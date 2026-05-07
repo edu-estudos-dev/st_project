@@ -40,7 +40,7 @@ const PRODUCT_OPTIONS = [
     className: 'modern-checkbox-green'
   },
   {
-    value: 'FIGURINHAS',
+    value: 'CONSIGNADOS',
     label: 'Consignados',
     className: 'modern-checkbox-blue'
   },
@@ -203,7 +203,7 @@ class EstabelecimentoController {
       }
 
       const hasBolinhas = produtosSelecionados.includes('BOLINHAS');
-      const hasConsignados = produtosSelecionados.includes('FIGURINHAS');
+      const hasConsignados = produtosSelecionados.includes('CONSIGNADOS');
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
 
       const chaveBolinhas = hasBolinhas

@@ -32,9 +32,9 @@ class AssinanteModel {
           FROM estabelecimentos
           WHERE status = 'ativo' AND UPPER(produto) LIKE '%BOLINHAS%'
           UNION
-          SELECT DISTINCT assinante_id, 'FIGURINHAS' AS produto_key, 2 AS produto_order
+          SELECT DISTINCT assinante_id, 'CONSIGNADOS' AS produto_key, 2 AS produto_order
           FROM estabelecimentos
-          WHERE status = 'ativo' AND UPPER(produto) LIKE '%FIGURINHAS%'
+          WHERE status = 'ativo' AND UPPER(produto) LIKE '%CONSIGNADOS%'
           UNION
           SELECT DISTINCT assinante_id, 'PELUCIAS' AS produto_key, 3 AS produto_order
           FROM estabelecimentos
@@ -176,14 +176,14 @@ class AssinanteModel {
         COUNT(DISTINCT e.id)::int AS estabelecimentos,
         COUNT(DISTINCT l.id)::int AS lancamentos,
         COUNT(DISTINCT sb.id)::int AS bolinhas,
-        COUNT(DISTINCT sf.id)::int AS figurinhas,
+        COUNT(DISTINCT sf.id)::int AS consignados,
         COUNT(DISTINCT sp.id)::int AS pelucias
       FROM assinantes a
       INNER JOIN users u ON u.id = a.user_id
       LEFT JOIN estabelecimentos e ON e.assinante_id = a.id
       LEFT JOIN lancamentos l ON l.assinante_id = a.id
       LEFT JOIN sangrias_bolinha sb ON sb.assinante_id = a.id
-      LEFT JOIN sangrias_figurinhas sf ON sf.assinante_id = a.id
+      LEFT JOIN sangrias_consignados sf ON sf.assinante_id = a.id
       LEFT JOIN sangrias_pelucias sp ON sp.assinante_id = a.id
       GROUP BY a.id, u.id
       ORDER BY a.id ASC`

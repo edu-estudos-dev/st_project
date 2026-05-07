@@ -14,7 +14,7 @@ import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 
 const PRODUCT_OPTIONS = [
     { value: 'BOLINHAS', label: 'Bolinhas' },
-    { value: 'FIGURINHAS', label: 'Consignados' },
+    { value: 'CONSIGNADOS', label: 'Consignados' },
     { value: 'PELUCIAS', label: 'Pelúcias' }
 ];
 

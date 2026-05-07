@@ -5,7 +5,7 @@ const STATUS_OPTIONS = ['trial', 'ativo', 'vencido', 'cancelado', 'bloqueado'];
 const BILLING_OPTIONS = ['', 'mensal', 'anual'];
 const PRODUCT_OPTIONS = [
   { value: 'BOLINHAS', label: 'Bolinhas' },
-  { value: 'FIGURINHAS', label: 'Consignados' },
+  { value: 'CONSIGNADOS', label: 'Consignados' },
   { value: 'PELUCIAS', label: 'Pelucias' }
 ];
 

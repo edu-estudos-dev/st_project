@@ -1,5 +1,7 @@
 /node_modules
 /tmp
+/backups/db-snapshot-*/
+/backups/supabase-clean-snapshot-*/
 
 # Environment variables / secrets
 .env

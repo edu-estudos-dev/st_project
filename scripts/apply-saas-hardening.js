@@ -47,9 +47,9 @@ const run = async () => {
           FROM estabelecimentos
           WHERE status = 'ativo' AND UPPER(produto) LIKE '%BOLINHAS%'
           UNION
-          SELECT DISTINCT assinante_id, 'FIGURINHAS' AS produto_key, 2 AS produto_order
+          SELECT DISTINCT assinante_id, 'CONSIGNADOS' AS produto_key, 2 AS produto_order
           FROM estabelecimentos
-          WHERE status = 'ativo' AND UPPER(produto) LIKE '%FIGURINHAS%'
+          WHERE status = 'ativo' AND UPPER(produto) LIKE '%CONSIGNADOS%'
           UNION
           SELECT DISTINCT assinante_id, 'PELUCIAS' AS produto_key, 3 AS produto_order
           FROM estabelecimentos
@@ -100,10 +100,10 @@ const run = async () => {
         IF NOT EXISTS (
           SELECT 1
           FROM pg_constraint
-          WHERE conname = 'fk_figurinhas_estabelecimento_assinante'
+          WHERE conname = 'fk_consignados_estabelecimento_assinante'
         ) THEN
-          ALTER TABLE sangrias_figurinhas
-          ADD CONSTRAINT fk_figurinhas_estabelecimento_assinante
+          ALTER TABLE sangrias_consignados
+          ADD CONSTRAINT fk_consignados_estabelecimento_assinante
           FOREIGN KEY (estabelecimento_id, assinante_id)
           REFERENCES estabelecimentos (id, assinante_id);
         END IF;

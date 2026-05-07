@@ -47,7 +47,7 @@ const buildDescription = (produto, ano, mes) => {
   const mesTexto = MONTH_NAMES[mesIndex] || String(mes).padStart(2, '0');
   const labels = {
     bolinhas: 'das bolinhas',
-    figurinhas: 'dos consignados',
+    consignados: 'dos consignados',
     pelucias: 'das pelucias'
   };
 
@@ -103,7 +103,7 @@ const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId
 
 const MONTHLY_REVENUE_MODELS = {
   bolinhas: BolinhasModel,
-  figurinhas: ConsignadosModel,
+  consignados: ConsignadosModel,
   pelucias: PeluciasModel
 };
 
@@ -235,14 +235,14 @@ export const syncMonthlyRevenueConsolidation = async ({ assinanteId, referenceDa
   }
 
   const runningSync = (async () => {
-    const [bolinhas, figurinhas, pelucias] = await Promise.all([
+    const [bolinhas, consignados, pelucias] = await Promise.all([
       BolinhasModel.getMonthlyRevenue(assinanteId),
       ConsignadosModel.getMonthlyRevenue(assinanteId),
       PeluciasModel.getMonthlyRevenue(assinanteId)
     ]);
 
     await syncPreviousMonth('bolinhas', bolinhas, referenceDate, assinanteId);
-    await syncPreviousMonth('figurinhas', figurinhas, referenceDate, assinanteId);
+    await syncPreviousMonth('consignados', consignados, referenceDate, assinanteId);
     await syncPreviousMonth('pelucias', pelucias, referenceDate, assinanteId);
 
     lastSyncAtByReferenceKey.set(referenceKey, Date.now());

@@ -72,7 +72,7 @@
 
                                 <% if (false) { %>
                                     <label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="FIGURINHAS" <%= selectedProducts.includes('FIGURINHAS') ? 'checked' : '' %>>
+                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="CONSIGNADOS" <%= selectedProducts.includes('CONSIGNADOS') ? 'checked' : '' %>>
                                         <span>Consignados</span>
                                     </label>
                                 <% } %>
@@ -684,7 +684,7 @@
                 const selectedProducts = getSelectedProducts();
 
                 const hasBolinhas = selectedProducts.includes('BOLINHAS');
-                const hasConsignados = selectedProducts.includes('FIGURINHAS');
+                const hasConsignados = selectedProducts.includes('CONSIGNADOS');
                 const hasPelucias = selectedProducts.includes('PELUCIAS');
 
                 setGroupVisibility(bolinhasMachineFields, hasBolinhas);
@@ -784,7 +784,7 @@
                     return;
                 }
 
-                if (selectedProducts.includes('FIGURINHAS') && !consignadoQuantidadeInicialInput.value) {
+                if (selectedProducts.includes('CONSIGNADOS') && !consignadoQuantidadeInicialInput.value) {
                     e.preventDefault();
                     window.AppAlerts?.warning('Informe a quantidade inicial deixada para consignados.');
                     return;

@@ -380,7 +380,7 @@ class EstabelecimentoModel {
 
       const produtosConfigurados = {
         bolinhas: hasProduto(produtosHabilitados, 'BOLINHAS'),
-        consignados: hasProduto(produtosHabilitados, 'FIGURINHAS'),
+        consignados: hasProduto(produtosHabilitados, 'CONSIGNADOS'),
         pelucias: hasProduto(produtosHabilitados, 'PELUCIAS')
       };
       produtosConfigurados.figurinhas = produtosConfigurados.consignados;
@@ -416,7 +416,7 @@ class EstabelecimentoModel {
           disponibilidade.bolinhas = true;
         }
 
-        if (!disponibilidade.consignados && hasProduto(row.produto, 'FIGURINHAS')) {
+        if (!disponibilidade.consignados && hasProduto(row.produto, 'CONSIGNADOS')) {
           disponibilidade.consignados = true;
         }
 
@@ -453,7 +453,7 @@ class EstabelecimentoModel {
         SELECT
           COUNT(*) FILTER (WHERE status = 'ativo') AS total_ativos,
           COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%BOLINHAS%') AS bolinhas_ativas,
-          COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%FIGURINHAS%') AS figurinhas_ativas,
+          COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%CONSIGNADOS%') AS consignados_ativas,
           COUNT(*) FILTER (WHERE status = 'ativo' AND UPPER(produto) LIKE '%PELUCIAS%') AS pelucias_ativas
         FROM estabelecimentos
         WHERE assinante_id = $1
@@ -465,8 +465,8 @@ class EstabelecimentoModel {
       return {
         totalAtivos: Number(row.total_ativos || 0),
         bolinhasAtivas: Number(row.bolinhas_ativas || 0),
-        consignadosAtivos: Number(row.figurinhas_ativas || 0),
-        figurinhasAtivas: Number(row.figurinhas_ativas || 0),
+        consignadosAtivos: Number(row.consignados_ativas || 0),
+        figurinhasAtivas: Number(row.consignados_ativas || 0),
         peluciasAtivas: Number(row.pelucias_ativas || 0)
       };
     } catch (error) {
@@ -545,7 +545,7 @@ class EstabelecimentoModel {
           FROM estabelecimentos e
           WHERE e.assinante_id = $1
             AND e.status = 'ativo'
-            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+            AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
 
           UNION ALL
 
@@ -581,13 +581,13 @@ class EstabelecimentoModel {
             'Consignados' AS produto,
             sf.data_sangria::date AS data_movimentacao,
             COALESCE(sf.valor_apurado, 0)::numeric AS valor
-          FROM sangrias_figurinhas sf
+          FROM sangrias_consignados sf
           JOIN estabelecimentos e
             ON e.id = sf.estabelecimento_id
            AND e.assinante_id = sf.assinante_id
           WHERE sf.assinante_id = $1
             AND e.status = 'ativo'
-            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+            AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
             AND COALESCE(sf.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
 
           UNION ALL
@@ -908,7 +908,7 @@ class EstabelecimentoModel {
           FROM estabelecimentos e
           LEFT JOIN LATERAL (
             SELECT sf.data_sangria
-            FROM sangrias_figurinhas sf
+            FROM sangrias_consignados sf
             WHERE sf.estabelecimento_id = e.id
               AND sf.assinante_id = e.assinante_id
             ORDER BY sf.data_sangria DESC, sf.id DESC
@@ -916,7 +916,7 @@ class EstabelecimentoModel {
           ) latest ON TRUE
           WHERE e.status = 'ativo'
             AND e.assinante_id = $1
-            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+            AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
 
           UNION ALL
 
@@ -1005,13 +1005,13 @@ class EstabelecimentoModel {
             '/consignados/sangrias/view/' || sf.id AS href,
             COALESCE(sf.valor_apurado, 0) AS valor,
             'Coleta registrada' AS descricao
-          FROM sangrias_figurinhas sf
+          FROM sangrias_consignados sf
           JOIN estabelecimentos e
             ON e.id = sf.estabelecimento_id
            AND e.assinante_id = sf.assinante_id
           WHERE e.status = 'ativo'
             AND e.assinante_id = $1
-            AND UPPER(e.produto) LIKE '%FIGURINHAS%'
+            AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
             AND COALESCE(sf.observacoes, '') NOT LIKE '[ABERTURA INICIAL]%'
 
           UNION ALL

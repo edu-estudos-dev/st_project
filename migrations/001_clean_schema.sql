@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS lancamentos (
       'bonus'
     )),
   CONSTRAINT lancamentos_produto_check
-    CHECK (produto IN ('bolinhas', 'figurinhas', 'pelucias')),
+    CHECK (produto IN ('bolinhas', 'consignados', 'pelucias')),
   CONSTRAINT lancamentos_forma_de_pagamento_check
     CHECK (forma_de_pagamento IN ('boleto', 'credito', 'pix', 'especie'))
 );
@@ -138,7 +138,7 @@ CREATE INDEX IF NOT EXISTS sangrias_bolinha_assinante_data_idx
 CREATE INDEX IF NOT EXISTS sangrias_bolinha_estabelecimento_idx
   ON sangrias_bolinha (estabelecimento_id);
 
-CREATE TABLE IF NOT EXISTS sangrias_figurinhas (
+CREATE TABLE IF NOT EXISTS sangrias_consignados (
   id BIGSERIAL PRIMARY KEY,
   assinante_id BIGINT NOT NULL REFERENCES assinantes(id),
   estabelecimento_id INTEGER NOT NULL,
@@ -151,16 +151,16 @@ CREATE TABLE IF NOT EXISTS sangrias_figurinhas (
   tipo_pagamento VARCHAR(30) NULL,
   observacoes TEXT NULL,
   data_atualizacao TIMESTAMPTZ NULL,
-  CONSTRAINT sangrias_figurinhas_estabelecimento_assinante_fk
+  CONSTRAINT sangrias_consignados_estabelecimento_assinante_fk
     FOREIGN KEY (estabelecimento_id, assinante_id)
     REFERENCES estabelecimentos (id, assinante_id)
 );
 
-CREATE INDEX IF NOT EXISTS sangrias_figurinhas_assinante_data_idx
-  ON sangrias_figurinhas (assinante_id, data_sangria);
+CREATE INDEX IF NOT EXISTS sangrias_consignados_assinante_data_idx
+  ON sangrias_consignados (assinante_id, data_sangria);
 
-CREATE INDEX IF NOT EXISTS sangrias_figurinhas_estabelecimento_idx
-  ON sangrias_figurinhas (estabelecimento_id);
+CREATE INDEX IF NOT EXISTS sangrias_consignados_estabelecimento_idx
+  ON sangrias_consignados (estabelecimento_id);
 
 CREATE TABLE IF NOT EXISTS sangrias_pelucias (
   id BIGSERIAL PRIMARY KEY,
@@ -278,7 +278,7 @@ CREATE TABLE IF NOT EXISTS visita_produtos (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT visita_produtos_produto_check
-    CHECK (produto IN ('BOLINHAS', 'FIGURINHAS', 'PELUCIAS')),
+    CHECK (produto IN ('BOLINHAS', 'CONSIGNADOS', 'PELUCIAS')),
   CONSTRAINT visita_produtos_status_check
     CHECK (status IN ('pendente', 'registrado', 'sem_movimentacao', 'nao_realizada'))
 );
