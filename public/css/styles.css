@@ -44,6 +44,21 @@
   --vm-violet: #7c3aed;
   --brand-primary: #0359bf;
   --brand-accent: #37a647;
+  --vm-font-label: 0.72rem;
+  --vm-font-caption: 0.82rem;
+  --vm-font-small: 0.9rem;
+  --vm-font-button: 0.95rem;
+  --vm-font-body: 1rem;
+  --vm-font-body-small: 0.94rem;
+  --vm-font-section-text: clamp(1rem, 1.18vw, 1.08rem);
+  --vm-font-card-title: clamp(1.18rem, 1.55vw, 1.38rem);
+  --vm-font-inner-title: clamp(1.45rem, 2.1vw, 2.05rem);
+  --vm-font-section-title: clamp(2.25rem, 3.5vw, 3.6rem);
+  --vm-font-dashboard-title: clamp(1.7rem, 2.35vw, 2.45rem);
+  --vm-line-title: 1.08;
+  --vm-line-card: 1.18;
+  --vm-line-body: 1.68;
+  --vm-line-body-compact: 1.55;
 }
 
 html.app-booting body {
@@ -5939,4 +5954,263 @@ footer hr {
     .product-setup-header p {
         font-size: 0.83rem;
     }
+}
+
+/* ==========================================================================
+   17 - TIPOGRAFIA PADRAO DO SAAS
+   ==========================================================================
+
+   Espelha a escala publica em telas internas sem reestruturar as views.
+   Mantem a leitura confortavel no mobile e cobre dashboard, formularios,
+   listagens, tabelas, detalhes e navegacao interna.
+   ========================================================================== */
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+  font-size: var(--vm-font-body);
+  line-height: var(--vm-line-body);
+  color: #0f172a;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) main,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) li,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) td,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-text,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .text-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .view-actions-copy {
+  font-size: var(--vm-font-body);
+  line-height: var(--vm-line-body-compact);
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) small,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .small,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .optional-label,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .required-label {
+  font-size: var(--vm-font-small);
+  line-height: 1.45;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h1,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .page-titlebar h1 {
+  font-size: var(--vm-font-dashboard-title);
+  line-height: var(--vm-line-title);
+  letter-spacing: -0.035em;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-card-header h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .view-panel-header h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-section-title {
+  font-size: var(--vm-font-inner-title);
+  line-height: var(--vm-line-title);
+  letter-spacing: -0.032em;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-card-header h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .product-setup-header h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .view-card span,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .list-summary-card span {
+  font-size: var(--vm-font-card-title);
+  line-height: var(--vm-line-card);
+  letter-spacing: -0.02em;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .app-nav .nav-link,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .app-nav .dropdown-item,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .dashboard-sidebar-menu a,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .dashboard-logout-btn {
+  font-size: var(--vm-font-button);
+  line-height: 1.2;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-label,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) label:not(.form-check-label),
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .list-kicker,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-kicker,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-section-tag,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .page-titlebar-stat strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .list-stat strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .view-card strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .modern-table thead th,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table thead th {
+  font-size: var(--vm-font-label);
+  line-height: 1.35;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-control,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-select,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) textarea,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .input-group-text {
+  font-size: var(--vm-font-body);
+  line-height: 1.35;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .btn-modern,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .btn-modern-secondary,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-mode-btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .btn-route-secondary,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .btn-route-ghost {
+  font-size: var(--vm-font-button);
+  line-height: 1.2;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .modern-table tbody td,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table td {
+  font-size: var(--vm-font-body-small);
+  line-height: 1.45;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .page-titlebar p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .form-card-header p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .product-setup-header p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .view-panel-header p {
+  font-size: var(--vm-font-section-text);
+  line-height: var(--vm-line-body-compact);
+}
+
+@media (max-width: 991.98px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.7rem;
+    --vm-font-caption: 0.8rem;
+    --vm-font-small: 0.88rem;
+    --vm-font-button: 0.94rem;
+    --vm-font-body: 0.98rem;
+    --vm-font-body-small: 0.92rem;
+    --vm-font-section-text: 1rem;
+    --vm-font-card-title: clamp(1.08rem, 2.4vw, 1.22rem);
+    --vm-font-inner-title: clamp(1.38rem, 4vw, 1.9rem);
+    --vm-font-dashboard-title: clamp(2rem, 6vw, 2.8rem);
+    --vm-line-body: 1.62;
+    --vm-line-body-compact: 1.52;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.68rem;
+    --vm-font-caption: 0.78rem;
+    --vm-font-small: 0.86rem;
+    --vm-font-button: 0.92rem;
+    --vm-font-body: 0.94rem;
+    --vm-font-body-small: 0.88rem;
+    --vm-font-section-text: 0.96rem;
+    --vm-font-card-title: clamp(1.02rem, 4.6vw, 1.14rem);
+    --vm-font-inner-title: clamp(1.32rem, 6.4vw, 1.72rem);
+    --vm-font-dashboard-title: clamp(1.82rem, 8vw, 2.18rem);
+    --vm-line-title: 1.06;
+    --vm-line-body: 1.58;
+    --vm-line-body-compact: 1.5;
+  }
+
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .modern-table tbody td,
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table td,
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) .table-btn {
+    font-size: var(--vm-font-body);
+  }
+}
+
+@media (max-width: 390px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.66rem;
+    --vm-font-caption: 0.74rem;
+    --vm-font-small: 0.84rem;
+    --vm-font-button: 0.9rem;
+    --vm-font-body: 0.9rem;
+    --vm-font-body-small: 0.84rem;
+    --vm-font-section-text: 0.9rem;
+    --vm-font-card-title: clamp(1rem, 5vw, 1.08rem);
+    --vm-font-inner-title: clamp(1.26rem, 6.5vw, 1.55rem);
+    --vm-font-dashboard-title: clamp(1.66rem, 7.8vw, 1.98rem);
+  }
+}
+
+/* Ajuste final do painel no mobile: a sidebar fixa do desktop vira redundante
+   no celular, onde o header hamburguer e os cards do painel assumem a navegacao. */
+@media (max-width: 991.98px) {
+  body.dashboard-body .dashboard-shell {
+    width: min(100% - 0.75rem, 720px) !important;
+    padding: 0.65rem 0 2rem !important;
+  }
+
+  body.dashboard-body .dashboard-layout {
+    display: block !important;
+  }
+
+  body.dashboard-body .dashboard-sidebar {
+    display: none !important;
+  }
+
+  body.dashboard-body .dashboard-main {
+    display: grid !important;
+    gap: 0.78rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy,
+  body.dashboard-body .dashboard-panel,
+  body.dashboard-body .dashboard-revenue-hero,
+  body.dashboard-body .dashboard-kpi-card,
+  body.dashboard-body .dashboard-titlebar-card {
+    border-radius: 20px !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy {
+    padding: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-main {
+    display: block !important;
+  }
+
+  body.dashboard-body .dashboard-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+    margin-top: 0.9rem !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card {
+    min-height: 64px !important;
+    padding: 0.62rem 0.5rem !important;
+  }
+
+  body.dashboard-body .dashboard-section-heading {
+    grid-template-columns: 1fr !important;
+    gap: 0.35rem !important;
+    margin-top: 0.35rem !important;
+  }
+
+  body.dashboard-body .dashboard-section-heading p {
+    text-align: left !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body.dashboard-body .dashboard-shell {
+    width: min(100% - 0.5rem, 420px) !important;
+    padding-top: 0.5rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block h1 {
+    font-size: 1.75rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block p {
+    font-size: 0.94rem !important;
+    line-height: 1.45 !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card strong {
+    font-size: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card span {
+    font-size: 0.64rem !important;
+    line-height: 1.18 !important;
+  }
 }
