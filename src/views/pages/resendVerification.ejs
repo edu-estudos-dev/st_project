@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://vendmaster.com.br/reenviar-verificacao">
     <meta name="robots" content="noindex, follow">
 
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/auth.css') : '/css/auth.css' %>">
 
     <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
     <script defer src="/js/appAlerts.js"></script>

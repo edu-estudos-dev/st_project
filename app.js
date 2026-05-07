@@ -57,10 +57,36 @@ app.disable('x-powered-by');
 app.set('trust proxy', 1);
 
 const viewsDir = path.join(__dirname, 'src/views');
-const globalStylesPath = path.join(__dirname, 'public/css/styles.css');
 const assetVersion =
   process.env.ASSET_VERSION ||
-  String(Math.floor(statSync(globalStylesPath).mtimeMs));
+  String(Date.now());
+
+const assetVersionCache = new Map();
+
+const getAssetPath = (assetPath) => {
+  if (!assetPath || !String(assetPath).startsWith('/')) {
+    return assetPath;
+  }
+
+  if (String(assetPath).startsWith('/vendor/')) {
+    return assetPath;
+  }
+
+  const [pathname] = String(assetPath).split('?');
+
+  if (assetVersionCache.has(pathname)) {
+    return `${pathname}?v=${assetVersionCache.get(pathname)}`;
+  }
+
+  try {
+    const filePath = path.join(__dirname, 'public', pathname);
+    const version = String(Math.floor(statSync(filePath).mtimeMs));
+    assetVersionCache.set(pathname, version);
+    return `${pathname}?v=${version}`;
+  } catch (error) {
+    return `${pathname}?v=${assetVersion}`;
+  }
+};
 
 app.set('views', viewsDir);
 app.set('view engine', 'ejs');
@@ -143,6 +169,7 @@ app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
   res.locals.assetVersion = assetVersion;
+  res.locals.assetPath = getAssetPath;
 
   res.locals.navigationProducts = res.locals.navigationProducts || {
     bolinhas: false,

@@ -136,7 +136,7 @@
     <% } %>
 
     <% if (typeof skipGlobalStyles === 'undefined' || !skipGlobalStyles) { %>
-        <link rel="stylesheet" href="/css/styles.css?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>">
+        <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/styles.css') : '/css/styles.css' %>">
     <% } %>
 
     <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>
@@ -144,16 +144,16 @@
             <% if (typeof preloadExtraStyles !== 'undefined' && preloadExtraStyles) { %>
                 <link
                     rel="preload"
-                    href="<%= href %>"
+                    href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>"
                     as="style"
                     onload="this.onload=null;this.rel='stylesheet'"
                 >
 
                 <noscript>
-                    <link rel="stylesheet" href="<%= href %>">
+                    <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>">
                 </noscript>
             <% } else { %>
-                <link rel="stylesheet" href="<%= href %>">
+                <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>">
             <% } %>
         <% }) %>
     <% } %>
