@@ -876,7 +876,7 @@
 
     <% if (routeItems?.length) { %>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('DOMContentLoaded', async () => {
                 let routeItems = Array.from(document.querySelectorAll('[data-route-item]'));
 
                 const selectedBairrosData = <%- JSON.stringify(selectedBairros || []) %>;
@@ -1873,7 +1873,7 @@
                     window.AppAlerts?.success?.('Rota concluída! Todos os pontos foram visitados com sucesso.');
                 };
 
-                const applyFinishedRoutePointFromUrl = () => {
+                const applyFinishedRoutePointFromUrl = async () => {
                     if (
                         !rotaPontoFinalizadoId ||
                         !routeState.started ||
@@ -1911,6 +1911,7 @@
 
                     if (routeState.currentIndex >= routeItems.length) {
                         renderQueue();
+                        await askToGenerateReceiptFromUrl();
                         showRouteCompletedCelebration();
                         clearSavedRouteState();
 
@@ -2225,7 +2226,7 @@
                 const restoredRoute = restoreSavedRoute();
 
                 if (restoredRoute) {
-                    applyFinishedRoutePointFromUrl();
+                    await applyFinishedRoutePointFromUrl();
                 } else {
                     syncCurrentStop();
                 }
