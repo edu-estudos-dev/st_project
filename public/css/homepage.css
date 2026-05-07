@@ -3218,6 +3218,10 @@ html:has(.homepage-body) {
     border-radius: 16px !important;
   }
 
+  .homepage-body #solucao .vm-dashboard-slide-wide-panel {
+    min-height: 435px !important;
+  }
+
   .homepage-body #solucao .vm-dashboard-print-frame {
     position: relative !important;
     inset: auto !important;
@@ -3262,11 +3266,12 @@ html:has(.homepage-body) {
      {
     position: relative !important;
     inset: auto !important;
-    width: 100% !important;
-    height: 225px !important;
-    min-height: 225px !important;
+    width: min(62%, 220px) !important;
+    height: 330px !important;
+    min-height: 330px !important;
     max-height: none !important;
     margin: 0 auto 0 !important;
+    background: #eef5ff !important;
   }
 
   .homepage-body
@@ -3276,7 +3281,7 @@ html:has(.homepage-body) {
     img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: fill !important;
+    object-fit: contain !important;
     object-position: center top !important;
     transform: none !important;
   }
@@ -3302,6 +3307,10 @@ html:has(.homepage-body) {
     padding: 0.66rem 0.72rem !important;
     border-radius: 14px !important;
     align-items: flex-start !important;
+  }
+
+  .homepage-body #solucao .vm-dashboard-slide-wide-panel .vm-dashboard-slide-caption {
+    margin-top: 0.56rem !important;
   }
 
   .homepage-body #solucao .vm-dashboard-slide-caption span {
@@ -3456,6 +3465,10 @@ html:has(.homepage-body) {
     min-height: 340px !important;
   }
 
+  .homepage-body #solucao .vm-dashboard-slide-wide-panel {
+    min-height: 410px !important;
+  }
+
   .homepage-body #solucao .vm-dashboard-print-frame {
     height: 212px !important;
     min-height: 212px !important;
@@ -3496,11 +3509,12 @@ html:has(.homepage-body) {
      {
     position: relative !important;
     inset: auto !important;
-    width: 100% !important;
-    height: 212px !important;
-    min-height: 212px !important;
+    width: min(64%, 205px) !important;
+    height: 310px !important;
+    min-height: 310px !important;
     max-height: none !important;
     margin: 0 auto 0 !important;
+    background: #eef5ff !important;
   }
 
   .homepage-body
@@ -3510,7 +3524,7 @@ html:has(.homepage-body) {
     img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: fill !important;
+    object-fit: contain !important;
     object-position: center top !important;
     transform: none !important;
   }
