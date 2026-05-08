@@ -8,6 +8,8 @@
 
   <div class="form-shell form-shell-modern">
     <% const canManageProducts = assinante?.status_assinatura === 'trial'; %>
+    <% const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj); %>
+
     <%- include('../../partials/breadcrumb', { pageTitle: 'Produtos da Operação' }) %>
 
     <section class="page-titlebar page-titlebar-neutral">
@@ -18,7 +20,7 @@
           <% if (canManageProducts) { %>
             Durante o trial, ajuste quais frentes deseja testar no sistema.
           <% } else { %>
-            As ferramentas liberadas seguem o plano contratado e sao alteradas pelo administrador.
+            As ferramentas liberadas seguem o plano contratado e são alteradas pelo administrador.
           <% } %>
         </p>
       </div>
@@ -81,20 +83,35 @@
             </div>
           </div>
 
-          <div class="modern-note" style="display: block; margin-bottom: 1rem;">
+          <div class="modern-note" id="billingStatusBox" style="display: block; margin-bottom: 1rem;">
             <strong>Status atual:</strong>
-            <% if (assinante?.billing_nome && assinante?.billing_cpf_cnpj) { %>
+            <% if (hasBillingData) { %>
               dados de cobrança cadastrados.
             <% } else { %>
               dados de cobrança ainda pendentes.
             <% } %>
           </div>
 
-          <div class="form-actions-buttons" style="justify-content: flex-start;">
+          <div
+            id="paymentPreparationResult"
+            class="modern-note"
+            style="display: none; margin-bottom: 1rem;"
+          ></div>
+
+          <div class="form-actions-buttons" style="justify-content: flex-start; gap: 0.75rem; flex-wrap: wrap;">
             <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern">
               <i class="bi bi-credit-card-2-front"></i>
               <span>Preencher dados de cobrança</span>
             </a>
+
+            <button
+              type="button"
+              class="btn-modern"
+              id="prepararPagamentoBtn"
+            >
+              <i class="bi bi-shield-check"></i>
+              <span>Preparar pagamento</span>
+            </button>
           </div>
         </section>
 
@@ -124,14 +141,104 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('produtosAssinaturaForm').addEventListener('submit', (event) => {
-        const hasProduct = Array.from(document.querySelectorAll('input[name="produtos_habilitados"]')).some((checkbox) => checkbox.checked);
+      const produtosAssinaturaForm = document.getElementById('produtosAssinaturaForm');
+      const prepararPagamentoBtn = document.getElementById('prepararPagamentoBtn');
+      const paymentPreparationResult = document.getElementById('paymentPreparationResult');
 
-        if (!hasProduct) {
-          event.preventDefault();
-          window.AppAlerts?.warning('Selecione pelo menos um produto para sua operação.');
-        }
-      });
+      function setPaymentResult(message, type = 'info') {
+        if (!paymentPreparationResult) return;
+
+        const icons = {
+          success: 'bi-check2-circle',
+          warning: 'bi-exclamation-triangle',
+          error: 'bi-x-circle',
+          info: 'bi-info-circle'
+        };
+
+        paymentPreparationResult.style.display = 'block';
+        paymentPreparationResult.innerHTML = `
+          <strong>
+            <i class="bi ${icons[type] || icons.info}"></i>
+            Pagamento:
+          </strong>
+          ${message}
+        `;
+      }
+
+      if (produtosAssinaturaForm) {
+        produtosAssinaturaForm.addEventListener('submit', (event) => {
+          const hasProduct = Array.from(document.querySelectorAll('input[name="produtos_habilitados"]'))
+            .some((checkbox) => checkbox.checked);
+
+          if (!hasProduct) {
+            event.preventDefault();
+            window.AppAlerts?.warning('Selecione pelo menos um produto para sua operação.');
+          }
+        });
+      }
+
+      if (prepararPagamentoBtn) {
+        prepararPagamentoBtn.addEventListener('click', async () => {
+          const originalButtonContent = prepararPagamentoBtn.innerHTML;
+
+          prepararPagamentoBtn.disabled = true;
+          prepararPagamentoBtn.innerHTML = `
+            <i class="bi bi-hourglass-split"></i>
+            <span>Preparando...</span>
+          `;
+
+          try {
+            const response = await fetch('/pagamentos/iniciar', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json'
+              }
+            });
+
+            const data = await response.json().catch(() => ({
+              success: false,
+              message: 'Não foi possível interpretar a resposta do servidor.'
+            }));
+
+            if (!response.ok || !data.success) {
+              const message = data.message || 'Não foi possível preparar o pagamento.';
+
+              if (data.needsBillingData) {
+                setPaymentResult(`${message} Clique em "Preencher dados de cobrança" antes de continuar.`, 'warning');
+                window.AppAlerts?.warning(message);
+                return;
+              }
+
+              setPaymentResult(message, 'error');
+              window.AppAlerts?.error(message);
+              return;
+            }
+
+            if (data.needsGatewayConfiguration) {
+              const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+
+              setPaymentResult(message, 'warning');
+              window.AppAlerts?.warning(message);
+              return;
+            }
+
+            const successMessage = data.message || 'Pagamento preparado com sucesso.';
+
+            setPaymentResult(successMessage, 'success');
+            window.AppAlerts?.success(successMessage);
+          } catch (error) {
+            console.error('Erro ao preparar pagamento:', error);
+
+            const message = 'Erro ao preparar pagamento. Tente novamente em alguns instantes.';
+
+            setPaymentResult(message, 'error');
+            window.AppAlerts?.error(message);
+          } finally {
+            prepararPagamentoBtn.disabled = false;
+            prepararPagamentoBtn.innerHTML = originalButtonContent;
+          }
+        });
+      }
 
       <% if (success) { %>window.AppAlerts?.success("<%- String(success).replace(/"/g, '&quot;') %>");<% } %>
       <% if (error) { %>window.AppAlerts?.error("<%- String(error).replace(/"/g, '&quot;') %>");<% } %>
