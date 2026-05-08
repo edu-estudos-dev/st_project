@@ -291,8 +291,8 @@
             <span class="form-section-tag">Pagamento</span>
             <h2>Preparação do pagamento</h2>
             <p>
-              Valide os dados de cobrança e confira se o gateway já está pronto para avançar.
-              Enquanto a chave real do Asaas não estiver configurada, nenhuma cobrança real será criada.
+              Valide os dados de cobrança e confirme se a cobrança já está disponível para avançar.
+              Enquanto a integração de pagamento não estiver pronta, nenhuma cobrança real será criada.
             </p>
           </div>
 
@@ -300,13 +300,13 @@
             <i class="bi <%= gatewayConfigured ? 'bi-check2-circle' : 'bi-shield-exclamation' %>"></i>
             <div>
               <strong>
-                <%= gatewayConfigured ? 'Gateway configurado' : 'Gateway pendente' %>
+                <%= gatewayConfigured ? 'Cobrança disponível' : 'Cobrança pendente' %>
               </strong>
               <span>
                 <% if (gatewayConfigured) { %>
-                  O gateway está configurado para o ambiente atual.
+                  O ambiente de pagamento está pronto para processar a assinatura.
                 <% } else { %>
-                  Ainda não há chave real configurada.
+                  A cobrança ainda não está disponível. Entre em contato com o suporte.
                 <% } %>
               </span>
             </div>
@@ -892,7 +892,7 @@
           }
 
           if (data.needsGatewayConfiguration) {
-            const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+            const message = 'Dados de cobrança válidos. A cobrança ainda não está disponível para esta assinatura.';
 
             setPaymentResult(message, 'warning');
             window.AppAlerts?.warning(message);
