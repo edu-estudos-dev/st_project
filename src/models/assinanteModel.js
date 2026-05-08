@@ -95,6 +95,8 @@ class AssinanteModel {
         data_ativacao,
         data_vencimento,
         data_limite_exclusao,
+        gateway_customer_id,
+        gateway_subscription_id,
         produtos_habilitados,
         plano_codigo,
         plano_nome,
@@ -122,6 +124,8 @@ class AssinanteModel {
         data_ativacao,
         data_vencimento,
         data_limite_exclusao,
+        gateway_customer_id,
+        gateway_subscription_id,
         produtos_habilitados,
         plano_codigo,
         plano_nome,
@@ -208,6 +212,28 @@ class AssinanteModel {
     );
 
     return result.rows.map(row => this.normalizeRow(row));
+  }
+
+  async updateGatewayCustomerId(id, gatewayCustomerId) {
+    if (!id) {
+      throw new Error('ID do assinante é obrigatório para salvar gateway_customer_id.');
+    }
+
+    if (!gatewayCustomerId || String(gatewayCustomerId).trim() === '') {
+      throw new Error('gateway_customer_id é obrigatório.');
+    }
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         gateway_customer_id = $2,
+         updated_at = NOW()
+       WHERE id = $1
+       RETURNING id, gateway_customer_id`,
+      [id, String(gatewayCustomerId).trim()]
+    );
+
+    return result.rows[0] || null;
   }
 
   async updateFromAdmin(id, data) {
