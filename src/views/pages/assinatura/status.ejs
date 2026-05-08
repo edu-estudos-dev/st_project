@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<%- include('../../partials/head', { title }) %>
+
+<body class="form-page-body">
+  <%- include('../../partials/header') %>
+  <div class="page-spacer"></div>
+
+  <div class="form-shell form-shell-modern assinatura-status-shell">
+    <% 
+      const statusAssinatura = assinante?.status_assinatura || 'não informado';
+      const produtosSelecionados = assinante?.produtos_habilitados_lista || [];
+      const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj);
+
+      const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+
+      const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+
+      const formatCurrency = (value) => {
+        const numericValue = Number(value || 0);
+        return currencyFormatter.format(numericValue);
+      };
+
+      const formatDate = (value) => {
+        if (!value) return 'Não informado';
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+          return 'Não informado';
+        }
+
+        return dateFormatter.format(date);
+      };
+
+      const formatDocument = (value) => {
+        const digits = String(value || '').replace(/\D/g, '');
+
+        if (digits.length === 11) {
+          return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+        }
+
+        if (digits.length === 14) {
+          return digits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+        }
+
+        return value || 'Não informado';
+      };
+
+      const formatPhone = (value) => {
+        const digits = String(value || '').replace(/\D/g, '');
+
+        if (digits.length === 10) {
+          return digits.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+        }
+
+        if (digits.length === 11) {
+          return digits.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+        }
+
+        return value || 'Não informado';
+      };
+
+      const statusLabels = {
+        trial: 'Trial',
+        ativo: 'Ativo',
+        vencido: 'Vencido',
+        cancelado: 'Cancelado',
+        bloqueado: 'Bloqueado'
+      };
+
+      const statusClassMap = {
+        trial: 'status-trial',
+        ativo: 'status-active',
+        vencido: 'status-warning',
+        cancelado: 'status-muted',
+        bloqueado: 'status-danger'
+      };
+
+      const statusLabel = statusLabels[statusAssinatura] || statusAssinatura;
+      const statusClass = statusClassMap[statusAssinatura] || 'status-muted';
+    %>
+
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Status da Assinatura' }) %>
+
+    <section class="page-titlebar page-titlebar-neutral assinatura-status-hero">
+      <div class="page-titlebar-content">
+        <span class="form-kicker">
+          <i class="bi bi-person-badge"></i>
+          Assinatura
+        </span>
+
+        <h1>Status da assinatura</h1>
+
+        <p>
+          Veja o plano contratado, as ferramentas habilitadas, os dados de cobrança e a preparação do pagamento.
+        </p>
+      </div>
+
+      <div class="page-titlebar-side">
+        <div class="page-titlebar-stat assinatura-hero-stat">
+          <strong>Status atual</strong>
+          <span><%= statusLabel %></span>
+        </div>
+      </div>
+    </section>
+
+    <main class="form-stage assinatura-status-stage">
+      <section class="form-card assinatura-plan-card">
+        <div class="assinatura-plan-content">
+          <div>
+            <span class="form-section-tag">Plano atual</span>
+            <h2><%= assinante?.plano_nome || 'Plano não informado' %></h2>
+            <p>
+              Informações comerciais configuradas para este assinante.
+            </p>
+          </div>
+
+          <span class="assinatura-status-pill <%= statusClass %>">
+            <%= statusLabel %>
+          </span>
+        </div>
+
+        <div class="assinatura-summary-grid">
+          <div class="assinatura-summary-item assinatura-summary-featured">
+            <span>Valor mensal</span>
+            <strong><%= formatCurrency(assinante?.valor_mensal) %></strong>
+          </div>
+
+          <div class="assinatura-summary-item">
+            <span>Código do plano</span>
+            <strong><%= assinante?.plano_codigo || 'Não informado' %></strong>
+          </div>
+
+          <div class="assinatura-summary-item">
+            <span>Fim do trial</span>
+            <strong><%= formatDate(assinante?.trial_fim) %></strong>
+          </div>
+
+          <div class="assinatura-summary-item">
+            <span>Vencimento</span>
+            <strong><%= formatDate(assinante?.data_vencimento) %></strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="assinatura-status-grid">
+        <article class="form-card assinatura-status-card">
+          <div class="form-card-header">
+            <div>
+              <span class="form-section-tag">Ferramentas</span>
+              <h2>Produtos liberados</h2>
+              <p>
+                Frentes operacionais disponíveis para este cliente.
+              </p>
+            </div>
+          </div>
+
+          <div class="assinatura-products-list">
+            <% if (productOptions?.length) { %>
+              <% productOptions.forEach((produto) => { %>
+                <% const enabled = produtosSelecionados.includes(produto.value); %>
+
+                <div class="assinatura-product-row <%= enabled ? 'is-enabled' : 'is-disabled' %>">
+                  <span>
+                    <i class="bi <%= enabled ? 'bi-check2-circle' : 'bi-circle' %>"></i>
+                    <%= produto.label %>
+                  </span>
+
+                  <strong><%= enabled ? 'Habilitado' : 'Não habilitado' %></strong>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p class="modern-note">Nenhuma ferramenta encontrada.</p>
+            <% } %>
+          </div>
+
+          <div class="assinatura-card-actions">
+            <a href="/assinatura/produtos" class="btn-modern-secondary assinatura-light-button">
+              <i class="bi bi-grid-3x3-gap"></i>
+              <span>Gerenciar produtos</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="form-card assinatura-status-card">
+          <div class="form-card-header">
+            <div>
+              <span class="form-section-tag">Cobrança</span>
+              <h2>Dados de cobrança</h2>
+              <p>
+                Dados que serão usados para preparar o pagamento.
+              </p>
+            </div>
+          </div>
+
+          <div class="assinatura-billing-box <%= hasBillingData ? 'is-ready' : 'is-pending' %>">
+            <i class="bi <%= hasBillingData ? 'bi-check2-circle' : 'bi-exclamation-triangle' %>"></i>
+            <div>
+              <strong>
+                <%= hasBillingData ? 'Dados cadastrados' : 'Dados pendentes' %>
+              </strong>
+              <span>
+                <% if (hasBillingData) { %>
+                  Os dados mínimos de cobrança já foram preenchidos.
+                <% } else { %>
+                  Preencha os dados antes de preparar o pagamento.
+                <% } %>
+              </span>
+            </div>
+          </div>
+
+          <div class="assinatura-details-list">
+            <div>
+              <span>Nome/Razão social</span>
+              <strong><%= assinante?.billing_nome || 'Não informado' %></strong>
+            </div>
+
+            <div>
+              <span>CPF/CNPJ</span>
+              <strong><%= formatDocument(assinante?.billing_cpf_cnpj) %></strong>
+            </div>
+
+            <div>
+              <span>E-mail</span>
+              <strong><%= assinante?.billing_email || 'Não informado' %></strong>
+            </div>
+
+            <div>
+              <span>Telefone</span>
+              <strong><%= formatPhone(assinante?.billing_telefone) %></strong>
+            </div>
+          </div>
+
+          <div class="assinatura-card-actions">
+            <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern">
+              <i class="bi bi-credit-card-2-front"></i>
+              <span>Preencher dados</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <section class="form-card assinatura-payment-card">
+        <div class="assinatura-payment-main">
+          <div>
+            <span class="form-section-tag">Pagamento</span>
+            <h2>Preparação do pagamento</h2>
+            <p>
+              Valide os dados de cobrança e confira se o gateway já está pronto para avançar.
+              Enquanto a chave real do Asaas não estiver configurada, nenhuma cobrança real será criada.
+            </p>
+          </div>
+
+          <div class="assinatura-billing-box assinatura-payment-status <%= gatewayConfigured ? 'is-ready' : 'is-pending' %>">
+            <i class="bi <%= gatewayConfigured ? 'bi-check2-circle' : 'bi-shield-exclamation' %>"></i>
+            <div>
+              <strong>
+                <%= gatewayConfigured ? 'Gateway configurado' : 'Gateway pendente' %>
+              </strong>
+              <span>
+                <% if (gatewayConfigured) { %>
+                  O gateway está configurado para o ambiente atual.
+                <% } else { %>
+                  Ainda não há chave real configurada.
+                <% } %>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div id="assinaturaPaymentResult" class="modern-note assinatura-payment-result" style="display: none;"></div>
+
+        <div class="assinatura-payment-actions">
+          <button type="button" class="btn-modern" id="prepararPagamentoStatusBtn">
+            <i class="bi bi-shield-check"></i>
+            <span>Preparar pagamento</span>
+          </button>
+
+          <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern-secondary assinatura-light-button">
+            <i class="bi bi-pencil-square"></i>
+            <span>Revisar cobrança</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="form-actions-bar assinatura-status-actions">
+        <div class="form-actions-copy">
+          <strong>Resumo da assinatura</strong>
+          <span>Use esta tela para revisar o estado do cliente antes de avançar para cobrança real.</span>
+        </div>
+
+        <div class="form-actions-buttons">
+          <a href="/painel" class="btn-modern-secondary">
+            <i class="bi bi-arrow-left"></i>
+            <span>Voltar ao painel</span>
+          </a>
+
+          <a href="/assinatura/produtos" class="btn-modern">
+            <i class="bi bi-grid-3x3-gap"></i>
+            <span>Produtos da operação</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    .assinatura-status-shell {
+      padding-bottom: 2rem;
+    }
+
+    .assinatura-status-hero {
+      margin-bottom: 1.15rem;
+    }
+
+    .assinatura-hero-stat span {
+      font-size: 1.08rem;
+      font-weight: 850;
+    }
+
+    .assinatura-status-stage {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .assinatura-plan-card,
+    .assinatura-status-card,
+    .assinatura-payment-card {
+      overflow: hidden;
+    }
+
+    .assinatura-plan-content {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.25rem;
+      padding: 1.25rem 1.35rem 0.8rem;
+    }
+
+    .assinatura-plan-content h2,
+    .assinatura-payment-main h2 {
+      margin: 0.35rem 0 0.35rem;
+      color: #0f172a;
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      line-height: 1.12;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+    }
+
+    .assinatura-plan-content p,
+    .assinatura-payment-main p {
+      margin: 0;
+      max-width: 720px;
+      color: #64748b;
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    .assinatura-status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: max-content;
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 850;
+    }
+
+    .assinatura-status-pill.status-trial {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+    }
+
+    .assinatura-status-pill.status-active {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+    }
+
+    .assinatura-status-pill.status-warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+    }
+
+    .assinatura-status-pill.status-danger {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .assinatura-status-pill.status-muted {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .assinatura-summary-grid {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 1fr);
+      gap: 0.95rem;
+      padding: 0 1.35rem 1.35rem;
+    }
+
+    .assinatura-summary-item {
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 20px;
+      padding: 1rem;
+      background: rgba(248, 250, 252, 0.9);
+    }
+
+    .assinatura-summary-featured {
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 8rem),
+        #eff6ff;
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    .assinatura-summary-item span,
+    .assinatura-details-list span {
+      display: block;
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 750;
+      margin-bottom: 0.25rem;
+    }
+
+    .assinatura-summary-item strong {
+      color: #0f172a;
+      font-size: clamp(1rem, 1.6vw, 1.16rem);
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .assinatura-summary-featured strong {
+      color: #1d4ed8;
+      font-size: clamp(1.2rem, 2vw, 1.45rem);
+    }
+
+    .assinatura-status-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .assinatura-status-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .assinatura-status-card .form-card-header {
+      align-items: flex-start;
+      gap: 1rem;
+      padding-bottom: 0.85rem;
+    }
+
+    .assinatura-status-card .form-card-header h2 {
+      font-size: clamp(1.28rem, 2vw, 1.62rem);
+      letter-spacing: -0.03em;
+    }
+
+    .assinatura-status-card .form-card-header p {
+      max-width: 34rem;
+      font-size: 0.96rem;
+      line-height: 1.5;
+    }
+
+    .assinatura-products-list,
+    .assinatura-details-list {
+      display: grid;
+      gap: 0.78rem;
+      padding: 1rem 1.15rem;
+    }
+
+    .assinatura-product-row,
+    .assinatura-details-list > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 18px;
+      padding: 0.92rem 1rem;
+      background: rgba(248, 250, 252, 0.86);
+    }
+
+    .assinatura-product-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #0f172a;
+      font-size: 0.98rem;
+      font-weight: 850;
+    }
+
+    .assinatura-product-row strong {
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    .assinatura-product-row.is-enabled {
+      background: #f0fdf4;
+      border-color: rgba(16, 185, 129, 0.22);
+    }
+
+    .assinatura-product-row.is-enabled span,
+    .assinatura-product-row.is-enabled strong {
+      color: #047857;
+    }
+
+    .assinatura-product-row.is-disabled {
+      background: #f8fafc;
+    }
+
+    .assinatura-product-row.is-disabled span,
+    .assinatura-product-row.is-disabled strong {
+      color: #64748b;
+    }
+
+    .assinatura-details-list {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .assinatura-details-list > div {
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .assinatura-details-list strong {
+      color: #0f172a;
+      font-size: 0.98rem;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .assinatura-billing-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.78rem;
+      margin: 1rem 1.15rem 0;
+      padding: 1rem;
+      border-radius: 20px;
+    }
+
+    .assinatura-billing-box i {
+      margin-top: 0.12rem;
+      font-size: 1.16rem;
+    }
+
+    .assinatura-billing-box strong {
+      display: block;
+      margin-bottom: 0.18rem;
+      font-size: 0.98rem;
+      font-weight: 900;
+    }
+
+    .assinatura-billing-box span {
+      display: block;
+      line-height: 1.48;
+      font-size: 0.94rem;
+    }
+
+    .assinatura-billing-box.is-ready {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid rgba(16, 185, 129, 0.24);
+    }
+
+    .assinatura-billing-box.is-pending {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.26);
+    }
+
+    .assinatura-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      padding: 1rem 1.15rem 1.15rem;
+      margin-top: auto;
+    }
+
+    .assinatura-light-button {
+      background: #fff;
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    .assinatura-payment-card {
+      padding: 1.35rem;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 18rem),
+        rgba(255, 255, 255, 0.96);
+    }
+
+    .assinatura-payment-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .assinatura-payment-status {
+      margin: 0;
+    }
+
+    .assinatura-payment-result {
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: #fffbeb;
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .assinatura-payment-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .assinatura-status-actions {
+      margin-top: 0;
+    }
+
+    @media (max-width: 1000px) {
+      .assinatura-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .assinatura-status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .assinatura-payment-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .assinatura-plan-content {
+        flex-direction: column;
+        padding: 1rem 1rem 0.75rem;
+      }
+
+      .assinatura-summary-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem 1rem;
+      }
+
+      .assinatura-details-list {
+        grid-template-columns: 1fr;
+      }
+
+      .assinatura-product-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .assinatura-status-card .form-card-header {
+        flex-direction: column;
+      }
+
+      .assinatura-payment-card {
+        padding: 1rem;
+      }
+
+      .assinatura-card-actions .btn-modern,
+      .assinatura-card-actions .btn-modern-secondary,
+      .assinatura-card-actions button,
+      .assinatura-payment-actions .btn-modern,
+      .assinatura-payment-actions .btn-modern-secondary,
+      .assinatura-payment-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const prepararPagamentoBtn = document.getElementById('prepararPagamentoStatusBtn');
+      const paymentResult = document.getElementById('assinaturaPaymentResult');
+
+      function setPaymentResult(message, type = 'info') {
+        if (!paymentResult) return;
+
+        const icons = {
+          success: 'bi-check2-circle',
+          warning: 'bi-exclamation-triangle',
+          error: 'bi-x-circle',
+          info: 'bi-info-circle'
+        };
+
+        paymentResult.style.display = 'block';
+        paymentResult.innerHTML = `
+          <strong>
+            <i class="bi ${icons[type] || icons.info}"></i>
+            Pagamento:
+          </strong>
+          ${message}
+        `;
+
+        if (type === 'success') {
+          paymentResult.style.background = '#ecfdf5';
+          paymentResult.style.borderColor = 'rgba(16, 185, 129, 0.25)';
+          paymentResult.style.color = '#065f46';
+        }
+
+        if (type === 'error') {
+          paymentResult.style.background = '#fef2f2';
+          paymentResult.style.borderColor = 'rgba(239, 68, 68, 0.25)';
+          paymentResult.style.color = '#991b1b';
+        }
+
+        if (type === 'warning' || type === 'info') {
+          paymentResult.style.background = '#fffbeb';
+          paymentResult.style.borderColor = 'rgba(245, 158, 11, 0.25)';
+          paymentResult.style.color = '#92400e';
+        }
+      }
+
+      if (prepararPagamentoBtn) {
+        prepararPagamentoBtn.addEventListener('click', async () => {
+          const originalButtonContent = prepararPagamentoBtn.innerHTML;
+
+          prepararPagamentoBtn.disabled = true;
+          prepararPagamentoBtn.innerHTML = `
+            <i class="bi bi-hourglass-split"></i>
+            <span>Preparando...</span>
+          `;
+
+          try {
+            const response = await fetch('/pagamentos/iniciar', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json'
+              }
+            });
+
+            const data = await response.json().catch(() => ({
+              success: false,
+              message: 'Não foi possível interpretar a resposta do servidor.'
+            }));
+
+            if (!response.ok || !data.success) {
+              const message = data.message || 'Não foi possível preparar o pagamento.';
+
+              if (data.needsBillingData) {
+                setPaymentResult(`${message} Clique em "Preencher dados" antes de continuar.`, 'warning');
+                window.AppAlerts?.warning(message);
+                return;
+              }
+
+              setPaymentResult(message, 'error');
+              window.AppAlerts?.error(message);
+              return;
+            }
+
+            if (data.needsGatewayConfiguration) {
+              const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+
+              setPaymentResult(message, 'warning');
+              window.AppAlerts?.warning(message);
+              return;
+            }
+
+            const successMessage = data.message || 'Pagamento preparado com sucesso.';
+
+            setPaymentResult(successMessage, 'success');
+            window.AppAlerts?.success(successMessage);
+          } catch (error) {
+            console.error('Erro ao preparar pagamento:', error);
+
+            const message = 'Erro ao preparar pagamento. Tente novamente em alguns instantes.';
+
+            setPaymentResult(message, 'error');
+            window.AppAlerts?.error(message);
+          } finally {
+            prepararPagamentoBtn.disabled = false;
+            prepararPagamentoBtn.innerHTML = originalButtonContent;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
