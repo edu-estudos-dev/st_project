@@ -402,15 +402,6 @@ class LoginLogoutController {
                 });
             }
 
-            if (usuario.status_assinatura === 'bloqueado') {
-                return res.status(403).render('pages/login', {
-                    title: 'Login',
-                    erro: 'Assinatura bloqueada. Entre em contato com o suporte.',
-                    success: null,
-                    resendVerificationEmail: null
-                });
-            }
-
             const authToken = signAuthToken({
                 sub: usuario.user_id,
                 username: usuario.username,
@@ -418,8 +409,12 @@ class LoginLogoutController {
                 status_assinatura: usuario.status_assinatura
             });
 
+            const redirectAfterLogin = ['bloqueado', 'cancelado'].includes(usuario.status_assinatura)
+                ? '/assinatura/status?success=Login realizado com sucesso'
+                : '/painel?success=Login realizado com sucesso';
+
             res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
-            return res.redirect('/painel?success=Login realizado com sucesso');
+            return res.redirect(redirectAfterLogin);
         } catch (error) {
             console.error('Erro ao processar o login:', error);
 
