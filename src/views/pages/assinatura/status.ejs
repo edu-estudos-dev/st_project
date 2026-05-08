@@ -7,12 +7,13 @@
   <div class="page-spacer"></div>
 
   <div class="form-shell form-shell-modern assinatura-status-shell">
-    <% 
+    <%
       const statusAssinatura = assinante?.status_assinatura || 'não informado';
       const produtosSelecionados = assinante?.produtos_habilitados_lista || [];
       const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj);
       const canManageSubscriptionProducts = Boolean(typeof canManageProducts !== 'undefined' && canManageProducts);
-      const isReadOnlySubscription = ['vencido', 'cancelado'].includes(statusAssinatura);
+      const hasSubscriptionAlert = ['vencido', 'bloqueado', 'cancelado'].includes(statusAssinatura);
+      const isBillingOnlySubscription = ['bloqueado', 'cancelado'].includes(statusAssinatura);
 
       const currencyFormatter = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -86,16 +87,24 @@
         bloqueado: 'status-danger'
       };
 
+      const alertContentMap = {
+        vencido: {
+          title: 'Pagamento pendente',
+          message: 'Sua assinatura está vencida. Por enquanto, seus dados continuam preservados e o sistema permanece em modo de consulta. Regularize o pagamento para voltar a cadastrar, editar e usar todos os recursos.'
+        },
+        bloqueado: {
+          title: 'Assinatura temporariamente bloqueada',
+          message: 'Sua assinatura foi bloqueada por falta de regularização. Seus dados continuam preservados. Regularize o pagamento para recuperar o acesso às ferramentas do VendMaster.'
+        },
+        cancelado: {
+          title: 'Assinatura cancelada',
+          message: 'Sua assinatura foi cancelada por falta de regularização. Seus dados continuam preservados por enquanto. Reative a assinatura para voltar a usar o VendMaster.'
+        }
+      };
+
       const statusLabel = statusLabels[statusAssinatura] || statusAssinatura;
       const statusClass = statusClassMap[statusAssinatura] || 'status-muted';
-
-      const readOnlyTitle = statusAssinatura === 'cancelado'
-        ? 'Assinatura cancelada'
-        : 'Assinatura vencida';
-
-      const readOnlyMessage = statusAssinatura === 'cancelado'
-        ? 'Sua assinatura está cancelada. O sistema permanece disponível apenas para consulta. Para voltar a cadastrar ou alterar dados, regularize sua assinatura.'
-        : 'Sua assinatura está vencida. O sistema permanece disponível apenas para consulta. Para voltar a cadastrar ou alterar dados, regularize sua assinatura.';
+      const subscriptionAlert = alertContentMap[statusAssinatura] || null;
     %>
 
     <%- include('../../partials/breadcrumb', { pageTitle: 'Status da Assinatura' }) %>
@@ -122,15 +131,15 @@
       </div>
     </section>
 
-    <% if (isReadOnlySubscription) { %>
-      <section class="assinatura-readonly-alert">
+    <% if (hasSubscriptionAlert && subscriptionAlert) { %>
+      <section class="assinatura-readonly-alert <%= isBillingOnlySubscription ? 'is-billing-only' : '' %>">
         <div class="assinatura-readonly-icon">
-          <i class="bi bi-exclamation-triangle"></i>
+          <i class="bi <%= statusAssinatura === 'vencido' ? 'bi-exclamation-triangle' : 'bi-lock' %>"></i>
         </div>
 
         <div class="assinatura-readonly-copy">
-          <strong><%= readOnlyTitle %></strong>
-          <span><%= readOnlyMessage %></span>
+          <strong><%= subscriptionAlert.title %></strong>
+          <span><%= subscriptionAlert.message %></span>
         </div>
 
         <div class="assinatura-readonly-actions">
@@ -289,10 +298,10 @@
         <div class="assinatura-payment-main">
           <div>
             <span class="form-section-tag">Pagamento</span>
-            <h2>Preparação do pagamento</h2>
+            <h2>Regularização do pagamento</h2>
             <p>
               Escolha cartão para abrir o ambiente seguro do Asaas ou boleto para abrir a cobrança bancária.
-              Pix ficará disponível assim que o serviço do Asaas for restabelecido.
+              Pix será disponibilizado em uma etapa futura do fluxo de assinatura.
             </p>
           </div>
 
@@ -342,10 +351,10 @@
             </div>
 
             <div>
-              <span class="assinatura-payment-badge is-neutral">Indisponível</span>
+              <span class="assinatura-payment-badge is-neutral">Em breve</span>
               <strong>Pix</strong>
               <small>
-                Temporariamente indisponível no Asaas. Será liberado assim que o serviço voltar.
+                Ainda não disponível neste fluxo. Quando for liberado, tende a ser uma opção de confirmação mais rápida.
               </small>
             </div>
           </div>
@@ -394,14 +403,24 @@
       <section class="form-actions-bar assinatura-status-actions">
         <div class="form-actions-copy">
           <strong>Resumo da assinatura</strong>
-          <span>Use esta tela para revisar o estado do cliente antes de avançar para cobrança real.</span>
+          <span>
+            <% if (isBillingOnlySubscription) { %>
+              Regularize ou reative a assinatura para recuperar o acesso às ferramentas.
+            <% } else if (statusAssinatura === 'vencido') { %>
+              Regularize a assinatura para voltar a alterar dados no sistema.
+            <% } else { %>
+              Use esta tela para revisar o estado do cliente antes de avançar para cobrança real.
+            <% } %>
+          </span>
         </div>
 
         <div class="form-actions-buttons">
-          <a href="/painel" class="btn-modern-secondary">
-            <i class="bi bi-arrow-left"></i>
-            <span>Voltar ao painel</span>
-          </a>
+          <% if (!isBillingOnlySubscription) { %>
+            <a href="/painel" class="btn-modern-secondary">
+              <i class="bi bi-arrow-left"></i>
+              <span>Voltar ao painel</span>
+            </a>
+          <% } %>
 
           <% if (canManageSubscriptionProducts) { %>
             <a href="/assinatura/produtos" class="btn-modern">
@@ -444,6 +463,14 @@
       box-shadow: 0 16px 38px rgba(15, 23, 42, 0.07);
     }
 
+    .assinatura-readonly-alert.is-billing-only {
+      border-color: rgba(239, 68, 68, 0.22);
+      background:
+        radial-gradient(circle at top right, rgba(239, 68, 68, 0.1), transparent 16rem),
+        #fef2f2;
+      color: #991b1b;
+    }
+
     .assinatura-readonly-icon {
       display: inline-flex;
       align-items: center;
@@ -457,6 +484,11 @@
       flex: 0 0 auto;
     }
 
+    .assinatura-readonly-alert.is-billing-only .assinatura-readonly-icon {
+      background: rgba(239, 68, 68, 0.12);
+      color: #991b1b;
+    }
+
     .assinatura-readonly-copy {
       display: grid;
       gap: 0.22rem;
@@ -468,10 +500,18 @@
       font-weight: 900;
     }
 
+    .assinatura-readonly-alert.is-billing-only .assinatura-readonly-copy strong {
+      color: #7f1d1d;
+    }
+
     .assinatura-readonly-copy span {
       color: #92400e;
       font-size: 0.95rem;
       line-height: 1.45;
+    }
+
+    .assinatura-readonly-alert.is-billing-only .assinatura-readonly-copy span {
+      color: #991b1b;
     }
 
     .assinatura-readonly-actions {
