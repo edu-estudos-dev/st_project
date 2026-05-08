@@ -112,6 +112,11 @@
               <i class="bi bi-shield-check"></i>
               <span>Preparar pagamento</span>
             </button>
+
+            <a href="/assinatura/status" class="btn-modern-secondary assinatura-products-light-button">
+              <i class="bi bi-person-badge"></i>
+              <span>Status da assinatura</span>
+            </a>
           </div>
         </section>
 
@@ -138,6 +143,21 @@
       </form>
     </main>
   </div>
+
+  <style>
+    .assinatura-products-light-button {
+      background: #fff;
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    @media (max-width: 640px) {
+      .form-actions-buttons .assinatura-products-light-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

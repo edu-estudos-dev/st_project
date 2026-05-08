@@ -12,6 +12,7 @@
         <% const navProducts = navigationProducts || { bolinhas: false, consignados: false, figurinhas: false, pelucias: false, hasAny: false }; %>
         <% const hasConsignados = Boolean(navProducts.consignados || navProducts.figurinhas); %>
         <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+        <% const canAccessProductSettings = Boolean(usuario?.status_assinatura === 'trial' || (typeof isSaasAdmin !== 'undefined' && isSaasAdmin)); %>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto app-primary-nav">
@@ -116,12 +117,14 @@
                                 <small class="menu-link-text">Veja vencimentos próximos e itens atrasados.</small>
                             </a>
                         </li>
+                        <% if (canAccessProductSettings) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/assinatura/produtos">
-                                <span class="menu-link-title">Produtos da operacao</span>
+                                <span class="menu-link-title">Produtos da operação</span>
                                 <small class="menu-link-text">Escolha quais frentes aparecem no sistema.</small>
                             </a>
                         </li>
+                        <% } %>
                     </ul>
                 </li>
 
@@ -258,9 +261,12 @@
                             <i class="bi bi-chevron-right"></i>
                         </a>
                         <div class="nav-account-divider"></div>
+                        <a href="/assinatura/status"><i class="bi bi-person-badge"></i><span>Minha assinatura</span></a>
                         <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>relatórios</span></a>
                         <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
-                        <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Produtos da operação</span></a>
+                        <% if (canAccessProductSettings) { %>
+                            <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Produtos da operação</span></a>
+                        <% } %>
                         <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
                         <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
                             <a href="/admin/assinantes"><i class="bi bi-shield-check"></i><span>Assinantes</span></a>
