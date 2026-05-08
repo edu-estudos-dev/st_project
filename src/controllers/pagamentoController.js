@@ -100,6 +100,39 @@ async function ensureAsaasCustomerForAssinante(assinante) {
   };
 }
 
+async function renderizarFormularioDadosCobranca(req, res) {
+  try {
+    const assinanteId = getAssinanteIdFromRequest(req);
+
+    if (!assinanteId) {
+      return res.redirect('/login?erro=Por%20favor,%20fa%C3%A7a%20login%20primeiro.');
+    }
+
+    const assinante = await AssinanteModel.findById(assinanteId);
+
+    if (!assinante) {
+      return res.status(404).render('pages/404', {
+        title: 'Assinante não encontrado - VendMaster'
+      });
+    }
+
+    return res.render('pages/pagamentos/dadosCobranca', {
+      billingData: {
+        billing_nome: assinante.billing_nome || '',
+        billing_cpf_cnpj: assinante.billing_cpf_cnpj || '',
+        billing_email: assinante.billing_email || '',
+        billing_telefone: assinante.billing_telefone || ''
+      },
+      gatewayConfigured: isGatewayConfigured(),
+      gatewayConfig: getGatewayConfig()
+    });
+  } catch (error) {
+    console.error('Erro ao renderizar formulário de dados de cobrança:', error);
+
+    return res.status(500).send('Erro ao carregar dados de cobrança.');
+  }
+}
+
 async function obterDadosCobranca(req, res) {
   try {
     const assinanteId = getAssinanteIdFromRequest(req);
@@ -254,6 +287,7 @@ async function iniciarPagamento(req, res) {
 }
 
 export {
+  renderizarFormularioDadosCobranca,
   obterDadosCobranca,
   salvarDadosCobranca,
   iniciarPagamento
