@@ -84,6 +84,38 @@ class PaymentEventModel {
     );
   }
 
+  async listByAssinanteId(assinanteId, { limit = 100 } = {}) {
+    if (!assinanteId) {
+      return [];
+    }
+
+    const safeLimit = Number.isInteger(Number(limit))
+      ? Math.max(1, Math.min(Number(limit), 300))
+      : 100;
+
+    const result = await connection.query(
+      `SELECT
+        id,
+        assinante_id,
+        provider,
+        event_type,
+        gateway_event_id,
+        gateway_payment_id,
+        gateway_subscription_id,
+        status,
+        payload,
+        processed_at,
+        created_at
+       FROM payment_events
+       WHERE assinante_id = $1
+       ORDER BY created_at DESC, id DESC
+       LIMIT $2`,
+      [assinanteId, safeLimit]
+    );
+
+    return result.rows;
+  }
+
   async markAsProcessed(id) {
     const result = await connection.query(
       `UPDATE payment_events

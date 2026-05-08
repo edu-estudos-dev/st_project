@@ -1,4 +1,5 @@
 import AssinanteModel from '../models/assinanteModel.js';
+import PaymentEventModel from '../models/paymentEventModel.js';
 import { atualizarStatusContato, listarContatos } from '../models/interessadosModel.js';
 
 const STATUS_OPTIONS = ['trial', 'ativo', 'vencido', 'cancelado', 'bloqueado'];
@@ -45,9 +46,27 @@ const normalizeMoney = (value) => {
 
 const formatDateInput = (value) => {
   if (!value) return '';
+
   const date = new Date(value);
+
   if (Number.isNaN(date.getTime())) return '';
+
   return date.toISOString().slice(0, 10);
+};
+
+const formatDateTime = (value) => {
+  if (!value) return 'Não informado';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Não informado';
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  }).format(date);
 };
 
 class AdminAssinantesController {
@@ -123,11 +142,13 @@ class AdminAssinantesController {
       }
 
       const assinanteAtual = await AssinanteModel.findAdminById(id);
+
       if (!assinanteAtual) {
         return res.status(404).send('Assinante nao encontrado.');
       }
 
       const isEditingSelf = Number(assinanteAtual.user_id) === Number(req.user.user_id);
+
       if (isEditingSelf && statusAssinatura === 'bloqueado') {
         throw new Error('Voce nao pode bloquear o proprio usuario administrador.');
       }
@@ -150,8 +171,37 @@ class AdminAssinantesController {
       return res.redirect(`/admin/assinantes/${id}/edit?success=${encodeURIComponent('Assinante atualizado com sucesso.')}`);
     } catch (error) {
       console.error('Erro ao atualizar assinante:', error);
+
       const message = error.message || 'Erro ao atualizar assinante.';
+
       return res.redirect(`/admin/assinantes/${req.params.id}/edit?error=${encodeURIComponent(message)}`);
+    }
+  };
+
+  pagamentos = async (req, res) => {
+    try {
+      const assinante = await AssinanteModel.findAdminById(req.params.id);
+
+      if (!assinante) {
+        return res.status(404).send('Assinante nao encontrado.');
+      }
+
+      const paymentEvents = await PaymentEventModel.listByAssinanteId(assinante.id, {
+        limit: 100
+      });
+
+      return res.render('pages/admin/pagamentosAssinante', {
+        title: 'Eventos de Pagamento',
+        usuario: req.user,
+        assinante,
+        paymentEvents,
+        formatDateTime,
+        success: req.query.success,
+        error: req.query.error
+      });
+    } catch (error) {
+      console.error('Erro ao listar eventos de pagamento:', error);
+      return res.status(500).send('Erro ao listar eventos de pagamento.');
     }
   };
 
@@ -178,6 +228,7 @@ class AdminAssinantesController {
       const status = String(req.body.status || '').trim().toLowerCase();
 
       const updated = await atualizarStatusContato({ id, status });
+
       if (!updated) {
         return res.redirect('/admin/interessados?error=Contato nao encontrado.');
       }

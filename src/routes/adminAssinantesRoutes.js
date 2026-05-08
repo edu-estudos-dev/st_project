@@ -8,6 +8,7 @@ router.use(requireSaasAdmin);
 
 router.get('/', AdminAssinantesController.index);
 router.get('/interessados', AdminAssinantesController.interessados);
+router.get('/:id/pagamentos', AdminAssinantesController.pagamentos);
 router.get('/:id/edit', AdminAssinantesController.edit);
 router.post('/:id/edit', AdminAssinantesController.update);
 

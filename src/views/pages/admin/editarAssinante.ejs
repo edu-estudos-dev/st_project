@@ -36,10 +36,17 @@
                   <h2>Dados da assinatura</h2>
                   <p>Altere manualmente status, plano, ciclo de cobrança e datas de controle.</p>
                 </div>
-                <a class="list-action" href="/admin/assinantes">
-                  <i class="bi bi-arrow-left"></i>
-                  <span>Voltar</span>
-                </a>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="list-action" href="/admin/assinantes/<%= assinante.id %>/pagamentos">
+                    <i class="bi bi-receipt"></i>
+                    <span>Eventos de pagamento</span>
+                  </a>
+
+                  <a class="list-action" href="/admin/assinantes">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Voltar</span>
+                  </a>
+                </div>
               </div>
 
               <form action="/admin/assinantes/<%= assinante.id %>/edit" method="POST" class="modern-form">
