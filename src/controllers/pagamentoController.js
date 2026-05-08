@@ -2,11 +2,15 @@ import AssinanteModel from '../models/assinanteModel.js';
 
 import {
   createCustomer,
+  createPayment,
   createSubscription,
   getGatewayConfig,
+  getPixQrCode,
   getSubscriptionPayments,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
+
+const ALLOWED_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
 
 function onlyDigits(value) {
   return String(value || '').replace(/\D/g, '');
@@ -20,6 +24,14 @@ function normalizeEmail(value) {
   return String(value || '')
     .trim()
     .toLowerCase();
+}
+
+function normalizeBillingType(value) {
+  const billingType = String(value || 'CREDIT_CARD')
+    .trim()
+    .toUpperCase();
+
+  return ALLOWED_BILLING_TYPES.has(billingType) ? billingType : 'CREDIT_CARD';
 }
 
 function formatDateOnly(value) {
@@ -124,6 +136,34 @@ function buildAsaasSubscriptionPayload(assinante, customerId) {
   };
 }
 
+function buildAsaasPixPaymentPayload(assinante, customerId) {
+  const monthlyValue = getMonthlyPlanValue(assinante);
+  const planName = assinante.plano_nome || 'Plano VendMaster';
+
+  return {
+    customer: customerId,
+    billingType: 'PIX',
+    value: monthlyValue,
+    dueDate: formatDateOnly(new Date()),
+    description: `Regularização VendMaster via Pix - ${planName}`,
+    externalReference: `assinante:${assinante.id}`
+  };
+}
+
+function buildAsaasCreditCardPaymentPayload(assinante, customerId) {
+  const monthlyValue = getMonthlyPlanValue(assinante);
+  const planName = assinante.plano_nome || 'Plano VendMaster';
+
+  return {
+    customer: customerId,
+    billingType: 'CREDIT_CARD',
+    value: monthlyValue,
+    dueDate: formatDateOnly(new Date()),
+    description: `Regularização VendMaster via cartão de crédito - ${planName}`,
+    externalReference: `assinante:${assinante.id}`
+  };
+}
+
 async function ensureAsaasCustomerForAssinante(assinante) {
   if (assinante.gateway_customer_id) {
     return {
@@ -211,12 +251,163 @@ function buildPaymentResponse(payment) {
   return {
     id: payment.id || null,
     status: payment.status || null,
+    billingType: payment.billingType || null,
     value: payment.value ?? null,
     dueDate: payment.dueDate || null,
     invoiceUrl: payment.invoiceUrl || null,
     bankSlipUrl: payment.bankSlipUrl || null,
     transactionReceiptUrl: payment.transactionReceiptUrl || null,
     paymentUrl
+  };
+}
+
+function buildPixResponse(pixQrCode) {
+  if (!pixQrCode) {
+    return null;
+  }
+
+  return {
+    encodedImage: pixQrCode.encodedImage || null,
+    payload: pixQrCode.payload || null,
+    expirationDate: pixQrCode.expirationDate || null
+  };
+}
+
+async function prepararPagamentoBoleto({
+  assinante,
+  customerResult,
+  hasBillingData,
+  gatewayConfig
+}) {
+  const assinanteComCustomer = {
+    ...assinante,
+    gateway_customer_id: customerResult.customerId
+  };
+
+  const subscriptionResult = await ensureAsaasSubscriptionForAssinante(
+    assinanteComCustomer,
+    customerResult.customerId
+  );
+
+  const paymentsResult = await getSubscriptionPayments(
+    subscriptionResult.subscriptionId,
+    10
+  );
+
+  const selectedPayment = selectBestPaymentForSubscription(
+    paymentsResult?.data || []
+  );
+  const payment = buildPaymentResponse(selectedPayment);
+
+  return {
+    success: true,
+    message: payment?.paymentUrl
+      ? 'Boleto preparado com sucesso. Abra a cobrança para concluir a regularização.'
+      : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no Asaas.',
+    provider: gatewayConfig.provider,
+    environment: gatewayConfig.environment,
+    gatewayConfigured: true,
+    hasBillingData,
+    requestedBillingType: 'BOLETO',
+    effectiveBillingType: 'BOLETO',
+    gatewayCustomerId: customerResult.customerId,
+    gatewayCustomerCreated: customerResult.created,
+    gatewaySubscriptionId: subscriptionResult.subscriptionId,
+    gatewaySubscriptionCreated: subscriptionResult.created,
+    needsGatewayConfiguration: false,
+    payment,
+    pix: null
+  };
+}
+
+async function prepararPagamentoPix({
+  assinante,
+  customerResult,
+  hasBillingData,
+  gatewayConfig
+}) {
+  const pixPayment = await createPayment(
+    buildAsaasPixPaymentPayload(assinante, customerResult.customerId)
+  );
+
+  if (!pixPayment?.id) {
+    throw new Error('Asaas não retornou o ID da cobrança Pix criada.');
+  }
+
+  let pix = null;
+  let pixQrCodeError = null;
+
+  try {
+    const pixQrCode = await getPixQrCode(pixPayment.id);
+    pix = buildPixResponse(pixQrCode);
+  } catch (error) {
+    pixQrCodeError = error.message || 'Não foi possível gerar o QR Code Pix.';
+    console.warn(
+      '[ASAAS][PIX_QR_CODE] Cobrança Pix criada, mas QR Code não retornou:',
+      pixQrCodeError
+    );
+  }
+
+  const payment = buildPaymentResponse(pixPayment);
+  const hasPixQrCode = Boolean(pix?.encodedImage || pix?.payload);
+
+  return {
+    success: true,
+    message: hasPixQrCode
+      ? 'Pix gerado com sucesso. Pague pelo QR Code ou pelo Pix copia e cola para regularizar a assinatura.'
+      : 'Cobrança Pix criada com sucesso. Abra a cobrança para concluir o pagamento no ambiente do Asaas.',
+    provider: gatewayConfig.provider,
+    environment: gatewayConfig.environment,
+    gatewayConfigured: true,
+    hasBillingData,
+    requestedBillingType: 'PIX',
+    effectiveBillingType: 'PIX',
+    gatewayCustomerId: customerResult.customerId,
+    gatewayCustomerCreated: customerResult.created,
+    gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+    gatewaySubscriptionCreated: false,
+    needsGatewayConfiguration: false,
+    payment,
+    pix,
+    pixQrCodeAvailable: hasPixQrCode,
+    pixQrCodeError
+  };
+}
+
+async function prepararPagamentoCartao({
+  assinante,
+  customerResult,
+  hasBillingData,
+  gatewayConfig
+}) {
+  const creditCardPayment = await createPayment(
+    buildAsaasCreditCardPaymentPayload(assinante, customerResult.customerId)
+  );
+
+  if (!creditCardPayment?.id) {
+    throw new Error('Asaas não retornou o ID da cobrança por cartão criada.');
+  }
+
+  const payment = buildPaymentResponse(creditCardPayment);
+
+  return {
+    success: true,
+    message: payment?.paymentUrl
+      ? 'Cobrança por cartão preparada com sucesso. Abra a cobrança para informar os dados do cartão no ambiente seguro do Asaas.'
+      : 'Cobrança por cartão criada, mas nenhum link de pagamento foi retornado pelo Asaas.',
+    provider: gatewayConfig.provider,
+    environment: gatewayConfig.environment,
+    gatewayConfigured: true,
+    hasBillingData,
+    requestedBillingType: 'CREDIT_CARD',
+    effectiveBillingType: 'CREDIT_CARD',
+    gatewayCustomerId: customerResult.customerId,
+    gatewayCustomerCreated: customerResult.created,
+    gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+    gatewaySubscriptionCreated: false,
+    needsGatewayConfiguration: false,
+    payment,
+    pix: null
   };
 }
 
@@ -339,6 +530,7 @@ async function iniciarPagamento(req, res) {
   try {
     const gatewayConfig = getGatewayConfig();
     const assinanteId = getAssinanteIdFromRequest(req);
+    const requestedBillingType = normalizeBillingType(req.body?.billingType);
 
     if (!assinanteId) {
       return res.status(403).json({
@@ -372,56 +564,50 @@ async function iniciarPagamento(req, res) {
       return res.status(200).json({
         success: true,
         message:
-          'Dados de cobrança validados. Gateway ainda não configurado para criar customer real.',
+          'Dados de cobrança validados. A cobrança ainda não está disponível para este ambiente.',
         provider: gatewayConfig.provider,
         environment: gatewayConfig.environment,
         gatewayConfigured: false,
         hasBillingData,
+        requestedBillingType,
         gatewayCustomerId: assinante.gateway_customer_id || null,
         gatewayCustomerCreated: false,
         gatewaySubscriptionId: assinante.gateway_subscription_id || null,
         gatewaySubscriptionCreated: false,
-        needsGatewayConfiguration: true
+        needsGatewayConfiguration: true,
+        payment: null,
+        pix: null
       });
     }
 
     const customerResult = await ensureAsaasCustomerForAssinante(assinante);
 
-    const assinanteComCustomer = {
-      ...assinante,
-      gateway_customer_id: customerResult.customerId
-    };
+    let responsePayload;
 
-    const subscriptionResult = await ensureAsaasSubscriptionForAssinante(
-      assinanteComCustomer,
-      customerResult.customerId
-    );
+    if (requestedBillingType === 'PIX') {
+      responsePayload = await prepararPagamentoPix({
+        assinante,
+        customerResult,
+        hasBillingData,
+        gatewayConfig
+      });
+    } else if (requestedBillingType === 'CREDIT_CARD') {
+      responsePayload = await prepararPagamentoCartao({
+        assinante,
+        customerResult,
+        hasBillingData,
+        gatewayConfig
+      });
+    } else {
+      responsePayload = await prepararPagamentoBoleto({
+        assinante,
+        customerResult,
+        hasBillingData,
+        gatewayConfig
+      });
+    }
 
-    const paymentsResult = await getSubscriptionPayments(
-      subscriptionResult.subscriptionId,
-      10
-    );
-    const selectedPayment = selectBestPaymentForSubscription(
-      paymentsResult?.data || []
-    );
-    const payment = buildPaymentResponse(selectedPayment);
-
-    return res.status(200).json({
-      success: true,
-      message: payment?.paymentUrl
-        ? 'Cobrança preparada com sucesso. Abra a cobrança para concluir a regularização.'
-        : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no Asaas.',
-      provider: gatewayConfig.provider,
-      environment: gatewayConfig.environment,
-      gatewayConfigured: true,
-      hasBillingData,
-      gatewayCustomerId: customerResult.customerId,
-      gatewayCustomerCreated: customerResult.created,
-      gatewaySubscriptionId: subscriptionResult.subscriptionId,
-      gatewaySubscriptionCreated: subscriptionResult.created,
-      needsGatewayConfiguration: false,
-      payment
-    });
+    return res.status(200).json(responsePayload);
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);
 

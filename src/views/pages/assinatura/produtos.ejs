@@ -78,7 +78,7 @@
               <h2>Dados de cobrança</h2>
               <p>
                 Informe ou revise os dados usados para preparar a cobrança da assinatura.
-                No momento, a cobrança disponível é por boleto. Cartão e Pix serão adicionados em etapas separadas.
+                Cartão e boleto já podem ser usados para regularização. Pix será liberado quando o serviço estiver disponível.
               </p>
             </div>
           </div>
@@ -93,7 +93,15 @@
           </div>
 
           <div class="assinatura-products-payment-methods" aria-label="Formas de pagamento">
-            <div class="assinatura-products-payment-method-card is-disabled">
+            <label class="assinatura-products-payment-method-card is-active is-featured" for="assinatura_billing_credit_card">
+              <input
+                type="radio"
+                id="assinatura_billing_credit_card"
+                name="assinatura_billing_type"
+                value="CREDIT_CARD"
+                checked
+              >
+
               <div class="assinatura-products-payment-method-icon">
                 <i class="bi bi-credit-card"></i>
               </div>
@@ -102,10 +110,10 @@
                 <span class="assinatura-products-payment-badge">Recomendado</span>
                 <strong>Cartão de crédito</strong>
                 <small>
-                  Assinatura recorrente automática. Em implantação para uso com fluxo seguro.
+                  Abre a cobrança no ambiente seguro do Asaas para informar os dados do cartão.
                 </small>
               </div>
-            </div>
+            </label>
 
             <div class="assinatura-products-payment-method-card is-disabled">
               <div class="assinatura-products-payment-method-icon">
@@ -113,15 +121,22 @@
               </div>
 
               <div>
-                <span class="assinatura-products-payment-badge is-neutral">Em implantação</span>
+                <span class="assinatura-products-payment-badge is-neutral">Indisponível</span>
                 <strong>Pix</strong>
                 <small>
-                  Será usado para regularização rápida, com QR Code gerado para a cobrança.
+                  Temporariamente indisponível no Asaas. Será liberado assim que o serviço voltar.
                 </small>
               </div>
             </div>
 
-            <div class="assinatura-products-payment-method-card is-active">
+            <label class="assinatura-products-payment-method-card is-active" for="assinatura_billing_boleto">
+              <input
+                type="radio"
+                id="assinatura_billing_boleto"
+                name="assinatura_billing_type"
+                value="BOLETO"
+              >
+
               <div class="assinatura-products-payment-method-icon">
                 <i class="bi bi-upc-scan"></i>
               </div>
@@ -133,11 +148,11 @@
                   Cobrança atual da assinatura. A compensação pode levar mais tempo após o pagamento.
                 </small>
               </div>
-            </div>
+            </label>
           </div>
 
           <div class="modern-note assinatura-products-payment-hint">
-            Ao clicar em preparar pagamento, o VendMaster localizará a cobrança atual por boleto e abrirá o link para pagamento no ambiente do Asaas.
+            Escolha cartão para abrir a cobrança no ambiente seguro do Asaas ou boleto para gerar a cobrança bancária.
           </div>
 
           <div
@@ -158,7 +173,7 @@
               id="prepararPagamentoBtn"
             >
               <i class="bi bi-shield-check"></i>
-              <span>Preparar boleto</span>
+              <span id="prepararPagamentoBtnText">Preparar cartão</span>
             </button>
 
             <a href="/assinatura/status" class="btn-modern-secondary assinatura-products-light-button">
@@ -207,6 +222,7 @@
     }
 
     .assinatura-products-payment-method-card {
+      position: relative;
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
@@ -223,8 +239,35 @@
       box-shadow: 0 14px 30px rgba(37, 99, 235, 0.08);
     }
 
+    .assinatura-products-payment-method-card.is-featured {
+      background:
+        radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 8rem),
+        #eff6ff;
+    }
+
     .assinatura-products-payment-method-card.is-disabled {
-      opacity: 0.72;
+      opacity: 0.62;
+    }
+
+    .assinatura-products-payment-method-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    label.assinatura-products-payment-method-card.is-active {
+      cursor: pointer;
+    }
+
+    label.assinatura-products-payment-method-card.is-active:has(input:checked) {
+      background: #ecfdf5;
+      border-color: rgba(16, 185, 129, 0.28);
+      box-shadow: 0 14px 30px rgba(16, 185, 129, 0.09);
+    }
+
+    label.assinatura-products-payment-method-card.is-active:has(input:checked) .assinatura-products-payment-method-icon {
+      color: #047857;
+      border-color: rgba(16, 185, 129, 0.22);
     }
 
     .assinatura-products-payment-method-icon {
@@ -309,6 +352,19 @@
       const produtosAssinaturaForm = document.getElementById('produtosAssinaturaForm');
       const prepararPagamentoBtn = document.getElementById('prepararPagamentoBtn');
       const paymentPreparationResult = document.getElementById('paymentPreparationResult');
+      const prepararPagamentoBtnText = document.getElementById('prepararPagamentoBtnText');
+
+      function getSelectedBillingType() {
+        return document.querySelector('input[name="assinatura_billing_type"]:checked')?.value || 'CREDIT_CARD';
+      }
+
+      function updatePaymentButtonText() {
+        if (!prepararPagamentoBtnText) return;
+
+        prepararPagamentoBtnText.textContent = getSelectedBillingType() === 'BOLETO'
+          ? 'Preparar boleto'
+          : 'Preparar cartão';
+      }
 
       function setPaymentResult(message, type = 'info') {
         if (!paymentPreparationResult) return;
@@ -329,6 +385,12 @@
           ${message}
         `;
       }
+
+      document
+        .querySelectorAll('input[name="assinatura_billing_type"]')
+        .forEach((input) => input.addEventListener('change', updatePaymentButtonText));
+
+      updatePaymentButtonText();
 
       if (produtosAssinaturaForm) {
         produtosAssinaturaForm.addEventListener('submit', (event) => {
@@ -353,11 +415,21 @@
           `;
 
           try {
+            const selectedBillingType = getSelectedBillingType();
+
+           const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
             const response = await fetch('/pagamentos/iniciar', {
               method: 'POST',
+              credentials: 'same-origin',
               headers: {
-                Accept: 'application/json'
-              }
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({
+                billingType: selectedBillingType
+              })
             });
 
             const data = await response.json().catch(() => ({
@@ -387,7 +459,8 @@
               return;
             }
 
-            const successMessage = data.message || 'Boleto preparado com sucesso.';
+            const successMessage = data.message || 'Pagamento preparado com sucesso.';
+            const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
             const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
 
             if (paymentUrl) {
@@ -396,9 +469,13 @@
                 'success'
               );
 
+              const isCreditCard = effectiveBillingType === 'CREDIT_CARD';
+
               const openPayment = await window.AppAlerts?.confirm({
-                title: 'Boleto preparado',
-                text: 'A cobrança por boleto foi localizada. Deseja abrir a cobrança agora?',
+                title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
+                text: isCreditCard
+                  ? 'A cobrança foi criada. Deseja abrir o ambiente seguro do Asaas para informar os dados do cartão?'
+                  : 'A cobrança por boleto foi localizada. Deseja abrir a cobrança agora?',
                 confirmButtonText: 'Abrir cobrança',
                 cancelButtonText: 'Continuar no VendMaster'
               });
@@ -423,6 +500,7 @@
           } finally {
             prepararPagamentoBtn.disabled = false;
             prepararPagamentoBtn.innerHTML = originalButtonContent;
+            updatePaymentButtonText();
           }
         });
       }

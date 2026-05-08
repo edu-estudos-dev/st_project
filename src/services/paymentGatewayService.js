@@ -8,6 +8,13 @@ const API_KEY_PLACEHOLDERS = new Set([
   'ASAAS_API_KEY'
 ]);
 
+const ALLOWED_PAYMENT_BILLING_TYPES = new Set([
+  'BOLETO',
+  'PIX',
+  'CREDIT_CARD',
+  'UNDEFINED'
+]);
+
 function getGatewayConfig() {
   const environment = process.env.PAYMENT_GATEWAY_ENV || 'sandbox';
   const apiKey = String(process.env.ASAAS_API_KEY || '').trim();
@@ -87,6 +94,14 @@ function normalizeMoneyValue(value) {
   return Number(numericValue.toFixed(2));
 }
 
+function normalizeBillingType(value, fallback = 'BOLETO') {
+  const billingType = String(value || fallback).trim().toUpperCase();
+
+  return ALLOWED_PAYMENT_BILLING_TYPES.has(billingType)
+    ? billingType
+    : fallback;
+}
+
 function validateCustomerData(customerData) {
   const errors = [];
 
@@ -136,9 +151,36 @@ function validateSubscriptionData(subscriptionData) {
     ...subscriptionData,
     customer: String(subscriptionData.customer).trim(),
     value,
-    billingType: subscriptionData.billingType || 'BOLETO',
+    billingType: normalizeBillingType(subscriptionData.billingType, 'BOLETO'),
     cycle: subscriptionData.cycle || 'MONTHLY',
     nextDueDate: formatDateOnly(subscriptionData.nextDueDate || new Date())
+  };
+}
+
+function validatePaymentData(paymentData) {
+  const errors = [];
+
+  const value = normalizeMoneyValue(paymentData?.value);
+  const billingType = normalizeBillingType(paymentData?.billingType, 'BOLETO');
+
+  if (!paymentData?.customer) {
+    errors.push('Customer do Asaas é obrigatório para criar cobrança.');
+  }
+
+  if (!value) {
+    errors.push('Valor da cobrança é obrigatório.');
+  }
+
+  if (errors.length) {
+    throw new Error(`Dados inválidos para criar cobrança no Asaas: ${errors.join(' ')}`);
+  }
+
+  return {
+    ...paymentData,
+    customer: String(paymentData.customer).trim(),
+    billingType,
+    value,
+    dueDate: formatDateOnly(paymentData.dueDate || new Date())
   };
 }
 
@@ -226,6 +268,41 @@ async function createSubscription(subscriptionData = {}) {
   });
 }
 
+async function createPayment(paymentData = {}) {
+  const validatedPayment = validatePaymentData(paymentData);
+
+  const payload = onlyFilledFields({
+    customer: validatedPayment.customer,
+    billingType: validatedPayment.billingType,
+    value: validatedPayment.value,
+    dueDate: validatedPayment.dueDate,
+    description: validatedPayment.description,
+    externalReference: validatedPayment.externalReference,
+    fine: validatedPayment.fine,
+    interest: validatedPayment.interest,
+    discount: validatedPayment.discount
+  });
+
+  return requestAsaas({
+    method: 'POST',
+    path: '/payments',
+    body: payload
+  });
+}
+
+async function getPixQrCode(paymentId) {
+  const normalizedPaymentId = String(paymentId || '').trim();
+
+  if (!normalizedPaymentId) {
+    throw new Error('ID da cobrança é obrigatório para buscar QR Code Pix.');
+  }
+
+  return requestAsaas({
+    method: 'GET',
+    path: `/payments/${encodeURIComponent(normalizedPaymentId)}/pixQrCode`
+  });
+}
+
 async function getSubscriptionPayments(subscriptionId, limit = 10) {
   const normalizedSubscriptionId = String(subscriptionId || '').trim();
 
@@ -253,6 +330,8 @@ export {
   ensureGatewayConfigured,
   createCustomer,
   createSubscription,
+  createPayment,
+  getPixQrCode,
   getSubscriptionPayments,
   createPaymentLink
 };
