@@ -75,7 +75,7 @@ class AssinanteModel {
     };
   }
 
-  async expireOverdueSubscriptions(whereSql, params) {
+    async expireOverdueSubscriptions(whereSql, params) {
     await this.ensureProdutosHabilitadosColumn();
 
     await connection.query(
@@ -92,6 +92,47 @@ class AssinanteModel {
          )`,
       params
     );
+  }
+
+  async expireAllOverdueSubscriptionsForMaintenance() {
+    await this.ensureProdutosHabilitadosColumn();
+    await this.ensureBillingColumns();
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'vencido',
+         updated_at = NOW()
+       WHERE status_assinatura IN ('trial', 'ativo')
+         AND (
+           (status_assinatura = 'trial' AND trial_fim IS NOT NULL AND trial_fim < NOW())
+           OR
+           (status_assinatura = 'ativo' AND data_vencimento IS NOT NULL AND data_vencimento < NOW())
+         )
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         tipo_cobranca,
+         trial_inicio,
+         trial_fim,
+         data_ativacao,
+         data_vencimento,
+         data_limite_exclusao,
+         gateway_customer_id,
+         gateway_subscription_id,
+         billing_nome,
+         billing_cpf_cnpj,
+         billing_email,
+         billing_telefone,
+         produtos_habilitados,
+         plano_codigo,
+         plano_nome,
+         valor_mensal,
+         updated_at`
+    );
+
+    return result.rows.map(row => this.normalizeRow(row));
   }
 
   async findById(id) {
