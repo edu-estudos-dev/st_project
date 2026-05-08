@@ -2,6 +2,7 @@ import AssinanteModel from '../models/assinanteModel.js';
 
 import {
   createCustomer,
+  createSubscription,
   getGatewayConfig,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
@@ -16,6 +17,16 @@ function normalizeText(value) {
 
 function normalizeEmail(value) {
   return String(value || '').trim().toLowerCase();
+}
+
+function formatDateOnly(value) {
+  const date = value ? new Date(value) : new Date();
+
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  return date.toISOString().slice(0, 10);
 }
 
 function validateBillingData(data) {
@@ -64,6 +75,16 @@ function getAssinanteIdFromRequest(req) {
   return req.user?.assinante_id || req.user?.assinanteId || null;
 }
 
+function getMonthlyPlanValue(assinante) {
+  const value = Number(assinante?.valor_mensal || 0);
+
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error('Valor mensal do plano não está configurado para este assinante.');
+  }
+
+  return Number(value.toFixed(2));
+}
+
 function buildAsaasCustomerPayload(assinante) {
   const billingTelefone = onlyDigits(assinante.billing_telefone);
 
@@ -75,6 +96,21 @@ function buildAsaasCustomerPayload(assinante) {
     externalReference: `assinante:${assinante.id}`,
     notificationDisabled: true,
     observations: `Cliente criado pelo VendMaster. Assinante interno #${assinante.id}.`
+  };
+}
+
+function buildAsaasSubscriptionPayload(assinante, customerId) {
+  const monthlyValue = getMonthlyPlanValue(assinante);
+  const planName = assinante.plano_nome || 'Plano VendMaster';
+
+  return {
+    customer: customerId,
+    billingType: 'BOLETO',
+    value: monthlyValue,
+    nextDueDate: formatDateOnly(new Date()),
+    cycle: 'MONTHLY',
+    description: `Assinatura VendMaster - ${planName}`,
+    externalReference: `assinante:${assinante.id}`
   };
 }
 
@@ -97,6 +133,31 @@ async function ensureAsaasCustomerForAssinante(assinante) {
   return {
     customerId: customer.id,
     created: true
+  };
+}
+
+async function ensureAsaasSubscriptionForAssinante(assinante, customerId) {
+  if (assinante.gateway_subscription_id) {
+    return {
+      subscriptionId: assinante.gateway_subscription_id,
+      created: false
+    };
+  }
+
+  const subscription = await createSubscription(
+    buildAsaasSubscriptionPayload(assinante, customerId)
+  );
+
+  if (!subscription?.id) {
+    throw new Error('Asaas não retornou o ID da assinatura criada.');
+  }
+
+  await AssinanteModel.updateGatewaySubscriptionId(assinante.id, subscription.id);
+
+  return {
+    subscriptionId: subscription.id,
+    created: true,
+    raw: subscription
   };
 }
 
@@ -257,23 +318,37 @@ async function iniciarPagamento(req, res) {
         hasBillingData,
         gatewayCustomerId: assinante.gateway_customer_id || null,
         gatewayCustomerCreated: false,
+        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+        gatewaySubscriptionCreated: false,
         needsGatewayConfiguration: true
       });
     }
 
     const customerResult = await ensureAsaasCustomerForAssinante(assinante);
 
+    const assinanteComCustomer = {
+      ...assinante,
+      gateway_customer_id: customerResult.customerId
+    };
+
+    const subscriptionResult = await ensureAsaasSubscriptionForAssinante(
+      assinanteComCustomer,
+      customerResult.customerId
+    );
+
     return res.status(200).json({
       success: true,
-      message: customerResult.created
-        ? 'Customer criado no Asaas. Próxima etapa: criar cobrança ou checkout.'
-        : 'Customer já existente no Asaas. Próxima etapa: criar cobrança ou checkout.',
+      message: subscriptionResult.created
+        ? 'Assinatura criada no Asaas Sandbox. Próxima etapa: simular o pagamento.'
+        : 'Assinatura já existente no Asaas. Próxima etapa: simular o pagamento.',
       provider: gatewayConfig.provider,
       environment: gatewayConfig.environment,
       gatewayConfigured: true,
       hasBillingData,
       gatewayCustomerId: customerResult.customerId,
       gatewayCustomerCreated: customerResult.created,
+      gatewaySubscriptionId: subscriptionResult.subscriptionId,
+      gatewaySubscriptionCreated: subscriptionResult.created,
       needsGatewayConfiguration: false
     });
   } catch (error) {
@@ -281,7 +356,7 @@ async function iniciarPagamento(req, res) {
 
     return res.status(500).json({
       success: false,
-      message: 'Erro ao preparar fluxo de pagamento.'
+      message: error.message || 'Erro ao preparar fluxo de pagamento.'
     });
   }
 }

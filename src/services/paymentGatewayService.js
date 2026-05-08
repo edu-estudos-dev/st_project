@@ -67,6 +67,26 @@ function normalizeDigits(value) {
   return String(value || '').replace(/\D/g, '');
 }
 
+function formatDateOnly(value) {
+  const date = value ? new Date(value) : new Date();
+
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  return date.toISOString().slice(0, 10);
+}
+
+function normalizeMoneyValue(value) {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue) || numericValue <= 0) {
+    return null;
+  }
+
+  return Number(numericValue.toFixed(2));
+}
+
 function validateCustomerData(customerData) {
   const errors = [];
 
@@ -92,6 +112,33 @@ function validateCustomerData(customerData) {
     ...customerData,
     name: String(customerData.name).trim(),
     cpfCnpj
+  };
+}
+
+function validateSubscriptionData(subscriptionData) {
+  const errors = [];
+
+  const value = normalizeMoneyValue(subscriptionData?.value);
+
+  if (!subscriptionData?.customer) {
+    errors.push('Customer do Asaas é obrigatório para criar assinatura.');
+  }
+
+  if (!value) {
+    errors.push('Valor mensal da assinatura é obrigatório.');
+  }
+
+  if (errors.length) {
+    throw new Error(`Dados inválidos para criar assinatura no Asaas: ${errors.join(' ')}`);
+  }
+
+  return {
+    ...subscriptionData,
+    customer: String(subscriptionData.customer).trim(),
+    value,
+    billingType: subscriptionData.billingType || 'BOLETO',
+    cycle: subscriptionData.cycle || 'MONTHLY',
+    nextDueDate: formatDateOnly(subscriptionData.nextDueDate || new Date())
   };
 }
 
@@ -157,8 +204,26 @@ async function createCustomer(customerData = {}) {
   });
 }
 
-async function createSubscription() {
-  throw new Error('createSubscription ainda não implementado. Integração real pendente.');
+async function createSubscription(subscriptionData = {}) {
+  const validatedSubscription = validateSubscriptionData(subscriptionData);
+
+  const payload = onlyFilledFields({
+    customer: validatedSubscription.customer,
+    billingType: validatedSubscription.billingType,
+    value: validatedSubscription.value,
+    nextDueDate: validatedSubscription.nextDueDate,
+    cycle: validatedSubscription.cycle,
+    description: validatedSubscription.description,
+    externalReference: validatedSubscription.externalReference,
+    fine: validatedSubscription.fine,
+    interest: validatedSubscription.interest
+  });
+
+  return requestAsaas({
+    method: 'POST',
+    path: '/subscriptions',
+    body: payload
+  });
 }
 
 async function createPaymentLink() {

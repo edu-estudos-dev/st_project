@@ -1,5 +1,8 @@
 import connection from '../db_config/connection.js';
-import { parseStoredProdutos, serializeProdutos } from '../utilities/produtoUtils.js';
+import {
+  parseStoredProdutos,
+  serializeProdutos
+} from '../utilities/produtoUtils.js';
 
 const ADMIN_UPDATE_FIELDS = new Set([
   'status_assinatura',
@@ -246,7 +249,9 @@ class AssinanteModel {
 
   async updateGatewayCustomerId(id, gatewayCustomerId) {
     if (!id) {
-      throw new Error('ID do assinante é obrigatório para salvar gateway_customer_id.');
+      throw new Error(
+        'ID do assinante é obrigatório para salvar gateway_customer_id.'
+      );
     }
 
     if (!gatewayCustomerId || String(gatewayCustomerId).trim() === '') {
@@ -266,11 +271,37 @@ class AssinanteModel {
     return result.rows[0] || null;
   }
 
+  async updateGatewaySubscriptionId(id, gatewaySubscriptionId) {
+    if (!id) {
+      throw new Error(
+        'ID do assinante é obrigatório para salvar gateway_subscription_id.'
+      );
+    }
+
+    if (!gatewaySubscriptionId || String(gatewaySubscriptionId).trim() === '') {
+      throw new Error('gateway_subscription_id é obrigatório.');
+    }
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         gateway_subscription_id = $2,
+         updated_at = NOW()
+       WHERE id = $1
+       RETURNING id, gateway_subscription_id`,
+      [id, String(gatewaySubscriptionId).trim()]
+    );
+
+    return result.rows[0] || null;
+  }
+
   async updateBillingData(id, billingData) {
     await this.ensureBillingColumns();
 
     if (!id) {
-      throw new Error('ID do assinante é obrigatório para salvar dados de cobrança.');
+      throw new Error(
+        'ID do assinante é obrigatório para salvar dados de cobrança.'
+      );
     }
 
     const result = await connection.query(
@@ -307,7 +338,9 @@ class AssinanteModel {
       data.produtos_habilitados = serializeProdutos(data.produtos_habilitados);
     }
 
-    const entries = Object.entries(data).filter(([key]) => ADMIN_UPDATE_FIELDS.has(key));
+    const entries = Object.entries(data).filter(([key]) =>
+      ADMIN_UPDATE_FIELDS.has(key)
+    );
 
     if (!entries.length) {
       return this.findAdminById(id);
@@ -333,7 +366,7 @@ class AssinanteModel {
     return this.findAdminById(id);
   }
 
-    async findByGatewayReference({
+  async findByGatewayReference({
     gatewayCustomerId = null,
     gatewaySubscriptionId = null
   }) {
@@ -387,10 +420,10 @@ class AssinanteModel {
     return this.normalizeRow(result.rows[0]);
   }
 
-  async activateAfterConfirmedPayment(id, {
-    paymentDate = null,
-    gatewaySubscriptionId = null
-  } = {}) {
+  async activateAfterConfirmedPayment(
+    id,
+    { paymentDate = null, gatewaySubscriptionId = null } = {}
+  ) {
     if (!id) {
       throw new Error('ID do assinante é obrigatório para ativar assinatura.');
     }
@@ -420,11 +453,7 @@ class AssinanteModel {
          plano_codigo,
          plano_nome,
          valor_mensal`,
-      [
-        id,
-        safePaymentDate.toISOString(),
-        gatewaySubscriptionId || null
-      ]
+      [id, safePaymentDate.toISOString(), gatewaySubscriptionId || null]
     );
 
     return result.rows[0] || null;
