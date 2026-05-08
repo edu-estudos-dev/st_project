@@ -12,6 +12,7 @@
       const produtosSelecionados = assinante?.produtos_habilitados_lista || [];
       const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj);
       const canManageSubscriptionProducts = Boolean(typeof canManageProducts !== 'undefined' && canManageProducts);
+      const isReadOnlySubscription = ['vencido', 'cancelado'].includes(statusAssinatura);
 
       const currencyFormatter = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -87,6 +88,14 @@
 
       const statusLabel = statusLabels[statusAssinatura] || statusAssinatura;
       const statusClass = statusClassMap[statusAssinatura] || 'status-muted';
+
+      const readOnlyTitle = statusAssinatura === 'cancelado'
+        ? 'Assinatura cancelada'
+        : 'Assinatura vencida';
+
+      const readOnlyMessage = statusAssinatura === 'cancelado'
+        ? 'Sua assinatura está cancelada. O sistema permanece disponível apenas para consulta. Para voltar a cadastrar ou alterar dados, regularize sua assinatura.'
+        : 'Sua assinatura está vencida. O sistema permanece disponível apenas para consulta. Para voltar a cadastrar ou alterar dados, regularize sua assinatura.';
     %>
 
     <%- include('../../partials/breadcrumb', { pageTitle: 'Status da Assinatura' }) %>
@@ -112,6 +121,31 @@
         </div>
       </div>
     </section>
+
+    <% if (isReadOnlySubscription) { %>
+      <section class="assinatura-readonly-alert">
+        <div class="assinatura-readonly-icon">
+          <i class="bi bi-exclamation-triangle"></i>
+        </div>
+
+        <div class="assinatura-readonly-copy">
+          <strong><%= readOnlyTitle %></strong>
+          <span><%= readOnlyMessage %></span>
+        </div>
+
+        <div class="assinatura-readonly-actions">
+          <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern-secondary assinatura-light-button">
+            <i class="bi bi-pencil-square"></i>
+            <span>Revisar cobrança</span>
+          </a>
+
+          <button type="button" class="btn-modern" id="prepararPagamentoReadonlyBtn">
+            <i class="bi bi-shield-check"></i>
+            <span>Preparar pagamento</span>
+          </button>
+        </div>
+      </section>
+    <% } %>
 
     <main class="form-stage assinatura-status-stage">
       <section class="form-card assinatura-plan-card">
@@ -329,6 +363,59 @@
     .assinatura-hero-stat span {
       font-size: 1.08rem;
       font-weight: 850;
+    }
+
+    .assinatura-readonly-alert {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1.1rem 1.2rem;
+      border: 1px solid rgba(245, 158, 11, 0.32);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 16rem),
+        #fffbeb;
+      color: #92400e;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.07);
+    }
+
+    .assinatura-readonly-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.14);
+      color: #b45309;
+      font-size: 1.25rem;
+      flex: 0 0 auto;
+    }
+
+    .assinatura-readonly-copy {
+      display: grid;
+      gap: 0.22rem;
+    }
+
+    .assinatura-readonly-copy strong {
+      color: #78350f;
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .assinatura-readonly-copy span {
+      color: #92400e;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .assinatura-readonly-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.65rem;
     }
 
     .assinatura-status-stage {
@@ -644,6 +731,15 @@
     }
 
     @media (max-width: 1000px) {
+      .assinatura-readonly-alert {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .assinatura-readonly-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+
       .assinatura-summary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -661,6 +757,22 @@
       .assinatura-plan-content {
         flex-direction: column;
         padding: 1rem 1rem 0.75rem;
+      }
+
+      .assinatura-readonly-alert {
+        grid-template-columns: 1fr;
+      }
+
+      .assinatura-readonly-icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      .assinatura-readonly-actions .btn-modern,
+      .assinatura-readonly-actions .btn-modern-secondary,
+      .assinatura-readonly-actions button {
+        width: 100%;
+        justify-content: center;
       }
 
       .assinatura-summary-grid {
@@ -700,6 +812,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const prepararPagamentoBtn = document.getElementById('prepararPagamentoStatusBtn');
+      const prepararPagamentoReadonlyBtn = document.getElementById('prepararPagamentoReadonlyBtn');
       const paymentResult = document.getElementById('assinaturaPaymentResult');
 
       function setPaymentResult(message, type = 'info') {
@@ -740,68 +853,71 @@
         }
       }
 
-      if (prepararPagamentoBtn) {
-        prepararPagamentoBtn.addEventListener('click', async () => {
-          const originalButtonContent = prepararPagamentoBtn.innerHTML;
+      async function prepararPagamento(button) {
+        if (!button) return;
 
-          prepararPagamentoBtn.disabled = true;
-          prepararPagamentoBtn.innerHTML = `
-            <i class="bi bi-hourglass-split"></i>
-            <span>Preparando...</span>
-          `;
+        const originalButtonContent = button.innerHTML;
 
-          try {
-            const response = await fetch('/pagamentos/iniciar', {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json'
-              }
-            });
+        button.disabled = true;
+        button.innerHTML = `
+          <i class="bi bi-hourglass-split"></i>
+          <span>Preparando...</span>
+        `;
 
-            const data = await response.json().catch(() => ({
-              success: false,
-              message: 'Não foi possível interpretar a resposta do servidor.'
-            }));
-
-            if (!response.ok || !data.success) {
-              const message = data.message || 'Não foi possível preparar o pagamento.';
-
-              if (data.needsBillingData) {
-                setPaymentResult(`${message} Clique em "Preencher dados" antes de continuar.`, 'warning');
-                window.AppAlerts?.warning(message);
-                return;
-              }
-
-              setPaymentResult(message, 'error');
-              window.AppAlerts?.error(message);
-              return;
+        try {
+          const response = await fetch('/pagamentos/iniciar', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json'
             }
+          });
 
-            if (data.needsGatewayConfiguration) {
-              const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+          const data = await response.json().catch(() => ({
+            success: false,
+            message: 'Não foi possível interpretar a resposta do servidor.'
+          }));
 
-              setPaymentResult(message, 'warning');
+          if (!response.ok || !data.success) {
+            const message = data.message || 'Não foi possível preparar o pagamento.';
+
+            if (data.needsBillingData) {
+              setPaymentResult(`${message} Clique em "Preencher dados" antes de continuar.`, 'warning');
               window.AppAlerts?.warning(message);
               return;
             }
 
-            const successMessage = data.message || 'Pagamento preparado com sucesso.';
-
-            setPaymentResult(successMessage, 'success');
-            window.AppAlerts?.success(successMessage);
-          } catch (error) {
-            console.error('Erro ao preparar pagamento:', error);
-
-            const message = 'Erro ao preparar pagamento. Tente novamente em alguns instantes.';
-
             setPaymentResult(message, 'error');
             window.AppAlerts?.error(message);
-          } finally {
-            prepararPagamentoBtn.disabled = false;
-            prepararPagamentoBtn.innerHTML = originalButtonContent;
+            return;
           }
-        });
+
+          if (data.needsGatewayConfiguration) {
+            const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+
+            setPaymentResult(message, 'warning');
+            window.AppAlerts?.warning(message);
+            return;
+          }
+
+          const successMessage = data.message || 'Pagamento preparado com sucesso.';
+
+          setPaymentResult(successMessage, 'success');
+          window.AppAlerts?.success(successMessage);
+        } catch (error) {
+          console.error('Erro ao preparar pagamento:', error);
+
+          const message = 'Erro ao preparar pagamento. Tente novamente em alguns instantes.';
+
+          setPaymentResult(message, 'error');
+          window.AppAlerts?.error(message);
+        } finally {
+          button.disabled = false;
+          button.innerHTML = originalButtonContent;
+        }
       }
+
+      prepararPagamentoBtn?.addEventListener('click', () => prepararPagamento(prepararPagamentoBtn));
+      prepararPagamentoReadonlyBtn?.addEventListener('click', () => prepararPagamento(prepararPagamentoReadonlyBtn));
     });
   </script>
 </body>
