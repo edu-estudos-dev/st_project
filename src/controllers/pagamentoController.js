@@ -1,6 +1,7 @@
 import AssinanteModel from '../models/assinanteModel.js';
 
 import {
+  createCustomer,
   getGatewayConfig,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
@@ -61,6 +62,42 @@ function validateBillingData(data) {
 
 function getAssinanteIdFromRequest(req) {
   return req.user?.assinante_id || req.user?.assinanteId || null;
+}
+
+function buildAsaasCustomerPayload(assinante) {
+  const billingTelefone = onlyDigits(assinante.billing_telefone);
+
+  return {
+    name: assinante.billing_nome,
+    cpfCnpj: assinante.billing_cpf_cnpj,
+    email: assinante.billing_email || undefined,
+    mobilePhone: billingTelefone || undefined,
+    externalReference: `assinante:${assinante.id}`,
+    notificationDisabled: true,
+    observations: `Cliente criado pelo VendMaster. Assinante interno #${assinante.id}.`
+  };
+}
+
+async function ensureAsaasCustomerForAssinante(assinante) {
+  if (assinante.gateway_customer_id) {
+    return {
+      customerId: assinante.gateway_customer_id,
+      created: false
+    };
+  }
+
+  const customer = await createCustomer(buildAsaasCustomerPayload(assinante));
+
+  if (!customer?.id) {
+    throw new Error('Asaas não retornou o ID do customer criado.');
+  }
+
+  await AssinanteModel.updateGatewayCustomerId(assinante.id, customer.id);
+
+  return {
+    customerId: customer.id,
+    created: true
+  };
 }
 
 async function obterDadosCobranca(req, res) {
@@ -177,13 +214,34 @@ async function iniciarPagamento(req, res) {
       });
     }
 
+    if (!isGatewayConfigured()) {
+      return res.status(200).json({
+        success: true,
+        message: 'Dados de cobrança validados. Gateway ainda não configurado para criar customer real.',
+        provider: gatewayConfig.provider,
+        environment: gatewayConfig.environment,
+        gatewayConfigured: false,
+        hasBillingData,
+        gatewayCustomerId: assinante.gateway_customer_id || null,
+        gatewayCustomerCreated: false,
+        needsGatewayConfiguration: true
+      });
+    }
+
+    const customerResult = await ensureAsaasCustomerForAssinante(assinante);
+
     return res.status(200).json({
       success: true,
-      message: 'Fluxo de pagamento preparado. Integração real ainda pendente.',
+      message: customerResult.created
+        ? 'Customer criado no Asaas. Próxima etapa: criar cobrança ou checkout.'
+        : 'Customer já existente no Asaas. Próxima etapa: criar cobrança ou checkout.',
       provider: gatewayConfig.provider,
       environment: gatewayConfig.environment,
-      gatewayConfigured: isGatewayConfigured(),
-      hasBillingData
+      gatewayConfigured: true,
+      hasBillingData,
+      gatewayCustomerId: customerResult.customerId,
+      gatewayCustomerCreated: customerResult.created,
+      needsGatewayConfiguration: false
     });
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);

@@ -1,17 +1,35 @@
 const PAYMENT_PROVIDER = process.env.PAYMENT_PROVIDER || 'asaas';
 
+const API_KEY_PLACEHOLDERS = new Set([
+  '',
+  'SUA_CHAVE_SANDBOX_DO_ASAAS',
+  'SUA_CHAVE_REAL_SANDBOX_AQUI',
+  'SUA_CHAVE_ASAAS',
+  'ASAAS_API_KEY'
+]);
+
 function getGatewayConfig() {
   const environment = process.env.PAYMENT_GATEWAY_ENV || 'sandbox';
+  const apiKey = String(process.env.ASAAS_API_KEY || '').trim();
 
   return {
     provider: PAYMENT_PROVIDER,
     environment,
-    apiKey: process.env.ASAAS_API_KEY || '',
+    apiKey,
     baseUrl:
       environment === 'production'
         ? 'https://api.asaas.com/v3'
         : 'https://api-sandbox.asaas.com/v3'
   };
+}
+
+function hasValidApiKey(apiKey) {
+  const normalizedApiKey = String(apiKey || '').trim();
+
+  if (!normalizedApiKey) return false;
+  if (API_KEY_PLACEHOLDERS.has(normalizedApiKey)) return false;
+
+  return true;
 }
 
 function isGatewayConfigured() {
@@ -20,7 +38,7 @@ function isGatewayConfigured() {
   return Boolean(
     config.provider &&
     config.environment &&
-    config.apiKey &&
+    hasValidApiKey(config.apiKey) &&
     config.baseUrl
   );
 }
@@ -28,8 +46,8 @@ function isGatewayConfigured() {
 function ensureGatewayConfigured() {
   const config = getGatewayConfig();
 
-  if (!config.apiKey) {
-    throw new Error('Gateway de pagamento não configurado: ASAAS_API_KEY ausente.');
+  if (!hasValidApiKey(config.apiKey)) {
+    throw new Error('Gateway de pagamento não configurado: ASAAS_API_KEY ausente ou inválida.');
   }
 
   return config;
@@ -45,7 +63,7 @@ function onlyFilledFields(data) {
   );
 }
 
-function normalizeCpfCnpj(value) {
+function normalizeDigits(value) {
   return String(value || '').replace(/\D/g, '');
 }
 
@@ -56,7 +74,7 @@ function validateCustomerData(customerData) {
     errors.push('Nome do cliente é obrigatório.');
   }
 
-  const cpfCnpj = normalizeCpfCnpj(customerData?.cpfCnpj);
+  const cpfCnpj = normalizeDigits(customerData?.cpfCnpj);
 
   if (!cpfCnpj) {
     errors.push('CPF ou CNPJ do cliente é obrigatório.');
@@ -88,6 +106,7 @@ async function requestAsaas({ method, path, body }) {
     method,
     headers: {
       'Content-Type': 'application/json',
+      'User-Agent': 'VendMaster/1.0 (Node.js)',
       access_token: config.apiKey
     },
     body: body ? JSON.stringify(body) : undefined
@@ -126,17 +145,9 @@ async function createCustomer(customerData = {}) {
     email: validatedCustomer.email,
     phone: validatedCustomer.phone,
     mobilePhone: validatedCustomer.mobilePhone,
-    address: validatedCustomer.address,
-    addressNumber: validatedCustomer.addressNumber,
-    complement: validatedCustomer.complement,
-    province: validatedCustomer.province,
-    postalCode: validatedCustomer.postalCode
-      ? normalizeCpfCnpj(validatedCustomer.postalCode)
-      : undefined,
     externalReference: validatedCustomer.externalReference,
     notificationDisabled: validatedCustomer.notificationDisabled ?? true,
-    observations: validatedCustomer.observations,
-    company: validatedCustomer.company
+    observations: validatedCustomer.observations
   });
 
   return requestAsaas({
