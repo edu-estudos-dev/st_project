@@ -2,171 +2,956 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title }) %>
 
-  <body class="list-page-body">
-    <%- include('../../partials/header') %>
-      <div class="page-spacer"></div>
+<body class="list-page-body">
+  <%- include('../../partials/header') %>
+  <div class="page-spacer"></div>
 
-      <div class="list-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Assinantes' }) %>
+  <div class="list-shell admin-subscribers-shell">
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Assinantes' }) %>
 
-          <section class="page-titlebar page-titlebar-neutral">
-            <div class="page-titlebar-content">
-              <span class="list-kicker"><i class="bi bi-building-check"></i> SaaS</span>
-              <h1>Assinantes</h1>
-              <p>Gerencie status, cobrança, planos e prazos dos assinantes do sistema.</p>
-            </div>
-            <div class="page-titlebar-side">
-              <div class="list-stat">
-                <strong>Total</strong>
-                <span>
-                  <%= assinantes.length %> assinante(s)
-                </span>
-              </div>
-            </div>
-          </section>
+    <%
+      const totalAssinantes = assinantes.length;
+      const totalAtivos = assinantes.filter((item) => item.status_assinatura === 'ativo').length;
+      const totalTrial = assinantes.filter((item) => item.status_assinatura === 'trial').length;
+      const totalVencidos = assinantes.filter((item) => item.status_assinatura === 'vencido').length;
+      const totalBloqueados = assinantes.filter((item) => ['bloqueado', 'cancelado'].includes(item.status_assinatura)).length;
 
-          <main class="list-stage">
-            <section class="list-panel">
-              <div class="list-toolbar">
-                <div class="list-toolbar-copy">
-                  <h2>Controle de assinatura</h2>
-                  <p>Status vencido e cancelado deixam o assinante em somente leitura; bloqueado impede acesso.</p>
-                </div>
-              </div>
+      const formatCurrency = (value) => {
+        const numericValue = Number(value || 0);
 
-              <div class="modern-table-wrap">
-                <div class="modern-table-scroll">
-                  <table class="modern-table">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Assinante</th>
-                        <th>Status</th>
-                        <th>Cobrança</th>
-                        <th>Plano</th>
-                        <th>Produtos</th>
-                        <th>Trial</th>
-                        <th>Vencimento</th>
-                        <th>Dados</th>
-                        <th class="table-actions-heading">Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% assinantes.forEach((assinante) => { %>
-                        <% const statusTone = {
-                          trial: 'table-badge-amber',
-                          ativo: 'table-badge-green',
-                          vencido: 'table-badge-danger',
-                          cancelado: 'table-badge-danger',
-                          bloqueado: 'table-badge-danger'
-                        }[assinante.status_assinatura] || 'table-badge-amber'; %>
+        if (!Number.isFinite(numericValue) || numericValue <= 0) {
+          return 'Valor não definido';
+        }
 
-                        <tr>
-                          <td><strong>#<%= assinante.id %></strong></td>
+        return numericValue.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        });
+      };
 
-                          <td>
-                            <div class="table-title-cell">
-                              <%= assinante.username %>
-                            </div>
-                            <span class="table-muted">
-                              <%= assinante.email %>
-                            </span>
-                          </td>
+      const formatDate = (value, fallback = 'Não informado') => {
+        if (!value) return fallback;
 
-                          <td>
-                            <span class="table-badge <%= statusTone %>">
-                              <%= String(assinante.status_assinatura || '').toUpperCase() %>
-                            </span>
-                          </td>
+        const date = new Date(value);
 
-                          <td>
-                            <%= assinante.tipo_cobranca || 'Sem cobrança' %>
-                          </td>
+        if (Number.isNaN(date.getTime())) {
+          return fallback;
+        }
 
-                          <td>
-                            <% if (assinante.plano_nome || assinante.plano_codigo || assinante.valor_mensal) { %>
-                              <div class="table-title-cell">
-                                <%= assinante.plano_nome || 'Plano sem nome' %>
-                              </div>
+        return date.toLocaleDateString('pt-BR');
+      };
 
-                              <span class="table-muted">
-                                <% if (assinante.valor_mensal) { %>
-                                  R$ <%= Number(assinante.valor_mensal).toLocaleString('pt-BR', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                  }) %>/mês
-                                <% } else { %>
-                                  Valor não definido
-                                <% } %>
-                              </span>
+      const getStatusTone = (status) => {
+        return {
+          trial: 'is-trial',
+          ativo: 'is-active',
+          vencido: 'is-overdue',
+          cancelado: 'is-cancelled',
+          bloqueado: 'is-blocked'
+        }[status] || 'is-muted';
+      };
 
-                              <% if (assinante.plano_codigo) { %>
-                                <span class="table-muted">
-                                  <br>
-                                  <%= assinante.plano_codigo %>
-                                </span>
-                              <% } %>
-                            <% } else { %>
-                              <span class="table-muted">Plano não definido</span>
-                            <% } %>
-                          </td>
+      const getStatusLabel = (status) => {
+        return {
+          trial: 'Trial',
+          ativo: 'Ativo',
+          vencido: 'Vencido',
+          cancelado: 'Cancelado',
+          bloqueado: 'Bloqueado'
+        }[status] || 'Não informado';
+      };
+    %>
 
-                          <td>
-                            <span class="table-muted">
-                              <%= assinante.produtos_habilitados_lista?.length
-                                ? assinante.produtos_habilitados_lista.join(', ')
-                                : 'Nenhum' %>
-                            </span>
-                          </td>
+    <section class="page-titlebar page-titlebar-neutral admin-subscribers-hero">
+      <div class="page-titlebar-content">
+        <span class="list-kicker">
+          <i class="bi bi-building-check"></i>
+          SaaS
+        </span>
 
-                          <td>
-                            <%= assinante.trial_fim
-                              ? new Date(assinante.trial_fim).toLocaleDateString('pt-BR')
-                              : 'Sem trial' %>
-                          </td>
+        <h1>Assinantes</h1>
 
-                          <td>
-                            <%= assinante.data_vencimento
-                              ? new Date(assinante.data_vencimento).toLocaleDateString('pt-BR')
-                              : 'Sem vencimento' %>
-                          </td>
-
-                          <td>
-                            <span class="table-muted">
-                              <%= assinante.estabelecimentos %> ponto(s),
-                              <%= assinante.lancamentos %> lanç.,
-                              <%= assinante.bolinhas + assinante.consignados + assinante.pelucias %> sangria(s)
-                            </span>
-                          </td>
-
-                          <td>
-                            <div class="table-actions">
-                              <a href="/admin/assinantes/<%= assinante.id %>/edit" class="table-btn table-btn-edit">
-                                Editar
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                      <% }) %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          </main>
+        <p>
+          Gerencie status, cobrança, planos, produtos e dados operacionais dos assinantes do VendMaster.
+        </p>
       </div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          <% if (typeof success !== 'undefined' && success) { %>
-            window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
-          <% } %>
+      <div class="page-titlebar-side">
+        <div class="admin-subscribers-hero-stat">
+          <span>Total</span>
+          <strong><%= totalAssinantes %></strong>
+          <small>assinante(s)</small>
+        </div>
+      </div>
+    </section>
 
-          <% if (typeof error !== 'undefined' && error) { %>
-            window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
-          <% } %>
+    <main class="list-stage admin-subscribers-stage">
+      <section class="admin-subscribers-metrics">
+        <article class="admin-subscribers-metric-card">
+          <span>Ativos</span>
+          <strong><%= totalAtivos %></strong>
+          <small>com acesso liberado</small>
+        </article>
+
+        <article class="admin-subscribers-metric-card">
+          <span>Trial</span>
+          <strong><%= totalTrial %></strong>
+          <small>em período de teste</small>
+        </article>
+
+        <article class="admin-subscribers-metric-card is-warning">
+          <span>Vencidos</span>
+          <strong><%= totalVencidos %></strong>
+          <small>somente leitura</small>
+        </article>
+
+        <article class="admin-subscribers-metric-card is-danger">
+          <span>Bloqueados/cancelados</span>
+          <strong><%= totalBloqueados %></strong>
+          <small>acesso restrito</small>
+        </article>
+      </section>
+
+      <section class="list-panel admin-subscribers-panel">
+        <div class="list-toolbar admin-subscribers-toolbar">
+          <div class="list-toolbar-copy">
+            <h2>Controle de assinaturas</h2>
+            <p>
+              Alterne entre a visão comercial e a visão operacional sem precisar usar rolagem horizontal.
+            </p>
+          </div>
+
+          <div class="admin-subscribers-toolbar-note">
+            <i class="bi bi-info-circle"></i>
+            <span>
+              Vencido e cancelado deixam o assinante em somente leitura; bloqueado impede acesso total.
+            </span>
+          </div>
+        </div>
+
+        <div class="admin-subscribers-view-tabs" role="tablist" aria-label="Modo de visualização da tabela">
+          <button
+            type="button"
+            class="admin-view-tab is-active"
+            data-view-target="comercial"
+            role="tab"
+            aria-selected="true"
+          >
+            Dados comerciais
+          </button>
+
+          <button
+            type="button"
+            class="admin-view-tab"
+            data-view-target="operacional"
+            role="tab"
+            aria-selected="false"
+          >
+            Operacional
+          </button>
+        </div>
+
+        <% if (!assinantes.length) { %>
+          <div class="modern-note admin-subscribers-empty">
+            Nenhum assinante encontrado.
+          </div>
+        <% } else { %>
+          <div class="admin-subscribers-view is-active" data-view-panel="comercial">
+            <div class="admin-subscribers-table-wrap">
+              <table class="admin-subscribers-table admin-subscribers-table-commercial">
+                <thead>
+                  <tr>
+                    <th>Assinante</th>
+                    <th>Status e cobrança</th>
+                    <th>Plano</th>
+                    <th>Produtos</th>
+                    <th>Datas</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% assinantes.forEach((assinante) => { %>
+                    <% const statusTone = getStatusTone(assinante.status_assinatura); %>
+                    <% const statusLabel = getStatusLabel(assinante.status_assinatura); %>
+                    <% const produtos = assinante.produtos_habilitados_lista || []; %>
+
+                    <tr>
+                      <td data-label="Assinante">
+                        <div class="admin-subscriber-identity">
+                          <span class="admin-subscriber-id">#<%= assinante.id %></span>
+
+                          <div>
+                            <strong><%= assinante.username || 'Sem nome' %></strong>
+                            <small><%= assinante.email || 'Sem e-mail' %></small>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td data-label="Status e cobrança">
+                        <div class="admin-status-stack">
+                          <span class="admin-status-pill <%= statusTone %>">
+                            <%= statusLabel %>
+                          </span>
+
+                          <small><%= assinante.tipo_cobranca || 'Sem cobrança' %></small>
+                        </div>
+                      </td>
+
+                      <td data-label="Plano">
+                        <% if (assinante.plano_nome || assinante.plano_codigo || assinante.valor_mensal) { %>
+                          <div class="admin-plan-cell">
+                            <strong><%= assinante.plano_nome || 'Plano sem nome' %></strong>
+                            <span><%= formatCurrency(assinante.valor_mensal) %>/mês</span>
+                            <small><%= assinante.plano_codigo || 'Código não definido' %></small>
+                          </div>
+                        <% } else { %>
+                          <span class="admin-cell-muted">Plano não definido</span>
+                        <% } %>
+                      </td>
+
+                      <td data-label="Produtos">
+                        <% if (produtos.length) { %>
+                          <div class="admin-products-list">
+                            <% produtos.forEach((produto) => { %>
+                              <span><%= produto %></span>
+                            <% }) %>
+                          </div>
+                        <% } else { %>
+                          <span class="admin-cell-muted">Nenhum produto</span>
+                        <% } %>
+                      </td>
+
+                      <td data-label="Datas">
+                        <div class="admin-date-cell">
+                          <strong>Venc.: <%= formatDate(assinante.data_vencimento, 'Sem vencimento') %></strong>
+                          <small>Trial: <%= formatDate(assinante.trial_fim, 'Sem trial') %></small>
+                        </div>
+                      </td>
+
+                      <td data-label="Ações">
+                        <div class="admin-row-actions">
+                          <a href="/admin/assinantes/<%= assinante.id %>/edit" class="admin-action-btn is-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            <span>Editar</span>
+                          </a>
+
+                          <a href="/admin/assinantes/<%= assinante.id %>/pagamentos" class="admin-action-btn">
+                            <i class="bi bi-receipt"></i>
+                            <span>Eventos</span>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="admin-subscribers-view" data-view-panel="operacional">
+            <div class="admin-subscribers-table-wrap">
+              <table class="admin-subscribers-table admin-subscribers-table-operational">
+                <thead>
+                  <tr>
+                    <th>Assinante</th>
+                    <th>Produtos</th>
+                    <th>Operação</th>
+                    <th>Sangrias</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% assinantes.forEach((assinante) => { %>
+                    <% const produtos = assinante.produtos_habilitados_lista || []; %>
+                    <% const bolinhas = Number(assinante.bolinhas || 0); %>
+                    <% const consignados = Number(assinante.consignados || 0); %>
+                    <% const pelucias = Number(assinante.pelucias || 0); %>
+                    <% const totalSangrias = bolinhas + consignados + pelucias; %>
+
+                    <tr>
+                      <td data-label="Assinante">
+                        <div class="admin-subscriber-identity">
+                          <span class="admin-subscriber-id">#<%= assinante.id %></span>
+
+                          <div>
+                            <strong><%= assinante.username || 'Sem nome' %></strong>
+                            <small><%= assinante.email || 'Sem e-mail' %></small>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td data-label="Produtos">
+                        <% if (produtos.length) { %>
+                          <div class="admin-products-list">
+                            <% produtos.forEach((produto) => { %>
+                              <span><%= produto %></span>
+                            <% }) %>
+                          </div>
+                        <% } else { %>
+                          <span class="admin-cell-muted">Nenhum produto</span>
+                        <% } %>
+                      </td>
+
+                      <td data-label="Operação">
+                        <div class="admin-ops-list">
+                          <span><strong><%= Number(assinante.estabelecimentos || 0) %></strong> ponto(s)</span>
+                          <span><strong><%= Number(assinante.lancamentos || 0) %></strong> lançamento(s)</span>
+                        </div>
+                      </td>
+
+                      <td data-label="Sangrias">
+                        <div class="admin-ops-list">
+                          <span><strong><%= bolinhas %></strong> bolinhas</span>
+                          <span><strong><%= consignados %></strong> consignados</span>
+                          <span><strong><%= pelucias %></strong> pelúcias</span>
+                          <span class="is-total"><strong><%= totalSangrias %></strong> total</span>
+                        </div>
+                      </td>
+
+                      <td data-label="Ações">
+                        <div class="admin-row-actions">
+                          <a href="/admin/assinantes/<%= assinante.id %>/edit" class="admin-action-btn is-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            <span>Editar</span>
+                          </a>
+
+                          <a href="/admin/assinantes/<%= assinante.id %>/pagamentos" class="admin-action-btn">
+                            <i class="bi bi-receipt"></i>
+                            <span>Eventos</span>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    .admin-subscribers-shell {
+      max-width: 1280px;
+    }
+
+    .admin-subscribers-hero {
+      margin-bottom: 1rem;
+      min-height: auto;
+      padding-top: 1.35rem;
+      padding-bottom: 1.35rem;
+    }
+
+    .admin-subscribers-hero .page-titlebar-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      margin-bottom: 0.45rem;
+    }
+
+    .admin-subscribers-hero .page-titlebar-content p {
+      max-width: 46rem;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .admin-subscribers-hero-stat {
+      display: grid;
+      gap: 0.1rem;
+      min-width: 180px;
+      padding: 1rem 1.15rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .admin-subscribers-hero-stat span,
+    .admin-subscribers-hero-stat small {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .admin-subscribers-hero-stat strong {
+      color: #fff;
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .admin-subscribers-stage {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .admin-subscribers-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .admin-subscribers-metric-card {
+      display: grid;
+      gap: 0.18rem;
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 8rem),
+        rgba(255, 255, 255, 0.96);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+    }
+
+    .admin-subscribers-metric-card.is-warning {
+      background:
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 8rem),
+        rgba(255, 255, 255, 0.96);
+    }
+
+    .admin-subscribers-metric-card.is-danger {
+      background:
+        radial-gradient(circle at top right, rgba(239, 68, 68, 0.1), transparent 8rem),
+        rgba(255, 255, 255, 0.96);
+    }
+
+    .admin-subscribers-metric-card span {
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .admin-subscribers-metric-card strong {
+      color: #0f172a;
+      font-size: 1.55rem;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .admin-subscribers-metric-card small {
+      color: #64748b;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .admin-subscribers-panel {
+      padding: 1.05rem;
+      overflow: hidden;
+    }
+
+    .admin-subscribers-toolbar {
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.15rem 0.1rem 1rem;
+    }
+
+    .admin-subscribers-toolbar .list-toolbar-copy h2 {
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      letter-spacing: -0.04em;
+    }
+
+    .admin-subscribers-toolbar .list-toolbar-copy p {
+      max-width: 50rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .admin-subscribers-toolbar-note {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      max-width: 380px;
+      padding: 0.78rem 0.88rem;
+      border-radius: 16px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1px solid rgba(37, 99, 235, 0.16);
+      font-size: 0.82rem;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+
+    .admin-subscribers-toolbar-note i {
+      margin-top: 0.08rem;
+      flex: 0 0 auto;
+    }
+
+    .admin-subscribers-view-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 1rem;
+      padding: 0.32rem;
+      border-radius: 999px;
+      background: #eaf2ff;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+    }
+
+    .admin-view-tab {
+      border: 0;
+      background: transparent;
+      color: #385074;
+      font-size: 0.86rem;
+      font-weight: 900;
+      padding: 0.72rem 1.15rem;
+      border-radius: 999px;
+      line-height: 1;
+      transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .admin-view-tab:hover {
+      background: rgba(255, 255, 255, 0.75);
+      color: #1d4ed8;
+    }
+
+    .admin-view-tab.is-active {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.16);
+    }
+
+    .admin-subscribers-view {
+      display: none;
+    }
+
+    .admin-subscribers-view.is-active {
+      display: block;
+    }
+
+    .admin-subscribers-empty {
+      margin: 0;
+    }
+
+    .admin-subscribers-table-wrap {
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    .admin-subscribers-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 0;
+    }
+
+    .admin-subscribers-table thead th {
+      padding: 0.9rem 0.8rem;
+      background: #0f7df2;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.035em;
+      white-space: nowrap;
+    }
+
+    .admin-subscribers-table thead th:first-child {
+      border-top-left-radius: 18px;
+    }
+
+    .admin-subscribers-table thead th:last-child {
+      border-top-right-radius: 18px;
+    }
+
+    .admin-subscribers-table tbody td {
+      padding: 0.9rem 0.8rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      color: #0f172a;
+      font-size: 0.88rem;
+      vertical-align: middle;
+      background: #fff;
+    }
+
+    .admin-subscribers-table tbody tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .admin-subscribers-table tbody tr:hover td {
+      background: #eff6ff;
+    }
+
+    .admin-subscribers-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .admin-subscriber-identity {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+
+    .admin-subscriber-id {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 30px;
+      padding: 0 0.5rem;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.74rem;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .admin-subscriber-identity > div {
+      min-width: 0;
+    }
+
+    .admin-subscriber-identity strong,
+    .admin-plan-cell strong,
+    .admin-date-cell strong,
+    .admin-status-stack strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.9rem;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .admin-subscriber-identity small,
+    .admin-plan-cell span,
+    .admin-plan-cell small,
+    .admin-date-cell small,
+    .admin-status-stack small,
+    .admin-cell-muted {
+      display: block;
+      color: #64748b;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .admin-plan-cell,
+    .admin-date-cell,
+    .admin-status-stack {
+      display: grid;
+      gap: 0.16rem;
+      min-width: 0;
+    }
+
+    .admin-status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: max-content;
+      min-width: 74px;
+      padding: 0.34rem 0.58rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .admin-status-pill.is-active {
+      background: #dcfce7;
+      color: #047857;
+    }
+
+    .admin-status-pill.is-trial {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .admin-status-pill.is-overdue,
+    .admin-status-pill.is-cancelled,
+    .admin-status-pill.is-blocked {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .admin-status-pill.is-muted {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .admin-products-list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.22rem;
+      min-width: 0;
+    }
+
+    .admin-products-list span {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      max-width: 100%;
+      padding: 0.2rem 0.42rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 0.62rem;
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .admin-ops-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .admin-ops-list span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.28rem 0.52rem;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .admin-ops-list span.is-total {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .admin-ops-list strong {
+      color: #0f172a;
+      font-weight: 950;
+    }
+
+    .admin-row-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
+    .admin-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.28rem;
+      width: 100%;
+      padding: 0.42rem 0.5rem;
+      border-radius: 999px;
+      background: #fff;
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      font-size: 0.68rem;
+      font-weight: 900;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .admin-action-btn:hover {
+      transform: translateY(-1px);
+      color: #1d4ed8;
+      background: #eff6ff;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.12);
+    }
+
+    .admin-action-btn.is-primary {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+    }
+
+    .admin-action-btn.is-primary:hover {
+      color: #fff;
+      background: #1d4ed8;
+    }
+
+    @media (min-width: 981px) {
+      .admin-subscribers-table-commercial th:nth-child(1),
+      .admin-subscribers-table-commercial td:nth-child(1) {
+        width: 23%;
+      }
+
+      .admin-subscribers-table-commercial th:nth-child(2),
+      .admin-subscribers-table-commercial td:nth-child(2) {
+        width: 15%;
+      }
+
+      .admin-subscribers-table-commercial th:nth-child(3),
+      .admin-subscribers-table-commercial td:nth-child(3) {
+        width: 17%;
+      }
+
+      .admin-subscribers-table-commercial th:nth-child(4),
+      .admin-subscribers-table-commercial td:nth-child(4) {
+        width: 16%;
+      }
+
+      .admin-subscribers-table-commercial th:nth-child(5),
+      .admin-subscribers-table-commercial td:nth-child(5) {
+        width: 14%;
+      }
+
+      .admin-subscribers-table-commercial th:nth-child(6),
+      .admin-subscribers-table-commercial td:nth-child(6) {
+        width: 15%;
+      }
+
+      .admin-subscribers-table-operational th:nth-child(1),
+      .admin-subscribers-table-operational td:nth-child(1) {
+        width: 25%;
+      }
+
+      .admin-subscribers-table-operational th:nth-child(2),
+      .admin-subscribers-table-operational td:nth-child(2) {
+        width: 16%;
+      }
+
+      .admin-subscribers-table-operational th:nth-child(3),
+      .admin-subscribers-table-operational td:nth-child(3) {
+        width: 18%;
+      }
+
+      .admin-subscribers-table-operational th:nth-child(4),
+      .admin-subscribers-table-operational td:nth-child(4) {
+        width: 26%;
+      }
+
+      .admin-subscribers-table-operational th:nth-child(5),
+      .admin-subscribers-table-operational td:nth-child(5) {
+        width: 15%;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .admin-subscribers-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .admin-subscribers-toolbar {
+        flex-direction: column;
+      }
+
+      .admin-subscribers-toolbar-note {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .admin-subscribers-table,
+      .admin-subscribers-table thead,
+      .admin-subscribers-table tbody,
+      .admin-subscribers-table th,
+      .admin-subscribers-table td,
+      .admin-subscribers-table tr {
+        display: block;
+      }
+
+      .admin-subscribers-table thead {
+        display: none;
+      }
+
+      .admin-subscribers-table tbody tr {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      }
+
+      .admin-subscribers-table tbody td {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0.6rem 0;
+        border-bottom: 0;
+        background: transparent !important;
+      }
+
+      .admin-subscribers-table tbody td::before {
+        content: attr(data-label);
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .admin-row-actions {
+        max-width: 240px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .admin-subscribers-hero {
+        padding: 1.1rem;
+      }
+
+      .admin-subscribers-hero .page-titlebar-side {
+        width: 100%;
+      }
+
+      .admin-subscribers-hero-stat {
+        width: 100%;
+      }
+
+      .admin-subscribers-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-subscribers-panel {
+        padding: 0.8rem;
+      }
+
+      .admin-subscribers-view-tabs {
+        display: flex;
+        width: 100%;
+      }
+
+      .admin-view-tab {
+        flex: 1 1 0;
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      <% if (typeof success !== 'undefined' && success) { %>
+        window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
+      <% } %>
+
+      const tabButtons = document.querySelectorAll('[data-view-target]');
+      const panels = document.querySelectorAll('[data-view-panel]');
+
+      tabButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-view-target');
+
+          tabButtons.forEach((item) => {
+            item.classList.remove('is-active');
+            item.setAttribute('aria-selected', 'false');
+          });
+
+          panels.forEach((panel) => {
+            panel.classList.toggle(
+              'is-active',
+              panel.getAttribute('data-view-panel') === target
+            );
+          });
+
+          button.classList.add('is-active');
+          button.setAttribute('aria-selected', 'true');
         });
-      </script>
-  </body>
-
+      });
+    });
+  </script>
+</body>
 </html>

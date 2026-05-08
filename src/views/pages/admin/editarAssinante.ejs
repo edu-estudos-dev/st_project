@@ -2,239 +2,335 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title }) %>
 
-  <body class="list-page-body">
-    <%- include('../../partials/header') %>
-      <div class="page-spacer"></div>
+<body class="list-page-body">
+  <%- include('../../partials/header') %>
+  <div class="page-spacer"></div>
 
-      <div class="list-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Assinante' }) %>
+  <div class="list-shell">
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Assinante' }) %>
 
-          <section class="page-titlebar page-titlebar-neutral">
-            <div class="page-titlebar-content">
-              <span class="list-kicker"><i class="bi bi-person-gear"></i> SaaS</span>
-              <h1>
-                <%= assinante.username %>
-              </h1>
-              <p>
-                <%= assinante.email %>
-              </p>
-            </div>
-            <div class="page-titlebar-side">
-              <div class="list-stat">
-                <strong>Status atual</strong>
-                <span>
-                  <%= String(assinante.status_assinatura || '' ).toUpperCase() %>
-                </span>
-              </div>
-            </div>
-          </section>
-
-          <main class="list-stage">
-            <section class="list-panel">
-              <div class="list-toolbar">
-                <div class="list-toolbar-copy">
-                  <h2>Dados da assinatura</h2>
-                  <p>Altere manualmente status, plano, ciclo de cobrança e datas de controle.</p>
-                </div>
-                <div class="d-flex flex-wrap gap-2">
-                  <a class="list-action" href="/admin/assinantes/<%= assinante.id %>/pagamentos">
-                    <i class="bi bi-receipt"></i>
-                    <span>Eventos de pagamento</span>
-                  </a>
-
-                  <a class="list-action" href="/admin/assinantes">
-                    <i class="bi bi-arrow-left"></i>
-                    <span>Voltar</span>
-                  </a>
-                </div>
-              </div>
-
-              <form action="/admin/assinantes/<%= assinante.id %>/edit" method="POST" class="modern-form">
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label" for="status_assinatura">Status</label>
-                    <select class="form-select" id="status_assinatura" name="status_assinatura" required>
-                      <% statusOptions.forEach((status)=> { %>
-                        <option value="<%= status %>" <%= assinante.status_assinatura === status ? 'selected' : '' %>>
-                          <%= status %>
-                        </option>
-                      <% }) %>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label" for="tipo_cobranca">Tipo de cobrança</label>
-                    <select class="form-select" id="tipo_cobranca" name="tipo_cobranca">
-                      <% billingOptions.forEach((tipo)=> { %>
-                        <option value="<%= tipo %>" <%= (assinante.tipo_cobranca || '') === tipo ? 'selected' : '' %>>
-                          <%= tipo || 'Sem cobrança' %>
-                        </option>
-                      <% }) %>
-                    </select>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label" for="plano_codigo">Código do plano</label>
-                    <select class="form-select" id="plano_codigo" name="plano_codigo">
-                      <option value="" <%= !assinante.plano_codigo ? 'selected' : '' %>>Plano não definido</option>
-                      <option value="1-ferramenta" <%= assinante.plano_codigo === '1-ferramenta' ? 'selected' : '' %>>
-                        1-ferramenta
-                      </option>
-                      <option value="2-ferramentas" <%= assinante.plano_codigo === '2-ferramentas' ? 'selected' : '' %>>
-                        2-ferramentas
-                      </option>
-                      <option value="3-ferramentas" <%= assinante.plano_codigo === '3-ferramentas' ? 'selected' : '' %>>
-                        3-ferramentas
-                      </option>
-                    </select>
-                    <small class="modern-note">Código interno usado para identificar o plano escolhido.</small>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label" for="plano_nome">Nome do plano</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      id="plano_nome"
-                      name="plano_nome"
-                      value="<%= assinante.plano_nome || '' %>"
-                      placeholder="Ex.: Plano Completo"
-                    >
-                  </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label" for="valor_mensal">Valor mensal</label>
-                    <input
-                      class="form-control"
-                      type="number"
-                      id="valor_mensal"
-                      name="valor_mensal"
-                      min="0"
-                      step="0.01"
-                      value="<%= assinante.valor_mensal || '' %>"
-                      placeholder="44.90"
-                    >
-                    <small class="modern-note">Use ponto para centavos. Ex.: 44.90</small>
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label">Produtos habilitados</label>
-                    <div class="modern-checkbox-grid">
-                      <% const selectedProducts = assinante.produtos_habilitados_lista || []; %>
-                      <% productOptions.forEach((produto) => { %>
-                        <label class="modern-checkbox" for="produto_<%= produto.value %>">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="produto_<%= produto.value %>"
-                            name="produtos_habilitados"
-                            value="<%= produto.value %>"
-                            <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
-                          >
-                          <span><%= produto.label %></span>
-                        </label>
-                      <% }) %>
-                    </div>
-                    <small class="modern-note">Esses produtos definem quais módulos aparecem para o assinante.</small>
-                  </div>
-
-                  <div class="col-md-3">
-                    <label class="form-label" for="trial_fim">Fim do trial</label>
-                    <input class="form-control" type="date" id="trial_fim" name="trial_fim"
-                      value="<%= formatDateInput(assinante.trial_fim) %>">
-                  </div>
-
-                  <div class="col-md-3">
-                    <label class="form-label" for="data_ativacao">Ativação</label>
-                    <input class="form-control" type="date" id="data_ativacao" name="data_ativacao"
-                      value="<%= formatDateInput(assinante.data_ativacao) %>">
-                  </div>
-
-                  <div class="col-md-3">
-                    <label class="form-label" for="data_vencimento">Vencimento</label>
-                    <input class="form-control" type="date" id="data_vencimento" name="data_vencimento"
-                      value="<%= formatDateInput(assinante.data_vencimento) %>">
-                  </div>
-
-                  <div class="col-md-3">
-                    <label class="form-label" for="data_limite_exclusao">Limite exclusão</label>
-                    <input class="form-control" type="date" id="data_limite_exclusao" name="data_limite_exclusao"
-                      value="<%= formatDateInput(assinante.data_limite_exclusao) %>">
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label" for="gateway_customer_id">Gateway customer ID</label>
-                    <input class="form-control" type="text" id="gateway_customer_id" name="gateway_customer_id"
-                      value="<%= assinante.gateway_customer_id || '' %>">
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label" for="gateway_subscription_id">Gateway subscription ID</label>
-                    <input class="form-control" type="text" id="gateway_subscription_id" name="gateway_subscription_id"
-                      value="<%= assinante.gateway_subscription_id || '' %>">
-                  </div>
-                </div>
-
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                  <button type="submit" class="list-action">
-                    <i class="bi bi-check-circle"></i>
-                    <span>Salvar assinatura</span>
-                  </button>
-                  <a href="/admin/assinantes" class="list-action">
-                    <i class="bi bi-x-circle"></i>
-                    <span>Cancelar</span>
-                  </a>
-                </div>
-              </form>
-            </section>
-          </main>
+    <section class="page-titlebar page-titlebar-neutral">
+      <div class="page-titlebar-content">
+        <span class="list-kicker">
+          <i class="bi bi-person-gear"></i>
+          SaaS
+        </span>
+        <h1><%= assinante.username %></h1>
+        <p><%= assinante.email %></p>
       </div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const planoCodigoSelect = document.getElementById('plano_codigo');
-          const planoNomeInput = document.getElementById('plano_nome');
-          const valorMensalInput = document.getElementById('valor_mensal');
+      <div class="page-titlebar-side">
+        <div class="list-stat">
+          <strong>Status atual</strong>
+          <span><%= String(assinante.status_assinatura || '').toUpperCase() %></span>
+        </div>
+      </div>
+    </section>
 
-          const planos = {
-            '1-ferramenta': {
-              nome: 'Plano Essencial',
-              valor: '24.90'
-            },
-            '2-ferramentas': {
-              nome: 'Plano Operador',
-              valor: '34.90'
-            },
-            '3-ferramentas': {
-              nome: 'Plano Completo',
-              valor: '44.90'
-            }
-          };
+    <main class="list-stage">
+      <section class="list-panel">
+        <div class="list-toolbar">
+          <div class="list-toolbar-copy">
+            <h2>Dados da assinatura</h2>
+            <p>Altere manualmente status, plano, ciclo de cobrança e datas de controle.</p>
+          </div>
 
-          if (planoCodigoSelect && planoNomeInput && valorMensalInput) {
-            planoCodigoSelect.addEventListener('change', () => {
-              const plano = planos[planoCodigoSelect.value];
+          <div class="admin-toolbar-actions">
+            <a class="admin-standard-btn" href="/admin/assinantes/<%= assinante.id %>/pagamentos">
+              <i class="bi bi-receipt"></i>
+              <span>Eventos de pagamento</span>
+            </a>
 
-              if (!plano) {
-                planoNomeInput.value = '';
-                valorMensalInput.value = '';
-                return;
-              }
+            <a class="admin-standard-btn" href="/admin/assinantes">
+              <i class="bi bi-arrow-left"></i>
+              <span>Voltar</span>
+            </a>
+          </div>
+        </div>
 
-              planoNomeInput.value = plano.nome;
-              valorMensalInput.value = plano.valor;
-            });
+        <form action="/admin/assinantes/<%= assinante.id %>/edit" method="POST" class="modern-form">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="status_assinatura">Status</label>
+              <select class="form-select" id="status_assinatura" name="status_assinatura" required>
+                <% statusOptions.forEach((status) => { %>
+                  <option value="<%= status %>" <%= assinante.status_assinatura === status ? 'selected' : '' %>>
+                    <%= status %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="tipo_cobranca">Tipo de cobrança</label>
+              <select class="form-select" id="tipo_cobranca" name="tipo_cobranca">
+                <% billingOptions.forEach((tipo) => { %>
+                  <option value="<%= tipo %>" <%= (assinante.tipo_cobranca || '') === tipo ? 'selected' : '' %>>
+                    <%= tipo || 'Sem cobrança' %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="plano_codigo">Código do plano</label>
+              <select class="form-select" id="plano_codigo" name="plano_codigo">
+                <option value="" <%= !assinante.plano_codigo ? 'selected' : '' %>>Plano não definido</option>
+                <option value="1-ferramenta" <%= assinante.plano_codigo === '1-ferramenta' ? 'selected' : '' %>>
+                  1-ferramenta
+                </option>
+                <option value="2-ferramentas" <%= assinante.plano_codigo === '2-ferramentas' ? 'selected' : '' %>>
+                  2-ferramentas
+                </option>
+                <option value="3-ferramentas" <%= assinante.plano_codigo === '3-ferramentas' ? 'selected' : '' %>>
+                  3-ferramentas
+                </option>
+              </select>
+              <small class="modern-note">Código interno usado para identificar o plano escolhido.</small>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="plano_nome">Nome do plano</label>
+              <input
+                class="form-control"
+                type="text"
+                id="plano_nome"
+                name="plano_nome"
+                value="<%= assinante.plano_nome || '' %>"
+                placeholder="Ex.: Plano Completo"
+              >
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="valor_mensal">Valor mensal</label>
+              <input
+                class="form-control"
+                type="number"
+                id="valor_mensal"
+                name="valor_mensal"
+                min="0"
+                step="0.01"
+                value="<%= assinante.valor_mensal || '' %>"
+                placeholder="44.90"
+              >
+              <small class="modern-note">Use ponto para centavos. Ex.: 44.90</small>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Produtos habilitados</label>
+              <div class="modern-checkbox-grid">
+                <% const selectedProducts = assinante.produtos_habilitados_lista || []; %>
+                <% productOptions.forEach((produto) => { %>
+                  <label class="modern-checkbox" for="produto_<%= produto.value %>">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="produto_<%= produto.value %>"
+                      name="produtos_habilitados"
+                      value="<%= produto.value %>"
+                      <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
+                    >
+                    <span><%= produto.label %></span>
+                  </label>
+                <% }) %>
+              </div>
+              <small class="modern-note">Esses produtos definem quais módulos aparecem para o assinante.</small>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label" for="trial_fim">Fim do trial</label>
+              <input
+                class="form-control"
+                type="date"
+                id="trial_fim"
+                name="trial_fim"
+                value="<%= formatDateInput(assinante.trial_fim) %>"
+              >
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label" for="data_ativacao">Ativação</label>
+              <input
+                class="form-control"
+                type="date"
+                id="data_ativacao"
+                name="data_ativacao"
+                value="<%= formatDateInput(assinante.data_ativacao) %>"
+              >
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label" for="data_vencimento">Vencimento</label>
+              <input
+                class="form-control"
+                type="date"
+                id="data_vencimento"
+                name="data_vencimento"
+                value="<%= formatDateInput(assinante.data_vencimento) %>"
+              >
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label" for="data_limite_exclusao">Limite exclusão</label>
+              <input
+                class="form-control"
+                type="date"
+                id="data_limite_exclusao"
+                name="data_limite_exclusao"
+                value="<%= formatDateInput(assinante.data_limite_exclusao) %>"
+              >
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="gateway_customer_id">Gateway customer ID</label>
+              <input
+                class="form-control"
+                type="text"
+                id="gateway_customer_id"
+                name="gateway_customer_id"
+                value="<%= assinante.gateway_customer_id || '' %>"
+              >
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="gateway_subscription_id">Gateway subscription ID</label>
+              <input
+                class="form-control"
+                type="text"
+                id="gateway_subscription_id"
+                name="gateway_subscription_id"
+                value="<%= assinante.gateway_subscription_id || '' %>"
+              >
+            </div>
+          </div>
+
+          <div class="admin-form-actions">
+            <button type="submit" class="admin-standard-btn">
+              <i class="bi bi-check-circle"></i>
+              <span>Salvar assinatura</span>
+            </button>
+
+            <a href="/admin/assinantes" class="admin-standard-btn">
+              <i class="bi bi-x-circle"></i>
+              <span>Cancelar</span>
+            </a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    .admin-toolbar-actions,
+    .admin-form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .admin-form-actions {
+      margin-top: 1.75rem;
+    }
+
+    .admin-standard-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      min-height: 52px;
+      padding: 0.85rem 1.35rem;
+      border: 0;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #3264f0 0%, #2455e6 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 14px 26px rgba(37, 85, 230, 0.22);
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease,
+        background 0.18s ease;
+      cursor: pointer;
+    }
+
+    .admin-standard-btn:hover {
+      color: #ffffff;
+      text-decoration: none;
+      transform: translateY(-3px);
+      box-shadow: 0 18px 30px rgba(37, 85, 230, 0.28);
+      filter: brightness(1.03);
+    }
+
+    .admin-standard-btn:focus-visible {
+      outline: 3px solid rgba(37, 85, 230, 0.22);
+      outline-offset: 2px;
+      color: #ffffff;
+    }
+
+    .admin-standard-btn i {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    @media (max-width: 768px) {
+      .admin-toolbar-actions,
+      .admin-form-actions {
+        width: 100%;
+      }
+
+      .admin-standard-btn {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const planoCodigoSelect = document.getElementById('plano_codigo');
+      const planoNomeInput = document.getElementById('plano_nome');
+      const valorMensalInput = document.getElementById('valor_mensal');
+
+      const planos = {
+        '1-ferramenta': {
+          nome: 'Plano Essencial',
+          valor: '24.90'
+        },
+        '2-ferramentas': {
+          nome: 'Plano Operador',
+          valor: '34.90'
+        },
+        '3-ferramentas': {
+          nome: 'Plano Completo',
+          valor: '44.90'
+        }
+      };
+
+      if (planoCodigoSelect && planoNomeInput && valorMensalInput) {
+        planoCodigoSelect.addEventListener('change', () => {
+          const plano = planos[planoCodigoSelect.value];
+
+          if (!plano) {
+            planoNomeInput.value = '';
+            valorMensalInput.value = '';
+            return;
           }
 
-          <% if (typeof success !== 'undefined' && success) { %>
-            window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
-          <% } %>
-
-          <% if (typeof error !== 'undefined' && error) { %>
-            window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
-          <% } %>
+          planoNomeInput.value = plano.nome;
+          valorMensalInput.value = plano.valor;
         });
-      </script>
-  </body>
+      }
 
+      <% if (typeof success !== 'undefined' && success) { %>
+        window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
+      <% } %>
+    });
+  </script>
+</body>
 </html>
