@@ -53,6 +53,16 @@ class AssinanteModel {
     `);
   }
 
+  async ensureBillingColumns() {
+    await connection.query(`
+      ALTER TABLE assinantes
+      ADD COLUMN IF NOT EXISTS billing_nome VARCHAR(150),
+      ADD COLUMN IF NOT EXISTS billing_cpf_cnpj VARCHAR(20),
+      ADD COLUMN IF NOT EXISTS billing_email VARCHAR(150),
+      ADD COLUMN IF NOT EXISTS billing_telefone VARCHAR(30)
+    `);
+  }
+
   normalizeRow(row) {
     if (!row) return null;
 
@@ -83,6 +93,7 @@ class AssinanteModel {
 
   async findById(id) {
     await this.expireOverdueSubscriptions('id = $1', [id]);
+    await this.ensureBillingColumns();
 
     const result = await connection.query(
       `SELECT
@@ -97,6 +108,10 @@ class AssinanteModel {
         data_limite_exclusao,
         gateway_customer_id,
         gateway_subscription_id,
+        billing_nome,
+        billing_cpf_cnpj,
+        billing_email,
+        billing_telefone,
         produtos_habilitados,
         plano_codigo,
         plano_nome,
@@ -112,6 +127,7 @@ class AssinanteModel {
 
   async findByUserId(userId) {
     await this.expireOverdueSubscriptions('user_id = $1', [userId]);
+    await this.ensureBillingColumns();
 
     const result = await connection.query(
       `SELECT
@@ -126,6 +142,10 @@ class AssinanteModel {
         data_limite_exclusao,
         gateway_customer_id,
         gateway_subscription_id,
+        billing_nome,
+        billing_cpf_cnpj,
+        billing_email,
+        billing_telefone,
         produtos_habilitados,
         plano_codigo,
         plano_nome,
@@ -141,6 +161,7 @@ class AssinanteModel {
 
   async findAdminById(id) {
     await this.expireOverdueSubscriptions('id = $1', [id]);
+    await this.ensureBillingColumns();
 
     const result = await connection.query(
       `SELECT
@@ -157,6 +178,10 @@ class AssinanteModel {
         a.data_limite_exclusao,
         a.gateway_customer_id,
         a.gateway_subscription_id,
+        a.billing_nome,
+        a.billing_cpf_cnpj,
+        a.billing_email,
+        a.billing_telefone,
         a.produtos_habilitados,
         a.plano_codigo,
         a.plano_nome,
@@ -175,6 +200,7 @@ class AssinanteModel {
 
   async listForAdmin() {
     await this.expireOverdueSubscriptions('TRUE', []);
+    await this.ensureBillingColumns();
 
     const result = await connection.query(
       `SELECT
@@ -189,6 +215,10 @@ class AssinanteModel {
         a.data_ativacao,
         a.data_vencimento,
         a.data_limite_exclusao,
+        a.billing_nome,
+        a.billing_cpf_cnpj,
+        a.billing_email,
+        a.billing_telefone,
         a.produtos_habilitados,
         a.plano_codigo,
         a.plano_nome,
@@ -231,6 +261,40 @@ class AssinanteModel {
        WHERE id = $1
        RETURNING id, gateway_customer_id`,
       [id, String(gatewayCustomerId).trim()]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  async updateBillingData(id, billingData) {
+    await this.ensureBillingColumns();
+
+    if (!id) {
+      throw new Error('ID do assinante é obrigatório para salvar dados de cobrança.');
+    }
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         billing_nome = $2,
+         billing_cpf_cnpj = $3,
+         billing_email = $4,
+         billing_telefone = $5,
+         updated_at = NOW()
+       WHERE id = $1
+       RETURNING
+         id,
+         billing_nome,
+         billing_cpf_cnpj,
+         billing_email,
+         billing_telefone`,
+      [
+        id,
+        billingData.billing_nome,
+        billingData.billing_cpf_cnpj,
+        billingData.billing_email,
+        billingData.billing_telefone
+      ]
     );
 
     return result.rows[0] || null;
