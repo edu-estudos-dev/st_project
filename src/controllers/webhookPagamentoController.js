@@ -28,10 +28,27 @@ async function receberWebhookAsaas(req, res) {
     }
 
     const normalizedEvent = normalizeAsaasWebhookPayload(req.body || {});
+
+    if (normalizedEvent.gatewayEventId) {
+      const existingEvent = await PaymentEventModel.findByGatewayEventId(
+        normalizedEvent.gatewayEventId,
+        normalizedEvent.provider
+      );
+
+      if (existingEvent) {
+        return res.status(200).json({
+          received: true,
+          duplicated: true,
+          eventId: existingEvent.id
+        });
+      }
+    }
+
     const event = await PaymentEventModel.create(normalizedEvent);
 
     return res.status(200).json({
       received: true,
+      duplicated: false,
       eventId: event.id
     });
   } catch (error) {
