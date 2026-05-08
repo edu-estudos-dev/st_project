@@ -26,14 +26,7 @@ async function resolveAssinanteFromEvent(normalizedEvent) {
   });
 }
 
-async function processConfirmedPayment(normalizedEvent, assinante) {
-  if (!normalizedEvent.isPaymentConfirmed) {
-    return {
-      processed: false,
-      reason: 'event_not_confirmed_payment'
-    };
-  }
-
+async function processPaymentEvent(normalizedEvent, assinante) {
   if (!assinante?.id) {
     return {
       processed: false,
@@ -41,18 +34,76 @@ async function processConfirmedPayment(normalizedEvent, assinante) {
     };
   }
 
-  const updatedAssinante = await AssinanteModel.activateAfterConfirmedPayment(
-    assinante.id,
-    {
-      paymentDate: normalizedEvent.paymentDate,
-      gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
-    }
-  );
+  if (normalizedEvent.isPaymentConfirmed) {
+    const updatedAssinante = await AssinanteModel.activateAfterConfirmedPayment(
+      assinante.id,
+      {
+        paymentDate: normalizedEvent.paymentDate,
+        gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
+      }
+    );
+
+    return {
+      processed: true,
+      reason: 'subscription_activated',
+      assinante: updatedAssinante
+    };
+  }
+
+  if (normalizedEvent.isSubscriptionCancelled) {
+    const updatedAssinante = await AssinanteModel.cancelFromGateway(
+      assinante.id,
+      {
+        gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
+      }
+    );
+
+    return {
+      processed: true,
+      reason: 'subscription_cancelled',
+      assinante: updatedAssinante
+    };
+  }
+
+  if (normalizedEvent.isPaymentOverdue) {
+    const updatedAssinante = await AssinanteModel.markAsOverdueFromPayment(
+      assinante.id,
+      {
+        dueDate: normalizedEvent.dueDate,
+        gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
+      }
+    );
+
+    return {
+      processed: Boolean(updatedAssinante),
+      reason: updatedAssinante
+        ? 'subscription_marked_overdue'
+        : 'subscription_not_changed',
+      assinante: updatedAssinante
+    };
+  }
+
+  if (normalizedEvent.isPaymentDeleted) {
+    const updatedAssinante = await AssinanteModel.markAsOverdueFromPayment(
+      assinante.id,
+      {
+        dueDate: normalizedEvent.dueDate,
+        gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
+      }
+    );
+
+    return {
+      processed: Boolean(updatedAssinante),
+      reason: updatedAssinante
+        ? 'payment_deleted_subscription_marked_overdue'
+        : 'subscription_not_changed',
+      assinante: updatedAssinante
+    };
+  }
 
   return {
-    processed: true,
-    reason: 'subscription_activated',
-    assinante: updatedAssinante
+    processed: false,
+    reason: 'event_not_actionable'
   };
 }
 
@@ -83,7 +134,7 @@ async function receberWebhookAsaas(req, res) {
       assinanteId: assinante?.id || null
     });
 
-    const processingResult = await processConfirmedPayment(normalizedEvent, assinante);
+    const processingResult = await processPaymentEvent(normalizedEvent, assinante);
 
     if (processingResult.processed) {
       await PaymentEventModel.markAsProcessed(event.id);

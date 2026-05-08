@@ -10,11 +10,50 @@ const PAYMENT_CONFIRMED_STATUSES = new Set([
   'RECEIVED_IN_CASH'
 ]);
 
+const PAYMENT_OVERDUE_EVENTS = new Set([
+  'PAYMENT_OVERDUE'
+]);
+
+const PAYMENT_OVERDUE_STATUSES = new Set([
+  'OVERDUE'
+]);
+
+const PAYMENT_DELETED_EVENTS = new Set([
+  'PAYMENT_DELETED'
+]);
+
+const SUBSCRIPTION_CANCELLED_EVENTS = new Set([
+  'SUBSCRIPTION_DELETED',
+  'SUBSCRIPTION_INACTIVATED'
+]);
+
+const SUBSCRIPTION_CANCELLED_STATUSES = new Set([
+  'CANCELLED',
+  'CANCELED',
+  'INACTIVE',
+  'INACTIVATED'
+]);
+
 function normalizeAsaasWebhookPayload(payload = {}) {
   const payment = payload.payment || {};
   const subscription = payload.subscription || {};
   const eventType = payload.event || payload.eventType || 'UNKNOWN_EVENT';
-  const status = payment.status || payload.status || null;
+  const status = payment.status || subscription.status || payload.status || null;
+
+  const isPaymentConfirmed =
+    PAYMENT_CONFIRMED_EVENTS.has(eventType)
+    || PAYMENT_CONFIRMED_STATUSES.has(status);
+
+  const isPaymentOverdue =
+    PAYMENT_OVERDUE_EVENTS.has(eventType)
+    || PAYMENT_OVERDUE_STATUSES.has(status);
+
+  const isPaymentDeleted =
+    PAYMENT_DELETED_EVENTS.has(eventType);
+
+  const isSubscriptionCancelled =
+    SUBSCRIPTION_CANCELLED_EVENTS.has(eventType)
+    || SUBSCRIPTION_CANCELLED_STATUSES.has(status);
 
   return {
     provider: 'asaas',
@@ -33,10 +72,15 @@ function normalizeAsaasWebhookPayload(payload = {}) {
       || payment.dateCreated
       || payload.paymentDate
       || null,
-    dueDate: payment.dueDate || payload.dueDate || null,
-    isPaymentConfirmed:
-      PAYMENT_CONFIRMED_EVENTS.has(eventType)
-      || PAYMENT_CONFIRMED_STATUSES.has(status),
+    dueDate:
+      payment.dueDate
+      || subscription.nextDueDate
+      || payload.dueDate
+      || null,
+    isPaymentConfirmed,
+    isPaymentOverdue,
+    isPaymentDeleted,
+    isSubscriptionCancelled,
     payload
   };
 }

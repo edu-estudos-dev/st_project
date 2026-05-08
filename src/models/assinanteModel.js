@@ -458,6 +458,74 @@ class AssinanteModel {
 
     return result.rows[0] || null;
   }
+
+    async markAsOverdueFromPayment(
+    id,
+    { dueDate = null, gatewaySubscriptionId = null } = {}
+  ) {
+    if (!id) {
+      throw new Error('ID do assinante é obrigatório para marcar assinatura vencida.');
+    }
+
+    const parsedDueDate = dueDate ? new Date(dueDate) : null;
+    const safeDueDate = parsedDueDate && !Number.isNaN(parsedDueDate.getTime())
+      ? parsedDueDate
+      : null;
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'vencido',
+         data_vencimento = COALESCE($2::timestamptz, data_vencimento, NOW()),
+         gateway_subscription_id = COALESCE($3, gateway_subscription_id),
+         updated_at = NOW()
+       WHERE id = $1
+         AND status_assinatura <> 'cancelado'
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         data_ativacao,
+         data_vencimento,
+         gateway_customer_id,
+         gateway_subscription_id,
+         plano_codigo,
+         plano_nome,
+         valor_mensal`,
+      [id, safeDueDate ? safeDueDate.toISOString() : null, gatewaySubscriptionId || null]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  async cancelFromGateway(id, { gatewaySubscriptionId = null } = {}) {
+    if (!id) {
+      throw new Error('ID do assinante é obrigatório para cancelar assinatura.');
+    }
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'cancelado',
+         gateway_subscription_id = COALESCE($2, gateway_subscription_id),
+         updated_at = NOW()
+       WHERE id = $1
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         data_ativacao,
+         data_vencimento,
+         gateway_customer_id,
+         gateway_subscription_id,
+         plano_codigo,
+         plano_nome,
+         valor_mensal`,
+      [id, gatewaySubscriptionId || null]
+    );
+
+    return result.rows[0] || null;
+  }
 }
 
 export default new AssinanteModel();
