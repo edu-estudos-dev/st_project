@@ -4,6 +4,7 @@ import {
   createCustomer,
   createSubscription,
   getGatewayConfig,
+  getSubscriptionPayments,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
 
@@ -16,7 +17,9 @@ function normalizeText(value) {
 }
 
 function normalizeEmail(value) {
-  return String(value || '').trim().toLowerCase();
+  return String(value || '')
+    .trim()
+    .toLowerCase();
 }
 
 function formatDateOnly(value) {
@@ -33,7 +36,9 @@ function validateBillingData(data) {
   const errors = [];
 
   const billingNome = normalizeText(data.billing_nome || data.nome);
-  const billingCpfCnpj = onlyDigits(data.billing_cpf_cnpj || data.cpfCnpj || data.documento);
+  const billingCpfCnpj = onlyDigits(
+    data.billing_cpf_cnpj || data.cpfCnpj || data.documento
+  );
   const billingEmail = normalizeEmail(data.billing_email || data.email);
   const billingTelefone = onlyDigits(data.billing_telefone || data.telefone);
 
@@ -53,7 +58,10 @@ function validateBillingData(data) {
     errors.push('Informe um e-mail de cobrança válido.');
   }
 
-  if (billingTelefone && (billingTelefone.length < 10 || billingTelefone.length > 11)) {
+  if (
+    billingTelefone &&
+    (billingTelefone.length < 10 || billingTelefone.length > 11)
+  ) {
     errors.push('Telefone de cobrança deve ter DDD e 10 ou 11 dígitos.');
   }
 
@@ -79,7 +87,9 @@ function getMonthlyPlanValue(assinante) {
   const value = Number(assinante?.valor_mensal || 0);
 
   if (!Number.isFinite(value) || value <= 0) {
-    throw new Error('Valor mensal do plano não está configurado para este assinante.');
+    throw new Error(
+      'Valor mensal do plano não está configurado para este assinante.'
+    );
   }
 
   return Number(value.toFixed(2));
@@ -152,7 +162,10 @@ async function ensureAsaasSubscriptionForAssinante(assinante, customerId) {
     throw new Error('Asaas não retornou o ID da assinatura criada.');
   }
 
-  await AssinanteModel.updateGatewaySubscriptionId(assinante.id, subscription.id);
+  await AssinanteModel.updateGatewaySubscriptionId(
+    assinante.id,
+    subscription.id
+  );
 
   return {
     subscriptionId: subscription.id,
@@ -161,12 +174,60 @@ async function ensureAsaasSubscriptionForAssinante(assinante, customerId) {
   };
 }
 
+function selectBestPaymentForSubscription(payments = []) {
+  if (!Array.isArray(payments) || !payments.length) {
+    return null;
+  }
+
+  const priority = {
+    PENDING: 1,
+    OVERDUE: 2,
+    CONFIRMED: 3,
+    RECEIVED: 4
+  };
+
+  return [...payments].sort((a, b) => {
+    const priorityA = priority[a?.status] || 99;
+    const priorityB = priority[b?.status] || 99;
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    const dateA = new Date(a?.dueDate || a?.dateCreated || 0).getTime();
+    const dateB = new Date(b?.dueDate || b?.dateCreated || 0).getTime();
+
+    return dateB - dateA;
+  })[0];
+}
+
+function buildPaymentResponse(payment) {
+  if (!payment) {
+    return null;
+  }
+
+  const paymentUrl = payment.invoiceUrl || payment.bankSlipUrl || null;
+
+  return {
+    id: payment.id || null,
+    status: payment.status || null,
+    value: payment.value ?? null,
+    dueDate: payment.dueDate || null,
+    invoiceUrl: payment.invoiceUrl || null,
+    bankSlipUrl: payment.bankSlipUrl || null,
+    transactionReceiptUrl: payment.transactionReceiptUrl || null,
+    paymentUrl
+  };
+}
+
 async function renderizarFormularioDadosCobranca(req, res) {
   try {
     const assinanteId = getAssinanteIdFromRequest(req);
 
     if (!assinanteId) {
-      return res.redirect('/login?erro=Por%20favor,%20fa%C3%A7a%20login%20primeiro.');
+      return res.redirect(
+        '/login?erro=Por%20favor,%20fa%C3%A7a%20login%20primeiro.'
+      );
     }
 
     const assinante = await AssinanteModel.findById(assinanteId);
@@ -296,8 +357,7 @@ async function iniciarPagamento(req, res) {
     }
 
     const hasBillingData = Boolean(
-      assinante.billing_nome &&
-      assinante.billing_cpf_cnpj
+      assinante.billing_nome && assinante.billing_cpf_cnpj
     );
 
     if (!hasBillingData) {
@@ -311,7 +371,8 @@ async function iniciarPagamento(req, res) {
     if (!isGatewayConfigured()) {
       return res.status(200).json({
         success: true,
-        message: 'Dados de cobrança validados. Gateway ainda não configurado para criar customer real.',
+        message:
+          'Dados de cobrança validados. Gateway ainda não configurado para criar customer real.',
         provider: gatewayConfig.provider,
         environment: gatewayConfig.environment,
         gatewayConfigured: false,
@@ -336,11 +397,20 @@ async function iniciarPagamento(req, res) {
       customerResult.customerId
     );
 
+    const paymentsResult = await getSubscriptionPayments(
+      subscriptionResult.subscriptionId,
+      10
+    );
+    const selectedPayment = selectBestPaymentForSubscription(
+      paymentsResult?.data || []
+    );
+    const payment = buildPaymentResponse(selectedPayment);
+
     return res.status(200).json({
       success: true,
-      message: subscriptionResult.created
-        ? 'Assinatura criada no Asaas Sandbox. Próxima etapa: simular o pagamento.'
-        : 'Assinatura já existente no Asaas. Próxima etapa: simular o pagamento.',
+      message: payment?.paymentUrl
+        ? 'Cobrança preparada com sucesso. Abra a cobrança para concluir a regularização.'
+        : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no Asaas.',
       provider: gatewayConfig.provider,
       environment: gatewayConfig.environment,
       gatewayConfigured: true,
@@ -349,7 +419,8 @@ async function iniciarPagamento(req, res) {
       gatewayCustomerCreated: customerResult.created,
       gatewaySubscriptionId: subscriptionResult.subscriptionId,
       gatewaySubscriptionCreated: subscriptionResult.created,
-      needsGatewayConfiguration: false
+      needsGatewayConfiguration: false,
+      payment
     });
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);

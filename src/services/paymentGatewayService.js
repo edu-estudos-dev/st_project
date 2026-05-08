@@ -226,6 +226,23 @@ async function createSubscription(subscriptionData = {}) {
   });
 }
 
+async function getSubscriptionPayments(subscriptionId, limit = 10) {
+  const normalizedSubscriptionId = String(subscriptionId || '').trim();
+
+  if (!normalizedSubscriptionId) {
+    throw new Error('ID da assinatura é obrigatório para buscar cobranças no Asaas.');
+  }
+
+  const normalizedLimit = Number.isInteger(Number(limit))
+    ? Math.max(1, Math.min(Number(limit), 100))
+    : 10;
+
+  return requestAsaas({
+    method: 'GET',
+    path: `/payments?subscription=${encodeURIComponent(normalizedSubscriptionId)}&limit=${normalizedLimit}`
+  });
+}
+
 async function createPaymentLink() {
   throw new Error('createPaymentLink ainda não implementado. Integração real pendente.');
 }
@@ -236,5 +253,6 @@ export {
   ensureGatewayConfigured,
   createCustomer,
   createSubscription,
+  getSubscriptionPayments,
   createPaymentLink
 };

@@ -242,7 +242,29 @@
               return;
             }
 
-            const successMessage = data.message || 'Pagamento preparado com sucesso.';
+                        const successMessage = data.message || 'Pagamento preparado com sucesso.';
+            const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
+
+            if (paymentUrl) {
+              setPaymentResult(
+                `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>.`,
+                'success'
+              );
+
+              const openPayment = await window.AppAlerts?.confirm({
+                title: 'Cobrança preparada',
+                text: 'A cobrança foi localizada no Asaas. Deseja abrir a cobrança agora?',
+                confirmButtonText: 'Abrir cobrança',
+                cancelButtonText: 'Continuar no VendMaster'
+              });
+
+              if (openPayment) {
+                window.location.href = paymentUrl;
+                return;
+              }
+
+              return;
+            }
 
             setPaymentResult(successMessage, 'success');
             window.AppAlerts?.success(successMessage);

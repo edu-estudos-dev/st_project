@@ -132,6 +132,38 @@
          </aside>
 
          <div class="dashboard-main">
+            <% if (isReadOnly) { %>
+               <section class="dashboard-panel dashboard-panel-primary" aria-label="Aviso de assinatura vencida">
+                  <div class="dashboard-panel-header">
+                     <div>
+                        <span class="dashboard-section-tag">Assinatura</span>
+                        <h2>Assinatura vencida</h2>
+                     </div>
+                     <p>O sistema está em modo somente leitura até a regularização do pagamento.</p>
+                  </div>
+
+                  <div class="dashboard-shortcuts">
+                     <a href="/assinatura/produtos" class="dashboard-shortcut dashboard-shortcut-amber">
+                        <div class="dashboard-shortcut-top">
+                           <span class="dashboard-shortcut-pill">Regularização</span>
+                           <span class="dashboard-shortcut-arrow">&rarr;</span>
+                        </div>
+                        <h3>Regularizar assinatura</h3>
+                        <p>Revise os dados de cobrança e prepare o pagamento para liberar novamente os cadastros e alterações.</p>
+                     </a>
+
+                     <a href="/assinatura/status" class="dashboard-shortcut dashboard-shortcut-violet">
+                        <div class="dashboard-shortcut-top">
+                           <span class="dashboard-shortcut-pill">Status</span>
+                           <span class="dashboard-shortcut-arrow">&rarr;</span>
+                        </div>
+                        <h3>Ver status da assinatura</h3>
+                        <p>Acompanhe o plano atual, dados de cobrança, vencimento e situação do pagamento.</p>
+                     </a>
+                  </div>
+               </section>
+            <% } %>
+
             <section class="dashboard-titlebar">
                <div class="dashboard-titlebar-copy dashboard-titlebar-copy--full">
                   <div class="dashboard-titlebar-main">
@@ -583,6 +615,32 @@
                guard += 1;
             }
          };
+
+         const assinaturaSomenteLeitura = <%= isReadOnly ? 'true' : 'false' %>;
+         const assinaturaAlertStorageKey = 'vendmaster-subscription-readonly-dashboard-shown';
+
+         if (assinaturaSomenteLeitura && window.sessionStorage.getItem(assinaturaAlertStorageKey) !== 'true') {
+            window.sessionStorage.setItem(assinaturaAlertStorageKey, 'true');
+
+            if (new URLSearchParams(window.location.search).has('success')) {
+               await sleep(2800);
+            }
+
+            await sleep(700);
+            await waitForSwalToClose();
+
+            const regularizarAssinatura = await window.AppAlerts?.confirm({
+               title: 'Assinatura vencida',
+               text: 'Sua assinatura está vencida. O sistema permanece em modo somente leitura até a regularização do pagamento.',
+               confirmButtonText: 'Regularizar agora',
+               cancelButtonText: 'Continuar em modo leitura'
+            });
+
+            if (regularizarAssinatura) {
+               window.location.href = '/assinatura/produtos';
+               return;
+            }
+         }
 
          const totalAlertas = <%= financialData.total || 0 %>;
          const proximos = <%= financialData.proximos?.length || 0 %>;
