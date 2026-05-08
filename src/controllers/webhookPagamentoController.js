@@ -1,4 +1,5 @@
 import PaymentEventModel from '../models/paymentEventModel.js';
+import { normalizeAsaasWebhookPayload } from '../services/asaasWebhookNormalizerService.js';
 
 function getHeaderValue(req, headerName) {
   return req.get(headerName) || req.headers[headerName.toLowerCase()] || null;
@@ -26,24 +27,8 @@ async function receberWebhookAsaas(req, res) {
       });
     }
 
-    const payload = req.body || {};
-
-    const eventType = payload.event || payload.eventType || 'UNKNOWN_EVENT';
-    const gatewayEventId = payload.id || payload.eventId || null;
-    const gatewayPaymentId = payload.payment?.id || payload.paymentId || null;
-    const gatewaySubscriptionId =
-      payload.subscription?.id || payload.subscriptionId || null;
-    const status = payload.payment?.status || payload.status || null;
-
-    const event = await PaymentEventModel.create({
-      provider: 'asaas',
-      eventType,
-      gatewayEventId,
-      gatewayPaymentId,
-      gatewaySubscriptionId,
-      status,
-      payload
-    });
+    const normalizedEvent = normalizeAsaasWebhookPayload(req.body || {});
+    const event = await PaymentEventModel.create(normalizedEvent);
 
     return res.status(200).json({
       received: true,
