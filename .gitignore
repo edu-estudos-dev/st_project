@@ -26,3 +26,7 @@ id_ed25519
 *.zip
 *.tar
 *.gz
+
+# Application logs
+/logs/
+*.log
