@@ -41,6 +41,7 @@ import adminAssinantesRoutes from './src/routes/adminAssinantesRoutes.js';
 import adminInteressadosRoutes from './src/routes/adminInteressadosRoutes.js';
 import assinaturaRoutes from './src/routes/assinaturaRoutes.js';
 import pagamentoRoutes from './src/routes/pagamentoRoutes.js';
+import webhookPagamentoRoutes from './src/routes/webhookPagamentoRoutes.js';
 
 import bolinhasSangriaRoutes from './src/routes/bolinhasRoutes.js';
 import consignadosRoutes from './src/routes/consignadosRoutes.js';
@@ -48,6 +49,7 @@ import receitaBolinhaRoutes from './src/routes/receitaBolinhaRoutes.js';
 import receitaConsignadosRoutes from './src/routes/receitaConsignadosRoutes.js';
 import peluciasRoutes from './src/routes/peluciasRoutes.js';
 import receitaPeluciaRoutes from './src/routes/receitaPeluciaRoutes.js';
+
 
 dotenv.config();
 
@@ -207,6 +209,7 @@ app.use(loginLogoutRoutes);
 app.use(homepageRoutes);
 app.use(blogRoutes);
 app.use(interessadosRoutes);
+app.use('/webhooks', webhookPagamentoRoutes);
 
 const requireAuthenticatedSubscription = [
   isAuthenticated,
