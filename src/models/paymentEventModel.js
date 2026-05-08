@@ -53,6 +53,37 @@ class PaymentEventModel {
     return result.rows[0] || null;
   }
 
+  async findByGatewayPaymentAndType(gatewayPaymentId, eventType, provider = 'asaas') {
+    if (!gatewayPaymentId || !eventType) return null;
+
+    const result = await connection.query(
+      `SELECT *
+       FROM payment_events
+       WHERE gateway_payment_id = $1
+         AND event_type = $2
+         AND provider = $3
+       LIMIT 1`,
+      [gatewayPaymentId, eventType, provider]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  async findDuplicate(normalizedEvent) {
+    if (normalizedEvent.gatewayEventId) {
+      return this.findByGatewayEventId(
+        normalizedEvent.gatewayEventId,
+        normalizedEvent.provider
+      );
+    }
+
+    return this.findByGatewayPaymentAndType(
+      normalizedEvent.gatewayPaymentId,
+      normalizedEvent.eventType,
+      normalizedEvent.provider
+    );
+  }
+
   async markAsProcessed(id) {
     const result = await connection.query(
       `UPDATE payment_events

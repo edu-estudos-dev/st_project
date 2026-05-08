@@ -332,6 +332,103 @@ class AssinanteModel {
 
     return this.findAdminById(id);
   }
+
+    async findByGatewayReference({
+    gatewayCustomerId = null,
+    gatewaySubscriptionId = null
+  }) {
+    await this.ensureBillingColumns();
+
+    if (!gatewayCustomerId && !gatewaySubscriptionId) {
+      return null;
+    }
+
+    const conditions = [];
+    const params = [];
+
+    if (gatewayCustomerId) {
+      params.push(gatewayCustomerId);
+      conditions.push(`gateway_customer_id = $${params.length}`);
+    }
+
+    if (gatewaySubscriptionId) {
+      params.push(gatewaySubscriptionId);
+      conditions.push(`gateway_subscription_id = $${params.length}`);
+    }
+
+    const result = await connection.query(
+      `SELECT
+        id,
+        user_id,
+        status_assinatura,
+        tipo_cobranca,
+        trial_inicio,
+        trial_fim,
+        data_ativacao,
+        data_vencimento,
+        data_limite_exclusao,
+        gateway_customer_id,
+        gateway_subscription_id,
+        billing_nome,
+        billing_cpf_cnpj,
+        billing_email,
+        billing_telefone,
+        produtos_habilitados,
+        plano_codigo,
+        plano_nome,
+        valor_mensal
+      FROM assinantes
+      WHERE ${conditions.join(' OR ')}
+      ORDER BY id ASC
+      LIMIT 1`,
+      params
+    );
+
+    return this.normalizeRow(result.rows[0]);
+  }
+
+  async activateAfterConfirmedPayment(id, {
+    paymentDate = null,
+    gatewaySubscriptionId = null
+  } = {}) {
+    if (!id) {
+      throw new Error('ID do assinante é obrigatório para ativar assinatura.');
+    }
+
+    const parsedPaymentDate = paymentDate ? new Date(paymentDate) : new Date();
+    const safePaymentDate = Number.isNaN(parsedPaymentDate.getTime())
+      ? new Date()
+      : parsedPaymentDate;
+
+    const result = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'ativo',
+         data_ativacao = COALESCE(data_ativacao, NOW()),
+         data_vencimento = $2::timestamptz + INTERVAL '30 days',
+         gateway_subscription_id = COALESCE($3, gateway_subscription_id),
+         updated_at = NOW()
+       WHERE id = $1
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         data_ativacao,
+         data_vencimento,
+         gateway_customer_id,
+         gateway_subscription_id,
+         plano_codigo,
+         plano_nome,
+         valor_mensal`,
+      [
+        id,
+        safePaymentDate.toISOString(),
+        gatewaySubscriptionId || null
+      ]
+    );
+
+    return result.rows[0] || null;
+  }
 }
 
 export default new AssinanteModel();
