@@ -2,227 +2,225 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title }) %>
 
-    <body class="list-page-body">
-        <%- include('../../partials/header') %>
-            <div class="page-spacer"></div>
+<body class="list-page-body">
+  <%- include('../../partials/header') %>
+  <div class="page-spacer"></div>
 
-            <div class="list-shell">
-                <%- include('../../partials/breadcrumb', { pageTitle: 'Eventos de Pagamento' }) %>
+  <div class="list-shell">
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Eventos de Pagamento' }) %>
 
-                    <section class="page-titlebar page-titlebar-neutral">
-                        <div class="page-titlebar-content">
-                            <span class="list-kicker"><i class="bi bi-receipt"></i> Cobrança</span>
-                            <h1>Eventos de pagamento</h1>
-                            <p>
-                                <strong>
-                                    <%= assinante.username %>
-                                </strong>
-                                · <%= assinante.email %>
-                            </p>
-                        </div>
+    <section class="page-titlebar page-titlebar-neutral">
+      <div class="page-titlebar-content">
+        <span class="list-kicker">
+          <i class="bi bi-receipt"></i>
+          Cobrança
+        </span>
+        <h1>Eventos de pagamento</h1>
+        <p>
+          <strong><%= assinante.username %></strong>
+          · <%= assinante.email %>
+        </p>
+      </div>
 
-                        <div class="page-titlebar-side">
-                            <div class="list-stat">
-                                <strong>Status atual</strong>
-                                <span>
-                                    <%= String(assinante.status_assinatura || '' ).toUpperCase() %>
-                                </span>
-                            </div>
-                        </div>
-                    </section>
+      <div class="page-titlebar-side">
+        <div class="list-stat">
+          <strong>Status atual</strong>
+          <span><%= String(assinante.status_assinatura || '').toUpperCase() %></span>
+        </div>
+      </div>
+    </section>
 
-                    <main class="list-stage">
-                        <section class="list-panel">
-                            <div class="list-toolbar">
-                                <div class="list-toolbar-copy">
-                                    <h2>Histórico recebido do Asaas</h2>
-                                    <p>Use esta tela para diagnosticar pagamento confirmado, vencido, deletado ou não
-                                        processado.</p>
-                                </div>
+    <main class="list-stage">
+      <section class="list-panel">
+        <div class="list-toolbar">
+          <div class="list-toolbar-copy">
+            <h2>Histórico de eventos de cobrança</h2>
+            <p>
+              Use esta tela para diagnosticar pagamentos confirmados, vencidos,
+              cancelados ou eventos ainda não processados.
+            </p>
+          </div>
 
-                                <div class="d-flex flex-wrap gap-2">
-                                    <a class="list-action" href="/admin/assinantes/<%= assinante.id %>/edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                        <span>Editar assinante</span>
-                                    </a>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="list-action" href="/admin/assinantes/<%= assinante.id %>/edit">
+              <i class="bi bi-pencil-square"></i>
+              <span>Editar assinante</span>
+            </a>
 
-                                    <a class="list-action" href="/admin/assinantes">
-                                        <i class="bi bi-arrow-left"></i>
-                                        <span>Voltar</span>
-                                    </a>
-                                </div>
-                            </div>
+            <a class="list-action" href="/admin/assinantes">
+              <i class="bi bi-arrow-left"></i>
+              <span>Voltar</span>
+            </a>
+          </div>
+        </div>
 
-                            <% if (!paymentEvents.length) { %>
-                                <div class="modern-note">
-                                    Nenhum evento de pagamento foi registrado para este assinante.
-                                </div>
-                                <% } else { %>
-                                    <div class="table-responsive">
-                                        <table class="table align-middle admin-payment-events-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Data</th>
-                                                    <th>Evento</th>
-                                                    <th>Status</th>
-                                                    <th>Payment ID</th>
-                                                    <th>Subscription ID</th>
-                                                    <th>Processado</th>
-                                                    <th>Payload</th>
-                                                </tr>
-                                            </thead>
+        <% if (!paymentEvents.length) { %>
+          <div class="modern-note">
+            Nenhum evento de pagamento foi registrado para este assinante.
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table align-middle admin-payment-events-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Evento</th>
+                  <th>Status</th>
+                  <th>ID do pagamento</th>
+                  <th>ID da assinatura</th>
+                  <th>Processado</th>
+                  <th>Dados técnicos</th>
+                </tr>
+              </thead>
 
-                                            <tbody>
-                                                <% paymentEvents.forEach((event)=> { %>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>
-                                                                <%= formatDateTime(event.created_at) %>
-                                                            </strong>
-                                                        </td>
+              <tbody>
+                <% paymentEvents.forEach((event) => { %>
+                  <tr>
+                    <td>
+                      <strong><%= formatDateTime(event.created_at) %></strong>
+                    </td>
 
-                                                        <td>
-                                                            <span class="admin-event-pill">
-                                                                <%= event.event_type || 'Não informado' %>
-                                                            </span>
-                                                        </td>
+                    <td>
+                      <span class="admin-event-pill">
+                        <%= event.event_type || 'Não informado' %>
+                      </span>
+                    </td>
 
-                                                        <td>
-                                                            <%= event.status || 'Não informado' %>
-                                                        </td>
+                    <td>
+                      <%= event.status || 'Não informado' %>
+                    </td>
 
-                                                        <td>
-                                                            <code><%= event.gateway_payment_id || '-' %></code>
-                                                        </td>
+                    <td>
+                      <code><%= event.gateway_payment_id || '-' %></code>
+                    </td>
 
-                                                        <td>
-                                                            <code><%= event.gateway_subscription_id || '-' %></code>
-                                                        </td>
+                    <td>
+                      <code><%= event.gateway_subscription_id || '-' %></code>
+                    </td>
 
-                                                        <td>
-                                                            <% if (event.processed_at) { %>
-                                                                <span class="admin-event-processed is-processed">
-                                                                    <i class="bi bi-check-circle"></i>
-                                                                    Sim
-                                                                </span>
-                                                                <small>
-                                                                    <%= formatDateTime(event.processed_at) %>
-                                                                </small>
-                                                                <% } else { %>
-                                                                    <span class="admin-event-processed is-pending">
-                                                                        <i class="bi bi-dash-circle"></i>
-                                                                        Não
-                                                                    </span>
-                                                                    <% } %>
-                                                        </td>
+                    <td>
+                      <% if (event.processed_at) { %>
+                        <span class="admin-event-processed is-processed">
+                          <i class="bi bi-check-circle"></i>
+                          Sim
+                        </span>
+                        <small>
+                          <%= formatDateTime(event.processed_at) %>
+                        </small>
+                      <% } else { %>
+                        <span class="admin-event-processed is-pending">
+                          <i class="bi bi-dash-circle"></i>
+                          Não
+                        </span>
+                      <% } %>
+                    </td>
 
-                                                        <td>
-                                                            <details class="admin-event-payload">
-                                                                <summary>Detalhes técnicos</summary>
-                                                                <pre><%= JSON.stringify(event.payload || {}, null, 2) %></pre>
-                                                            </details>
-                                                        </td>
-                                                    </tr>
-                                                    <% }) %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <% } %>
-                        </section>
-                    </main>
-            </div>
+                    <td>
+                      <details class="admin-event-payload">
+                        <summary>Detalhes técnicos</summary>
+                        <pre><%= JSON.stringify(event.payload || {}, null, 2) %></pre>
+                      </details>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
 
-            <style>
-                .admin-payment-events-table {
-                    margin-bottom: 0;
-                }
+  <style>
+    .admin-payment-events-table {
+      margin-bottom: 0;
+    }
 
-                .admin-payment-events-table th {
-                    color: #475569;
-                    font-size: 0.82rem;
-                    font-weight: 850;
-                    white-space: nowrap;
-                }
+    .admin-payment-events-table th {
+      color: #475569;
+      font-size: 0.82rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
 
-                .admin-payment-events-table td {
-                    color: #0f172a;
-                    font-size: 0.9rem;
-                    vertical-align: top;
-                }
+    .admin-payment-events-table td {
+      color: #0f172a;
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
 
-                .admin-payment-events-table code {
-                    color: #1d4ed8;
-                    font-size: 0.82rem;
-                    word-break: break-word;
-                    white-space: normal;
-                }
+    .admin-payment-events-table code {
+      color: #1d4ed8;
+      font-size: 0.82rem;
+      word-break: break-word;
+      white-space: normal;
+    }
 
-                .admin-event-pill {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 0.28rem 0.55rem;
-                    border-radius: 999px;
-                    background: #eff6ff;
-                    color: #1d4ed8;
-                    font-size: 0.78rem;
-                    font-weight: 850;
-                    white-space: nowrap;
-                }
+    .admin-event-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.28rem 0.55rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.78rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
 
-                .admin-event-processed {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.3rem;
-                    font-size: 0.82rem;
-                    font-weight: 850;
-                }
+    .admin-event-processed {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
 
-                .admin-event-processed.is-processed {
-                    color: #047857;
-                }
+    .admin-event-processed.is-processed {
+      color: #047857;
+    }
 
-                .admin-event-processed.is-pending {
-                    color: #92400e;
-                }
+    .admin-event-processed.is-pending {
+      color: #92400e;
+    }
 
-                .admin-event-payload summary {
-                    cursor: pointer;
-                    color: #1d4ed8;
-                    font-weight: 850;
-                    font-size: 0.85rem;
-                }
+    .admin-event-payload summary {
+      cursor: pointer;
+      color: #1d4ed8;
+      font-weight: 850;
+      font-size: 0.85rem;
+    }
 
-                .admin-event-payload pre {
-                    max-width: 520px;
-                    max-height: 280px;
-                    overflow: auto;
-                    margin-top: 0.65rem;
-                    padding: 0.8rem;
-                    border-radius: 14px;
-                    background: #0f172a;
-                    color: #e2e8f0;
-                    font-size: 0.78rem;
-                    line-height: 1.45;
-                }
+    .admin-event-payload pre {
+      max-width: 520px;
+      max-height: 280px;
+      overflow: auto;
+      margin-top: 0.65rem;
+      padding: 0.8rem;
+      border-radius: 14px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
 
-                @media (max-width: 768px) {
-                    .admin-event-payload pre {
-                        max-width: 78vw;
-                    }
-                }
-            </style>
+    @media (max-width: 768px) {
+      .admin-event-payload pre {
+        max-width: 78vw;
+      }
+    }
+  </style>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
       <% if (typeof success !== 'undefined' && success) { %>
-                        window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
+        window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
       <% } %>
 
       <% if (typeof error !== 'undefined' && error) { %>
-                        window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
+        window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");
       <% } %>
     });
-            </script>
-    </body>
-
+  </script>
+</body>
 </html>

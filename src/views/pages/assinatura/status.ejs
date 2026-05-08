@@ -98,7 +98,7 @@
         },
         cancelado: {
           title: 'Assinatura cancelada',
-          message: 'Sua assinatura foi cancelada por falta de regularização. Seus dados continuam preservados por enquanto. Reative a assinatura para voltar a usar o VendMaster.'
+          message: 'Sua assinatura foi cancelada por falta de regularização. Seus dados continuam preservados neste momento. Reative a assinatura para voltar a usar o VendMaster.'
         }
       };
 
@@ -119,7 +119,7 @@
         <h1>Status da assinatura</h1>
 
         <p>
-          Veja o plano contratado, as ferramentas habilitadas, os dados de cobrança e a preparação do pagamento.
+          Veja seu plano, as ferramentas habilitadas, os dados de cobrança e as opções de pagamento.
         </p>
       </div>
 
@@ -145,7 +145,7 @@
         <div class="assinatura-readonly-actions">
           <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern-secondary assinatura-light-button">
             <i class="bi bi-pencil-square"></i>
-            <span>Revisar cobrança</span>
+            <span>Revisar dados</span>
           </a>
 
           <button type="button" class="btn-modern" id="prepararPagamentoReadonlyBtn">
@@ -163,7 +163,7 @@
             <span class="form-section-tag">Plano atual</span>
             <h2><%= assinante?.plano_nome || 'Plano não informado' %></h2>
             <p>
-              Informações comerciais configuradas para este assinante.
+              Informações do plano vinculado à sua conta.
             </p>
           </div>
 
@@ -200,9 +200,9 @@
           <div class="form-card-header">
             <div>
               <span class="form-section-tag">Ferramentas</span>
-              <h2>Produtos liberados</h2>
+              <h2>Ferramentas liberadas</h2>
               <p>
-                Frentes operacionais disponíveis para este cliente.
+                Recursos disponíveis na sua assinatura.
               </p>
             </div>
           </div>
@@ -230,7 +230,7 @@
             <div class="assinatura-card-actions">
               <a href="/assinatura/produtos" class="btn-modern-secondary assinatura-light-button">
                 <i class="bi bi-grid-3x3-gap"></i>
-                <span>Gerenciar produtos</span>
+                <span>Gerenciar ferramentas</span>
               </a>
             </div>
           <% } %>
@@ -242,7 +242,7 @@
               <span class="form-section-tag">Cobrança</span>
               <h2>Dados de cobrança</h2>
               <p>
-                Dados que serão usados para preparar o pagamento.
+                Dados usados para gerar e identificar sua cobrança.
               </p>
             </div>
           </div>
@@ -300,8 +300,8 @@
             <span class="form-section-tag">Pagamento</span>
             <h2>Regularização do pagamento</h2>
             <p>
-              Escolha cartão para abrir o ambiente seguro do Asaas ou boleto para abrir a cobrança bancária.
-              Pix será disponibilizado em uma etapa futura do fluxo de assinatura.
+              Escolha cartão para abrir o ambiente seguro de pagamento ou boleto para abrir a cobrança bancária.
+              Pix será disponibilizado em uma próxima etapa do fluxo de assinatura.
             </p>
           </div>
 
@@ -313,7 +313,7 @@
               </strong>
               <span>
                 <% if (gatewayConfigured) { %>
-                  O ambiente de pagamento está pronto para processar a assinatura.
+                  O pagamento está pronto para ser processado com segurança.
                 <% } else { %>
                   A cobrança ainda não está disponível. Entre em contato com o suporte.
                 <% } %>
@@ -340,7 +340,7 @@
               <span class="assinatura-payment-badge">Recomendado</span>
               <strong>Cartão de crédito</strong>
               <small>
-                Abre a cobrança no ambiente seguro do Asaas para informar os dados do cartão.
+                Abre uma página segura para informar os dados do cartão.
               </small>
             </div>
           </label>
@@ -375,14 +375,14 @@
               <span class="assinatura-payment-badge is-ready">Disponível agora</span>
               <strong>Boleto</strong>
               <small>
-                Cobrança atual da assinatura. A compensação pode levar mais tempo após o pagamento.
+                Abre a cobrança bancária da assinatura. A compensação pode levar mais tempo após o pagamento.
               </small>
             </div>
           </label>
         </div>
 
         <div class="modern-note assinatura-payment-hint">
-          O VendMaster libera o acesso automaticamente assim que o pagamento for confirmado pelo Asaas.
+          O VendMaster libera o acesso automaticamente assim que o pagamento for confirmado.
         </div>
 
         <div id="assinaturaPaymentResult" class="modern-note assinatura-payment-result" style="display: none;"></div>
@@ -395,7 +395,7 @@
 
           <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern-secondary assinatura-light-button">
             <i class="bi bi-pencil-square"></i>
-            <span>Revisar cobrança</span>
+            <span>Revisar dados</span>
           </a>
         </div>
       </section>
@@ -409,7 +409,7 @@
             <% } else if (statusAssinatura === 'vencido') { %>
               Regularize a assinatura para voltar a alterar dados no sistema.
             <% } else { %>
-              Use esta tela para revisar o estado do cliente antes de avançar para cobrança real.
+              Use esta tela para revisar sua assinatura, seus dados de cobrança e suas ferramentas habilitadas.
             <% } %>
           </span>
         </div>
@@ -425,7 +425,7 @@
           <% if (canManageSubscriptionProducts) { %>
             <a href="/assinatura/produtos" class="btn-modern">
               <i class="bi bi-grid-3x3-gap"></i>
-              <span>Produtos da operação</span>
+              <span>Ferramentas da assinatura</span>
             </a>
           <% } %>
         </div>
@@ -1171,7 +1171,7 @@
             const openPayment = await window.AppAlerts?.confirm({
               title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
               text: isCreditCard
-                ? 'A cobrança foi criada. Deseja abrir o ambiente seguro do Asaas para informar os dados do cartão?'
+                ? 'A cobrança foi criada. Deseja abrir a página segura para informar os dados do cartão?'
                 : 'A cobrança por boleto foi localizada. Deseja abrir a cobrança agora?',
               confirmButtonText: 'Abrir cobrança',
               cancelButtonText: 'Continuar no VendMaster'

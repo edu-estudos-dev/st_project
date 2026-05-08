@@ -171,7 +171,7 @@
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="data_limite_exclusao">Limite exclusão</label>
+              <label class="form-label" for="data_limite_exclusao">Limite futuro de retenção</label>
               <input
                 class="form-control"
                 type="date"
@@ -179,10 +179,11 @@
                 name="data_limite_exclusao"
                 value="<%= formatDateInput(assinante.data_limite_exclusao) %>"
               >
+              <small class="modern-note">Campo reservado para política futura. Não exclui dados automaticamente.</small>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label" for="gateway_customer_id">Gateway customer ID</label>
+              <label class="form-label" for="gateway_customer_id">ID do cliente na cobrança</label>
               <input
                 class="form-control"
                 type="text"
@@ -190,10 +191,11 @@
                 name="gateway_customer_id"
                 value="<%= assinante.gateway_customer_id || '' %>"
               >
+              <small class="modern-note">Identificador usado na integração de pagamento.</small>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label" for="gateway_subscription_id">Gateway subscription ID</label>
+              <label class="form-label" for="gateway_subscription_id">ID da assinatura na cobrança</label>
               <input
                 class="form-control"
                 type="text"
@@ -201,6 +203,7 @@
                 name="gateway_subscription_id"
                 value="<%= assinante.gateway_subscription_id || '' %>"
               >
+              <small class="modern-note">Identificador usado para localizar a assinatura no provedor de pagamento.</small>
             </div>
           </div>
 

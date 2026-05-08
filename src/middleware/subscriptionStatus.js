@@ -119,7 +119,7 @@ export const requireWritableSubscription = (req, res, next) => {
     }
 
     if (READ_ACCESS_STATUSES.has(status)) {
-        return deny(req, res, 403, 'Assinatura em modo somente leitura. Regularize para alterar dados.');
+        return deny(req, res, 403, 'Assinatura em modo de consulta. Regularize para voltar a alterar dados.');
     }
 
     if (BILLING_ONLY_STATUSES.has(status)) {

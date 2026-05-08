@@ -10,25 +10,25 @@
     <% const canManageProducts = assinante?.status_assinatura === 'trial'; %>
     <% const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj); %>
 
-    <%- include('../../partials/breadcrumb', { pageTitle: 'Produtos da Operação' }) %>
+    <%- include('../../partials/breadcrumb', { pageTitle: 'Ferramentas da Assinatura' }) %>
 
     <section class="page-titlebar page-titlebar-neutral">
       <div class="page-titlebar-content">
         <span class="form-kicker"><i class="bi bi-grid-3x3-gap"></i> Assinatura</span>
-        <h1>Produtos da operação</h1>
+        <h1>Ferramentas da assinatura</h1>
         <p>
           <% if (canManageProducts) { %>
             Durante o trial, ajuste quais frentes deseja testar no sistema.
           <% } else { %>
-            As ferramentas liberadas seguem o plano contratado e são alteradas pelo administrador.
+            As ferramentas liberadas seguem o plano contratado e só podem ser alteradas mediante ajuste do plano.
           <% } %>
         </p>
       </div>
 
       <div class="page-titlebar-side">
         <div class="page-titlebar-stat">
-          <strong>Produtos</strong>
-          <span><%= assinante?.produtos_habilitados_lista?.length || 0 %> habilitado(s)</span>
+          <strong>Ferramentas</strong>
+          <span><%= assinante?.produtos_habilitados_lista?.length || 0 %> habilitada(s)</span>
         </div>
       </div>
     </section>
@@ -64,7 +64,7 @@
 
           <small class="modern-note">
             <% if (canManageProducts) { %>
-              Se adicionar uma frente nova, depois marque esse produto nos estabelecimentos em que ele existe.
+              Se adicionar uma frente nova, depois marque essa ferramenta nos estabelecimentos em que ela existe.
             <% } else { %>
               Para incluir ou remover ferramentas, fale com o suporte para ajustar seu plano.
             <% } %>
@@ -78,7 +78,7 @@
               <h2>Dados de cobrança</h2>
               <p>
                 Informe ou revise os dados usados para preparar a cobrança da assinatura.
-                Cartão e boleto já podem ser usados para regularização. Pix será liberado quando o serviço estiver disponível.
+                Cartão e boleto já podem ser usados para regularização. Pix será disponibilizado em uma próxima etapa do fluxo de assinatura.
               </p>
             </div>
           </div>
@@ -110,7 +110,7 @@
                 <span class="assinatura-products-payment-badge">Recomendado</span>
                 <strong>Cartão de crédito</strong>
                 <small>
-                  Abre a cobrança no ambiente seguro do Asaas para informar os dados do cartão.
+                  Abre uma página segura para informar os dados do cartão.
                 </small>
               </div>
             </label>
@@ -121,10 +121,10 @@
               </div>
 
               <div>
-                <span class="assinatura-products-payment-badge is-neutral">Indisponível</span>
+                <span class="assinatura-products-payment-badge is-neutral">Em breve</span>
                 <strong>Pix</strong>
                 <small>
-                  Temporariamente indisponível no Asaas. Será liberado assim que o serviço voltar.
+                  Ainda não disponível neste fluxo. Quando for liberado, tende a ser uma opção de confirmação mais rápida.
                 </small>
               </div>
             </div>
@@ -145,14 +145,14 @@
                 <span class="assinatura-products-payment-badge is-ready">Disponível agora</span>
                 <strong>Boleto</strong>
                 <small>
-                  Cobrança atual da assinatura. A compensação pode levar mais tempo após o pagamento.
+                  Abre a cobrança bancária da assinatura. A compensação pode levar mais tempo após o pagamento.
                 </small>
               </div>
             </label>
           </div>
 
           <div class="modern-note assinatura-products-payment-hint">
-            Escolha cartão para abrir a cobrança no ambiente seguro do Asaas ou boleto para gerar a cobrança bancária.
+            Escolha cartão para abrir a página segura de pagamento ou boleto para abrir a cobrança bancária.
           </div>
 
           <div
@@ -198,7 +198,7 @@
             <% if (canManageProducts) { %>
               <button type="submit" class="btn-modern">
                 <i class="bi bi-check2-circle"></i>
-                <span>Salvar produtos</span>
+                <span>Salvar ferramentas</span>
               </button>
             <% } %>
           </div>
@@ -399,7 +399,7 @@
 
           if (!hasProduct) {
             event.preventDefault();
-            window.AppAlerts?.warning('Selecione pelo menos um produto para sua operação.');
+            window.AppAlerts?.warning('Selecione pelo menos uma ferramenta para sua operação.');
           }
         });
       }
@@ -417,7 +417,7 @@
           try {
             const selectedBillingType = getSelectedBillingType();
 
-           const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
             const response = await fetch('/pagamentos/iniciar', {
               method: 'POST',
@@ -474,7 +474,7 @@
               const openPayment = await window.AppAlerts?.confirm({
                 title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
                 text: isCreditCard
-                  ? 'A cobrança foi criada. Deseja abrir o ambiente seguro do Asaas para informar os dados do cartão?'
+                  ? 'A cobrança foi criada. Deseja abrir a página segura para informar os dados do cartão?'
                   : 'A cobrança por boleto foi localizada. Deseja abrir a cobrança agora?',
                 confirmButtonText: 'Abrir cobrança',
                 cancelButtonText: 'Continuar no VendMaster'

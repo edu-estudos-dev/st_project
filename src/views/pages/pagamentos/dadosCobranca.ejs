@@ -336,8 +336,7 @@
           <h1>Dados de cobrança</h1>
 
           <p>
-            Informe os dados que serão usados para preparar o pagamento da assinatura.
-            Enquanto o gateway não estiver configurado, o VendMaster apenas valida e salva essas informações.
+            Informe os dados que serão usados para identificar sua cobrança e preparar o pagamento da assinatura.
           </p>
         </div>
       </section>
@@ -346,7 +345,7 @@
         <div class="billing-card-header">
           <h2>Identificação do pagador</h2>
           <p>
-            Estes dados serão usados futuramente para criar o cliente no gateway de pagamento e iniciar a cobrança.
+            Estes dados ajudam o VendMaster a gerar a cobrança correta da sua assinatura.
           </p>
         </div>
 
@@ -354,9 +353,9 @@
           <div class="billing-info-box">
             <i class="bi bi-info-circle"></i>
             <div>
-              <strong>Sem cobrança real neste momento.</strong>
+              <strong>Dados necessários para cobrança.</strong>
               <span>
-                Esta tela apenas salva os dados de cobrança no VendMaster. A criação de cobrança ou checkout será feita em uma etapa posterior.
+                Preencha ou revise as informações abaixo antes de preparar o pagamento por cartão ou boleto.
               </span>
             </div>
           </div>
@@ -372,7 +371,7 @@
                   name="billing_nome"
                   autocomplete="name"
                   value="<%= billingData?.billing_nome || '' %>"
-                  placeholder="Ex.: Cliente Teste VendMaster"
+                  placeholder="Ex.: Empresa Exemplo LTDA"
                   required
                 >
                 <small class="billing-help-text">
@@ -437,23 +436,23 @@
               </div>
 
               <div class="billing-gateway-field">
-                <label>Status do gateway</label>
+                <label>Status da cobrança</label>
                 <input
                   type="text"
                   class="form-control"
-                  value="<%= gatewayConfigured ? 'Configurado' : 'Não configurado' %>"
+                  value="<%= gatewayConfigured ? 'Disponível' : 'Pendente' %>"
                   disabled
                 >
 
                 <% if (gatewayConfigured) { %>
                   <span class="billing-gateway-badge is-ready">
                     <i class="bi bi-check2-circle"></i>
-                    Gateway configurado
+                    Cobrança disponível
                   </span>
                 <% } else { %>
                   <span class="billing-gateway-badge is-pending">
                     <i class="bi bi-exclamation-triangle"></i>
-                    Gateway pendente
+                    Cobrança pendente
                   </span>
                 <% } %>
               </div>
@@ -467,7 +466,7 @@
 
               <button type="button" class="btn btn-outline-primary" id="startPaymentButton">
                 <i class="bi bi-arrow-right-circle me-1"></i>
-                <span>Testar início do pagamento</span>
+                <span>Preparar pagamento</span>
               </button>
 
               <a href="/assinatura/status" class="btn btn-outline-secondary">
@@ -761,7 +760,7 @@
 
         clearStatus();
         setButtonLoading(startPaymentButton, true, 'Preparando...');
-        showStatus('warning', 'Preparando pagamento...', 'Validando dados de cobrança e verificando a configuração do gateway.');
+        showStatus('warning', 'Preparando pagamento...', 'Validando os dados de cobrança antes de abrir a cobrança.');
 
         try {
           const response = await fetch('/pagamentos/iniciar', {
@@ -774,13 +773,13 @@
           const data = await parseJsonResponse(response);
 
           if (!response.ok || !data.success) {
-            throw new Error(data.message || 'Não foi possível iniciar o pagamento.');
+            throw new Error(data.message || 'Não foi possível preparar o pagamento.');
           }
 
           if (data.needsGatewayConfiguration) {
-            const message = data.message || 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+            const message = data.message || 'Dados de cobrança válidos. A cobrança ainda não está disponível para esta assinatura.';
 
-            showStatus('warning', 'Gateway ainda pendente.', message);
+            showStatus('warning', 'Cobrança pendente.', message);
             window.AppAlerts?.warning(message);
             return;
           }
@@ -790,7 +789,7 @@
           showStatus('success', 'Pagamento preparado.', message);
           window.AppAlerts?.success(message);
         } catch (error) {
-          const message = error.message || 'Erro ao iniciar pagamento.';
+          const message = error.message || 'Erro ao preparar pagamento.';
 
           showStatus('error', 'Erro ao preparar pagamento.', message);
           window.AppAlerts?.error(message);

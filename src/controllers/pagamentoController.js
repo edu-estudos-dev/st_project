@@ -175,7 +175,7 @@ async function ensureAsaasCustomerForAssinante(assinante) {
   const customer = await createCustomer(buildAsaasCustomerPayload(assinante));
 
   if (!customer?.id) {
-    throw new Error('Asaas não retornou o ID do customer criado.');
+    throw new Error('Provedor de pagamento não retornou o ID do cliente criado.');
   }
 
   await AssinanteModel.updateGatewayCustomerId(assinante.id, customer.id);
@@ -199,7 +199,7 @@ async function ensureAsaasSubscriptionForAssinante(assinante, customerId) {
   );
 
   if (!subscription?.id) {
-    throw new Error('Asaas não retornou o ID da assinatura criada.');
+    throw new Error('Provedor de pagamento não retornou o ID da assinatura criada.');
   }
 
   await AssinanteModel.updateGatewaySubscriptionId(
@@ -303,7 +303,7 @@ async function prepararPagamentoBoleto({
     success: true,
     message: payment?.paymentUrl
       ? 'Boleto preparado com sucesso. Abra a cobrança para concluir a regularização.'
-      : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no Asaas.',
+      : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no momento.',
     provider: gatewayConfig.provider,
     environment: gatewayConfig.environment,
     gatewayConfigured: true,
@@ -331,7 +331,7 @@ async function prepararPagamentoPix({
   );
 
   if (!pixPayment?.id) {
-    throw new Error('Asaas não retornou o ID da cobrança Pix criada.');
+    throw new Error('Provedor de pagamento não retornou o ID da cobrança Pix criada.');
   }
 
   let pix = null;
@@ -355,7 +355,7 @@ async function prepararPagamentoPix({
     success: true,
     message: hasPixQrCode
       ? 'Pix gerado com sucesso. Pague pelo QR Code ou pelo Pix copia e cola para regularizar a assinatura.'
-      : 'Cobrança Pix criada com sucesso. Abra a cobrança para concluir o pagamento no ambiente do Asaas.',
+      : 'Cobrança Pix criada com sucesso. Abra a cobrança para concluir o pagamento.',
     provider: gatewayConfig.provider,
     environment: gatewayConfig.environment,
     gatewayConfigured: true,
@@ -385,7 +385,7 @@ async function prepararPagamentoCartao({
   );
 
   if (!creditCardPayment?.id) {
-    throw new Error('Asaas não retornou o ID da cobrança por cartão criada.');
+    throw new Error('Provedor de pagamento não retornou o ID da cobrança por cartão criada.');
   }
 
   const payment = buildPaymentResponse(creditCardPayment);
@@ -393,8 +393,8 @@ async function prepararPagamentoCartao({
   return {
     success: true,
     message: payment?.paymentUrl
-      ? 'Cobrança por cartão preparada com sucesso. Abra a cobrança para informar os dados do cartão no ambiente seguro do Asaas.'
-      : 'Cobrança por cartão criada, mas nenhum link de pagamento foi retornado pelo Asaas.',
+      ? 'Cobrança por cartão preparada com sucesso. Abra a página segura para informar os dados do cartão.'
+      : 'Cobrança por cartão criada, mas nenhum link de pagamento foi retornado no momento.',
     provider: gatewayConfig.provider,
     environment: gatewayConfig.environment,
     gatewayConfigured: true,
@@ -564,7 +564,7 @@ async function iniciarPagamento(req, res) {
       return res.status(200).json({
         success: true,
         message:
-          'Dados de cobrança validados. A cobrança ainda não está disponível para este ambiente.',
+          'Dados de cobrança validados. A cobrança ainda não está disponível para esta assinatura.',
         provider: gatewayConfig.provider,
         environment: gatewayConfig.environment,
         gatewayConfigured: false,
@@ -613,7 +613,7 @@ async function iniciarPagamento(req, res) {
 
     return res.status(500).json({
       success: false,
-      message: error.message || 'Erro ao preparar fluxo de pagamento.'
+      message: 'Não foi possível preparar o pagamento. Tente novamente em alguns instantes.'
     });
   }
 }

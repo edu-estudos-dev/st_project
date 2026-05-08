@@ -139,7 +139,7 @@
                         <span class="dashboard-section-tag">Assinatura</span>
                         <h2>Assinatura vencida</h2>
                      </div>
-                     <p>O sistema está em modo somente leitura até a regularização do pagamento.</p>
+                     <p>Por enquanto, o sistema permanece em modo de consulta até a regularização do pagamento.</p>
                   </div>
 
                   <div class="dashboard-shortcuts">
@@ -631,7 +631,7 @@
 
             const regularizarAssinatura = await window.AppAlerts?.confirm({
                title: 'Assinatura vencida',
-               text: 'Sua assinatura está vencida. O sistema permanece em modo somente leitura até a regularização do pagamento.',
+               text: 'Sua assinatura está vencida. Por enquanto, o sistema permanece em modo de consulta até a regularização do pagamento.',
                confirmButtonText: 'Regularizar agora',
                cancelButtonText: 'Continuar em modo leitura'
             });
