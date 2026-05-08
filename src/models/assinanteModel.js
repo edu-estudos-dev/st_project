@@ -94,14 +94,18 @@ class AssinanteModel {
     );
   }
 
-  async expireAllOverdueSubscriptionsForMaintenance() {
+    async expireAllOverdueSubscriptionsForMaintenance() {
     await this.ensureProdutosHabilitadosColumn();
     await this.ensureBillingColumns();
 
-    const result = await connection.query(
+    const expiredResult = await connection.query(
       `UPDATE assinantes
        SET
          status_assinatura = 'vencido',
+         data_vencimento = CASE
+           WHEN status_assinatura = 'trial' THEN COALESCE(data_vencimento, trial_fim)
+           ELSE data_vencimento
+         END,
          updated_at = NOW()
        WHERE status_assinatura IN ('trial', 'ativo')
          AND (
@@ -132,7 +136,73 @@ class AssinanteModel {
          updated_at`
     );
 
-    return result.rows.map(row => this.normalizeRow(row));
+    const cancelledResult = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'cancelado',
+         updated_at = NOW()
+       WHERE status_assinatura IN ('vencido', 'bloqueado')
+         AND COALESCE(data_vencimento, trial_fim) IS NOT NULL
+         AND COALESCE(data_vencimento, trial_fim) < NOW() - INTERVAL '30 days'
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         tipo_cobranca,
+         trial_inicio,
+         trial_fim,
+         data_ativacao,
+         data_vencimento,
+         data_limite_exclusao,
+         gateway_customer_id,
+         gateway_subscription_id,
+         billing_nome,
+         billing_cpf_cnpj,
+         billing_email,
+         billing_telefone,
+         produtos_habilitados,
+         plano_codigo,
+         plano_nome,
+         valor_mensal,
+         updated_at`
+    );
+
+    const blockedResult = await connection.query(
+      `UPDATE assinantes
+       SET
+         status_assinatura = 'bloqueado',
+         updated_at = NOW()
+       WHERE status_assinatura = 'vencido'
+         AND COALESCE(data_vencimento, trial_fim) IS NOT NULL
+         AND COALESCE(data_vencimento, trial_fim) < NOW() - INTERVAL '3 days'
+       RETURNING
+         id,
+         user_id,
+         status_assinatura,
+         tipo_cobranca,
+         trial_inicio,
+         trial_fim,
+         data_ativacao,
+         data_vencimento,
+         data_limite_exclusao,
+         gateway_customer_id,
+         gateway_subscription_id,
+         billing_nome,
+         billing_cpf_cnpj,
+         billing_email,
+         billing_telefone,
+         produtos_habilitados,
+         plano_codigo,
+         plano_nome,
+         valor_mensal,
+         updated_at`
+    );
+
+    return {
+      expiredSubscriptions: expiredResult.rows.map(row => this.normalizeRow(row)),
+      blockedSubscriptions: blockedResult.rows.map(row => this.normalizeRow(row)),
+      cancelledSubscriptions: cancelledResult.rows.map(row => this.normalizeRow(row))
+    };
   }
 
   async findById(id) {

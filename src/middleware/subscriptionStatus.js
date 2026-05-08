@@ -3,12 +3,26 @@ import { getAuthCookieName, getClearAuthCookieOptions } from '../utilities/authT
 import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
 const FULL_ACCESS_STATUSES = new Set(['trial', 'ativo']);
-const READ_ACCESS_STATUSES = new Set(['trial', 'ativo', 'vencido', 'cancelado']);
+const READ_ACCESS_STATUSES = new Set(['trial', 'ativo', 'vencido']);
+const BILLING_ONLY_STATUSES = new Set(['bloqueado', 'cancelado']);
+
+const BILLING_REGULARIZATION_PATHS = [
+    '/assinatura',
+    '/pagamentos'
+];
 
 const isJsonRequest = (req) => {
     return req.xhr
         || req.get('x-requested-with') === 'XMLHttpRequest'
         || req.get('accept')?.includes('application/json');
+};
+
+const isBillingRegularizationPath = (req) => {
+    const path = req.baseUrl || req.path || req.originalUrl || '';
+
+    return BILLING_REGULARIZATION_PATHS.some((allowedPath) =>
+        path === allowedPath || path.startsWith(`${allowedPath}/`)
+    );
 };
 
 const deny = (req, res, statusCode, message, redirectPath = '/painel', clearAuthCookie = false) => {
@@ -63,11 +77,38 @@ export const requireReadableSubscription = (req, res, next) => {
         return next();
     }
 
-    if (status === 'bloqueado') {
-        return deny(req, res, 403, 'Assinatura bloqueada. Entre em contato com o suporte.', '/login', true);
+    if (BILLING_ONLY_STATUSES.has(status) && isBillingRegularizationPath(req)) {
+        return next();
     }
 
-    return deny(req, res, 403, 'Assinatura indisponivel. Entre em contato com o suporte.', '/login', true);
+    if (status === 'bloqueado') {
+        return deny(
+            req,
+            res,
+            403,
+            'Assinatura bloqueada. Regularize o pagamento para voltar a usar o sistema.',
+            '/assinatura/status'
+        );
+    }
+
+    if (status === 'cancelado') {
+        return deny(
+            req,
+            res,
+            403,
+            'Assinatura cancelada. Acesse a área de assinatura para verificar a possibilidade de reativação.',
+            '/assinatura/status'
+        );
+    }
+
+    return deny(
+        req,
+        res,
+        403,
+        'Assinatura indisponivel. Entre em contato com o suporte.',
+        '/login',
+        true
+    );
 };
 
 export const requireWritableSubscription = (req, res, next) => {
@@ -79,6 +120,16 @@ export const requireWritableSubscription = (req, res, next) => {
 
     if (READ_ACCESS_STATUSES.has(status)) {
         return deny(req, res, 403, 'Assinatura em modo somente leitura. Regularize para alterar dados.');
+    }
+
+    if (BILLING_ONLY_STATUSES.has(status)) {
+        return deny(
+            req,
+            res,
+            403,
+            'Assinatura sem acesso às ferramentas. Regularize para voltar a usar o sistema.',
+            '/assinatura/status'
+        );
     }
 
     return requireReadableSubscription(req, res, next);
