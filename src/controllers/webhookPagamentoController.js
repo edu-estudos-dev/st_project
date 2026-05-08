@@ -1,7 +1,31 @@
 import PaymentEventModel from '../models/paymentEventModel.js';
 
+function getHeaderValue(req, headerName) {
+  return req.get(headerName) || req.headers[headerName.toLowerCase()] || null;
+}
+
+function isWebhookTokenValid(req) {
+  const expectedToken = process.env.ASAAS_WEBHOOK_TOKEN;
+
+  if (!expectedToken) {
+    console.error('ASAAS_WEBHOOK_TOKEN não configurado no ambiente.');
+    return false;
+  }
+
+  const receivedToken = getHeaderValue(req, 'asaas-access-token');
+
+  return receivedToken === expectedToken;
+}
+
 async function receberWebhookAsaas(req, res) {
   try {
+    if (!isWebhookTokenValid(req)) {
+      return res.status(401).json({
+        received: false,
+        message: 'Webhook não autorizado.'
+      });
+    }
+
     const payload = req.body || {};
 
     const eventType = payload.event || payload.eventType || 'UNKNOWN_EVENT';
