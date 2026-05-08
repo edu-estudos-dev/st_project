@@ -14,8 +14,15 @@
       <div class="page-titlebar-content">
         <span class="form-kicker"><i class="bi bi-grid-3x3-gap"></i> Assinatura</span>
         <h1>Produtos da operação</h1>
-        <p><% if (canManageProducts) { %>Durante o trial, ajuste quais frentes deseja testar no sistema.<% } else { %>As ferramentas liberadas seguem o plano contratado e sao alteradas pelo administrador.<% } %></p>
+        <p>
+          <% if (canManageProducts) { %>
+            Durante o trial, ajuste quais frentes deseja testar no sistema.
+          <% } else { %>
+            As ferramentas liberadas seguem o plano contratado e sao alteradas pelo administrador.
+          <% } %>
+        </p>
       </div>
+
       <div class="page-titlebar-side">
         <div class="page-titlebar-stat">
           <strong>Produtos</strong>
@@ -52,7 +59,43 @@
               </label>
             <% }) %>
           </div>
-          <small class="modern-note"><% if (canManageProducts) { %>Se adicionar uma frente nova, depois marque esse produto nos estabelecimentos em que ele existe.<% } else { %>Para incluir ou remover ferramentas, fale com o suporte para ajustar seu plano.<% } %></small>
+
+          <small class="modern-note">
+            <% if (canManageProducts) { %>
+              Se adicionar uma frente nova, depois marque esse produto nos estabelecimentos em que ele existe.
+            <% } else { %>
+              Para incluir ou remover ferramentas, fale com o suporte para ajustar seu plano.
+            <% } %>
+          </small>
+        </section>
+
+        <section class="form-card">
+          <div class="form-card-header">
+            <div>
+              <span class="form-section-tag">Cobrança</span>
+              <h2>Dados de cobrança</h2>
+              <p>
+                Informe ou revise os dados que serão usados para preparar o pagamento da assinatura.
+                Nenhuma cobrança real será criada enquanto o gateway não estiver configurado.
+              </p>
+            </div>
+          </div>
+
+          <div class="modern-note" style="display: block; margin-bottom: 1rem;">
+            <strong>Status atual:</strong>
+            <% if (assinante?.billing_nome && assinante?.billing_cpf_cnpj) { %>
+              dados de cobrança cadastrados.
+            <% } else { %>
+              dados de cobrança ainda pendentes.
+            <% } %>
+          </div>
+
+          <div class="form-actions-buttons" style="justify-content: flex-start;">
+            <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern">
+              <i class="bi bi-credit-card-2-front"></i>
+              <span>Preencher dados de cobrança</span>
+            </a>
+          </div>
         </section>
 
         <section class="form-actions-bar">
@@ -60,11 +103,13 @@
             <strong>Salvar configuração</strong>
             <span>Os menus serão atualizados a partir da próxima navegação.</span>
           </div>
+
           <div class="form-actions-buttons">
             <a href="/painel" class="btn-modern-secondary">
               <i class="bi bi-arrow-left"></i>
               <span>Voltar</span>
             </a>
+
             <% if (canManageProducts) { %>
               <button type="submit" class="btn-modern">
                 <i class="bi bi-check2-circle"></i>
@@ -81,6 +126,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('produtosAssinaturaForm').addEventListener('submit', (event) => {
         const hasProduct = Array.from(document.querySelectorAll('input[name="produtos_habilitados"]')).some((checkbox) => checkbox.checked);
+
         if (!hasProduct) {
           event.preventDefault();
           window.AppAlerts?.warning('Selecione pelo menos um produto para sua operação.');
