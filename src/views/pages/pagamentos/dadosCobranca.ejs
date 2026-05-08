@@ -165,11 +165,70 @@
       border-radius: 14px;
       border-color: rgba(148, 163, 184, 0.45);
       padding: 0.78rem 0.9rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     }
 
     .billing-form .form-control:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+    }
+
+    .billing-form .form-control.is-valid {
+      border-color: rgba(16, 185, 129, 0.75);
+      background-color: #f0fdf4;
+    }
+
+    .billing-form .form-control.is-invalid {
+      border-color: rgba(239, 68, 68, 0.8);
+      background-color: #fff7f7;
+    }
+
+    .billing-help-text {
+      display: block;
+      margin-top: 0.35rem;
+      color: #64748b;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+
+    .billing-field-error {
+      display: none;
+      margin-top: 0.35rem;
+      color: #b91c1c;
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .billing-field-error.is-visible {
+      display: block;
+    }
+
+    .billing-gateway-field {
+      position: relative;
+    }
+
+    .billing-gateway-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.45rem;
+      padding: 0.42rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .billing-gateway-badge.is-ready {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid rgba(16, 185, 129, 0.28);
+    }
+
+    .billing-gateway-badge.is-pending {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid rgba(245, 158, 11, 0.28);
     }
 
     .billing-actions {
@@ -194,7 +253,19 @@
     }
 
     .billing-status.is-visible {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+    }
+
+    .billing-status i {
+      font-size: 1.1rem;
+      margin-top: 0.13rem;
+    }
+
+    .billing-status strong {
       display: block;
+      margin-bottom: 0.15rem;
     }
 
     .billing-status-success {
@@ -300,6 +371,10 @@
                   placeholder="Ex.: Cliente Teste VendMaster"
                   required
                 >
+                <small class="billing-help-text">
+                  Use o nome do responsável ou a razão social que será vinculada à cobrança.
+                </small>
+                <small class="billing-field-error" id="billing_nome_error"></small>
               </div>
 
               <div>
@@ -310,10 +385,15 @@
                   id="billing_cpf_cnpj"
                   name="billing_cpf_cnpj"
                   inputmode="numeric"
+                  maxlength="18"
                   value="<%= billingData?.billing_cpf_cnpj || '' %>"
                   placeholder="Ex.: 111.444.777-35"
                   required
                 >
+                <small class="billing-help-text">
+                  Digite somente números; a formatação será aplicada automaticamente.
+                </small>
+                <small class="billing-field-error" id="billing_cpf_cnpj_error"></small>
               </div>
 
               <div>
@@ -327,6 +407,10 @@
                   value="<%= billingData?.billing_email || '' %>"
                   placeholder="cliente@empresa.com.br"
                 >
+                <small class="billing-help-text">
+                  Opcional, mas recomendado para avisos de pagamento.
+                </small>
+                <small class="billing-field-error" id="billing_email_error"></small>
               </div>
 
               <div>
@@ -337,12 +421,18 @@
                   id="billing_telefone"
                   name="billing_telefone"
                   autocomplete="tel"
+                  inputmode="numeric"
+                  maxlength="15"
                   value="<%= billingData?.billing_telefone || '' %>"
                   placeholder="(85) 99999-9999"
                 >
+                <small class="billing-help-text">
+                  Opcional. Informe DDD + número.
+                </small>
+                <small class="billing-field-error" id="billing_telefone_error"></small>
               </div>
 
-              <div>
+              <div class="billing-gateway-field">
                 <label>Status do gateway</label>
                 <input
                   type="text"
@@ -350,23 +440,35 @@
                   value="<%= gatewayConfigured ? 'Configurado' : 'Não configurado' %>"
                   disabled
                 >
+
+                <% if (gatewayConfigured) { %>
+                  <span class="billing-gateway-badge is-ready">
+                    <i class="bi bi-check2-circle"></i>
+                    Gateway configurado
+                  </span>
+                <% } else { %>
+                  <span class="billing-gateway-badge is-pending">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Gateway pendente
+                  </span>
+                <% } %>
               </div>
             </div>
 
             <div class="billing-actions">
               <button type="submit" class="btn btn-primary" id="saveBillingButton">
                 <i class="bi bi-check2-circle me-1"></i>
-                Salvar dados de cobrança
+                <span>Salvar dados de cobrança</span>
               </button>
 
               <button type="button" class="btn btn-outline-primary" id="startPaymentButton">
                 <i class="bi bi-arrow-right-circle me-1"></i>
-                Testar início do pagamento
+                <span>Testar início do pagamento</span>
               </button>
 
-              <a href="/assinatura" class="btn btn-outline-secondary">
+              <a href="/assinatura/produtos" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>
-                Voltar para assinatura
+                <span>Voltar para assinatura</span>
               </a>
             </div>
           </form>
@@ -378,108 +480,309 @@
   </main>
 
   <script>
-    const billingForm = document.getElementById('billingForm');
-    const saveBillingButton = document.getElementById('saveBillingButton');
-    const startPaymentButton = document.getElementById('startPaymentButton');
-    const billingStatus = document.getElementById('billingStatus');
+    document.addEventListener('DOMContentLoaded', () => {
+      const billingForm = document.getElementById('billingForm');
+      const saveBillingButton = document.getElementById('saveBillingButton');
+      const startPaymentButton = document.getElementById('startPaymentButton');
+      const billingStatus = document.getElementById('billingStatus');
 
-    function getCsrfToken() {
-      return document.querySelector('meta[name="csrf-token"]')?.content || '';
-    }
-
-    function showStatus(type, message) {
-      billingStatus.className = `billing-status billing-status-${type} is-visible`;
-      billingStatus.textContent = message;
-    }
-
-    function getFormPayload() {
-      const formData = new FormData(billingForm);
-
-      return {
-        billing_nome: String(formData.get('billing_nome') || '').trim(),
-        billing_cpf_cnpj: String(formData.get('billing_cpf_cnpj') || '').trim(),
-        billing_email: String(formData.get('billing_email') || '').trim(),
-        billing_telefone: String(formData.get('billing_telefone') || '').trim()
+      const fields = {
+        nome: document.getElementById('billing_nome'),
+        cpfCnpj: document.getElementById('billing_cpf_cnpj'),
+        email: document.getElementById('billing_email'),
+        telefone: document.getElementById('billing_telefone')
       };
-    }
 
-    async function parseJsonResponse(response) {
-      const data = await response.json().catch(() => null);
-
-      if (!data) {
-        throw new Error('Resposta inválida do servidor.');
+      function onlyDigits(value) {
+        return String(value || '').replace(/\D/g, '');
       }
 
-      return data;
-    }
+      function formatCpfCnpj(value) {
+        const digits = onlyDigits(value).slice(0, 14);
 
-    billingForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      saveBillingButton.disabled = true;
-      showStatus('warning', 'Salvando dados de cobrança...');
-
-      try {
-        const response = await fetch('/pagamentos/dados-cobranca', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'CSRF-Token': getCsrfToken()
-          },
-          body: JSON.stringify(getFormPayload())
-        });
-
-        const data = await parseJsonResponse(response);
-
-        if (!response.ok || !data.success) {
-          throw new Error(data.message || 'Não foi possível salvar os dados de cobrança.');
+        if (digits.length <= 11) {
+          return digits
+            .replace(/^(\d{3})(\d)/, '$1.$2')
+            .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
         }
 
-        showStatus('success', data.message || 'Dados de cobrança salvos com sucesso.');
-      } catch (error) {
-        showStatus('error', error.message || 'Erro ao salvar dados de cobrança.');
-      } finally {
-        saveBillingButton.disabled = false;
+        return digits
+          .replace(/^(\d{2})(\d)/, '$1.$2')
+          .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+          .replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3/$4')
+          .replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/, '$1.$2.$3/$4-$5');
       }
-    });
 
-    startPaymentButton.addEventListener('click', async () => {
-      startPaymentButton.disabled = true;
-      showStatus('warning', 'Validando dados e preparando pagamento...');
+      function formatPhone(value) {
+        const digits = onlyDigits(value).slice(0, 11);
 
-      try {
-        const response = await fetch('/pagamentos/iniciar', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'CSRF-Token': getCsrfToken()
-          },
-          body: JSON.stringify({})
-        });
-
-        const data = await parseJsonResponse(response);
-
-        if (!response.ok || !data.success) {
-          throw new Error(data.message || 'Não foi possível iniciar o pagamento.');
+        if (digits.length <= 2) {
+          return digits;
         }
 
-        if (data.needsGatewayConfiguration) {
-          showStatus(
-            'warning',
-            'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.'
-          );
+        if (digits.length <= 6) {
+          return digits.replace(/^(\d{2})(\d)/, '($1) $2');
+        }
+
+        if (digits.length <= 10) {
+          return digits.replace(/^(\d{2})(\d{4})(\d)/, '($1) $2-$3');
+        }
+
+        return digits.replace(/^(\d{2})(\d{5})(\d)/, '($1) $2-$3');
+      }
+
+      function showStatus(type, title, message) {
+        const icons = {
+          success: 'bi-check2-circle',
+          warning: 'bi-exclamation-triangle',
+          error: 'bi-x-circle'
+        };
+
+        billingStatus.className = `billing-status billing-status-${type} is-visible`;
+        billingStatus.innerHTML = `
+          <i class="bi ${icons[type] || icons.warning}"></i>
+          <div>
+            <strong>${title}</strong>
+            <span>${message}</span>
+          </div>
+        `;
+      }
+
+      function clearFieldError(input) {
+        if (!input) return;
+
+        const errorElement = document.getElementById(`${input.id}_error`);
+
+        input.classList.remove('is-invalid');
+
+        if (errorElement) {
+          errorElement.classList.remove('is-visible');
+          errorElement.textContent = '';
+        }
+      }
+
+      function setFieldError(input, message) {
+        if (!input) return;
+
+        const errorElement = document.getElementById(`${input.id}_error`);
+
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.classList.add('is-visible');
+        }
+      }
+
+      function setFieldValid(input) {
+        if (!input) return;
+
+        input.classList.remove('is-invalid');
+
+        if (String(input.value || '').trim()) {
+          input.classList.add('is-valid');
+        }
+      }
+
+      function validateForm() {
+        const errors = [];
+        const nome = String(fields.nome.value || '').trim();
+        const cpfCnpjDigits = onlyDigits(fields.cpfCnpj.value);
+        const email = String(fields.email.value || '').trim();
+        const telefoneDigits = onlyDigits(fields.telefone.value);
+
+        Object.values(fields).forEach((input) => clearFieldError(input));
+
+        if (!nome || nome.length < 2) {
+          errors.push('Informe o nome ou razão social para cobrança.');
+          setFieldError(fields.nome, 'Informe o nome ou razão social.');
+        } else {
+          setFieldValid(fields.nome);
+        }
+
+        if (!cpfCnpjDigits) {
+          errors.push('Informe o CPF ou CNPJ para cobrança.');
+          setFieldError(fields.cpfCnpj, 'Informe o CPF ou CNPJ.');
+        } else if (![11, 14].includes(cpfCnpjDigits.length)) {
+          errors.push('CPF/CNPJ deve ter 11 ou 14 dígitos.');
+          setFieldError(fields.cpfCnpj, 'CPF/CNPJ deve ter 11 ou 14 dígitos.');
+        } else {
+          setFieldValid(fields.cpfCnpj);
+        }
+
+        if (email && !email.includes('@')) {
+          errors.push('Informe um e-mail de cobrança válido.');
+          setFieldError(fields.email, 'Informe um e-mail válido.');
+        } else {
+          setFieldValid(fields.email);
+        }
+
+        if (telefoneDigits && (telefoneDigits.length < 10 || telefoneDigits.length > 11)) {
+          errors.push('Telefone de cobrança deve ter DDD e 10 ou 11 dígitos.');
+          setFieldError(fields.telefone, 'Telefone deve ter DDD e 10 ou 11 dígitos.');
+        } else {
+          setFieldValid(fields.telefone);
+        }
+
+        return {
+          isValid: errors.length === 0,
+          errors
+        };
+      }
+
+      function getFormPayload() {
+        const formData = new FormData(billingForm);
+
+        return {
+          billing_nome: String(formData.get('billing_nome') || '').trim(),
+          billing_cpf_cnpj: onlyDigits(formData.get('billing_cpf_cnpj')),
+          billing_email: String(formData.get('billing_email') || '').trim(),
+          billing_telefone: onlyDigits(formData.get('billing_telefone'))
+        };
+      }
+
+      async function parseJsonResponse(response) {
+        const data = await response.json().catch(() => null);
+
+        if (!data) {
+          throw new Error('Resposta inválida do servidor.');
+        }
+
+        return data;
+      }
+
+      function setButtonLoading(button, isLoading, loadingText) {
+        if (!button) return;
+
+        if (isLoading) {
+          button.dataset.originalHtml = button.innerHTML;
+          button.disabled = true;
+          button.innerHTML = `
+            <i class="bi bi-hourglass-split me-1"></i>
+            <span>${loadingText}</span>
+          `;
           return;
         }
 
-        showStatus(
-          'success',
-          data.message || 'Pagamento preparado com sucesso.'
-        );
-      } catch (error) {
-        showStatus('error', error.message || 'Erro ao iniciar pagamento.');
-      } finally {
-        startPaymentButton.disabled = false;
+        button.disabled = false;
+
+        if (button.dataset.originalHtml) {
+          button.innerHTML = button.dataset.originalHtml;
+          delete button.dataset.originalHtml;
+        }
       }
+
+      fields.cpfCnpj.addEventListener('input', () => {
+        fields.cpfCnpj.value = formatCpfCnpj(fields.cpfCnpj.value);
+        clearFieldError(fields.cpfCnpj);
+      });
+
+      fields.telefone.addEventListener('input', () => {
+        fields.telefone.value = formatPhone(fields.telefone.value);
+        clearFieldError(fields.telefone);
+      });
+
+      fields.nome.addEventListener('input', () => clearFieldError(fields.nome));
+      fields.email.addEventListener('input', () => clearFieldError(fields.email));
+
+      fields.cpfCnpj.value = formatCpfCnpj(fields.cpfCnpj.value);
+      fields.telefone.value = formatPhone(fields.telefone.value);
+
+      billingForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const validation = validateForm();
+
+        if (!validation.isValid) {
+          const message = validation.errors.join(' ');
+
+          showStatus('error', 'Revise os dados informados.', message);
+          window.AppAlerts?.warning(message);
+          return;
+        }
+
+        setButtonLoading(saveBillingButton, true, 'Salvando...');
+        showStatus('warning', 'Salvando dados...', 'Aguarde enquanto os dados de cobrança são atualizados.');
+
+        try {
+          const response = await fetch('/pagamentos/dados-cobranca', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json'
+            },
+            body: JSON.stringify(getFormPayload())
+          });
+
+          const data = await parseJsonResponse(response);
+
+          if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Não foi possível salvar os dados de cobrança.');
+          }
+
+          showStatus('success', 'Dados salvos.', data.message || 'Dados de cobrança salvos com sucesso.');
+          window.AppAlerts?.success(data.message || 'Dados de cobrança salvos com sucesso.');
+        } catch (error) {
+          const message = error.message || 'Erro ao salvar dados de cobrança.';
+
+          showStatus('error', 'Erro ao salvar.', message);
+          window.AppAlerts?.error(message);
+        } finally {
+          setButtonLoading(saveBillingButton, false);
+        }
+      });
+
+      startPaymentButton.addEventListener('click', async () => {
+        const validation = validateForm();
+
+        if (!validation.isValid) {
+          const message = validation.errors.join(' ');
+
+          showStatus('error', 'Revise os dados antes de continuar.', message);
+          window.AppAlerts?.warning(message);
+          return;
+        }
+
+        setButtonLoading(startPaymentButton, true, 'Preparando...');
+        showStatus('warning', 'Preparando pagamento...', 'Validando dados e verificando a configuração do gateway.');
+
+        try {
+          const response = await fetch('/pagamentos/iniciar', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json'
+            }
+          });
+
+          const data = await parseJsonResponse(response);
+
+          if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Não foi possível iniciar o pagamento.');
+          }
+
+          if (data.needsGatewayConfiguration) {
+            const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+
+            showStatus('warning', 'Gateway ainda pendente.', message);
+            window.AppAlerts?.warning(message);
+            return;
+          }
+
+          const message = data.message || 'Pagamento preparado com sucesso.';
+
+          showStatus('success', 'Pagamento preparado.', message);
+          window.AppAlerts?.success(message);
+        } catch (error) {
+          const message = error.message || 'Erro ao iniciar pagamento.';
+
+          showStatus('error', 'Erro ao preparar pagamento.', message);
+          window.AppAlerts?.error(message);
+        } finally {
+          setButtonLoading(startPaymentButton, false);
+        }
+      });
     });
   </script>
 </body>
