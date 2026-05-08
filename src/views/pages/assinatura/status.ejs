@@ -11,6 +11,7 @@
       const statusAssinatura = assinante?.status_assinatura || 'não informado';
       const produtosSelecionados = assinante?.produtos_habilitados_lista || [];
       const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj);
+      const canManageSubscriptionProducts = Boolean(typeof canManageProducts !== 'undefined' && canManageProducts);
 
       const currencyFormatter = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -182,12 +183,14 @@
             <% } %>
           </div>
 
-          <div class="assinatura-card-actions">
-            <a href="/assinatura/produtos" class="btn-modern-secondary assinatura-light-button">
-              <i class="bi bi-grid-3x3-gap"></i>
-              <span>Gerenciar produtos</span>
-            </a>
-          </div>
+          <% if (canManageSubscriptionProducts) { %>
+            <div class="assinatura-card-actions">
+              <a href="/assinatura/produtos" class="btn-modern-secondary assinatura-light-button">
+                <i class="bi bi-grid-3x3-gap"></i>
+                <span>Gerenciar produtos</span>
+              </a>
+            </div>
+          <% } %>
         </article>
 
         <article class="form-card assinatura-status-card">
@@ -303,10 +306,12 @@
             <span>Voltar ao painel</span>
           </a>
 
-          <a href="/assinatura/produtos" class="btn-modern">
-            <i class="bi bi-grid-3x3-gap"></i>
-            <span>Produtos da operação</span>
-          </a>
+          <% if (canManageSubscriptionProducts) { %>
+            <a href="/assinatura/produtos" class="btn-modern">
+              <i class="bi bi-grid-3x3-gap"></i>
+              <span>Produtos da operação</span>
+            </a>
+          <% } %>
         </div>
       </section>
     </main>

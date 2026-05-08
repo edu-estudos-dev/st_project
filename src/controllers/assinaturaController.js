@@ -1,5 +1,6 @@
 import AssinanteModel from '../models/assinanteModel.js';
 import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
+import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
 import {
   getGatewayConfig,
@@ -11,6 +12,14 @@ const PRODUCT_OPTIONS = [
   { value: 'CONSIGNADOS', label: 'Consignados', className: 'modern-checkbox-blue' },
   { value: 'PELUCIAS', label: 'Pelúcias', className: 'modern-checkbox-violet' }
 ];
+
+function canAccessProductSettings(req, res) {
+  return Boolean(
+    req.user?.status_assinatura === 'trial'
+    || res.locals?.isSaasAdmin
+    || isSaasAdminUser(req.user)
+  );
+}
 
 class AssinaturaController {
   status = async (req, res) => {
@@ -28,6 +37,7 @@ class AssinaturaController {
         usuario: req.user,
         assinante,
         productOptions: PRODUCT_OPTIONS,
+        canManageProducts: canAccessProductSettings(req, res),
         gatewayConfigured: isGatewayConfigured(),
         gatewayConfig: getGatewayConfig()
       });
@@ -39,6 +49,10 @@ class AssinaturaController {
 
   editProdutos = async (req, res) => {
     try {
+      if (!canAccessProductSettings(req, res)) {
+        return res.redirect('/assinatura/status');
+      }
+
       const assinante = await AssinanteModel.findById(req.user.assinante_id);
 
       return res.render('pages/assinatura/produtos', {
@@ -57,8 +71,8 @@ class AssinaturaController {
 
   updateProdutos = async (req, res) => {
     try {
-      if (req.user?.status_assinatura !== 'trial') {
-        throw new Error('As ferramentas contratadas são alteradas pelo administrador após a escolha do plano.');
+      if (!canAccessProductSettings(req, res)) {
+        throw new Error('As ferramentas contratadas seguem o plano atual e não podem ser alteradas por esta tela.');
       }
 
       const produtos = normalizeSelectedProdutos(
