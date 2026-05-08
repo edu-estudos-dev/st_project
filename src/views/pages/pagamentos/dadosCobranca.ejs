@@ -268,6 +268,10 @@
       margin-bottom: 0.15rem;
     }
 
+    .billing-status span {
+      display: block;
+    }
+
     .billing-status-success {
       background: #ecfdf5;
       border: 1px solid rgba(16, 185, 129, 0.25);
@@ -466,9 +470,9 @@
                 <span>Testar início do pagamento</span>
               </button>
 
-              <a href="/assinatura/produtos" class="btn btn-outline-secondary">
+              <a href="/assinatura/status" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>
-                <span>Voltar para assinatura</span>
+                <span>Voltar para minha assinatura</span>
               </a>
             </div>
           </form>
@@ -547,6 +551,16 @@
             <span>${message}</span>
           </div>
         `;
+
+        billingStatus.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+
+      function clearStatus() {
+        billingStatus.className = 'billing-status';
+        billingStatus.innerHTML = '';
       }
 
       function clearFieldError(input) {
@@ -745,8 +759,9 @@
           return;
         }
 
+        clearStatus();
         setButtonLoading(startPaymentButton, true, 'Preparando...');
-        showStatus('warning', 'Preparando pagamento...', 'Validando dados e verificando a configuração do gateway.');
+        showStatus('warning', 'Preparando pagamento...', 'Validando dados de cobrança e verificando a configuração do gateway.');
 
         try {
           const response = await fetch('/pagamentos/iniciar', {
@@ -763,7 +778,7 @@
           }
 
           if (data.needsGatewayConfiguration) {
-            const message = 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
+            const message = data.message || 'Dados de cobrança válidos. O gateway ainda não está configurado, então nenhuma cobrança real foi criada.';
 
             showStatus('warning', 'Gateway ainda pendente.', message);
             window.AppAlerts?.warning(message);
