@@ -1188,7 +1188,14 @@
             });
 
             if (openPayment) {
-              window.location.href = paymentUrl;
+              const paymentWindow = window.open(paymentUrl, "_blank");
+
+              if (paymentWindow) {
+                paymentWindow.opener = null;
+              } else {
+                window.AppAlerts?.warning("Não foi possível abrir a cobrança em uma nova aba. Verifique se o navegador bloqueou janelas pop-up do VendMaster.");
+              }
+
               return;
             }
 
