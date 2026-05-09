@@ -281,6 +281,7 @@ function isReusablePendingPayment(payment, assinante) {
   const expectedValue = getMonthlyPlanValue(assinante);
 
   return (
+    payment?.deleted !== true &&
     payment?.status === 'PENDING' &&
     payment?.externalReference === expectedExternalReference &&
     isSameMoneyValue(payment?.value, expectedValue) &&
