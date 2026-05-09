@@ -5,12 +5,12 @@ import {
   createPayment,
   createSubscription,
   getGatewayConfig,
-  getPixQrCode,
   getSubscriptionPayments,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
 
 const ALLOWED_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
+const ACTIVE_BILLING_TYPES = new Set(['BOLETO', 'CREDIT_CARD']);
 
 function onlyDigits(value) {
   return String(value || '').replace(/\D/g, '');
@@ -32,6 +32,14 @@ function normalizeBillingType(value) {
     .toUpperCase();
 
   return ALLOWED_BILLING_TYPES.has(billingType) ? billingType : 'CREDIT_CARD';
+}
+
+function isPixBillingType(billingType) {
+  return billingType === 'PIX';
+}
+
+function isActiveBillingType(billingType) {
+  return ACTIVE_BILLING_TYPES.has(billingType);
 }
 
 function formatDateOnly(value) {
@@ -132,20 +140,6 @@ function buildAsaasSubscriptionPayload(assinante, customerId) {
     nextDueDate: formatDateOnly(new Date()),
     cycle: 'MONTHLY',
     description: `Assinatura VendMaster - ${planName}`,
-    externalReference: `assinante:${assinante.id}`
-  };
-}
-
-function buildAsaasPixPaymentPayload(assinante, customerId) {
-  const monthlyValue = getMonthlyPlanValue(assinante);
-  const planName = assinante.plano_nome || 'Plano VendMaster';
-
-  return {
-    customer: customerId,
-    billingType: 'PIX',
-    value: monthlyValue,
-    dueDate: formatDateOnly(new Date()),
-    description: `Regularização VendMaster via Pix - ${planName}`,
     externalReference: `assinante:${assinante.id}`
   };
 }
@@ -261,18 +255,6 @@ function buildPaymentResponse(payment) {
   };
 }
 
-function buildPixResponse(pixQrCode) {
-  if (!pixQrCode) {
-    return null;
-  }
-
-  return {
-    encodedImage: pixQrCode.encodedImage || null,
-    payload: pixQrCode.payload || null,
-    expirationDate: pixQrCode.expirationDate || null
-  };
-}
-
 async function prepararPagamentoBoleto({
   assinante,
   customerResult,
@@ -317,60 +299,6 @@ async function prepararPagamentoBoleto({
     needsGatewayConfiguration: false,
     payment,
     pix: null
-  };
-}
-
-async function prepararPagamentoPix({
-  assinante,
-  customerResult,
-  hasBillingData,
-  gatewayConfig
-}) {
-  const pixPayment = await createPayment(
-    buildAsaasPixPaymentPayload(assinante, customerResult.customerId)
-  );
-
-  if (!pixPayment?.id) {
-    throw new Error('Provedor de pagamento não retornou o ID da cobrança Pix criada.');
-  }
-
-  let pix = null;
-  let pixQrCodeError = null;
-
-  try {
-    const pixQrCode = await getPixQrCode(pixPayment.id);
-    pix = buildPixResponse(pixQrCode);
-  } catch (error) {
-    pixQrCodeError = error.message || 'Não foi possível gerar o QR Code Pix.';
-    console.warn(
-      '[ASAAS][PIX_QR_CODE] Cobrança Pix criada, mas QR Code não retornou:',
-      pixQrCodeError
-    );
-  }
-
-  const payment = buildPaymentResponse(pixPayment);
-  const hasPixQrCode = Boolean(pix?.encodedImage || pix?.payload);
-
-  return {
-    success: true,
-    message: hasPixQrCode
-      ? 'Pix gerado com sucesso. Pague pelo QR Code ou pelo Pix copia e cola para regularizar a assinatura.'
-      : 'Cobrança Pix criada com sucesso. Abra a cobrança para concluir o pagamento.',
-    provider: gatewayConfig.provider,
-    environment: gatewayConfig.environment,
-    gatewayConfigured: true,
-    hasBillingData,
-    requestedBillingType: 'PIX',
-    effectiveBillingType: 'PIX',
-    gatewayCustomerId: customerResult.customerId,
-    gatewayCustomerCreated: customerResult.created,
-    gatewaySubscriptionId: assinante.gateway_subscription_id || null,
-    gatewaySubscriptionCreated: false,
-    needsGatewayConfiguration: false,
-    payment,
-    pix,
-    pixQrCodeAvailable: hasPixQrCode,
-    pixQrCodeError
   };
 }
 
@@ -560,6 +488,42 @@ async function iniciarPagamento(req, res) {
       });
     }
 
+    if (isPixBillingType(requestedBillingType)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Pix para assinatura estará disponível em breve. Por enquanto, escolha cartão de crédito ou boleto.',
+        pixComingSoon: true,
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: null,
+        gatewayCustomerId: assinante.gateway_customer_id || null,
+        gatewayCustomerCreated: false,
+        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+        gatewaySubscriptionCreated: false,
+        needsGatewayConfiguration: false,
+        payment: null,
+        pix: null
+      });
+    }
+
+    if (!isActiveBillingType(requestedBillingType)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Forma de pagamento inválida. Escolha cartão de crédito ou boleto.',
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: null,
+        gatewayCustomerId: assinante.gateway_customer_id || null,
+        gatewayCustomerCreated: false,
+        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+        gatewaySubscriptionCreated: false,
+        needsGatewayConfiguration: false,
+        payment: null,
+        pix: null
+      });
+    }
+
     if (!isGatewayConfigured()) {
       return res.status(200).json({
         success: true,
@@ -584,14 +548,7 @@ async function iniciarPagamento(req, res) {
 
     let responsePayload;
 
-    if (requestedBillingType === 'PIX') {
-      responsePayload = await prepararPagamentoPix({
-        assinante,
-        customerResult,
-        hasBillingData,
-        gatewayConfig
-      });
-    } else if (requestedBillingType === 'CREDIT_CARD') {
+    if (requestedBillingType === 'CREDIT_CARD') {
       responsePayload = await prepararPagamentoCartao({
         assinante,
         customerResult,
