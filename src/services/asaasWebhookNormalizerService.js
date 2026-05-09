@@ -1,7 +1,6 @@
 const PAYMENT_CONFIRMED_EVENTS = new Set([
   'PAYMENT_RECEIVED',
-  'PAYMENT_CONFIRMED',
-  'PAYMENT_APPROVED'
+  'PAYMENT_CONFIRMED'
 ]);
 
 const PAYMENT_CONFIRMED_STATUSES = new Set([
@@ -34,11 +33,27 @@ const SUBSCRIPTION_CANCELLED_STATUSES = new Set([
   'INACTIVATED'
 ]);
 
+function normalizeUpper(value, fallback = null) {
+  const normalizedValue = String(value || '')
+    .trim()
+    .toUpperCase();
+
+  return normalizedValue || fallback;
+}
+
 function normalizeAsaasWebhookPayload(payload = {}) {
   const payment = payload.payment || {};
   const subscription = payload.subscription || {};
-  const eventType = payload.event || payload.eventType || 'UNKNOWN_EVENT';
-  const status = payment.status || subscription.status || payload.status || null;
+
+  const eventType = normalizeUpper(
+    payload.event || payload.eventType,
+    'UNKNOWN_EVENT'
+  );
+
+  const status = normalizeUpper(
+    payment.status || subscription.status || payload.status,
+    null
+  );
 
   const isPaymentConfirmed =
     PAYMENT_CONFIRMED_EVENTS.has(eventType)
