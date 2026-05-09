@@ -8,17 +8,21 @@
 
   <div class="form-shell form-shell-modern">
     <% const canManageProducts = assinante?.status_assinatura === 'trial'; %>
-    <% const hasBillingData = Boolean(assinante?.billing_nome && assinante?.billing_cpf_cnpj); %>
 
     <%- include('../../partials/breadcrumb', { pageTitle: 'Ferramentas da Assinatura' }) %>
 
     <section class="page-titlebar page-titlebar-neutral">
       <div class="page-titlebar-content">
-        <span class="form-kicker"><i class="bi bi-grid-3x3-gap"></i> Assinatura</span>
+        <span class="form-kicker">
+          <i class="bi bi-grid-3x3-gap"></i>
+          Assinatura
+        </span>
+
         <h1>Ferramentas da assinatura</h1>
+
         <p>
           <% if (canManageProducts) { %>
-            Durante o trial, ajuste quais frentes deseja testar no sistema.
+            Durante o trial, escolha quais frentes deseja testar no VendMaster.
           <% } else { %>
             As ferramentas liberadas seguem o plano contratado e só podem ser alteradas mediante ajuste do plano.
           <% } %>
@@ -40,12 +44,15 @@
             <div>
               <span class="form-section-tag">Configuração</span>
               <h2>Frentes que você opera</h2>
-              <p>Essa seleção controla menus, atalhos, receitas por produto e filtros do sistema.</p>
+              <p>
+                Essa seleção controla menus, atalhos, receitas por produto e filtros do sistema.
+              </p>
             </div>
           </div>
 
           <div class="modern-checkbox-grid">
             <% const selectedProducts = assinante?.produtos_habilitados_lista || []; %>
+
             <% productOptions.forEach((produto) => { %>
               <label class="modern-checkbox <%= produto.className || '' %>" for="assinatura_produto_<%= produto.value %>">
                 <input
@@ -66,119 +73,36 @@
             <% if (canManageProducts) { %>
               Se adicionar uma frente nova, depois marque essa ferramenta nos estabelecimentos em que ela existe.
             <% } else { %>
-              Para incluir ou remover ferramentas, fale com o suporte para ajustar seu plano.
+              Para incluir ou remover ferramentas, acesse sua assinatura ou fale com o suporte para ajustar o plano.
             <% } %>
           </small>
         </section>
 
-        <section class="form-card">
+        <section class="form-card assinatura-products-info-card">
           <div class="form-card-header">
             <div>
-              <span class="form-section-tag">Cobrança</span>
-              <h2>Dados de cobrança</h2>
+              <span class="form-section-tag">Plano e cobrança</span>
+              <h2>Gerencie sua assinatura em uma tela separada</h2>
               <p>
-                Informe ou revise os dados usados para preparar a cobrança da assinatura.
-                Cartão e boleto já podem ser usados para regularização. Pix será disponibilizado em uma próxima etapa do fluxo de assinatura.
+                O status da assinatura, vencimento, dados de cobrança e opções de pagamento ficam centralizados na tela Minha assinatura.
               </p>
             </div>
           </div>
 
-          <div class="modern-note" id="billingStatusBox" style="display: block; margin-bottom: 1rem;">
-            <strong>Status atual:</strong>
-            <% if (hasBillingData) { %>
-              dados de cobrança cadastrados.
-            <% } else { %>
-              dados de cobrança ainda pendentes.
-            <% } %>
-          </div>
-
-          <div class="assinatura-products-payment-methods" aria-label="Formas de pagamento">
-            <label class="assinatura-products-payment-method-card is-active is-featured" for="assinatura_billing_credit_card">
-              <input
-                type="radio"
-                id="assinatura_billing_credit_card"
-                name="assinatura_billing_type"
-                value="CREDIT_CARD"
-                checked
-              >
-
-              <div class="assinatura-products-payment-method-icon">
-                <i class="bi bi-credit-card"></i>
-              </div>
-
-              <div>
-                <span class="assinatura-products-payment-badge">Recomendado</span>
-                <strong>Cartão de crédito</strong>
-                <small>
-                  Abre uma página segura para informar os dados do cartão.
-                </small>
-              </div>
-            </label>
-
-            <div class="assinatura-products-payment-method-card is-disabled">
-              <div class="assinatura-products-payment-method-icon">
-                <i class="bi bi-qr-code"></i>
-              </div>
-
-              <div>
-                <span class="assinatura-products-payment-badge is-neutral">Em breve</span>
-                <strong>Pix</strong>
-                <small>
-                  Ainda não disponível neste fluxo. Quando for liberado, tende a ser uma opção de confirmação mais rápida.
-                </small>
-              </div>
+          <div class="assinatura-products-info-box">
+            <i class="bi bi-person-badge"></i>
+            <div>
+              <strong>Precisa revisar pagamento ou dados de cobrança?</strong>
+              <span>
+                Acesse a tela de status da assinatura para regularizar pagamentos, revisar dados de cobrança ou acompanhar o plano atual.
+              </span>
             </div>
-
-            <label class="assinatura-products-payment-method-card is-active" for="assinatura_billing_boleto">
-              <input
-                type="radio"
-                id="assinatura_billing_boleto"
-                name="assinatura_billing_type"
-                value="BOLETO"
-              >
-
-              <div class="assinatura-products-payment-method-icon">
-                <i class="bi bi-upc-scan"></i>
-              </div>
-
-              <div>
-                <span class="assinatura-products-payment-badge is-ready">Disponível agora</span>
-                <strong>Boleto</strong>
-                <small>
-                  Abre a cobrança bancária da assinatura. A compensação pode levar mais tempo após o pagamento.
-                </small>
-              </div>
-            </label>
           </div>
 
-          <div class="modern-note assinatura-products-payment-hint">
-            Depois de abrir a cobrança, conclua o pagamento na página segura. A liberação acontece automaticamente após a confirmação. No boleto, a compensação pode levar mais tempo.
-          </div>
-
-          <div
-            id="paymentPreparationResult"
-            class="modern-note"
-            style="display: none; margin-bottom: 1rem;"
-          ></div>
-
-          <div class="form-actions-buttons" style="justify-content: flex-start; gap: 0.75rem; flex-wrap: wrap;">
-            <a href="/pagamentos/dados-cobranca/formulario" class="btn-modern">
-              <i class="bi bi-credit-card-2-front"></i>
-              <span>Preencher dados de cobrança</span>
-            </a>
-
-            <button
-              type="button"
-              class="btn-modern"
-              id="prepararPagamentoBtn"
-            >
-              <i class="bi bi-shield-check"></i>
-              <span id="prepararPagamentoBtnText">Preparar cartão</span>
-            </button>
-
-            <a href="/assinatura/status" class="btn-modern-secondary assinatura-products-light-button">
+          <div class="assinatura-products-info-actions">
+            <a href="/assinatura/status" class="btn-modern">
               <i class="bi bi-person-badge"></i>
-              <span>Status da assinatura</span>
+              <span>Ir para minha assinatura</span>
             </a>
           </div>
         </section>
@@ -186,7 +110,13 @@
         <section class="form-actions-bar">
           <div class="form-actions-copy">
             <strong>Salvar configuração</strong>
-            <span>Os menus serão atualizados a partir da próxima navegação.</span>
+            <span>
+              <% if (canManageProducts) { %>
+                Os menus serão atualizados a partir da próxima navegação.
+              <% } else { %>
+                As ferramentas atuais seguem o plano contratado.
+              <% } %>
+            </span>
           </div>
 
           <div class="form-actions-buttons">
@@ -208,139 +138,60 @@
   </div>
 
   <style>
-    .assinatura-products-light-button {
-      background: #fff;
-      color: #1d4ed8;
-      border: 1px solid rgba(37, 99, 235, 0.2);
+    .assinatura-products-info-card {
+      overflow: hidden;
     }
 
-    .assinatura-products-payment-methods {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .assinatura-products-payment-method-card {
-      position: relative;
+    .assinatura-products-info-box {
       display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
-      min-height: 100%;
+      gap: 0.85rem;
+      margin: 1rem 1.15rem 0;
       padding: 1rem;
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      border-radius: 18px;
-      background: rgba(248, 250, 252, 0.92);
-    }
-
-    .assinatura-products-payment-method-card.is-active {
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      border-radius: 20px;
       background: #eff6ff;
-      border-color: rgba(37, 99, 235, 0.24);
-      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.08);
+      color: #1e3a8a;
     }
 
-    .assinatura-products-payment-method-card.is-featured {
-      background:
-        radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 8rem),
-        #eff6ff;
-    }
-
-    .assinatura-products-payment-method-card.is-disabled {
-      opacity: 0.62;
-    }
-
-    .assinatura-products-payment-method-card input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    label.assinatura-products-payment-method-card.is-active {
-      cursor: pointer;
-    }
-
-    label.assinatura-products-payment-method-card.is-active:has(input:checked) {
-      background: #ecfdf5;
-      border-color: rgba(16, 185, 129, 0.28);
-      box-shadow: 0 14px 30px rgba(16, 185, 129, 0.09);
-    }
-
-    label.assinatura-products-payment-method-card.is-active:has(input:checked) .assinatura-products-payment-method-icon {
-      color: #047857;
-      border-color: rgba(16, 185, 129, 0.22);
-    }
-
-    .assinatura-products-payment-method-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      background: #fff;
-      color: #1d4ed8;
-      border: 1px solid rgba(37, 99, 235, 0.14);
-      font-size: 1rem;
-    }
-
-    .assinatura-products-payment-method-card > div:last-child {
-      display: grid;
-      gap: 0.26rem;
-      min-width: 0;
-    }
-
-    .assinatura-products-payment-badge {
-      display: inline-flex;
-      align-items: center;
-      width: max-content;
-      padding: 0.22rem 0.48rem;
-      border-radius: 999px;
-      background: #ecfdf5;
-      color: #047857;
-      font-size: 0.72rem;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .assinatura-products-payment-badge.is-neutral {
-      background: #f1f5f9;
-      color: #475569;
-    }
-
-    .assinatura-products-payment-badge.is-ready {
-      background: #dbeafe;
+    .assinatura-products-info-box i {
+      margin-top: 0.1rem;
+      font-size: 1.2rem;
       color: #1d4ed8;
     }
 
-    .assinatura-products-payment-method-card strong {
-      color: #0f172a;
+    .assinatura-products-info-box strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: #1e3a8a;
       font-size: 0.98rem;
       font-weight: 900;
     }
 
-    .assinatura-products-payment-method-card small {
-      color: #64748b;
-      line-height: 1.42;
-      font-weight: 650;
-    }
-
-    .assinatura-products-payment-hint {
-      margin-bottom: 1rem;
-      background: #eff6ff;
-      border-color: rgba(37, 99, 235, 0.2);
-      color: #1e3a8a;
+    .assinatura-products-info-box span {
+      display: block;
+      color: #334155;
+      font-size: 0.94rem;
       line-height: 1.5;
     }
 
-    @media (max-width: 900px) {
-      .assinatura-products-payment-methods {
-        grid-template-columns: 1fr;
-      }
+    .assinatura-products-info-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1rem 1.15rem 1.15rem;
     }
 
     @media (max-width: 640px) {
-      .form-actions-buttons .assinatura-products-light-button {
+      .assinatura-products-info-box {
+        margin: 1rem 1rem 0;
+      }
+
+      .assinatura-products-info-actions {
+        padding: 1rem;
+      }
+
+      .assinatura-products-info-actions .btn-modern {
         width: 100%;
         justify-content: center;
       }
@@ -350,55 +201,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const produtosAssinaturaForm = document.getElementById('produtosAssinaturaForm');
-      const prepararPagamentoBtn = document.getElementById('prepararPagamentoBtn');
-      const paymentPreparationResult = document.getElementById('paymentPreparationResult');
-      const prepararPagamentoBtnText = document.getElementById('prepararPagamentoBtnText');
-
-      function getSelectedBillingType() {
-        return document.querySelector('input[name="assinatura_billing_type"]:checked')?.value || 'CREDIT_CARD';
-      }
-
-      function updatePaymentButtonText() {
-        if (!prepararPagamentoBtnText) return;
-
-        prepararPagamentoBtnText.textContent = getSelectedBillingType() === 'BOLETO'
-          ? 'Preparar boleto'
-          : 'Preparar cartão';
-      }
-
-      function getPaymentFollowUpText(billingType) {
-        if (billingType === 'BOLETO') {
-          return 'Depois de pagar, a compensação pode levar mais tempo. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
-        }
-
-        return 'Depois de informar os dados do cartão, a confirmação costuma acontecer em poucos instantes. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
-      }
-
-      function setPaymentResult(message, type = 'info') {
-        if (!paymentPreparationResult) return;
-
-        const icons = {
-          success: 'bi-check2-circle',
-          warning: 'bi-exclamation-triangle',
-          error: 'bi-x-circle',
-          info: 'bi-info-circle'
-        };
-
-        paymentPreparationResult.style.display = 'block';
-        paymentPreparationResult.innerHTML = `
-          <strong>
-            <i class="bi ${icons[type] || icons.info}"></i>
-            Pagamento:
-          </strong>
-          ${message}
-        `;
-      }
-
-      document
-        .querySelectorAll('input[name="assinatura_billing_type"]')
-        .forEach((input) => input.addEventListener('change', updatePaymentButtonText));
-
-      updatePaymentButtonText();
 
       if (produtosAssinaturaForm) {
         produtosAssinaturaForm.addEventListener('submit', (event) => {
@@ -412,111 +214,13 @@
         });
       }
 
-      if (prepararPagamentoBtn) {
-        prepararPagamentoBtn.addEventListener('click', async () => {
-          const originalButtonContent = prepararPagamentoBtn.innerHTML;
+      <% if (success) { %>
+        window.AppAlerts?.success("<%- String(success).replace(/"/g, '&quot;') %>");
+      <% } %>
 
-          prepararPagamentoBtn.disabled = true;
-          prepararPagamentoBtn.innerHTML = `
-            <i class="bi bi-hourglass-split"></i>
-            <span>Preparando...</span>
-          `;
-
-          try {
-            const selectedBillingType = getSelectedBillingType();
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-
-            const response = await fetch('/pagamentos/iniciar', {
-              method: 'POST',
-              credentials: 'same-origin',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken
-              },
-              body: JSON.stringify({
-                billingType: selectedBillingType
-              })
-            });
-
-            const data = await response.json().catch(() => ({
-              success: false,
-              message: 'Não foi possível interpretar a resposta do servidor.'
-            }));
-
-            if (!response.ok || !data.success) {
-              const message = data.message || 'Não foi possível preparar o pagamento.';
-
-              if (data.needsBillingData) {
-                setPaymentResult(`${message} Clique em "Preencher dados de cobrança" antes de continuar.`, 'warning');
-                window.AppAlerts?.warning(message);
-                return;
-              }
-
-              setPaymentResult(message, 'error');
-              window.AppAlerts?.error(message);
-              return;
-            }
-
-            if (data.needsGatewayConfiguration) {
-              const message = 'Dados de cobrança válidos. A cobrança ainda não está disponível para esta assinatura.';
-
-              setPaymentResult(message, 'warning');
-              window.AppAlerts?.warning(message);
-              return;
-            }
-
-            const successMessage = data.message || 'Pagamento preparado com sucesso.';
-            const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
-            const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
-
-            if (paymentUrl) {
-              const followUpText = getPaymentFollowUpText(effectiveBillingType);
-
-              setPaymentResult(
-                `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>. ${followUpText}`,
-                'success'
-              );
-
-              const isCreditCard = effectiveBillingType === 'CREDIT_CARD';
-
-              const openPayment = await window.AppAlerts?.confirm({
-                title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
-                text: isCreditCard
-                  ? 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
-                  : 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.',
-                confirmButtonText: 'Abrir cobrança',
-                cancelButtonText: 'Continuar no VendMaster'
-              });
-
-              if (openPayment) {
-                window.location.href = paymentUrl;
-                return;
-              }
-
-              return;
-            }
-
-            setPaymentResult(successMessage, 'success');
-            window.AppAlerts?.success(successMessage);
-          } catch (error) {
-            console.error('Erro ao preparar pagamento:', error);
-
-            const message = 'Erro ao preparar pagamento. Tente novamente em alguns instantes.';
-
-            setPaymentResult(message, 'error');
-            window.AppAlerts?.error(message);
-          } finally {
-            prepararPagamentoBtn.disabled = false;
-            prepararPagamentoBtn.innerHTML = originalButtonContent;
-            updatePaymentButtonText();
-          }
-        });
-      }
-
-      <% if (success) { %>window.AppAlerts?.success("<%- String(success).replace(/"/g, '&quot;') %>");<% } %>
-      <% if (error) { %>window.AppAlerts?.error("<%- String(error).replace(/"/g, '&quot;') %>");<% } %>
+      <% if (error) { %>
+        window.AppAlerts?.error("<%- String(error).replace(/"/g, '&quot;') %>");
+      <% } %>
     });
   </script>
 </body>

@@ -55,8 +55,14 @@ class AssinaturaController {
 
       const assinante = await AssinanteModel.findById(req.user.assinante_id);
 
+      if (!assinante) {
+        return res.status(404).render('pages/404', {
+          title: 'Assinatura não encontrada - VendMaster'
+        });
+      }
+
       return res.render('pages/assinatura/produtos', {
-        title: 'Produtos da Operação',
+        title: 'Ferramentas da Assinatura',
         usuario: req.user,
         assinante,
         productOptions: PRODUCT_OPTIONS,
@@ -64,8 +70,8 @@ class AssinaturaController {
         error: req.query.error
       });
     } catch (error) {
-      console.error('Erro ao carregar produtos da assinatura:', error);
-      return res.status(500).send('Erro ao carregar produtos da assinatura.');
+      console.error('Erro ao carregar ferramentas da assinatura:', error);
+      return res.status(500).send('Erro ao carregar ferramentas da assinatura.');
     }
   };
 
@@ -82,16 +88,16 @@ class AssinaturaController {
       );
 
       if (!produtos.length) {
-        throw new Error('Selecione pelo menos um produto para a sua operação.');
+        throw new Error('Selecione pelo menos uma ferramenta para a sua operação.');
       }
 
       await AssinanteModel.updateFromAdmin(req.user.assinante_id, {
         produtos_habilitados: produtos
       });
 
-      return res.redirect('/assinatura/produtos?success=Produtos atualizados com sucesso.');
+      return res.redirect('/assinatura/produtos?success=Ferramentas atualizadas com sucesso.');
     } catch (error) {
-      const message = error.message || 'Erro ao atualizar produtos.';
+      const message = error.message || 'Erro ao atualizar ferramentas.';
       return res.redirect(`/assinatura/produtos?error=${encodeURIComponent(message)}`);
     }
   };
