@@ -4,6 +4,7 @@ import {
   createCustomer,
   createPayment,
   createSubscription,
+  getCustomerPayments,
   getGatewayConfig,
   getSubscriptionPayments,
   isGatewayConfigured
@@ -255,6 +256,59 @@ function buildPaymentResponse(payment) {
   };
 }
 
+function isSameMoneyValue(firstValue, secondValue) {
+  const first = Number(firstValue);
+  const second = Number(secondValue);
+
+  if (!Number.isFinite(first) || !Number.isFinite(second)) {
+    return false;
+  }
+
+  return first.toFixed(2) === second.toFixed(2);
+}
+
+function getPaymentDateScore(payment) {
+  return new Date(
+    payment?.dateCreated ||
+      payment?.dueDate ||
+      payment?.createdDate ||
+      0
+  ).getTime();
+}
+
+function selectReusableCreditCardPayment(payments = [], assinante) {
+  if (!Array.isArray(payments) || !payments.length) {
+    return null;
+  }
+
+  const expectedExternalReference = `assinante:${assinante.id}`;
+  const expectedValue = getMonthlyPlanValue(assinante);
+
+  const reusablePayments = payments.filter((payment) => {
+    return (
+      payment?.billingType === 'CREDIT_CARD' &&
+      payment?.status === 'PENDING' &&
+      payment?.externalReference === expectedExternalReference &&
+      isSameMoneyValue(payment?.value, expectedValue) &&
+      Boolean(payment?.invoiceUrl)
+    );
+  });
+
+  if (!reusablePayments.length) {
+    return null;
+  }
+
+  return reusablePayments.sort((a, b) => {
+    return getPaymentDateScore(b) - getPaymentDateScore(a);
+  })[0];
+}
+
+async function findReusableCreditCardPayment(assinante, customerId) {
+  const paymentsResult = await getCustomerPayments(customerId, 50);
+
+  return selectReusableCreditCardPayment(paymentsResult?.data || [], assinante);
+}
+
 async function prepararPagamentoBoleto({
   assinante,
   customerResult,
@@ -308,21 +362,31 @@ async function prepararPagamentoCartao({
   hasBillingData,
   gatewayConfig
 }) {
-  const creditCardPayment = await createPayment(
-    buildAsaasCreditCardPaymentPayload(assinante, customerResult.customerId)
+  const reusableCreditCardPayment = await findReusableCreditCardPayment(
+    assinante,
+    customerResult.customerId
   );
+
+  const creditCardPayment =
+    reusableCreditCardPayment ||
+    (await createPayment(
+      buildAsaasCreditCardPaymentPayload(assinante, customerResult.customerId)
+    ));
 
   if (!creditCardPayment?.id) {
     throw new Error('Provedor de pagamento não retornou o ID da cobrança por cartão criada.');
   }
 
   const payment = buildPaymentResponse(creditCardPayment);
+  const paymentWasReused = Boolean(reusableCreditCardPayment?.id);
 
   return {
     success: true,
-    message: payment?.paymentUrl
-      ? 'Cobrança por cartão preparada com sucesso. Abra a página segura para informar os dados do cartão.'
-      : 'Cobrança por cartão criada, mas nenhum link de pagamento foi retornado no momento.',
+    message: paymentWasReused
+      ? 'Encontramos uma cobrança por cartão já aberta. Abra a página segura para concluir a regularização.'
+      : payment?.paymentUrl
+        ? 'Cobrança por cartão preparada com sucesso. Abra a página segura para informar os dados do cartão.'
+        : 'Cobrança por cartão criada, mas nenhum link de pagamento foi retornado no momento.',
     provider: gatewayConfig.provider,
     environment: gatewayConfig.environment,
     gatewayConfigured: true,
@@ -333,6 +397,7 @@ async function prepararPagamentoCartao({
     gatewayCustomerCreated: customerResult.created,
     gatewaySubscriptionId: assinante.gateway_subscription_id || null,
     gatewaySubscriptionCreated: false,
+    gatewayPaymentReused: paymentWasReused,
     needsGatewayConfiguration: false,
     payment,
     pix: null

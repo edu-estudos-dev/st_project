@@ -320,6 +320,23 @@ async function getSubscriptionPayments(subscriptionId, limit = 10) {
   });
 }
 
+async function getCustomerPayments(customerId, limit = 20) {
+  const normalizedCustomerId = String(customerId || '').trim();
+
+  if (!normalizedCustomerId) {
+    throw new Error('ID do pagador é obrigatório para buscar cobranças.');
+  }
+
+  const normalizedLimit = Number.isInteger(Number(limit))
+    ? Math.max(1, Math.min(Number(limit), 100))
+    : 20;
+
+  return requestAsaas({
+    method: 'GET',
+    path: `/payments?customer=${encodeURIComponent(normalizedCustomerId)}&limit=${normalizedLimit}`
+  });
+}
+
 async function createPaymentLink() {
   throw new Error('Link de pagamento ainda não disponível neste fluxo.');
 }
@@ -333,5 +350,6 @@ export {
   createPayment,
   getPixQrCode,
   getSubscriptionPayments,
+  getCustomerPayments,
   createPaymentLink
 };

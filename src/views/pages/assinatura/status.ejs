@@ -1064,6 +1064,27 @@
         return 'Depois de informar os dados do cartão, a confirmação costuma acontecer em poucos instantes. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
       }
 
+      function getPaymentModalCopy({ billingType, paymentWasReused }) {
+        if (billingType === 'BOLETO') {
+          return {
+            title: 'Boleto preparado',
+            text: 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.'
+          };
+        }
+
+        if (paymentWasReused) {
+          return {
+            title: 'Cobrança por cartão já disponível',
+            text: 'Encontramos uma cobrança por cartão já aberta. Abra a página segura para concluir a regularização.'
+          };
+        }
+
+        return {
+          title: 'Cobrança por cartão preparada',
+          text: 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
+        };
+      }
+
       function setPaymentResult(message, type = 'info') {
         if (!paymentResult) return;
 
@@ -1167,6 +1188,7 @@
           const successMessage = data.message || 'Pagamento preparado com sucesso.';
           const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
           const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
+          const paymentWasReused = Boolean(data.gatewayPaymentReused);
 
           if (paymentUrl) {
             const followUpText = getPaymentFollowUpText(effectiveBillingType);
@@ -1176,13 +1198,14 @@
               'success'
             );
 
-            const isCreditCard = effectiveBillingType === 'CREDIT_CARD';
+            const modalCopy = getPaymentModalCopy({
+              billingType: effectiveBillingType,
+              paymentWasReused
+            });
 
             const openPayment = await window.AppAlerts?.confirm({
-              title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
-              text: isCreditCard
-                ? 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
-                : 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.',
+              title: modalCopy.title,
+              text: modalCopy.text,
               confirmButtonText: 'Abrir cobrança',
               cancelButtonText: 'Continuar no VendMaster'
             });
