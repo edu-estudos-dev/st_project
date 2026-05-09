@@ -54,7 +54,7 @@ function ensureGatewayConfigured() {
   const config = getGatewayConfig();
 
   if (!hasValidApiKey(config.apiKey)) {
-    throw new Error('Gateway de pagamento não configurado: ASAAS_API_KEY ausente ou inválida.');
+    throw new Error('Configuração de pagamento ausente ou inválida.');
   }
 
   return config;
@@ -106,13 +106,13 @@ function validateCustomerData(customerData) {
   const errors = [];
 
   if (!customerData?.name || String(customerData.name).trim().length < 2) {
-    errors.push('Nome do cliente é obrigatório.');
+    errors.push('Nome do pagador é obrigatório.');
   }
 
   const cpfCnpj = normalizeDigits(customerData?.cpfCnpj);
 
   if (!cpfCnpj) {
-    errors.push('CPF ou CNPJ do cliente é obrigatório.');
+    errors.push('CPF ou CNPJ do pagador é obrigatório.');
   }
 
   if (cpfCnpj && ![11, 14].includes(cpfCnpj.length)) {
@@ -120,7 +120,7 @@ function validateCustomerData(customerData) {
   }
 
   if (errors.length) {
-    throw new Error(`Dados inválidos para criar customer no Asaas: ${errors.join(' ')}`);
+    throw new Error(`Dados inválidos para cadastro de cobrança: ${errors.join(' ')}`);
   }
 
   return {
@@ -136,7 +136,7 @@ function validateSubscriptionData(subscriptionData) {
   const value = normalizeMoneyValue(subscriptionData?.value);
 
   if (!subscriptionData?.customer) {
-    errors.push('Customer do Asaas é obrigatório para criar assinatura.');
+    errors.push('Identificador do pagador é obrigatório para criar a assinatura.');
   }
 
   if (!value) {
@@ -144,7 +144,7 @@ function validateSubscriptionData(subscriptionData) {
   }
 
   if (errors.length) {
-    throw new Error(`Dados inválidos para criar assinatura no Asaas: ${errors.join(' ')}`);
+    throw new Error(`Dados inválidos para criar assinatura: ${errors.join(' ')}`);
   }
 
   return {
@@ -164,7 +164,7 @@ function validatePaymentData(paymentData) {
   const billingType = normalizeBillingType(paymentData?.billingType, 'BOLETO');
 
   if (!paymentData?.customer) {
-    errors.push('Customer do Asaas é obrigatório para criar cobrança.');
+    errors.push('Identificador do pagador é obrigatório para criar a cobrança.');
   }
 
   if (!value) {
@@ -172,7 +172,7 @@ function validatePaymentData(paymentData) {
   }
 
   if (errors.length) {
-    throw new Error(`Dados inválidos para criar cobrança no Asaas: ${errors.join(' ')}`);
+    throw new Error(`Dados inválidos para criar cobrança: ${errors.join(' ')}`);
   }
 
   return {
@@ -188,7 +188,7 @@ async function requestAsaas({ method, path, body }) {
   const config = ensureGatewayConfigured();
 
   if (config.provider !== 'asaas') {
-    throw new Error(`Provider de pagamento não suportado: ${config.provider}`);
+    throw new Error(`Provedor de pagamento não suportado: ${config.provider}`);
   }
 
   const response = await fetch(`${config.baseUrl}${path}`, {
@@ -218,7 +218,7 @@ async function requestAsaas({ method, path, body }) {
       : JSON.stringify(responseBody);
 
     throw new Error(
-      `Erro na API do Asaas (${response.status}): ${details || 'sem detalhes'}`
+      `Erro no provedor de pagamento (${response.status}): ${details || 'sem detalhes'}`
     );
   }
 
@@ -307,7 +307,7 @@ async function getSubscriptionPayments(subscriptionId, limit = 10) {
   const normalizedSubscriptionId = String(subscriptionId || '').trim();
 
   if (!normalizedSubscriptionId) {
-    throw new Error('ID da assinatura é obrigatório para buscar cobranças no Asaas.');
+    throw new Error('ID da assinatura é obrigatório para buscar cobranças.');
   }
 
   const normalizedLimit = Number.isInteger(Number(limit))
@@ -321,7 +321,7 @@ async function getSubscriptionPayments(subscriptionId, limit = 10) {
 }
 
 async function createPaymentLink() {
-  throw new Error('createPaymentLink ainda não implementado. Integração real pendente.');
+  throw new Error('Link de pagamento ainda não disponível neste fluxo.');
 }
 
 export {
