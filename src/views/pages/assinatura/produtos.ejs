@@ -152,7 +152,7 @@
           </div>
 
           <div class="modern-note assinatura-products-payment-hint">
-            Escolha cartão para abrir a página segura de pagamento ou boleto para abrir a cobrança bancária.
+            Depois de abrir a cobrança, conclua o pagamento na página segura. A liberação acontece automaticamente após a confirmação. No boleto, a compensação pode levar mais tempo.
           </div>
 
           <div
@@ -366,6 +366,14 @@
           : 'Preparar cartão';
       }
 
+      function getPaymentFollowUpText(billingType) {
+        if (billingType === 'BOLETO') {
+          return 'Depois de pagar, a compensação pode levar mais tempo. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
+        }
+
+        return 'Depois de informar os dados do cartão, a confirmação costuma acontecer em poucos instantes. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
+      }
+
       function setPaymentResult(message, type = 'info') {
         if (!paymentPreparationResult) return;
 
@@ -464,8 +472,10 @@
             const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
 
             if (paymentUrl) {
+              const followUpText = getPaymentFollowUpText(effectiveBillingType);
+
               setPaymentResult(
-                `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>.`,
+                `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>. ${followUpText}`,
                 'success'
               );
 
@@ -474,8 +484,8 @@
               const openPayment = await window.AppAlerts?.confirm({
                 title: isCreditCard ? 'Cobrança por cartão preparada' : 'Boleto preparado',
                 text: isCreditCard
-                  ? 'A cobrança foi criada. Deseja abrir a página segura para informar os dados do cartão?'
-                  : 'A cobrança por boleto foi localizada. Deseja abrir a cobrança agora?',
+                  ? 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
+                  : 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.',
                 confirmButtonText: 'Abrir cobrança',
                 cancelButtonText: 'Continuar no VendMaster'
               });
