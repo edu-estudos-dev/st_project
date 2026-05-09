@@ -336,7 +336,7 @@
           <h1>Dados de cobrança</h1>
 
           <p>
-            Informe os dados que serão usados para identificar sua cobrança e preparar o pagamento da assinatura.
+            Informe ou revise os dados usados para identificar sua cobrança. Depois de salvar, você será direcionado para Minha assinatura para escolher cartão ou boleto.
           </p>
         </div>
       </section>
@@ -355,7 +355,7 @@
             <div>
               <strong>Dados necessários para cobrança.</strong>
               <span>
-                Preencha ou revise as informações abaixo antes de preparar o pagamento por cartão ou boleto.
+                Preencha ou revise as informações abaixo. Após salvar, volte para Minha assinatura para preparar o pagamento com segurança.
               </span>
             </div>
           </div>
@@ -464,11 +464,6 @@
                 <span>Salvar dados de cobrança</span>
               </button>
 
-              <button type="button" class="btn btn-outline-primary" id="startPaymentButton">
-                <i class="bi bi-arrow-right-circle me-1"></i>
-                <span>Preparar pagamento</span>
-              </button>
-
               <a href="/assinatura/status" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>
                 <span>Voltar para minha assinatura</span>
@@ -486,8 +481,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const billingForm = document.getElementById('billingForm');
       const saveBillingButton = document.getElementById('saveBillingButton');
-      const startPaymentButton = document.getElementById('startPaymentButton');
       const billingStatus = document.getElementById('billingStatus');
+      const statusUrl = '/assinatura/status';
 
       const fields = {
         nome: document.getElementById('billing_nome'),
@@ -555,11 +550,6 @@
           behavior: 'smooth',
           block: 'nearest'
         });
-      }
-
-      function clearStatus() {
-        billingStatus.className = 'billing-status';
-        billingStatus.innerHTML = '';
       }
 
       function clearFieldError(input) {
@@ -735,8 +725,19 @@
             throw new Error(data.message || 'Não foi possível salvar os dados de cobrança.');
           }
 
-          showStatus('success', 'Dados salvos.', data.message || 'Dados de cobrança salvos com sucesso.');
-          window.AppAlerts?.success(data.message || 'Dados de cobrança salvos com sucesso.');
+          const message = data.message || 'Dados de cobrança salvos com sucesso.';
+
+          showStatus(
+            'success',
+            'Dados salvos.',
+            `${message} Você será direcionado para Minha assinatura para escolher a forma de pagamento.`
+          );
+
+          window.AppAlerts?.success(`${message} Redirecionando para Minha assinatura...`);
+
+          window.setTimeout(() => {
+            window.location.href = statusUrl;
+          }, 1200);
         } catch (error) {
           const message = error.message || 'Erro ao salvar dados de cobrança.';
 
@@ -744,57 +745,6 @@
           window.AppAlerts?.error(message);
         } finally {
           setButtonLoading(saveBillingButton, false);
-        }
-      });
-
-      startPaymentButton.addEventListener('click', async () => {
-        const validation = validateForm();
-
-        if (!validation.isValid) {
-          const message = validation.errors.join(' ');
-
-          showStatus('error', 'Revise os dados antes de continuar.', message);
-          window.AppAlerts?.warning(message);
-          return;
-        }
-
-        clearStatus();
-        setButtonLoading(startPaymentButton, true, 'Preparando...');
-        showStatus('warning', 'Preparando pagamento...', 'Validando os dados de cobrança antes de abrir a cobrança.');
-
-        try {
-          const response = await fetch('/pagamentos/iniciar', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json'
-            }
-          });
-
-          const data = await parseJsonResponse(response);
-
-          if (!response.ok || !data.success) {
-            throw new Error(data.message || 'Não foi possível preparar o pagamento.');
-          }
-
-          if (data.needsGatewayConfiguration) {
-            const message = data.message || 'Dados de cobrança válidos. A cobrança ainda não está disponível para esta assinatura.';
-
-            showStatus('warning', 'Cobrança pendente.', message);
-            window.AppAlerts?.warning(message);
-            return;
-          }
-
-          const message = data.message || 'Pagamento preparado com sucesso.';
-
-          showStatus('success', 'Pagamento preparado.', message);
-          window.AppAlerts?.success(message);
-        } catch (error) {
-          const message = error.message || 'Erro ao preparar pagamento.';
-
-          showStatus('error', 'Erro ao preparar pagamento.', message);
-          window.AppAlerts?.error(message);
-        } finally {
-          setButtonLoading(startPaymentButton, false);
         }
       });
     });
