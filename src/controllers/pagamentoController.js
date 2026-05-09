@@ -276,20 +276,45 @@ function getPaymentDateScore(payment) {
   ).getTime();
 }
 
+function isReusablePendingPayment(payment, assinante) {
+  const expectedExternalReference = `assinante:${assinante.id}`;
+  const expectedValue = getMonthlyPlanValue(assinante);
+
+  return (
+    payment?.status === 'PENDING' &&
+    payment?.externalReference === expectedExternalReference &&
+    isSameMoneyValue(payment?.value, expectedValue) &&
+    Boolean(payment?.invoiceUrl || payment?.bankSlipUrl)
+  );
+}
+
+function selectReusablePendingPayment(payments = [], assinante) {
+  if (!Array.isArray(payments) || !payments.length) {
+    return null;
+  }
+
+  const reusablePayments = payments.filter((payment) => {
+    return isReusablePendingPayment(payment, assinante);
+  });
+
+  if (!reusablePayments.length) {
+    return null;
+  }
+
+  return reusablePayments.sort((a, b) => {
+    return getPaymentDateScore(b) - getPaymentDateScore(a);
+  })[0];
+}
+
 function selectReusableCreditCardPayment(payments = [], assinante) {
   if (!Array.isArray(payments) || !payments.length) {
     return null;
   }
 
-  const expectedExternalReference = `assinante:${assinante.id}`;
-  const expectedValue = getMonthlyPlanValue(assinante);
-
   const reusablePayments = payments.filter((payment) => {
     return (
       payment?.billingType === 'CREDIT_CARD' &&
-      payment?.status === 'PENDING' &&
-      payment?.externalReference === expectedExternalReference &&
-      isSameMoneyValue(payment?.value, expectedValue) &&
+      isReusablePendingPayment(payment, assinante) &&
       Boolean(payment?.invoiceUrl)
     );
   });
@@ -301,6 +326,12 @@ function selectReusableCreditCardPayment(payments = [], assinante) {
   return reusablePayments.sort((a, b) => {
     return getPaymentDateScore(b) - getPaymentDateScore(a);
   })[0];
+}
+
+async function findReusablePendingPayment(assinante, customerId) {
+  const paymentsResult = await getCustomerPayments(customerId, 50);
+
+  return selectReusablePendingPayment(paymentsResult?.data || [], assinante);
 }
 
 async function findReusableCreditCardPayment(assinante, customerId) {
@@ -610,6 +641,38 @@ async function iniciarPagamento(req, res) {
     }
 
     const customerResult = await ensureAsaasCustomerForAssinante(assinante);
+    const reusablePendingPayment = await findReusablePendingPayment(
+      assinante,
+      customerResult.customerId
+    );
+
+    if (
+      reusablePendingPayment?.id &&
+      reusablePendingPayment.billingType &&
+      reusablePendingPayment.billingType !== requestedBillingType
+    ) {
+      const payment = buildPaymentResponse(reusablePendingPayment);
+      const currentMethodLabel =
+        reusablePendingPayment.billingType === 'CREDIT_CARD'
+          ? 'cartão'
+          : 'boleto';
+
+      return res.status(409).json({
+        success: false,
+        message: `Já existe uma cobrança por ${currentMethodLabel} em aberto. Para evitar cobranças duplicadas, conclua a cobrança atual antes de gerar outra forma de pagamento.`,
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: reusablePendingPayment.billingType,
+        gatewayCustomerId: customerResult.customerId,
+        gatewayCustomerCreated: customerResult.created,
+        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+        gatewaySubscriptionCreated: false,
+        gatewayPaymentReused: true,
+        needsGatewayConfiguration: false,
+        payment,
+        pix: null
+      });
+    }
 
     let responsePayload;
 
