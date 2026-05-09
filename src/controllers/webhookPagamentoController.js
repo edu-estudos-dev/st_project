@@ -10,7 +10,7 @@ function isWebhookTokenValid(req) {
   const expectedToken = process.env.ASAAS_WEBHOOK_TOKEN;
 
   if (!expectedToken) {
-    console.error('ASAAS_WEBHOOK_TOKEN não configurado no ambiente.');
+    console.error('Token do webhook de pagamento não configurado no ambiente.');
     return false;
   }
 
@@ -151,7 +151,7 @@ async function receberWebhookAsaas(req, res) {
       processingReason: processingResult.reason
     });
   } catch (error) {
-    console.error('Erro ao receber webhook do Asaas:', error);
+    console.error('Erro ao receber webhook de pagamento:', error);
 
     return res.status(500).json({
       received: false,

@@ -75,7 +75,7 @@ class AssinanteModel {
     };
   }
 
-    async expireOverdueSubscriptions(whereSql, params) {
+  async expireOverdueSubscriptions(whereSql, params) {
     await this.ensureProdutosHabilitadosColumn();
 
     await connection.query(
@@ -94,7 +94,7 @@ class AssinanteModel {
     );
   }
 
-    async expireAllOverdueSubscriptionsForMaintenance() {
+  async expireAllOverdueSubscriptionsForMaintenance() {
     await this.ensureProdutosHabilitadosColumn();
     await this.ensureBillingColumns();
 
@@ -570,7 +570,7 @@ class AssinanteModel {
     return result.rows[0] || null;
   }
 
-    async markAsOverdueFromPayment(
+  async markAsOverdueFromPayment(
     id,
     { dueDate = null, gatewaySubscriptionId = null } = {}
   ) {
@@ -591,7 +591,7 @@ class AssinanteModel {
          gateway_subscription_id = COALESCE($3, gateway_subscription_id),
          updated_at = NOW()
        WHERE id = $1
-         AND status_assinatura <> 'cancelado'
+         AND status_assinatura NOT IN ('bloqueado', 'cancelado')
        RETURNING
          id,
          user_id,
