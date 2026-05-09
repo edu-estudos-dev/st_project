@@ -6,6 +6,107 @@
   <%- include('../../partials/header') %>
   <div class="page-spacer"></div>
 
+  <%
+    const totalEventos = paymentEvents.length;
+    const totalProcessados = paymentEvents.filter((event) => Boolean(event.processed_at)).length;
+    const totalNaoProcessados = totalEventos - totalProcessados;
+    const totalConfirmados = paymentEvents.filter((event) => {
+      return ['PAYMENT_CONFIRMED', 'PAYMENT_RECEIVED'].includes(event.event_type);
+    }).length;
+
+    const getEventLabel = (eventType) => {
+      const labels = {
+        PAYMENT_CREATED: 'Cobrança criada',
+        PAYMENT_CONFIRMED: 'Pagamento confirmado',
+        PAYMENT_RECEIVED: 'Pagamento recebido',
+        PAYMENT_OVERDUE: 'Pagamento vencido',
+        PAYMENT_DELETED: 'Cobrança removida',
+        SUBSCRIPTION_DELETED: 'Assinatura removida',
+        SUBSCRIPTION_INACTIVATED: 'Assinatura inativada'
+      };
+
+      return labels[eventType] || eventType || 'Não informado';
+    };
+
+    const getEventClass = (eventType) => {
+      if (['PAYMENT_CONFIRMED', 'PAYMENT_RECEIVED'].includes(eventType)) {
+        return 'is-success';
+      }
+
+      if (['PAYMENT_OVERDUE', 'PAYMENT_DELETED', 'SUBSCRIPTION_DELETED', 'SUBSCRIPTION_INACTIVATED'].includes(eventType)) {
+        return 'is-warning';
+      }
+
+      if (eventType === 'PAYMENT_CREATED') {
+        return 'is-info';
+      }
+
+      return 'is-muted';
+    };
+
+    const getEventInterpretation = (event) => {
+      if (!event.assinante_id) {
+        return {
+          type: 'warning',
+          label: 'Evento sem assinante vinculado. Verifique se o cliente, assinatura ou cobrança está associado corretamente.'
+        };
+      }
+
+      const eventType = event.event_type;
+      const isProcessed = Boolean(event.processed_at);
+
+      if (eventType === 'PAYMENT_CREATED') {
+        return {
+          type: 'info',
+          label: 'Cobrança criada. Registro esperado; não ativa a assinatura.'
+        };
+      }
+
+      if (['PAYMENT_CONFIRMED', 'PAYMENT_RECEIVED'].includes(eventType)) {
+        return {
+          type: isProcessed ? 'success' : 'warning',
+          label: isProcessed
+            ? 'Pagamento confirmado. A assinatura foi ativada ou renovada.'
+            : 'Pagamento confirmado, mas ainda não processado. Verifique o processamento do webhook.'
+        };
+      }
+
+      if (eventType === 'PAYMENT_OVERDUE') {
+        return {
+          type: isProcessed ? 'warning' : 'info',
+          label: isProcessed
+            ? 'Pagamento vencido. A assinatura foi marcada como vencida quando aplicável.'
+            : 'Pagamento vencido registrado, mas sem ação aplicada.'
+        };
+      }
+
+      if (eventType === 'PAYMENT_DELETED') {
+        return {
+          type: isProcessed ? 'warning' : 'info',
+          label: isProcessed
+            ? 'Cobrança removida. A assinatura foi ajustada quando aplicável.'
+            : 'Cobrança removida registrada, mas sem ação aplicada.'
+        };
+      }
+
+      if (['SUBSCRIPTION_DELETED', 'SUBSCRIPTION_INACTIVATED'].includes(eventType)) {
+        return {
+          type: isProcessed ? 'warning' : 'info',
+          label: isProcessed
+            ? 'Assinatura cancelada ou inativada no provedor. O assinante foi marcado como cancelado.'
+            : 'Evento de assinatura registrado, mas sem ação aplicada.'
+        };
+      }
+
+      return {
+        type: isProcessed ? 'success' : 'info',
+        label: isProcessed
+          ? 'Evento registrado e processado.'
+          : 'Evento registrado sem ação automática.'
+      };
+    };
+  %>
+
   <div class="list-shell">
     <%- include('../../partials/breadcrumb', { pageTitle: 'Eventos de Pagamento' }) %>
 
@@ -31,13 +132,40 @@
     </section>
 
     <main class="list-stage">
+      <section class="admin-payment-summary-grid" aria-label="Resumo dos eventos de pagamento">
+        <article class="admin-payment-summary-card">
+          <span>Total</span>
+          <strong><%= totalEventos %></strong>
+          <small>evento(s) registrado(s)</small>
+        </article>
+
+        <article class="admin-payment-summary-card is-success">
+          <span>Processados</span>
+          <strong><%= totalProcessados %></strong>
+          <small>com ação aplicada</small>
+        </article>
+
+        <article class="admin-payment-summary-card is-warning">
+          <span>Não processados</span>
+          <strong><%= totalNaoProcessados %></strong>
+          <small>registro ou análise</small>
+        </article>
+
+        <article class="admin-payment-summary-card is-info">
+          <span>Pagamentos confirmados</span>
+          <strong><%= totalConfirmados %></strong>
+          <small>confirmações recebidas</small>
+        </article>
+      </section>
+
       <section class="list-panel">
         <div class="list-toolbar">
           <div class="list-toolbar-copy">
             <h2>Histórico de eventos de cobrança</h2>
             <p>
-              Use esta tela para diagnosticar pagamentos confirmados, vencidos,
-              cancelados ou eventos ainda não processados.
+              Use esta tela para acompanhar confirmações, vencimentos, cancelamentos e eventos
+              registrados sem ação automática. Eventos como cobrança criada podem aparecer como
+              não processados sem indicar erro.
             </p>
           </div>
 
@@ -66,8 +194,10 @@
                   <th>Data</th>
                   <th>Evento</th>
                   <th>Status</th>
+                  <th>Interpretação</th>
                   <th>ID do pagamento</th>
                   <th>ID da assinatura</th>
+                  <th>ID do evento</th>
                   <th>Processado</th>
                   <th>Dados técnicos</th>
                 </tr>
@@ -75,19 +205,32 @@
 
               <tbody>
                 <% paymentEvents.forEach((event) => { %>
+                  <% const interpretation = getEventInterpretation(event); %>
+
                   <tr>
                     <td>
                       <strong><%= formatDateTime(event.created_at) %></strong>
                     </td>
 
                     <td>
-                      <span class="admin-event-pill">
+                      <span class="admin-event-pill <%= getEventClass(event.event_type) %>">
+                        <%= getEventLabel(event.event_type) %>
+                      </span>
+                      <small class="admin-event-code">
                         <%= event.event_type || 'Não informado' %>
+                      </small>
+                    </td>
+
+                    <td>
+                      <span class="admin-event-status">
+                        <%= event.status || 'Não informado' %>
                       </span>
                     </td>
 
                     <td>
-                      <%= event.status || 'Não informado' %>
+                      <span class="admin-event-interpretation is-<%= interpretation.type %>">
+                        <%= interpretation.label %>
+                      </span>
                     </td>
 
                     <td>
@@ -99,12 +242,16 @@
                     </td>
 
                     <td>
+                      <code><%= event.gateway_event_id || '-' %></code>
+                    </td>
+
+                    <td>
                       <% if (event.processed_at) { %>
                         <span class="admin-event-processed is-processed">
                           <i class="bi bi-check-circle"></i>
                           Sim
                         </span>
-                        <small>
+                        <small class="admin-event-date">
                           <%= formatDateTime(event.processed_at) %>
                         </small>
                       <% } else { %>
@@ -132,8 +279,64 @@
   </div>
 
   <style>
+    .admin-payment-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-payment-summary-card {
+      padding: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 8rem),
+        #fff;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+    }
+
+    .admin-payment-summary-card span,
+    .admin-payment-summary-card small {
+      display: block;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .admin-payment-summary-card strong {
+      display: block;
+      margin: 0.18rem 0;
+      color: #0f172a;
+      font-size: 1.45rem;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-payment-summary-card.is-success {
+      background:
+        radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 8rem),
+        #ecfdf5;
+      border-color: rgba(16, 185, 129, 0.22);
+    }
+
+    .admin-payment-summary-card.is-warning {
+      background:
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 8rem),
+        #fffbeb;
+      border-color: rgba(245, 158, 11, 0.24);
+    }
+
+    .admin-payment-summary-card.is-info {
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 8rem),
+        #eff6ff;
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
     .admin-payment-events-table {
       margin-bottom: 0;
+      min-width: 1180px;
     }
 
     .admin-payment-events-table th {
@@ -150,6 +353,8 @@
     }
 
     .admin-payment-events-table code {
+      display: inline-block;
+      max-width: 180px;
       color: #1d4ed8;
       font-size: 0.82rem;
       word-break: break-word;
@@ -166,6 +371,72 @@
       font-size: 0.78rem;
       font-weight: 850;
       white-space: nowrap;
+    }
+
+    .admin-event-pill.is-success {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .admin-event-pill.is-warning {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
+    .admin-event-pill.is-info {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .admin-event-pill.is-muted {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .admin-event-code,
+    .admin-event-date {
+      display: block;
+      margin-top: 0.22rem;
+      color: #64748b;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .admin-event-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.26rem 0.5rem;
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.78rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .admin-event-interpretation {
+      display: block;
+      max-width: 280px;
+      line-height: 1.38;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .admin-event-interpretation.is-success {
+      color: #047857;
+    }
+
+    .admin-event-interpretation.is-warning {
+      color: #92400e;
+    }
+
+    .admin-event-interpretation.is-info {
+      color: #1d4ed8;
+    }
+
+    .admin-event-interpretation.is-muted {
+      color: #475569;
     }
 
     .admin-event-processed {
@@ -189,6 +460,7 @@
       color: #1d4ed8;
       font-weight: 850;
       font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     .admin-event-payload pre {
@@ -204,7 +476,17 @@
       line-height: 1.45;
     }
 
+    @media (max-width: 1000px) {
+      .admin-payment-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
     @media (max-width: 768px) {
+      .admin-payment-summary-grid {
+        grid-template-columns: 1fr;
+      }
+
       .admin-event-payload pre {
         max-width: 78vw;
       }
