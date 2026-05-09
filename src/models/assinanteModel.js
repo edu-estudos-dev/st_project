@@ -199,9 +199,15 @@ class AssinanteModel {
     );
 
     return {
-      expiredSubscriptions: expiredResult.rows.map(row => this.normalizeRow(row)),
-      blockedSubscriptions: blockedResult.rows.map(row => this.normalizeRow(row)),
-      cancelledSubscriptions: cancelledResult.rows.map(row => this.normalizeRow(row))
+      expiredSubscriptions: expiredResult.rows.map(row =>
+        this.normalizeRow(row)
+      ),
+      blockedSubscriptions: blockedResult.rows.map(row =>
+        this.normalizeRow(row)
+      ),
+      cancelledSubscriptions: cancelledResult.rows.map(row =>
+        this.normalizeRow(row)
+      )
     };
   }
 
@@ -546,24 +552,31 @@ class AssinanteModel {
 
     const result = await connection.query(
       `UPDATE assinantes
-       SET
-         status_assinatura = 'ativo',
-         data_ativacao = COALESCE(data_ativacao, NOW()),
-         data_vencimento = $2::timestamptz + INTERVAL '30 days',
-         gateway_subscription_id = COALESCE($3, gateway_subscription_id),
-         updated_at = NOW()
-       WHERE id = $1
-       RETURNING
-         id,
-         user_id,
-         status_assinatura,
-         data_ativacao,
-         data_vencimento,
-         gateway_customer_id,
-         gateway_subscription_id,
-         plano_codigo,
-         plano_nome,
-         valor_mensal`,
+     SET
+       status_assinatura = 'ativo',
+       data_ativacao = COALESCE(data_ativacao, NOW()),
+       data_vencimento = (
+         CASE
+           WHEN data_vencimento IS NOT NULL
+             AND data_vencimento > $2::timestamptz
+           THEN data_vencimento
+           ELSE $2::timestamptz
+         END
+       ) + INTERVAL '30 days',
+       gateway_subscription_id = COALESCE($3, gateway_subscription_id),
+       updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id,
+       user_id,
+       status_assinatura,
+       data_ativacao,
+       data_vencimento,
+       gateway_customer_id,
+       gateway_subscription_id,
+       plano_codigo,
+       plano_nome,
+       valor_mensal`,
       [id, safePaymentDate.toISOString(), gatewaySubscriptionId || null]
     );
 
@@ -575,13 +588,16 @@ class AssinanteModel {
     { dueDate = null, gatewaySubscriptionId = null } = {}
   ) {
     if (!id) {
-      throw new Error('ID do assinante é obrigatório para marcar assinatura vencida.');
+      throw new Error(
+        'ID do assinante é obrigatório para marcar assinatura vencida.'
+      );
     }
 
     const parsedDueDate = dueDate ? new Date(dueDate) : null;
-    const safeDueDate = parsedDueDate && !Number.isNaN(parsedDueDate.getTime())
-      ? parsedDueDate
-      : null;
+    const safeDueDate =
+      parsedDueDate && !Number.isNaN(parsedDueDate.getTime())
+        ? parsedDueDate
+        : null;
 
     const result = await connection.query(
       `UPDATE assinantes
@@ -603,7 +619,11 @@ class AssinanteModel {
          plano_codigo,
          plano_nome,
          valor_mensal`,
-      [id, safeDueDate ? safeDueDate.toISOString() : null, gatewaySubscriptionId || null]
+      [
+        id,
+        safeDueDate ? safeDueDate.toISOString() : null,
+        gatewaySubscriptionId || null
+      ]
     );
 
     return result.rows[0] || null;
@@ -611,7 +631,9 @@ class AssinanteModel {
 
   async cancelFromGateway(id, { gatewaySubscriptionId = null } = {}) {
     if (!id) {
-      throw new Error('ID do assinante é obrigatório para cancelar assinatura.');
+      throw new Error(
+        'ID do assinante é obrigatório para cancelar assinatura.'
+      );
     }
 
     const result = await connection.query(
