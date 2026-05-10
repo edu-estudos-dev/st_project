@@ -40,30 +40,38 @@
                   <p>
                     <%= post.resumo %>
                   </p>
+                <% } %>
+
+                <div class="blog-article-meta">
+                  <span class="blog-article-author-name">
+                    <%= post.autor || 'VendMaster' %>
+                  </span>
+
+                  <% if (post.data_publicacao) { %>
+                    <span aria-hidden="true">•</span>
+                    <time
+                      datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>">
+                      <%= formatarDataPost(post.data_publicacao) %>
+                    </time>
                   <% } %>
 
-                    <div class="blog-article-meta">
-                      <span class="blog-article-author-name">
-                        <%= post.autor || 'VendMaster' %>
-                      </span>
+                  <span aria-hidden="true">•</span>
+                  <span>Leitura estratégica</span>
+                </div>
 
-                      <% if (post.data_publicacao) { %>
-                        <span aria-hidden="true">•</span>
-                        <time
-                          datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>">
-                          <%= formatarDataPost(post.data_publicacao) %>
-                        </time>
-                        <% } %>
+                <div class="blog-article-hero-actions" aria-label="Ações do artigo">
+                  <a href="#conteudo-artigo" class="blog-primary-link">
+                    Ler artigo
+                  </a>
 
-                          <span aria-hidden="true">•</span>
-                          <span>Leitura estratégica</span>
-                    </div>
+                  <a href="/demonstracao" class="blog-secondary-link">
+                    Conhecer o VendMaster
+                  </a>
+                </div>
               </div>
-            </div>
 
-            <% if (post.imagem_capa) { %>
-              <div class="blog-container">
-                <div class="blog-article-cover" role="figure" aria-label="<%= post.titulo %>">
+              <% if (post.imagem_capa) { %>
+                <figure class="blog-article-featured-cover" aria-label="<%= post.titulo %>">
                   <img
                     src="<%= post.imagem_capa %>"
                     alt="<%= post.titulo %>"
@@ -71,12 +79,37 @@
                     decoding="async"
                     fetchpriority="high"
                   >
-                </div>
-              </div>
+
+                  <figcaption class="blog-article-featured-caption">
+                    <span>Conteúdo VendMaster</span>
+                    <strong><%= post.categoria %></strong>
+                  </figcaption>
+                </figure>
+              <% } else { %>
+                <figure class="blog-article-featured-cover blog-article-featured-placeholder" aria-label="VendMaster">
+                  <span>VendMaster</span>
+
+                  <figcaption class="blog-article-featured-caption">
+                    <span>Conteúdo VendMaster</span>
+                    <strong><%= post.categoria %></strong>
+                  </figcaption>
+                </figure>
               <% } %>
+            </div>
           </section>
 
           <div class="blog-container blog-article-layout">
+            <%
+              const vmArticleShareUrl = typeof canonicalUrl !== 'undefined' && canonicalUrl
+                ? canonicalUrl
+                : `https://vendmaster.com.br/blog/${post.slug}`;
+              const vmArticleShareTitle = post.titulo || 'Artigo VendMaster';
+              const vmArticleShareText = `${vmArticleShareTitle} | Blog VendMaster`;
+
+              const encodedVmArticleShareUrl = encodeURIComponent(vmArticleShareUrl);
+              const encodedVmArticleShareText = encodeURIComponent(vmArticleShareText);
+            %>
+
             <aside class="blog-article-sidebar" aria-label="Navegação lateral do artigo">
               <div class="blog-sidebar-card">
                 <h2>Categorias</h2>
@@ -100,6 +133,59 @@
                     <% } %>
               </div>
 
+              <div class="blog-sidebar-card blog-sidebar-share" aria-label="Compartilhar artigo">
+                <span class="blog-eyebrow">Compartilhe</span>
+
+                <h2>Gostou do artigo?</h2>
+
+                <p>
+                  Envie este conteúdo para alguém que também precisa melhorar a operação.
+                </p>
+
+                <div class="blog-sidebar-share-links">
+                  <a
+                    href="https://api.whatsapp.com/send?text=<%= encodedVmArticleShareText %>%20<%= encodedVmArticleShareUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Compartilhar no WhatsApp"
+                  >
+                    <i class="bi bi-whatsapp" aria-hidden="true"></i>
+                  </a>
+
+                  <a
+                    href="https://www.facebook.com/sharer/sharer.php?u=<%= encodedVmArticleShareUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Compartilhar no Facebook"
+                  >
+                    <i class="bi bi-facebook" aria-hidden="true"></i>
+                  </a>
+
+                  <a
+                    href="https://twitter.com/intent/tweet?url=<%= encodedVmArticleShareUrl %>&text=<%= encodedVmArticleShareText %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Compartilhar no X"
+                  >
+                    <i class="bi bi-twitter-x" aria-hidden="true"></i>
+                  </a>
+
+                  <button
+                    type="button"
+                    class="blog-sidebar-share-copy"
+                    data-share-copy-link="<%= vmArticleShareUrl %>"
+                    aria-label="Copiar link do artigo"
+                    aria-describedby="blog-share-feedback"
+                  >
+                    <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                  </button>
+                </div>
+
+                <p id="blog-share-feedback" class="blog-sidebar-share-feedback" aria-live="polite" hidden>
+                  Link copiado.
+                </p>
+              </div>
+
               <div class="blog-sidebar-card blog-sidebar-cta">
                 <span class="blog-eyebrow">VendMaster</span>
 
@@ -113,7 +199,16 @@
               </div>
             </aside>
 
-            <section class="blog-article-content">
+            <section class="blog-article-content" id="conteudo-artigo">
+              <aside class="blog-article-reading-card">
+                <span>Guia prático</span>
+                <strong>Leia com foco em aplicação, não apenas em teoria.</strong>
+                <p>
+                  Este conteúdo foi pensado para ajudar operadores a transformar controle,
+                  rota, sangria e gestão em uma rotina mais clara e profissional.
+                </p>
+              </aside>
+
               <%- post.conteudo %>
 
               <% const articleCommercialLinks = {
@@ -232,6 +327,59 @@
               </div>
             </section>
       </main>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const shareCopyButton = document.querySelector('[data-share-copy-link]');
+
+          if (!shareCopyButton) return;
+
+          const originalLabel = shareCopyButton.getAttribute('aria-label') || 'Copiar link do artigo';
+          const feedback = document.getElementById('blog-share-feedback');
+
+          shareCopyButton.addEventListener('click', async () => {
+            const link = shareCopyButton.getAttribute('data-share-copy-link');
+
+            if (!link) return;
+
+            try {
+              if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(link);
+              } else {
+                const temporaryInput = document.createElement('textarea');
+                temporaryInput.value = link;
+                temporaryInput.setAttribute('readonly', '');
+                temporaryInput.style.position = 'fixed';
+                temporaryInput.style.top = '-9999px';
+                document.body.appendChild(temporaryInput);
+                temporaryInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(temporaryInput);
+              }
+
+              shareCopyButton.setAttribute('aria-label', 'Link copiado');
+
+              if (feedback) {
+                feedback.hidden = false;
+              }
+
+              window.setTimeout(() => {
+                shareCopyButton.setAttribute('aria-label', originalLabel);
+
+                if (feedback) {
+                  feedback.hidden = true;
+                }
+              }, 2600);
+            } catch (error) {
+              shareCopyButton.setAttribute('aria-label', 'Não foi possível copiar o link');
+
+              window.setTimeout(() => {
+                shareCopyButton.setAttribute('aria-label', originalLabel);
+              }, 2600);
+            }
+          });
+        });
+      </script>
 
       <%- include('../../partials/footer') %>
   </body>

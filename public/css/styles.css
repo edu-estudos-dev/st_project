@@ -177,14 +177,6 @@ header li > a:hover {
   font-size: 1em;
 }
 
-.brand-mark-footer .brand-mark-primary {
-  color: var(--vm-blue);
-}
-
-.brand-mark-footer .brand-mark-accent {
-  color: var(--vm-green);
-}
-
 .usuario-info {
   align-self: flex-start;
   margin-left: 20px;
@@ -192,7 +184,7 @@ header li > a:hover {
 }
 
 /* Footer legado usado em paginas internas antigas */
-footer li > a {
+footer:not(.site-footer) li > a {
   text-decoration: none;
   color: #22c55e; /* VERDE DA MARCA */
   text-shadow: none;
@@ -200,15 +192,15 @@ footer li > a {
   transition: 0.3s;
 }
 
-footer li > a:hover {
+footer:not(.site-footer) li > a:hover {
   color: #2563eb; /* AZUL DA MARCA */
 }
 
-footer h5 {
+footer:not(.site-footer) h5 {
   color: var(--light-blue-color);
 }
 
-footer p {
+footer:not(.site-footer) p {
   color: var(--dark-color-2);
 }
 
@@ -5317,23 +5309,23 @@ body.route-neighborhood-modal-open {
     margin: 1.5rem auto;
   }
 
-  footer .row {
+  footer:not(.site-footer) .row {
     gap: 1.5rem;
   }
 
-  footer .box-1,
-  footer .box-2,
-  footer .box-3 {
+  footer:not(.site-footer) .box-1,
+  footer:not(.site-footer) .box-2,
+  footer:not(.site-footer) .box-3 {
     width: 100%;
     justify-content: center !important;
   }
 
-  footer .list-inline {
+  footer:not(.site-footer) .list-inline {
     flex-wrap: wrap;
     gap: 0.75rem;
   }
 
-  footer .col-md-4 {
+  footer:not(.site-footer) .col-md-4 {
     text-align: center;
   }
 
@@ -5610,7 +5602,7 @@ body.route-neighborhood-modal-open {
   }
 }
 
-footer {
+footer:not(.site-footer) {
   background: #0f172a;
   color: #e5e7eb;
 }
@@ -5620,36 +5612,36 @@ footer {
    ========================================================================== */
 
 /* Links e textos do footer legado */
-footer a {
+footer:not(.site-footer) a {
   color: #22c55e; /* VERDE DA MARCA */
   text-decoration: none;
   transition: 0.3s;
   font-weight: 500;
 }
 
-footer a:hover {
+footer:not(.site-footer) a:hover {
   color: #2563eb; /* AZUL NO HOVER */
 }
 
-footer h5 {
+footer:not(.site-footer) h5 {
   color: #ffffff;
   font-weight: 600;
 }
 
-footer h6 {
+footer:not(.site-footer) h6 {
   color: #9ca3af;
 }
 
-footer i {
+footer:not(.site-footer) i {
   font-size: 1.2rem;
   transition: 0.3s;
 }
 
-footer i:hover {
+footer:not(.site-footer) i:hover {
   color: #22c55e;
 }
 
-footer hr {
+footer:not(.site-footer) hr {
   border-color: #1f2937;
 }
 
@@ -5747,49 +5739,6 @@ footer hr {
   margin-bottom: 1.2rem;
 }
 
-/* ==========================================================================
-   13 - RODAPE MODERNO / SITE FOOTER
-   ========================================================================== */
-
-.site-footer {
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(96, 165, 250, 0.18),
-      transparent 20%
-    ),
-    linear-gradient(135deg, #081326 0%, #0c2144 55%, #13386f 100%);
-  color: #dbeafe;
-}
-
-.site-footer hr {
-  border-color: rgba(191, 219, 254, 0.14);
-}
-
-.site-footer .brand-mark-footer .brand-mark-primary {
-  color: #0359bf !important;
-}
-
-.site-footer .brand-mark-footer .brand-mark-accent {
-  color: #37a647 !important;
-}
-
-.site-footer a {
-  color: #c4f1d4;
-}
-
-.site-footer a:hover {
-  color: #93c5fd;
-}
-
-.site-footer h5 {
-  color: #f8fafc;
-}
-
-.site-footer h6,
-.site-footer p {
-  color: #bfdbfe;
-}
 
 /* ==========================================================================
    RESPONSIVE ORGANIZATION
@@ -5802,10 +5751,6 @@ footer hr {
 
   .auth-card {
     border-radius: 24px !important;
-  }
-
-  .site-footer .row {
-    gap: 1.5rem;
   }
 }
 

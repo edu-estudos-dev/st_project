@@ -62,7 +62,7 @@ class HomepageController {
 
       const postsPublicados = await blogModel.buscarPostsPublicados();
 
-      const postsRecentes = postsPublicados.slice(0, 2).map(post => ({
+      const postsRecentes = postsPublicados.map(post => ({
         titulo: post.titulo,
         slug: post.slug,
         categoria: post.categoria,
@@ -235,7 +235,8 @@ class HomepageController {
   }
 
   renderSistemaGestaoMaquinasPage(req, res) {
-    const canonicalUrl = 'https://vendmaster.com.br/sistema-gestao-maquinas-recreativas';
+    const canonicalUrl =
+      'https://vendmaster.com.br/sistema-gestao-maquinas-recreativas';
 
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
@@ -302,18 +303,15 @@ class HomepageController {
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/commercial-page.css',
-        '/css/sistema-gestao-maquinas-recreativas.css'
-      ],
+      extraStyles: ['/css/blog-public-header.css', '/css/commercial-pages.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
   }
 
   renderControleSangriaBolinhasPage(req, res) {
-    const canonicalUrl = 'https://vendmaster.com.br/controle-sangria-maquinas-bolinhas';
+    const canonicalUrl =
+      'https://vendmaster.com.br/controle-sangria-maquinas-bolinhas';
 
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
@@ -380,18 +378,15 @@ class HomepageController {
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/commercial-page.css',
-        '/css/controle-sangria-maquinas-bolinhas.css'
-      ],
+      extraStyles: ['/css/blog-public-header.css', '/css/commercial-pages.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
   }
 
   renderRotaInteligentePage(req, res) {
-    const canonicalUrl = 'https://vendmaster.com.br/rota-inteligente-maquinas-recreativas';
+    const canonicalUrl =
+      'https://vendmaster.com.br/rota-inteligente-maquinas-recreativas';
 
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
@@ -458,18 +453,15 @@ class HomepageController {
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/commercial-page.css',
-        '/css/rota-inteligente-maquinas-recreativas.css'
-      ],
+      extraStyles: ['/css/blog-public-header.css', '/css/commercial-pages.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
   }
 
   renderSistemaPeluciasPage(req, res) {
-    const canonicalUrl = 'https://vendmaster.com.br/sistema-para-maquinas-de-pelucias';
+    const canonicalUrl =
+      'https://vendmaster.com.br/sistema-para-maquinas-de-pelucias';
 
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
@@ -544,18 +536,15 @@ class HomepageController {
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/commercial-page.css',
-        '/css/sistema-para-maquinas-de-pelucias.css'
-      ],
+      extraStyles: ['/css/blog-public-header.css', '/css/commercial-pages.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
   }
 
   renderControleConsignadosPage(req, res) {
-    const canonicalUrl = 'https://vendmaster.com.br/controle-consignados-comissao';
+    const canonicalUrl =
+      'https://vendmaster.com.br/controle-consignados-comissao';
 
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
@@ -630,11 +619,7 @@ class HomepageController {
       canonicalUrl,
       breadcrumbJsonLd,
       faqJsonLd,
-      extraStyles: [
-        '/css/blog-public-header.css',
-        '/css/commercial-page.css',
-        '/css/controle-consignados-comissao.css'
-      ],
+      extraStyles: ['/css/blog-public-header.css', '/css/commercial-pages.css'],
       skipGlobalStyles: true,
       preloadExtraStyles: false
     });
