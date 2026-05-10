@@ -19,11 +19,38 @@ function isWebhookTokenValid(req) {
   return receivedToken === expectedToken;
 }
 
+function isUniqueViolationError(error) {
+  return error?.code === '23505';
+}
+
 async function resolveAssinanteFromEvent(normalizedEvent) {
   return AssinanteModel.findByGatewayReference({
     gatewayCustomerId: normalizedEvent.gatewayCustomerId,
     gatewaySubscriptionId: normalizedEvent.gatewaySubscriptionId
   });
+}
+
+async function createPaymentEventSafely(normalizedEvent, assinante) {
+  try {
+    return {
+      duplicated: false,
+      event: await PaymentEventModel.create({
+        ...normalizedEvent,
+        assinanteId: assinante?.id || null
+      })
+    };
+  } catch (error) {
+    if (!isUniqueViolationError(error)) {
+      throw error;
+    }
+
+    const duplicatedEvent = await PaymentEventModel.findDuplicate(normalizedEvent);
+
+    return {
+      duplicated: true,
+      event: duplicatedEvent || null
+    };
+  }
 }
 
 async function processPaymentEvent(normalizedEvent, assinante) {
@@ -128,12 +155,20 @@ async function receberWebhookAsaas(req, res) {
     }
 
     const assinante = await resolveAssinanteFromEvent(normalizedEvent);
+    const eventCreationResult = await createPaymentEventSafely(
+      normalizedEvent,
+      assinante
+    );
 
-    const event = await PaymentEventModel.create({
-      ...normalizedEvent,
-      assinanteId: assinante?.id || null
-    });
+    if (eventCreationResult.duplicated) {
+      return res.status(200).json({
+        received: true,
+        duplicated: true,
+        eventId: eventCreationResult.event?.id || null
+      });
+    }
 
+    const event = eventCreationResult.event;
     const processingResult = await processPaymentEvent(normalizedEvent, assinante);
 
     if (processingResult.processed) {
