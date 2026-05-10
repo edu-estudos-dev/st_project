@@ -54,7 +54,7 @@
 
   /* Escala tipográfica única da homepage */
   --vm-root-font-size: 16px;
-  --vm-font-label: 0.72rem;
+  --vm-font-label: 0.8rem;
   --vm-font-caption: 0.82rem;
   --vm-font-small: 0.9rem;
   --vm-font-button: 0.95rem;
@@ -78,6 +78,10 @@
   --vm-line-card: 1.18;
   --vm-line-body: 1.68;
   --vm-line-body-compact: 1.55;
+}
+
+.homepage-body :is(.vm-kicker, .tag-alert, .vm-pain-marker, .vm-ba-label) {
+  font-size: max(var(--vm-font-label), 0.8rem);
 }
 
 /* ========================================================================== */
@@ -8913,6 +8917,8 @@ html:has(.homepage-body) {
 
 @media (max-width: 575.98px) {
   .homepage-body {
+    --vm-font-label: 0.8rem;
+    --vm-font-caption: 0.86rem;
     --vm-font-small: 0.95rem;
     --vm-font-button: 1rem;
     --vm-font-body: 1rem;
@@ -8921,7 +8927,7 @@ html:has(.homepage-body) {
     --vm-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
     --vm-font-inner-title: clamp(1.48rem, 6.5vw, 1.88rem);
     --vm-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
-    --vm-font-hero-title: clamp(2.18rem, 10.4vw, 2.82rem);
+    --vm-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
     --vm-font-hero-text: 1rem;
     --vm-line-body: 1.62;
     --vm-line-body-compact: 1.55;
@@ -8939,17 +8945,30 @@ html:has(.homepage-body) {
     font-size: 1rem !important;
     line-height: 1.15 !important;
   }
+
+  .homepage-body :is(.vm-kicker, .tag-alert, .vm-pain-marker, .vm-ba-label) {
+    font-size: 0.8rem !important;
+    line-height: 1.16 !important;
+    white-space: normal !important;
+  }
+
+  .homepage-body .vm-arrow-divider {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+  }
 }
 
 @media (max-width: 390px) {
   .homepage-body {
+    --vm-font-label: 0.8rem;
+    --vm-font-caption: 0.84rem;
     --vm-font-small: 0.93rem;
     --vm-font-button: 0.98rem;
     --vm-font-body: 0.98rem;
     --vm-font-body-small: 0.95rem;
     --vm-font-section-text: 0.98rem;
     --vm-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
-    --vm-font-hero-title: clamp(2.05rem, 10.5vw, 2.48rem);
+    --vm-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
     --vm-font-hero-text: 0.98rem;
   }
 }

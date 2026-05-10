@@ -47,7 +47,7 @@
   --pricing-radius-lg: 34px;
   --pricing-radius-md: 24px;
   --pricing-radius-sm: 16px;
-  --pricing-font-label: 0.72rem;
+  --pricing-font-label: 0.8rem;
   --pricing-font-body: 1rem;
   --pricing-font-section-text: clamp(1rem, 1.18vw, 1.08rem);
   --pricing-font-card-title: clamp(1.2rem, 1.55vw, 1.4rem);
@@ -75,6 +75,10 @@ html:has(.pricing-page) {
 .pricing-main {
   width: 100%;
   overflow: hidden;
+}
+
+.pricing-page :is(.pricing-kicker, .pricing-badge, .pricing-tools-grid article span) {
+  font-size: max(var(--pricing-font-label), 0.8rem);
 }
 
 .pricing-container {
@@ -1081,11 +1085,12 @@ html:has(.pricing-page) {
 
 @media (max-width: 575.98px) {
   .pricing-page {
+    --pricing-font-label: 0.8rem;
     --pricing-font-body: 1rem;
     --pricing-font-section-text: 1rem;
     --pricing-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
     --pricing-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
-    --pricing-font-hero-title: clamp(2.18rem, 10.4vw, 2.82rem);
+    --pricing-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
   }
 
   .pricing-hero p,
@@ -1108,13 +1113,20 @@ html:has(.pricing-page) {
     font-size: 1rem !important;
     line-height: 1.15 !important;
   }
+
+  .pricing-page :is(.pricing-kicker, .pricing-badge, .pricing-tools-grid article span) {
+    font-size: 0.8rem !important;
+    line-height: 1.16 !important;
+    white-space: normal !important;
+  }
 }
 
 @media (max-width: 390px) {
   .pricing-page {
+    --pricing-font-label: 0.8rem;
     --pricing-font-body: 0.98rem;
     --pricing-font-section-text: 0.98rem;
     --pricing-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
-    --pricing-font-hero-title: clamp(2.05rem, 10.5vw, 2.48rem);
+    --pricing-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
   }
 }

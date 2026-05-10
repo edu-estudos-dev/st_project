@@ -41,7 +41,7 @@ const homepageFaqJsonLd = {
       name: 'Quanto custa?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Os planos começam em R$ 24,90 por mês para uma ferramenta. Você pode escolher entre controle de máquinas de bolinhas, consignados e pelúcias. Com duas ferramentas, o plano fica R$ 34,90 por mês. Para usar as três, o plano completo fica R$ 44,90 por mês.'
+        text: 'O VendMaster possui planos para uma, duas ou três ferramentas, conforme a necessidade da operação. Você pode escolher entre controle de máquinas de bolinhas, consignados e pelúcias.'
       }
     },
     {
@@ -150,7 +150,7 @@ class HomepageController {
     return res.render('pages/precos', {
       title: 'Preços | VendMaster',
       metaDescription:
-        'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos a partir de R$ 24,90 por mês.',
+        'Veja os planos do VendMaster para operadores de máquinas recreativas. Escolha entre controle de bolinhas, consignados e pelúcias, com planos para uma, duas ou três ferramentas, conforme a necessidade da operação.',
       canonicalUrl,
       breadcrumbJsonLd,
       offerCatalogJsonLd,
