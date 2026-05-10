@@ -128,6 +128,12 @@
                     </ul>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link btn-header fs-6" href="/comunidade">
+                        Comunidade
+                    </a>
+                </li>
+
                 <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
                 <li class="nav-item dropdown">
                     <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
@@ -147,6 +153,12 @@
                             <a class="dropdown-item menu-link" href="/admin/interessados">
                                 <span class="menu-link-title">Interessados</span>
                                 <small class="menu-link-text">Fila comercial dos formulários do site.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/admin/comunidade">
+                                <span class="menu-link-title">Comunidade</span>
+                                <small class="menu-link-text">Modere tópicos, respostas e discussões públicas.</small>
                             </a>
                         </li>
                     </ul>
@@ -262,6 +274,7 @@
                         </a>
                         <div class="nav-account-divider"></div>
                         <a href="/assinatura/status"><i class="bi bi-person-badge"></i><span>Minha assinatura</span></a>
+                        <a href="/comunidade"><i class="bi bi-chat-dots"></i><span>Comunidade</span></a>
                         <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>relatórios</span></a>
                         <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
                         <% if (canAccessProductSettings) { %>
@@ -271,6 +284,7 @@
                         <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
                             <a href="/admin/assinantes"><i class="bi bi-shield-check"></i><span>Assinantes</span></a>
                             <a href="/admin/interessados"><i class="bi bi-person-lines-fill"></i><span>Interessados</span></a>
+                            <a href="/admin/comunidade"><i class="bi bi-chat-square-text"></i><span>Moderação da comunidade</span></a>
                         <% } %>
                         <div class="nav-account-divider"></div>
                         <form action="/logout" method="POST">
