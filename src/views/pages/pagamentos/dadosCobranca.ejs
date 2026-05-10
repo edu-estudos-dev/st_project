@@ -208,6 +208,38 @@
       position: relative;
     }
 
+    .billing-gateway-status {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      min-height: 48px;
+      padding: 0.75rem 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 16px;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.35;
+    }
+
+    .billing-gateway-status i {
+      margin-top: 0.1rem;
+      color: #2563eb;
+    }
+
+    .billing-gateway-status strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.98rem;
+      font-weight: 900;
+    }
+
+    .billing-gateway-status span {
+      display: block;
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
     .billing-gateway-badge {
       display: inline-flex;
       align-items: center;
@@ -317,6 +349,11 @@
       }
 
       .billing-actions .btn {
+        width: 100%;
+      }
+
+      .billing-gateway-status,
+      .billing-gateway-badge {
         width: 100%;
       }
     }
@@ -437,12 +474,13 @@
 
               <div class="billing-gateway-field">
                 <label>Status da cobrança</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  value="<%= gatewayConfigured ? 'Disponível' : 'Pendente' %>"
-                  disabled
-                >
+                <div class="billing-gateway-status" role="status" aria-live="polite">
+                  <i class="bi <%= gatewayConfigured ? 'bi-shield-check' : 'bi-clock-history' %>"></i>
+                  <span>
+                    <strong><%= gatewayConfigured ? 'Cobrança disponível' : 'Cobrança pendente' %></strong>
+                    <span><%= gatewayConfigured ? 'O pagamento pode ser preparado com segurança.' : 'A preparação será liberada quando o ambiente estiver configurado.' %></span>
+                  </span>
+                </div>
 
                 <% if (gatewayConfigured) { %>
                   <span class="billing-gateway-badge is-ready">

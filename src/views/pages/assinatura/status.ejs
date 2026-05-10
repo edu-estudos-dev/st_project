@@ -618,11 +618,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: max-content;
+      width: fit-content;
+      max-width: 100%;
       padding: 0.55rem 0.85rem;
       border-radius: 999px;
       font-size: 0.9rem;
       font-weight: 850;
+      line-height: 1.15;
+      white-space: normal;
+      text-align: center;
     }
 
     .assinatura-status-pill.status-trial {
@@ -946,14 +950,17 @@
     .assinatura-payment-badge {
       display: inline-flex;
       align-items: center;
-      width: max-content;
-      padding: 0.22rem 0.48rem;
+      width: fit-content;
+      max-width: 100%;
+      min-height: 28px;
+      padding: 0.3rem 0.58rem;
       border-radius: 999px;
       background: #ecfdf5;
       color: #047857;
-      font-size: 0.72rem;
+      font-size: 0.8rem;
       font-weight: 900;
-      line-height: 1;
+      line-height: 1.1;
+      white-space: normal;
     }
 
     .assinatura-payment-badge.is-neutral {
@@ -1083,6 +1090,14 @@
 
       .assinatura-payment-card {
         padding: 1rem;
+      }
+
+      .assinatura-payment-method-card {
+        align-items: flex-start;
+      }
+
+      .assinatura-payment-badge {
+        font-size: 0.82rem;
       }
 
       .assinatura-card-actions .btn-modern,

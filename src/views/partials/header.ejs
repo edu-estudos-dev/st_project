@@ -322,7 +322,7 @@
             <div class="notification-drawer-empty">
                 <i class="bi bi-check2-circle"></i>
                 <strong>Nenhum alerta ativo</strong>
-                <span>Vencimentos e avisos importantes aparecerãoaqui.</span>
+                <span>Vencimentos e avisos importantes aparecerão aqui.</span>
             </div>
         <% } %>
     </div>
@@ -819,6 +819,88 @@
             border: 0;
             padding-left: 0.75rem;
             background: transparent;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .app-nav .container-fluid {
+            gap: 0.45rem;
+            padding: 0.62rem;
+        }
+
+        .app-nav-actions {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.5rem;
+            margin-top: 0.62rem;
+        }
+
+        .app-nav-search {
+            grid-column: 1 / -1;
+            order: 2;
+        }
+
+        .app-nav-search .form-control {
+            min-height: 44px;
+            font-size: 0.96rem;
+        }
+
+        .nav-alert-link,
+        .nav-account-toggle {
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: 14px;
+        }
+
+        .nav-account-dropdown {
+            position: fixed;
+            top: 4.7rem;
+            right: 0.75rem;
+            left: 0.75rem;
+            width: auto;
+            max-height: calc(100vh - 5.7rem);
+            overflow-y: auto;
+        }
+
+        .menu-group-label {
+            font-size: 0.78rem;
+        }
+
+        .menu-link-text {
+            font-size: 0.84rem;
+        }
+
+        .notification-drawer {
+            width: 100vw;
+            max-width: 100vw;
+        }
+
+        .notification-drawer-header {
+            padding: 1rem;
+        }
+
+        .notification-drawer-header span {
+            font-size: 0.8rem;
+        }
+
+        .notification-drawer-header h2 {
+            font-size: 1.28rem;
+        }
+
+        .notification-drawer-item {
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 0.8rem;
+            padding: 1rem;
+        }
+
+        .notification-drawer-time {
+            grid-column: 2;
+            justify-self: start;
+            white-space: normal;
+        }
+
+        .notification-drawer-footer {
+            padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
         }
     }
 </style>
