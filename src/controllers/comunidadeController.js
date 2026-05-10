@@ -13,6 +13,18 @@ const MAX_TOPIC_CONTENT_LENGTH = 10000;
 const MIN_REPLY_LENGTH = 5;
 const MAX_REPLY_LENGTH = 8000;
 
+const TERMOS_PRESERVADOS = new Map([
+  ['pix', 'PIX'],
+  ['cpf', 'CPF'],
+  ['cnpj', 'CNPJ'],
+  ['api', 'API'],
+  ['url', 'URL'],
+  ['seo', 'SEO'],
+  ['lgpd', 'LGPD'],
+  ['asaas', 'Asaas'],
+  ['vendmaster', 'VendMaster']
+]);
+
 function montarBreadcrumbJsonLd(itens) {
   return {
     '@context': 'https://schema.org',
@@ -54,6 +66,104 @@ function normalizarTexto(texto) {
   return String(texto || '')
     .replace(/\r\n/g, '\n')
     .replace(/\n{4,}/g, '\n\n\n')
+    .trim();
+}
+
+function preservarTermosImportantes(texto) {
+  return String(texto || '').replace(/\b[\p{L}\p{N}]+\b/gu, (termo) => {
+    const termoNormalizado = termo.toLocaleLowerCase('pt-BR');
+    return TERMOS_PRESERVADOS.get(termoNormalizado) || termo;
+  });
+}
+
+function capitalizarPrimeiraLetra(texto) {
+  const caracteres = Array.from(texto || '');
+  const indice = caracteres.findIndex((char) => /\p{L}/u.test(char));
+
+  if (indice === -1) {
+    return texto;
+  }
+
+  caracteres[indice] = caracteres[indice].toLocaleUpperCase('pt-BR');
+
+  return caracteres.join('');
+}
+
+function normalizarComoFrase(texto) {
+  const textoMinusculo = String(texto || '').toLocaleLowerCase('pt-BR');
+  const fraseCapitalizada = capitalizarPrimeiraLetra(textoMinusculo);
+
+  return preservarTermosImportantes(fraseCapitalizada);
+}
+
+function palavraTemCaixaAlternada(palavra) {
+  const letras = Array.from(String(palavra || '')).filter((char) => /\p{L}/u.test(char));
+
+  if (letras.length < 4) {
+    return false;
+  }
+
+  const maiusculas = letras.filter((char) => char === char.toLocaleUpperCase('pt-BR')).length;
+  const minusculas = letras.filter((char) => char === char.toLocaleLowerCase('pt-BR')).length;
+
+  if (maiusculas < 2 || minusculas < 2) {
+    return false;
+  }
+
+  let alternancias = 0;
+
+  for (let index = 1; index < letras.length; index += 1) {
+    const anteriorMaiusculo =
+      letras[index - 1] === letras[index - 1].toLocaleUpperCase('pt-BR');
+    const atualMaiusculo =
+      letras[index] === letras[index].toLocaleUpperCase('pt-BR');
+
+    if (anteriorMaiusculo !== atualMaiusculo) {
+      alternancias += 1;
+    }
+  }
+
+  return alternancias >= Math.floor(letras.length / 2);
+}
+
+function textoTemCaixaAlternada(texto) {
+  return String(texto || '')
+    .split(/\s+/)
+    .some((palavra) => palavraTemCaixaAlternada(palavra));
+}
+
+function normalizarTituloForum(titulo) {
+  const limpo = normalizarTexto(titulo).replace(/[ \t]{2,}/g, ' ');
+
+  const letras = Array.from(limpo).filter((char) => /\p{L}/u.test(char));
+
+  if (letras.length < 2) {
+    return limpo;
+  }
+
+  const todoMaiusculo =
+    limpo === limpo.toLocaleUpperCase('pt-BR') &&
+    limpo !== limpo.toLocaleLowerCase('pt-BR');
+
+  const todoMinusculo =
+    limpo === limpo.toLocaleLowerCase('pt-BR') &&
+    limpo !== limpo.toLocaleUpperCase('pt-BR');
+
+  if (todoMaiusculo || todoMinusculo || textoTemCaixaAlternada(limpo)) {
+    return normalizarComoFrase(limpo);
+  }
+
+  return preservarTermosImportantes(limpo);
+}
+
+function normalizarConteudoForum(conteudo) {
+  return String(conteudo || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\t/g, ' ')
+    .split('\n')
+    .map((linha) => linha.replace(/[ ]{2,}/g, ' ').trim())
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
@@ -348,8 +458,8 @@ const ComunidadeController = {
         });
       }
 
-      const titulo = normalizarTexto(req.body.titulo);
-      const conteudo = normalizarTexto(req.body.conteudo);
+      const titulo = normalizarTituloForum(req.body.titulo);
+      const conteudo = normalizarConteudoForum(req.body.conteudo);
       const categoryId = req.body.category_id;
 
       const erros = validarTopico({
@@ -415,7 +525,7 @@ const ComunidadeController = {
         });
       }
 
-      const conteudo = normalizarTexto(req.body.conteudo);
+      const conteudo = normalizarConteudoForum(req.body.conteudo);
       const respostas = await forumReplyModel.listarPorTopico(topico.id);
       const canonicalUrl = `${SITE_URL}/comunidade/topico/${topico.slug}`;
 
