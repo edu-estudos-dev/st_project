@@ -27,6 +27,7 @@ import {
 import loginLogoutRoutes from './src/routes/loginLogoutRoutes.js';
 import homepageRoutes from './src/routes/homepageRoutes.js';
 import blogRoutes from './src/routes/blogRoutes.js';
+import comunidadeRoutes from './src/routes/comunidadeRoutes.js';
 import sitemapRoutes from './src/routes/sitemapRoutes.js';
 import legacyAssetRoutes from './src/routes/legacyAssetRoutes.js';
 import estabelecimentoRoutes from './src/routes/estabelecimentoRoutes.js';
@@ -39,6 +40,7 @@ import rotasRoutes from './src/routes/rotasRoutes.js';
 import relatoriosRoutes from './src/routes/relatoriosRoutes.js';
 import adminAssinantesRoutes from './src/routes/adminAssinantesRoutes.js';
 import adminInteressadosRoutes from './src/routes/adminInteressadosRoutes.js';
+import adminComunidadeRoutes from './src/routes/adminComunidadeRoutes.js';
 import assinaturaRoutes from './src/routes/assinaturaRoutes.js';
 import pagamentoRoutes from './src/routes/pagamentoRoutes.js';
 import webhookPagamentoRoutes from './src/routes/webhookPagamentoRoutes.js';
@@ -208,6 +210,7 @@ app.use(
 app.use(loginLogoutRoutes);
 app.use(homepageRoutes);
 app.use(blogRoutes);
+app.use(comunidadeRoutes);
 app.use(interessadosRoutes);
 app.use('/webhooks', webhookPagamentoRoutes);
 
@@ -262,6 +265,12 @@ app.use(
 );
 
 app.use(
+  '/admin/comunidade',
+  requireAuthenticatedSubscription,
+  adminComunidadeRoutes
+);
+
+app.use(
   '/bolinhas',
   requireAuthenticatedSubscription,
   requireProductAvailable('bolinhas'),
@@ -306,6 +315,16 @@ app.use(
 app.use((req, res, next) => {
   res.status(404).render('pages/404');
   console.log('Página 404 renderizada');
+});
+
+app.use((err, req, res, next) => {
+  console.error('Erro interno do servidor:', err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  return res.status(500).render('pages/500');
 });
 
 export default app;

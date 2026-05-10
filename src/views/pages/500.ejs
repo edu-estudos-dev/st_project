@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página não encontrada - VendMaster</title>
+    <title>Erro interno - VendMaster</title>
 
     <style>
         :root {
@@ -162,7 +162,7 @@
             max-width: 620px;
             margin: 0 auto;
             color: var(--vm-text);
-            font-size: clamp(2.6rem, 5.8vw, 5rem);
+            font-size: clamp(2.45rem, 5.4vw, 4.7rem);
             line-height: 0.98;
             letter-spacing: -0.07em;
             font-weight: 950;
@@ -294,7 +294,7 @@
             }
 
             .error-card h1 {
-                font-size: clamp(2.15rem, 11vw, 3rem);
+                font-size: clamp(2.3rem, 12vw, 3.35rem);
             }
 
             .error-card p {
@@ -355,47 +355,47 @@
 
                 <div class="error-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" role="img" aria-label="">
-                        <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm1 15h-2v-2h2Zm0-4h-2V7h2Z"></path>
                     </svg>
                 </div>
 
-                <div class="error-code">Erro 404</div>
+                <div class="error-code">Erro 500</div>
             </div>
 
-            <h1 id="error-title">Essa rota não foi encontrada.</h1>
+            <h1 id="error-title">Algo não saiu como esperado.</h1>
 
             <p>
-                A página que você tentou acessar não existe, foi removida ou teve o endereço alterado.
-                Volte para a página inicial para continuar navegando pelo VendMaster.
+                Encontramos uma instabilidade interna ao carregar esta página.
+                Tente novamente em alguns instantes ou volte para a página inicial do VendMaster.
             </p>
 
             <div class="error-actions" aria-label="Ações para continuar navegando">
                 <a href="/" class="error-button">
-                    <span>Voltar para a página inicial</span>
+                    Voltar para a página inicial
                     <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M13.3 5.3 20 12l-6.7 6.7-1.4-1.4 4.3-4.3H4v-2h12.2l-4.3-4.3 1.4-1.4z"></path>
+                        <path d="M12.293 5.293 13.707 3.88 21.828 12l-8.121 8.121-1.414-1.414L18 13H2v-2h16z"></path>
                     </svg>
                 </a>
 
                 <a href="/login" class="error-button error-button-secondary">
-                    <span>Ir para o login</span>
+                    Ir para o login
                 </a>
             </div>
 
             <div class="error-hint" aria-label="Sugestões">
                 <div class="error-hint-item">
-                    <strong>Gestão</strong>
-                    <span>Controle pontos, rotas e operação.</span>
+                    <strong>Tente novamente</strong>
+                    <span>Atualize a página em alguns instantes.</span>
                 </div>
 
                 <div class="error-hint-item">
-                    <strong>Estoque</strong>
-                    <span>Acompanhe produtos e abastecimentos.</span>
+                    <strong>Volte ao início</strong>
+                    <span>Acesse a página inicial e continue navegando.</span>
                 </div>
 
                 <div class="error-hint-item">
-                    <strong>Financeiro</strong>
-                    <span>Veja resultados com mais clareza.</span>
+                    <strong>Precisa de ajuda?</strong>
+                    <span>Entre em contato com o suporte se o erro continuar.</span>
                 </div>
             </div>
         </section>

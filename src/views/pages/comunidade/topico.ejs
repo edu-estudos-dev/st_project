@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', {
+  title,
+  metaDescription,
+  canonicalUrl,
+  breadcrumbJsonLd,
+  extraStyles
+}) %>
+
+<body class="comunidade-page">
+  <%- include('../../partials/blogPublicHeader') %>
+
+  <main class="comunidade-main">
+    <section class="comunidade-hero comunidade-hero-compact">
+      <div class="comunidade-container">
+        <nav class="comunidade-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="/comunidade">Comunidade</a>
+          <span aria-hidden="true">/</span>
+          <a href="/comunidade/categoria/<%= topico.categoria_slug %>"><%= topico.categoria_nome %></a>
+          <span aria-hidden="true">/</span>
+          <span>Tópico</span>
+        </nav>
+
+        <article class="comunidade-topic-detail">
+          <div class="comunidade-topic-detail-header">
+            <div class="comunidade-topic-meta">
+              <% if (topico.is_pinned) { %>
+                <span class="comunidade-badge comunidade-badge-pinned">Fixado</span>
+              <% } %>
+
+              <% if (topico.status === 'closed') { %>
+                <span class="comunidade-badge comunidade-badge-closed">Fechado</span>
+              <% } %>
+
+              <a href="/comunidade/categoria/<%= topico.categoria_slug %>">
+                <%= topico.categoria_nome %>
+              </a>
+
+              <% if (topico.autor_nome) { %>
+                <span>Por <%= topico.autor_nome %></span>
+              <% } else { %>
+                <span>Autor removido</span>
+              <% } %>
+
+              <% if (topico.created_at) { %>
+                <span><%= formatarDataForum(topico.created_at) %></span>
+              <% } %>
+            </div>
+
+            <h1><%= topico.titulo %></h1>
+
+            <div class="comunidade-topic-detail-stats">
+              <span><strong><%= topico.reply_count %></strong> respostas</span>
+              <span><strong><%= topico.view_count %></strong> visualizações</span>
+            </div>
+          </div>
+
+          <div class="comunidade-rich-text">
+            <% String(topico.conteudo || '').split(/\n{1,}/).filter(Boolean).forEach((paragrafo) => { %>
+              <p><%= paragrafo %></p>
+            <% }) %>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="comunidade-section" id="respostas">
+      <div class="comunidade-container comunidade-topic-layout">
+        <div class="comunidade-topic-content">
+          <div class="comunidade-section-header">
+            <span class="comunidade-eyebrow">Respostas</span>
+            <h2>
+              <%= respostas && respostas.length ? `${respostas.length} resposta${respostas.length === 1 ? '' : 's'}` : 'Ainda sem respostas' %>
+            </h2>
+          </div>
+
+          <% if (respostas && respostas.length) { %>
+            <div class="comunidade-reply-list">
+              <% respostas.forEach((resposta, index) => { %>
+                <article class="comunidade-reply-card">
+                  <header class="comunidade-reply-header">
+                    <div>
+                      <strong>
+                        <%= resposta.autor_nome || 'Autor removido' %>
+                      </strong>
+
+                      <% if (resposta.created_at) { %>
+                        <span><%= formatarDataForum(resposta.created_at) %></span>
+                      <% } %>
+                    </div>
+
+                    <span class="comunidade-reply-number">#<%= index + 1 %></span>
+                  </header>
+
+                  <div class="comunidade-rich-text comunidade-reply-text">
+                    <% String(resposta.conteudo || '').split(/\n{1,}/).filter(Boolean).forEach((paragrafo) => { %>
+                      <p><%= paragrafo %></p>
+                    <% }) %>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="comunidade-empty-state comunidade-empty-state-left">
+              <h3>Este tópico ainda não recebeu respostas.</h3>
+              <p>Se você tiver experiência com esse assunto, sua contribuição pode ajudar outros operadores.</p>
+            </div>
+          <% } %>
+
+          <div class="comunidade-reply-box" id="responder">
+            <div class="comunidade-section-header">
+              <span class="comunidade-eyebrow">Participar</span>
+              <h2>Responder tópico</h2>
+            </div>
+
+            <% if (errorMessage) { %>
+              <div class="comunidade-alert comunidade-alert-error">
+                <%= errorMessage %>
+              </div>
+            <% } %>
+
+            <% if (topico.status === 'closed') { %>
+              <div class="comunidade-notice">
+                <strong>Tópico fechado</strong>
+                <p>Este tópico está fechado e não aceita novas respostas.</p>
+              </div>
+            <% } else if (canReply) { %>
+              <form action="/comunidade/topico/<%= topico.slug %>/responder" method="POST" class="comunidade-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+
+                <div class="comunidade-form-group">
+                  <label for="conteudo">Sua resposta</label>
+                  <textarea
+                    id="conteudo"
+                    name="conteudo"
+                    rows="7"
+                    maxlength="8000"
+                    required
+                    placeholder="Compartilhe sua experiência, dúvida ou sugestão de forma clara."
+                  ><%= formData?.conteudo || '' %></textarea>
+                  <small>Mínimo de 5 caracteres. Não publique dados sensíveis ou informações de clientes.</small>
+                </div>
+
+                <button type="submit" class="comunidade-primary-button">
+                  Publicar resposta
+                </button>
+              </form>
+            <% } else if (blockedParticipationReason) { %>
+              <div class="comunidade-notice">
+                <strong><%= blockedParticipationReason.title %></strong>
+                <p><%= blockedParticipationReason.message %></p>
+
+                <% if (typeof usuario !== 'undefined' && usuario) { %>
+                  <a href="/assinatura/status" class="comunidade-primary-link">
+                    Regularizar assinatura
+                  </a>
+                <% } else { %>
+                  <a href="/login" class="comunidade-primary-link">
+                    Entrar para responder
+                  </a>
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <aside class="comunidade-topic-sidebar">
+          <div class="comunidade-sidebar-card">
+            <span class="comunidade-eyebrow">Comunidade</span>
+            <h3>Ajude a manter o conteúdo útil</h3>
+            <p>
+              Publique respostas claras, evite dados sensíveis e compartilhe experiências
+              que possam ajudar outros operadores.
+            </p>
+
+            <a href="/comunidade" class="comunidade-card-link">
+              Ver outras discussões
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>

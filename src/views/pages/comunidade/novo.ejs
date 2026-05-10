@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', {
+  title,
+  metaDescription,
+  canonicalUrl,
+  robotsMeta,
+  breadcrumbJsonLd,
+  extraStyles
+}) %>
+
+<body class="comunidade-page">
+  <%- include('../../partials/blogPublicHeader') %>
+
+  <main class="comunidade-main">
+    <section class="comunidade-hero comunidade-hero-compact">
+      <div class="comunidade-container">
+        <nav class="comunidade-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <a href="/comunidade">Comunidade</a>
+          <span aria-hidden="true">/</span>
+          <span>Novo tópico</span>
+        </nav>
+
+        <div class="comunidade-page-title">
+          <span class="comunidade-eyebrow">Nova discussão</span>
+          <h1>Criar tópico na Comunidade VendMaster</h1>
+          <p>
+            Compartilhe uma dúvida ou experiência sobre operação de campo, rotas,
+            sangrias, comissões, máquinas, pontos ou uso do VendMaster.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="comunidade-section">
+      <div class="comunidade-container comunidade-form-layout">
+        <div class="comunidade-form-card">
+          <% if (errorMessage) { %>
+            <div class="comunidade-alert comunidade-alert-error">
+              <%= errorMessage %>
+            </div>
+          <% } %>
+
+          <% if (successMessage) { %>
+            <div class="comunidade-alert comunidade-alert-success">
+              <%= successMessage %>
+            </div>
+          <% } %>
+
+          <% if (!canCreateTopic && blockedParticipationReason) { %>
+            <div class="comunidade-notice">
+              <strong><%= blockedParticipationReason.title %></strong>
+              <p><%= blockedParticipationReason.message %></p>
+
+              <% if (typeof usuario !== 'undefined' && usuario) { %>
+                <a href="/assinatura/status" class="comunidade-primary-link">
+                  Regularizar assinatura
+                </a>
+              <% } else { %>
+                <a href="/login" class="comunidade-primary-link">
+                  Entrar para participar
+                </a>
+              <% } %>
+            </div>
+          <% } else { %>
+            <form action="/comunidade/novo" method="POST" class="comunidade-form">
+              <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+
+              <div class="comunidade-form-group">
+                <label for="category_id">Categoria</label>
+                <select id="category_id" name="category_id" required>
+                  <option value="">Selecione uma categoria</option>
+                  <% categorias.forEach((categoria) => { %>
+                    <option
+                      value="<%= categoria.id %>"
+                      <%= String(formData?.category_id || formData?.categoria || '') === String(categoria.id) || String(query?.categoria || '') === String(categoria.id) ? 'selected' : '' %>
+                    >
+                      <%= categoria.nome %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <div class="comunidade-form-group">
+                <label for="titulo">Título do tópico</label>
+                <input
+                  type="text"
+                  id="titulo"
+                  name="titulo"
+                  minlength="8"
+                  maxlength="140"
+                  required
+                  value="<%= formData?.titulo || '' %>"
+                  placeholder="Ex.: Como vocês organizam a sangria em pontos com maior giro?"
+                >
+                <small>Use um título claro, com no mínimo 8 e no máximo 140 caracteres.</small>
+              </div>
+
+              <div class="comunidade-form-group">
+                <label for="conteudo">Conteúdo</label>
+                <textarea
+                  id="conteudo"
+                  name="conteudo"
+                  rows="10"
+                  minlength="20"
+                  maxlength="10000"
+                  required
+                  placeholder="Explique o contexto, o problema ou a experiência que deseja compartilhar."
+                ><%= formData?.conteudo || '' %></textarea>
+                <small>Mínimo de 20 caracteres. Não publique dados sensíveis, senhas, documentos ou informações privadas de clientes.</small>
+              </div>
+
+              <div class="comunidade-form-actions">
+                <button type="submit" class="comunidade-primary-button">
+                  Publicar tópico
+                </button>
+
+                <a href="/comunidade" class="comunidade-secondary-link">
+                  Cancelar
+                </a>
+              </div>
+            </form>
+          <% } %>
+        </div>
+
+        <aside class="comunidade-sidebar-card">
+          <span class="comunidade-eyebrow">Boas práticas</span>
+          <h2>Como criar um bom tópico?</h2>
+
+          <ul class="comunidade-check-list">
+            <li>Explique o contexto da operação.</li>
+            <li>Use exemplos práticos, sem expor dados sensíveis.</li>
+            <li>Escolha a categoria mais próxima do assunto.</li>
+            <li>Evite publicar mensagens repetidas ou apenas promocionais.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>

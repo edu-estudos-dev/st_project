@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('../../partials/head', {
+  title,
+  metaDescription,
+  canonicalUrl,
+  breadcrumbJsonLd,
+  extraStyles
+}) %>
+
+<body class="comunidade-page">
+  <%- include('../../partials/blogPublicHeader') %>
+
+  <main class="comunidade-main">
+    <section class="comunidade-hero">
+      <div class="comunidade-container">
+        <nav class="comunidade-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Início</a>
+          <span aria-hidden="true">/</span>
+          <span>Comunidade</span>
+        </nav>
+
+        <div class="comunidade-hero-grid">
+          <div class="comunidade-hero-content">
+            <span class="comunidade-eyebrow">Comunidade VendMaster</span>
+
+            <h1>Um espaço para operadores de máquinas recreativas trocarem experiências reais</h1>
+
+            <p>
+              Tire dúvidas, compartilhe boas práticas e acompanhe discussões sobre
+              rotas, sangrias, comissões, pontos, máquinas, produtos e gestão da operação.
+            </p>
+
+            <div class="comunidade-hero-actions">
+              <% if (canCreateTopic) { %>
+                <a href="/comunidade/novo" class="comunidade-primary-link">
+                  Criar tópico
+                </a>
+              <% } else if (typeof usuario !== 'undefined' && usuario) { %>
+                <a href="/assinatura/status" class="comunidade-primary-link">
+                  Regularizar para participar
+                </a>
+              <% } else { %>
+                <a href="/login" class="comunidade-primary-link">
+                  Entrar para participar
+                </a>
+              <% } %>
+
+              <a href="#categorias" class="comunidade-secondary-link">
+                Ver categorias
+              </a>
+            </div>
+          </div>
+
+          <aside class="comunidade-hero-panel" aria-label="Resumo da comunidade">
+            <div class="comunidade-hero-panel-header">
+              <span>Foco em operação real</span>
+              <strong>VendMaster</strong>
+            </div>
+
+            <div class="comunidade-hero-topic-list">
+              <div class="comunidade-hero-topic">
+                <span>01</span>
+                <div>
+                  <h2>Rotas e sangrias</h2>
+                  <p>Discussões sobre visitas, coletas, repasses e organização de campo.</p>
+                </div>
+              </div>
+
+              <div class="comunidade-hero-topic">
+                <span>02</span>
+                <div>
+                  <h2>Máquinas e pontos</h2>
+                  <p>Troca de experiência sobre desempenho, produtos e operação física.</p>
+                </div>
+              </div>
+
+              <div class="comunidade-hero-topic">
+                <span>03</span>
+                <div>
+                  <h2>Gestão e controle</h2>
+                  <p>Boas práticas para profissionalizar a operação e reduzir improvisos.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <% if (blockedParticipationReason) { %>
+          <div class="comunidade-notice">
+            <strong><%= blockedParticipationReason.title %></strong>
+            <p><%= blockedParticipationReason.message %></p>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="comunidade-section" id="categorias">
+      <div class="comunidade-container">
+        <div class="comunidade-section-header">
+          <span class="comunidade-eyebrow">Categorias</span>
+          <h2>Escolha um tema para acompanhar</h2>
+          <p>
+            A comunidade começa simples, com poucos espaços bem definidos para concentrar
+            dúvidas úteis e evitar discussões vazias.
+          </p>
+        </div>
+
+        <% if (categorias && categorias.length) { %>
+          <div class="comunidade-category-grid">
+            <% categorias.forEach((categoria) => { %>
+              <a class="comunidade-category-card" href="/comunidade/categoria/<%= categoria.slug %>">
+                <span class="comunidade-category-count">
+                  <%= categoria.total_topicos %> tópico<%= Number(categoria.total_topicos) === 1 ? '' : 's' %>
+                </span>
+
+                <h3><%= categoria.nome %></h3>
+
+                <p><%= categoria.descricao %></p>
+
+                <span class="comunidade-card-link">
+                  Ver discussões
+                  <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="comunidade-empty-state">
+            <h3>Nenhuma categoria disponível no momento.</h3>
+            <p>As categorias da comunidade ainda não foram publicadas.</p>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="comunidade-section comunidade-section-alt">
+      <div class="comunidade-container">
+        <div class="comunidade-section-header comunidade-section-header-row">
+          <div>
+            <span class="comunidade-eyebrow">Discussões recentes</span>
+            <h2>Tópicos mais novos da comunidade</h2>
+          </div>
+
+          <% if (canCreateTopic) { %>
+            <a href="/comunidade/novo" class="comunidade-small-action">
+              Criar tópico
+            </a>
+          <% } %>
+        </div>
+
+        <% if (topicosRecentes && topicosRecentes.length) { %>
+          <div class="comunidade-topic-list">
+            <% topicosRecentes.forEach((topico) => { %>
+              <article class="comunidade-topic-card <%= topico.is_pinned ? 'is-pinned' : '' %>">
+                <a
+                  href="/comunidade/topico/<%= topico.slug %>"
+                  class="comunidade-topic-card-link"
+                  aria-label="Abrir tópico: <%= topico.titulo %>"
+                >
+                  <span class="visually-hidden">Abrir tópico</span>
+                </a>
+
+                <div class="comunidade-topic-main">
+                  <div class="comunidade-topic-meta">
+                    <% if (topico.is_pinned) { %>
+                      <span class="comunidade-badge comunidade-badge-pinned">Fixado</span>
+                    <% } %>
+
+                    <% if (topico.status === 'closed') { %>
+                      <span class="comunidade-badge comunidade-badge-closed">Fechado</span>
+                    <% } %>
+
+                    <a href="/comunidade/categoria/<%= topico.categoria_slug %>" class="comunidade-topic-category-link">
+                      <%= topico.categoria_nome %>
+                    </a>
+
+                    <% if (topico.created_at) { %>
+                      <span><%= formatarDataForum(topico.created_at) %></span>
+                    <% } %>
+                  </div>
+
+                  <h3>
+                    <a href="/comunidade/topico/<%= topico.slug %>">
+                      <%= topico.titulo %>
+                    </a>
+                  </h3>
+
+                  <p>
+                    <%= String(topico.conteudo || '').replace(/\s+/g, ' ').slice(0, 170) %><%= String(topico.conteudo || '').length > 170 ? '...' : '' %>
+                  </p>
+
+                  <span class="comunidade-open-topic">
+                    Abrir tópico
+                    <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+
+                <div class="comunidade-topic-stats">
+                  <span><strong><%= topico.reply_count %></strong> respostas</span>
+                  <span><strong><%= topico.view_count %></strong> visualizações</span>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="comunidade-empty-state">
+            <h3>A comunidade ainda não tem tópicos publicados.</h3>
+            <p>
+              Este será o espaço para reunir dúvidas e experiências práticas dos operadores.
+            </p>
+
+            <% if (canCreateTopic) { %>
+              <a href="/comunidade/novo" class="comunidade-primary-link">
+                Criar primeiro tópico
+              </a>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../../partials/footer') %>
+</body>
+</html>
