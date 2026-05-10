@@ -45,6 +45,42 @@ function isActiveBillingType(billingType) {
   return ACTIVE_BILLING_TYPES.has(billingType);
 }
 
+function buildPaymentBlockedBySubscriptionStatusResponse(assinante) {
+  const statusAssinatura = String(assinante?.status_assinatura || '').trim();
+
+  if (statusAssinatura === 'trial') {
+    return {
+      statusCode: 409,
+      payload: {
+        success: false,
+        message: 'Seu período de teste está ativo. Nenhuma cobrança precisa ser gerada agora.',
+        blockedReason: 'SUBSCRIPTION_TRIAL',
+        canPreparePayment: false,
+        status_assinatura: statusAssinatura,
+        payment: null,
+        pix: null
+      }
+    };
+  }
+
+  if (statusAssinatura === 'ativo') {
+    return {
+      statusCode: 409,
+      payload: {
+        success: false,
+        message: 'Sua assinatura já está ativa. Nenhuma cobrança de regularização precisa ser gerada agora.',
+        blockedReason: 'SUBSCRIPTION_ACTIVE',
+        canPreparePayment: false,
+        status_assinatura: statusAssinatura,
+        payment: null,
+        pix: null
+      }
+    };
+  }
+
+  return null;
+}
+
 function getBillingTypeLabel(billingType) {
   const labels = {
     BOLETO: 'boleto',
@@ -688,6 +724,15 @@ async function iniciarPagamento(req, res) {
       });
     }
 
+    const blockedBySubscriptionStatus =
+      buildPaymentBlockedBySubscriptionStatusResponse(assinante);
+
+    if (blockedBySubscriptionStatus) {
+      return res
+        .status(blockedBySubscriptionStatus.statusCode)
+        .json(blockedBySubscriptionStatus.payload);
+    }
+
     const hasBillingData = Boolean(
       assinante.billing_nome && assinante.billing_cpf_cnpj
     );
@@ -819,6 +864,15 @@ async function trocarFormaPagamento(req, res) {
       });
     }
 
+    const blockedBySubscriptionStatus =
+      buildPaymentBlockedBySubscriptionStatusResponse(assinante);
+
+    if (blockedBySubscriptionStatus) {
+      return res
+        .status(blockedBySubscriptionStatus.statusCode)
+        .json(blockedBySubscriptionStatus.payload);
+    }
+
     const hasBillingData = Boolean(
       assinante.billing_nome && assinante.billing_cpf_cnpj
     );
@@ -937,7 +991,7 @@ async function trocarFormaPagamento(req, res) {
       previousSubscriptionId: cancellationResult.previousSubscriptionId,
       message: responsePayload.payment?.paymentUrl
         ? `Forma de pagamento alterada com sucesso. A cobrança por ${getBillingTypeLabel(cancellationResult.previousBillingType)} foi cancelada e a nova cobrança por ${getBillingTypeLabel(requestedBillingType)} está pronta.`
-        : `Forma de pagamento alterada com sucesso. A cobrança anterior foi cancelada, mas nenhum link de pagamento foi localizado no momento.`
+        : 'Forma de pagamento alterada com sucesso. A cobrança anterior foi cancelada, mas nenhum link de pagamento foi localizado no momento.'
     });
   } catch (error) {
     console.error('Erro ao trocar forma de pagamento:', error);
