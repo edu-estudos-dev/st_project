@@ -65,9 +65,16 @@ addCheck(
 );
 
 addCheck(
-  'Edicao de produtos da assinatura continua restrita ao trial',
+  'Cadastro exige plano comercial antes de criar assinante',
+  'src/controllers/loginLogout.js',
+  includesAll("return res.redirect('/precos');", 'Escolha um plano comercial antes de criar sua conta.', 'plano_codigo: planoSelecionado.codigo'),
+  'Cadastro publico sem plano gera assinante sem valor mensal e quebra cobranca futura.'
+);
+
+addCheck(
+  'Edicao de produtos da assinatura continua restrita ao trial ou admin',
   'src/controllers/assinaturaController.js',
-  includesAll("status_assinatura !== 'trial'", 'alteradas pelo administrador'),
+  includesAll("req.user?.status_assinatura === 'trial'", 'isSaasAdminUser(req.user)', 'As ferramentas contratadas seguem o plano atual'),
   'Assinatura paga deve ter produtos controlados pelo admin.'
 );
 

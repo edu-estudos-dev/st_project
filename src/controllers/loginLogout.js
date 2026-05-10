@@ -69,7 +69,12 @@ class LoginLogoutController {
         }
 
         const planoSelecionado = PLAN_OPTIONS[req.query.plano] || null;
-        const limiteFerramentas = planoSelecionado?.limiteFerramentas || TRIAL_PRODUCTS.length;
+
+        if (!planoSelecionado) {
+            return res.redirect('/precos');
+        }
+
+        const limiteFerramentas = planoSelecionado.limiteFerramentas;
         const produtosSelecionadosNoTrial = TRIAL_PRODUCTS.slice(0, limiteFerramentas);
 
         return res.render('pages/register', {
@@ -444,6 +449,16 @@ class LoginLogoutController {
             const confirmarSenha = String(req.body.confirmarSenha ?? '');
             const produtosHabilitados = normalizeSelectedProdutos(formData.produtos_habilitados);
 
+            if (!planoSelecionado) {
+                return res.status(400).render('pages/register', {
+                    title: 'Cadastro de UsuÃ¡rio',
+                    error: 'Escolha um plano comercial antes de criar sua conta.',
+                    formData,
+                    productOptions: PRODUCT_OPTIONS,
+                    planoSelecionado
+                });
+            }
+
             if (!formData.user || !formData.email || !senha || !confirmarSenha) {
                 return res.status(400).render('pages/register', {
                     title: 'Cadastro de Usuário',
@@ -464,7 +479,7 @@ class LoginLogoutController {
                 });
             }
 
-            if (planoSelecionado && produtosHabilitados.length > planoSelecionado.limiteFerramentas) {
+            if (produtosHabilitados.length > planoSelecionado.limiteFerramentas) {
                 return res.status(400).render('pages/register', {
                     title: 'Cadastro de Usuário',
                     error: `Este plano permite escolher até ${planoSelecionado.limiteFerramentas} ferramenta${planoSelecionado.limiteFerramentas > 1 ? 's' : ''}.`,
@@ -514,9 +529,9 @@ class LoginLogoutController {
                 email: formData.email,
                 senha,
                 produtos_habilitados: produtosHabilitados,
-                plano_codigo: planoSelecionado?.codigo || null,
-                plano_nome: planoSelecionado?.nome || null,
-                valor_mensal: planoSelecionado?.valorMensal || null
+                plano_codigo: planoSelecionado.codigo,
+                plano_nome: planoSelecionado.nome,
+                valor_mensal: planoSelecionado.valorMensal
             });
 
             if (result?.error) {
