@@ -5,6 +5,7 @@ import { requireWritableSubscription } from '../middleware/subscriptionStatus.js
 const router = express.Router();
 
 router.get('/status', AssinaturaController.status);
+router.get('/status-atual', AssinaturaController.statusAtual);
 
 router.get('/produtos', AssinaturaController.editProdutos);
 router.post('/produtos', requireWritableSubscription, AssinaturaController.updateProdutos);

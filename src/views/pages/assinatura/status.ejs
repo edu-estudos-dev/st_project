@@ -996,6 +996,13 @@
       line-height: 1.5;
     }
 
+    .assinatura-payment-result a {
+      color: inherit;
+      font-weight: 900;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
     .assinatura-payment-actions {
       display: flex;
       flex-wrap: wrap;
@@ -1097,6 +1104,9 @@
         const prepararPagamentoReadonlyBtn = document.getElementById('prepararPagamentoReadonlyBtn');
         const paymentResult = document.getElementById('assinaturaPaymentResult');
         const prepararPagamentoBtnTexts = document.querySelectorAll('.prepararPagamentoBtnText');
+
+        let paymentStatusPollingInterval = null;
+        let paymentStatusPollingTimeout = null;
 
         function getSelectedBillingType() {
           return document.querySelector('input[name="assinatura_billing_type"]:checked')?.value || 'CREDIT_CARD';
@@ -1203,6 +1213,77 @@
           }));
         }
 
+        function stopPaymentConfirmationWatcher() {
+          if (paymentStatusPollingInterval) {
+            clearInterval(paymentStatusPollingInterval);
+            paymentStatusPollingInterval = null;
+          }
+
+          if (paymentStatusPollingTimeout) {
+            clearTimeout(paymentStatusPollingTimeout);
+            paymentStatusPollingTimeout = null;
+          }
+        }
+
+        async function checkCurrentSubscriptionStatus() {
+          const response = await fetch('/assinatura/status-atual', {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+              Accept: 'application/json'
+            }
+          });
+
+          return parseJsonResponse(response);
+        }
+
+        function handlePaymentConfirmed() {
+          stopPaymentConfirmationWatcher();
+
+          const successMessage = 'Pagamento confirmado! Sua assinatura foi reativada e seu acesso ao VendMaster já está liberado.';
+
+          setPaymentResult(
+            `${successMessage} <a href="/painel">Ir para o painel</a>.`,
+            'success'
+          );
+
+          window.AppAlerts?.success(successMessage);
+
+          setTimeout(() => {
+            window.location.href = '/assinatura/status?success=Pagamento confirmado. Sua assinatura foi reativada com sucesso.';
+          }, 1800);
+        }
+
+        function startPaymentConfirmationWatcher() {
+          stopPaymentConfirmationWatcher();
+
+          setPaymentResult(
+            'Aguardando confirmação do pagamento. Assim que o pagamento for confirmado, esta tela será atualizada automaticamente.',
+            'info'
+          );
+
+          paymentStatusPollingInterval = setInterval(async () => {
+            try {
+              const data = await checkCurrentSubscriptionStatus();
+
+              if (data.success && data.status_assinatura === 'ativo') {
+                handlePaymentConfirmed();
+              }
+            } catch (error) {
+              console.error('Erro ao consultar confirmação do pagamento:', error);
+            }
+          }, 4000);
+
+          paymentStatusPollingTimeout = setTimeout(() => {
+            stopPaymentConfirmationWatcher();
+
+            setPaymentResult(
+              'Ainda não recebemos a confirmação do pagamento. Se você acabou de pagar, aguarde alguns instantes e atualize esta página.',
+              'warning'
+            );
+          }, 120000);
+        }
+
         async function showPreparedPayment(data, selectedBillingType) {
           const successMessage = data.message || 'Pagamento preparado com sucesso.';
           const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
@@ -1236,9 +1317,12 @@
 
               if (paymentWindow) {
                 paymentWindow.opener = null;
+                startPaymentConfirmationWatcher();
               } else {
                 window.AppAlerts?.warning('Não foi possível abrir a cobrança em uma nova aba. Verifique se o navegador bloqueou janelas pop-up do VendMaster.');
               }
+            } else {
+              startPaymentConfirmationWatcher();
             }
 
             return;

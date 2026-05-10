@@ -47,6 +47,34 @@ class AssinaturaController {
     }
   };
 
+  statusAtual = async (req, res) => {
+    try {
+      const assinante = await AssinanteModel.findById(req.user.assinante_id);
+
+      if (!assinante) {
+        return res.status(404).json({
+          success: false,
+          message: 'Assinatura não encontrada.'
+        });
+      }
+
+      return res.json({
+        success: true,
+        status_assinatura: assinante.status_assinatura,
+        data_vencimento: assinante.data_vencimento,
+        trial_fim: assinante.trial_fim,
+        plano_nome: assinante.plano_nome
+      });
+    } catch (error) {
+      console.error('Erro ao consultar status atual da assinatura:', error);
+
+      return res.status(500).json({
+        success: false,
+        message: 'Não foi possível consultar o status da assinatura.'
+      });
+    }
+  };
+
   editProdutos = async (req, res) => {
     try {
       if (!canAccessProductSettings(req, res)) {
