@@ -77,13 +77,13 @@
               <select class="form-select" id="plano_codigo" name="plano_codigo">
                 <option value="" <%= !assinante.plano_codigo ? 'selected' : '' %>>Plano não definido</option>
                 <option value="1-ferramenta" <%= assinante.plano_codigo === '1-ferramenta' ? 'selected' : '' %>>
-                  1-ferramenta
+                  Plano Essencial — 1 ferramenta — R$ 24,90/mês
                 </option>
                 <option value="2-ferramentas" <%= assinante.plano_codigo === '2-ferramentas' ? 'selected' : '' %>>
-                  2-ferramentas
+                  Plano Operador — 2 ferramentas — R$ 34,90/mês
                 </option>
                 <option value="3-ferramentas" <%= assinante.plano_codigo === '3-ferramentas' ? 'selected' : '' %>>
-                  3-ferramentas
+                  Plano Completo — 3 ferramentas — R$ 44,90/mês
                 </option>
               </select>
               <small class="modern-note">Código interno usado para identificar o plano escolhido.</small>
