@@ -96,7 +96,7 @@ export const requireReadableSubscription = (req, res, next) => {
             req,
             res,
             403,
-            'Assinatura cancelada. Acesse a área de assinatura para verificar a possibilidade de reativação.',
+            'Sua assinatura está cancelada no momento. Para voltar a usar o VendMaster, acesse a área de assinatura e escolha uma forma de pagamento para reativar o acesso.',
             '/assinatura/status'
         );
     }
