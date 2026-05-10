@@ -550,6 +550,7 @@ body.comunidade-page {
 }
 
 .comunidade-rich-text {
+  display: block;
   margin-top: 24px;
   color: #233957;
   font-size: 1.05rem;
@@ -557,7 +558,11 @@ body.comunidade-page {
 }
 
 .comunidade-rich-text p {
+  display: block;
   margin: 0 0 16px;
+  color: #233957;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .comunidade-topic-layout,
