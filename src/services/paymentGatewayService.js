@@ -184,6 +184,16 @@ function validatePaymentData(paymentData) {
   };
 }
 
+function normalizeGatewayId(value, fieldLabel) {
+  const normalizedValue = String(value || '').trim();
+
+  if (!normalizedValue) {
+    throw new Error(`${fieldLabel} é obrigatório.`);
+  }
+
+  return normalizedValue;
+}
+
 async function requestAsaas({ method, path, body }) {
   const config = ensureGatewayConfigured();
 
@@ -290,6 +300,30 @@ async function createPayment(paymentData = {}) {
   });
 }
 
+async function deletePayment(paymentId) {
+  const normalizedPaymentId = normalizeGatewayId(
+    paymentId,
+    'ID da cobrança'
+  );
+
+  return requestAsaas({
+    method: 'DELETE',
+    path: `/payments/${encodeURIComponent(normalizedPaymentId)}`
+  });
+}
+
+async function deleteSubscription(subscriptionId) {
+  const normalizedSubscriptionId = normalizeGatewayId(
+    subscriptionId,
+    'ID da assinatura'
+  );
+
+  return requestAsaas({
+    method: 'DELETE',
+    path: `/subscriptions/${encodeURIComponent(normalizedSubscriptionId)}`
+  });
+}
+
 async function getPixQrCode(paymentId) {
   const normalizedPaymentId = String(paymentId || '').trim();
 
@@ -348,6 +382,8 @@ export {
   createCustomer,
   createSubscription,
   createPayment,
+  deletePayment,
+  deleteSubscription,
   getPixQrCode,
   getSubscriptionPayments,
   getCustomerPayments,

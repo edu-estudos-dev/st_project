@@ -4,6 +4,8 @@ import {
   createCustomer,
   createPayment,
   createSubscription,
+  deletePayment,
+  deleteSubscription,
   getCustomerPayments,
   getGatewayConfig,
   getSubscriptionPayments,
@@ -41,6 +43,15 @@ function isPixBillingType(billingType) {
 
 function isActiveBillingType(billingType) {
   return ACTIVE_BILLING_TYPES.has(billingType);
+}
+
+function getBillingTypeLabel(billingType) {
+  const labels = {
+    BOLETO: 'boleto',
+    CREDIT_CARD: 'cartão'
+  };
+
+  return labels[billingType] || 'forma de pagamento';
 }
 
 function formatDateOnly(value) {
@@ -252,6 +263,7 @@ function buildPaymentResponse(payment) {
     invoiceUrl: payment.invoiceUrl || null,
     bankSlipUrl: payment.bankSlipUrl || null,
     transactionReceiptUrl: payment.transactionReceiptUrl || null,
+    deleted: payment.deleted === true,
     paymentUrl
   };
 }
@@ -339,6 +351,85 @@ async function findReusableCreditCardPayment(assinante, customerId) {
   const paymentsResult = await getCustomerPayments(customerId, 50);
 
   return selectReusableCreditCardPayment(paymentsResult?.data || [], assinante);
+}
+
+async function cancelarPagamentoPendenteAtual(assinante, pendingPayment) {
+  if (!pendingPayment?.id) {
+    throw new Error('Nenhuma cobrança em aberto foi localizada para troca.');
+  }
+
+  const paymentBillingType = pendingPayment.billingType || null;
+  const paymentSubscriptionId =
+    pendingPayment.subscription ||
+    pendingPayment.gatewaySubscriptionId ||
+    pendingPayment.gateway_subscription_id ||
+    null;
+
+  let deletedSubscription = null;
+  let deletedPayment = null;
+  let clearedSubscriptionReference = false;
+
+  if (paymentSubscriptionId) {
+    deletedSubscription = await deleteSubscription(paymentSubscriptionId);
+
+    if (assinante.gateway_subscription_id === paymentSubscriptionId) {
+      await AssinanteModel.updateGatewaySubscriptionId(assinante.id, null);
+      clearedSubscriptionReference = true;
+    }
+
+    return {
+      previousBillingType: paymentBillingType,
+      previousPaymentId: pendingPayment.id,
+      previousSubscriptionId: paymentSubscriptionId,
+      deletedSubscription,
+      deletedPayment: null,
+      clearedSubscriptionReference
+    };
+  }
+
+  deletedPayment = await deletePayment(pendingPayment.id);
+
+  return {
+    previousBillingType: paymentBillingType,
+    previousPaymentId: pendingPayment.id,
+    previousSubscriptionId: null,
+    deletedSubscription: null,
+    deletedPayment,
+    clearedSubscriptionReference
+  };
+}
+
+function buildPaymentConflictResponse({
+  assinante,
+  customerResult,
+  hasBillingData,
+  requestedBillingType,
+  reusablePendingPayment
+}) {
+  const payment = buildPaymentResponse(reusablePendingPayment);
+  const currentMethodLabel = getBillingTypeLabel(reusablePendingPayment.billingType);
+  const requestedMethodLabel = getBillingTypeLabel(requestedBillingType);
+
+  return {
+    success: false,
+    message: `Já existe uma cobrança por ${currentMethodLabel} em aberto. Você pode concluir essa cobrança ou trocar para ${requestedMethodLabel}.`,
+    conflictReason: 'PENDING_PAYMENT_DIFFERENT_METHOD',
+    canSwitchPaymentMethod: true,
+    hasBillingData,
+    requestedBillingType,
+    requestedBillingTypeLabel: requestedMethodLabel,
+    effectiveBillingType: reusablePendingPayment.billingType,
+    currentBillingType: reusablePendingPayment.billingType,
+    currentBillingTypeLabel: currentMethodLabel,
+    gatewayCustomerId: customerResult.customerId,
+    gatewayCustomerCreated: customerResult.created,
+    gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+    gatewaySubscriptionCreated: false,
+    gatewayPaymentReused: true,
+    needsGatewayConfiguration: false,
+    payment,
+    pix: null
+  };
 }
 
 async function prepararPagamentoBoleto({
@@ -434,6 +525,30 @@ async function prepararPagamentoCartao({
     payment,
     pix: null
   };
+}
+
+async function prepararPagamentoPorTipo({
+  assinante,
+  customerResult,
+  hasBillingData,
+  gatewayConfig,
+  requestedBillingType
+}) {
+  if (requestedBillingType === 'CREDIT_CARD') {
+    return prepararPagamentoCartao({
+      assinante,
+      customerResult,
+      hasBillingData,
+      gatewayConfig
+    });
+  }
+
+  return prepararPagamentoBoleto({
+    assinante,
+    customerResult,
+    hasBillingData,
+    gatewayConfig
+  });
 }
 
 async function renderizarFormularioDadosCobranca(req, res) {
@@ -652,46 +767,24 @@ async function iniciarPagamento(req, res) {
       reusablePendingPayment.billingType &&
       reusablePendingPayment.billingType !== requestedBillingType
     ) {
-      const payment = buildPaymentResponse(reusablePendingPayment);
-      const currentMethodLabel =
-        reusablePendingPayment.billingType === 'CREDIT_CARD'
-          ? 'cartão'
-          : 'boleto';
-
-      return res.status(409).json({
-        success: false,
-        message: `Já existe uma cobrança por ${currentMethodLabel} em aberto. Para evitar cobranças duplicadas, conclua a cobrança atual antes de gerar outra forma de pagamento.`,
+      const responsePayload = buildPaymentConflictResponse({
+        assinante,
+        customerResult,
         hasBillingData,
         requestedBillingType,
-        effectiveBillingType: reusablePendingPayment.billingType,
-        gatewayCustomerId: customerResult.customerId,
-        gatewayCustomerCreated: customerResult.created,
-        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
-        gatewaySubscriptionCreated: false,
-        gatewayPaymentReused: true,
-        needsGatewayConfiguration: false,
-        payment,
-        pix: null
+        reusablePendingPayment
       });
+
+      return res.status(409).json(responsePayload);
     }
 
-    let responsePayload;
-
-    if (requestedBillingType === 'CREDIT_CARD') {
-      responsePayload = await prepararPagamentoCartao({
-        assinante,
-        customerResult,
-        hasBillingData,
-        gatewayConfig
-      });
-    } else {
-      responsePayload = await prepararPagamentoBoleto({
-        assinante,
-        customerResult,
-        hasBillingData,
-        gatewayConfig
-      });
-    }
+    const responsePayload = await prepararPagamentoPorTipo({
+      assinante,
+      customerResult,
+      hasBillingData,
+      gatewayConfig,
+      requestedBillingType
+    });
 
     return res.status(200).json(responsePayload);
   } catch (error) {
@@ -704,9 +797,162 @@ async function iniciarPagamento(req, res) {
   }
 }
 
+async function trocarFormaPagamento(req, res) {
+  try {
+    const gatewayConfig = getGatewayConfig();
+    const assinanteId = getAssinanteIdFromRequest(req);
+    const requestedBillingType = normalizeBillingType(req.body?.billingType);
+
+    if (!assinanteId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Assinante não identificado.'
+      });
+    }
+
+    const assinante = await AssinanteModel.findById(assinanteId);
+
+    if (!assinante) {
+      return res.status(404).json({
+        success: false,
+        message: 'Assinante não encontrado.'
+      });
+    }
+
+    const hasBillingData = Boolean(
+      assinante.billing_nome && assinante.billing_cpf_cnpj
+    );
+
+    if (!hasBillingData) {
+      return res.status(400).json({
+        success: false,
+        needsBillingData: true,
+        message: 'Informe os dados de cobrança antes de trocar a forma de pagamento.'
+      });
+    }
+
+    if (isPixBillingType(requestedBillingType)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Pix para assinatura estará disponível em breve. Por enquanto, escolha cartão de crédito ou boleto.',
+        pixComingSoon: true,
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: null,
+        payment: null,
+        pix: null
+      });
+    }
+
+    if (!isActiveBillingType(requestedBillingType)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Forma de pagamento inválida. Escolha cartão de crédito ou boleto.',
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: null,
+        payment: null,
+        pix: null
+      });
+    }
+
+    if (!isGatewayConfigured()) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'A cobrança ainda não está disponível para esta assinatura. Entre em contato com o suporte.',
+        hasBillingData,
+        requestedBillingType,
+        needsGatewayConfiguration: true,
+        payment: null,
+        pix: null
+      });
+    }
+
+    const customerResult = await ensureAsaasCustomerForAssinante(assinante);
+    const reusablePendingPayment = await findReusablePendingPayment(
+      assinante,
+      customerResult.customerId
+    );
+
+    if (!reusablePendingPayment?.id) {
+      const responsePayload = await prepararPagamentoPorTipo({
+        assinante,
+        customerResult,
+        hasBillingData,
+        gatewayConfig,
+        requestedBillingType
+      });
+
+      return res.status(200).json({
+        ...responsePayload,
+        switchedPaymentMethod: false,
+        message:
+          responsePayload.message ||
+          'Nenhuma cobrança anterior foi localizada. Uma nova cobrança foi preparada.'
+      });
+    }
+
+    if (reusablePendingPayment.billingType === requestedBillingType) {
+      return res.status(409).json({
+        success: false,
+        message: `Já existe uma cobrança por ${getBillingTypeLabel(requestedBillingType)} em aberto. Abra a cobrança atual para concluir o pagamento.`,
+        conflictReason: 'PENDING_PAYMENT_SAME_METHOD',
+        canSwitchPaymentMethod: false,
+        hasBillingData,
+        requestedBillingType,
+        effectiveBillingType: reusablePendingPayment.billingType,
+        currentBillingType: reusablePendingPayment.billingType,
+        currentBillingTypeLabel: getBillingTypeLabel(reusablePendingPayment.billingType),
+        payment: buildPaymentResponse(reusablePendingPayment),
+        pix: null
+      });
+    }
+
+    const cancellationResult = await cancelarPagamentoPendenteAtual(
+      assinante,
+      reusablePendingPayment
+    );
+
+    const updatedAssinante = await AssinanteModel.findById(assinante.id);
+
+    const responsePayload = await prepararPagamentoPorTipo({
+      assinante: updatedAssinante || {
+        ...assinante,
+        gateway_subscription_id: null
+      },
+      customerResult,
+      hasBillingData,
+      gatewayConfig,
+      requestedBillingType
+    });
+
+    return res.status(200).json({
+      ...responsePayload,
+      switchedPaymentMethod: true,
+      previousBillingType: cancellationResult.previousBillingType,
+      previousBillingTypeLabel: getBillingTypeLabel(cancellationResult.previousBillingType),
+      previousPaymentId: cancellationResult.previousPaymentId,
+      previousSubscriptionId: cancellationResult.previousSubscriptionId,
+      message: responsePayload.payment?.paymentUrl
+        ? `Forma de pagamento alterada com sucesso. A cobrança por ${getBillingTypeLabel(cancellationResult.previousBillingType)} foi cancelada e a nova cobrança por ${getBillingTypeLabel(requestedBillingType)} está pronta.`
+        : `Forma de pagamento alterada com sucesso. A cobrança anterior foi cancelada, mas nenhum link de pagamento foi localizado no momento.`
+    });
+  } catch (error) {
+    console.error('Erro ao trocar forma de pagamento:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Não foi possível trocar a forma de pagamento. Tente novamente em alguns instantes.'
+    });
+  }
+}
+
 export {
   renderizarFormularioDadosCobranca,
   obterDadosCobranca,
   salvarDadosCobranca,
-  iniciarPagamento
+  iniciarPagamento,
+  trocarFormaPagamento
 };

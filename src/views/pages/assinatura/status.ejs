@@ -1046,6 +1046,15 @@
         return document.querySelector('input[name="assinatura_billing_type"]:checked')?.value || 'CREDIT_CARD';
       }
 
+      function getBillingTypeLabel(billingType) {
+        const labels = {
+          BOLETO: 'boleto',
+          CREDIT_CARD: 'cartão'
+        };
+
+        return labels[billingType] || 'forma de pagamento';
+      }
+
       function updatePaymentButtonText() {
         const label = getSelectedBillingType() === 'BOLETO'
           ? 'Preparar boleto'
@@ -1064,11 +1073,13 @@
         return 'Depois de informar os dados do cartão, a confirmação costuma acontecer em poucos instantes. Assim que o pagamento for confirmado, o VendMaster libera o acesso automaticamente.';
       }
 
-      function getPaymentModalCopy({ billingType, paymentWasReused }) {
+      function getPaymentModalCopy({ billingType, paymentWasReused, switchedPaymentMethod }) {
         if (billingType === 'BOLETO') {
           return {
-            title: 'Boleto preparado',
-            text: 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.'
+            title: switchedPaymentMethod ? 'Forma de pagamento alterada' : 'Boleto preparado',
+            text: switchedPaymentMethod
+              ? 'A cobrança anterior foi cancelada e o novo boleto foi preparado. Abra a cobrança para concluir a regularização.'
+              : 'A cobrança por boleto foi localizada. Depois do pagamento, a compensação pode levar mais tempo e a liberação acontecerá automaticamente após a confirmação.'
           };
         }
 
@@ -1080,8 +1091,10 @@
         }
 
         return {
-          title: 'Cobrança por cartão preparada',
-          text: 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
+          title: switchedPaymentMethod ? 'Forma de pagamento alterada' : 'Cobrança por cartão preparada',
+          text: switchedPaymentMethod
+            ? 'A cobrança anterior foi cancelada e a nova cobrança por cartão foi preparada. Abra a página segura para informar os dados do cartão.'
+            : 'A cobrança foi criada. Abra a página segura para informar os dados do cartão. Depois da confirmação, o VendMaster libera o acesso automaticamente.'
         };
       }
 
@@ -1123,6 +1136,126 @@
         }
       }
 
+      function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+      }
+
+      async function parseJsonResponse(response) {
+        return response.json().catch(() => ({
+          success: false,
+          message: 'Não foi possível interpretar a resposta do servidor.'
+        }));
+      }
+
+      async function showPreparedPayment(data, selectedBillingType) {
+        const successMessage = data.message || 'Pagamento preparado com sucesso.';
+        const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
+        const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
+        const paymentWasReused = Boolean(data.gatewayPaymentReused);
+        const switchedPaymentMethod = Boolean(data.switchedPaymentMethod);
+
+        if (paymentUrl) {
+          const followUpText = getPaymentFollowUpText(effectiveBillingType);
+
+          setPaymentResult(
+            `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>. ${followUpText}`,
+            'success'
+          );
+
+          const modalCopy = getPaymentModalCopy({
+            billingType: effectiveBillingType,
+            paymentWasReused,
+            switchedPaymentMethod
+          });
+
+          const openPayment = await window.AppAlerts?.confirm({
+            title: modalCopy.title,
+            text: modalCopy.text,
+            confirmButtonText: 'Abrir cobrança',
+            cancelButtonText: 'Continuar no VendMaster'
+          });
+
+          if (openPayment) {
+            const paymentWindow = window.open(paymentUrl, '_blank');
+
+            if (paymentWindow) {
+              paymentWindow.opener = null;
+            } else {
+              window.AppAlerts?.warning('Não foi possível abrir a cobrança em uma nova aba. Verifique se o navegador bloqueou janelas pop-up do VendMaster.');
+            }
+          }
+
+          return;
+        }
+
+        setPaymentResult(successMessage, 'success');
+        window.AppAlerts?.success(successMessage);
+      }
+
+      async function trocarFormaPagamento(button, selectedBillingType, conflictData) {
+        const currentLabel = conflictData.currentBillingTypeLabel || getBillingTypeLabel(conflictData.currentBillingType);
+        const requestedLabel = conflictData.requestedBillingTypeLabel || getBillingTypeLabel(selectedBillingType);
+
+        const confirmSwitch = await window.AppAlerts?.confirm({
+          title: 'Trocar forma de pagamento?',
+          text: `Já existe uma cobrança por ${currentLabel} em aberto. Para trocar para ${requestedLabel}, a cobrança atual será cancelada e uma nova será gerada.`,
+          confirmButtonText: `Trocar para ${requestedLabel}`,
+          cancelButtonText: 'Manter cobrança atual'
+        });
+
+        if (!confirmSwitch) {
+          const message = 'Tudo certo. Mantivemos a cobrança atual em aberto.';
+          setPaymentResult(message, 'warning');
+          return;
+        }
+
+        const originalButtonContent = button.innerHTML;
+
+        button.disabled = true;
+        button.innerHTML = `
+          <i class="bi bi-hourglass-split"></i>
+          <span>Trocando...</span>
+        `;
+
+        try {
+          const response = await fetch('/pagamentos/trocar-forma', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': getCsrfToken()
+            },
+            body: JSON.stringify({
+              billingType: selectedBillingType
+            })
+          });
+
+          const data = await parseJsonResponse(response);
+
+          if (!response.ok || !data.success) {
+            const message = data.message || 'Não foi possível trocar a forma de pagamento.';
+
+            setPaymentResult(message, 'error');
+            window.AppAlerts?.error(message);
+            return;
+          }
+
+          await showPreparedPayment(data, selectedBillingType);
+        } catch (error) {
+          console.error('Erro ao trocar forma de pagamento:', error);
+
+          const message = 'Erro ao trocar a forma de pagamento. Tente novamente em alguns instantes.';
+
+          setPaymentResult(message, 'error');
+          window.AppAlerts?.error(message);
+        } finally {
+          button.disabled = false;
+          button.innerHTML = originalButtonContent;
+          updatePaymentButtonText();
+        }
+      }
+
       document
         .querySelectorAll('input[name="assinatura_billing_type"]')
         .forEach((input) => input.addEventListener('change', updatePaymentButtonText));
@@ -1143,25 +1276,20 @@
         try {
           const selectedBillingType = getSelectedBillingType();
 
-          const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-
           const response = await fetch('/pagamentos/iniciar', {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
-              'X-CSRF-Token': csrfToken
+              'X-CSRF-Token': getCsrfToken()
             },
             body: JSON.stringify({
               billingType: selectedBillingType
             })
           });
 
-          const data = await response.json().catch(() => ({
-            success: false,
-            message: 'Não foi possível interpretar a resposta do servidor.'
-          }));
+          const data = await parseJsonResponse(response);
 
           if (!response.ok || !data.success) {
             const message = data.message || 'Não foi possível preparar o pagamento.';
@@ -1169,6 +1297,13 @@
             if (data.needsBillingData) {
               setPaymentResult(`${message} Clique em "Preencher dados" antes de continuar.`, 'warning');
               window.AppAlerts?.warning(message);
+              return;
+            }
+
+            if (response.status === 409 && data.canSwitchPaymentMethod) {
+              setPaymentResult(`${message} Você pode manter a cobrança atual ou trocar a forma de pagamento.`, 'warning');
+
+              await trocarFormaPagamento(button, selectedBillingType, data);
               return;
             }
 
@@ -1185,48 +1320,7 @@
             return;
           }
 
-          const successMessage = data.message || 'Pagamento preparado com sucesso.';
-          const effectiveBillingType = data.effectiveBillingType || data.requestedBillingType || selectedBillingType;
-          const paymentUrl = data.payment?.paymentUrl || data.payment?.invoiceUrl || data.payment?.bankSlipUrl || null;
-          const paymentWasReused = Boolean(data.gatewayPaymentReused);
-
-          if (paymentUrl) {
-            const followUpText = getPaymentFollowUpText(effectiveBillingType);
-
-            setPaymentResult(
-              `${successMessage} <a href="${paymentUrl}" target="_blank" rel="noopener noreferrer">Abrir cobrança</a>. ${followUpText}`,
-              'success'
-            );
-
-            const modalCopy = getPaymentModalCopy({
-              billingType: effectiveBillingType,
-              paymentWasReused
-            });
-
-            const openPayment = await window.AppAlerts?.confirm({
-              title: modalCopy.title,
-              text: modalCopy.text,
-              confirmButtonText: 'Abrir cobrança',
-              cancelButtonText: 'Continuar no VendMaster'
-            });
-
-            if (openPayment) {
-              const paymentWindow = window.open(paymentUrl, "_blank");
-
-              if (paymentWindow) {
-                paymentWindow.opener = null;
-              } else {
-                window.AppAlerts?.warning("Não foi possível abrir a cobrança em uma nova aba. Verifique se o navegador bloqueou janelas pop-up do VendMaster.");
-              }
-
-              return;
-            }
-
-            return;
-          }
-
-          setPaymentResult(successMessage, 'success');
-          window.AppAlerts?.success(successMessage);
+          await showPreparedPayment(data, selectedBillingType);
         } catch (error) {
           console.error('Erro ao preparar pagamento:', error);
 
