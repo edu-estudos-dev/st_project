@@ -373,7 +373,7 @@ async function cancelarPagamentoPendenteAtual(assinante, pendingPayment) {
     deletedSubscription = await deleteSubscription(paymentSubscriptionId);
 
     if (assinante.gateway_subscription_id === paymentSubscriptionId) {
-      await AssinanteModel.updateGatewaySubscriptionId(assinante.id, null);
+      await AssinanteModel.updateFromAdmin(assinante.id, { gateway_subscription_id: null });
       clearedSubscriptionReference = true;
     }
 
