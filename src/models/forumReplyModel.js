@@ -1,5 +1,41 @@
 import pool from '../db_config/connection.js';
 
+async function atualizarResumoTopico(client, topicId) {
+  await client.query(
+    `
+      UPDATE forum_topics
+      SET
+        reply_count = (
+          SELECT COUNT(*)::INTEGER
+          FROM forum_replies
+          WHERE topic_id = $1
+            AND status = 'visible'
+            AND deleted_at IS NULL
+        ),
+        last_reply_at = (
+          SELECT MAX(created_at)
+          FROM forum_replies
+          WHERE topic_id = $1
+            AND status = 'visible'
+            AND deleted_at IS NULL
+        ),
+        last_reply_user_id = (
+          SELECT author_user_id
+          FROM forum_replies
+          WHERE topic_id = $1
+            AND status = 'visible'
+            AND deleted_at IS NULL
+          ORDER BY created_at DESC
+          LIMIT 1
+        ),
+        updated_at = NOW()
+      WHERE id = $1
+        AND deleted_at IS NULL
+    `,
+    [topicId]
+  );
+}
+
 const forumReplyModel = {
   async listarPorTopico(topicId, { includeHidden = false } = {}) {
     const statuses = includeHidden ? ['visible', 'hidden'] : ['visible'];
@@ -72,6 +108,7 @@ const forumReplyModel = {
             last_reply_user_id = $2,
             updated_at = NOW()
           WHERE id = $1
+            AND deleted_at IS NULL
         `,
         [topicId, authorUserId]
       );
@@ -101,6 +138,7 @@ const forumReplyModel = {
             updated_at = NOW()
           WHERE id = $1
             AND status = 'visible'
+            AND deleted_at IS NULL
           RETURNING *
         `,
         [id]
@@ -109,16 +147,44 @@ const forumReplyModel = {
       const reply = replyResult.rows[0] || null;
 
       if (reply) {
-        await client.query(
-          `
-            UPDATE forum_topics
-            SET
-              reply_count = GREATEST(reply_count - 1, 0),
-              updated_at = NOW()
-            WHERE id = $1
-          `,
-          [reply.topic_id]
-        );
+        await atualizarResumoTopico(client, reply.topic_id);
+      }
+
+      await client.query('COMMIT');
+
+      return reply;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  },
+
+  async excluir(id) {
+    const client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      const replyResult = await client.query(
+        `
+          UPDATE forum_replies
+          SET
+            status = 'hidden',
+            deleted_at = NOW(),
+            updated_at = NOW()
+          WHERE id = $1
+            AND deleted_at IS NULL
+          RETURNING *
+        `,
+        [id]
+      );
+
+      const reply = replyResult.rows[0] || null;
+
+      if (reply) {
+        await atualizarResumoTopico(client, reply.topic_id);
       }
 
       await client.query('COMMIT');

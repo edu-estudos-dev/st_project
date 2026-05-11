@@ -646,36 +646,46 @@
 
               <div class="admin-topic-actions">
                 <% if (topico.status === 'hidden') { %>
-                    <form action="/admin/comunidade/topico/<%= topico.id %>/reexibir" method="POST">
+                  <form action="/admin/comunidade/topico/<%= topico.id %>/reexibir" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                     <button type="submit" class="admin-btn-soft">
-                        Reexibir
+                      Reexibir
                     </button>
-                    </form>
+                  </form>
                 <% } else { %>
-                    <form action="/admin/comunidade/topico/<%= topico.id %>/fixar" method="POST">
+                  <form action="/admin/comunidade/topico/<%= topico.id %>/fixar" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                     <button type="submit" class="admin-btn-warning">
-                        <%= topico.is_pinned ? 'Desfixar' : 'Fixar' %>
+                      <%= topico.is_pinned ? 'Desfixar' : 'Fixar' %>
                     </button>
-                    </form>
+                  </form>
 
-                    <form action="/admin/comunidade/topico/<%= topico.id %>/fechar" method="POST">
+                  <form action="/admin/comunidade/topico/<%= topico.id %>/fechar" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                     <button type="submit" class="admin-btn-soft">
-                        <%= topico.status === 'closed' ? 'Reabrir' : 'Fechar' %>
+                      <%= topico.status === 'closed' ? 'Reabrir' : 'Fechar' %>
                     </button>
-                    </form>
+                  </form>
 
-                    <form action="/admin/comunidade/topico/<%= topico.id %>/ocultar" method="POST">
+                  <form action="/admin/comunidade/topico/<%= topico.id %>/ocultar" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                     <button type="submit" class="admin-btn-danger">
-                        Ocultar
+                      Ocultar
                     </button>
-                    </form>
+                  </form>
                 <% } %>
-                </div>
-             
+
+                <form
+                  action="/admin/comunidade/topico/<%= topico.id %>/excluir"
+                  method="POST"
+                  onsubmit="return confirm('Excluir este tópico? Essa ação remove o conteúdo da área pública e da moderação principal, mas mantém o registro no banco para segurança.');"
+                >
+                  <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+                  <button type="submit" class="admin-btn-danger">
+                    Excluir tópico
+                  </button>
+                </form>
+              </div>
             </article>
           <% }) %>
         </div>

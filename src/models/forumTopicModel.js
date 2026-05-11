@@ -189,6 +189,7 @@ const forumTopicModel = {
           view_count = view_count + 1,
           updated_at = updated_at
         WHERE id = $1
+          AND deleted_at IS NULL
       `,
       [id]
     );
@@ -228,38 +229,59 @@ const forumTopicModel = {
     return result.rows;
   },
 
- async ocultar(id) {
-  const result = await pool.query(
-    `
-      UPDATE forum_topics
-      SET
-        status = 'hidden',
-        updated_at = NOW()
-      WHERE id = $1
-      RETURNING *
-    `,
-    [id]
-  );
+  async ocultar(id) {
+    const result = await pool.query(
+      `
+        UPDATE forum_topics
+        SET
+          status = 'hidden',
+          updated_at = NOW()
+        WHERE id = $1
+          AND deleted_at IS NULL
+        RETURNING *
+      `,
+      [id]
+    );
 
-  return result.rows[0] || null;
-},
+    return result.rows[0] || null;
+  },
 
-async reexibir(id) {
-  const result = await pool.query(
-    `
-      UPDATE forum_topics
-      SET
-        status = 'open',
-        updated_at = NOW()
-      WHERE id = $1
-        AND status = 'hidden'
-      RETURNING *
-    `,
-    [id]
-  );
+  async reexibir(id) {
+    const result = await pool.query(
+      `
+        UPDATE forum_topics
+        SET
+          status = 'open',
+          updated_at = NOW()
+        WHERE id = $1
+          AND status = 'hidden'
+          AND deleted_at IS NULL
+        RETURNING *
+      `,
+      [id]
+    );
 
-  return result.rows[0] || null;
-},
+    return result.rows[0] || null;
+  },
+
+  async excluir(id) {
+    const result = await pool.query(
+      `
+        UPDATE forum_topics
+        SET
+          status = 'hidden',
+          is_pinned = FALSE,
+          deleted_at = NOW(),
+          updated_at = NOW()
+        WHERE id = $1
+          AND deleted_at IS NULL
+        RETURNING *
+      `,
+      [id]
+    );
+
+    return result.rows[0] || null;
+  },
 
   async alternarFixado(id) {
     const result = await pool.query(
@@ -269,6 +291,7 @@ async reexibir(id) {
           is_pinned = NOT is_pinned,
           updated_at = NOW()
         WHERE id = $1
+          AND deleted_at IS NULL
         RETURNING *
       `,
       [id]
@@ -289,6 +312,7 @@ async reexibir(id) {
           END,
           updated_at = NOW()
         WHERE id = $1
+          AND deleted_at IS NULL
         RETURNING *
       `,
       [id]

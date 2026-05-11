@@ -17,6 +17,11 @@ function getRedirectBack(req) {
   return req.get('referer') || '/admin/comunidade';
 }
 
+function appendQueryParam(url, key, value) {
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}${key}=${encodeURIComponent(value)}`;
+}
+
 const AdminComunidadeController = {
   async index(req, res, next) {
     try {
@@ -39,40 +44,80 @@ const AdminComunidadeController = {
   },
 
   async ocultarTopico(req, res, next) {
-  try {
-    const { id } = req.params;
+    try {
+      const { id } = req.params;
 
-    await forumTopicModel.ocultar(id);
+      const topico = await forumTopicModel.ocultar(id);
 
-    return res.redirect('/admin/comunidade?success=Tópico ocultado com sucesso.');
-  } catch (error) {
-    return next(error);
-  }
-},
+      if (!topico) {
+        return res.redirect(
+          '/admin/comunidade?error=Não foi possível ocultar o tópico.'
+        );
+      }
 
-async reexibirTopico(req, res, next) {
-  try {
-    const { id } = req.params;
-
-    const topico = await forumTopicModel.reexibir(id);
-
-    if (!topico) {
-      return res.redirect('/admin/comunidade?error=Não foi possível reexibir o tópico.');
+      return res.redirect(
+        '/admin/comunidade?success=Tópico ocultado com sucesso.'
+      );
+    } catch (error) {
+      return next(error);
     }
+  },
 
-    return res.redirect('/admin/comunidade?success=Tópico reexibido com sucesso.');
-  } catch (error) {
-    return next(error);
-  }
-},
+  async reexibirTopico(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const topico = await forumTopicModel.reexibir(id);
+
+      if (!topico) {
+        return res.redirect(
+          '/admin/comunidade?error=Não foi possível reexibir o tópico.'
+        );
+      }
+
+      return res.redirect(
+        '/admin/comunidade?success=Tópico reexibido com sucesso.'
+      );
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async excluirTopico(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const topico = await forumTopicModel.excluir(id);
+
+      if (!topico) {
+        return res.redirect(
+          '/admin/comunidade?error=Não foi possível excluir o tópico.'
+        );
+      }
+
+      return res.redirect(
+        '/admin/comunidade?success=Tópico excluído com sucesso.'
+      );
+    } catch (error) {
+      return next(error);
+    }
+  },
 
   async alternarFixadoTopico(req, res, next) {
     try {
       const { id } = req.params;
 
-      await forumTopicModel.alternarFixado(id);
+      const topico = await forumTopicModel.alternarFixado(id);
 
-      return res.redirect('/admin/comunidade?success=Status de fixação atualizado.');
+      if (!topico) {
+        return res.redirect(
+          '/admin/comunidade?error=Não foi possível atualizar a fixação do tópico.'
+        );
+      }
+
+      return res.redirect(
+        '/admin/comunidade?success=Status de fixação atualizado.'
+      );
     } catch (error) {
       return next(error);
     }
@@ -82,9 +127,17 @@ async reexibirTopico(req, res, next) {
     try {
       const { id } = req.params;
 
-      await forumTopicModel.alternarFechado(id);
+      const topico = await forumTopicModel.alternarFechado(id);
 
-      return res.redirect('/admin/comunidade?success=Status do tópico atualizado.');
+      if (!topico) {
+        return res.redirect(
+          '/admin/comunidade?error=Não foi possível atualizar o status do tópico.'
+        );
+      }
+
+      return res.redirect(
+        '/admin/comunidade?success=Status do tópico atualizado.'
+      );
     } catch (error) {
       return next(error);
     }
@@ -94,9 +147,39 @@ async reexibirTopico(req, res, next) {
     try {
       const { id } = req.params;
 
-      await forumReplyModel.ocultar(id);
+      const resposta = await forumReplyModel.ocultar(id);
+      const redirectUrl = getRedirectBack(req);
 
-      return res.redirect(`${getRedirectBack(req)}?success=Resposta ocultada com sucesso.`);
+      if (!resposta) {
+        return res.redirect(
+          appendQueryParam(redirectUrl, 'error', 'Não foi possível ocultar a resposta.')
+        );
+      }
+
+      return res.redirect(
+        appendQueryParam(redirectUrl, 'success', 'Resposta ocultada com sucesso.')
+      );
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async excluirResposta(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const resposta = await forumReplyModel.excluir(id);
+      const redirectUrl = getRedirectBack(req);
+
+      if (!resposta) {
+        return res.redirect(
+          appendQueryParam(redirectUrl, 'error', 'Não foi possível excluir a resposta.')
+        );
+      }
+
+      return res.redirect(
+        appendQueryParam(redirectUrl, 'success', 'Resposta excluída com sucesso.')
+      );
     } catch (error) {
       return next(error);
     }
