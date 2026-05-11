@@ -31,11 +31,15 @@ function normalizeEmail(value) {
 }
 
 function normalizeBillingType(value) {
-  const billingType = String(value || 'CREDIT_CARD')
-    .trim()
-    .toUpperCase();
+  const rawValue = String(value || '').trim();
 
-  return ALLOWED_BILLING_TYPES.has(billingType) ? billingType : 'CREDIT_CARD';
+  if (!rawValue) {
+    return 'CREDIT_CARD';
+  }
+
+  const billingType = rawValue.toUpperCase();
+
+  return ALLOWED_BILLING_TYPES.has(billingType) ? billingType : null;
 }
 
 function isActiveBillingType(billingType) {
@@ -96,6 +100,39 @@ function formatDateOnly(value) {
   }
 
   return date.toISOString().slice(0, 10);
+}
+
+function formatTodayDateOnly() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isPaymentDueDateStillValid(dueDate) {
+  const normalizedDueDate = String(dueDate || '').slice(0, 10);
+
+  if (!normalizedDueDate) {
+    return false;
+  }
+
+  return normalizedDueDate >= formatTodayDateOnly();
+}
+
+function isPendingPaymentFreshEnough(payment, maxAgeInDays = 2) {
+  const createdAt = payment?.dateCreated || payment?.createdDate;
+
+  if (!createdAt) {
+    return true;
+  }
+
+  const createdDate = new Date(createdAt);
+
+  if (Number.isNaN(createdDate.getTime())) {
+    return false;
+  }
+
+  const ageInMs = Date.now() - createdDate.getTime();
+  const maxAgeInMs = maxAgeInDays * 24 * 60 * 60 * 1000;
+
+  return ageInMs <= maxAgeInMs;
 }
 
 function validateBillingData(data) {
@@ -352,13 +389,31 @@ function isReusablePendingPayment(payment, assinante) {
   const expectedExternalReference = `assinante:${assinante.id}`;
   const expectedValue = getMonthlyPlanValue(assinante);
 
-  return (
-    payment?.deleted !== true &&
-    payment?.status === 'PENDING' &&
-    payment?.externalReference === expectedExternalReference &&
-    isSameMoneyValue(payment?.value, expectedValue) &&
-    isActiveBillingType(payment?.billingType)
-  );
+  if (
+    payment?.deleted === true ||
+    payment?.status !== 'PENDING' ||
+    payment?.externalReference !== expectedExternalReference ||
+    !isSameMoneyValue(payment?.value, expectedValue) ||
+    !isActiveBillingType(payment?.billingType)
+  ) {
+    return false;
+  }
+
+  if (
+    ['BOLETO', 'PIX'].includes(payment.billingType) &&
+    !isPaymentDueDateStillValid(payment.dueDate)
+  ) {
+    return false;
+  }
+
+  if (
+    payment.billingType === 'CREDIT_CARD' &&
+    !isPendingPaymentFreshEnough(payment, 2)
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function selectReusablePendingPayment(payments = [], assinante) {
@@ -548,11 +603,11 @@ async function prepararPagamentoBoleto({
     paymentsResult?.data || []
   );
 
-  const selectedPaymentIsPayable =
-    selectedPayment?.deleted !== true &&
-    ['PENDING', 'OVERDUE'].includes(selectedPayment?.status);
+  const selectedPaymentIsReusable =
+    selectedPayment?.billingType === 'BOLETO' &&
+    isReusablePendingPayment(selectedPayment, assinante);
 
-  if (!selectedPaymentIsPayable) {
+  if (!selectedPaymentIsReusable) {
     const boletoPayment = await createPayment({
       customer: customerResult.customerId,
       billingType: 'BOLETO',
@@ -569,7 +624,7 @@ async function prepararPagamentoBoleto({
     return {
       success: true,
       message: boletoPayment?.invoiceUrl || boletoPayment?.bankSlipUrl
-        ? 'Boleto preparado com sucesso. Abra a cobrança para concluir a regularização.'
+        ? 'Boleto preparado com sucesso. Abra a nova cobrança para concluir a regularização.'
         : 'Boleto criado, mas nenhum link de pagamento foi retornado no momento.',
       provider: gatewayConfig.provider,
       environment: gatewayConfig.environment,
@@ -593,7 +648,7 @@ async function prepararPagamentoBoleto({
   return {
     success: true,
     message: payment?.paymentUrl
-      ? 'Boleto preparado com sucesso. Abra a cobrança para concluir a regularização.'
+      ? 'Boleto em aberto localizado. Abra a cobrança para concluir a regularização.'
       : 'Assinatura preparada com sucesso, mas nenhuma cobrança aberta foi localizada no momento.',
     provider: gatewayConfig.provider,
     environment: gatewayConfig.environment,

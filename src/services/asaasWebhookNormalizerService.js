@@ -41,6 +41,22 @@ function normalizeUpper(value, fallback = null) {
   return normalizedValue || fallback;
 }
 
+function normalizeText(value, fallback = null) {
+  const normalizedValue = String(value || '').trim();
+
+  return normalizedValue || fallback;
+}
+
+function normalizeMoneyValue(value) {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return null;
+  }
+
+  return Number(numericValue.toFixed(2));
+}
+
 function normalizeAsaasWebhookPayload(payload = {}) {
   const payment = payload.payment || {};
   const subscription = payload.subscription || {};
@@ -53,6 +69,25 @@ function normalizeAsaasWebhookPayload(payload = {}) {
   const status = normalizeUpper(
     payment.status || subscription.status || payload.status,
     null
+  );
+
+  const billingType = normalizeUpper(
+    payment.billingType || subscription.billingType || payload.billingType,
+    null
+  );
+
+  const externalReference = normalizeText(
+    payment.externalReference ||
+      subscription.externalReference ||
+      payload.externalReference,
+    null
+  );
+
+  const paymentValue = normalizeMoneyValue(
+    payment.value ??
+      payment.netValue ??
+      subscription.value ??
+      payload.value
   );
 
   const isPaymentConfirmed =
@@ -92,6 +127,10 @@ function normalizeAsaasWebhookPayload(payload = {}) {
       || subscription.nextDueDate
       || payload.dueDate
       || null,
+    paymentValue,
+    billingType,
+    externalReference,
+    deleted: payment.deleted === true || payload.deleted === true,
     isPaymentConfirmed,
     isPaymentOverdue,
     isPaymentDeleted,

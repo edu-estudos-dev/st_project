@@ -11,8 +11,7 @@ const API_KEY_PLACEHOLDERS = new Set([
 const ALLOWED_PAYMENT_BILLING_TYPES = new Set([
   'BOLETO',
   'PIX',
-  'CREDIT_CARD',
-  'UNDEFINED'
+  'CREDIT_CARD'
 ]);
 
 function getGatewayConfig() {

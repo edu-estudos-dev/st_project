@@ -7,8 +7,13 @@ class PaymentEventModel {
     eventType,
     gatewayEventId = null,
     gatewayPaymentId = null,
+    gatewayCustomerId = null,
     gatewaySubscriptionId = null,
     status = null,
+    paymentValue = null,
+    billingType = null,
+    externalReference = null,
+    processingReason = null,
     payload
   }) {
     const result = await connection.query(
@@ -18,10 +23,15 @@ class PaymentEventModel {
         event_type,
         gateway_event_id,
         gateway_payment_id,
+        gateway_customer_id,
         gateway_subscription_id,
         status,
+        payment_value,
+        billing_type,
+        external_reference,
+        processing_reason,
         payload
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       RETURNING *`,
       [
         assinanteId,
@@ -29,8 +39,13 @@ class PaymentEventModel {
         eventType,
         gatewayEventId,
         gatewayPaymentId,
+        gatewayCustomerId,
         gatewaySubscriptionId,
         status,
+        paymentValue,
+        billingType,
+        externalReference,
+        processingReason,
         payload
       ]
     );
@@ -84,6 +99,27 @@ class PaymentEventModel {
     );
   }
 
+  async findProcessedConfirmationByGatewayPaymentId(
+    gatewayPaymentId,
+    provider = 'asaas'
+  ) {
+    if (!gatewayPaymentId) return null;
+
+    const result = await connection.query(
+      `SELECT *
+       FROM payment_events
+       WHERE provider = $1
+         AND gateway_payment_id = $2
+         AND event_type IN ('PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED')
+         AND processed_at IS NOT NULL
+       ORDER BY processed_at ASC, id ASC
+       LIMIT 1`,
+      [provider, gatewayPaymentId]
+    );
+
+    return result.rows[0] || null;
+  }
+
   async listByAssinanteId(assinanteId, { limit = 100 } = {}) {
     if (!assinanteId) {
       return [];
@@ -101,10 +137,16 @@ class PaymentEventModel {
         event_type,
         gateway_event_id,
         gateway_payment_id,
+        gateway_customer_id,
         gateway_subscription_id,
         status,
+        payment_value,
+        billing_type,
+        external_reference,
+        processing_reason,
         payload,
         processed_at,
+        ignored_at,
         created_at
        FROM payment_events
        WHERE assinante_id = $1
@@ -116,13 +158,30 @@ class PaymentEventModel {
     return result.rows;
   }
 
-  async markAsProcessed(id) {
+  async markAsProcessed(id, processingReason = null) {
     const result = await connection.query(
       `UPDATE payment_events
-       SET processed_at = NOW()
+       SET
+         processed_at = NOW(),
+         ignored_at = NULL,
+         processing_reason = COALESCE($2, processing_reason)
        WHERE id = $1
        RETURNING *`,
-      [id]
+      [id, processingReason]
+    );
+
+    return result.rows[0] || null;
+  }
+
+  async markAsIgnored(id, processingReason) {
+    const result = await connection.query(
+      `UPDATE payment_events
+       SET
+         ignored_at = NOW(),
+         processing_reason = $2
+       WHERE id = $1
+       RETURNING *`,
+      [id, processingReason]
     );
 
     return result.rows[0] || null;
