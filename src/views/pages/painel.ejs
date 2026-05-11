@@ -21,14 +21,35 @@
    <% const visitAlert = typeof dashboardVisitAlert !== 'undefined'
       ? dashboardVisitAlert
       : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto crítico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
-   <% const adminShortcuts = [
-      { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
-      { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova máquina com todos os dados operacionais.', tone: 'gold' },
-      { href: '/rotas', title: 'Rotas dos pontos', description: 'Monte o trajeto por bairro e abra a navegação no Google Maps ou no Waze.', tone: 'amber' },
-      { href: '/lancamentos', title: 'Lançamentos', description: 'Visualize entradas, saídas e movimentações registradas.', tone: 'slate' },
-      { href: '/lancamentos/add', title: 'Novo lançamento', description: 'Registre uma movimentação financeira rapidamente.', tone: 'green' },
-      { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' }
-   ]; %>
+   <%
+      const canAccessCommunityAdmin =
+         typeof canModerateCommunity !== 'undefined' && Boolean(canModerateCommunity);
+
+      const adminShortcutsBase = [
+         { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
+         { href: '/estabelecimentos/add', title: 'Novo estabelecimento', description: 'Cadastre uma nova máquina com todos os dados operacionais.', tone: 'gold' },
+         { href: '/rotas', title: 'Rotas dos pontos', description: 'Monte o trajeto por bairro e abra a navegação no Google Maps ou no Waze.', tone: 'amber' },
+         { href: '/lancamentos', title: 'Lançamentos', description: 'Visualize entradas, saídas e movimentações registradas.', tone: 'slate' },
+         { href: '/lancamentos/add', title: 'Novo lançamento', description: 'Registre uma movimentação financeira rapidamente.', tone: 'green' },
+         { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' }
+      ];
+
+      const communityAdminShortcuts = canAccessCommunityAdmin
+         ? [
+            {
+               href: '/admin/comunidade',
+               title: 'Moderação da Comunidade',
+               description: 'Gerencie tópicos, respostas e destaques da Comunidade VendMaster.',
+               tone: 'community'
+            }
+         ]
+         : [];
+
+      const adminShortcuts = [
+         ...adminShortcutsBase,
+         ...communityAdminShortcuts
+      ];
+   %>
    <% const operationalShortcuts = [
       { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green', productKey: 'bolinhas' },
       { href: '/consignados/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue', productKey: 'consignados' },
@@ -87,7 +108,7 @@
                <h2 class="dashboard-sidebar-title">Operação</h2>
                <nav class="dashboard-sidebar-nav" aria-label="Atalhos administrativos">
                   <% visibleAdminShortcuts.forEach((item) => { %>
-                     <a href="<%= item.href %>" class="dashboard-sidebar-link">
+                     <a href="<%= item.href %>" class="dashboard-sidebar-link dashboard-sidebar-link-<%= item.tone %>">
                         <span><%= item.title %></span>
                         <small>&rarr;</small>
                      </a>
@@ -100,7 +121,7 @@
                   <h2 class="dashboard-sidebar-title">Cadastros rápidos</h2>
                   <nav class="dashboard-sidebar-nav" aria-label="Cadastros operacionais">
                      <% visibleOperationalShortcuts.forEach((item) => { %>
-                        <a href="<%= item.href %>" class="dashboard-sidebar-link">
+                        <a href="<%= item.href %>" class="dashboard-sidebar-link dashboard-sidebar-link-<%= item.tone %>">
                            <span><%= item.title %></span>
                            <small>&rarr;</small>
                         </a>

@@ -1,4 +1,5 @@
 import EstabelecimentoModel from '../models/estabelecimentoModel.js';
+import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
 const formatDate = value =>
   value
@@ -35,6 +36,7 @@ const getTrendTone = value => {
 class PainelController {
   async renderPainel(req, res) {
     const assinanteId = req.user.assinante_id;
+
     const [dashboardSummary, dashboardInsights, operationalPendingItems] = await Promise.all([
       EstabelecimentoModel.getDashboardSummary(assinanteId),
       EstabelecimentoModel.getDashboardInsights(assinanteId),
@@ -81,6 +83,7 @@ class PainelController {
     const revenueDeltaPercent = insightTotals.deltaPercent;
     const revenueDirection = getTrendTone(revenueDelta);
     const recommendedAction = dashboardInsights.recommendedAction;
+
     const recommendedActionCard = recommendedAction
       ? {
           title: recommendedAction.estabelecimento || 'Ponto em atenção',
@@ -153,6 +156,7 @@ class PainelController {
       dashboardSummary,
       dashboardInsights: formattedInsights,
       dashboardVisitAlert: visitAlert,
+      canModerateCommunity: isSaasAdminUser(req.user),
       financialNotifications:
         res.locals.financialNotifications || {
           proximos: [],
