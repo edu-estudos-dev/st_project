@@ -1,5 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<%
+  function getAuthorInitials(nome) {
+    const texto = String(nome || '').trim();
+
+    if (!texto) {
+      return 'VM';
+    }
+
+    const partes = texto.split(/\s+/).filter(Boolean);
+
+    if (partes.length >= 2) {
+      return ((partes[0][0] || '') + (partes[1][0] || '')).toUpperCase();
+    }
+
+    return texto.slice(0, 2).toUpperCase();
+  }
+%>
 <%- include('../../partials/head', {
   title,
   metaDescription,
@@ -39,13 +56,12 @@
                 <%= topico.categoria_nome %>
               </a>
 
-              <% if (topico.autor_nome) { %>
-                <span>Por <%= topico.autor_nome %></span>
-              <% } else { %>
-                <span>Autor removido</span>
-              <% } %>
+              <span class="comunidade-meta-separator" aria-hidden="true">|</span>
+
+              <span>Por <%= topico.autor_nome || 'Autor removido' %></span>
 
               <% if (topico.created_at) { %>
+                <span class="comunidade-meta-separator" aria-hidden="true">|</span>
                 <span><%= formatarDataForum(topico.created_at) %></span>
               <% } %>
             </div>
@@ -82,14 +98,20 @@
               <% respostas.forEach((resposta, index) => { %>
                 <article class="comunidade-reply-card">
                   <header class="comunidade-reply-header">
-                    <div>
-                      <strong>
-                        <%= resposta.autor_nome || 'Autor removido' %>
-                      </strong>
+                    <div class="comunidade-reply-author">
+                      <span class="comunidade-author-avatar comunidade-author-avatar-lg" aria-hidden="true">
+                        <%= getAuthorInitials(resposta.autor_nome) %>
+                      </span>
 
-                      <% if (resposta.created_at) { %>
-                        <span><%= formatarDataForum(resposta.created_at) %></span>
-                      <% } %>
+                      <div>
+                        <strong>
+                          <%= resposta.autor_nome || 'Autor removido' %>
+                        </strong>
+
+                        <% if (resposta.created_at) { %>
+                          <span><%= formatarDataForum(resposta.created_at) %></span>
+                        <% } %>
+                      </div>
                     </div>
 
                     <span class="comunidade-reply-number">#<%= index + 1 %></span>
