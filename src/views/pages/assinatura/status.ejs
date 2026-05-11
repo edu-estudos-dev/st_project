@@ -1543,13 +1543,18 @@
           }, 1800);
         }
 
-        function startPaymentConfirmationWatcher() {
+        function startPaymentConfirmationWatcher({
+          preserveCurrentResult = false,
+          timeoutMs = 120000
+        } = {}) {
           stopPaymentConfirmationWatcher();
 
-          setPaymentResult(
-            'Aguardando confirmação do pagamento. Assim que o pagamento for confirmado, esta tela será atualizada automaticamente.',
-            'info'
-          );
+          if (!preserveCurrentResult) {
+            setPaymentResult(
+              'Aguardando confirmação do pagamento. Assim que o pagamento for confirmado, esta tela será atualizada automaticamente.',
+              'info'
+            );
+          }
 
           paymentStatusPollingInterval = setInterval(async () => {
             try {
@@ -1566,11 +1571,18 @@
           paymentStatusPollingTimeout = setTimeout(() => {
             stopPaymentConfirmationWatcher();
 
-            setPaymentResult(
-              'Ainda não recebemos a confirmação do pagamento. Se você acabou de pagar, aguarde alguns instantes e atualize esta página.',
-              'warning'
+            if (!preserveCurrentResult) {
+              setPaymentResult(
+                'Ainda não recebemos a confirmação do pagamento. Se você acabou de pagar, aguarde alguns instantes e atualize esta página.',
+                'warning'
+              );
+              return;
+            }
+
+            window.AppAlerts?.warning(
+              'Ainda não recebemos a confirmação do pagamento. Se você já pagou, aguarde alguns instantes e atualize esta página.'
             );
-          }, 120000);
+          }, timeoutMs);
         }
 
         async function showPreparedPayment(data, selectedBillingType) {
@@ -1593,8 +1605,12 @@
               });
 
               window.AppAlerts?.success(modalCopy.title);
-              startPaymentConfirmationWatcher();
-              setPixPaymentResult(data, effectiveBillingType);
+
+              startPaymentConfirmationWatcher({
+                preserveCurrentResult: true,
+                timeoutMs: 600000
+              });
+
               return;
             }
 
