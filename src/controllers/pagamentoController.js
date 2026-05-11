@@ -8,12 +8,13 @@ import {
   deleteSubscription,
   getCustomerPayments,
   getGatewayConfig,
+  getPixQrCode,
   getSubscriptionPayments,
   isGatewayConfigured
 } from '../services/paymentGatewayService.js';
 
 const ALLOWED_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
-const ACTIVE_BILLING_TYPES = new Set(['BOLETO', 'CREDIT_CARD']);
+const ACTIVE_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
 
 function onlyDigits(value) {
   return String(value || '').replace(/\D/g, '');
@@ -35,10 +36,6 @@ function normalizeBillingType(value) {
     .toUpperCase();
 
   return ALLOWED_BILLING_TYPES.has(billingType) ? billingType : 'CREDIT_CARD';
-}
-
-function isPixBillingType(billingType) {
-  return billingType === 'PIX';
 }
 
 function isActiveBillingType(billingType) {
@@ -84,6 +81,7 @@ function buildPaymentBlockedBySubscriptionStatusResponse(assinante) {
 function getBillingTypeLabel(billingType) {
   const labels = {
     BOLETO: 'boleto',
+    PIX: 'Pix',
     CREDIT_CARD: 'cartão'
   };
 
@@ -206,6 +204,20 @@ function buildAsaasCreditCardPaymentPayload(assinante, customerId) {
   };
 }
 
+function buildAsaasPixPaymentPayload(assinante, customerId) {
+  const monthlyValue = getMonthlyPlanValue(assinante);
+  const planName = assinante.plano_nome || 'Plano VendMaster';
+
+  return {
+    customer: customerId,
+    billingType: 'PIX',
+    value: monthlyValue,
+    dueDate: formatDateOnly(new Date()),
+    description: `Regularização VendMaster via Pix - ${planName}`,
+    externalReference: `assinante:${assinante.id}`
+  };
+}
+
 async function ensureAsaasCustomerForAssinante(assinante) {
   if (assinante.gateway_customer_id) {
     return {
@@ -304,6 +316,18 @@ function buildPaymentResponse(payment) {
   };
 }
 
+function buildPixResponse(pixQrCode) {
+  if (!pixQrCode) {
+    return null;
+  }
+
+  return {
+    encodedImage: pixQrCode.encodedImage || pixQrCode.encoded_image || null,
+    payload: pixQrCode.payload || pixQrCode.qrCode || pixQrCode.copyPaste || null,
+    expirationDate: pixQrCode.expirationDate || pixQrCode.expiration_date || null
+  };
+}
+
 function isSameMoneyValue(firstValue, secondValue) {
   const first = Number(firstValue);
   const second = Number(secondValue);
@@ -333,7 +357,7 @@ function isReusablePendingPayment(payment, assinante) {
     payment?.status === 'PENDING' &&
     payment?.externalReference === expectedExternalReference &&
     isSameMoneyValue(payment?.value, expectedValue) &&
-    Boolean(payment?.invoiceUrl || payment?.bankSlipUrl)
+    isActiveBillingType(payment?.billingType)
   );
 }
 
@@ -344,6 +368,27 @@ function selectReusablePendingPayment(payments = [], assinante) {
 
   const reusablePayments = payments.filter((payment) => {
     return isReusablePendingPayment(payment, assinante);
+  });
+
+  if (!reusablePayments.length) {
+    return null;
+  }
+
+  return reusablePayments.sort((a, b) => {
+    return getPaymentDateScore(b) - getPaymentDateScore(a);
+  })[0];
+}
+
+function selectReusablePaymentByBillingType(payments = [], assinante, billingType) {
+  if (!Array.isArray(payments) || !payments.length) {
+    return null;
+  }
+
+  const reusablePayments = payments.filter((payment) => {
+    return (
+      payment?.billingType === billingType &&
+      isReusablePendingPayment(payment, assinante)
+    );
   });
 
   if (!reusablePayments.length) {
@@ -387,6 +432,16 @@ async function findReusableCreditCardPayment(assinante, customerId) {
   const paymentsResult = await getCustomerPayments(customerId, 50);
 
   return selectReusableCreditCardPayment(paymentsResult?.data || [], assinante);
+}
+
+async function findReusablePaymentByBillingType(assinante, customerId, billingType) {
+  const paymentsResult = await getCustomerPayments(customerId, 50);
+
+  return selectReusablePaymentByBillingType(
+    paymentsResult?.data || [],
+    assinante,
+    billingType
+  );
 }
 
 async function cancelarPagamentoPendenteAtual(assinante, pendingPayment) {
@@ -492,6 +547,47 @@ async function prepararPagamentoBoleto({
   const selectedPayment = selectBestPaymentForSubscription(
     paymentsResult?.data || []
   );
+
+  const selectedPaymentIsPayable =
+    selectedPayment?.deleted !== true &&
+    ['PENDING', 'OVERDUE'].includes(selectedPayment?.status);
+
+  if (!selectedPaymentIsPayable) {
+    const boletoPayment = await createPayment({
+      customer: customerResult.customerId,
+      billingType: 'BOLETO',
+      value: getMonthlyPlanValue(assinante),
+      dueDate: formatDateOnly(new Date()),
+      description: `Regularização VendMaster via boleto - ${assinante.plano_nome || 'Plano VendMaster'}`,
+      externalReference: `assinante:${assinante.id}`
+    });
+
+    if (!boletoPayment?.id) {
+      throw new Error('Provedor de pagamento não retornou o ID da cobrança por boleto criada.');
+    }
+
+    return {
+      success: true,
+      message: boletoPayment?.invoiceUrl || boletoPayment?.bankSlipUrl
+        ? 'Boleto preparado com sucesso. Abra a cobrança para concluir a regularização.'
+        : 'Boleto criado, mas nenhum link de pagamento foi retornado no momento.',
+      provider: gatewayConfig.provider,
+      environment: gatewayConfig.environment,
+      gatewayConfigured: true,
+      hasBillingData,
+      requestedBillingType: 'BOLETO',
+      effectiveBillingType: 'BOLETO',
+      gatewayCustomerId: customerResult.customerId,
+      gatewayCustomerCreated: customerResult.created,
+      gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+      gatewaySubscriptionCreated: false,
+      gatewayPaymentReused: false,
+      needsGatewayConfiguration: false,
+      payment: buildPaymentResponse(boletoPayment),
+      pix: null
+    };
+  }
+
   const payment = buildPaymentResponse(selectedPayment);
 
   return {
@@ -509,6 +605,7 @@ async function prepararPagamentoBoleto({
     gatewayCustomerCreated: customerResult.created,
     gatewaySubscriptionId: subscriptionResult.subscriptionId,
     gatewaySubscriptionCreated: subscriptionResult.created,
+    gatewayPaymentReused: true,
     needsGatewayConfiguration: false,
     payment,
     pix: null
@@ -563,6 +660,55 @@ async function prepararPagamentoCartao({
   };
 }
 
+async function prepararPagamentoPix({
+  assinante,
+  customerResult,
+  hasBillingData,
+  gatewayConfig
+}) {
+  const reusablePixPayment = await findReusablePaymentByBillingType(
+    assinante,
+    customerResult.customerId,
+    'PIX'
+  );
+
+  const pixPayment =
+    reusablePixPayment ||
+    (await createPayment(
+      buildAsaasPixPaymentPayload(assinante, customerResult.customerId)
+    ));
+
+  if (!pixPayment?.id) {
+    throw new Error('Provedor de pagamento não retornou o ID da cobrança Pix criada.');
+  }
+
+  const pixQrCode = await getPixQrCode(pixPayment.id);
+  const pix = buildPixResponse(pixQrCode);
+  const payment = buildPaymentResponse(pixPayment);
+  const paymentWasReused = Boolean(reusablePixPayment?.id);
+
+  return {
+    success: true,
+    message: paymentWasReused
+      ? 'Encontramos uma cobrança Pix já aberta. Use o QR Code ou o código copia e cola para concluir a regularização.'
+      : 'Cobrança Pix preparada com sucesso. Use o QR Code ou o código copia e cola para concluir a regularização.',
+    provider: gatewayConfig.provider,
+    environment: gatewayConfig.environment,
+    gatewayConfigured: true,
+    hasBillingData,
+    requestedBillingType: 'PIX',
+    effectiveBillingType: 'PIX',
+    gatewayCustomerId: customerResult.customerId,
+    gatewayCustomerCreated: customerResult.created,
+    gatewaySubscriptionId: assinante.gateway_subscription_id || null,
+    gatewaySubscriptionCreated: false,
+    gatewayPaymentReused: paymentWasReused,
+    needsGatewayConfiguration: false,
+    payment,
+    pix
+  };
+}
+
 async function prepararPagamentoPorTipo({
   assinante,
   customerResult,
@@ -572,6 +718,15 @@ async function prepararPagamentoPorTipo({
 }) {
   if (requestedBillingType === 'CREDIT_CARD') {
     return prepararPagamentoCartao({
+      assinante,
+      customerResult,
+      hasBillingData,
+      gatewayConfig
+    });
+  }
+
+  if (requestedBillingType === 'PIX') {
+    return prepararPagamentoPix({
       assinante,
       customerResult,
       hasBillingData,
@@ -745,29 +900,10 @@ async function iniciarPagamento(req, res) {
       });
     }
 
-    if (isPixBillingType(requestedBillingType)) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'Pix para assinatura estará disponível em breve. Por enquanto, escolha cartão de crédito ou boleto.',
-        pixComingSoon: true,
-        hasBillingData,
-        requestedBillingType,
-        effectiveBillingType: null,
-        gatewayCustomerId: assinante.gateway_customer_id || null,
-        gatewayCustomerCreated: false,
-        gatewaySubscriptionId: assinante.gateway_subscription_id || null,
-        gatewaySubscriptionCreated: false,
-        needsGatewayConfiguration: false,
-        payment: null,
-        pix: null
-      });
-    }
-
     if (!isActiveBillingType(requestedBillingType)) {
       return res.status(400).json({
         success: false,
-        message: 'Forma de pagamento inválida. Escolha cartão de crédito ou boleto.',
+        message: 'Forma de pagamento inválida. Escolha cartão de crédito, Pix ou boleto.',
         hasBillingData,
         requestedBillingType,
         effectiveBillingType: null,
@@ -820,7 +956,7 @@ async function iniciarPagamento(req, res) {
         reusablePendingPayment
       });
 
-      return res.status(409).json(responsePayload);
+      return res.status(200).json(responsePayload);
     }
 
     const responsePayload = await prepararPagamentoPorTipo({
@@ -885,24 +1021,10 @@ async function trocarFormaPagamento(req, res) {
       });
     }
 
-    if (isPixBillingType(requestedBillingType)) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'Pix para assinatura estará disponível em breve. Por enquanto, escolha cartão de crédito ou boleto.',
-        pixComingSoon: true,
-        hasBillingData,
-        requestedBillingType,
-        effectiveBillingType: null,
-        payment: null,
-        pix: null
-      });
-    }
-
     if (!isActiveBillingType(requestedBillingType)) {
       return res.status(400).json({
         success: false,
-        message: 'Forma de pagamento inválida. Escolha cartão de crédito ou boleto.',
+        message: 'Forma de pagamento inválida. Escolha cartão de crédito, Pix ou boleto.',
         hasBillingData,
         requestedBillingType,
         effectiveBillingType: null,
@@ -951,7 +1073,7 @@ async function trocarFormaPagamento(req, res) {
     if (reusablePendingPayment.billingType === requestedBillingType) {
       return res.status(409).json({
         success: false,
-        message: `Já existe uma cobrança por ${getBillingTypeLabel(requestedBillingType)} em aberto. Abra a cobrança atual para concluir o pagamento.`,
+        message: `Já existe uma cobrança por ${getBillingTypeLabel(requestedBillingType)} em aberto. Use a cobrança atual para concluir o pagamento.`,
         conflictReason: 'PENDING_PAYMENT_SAME_METHOD',
         canSwitchPaymentMethod: false,
         hasBillingData,
@@ -989,9 +1111,12 @@ async function trocarFormaPagamento(req, res) {
       previousBillingTypeLabel: getBillingTypeLabel(cancellationResult.previousBillingType),
       previousPaymentId: cancellationResult.previousPaymentId,
       previousSubscriptionId: cancellationResult.previousSubscriptionId,
-      message: responsePayload.payment?.paymentUrl
-        ? `Forma de pagamento alterada com sucesso. A cobrança por ${getBillingTypeLabel(cancellationResult.previousBillingType)} foi cancelada e a nova cobrança por ${getBillingTypeLabel(requestedBillingType)} está pronta.`
-        : 'Forma de pagamento alterada com sucesso. A cobrança anterior foi cancelada, mas nenhum link de pagamento foi localizado no momento.'
+      message:
+        requestedBillingType === 'PIX'
+          ? `Forma de pagamento alterada com sucesso. A cobrança por ${getBillingTypeLabel(cancellationResult.previousBillingType)} foi cancelada e a nova cobrança Pix está pronta.`
+          : responsePayload.payment?.paymentUrl
+            ? `Forma de pagamento alterada com sucesso. A cobrança por ${getBillingTypeLabel(cancellationResult.previousBillingType)} foi cancelada e a nova cobrança por ${getBillingTypeLabel(requestedBillingType)} está pronta.`
+            : 'Forma de pagamento alterada com sucesso. A cobrança anterior foi cancelada, mas nenhum link de pagamento foi localizado no momento.'
     });
   } catch (error) {
     console.error('Erro ao trocar forma de pagamento:', error);
