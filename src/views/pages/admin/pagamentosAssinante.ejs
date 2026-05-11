@@ -90,7 +90,6 @@
     const getEventState = (event) => {
       if (event.processed_at) {
         return {
-          type: 'processed',
           className: 'is-processed',
           icon: 'bi-check-circle',
           label: 'Processado',
@@ -100,7 +99,6 @@
 
       if (event.ignored_at) {
         return {
-          type: 'ignored',
           className: 'is-ignored',
           icon: 'bi-shield-exclamation',
           label: 'Ignorado',
@@ -109,7 +107,6 @@
       }
 
       return {
-        type: 'registered',
         className: 'is-pending',
         icon: 'bi-dash-circle',
         label: 'Registrado',
@@ -238,15 +235,13 @@
         </article>
       </section>
 
-      <section class="list-panel">
+      <section class="list-panel admin-payment-panel">
         <div class="list-toolbar">
           <div class="list-toolbar-copy">
             <h2>Histórico de eventos de cobrança</h2>
             <p>
               Use esta tela para acompanhar pagamentos confirmados, cobranças vencidas,
-              cancelamentos e eventos ignorados pelas regras de segurança. Eventos ignorados
-              não indicam necessariamente erro: em muitos casos, são proteções contra webhook
-              duplicado, evento antigo ou cobrança substituída.
+              cancelamentos e eventos ignorados pelas regras de segurança.
             </p>
           </div>
 
@@ -273,162 +268,169 @@
             <div>
               <strong>Leitura da auditoria</strong>
               <span>
-                “Processado” significa que o evento alterou a assinatura.
-                “Ignorado” significa que o evento foi recebido, mas não alterou a assinatura
-                por regra de segurança. “Registrado” significa que o evento foi salvo apenas
-                para histórico.
+                “Processado” alterou a assinatura. “Ignorado” foi recebido, mas não alterou a assinatura por regra de segurança. “Registrado” foi salvo apenas para histórico.
               </span>
             </div>
           </div>
 
-          <div class="table-responsive admin-payment-table-wrap">
-            <table class="table align-middle admin-payment-events-table">
-              <colgroup>
-                <col style="width: 150px;">
-                <col style="width: 190px;">
-                <col style="width: 170px;">
-                <col style="width: 130px;">
-                <col style="width: 340px;">
-                <col style="width: 120px;">
-                <col style="width: 130px;">
-                <col style="width: 170px;">
-                <col style="width: 270px;">
-                <col style="width: 320px;">
-              </colgroup>
+          <div class="admin-payment-view-switch" role="tablist" aria-label="Alternar visão dos eventos">
+            <button type="button" class="admin-payment-view-button is-active" data-payment-view="summary" role="tab" aria-selected="true">
+              Resumo
+            </button>
 
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Evento</th>
-                  <th>Estado</th>
-                  <th>Status gateway</th>
-                  <th>Interpretação</th>
-                  <th>Valor</th>
-                  <th>Forma</th>
-                  <th>Referência</th>
-                  <th>IDs técnicos</th>
-                  <th>Detalhes</th>
-                </tr>
-              </thead>
+            <button type="button" class="admin-payment-view-button" data-payment-view="technical" role="tab" aria-selected="false">
+              Técnico
+            </button>
+          </div>
 
-              <tbody>
-                <% paymentEvents.forEach((event) => { %>
-                  <% const interpretation = getEventInterpretation(event); %>
-                  <% const eventState = getEventState(event); %>
-
+          <div class="admin-payment-view-panel is-active" data-payment-panel="summary">
+            <div class="table-responsive admin-payment-table-wrap">
+              <table class="table align-middle admin-payment-events-table is-summary">
+                <thead>
                   <tr>
-                    <td class="admin-col-date">
-                      <strong><%= formatDateTime(event.created_at) %></strong>
-                    </td>
-
-                    <td class="admin-col-event">
-                      <span class="admin-event-pill <%= getEventClass(event.event_type) %>">
-                        <%= getEventLabel(event.event_type) %>
-                      </span>
-                      <small class="admin-event-code">
-                        <%= event.event_type || 'Não informado' %>
-                      </small>
-                    </td>
-
-                    <td class="admin-col-state">
-                      <span class="admin-event-processed <%= eventState.className %>">
-                        <i class="bi <%= eventState.icon %>"></i>
-                        <%= eventState.label %>
-                      </span>
-
-                      <% if (eventState.date) { %>
-                        <small class="admin-event-date">
-                          <%= formatDateTime(eventState.date) %>
-                        </small>
-                      <% } %>
-
-                      <% if (event.processing_reason) { %>
-                        <small class="admin-event-reason">
-                          <%= getProcessingReasonLabel(event.processing_reason) %>
-                        </small>
-                      <% } %>
-                    </td>
-
-                    <td class="admin-col-gateway-status">
-                      <span class="admin-event-status">
-                        <%= event.status || 'Não informado' %>
-                      </span>
-                    </td>
-
-                    <td class="admin-col-interpretation">
-                      <span class="admin-event-interpretation is-<%= interpretation.type %>">
-                        <%= interpretation.label %>
-                      </span>
-                    </td>
-
-                    <td class="admin-col-value">
-                      <strong class="admin-event-money">
-                        <%= formatCurrency(event.payment_value) %>
-                      </strong>
-                    </td>
-
-                    <td class="admin-col-billing-type">
-                      <span class="admin-event-status">
-                        <%= event.billing_type || 'Não informado' %>
-                      </span>
-                    </td>
-
-                    <td class="admin-col-reference">
-                      <code class="admin-inline-code"><%= event.external_reference || '-' %></code>
-                    </td>
-
-                    <td class="admin-col-ids">
-                      <div class="admin-event-id-list">
-                        <div class="admin-event-id-item">
-                          <span>Pagamento</span>
-                          <code><%= event.gateway_payment_id || '-' %></code>
-                        </div>
-
-                        <div class="admin-event-id-item">
-                          <span>Cliente</span>
-                          <code><%= event.gateway_customer_id || '-' %></code>
-                        </div>
-
-                        <div class="admin-event-id-item">
-                          <span>Assinatura</span>
-                          <code><%= event.gateway_subscription_id || '-' %></code>
-                        </div>
-
-                        <div class="admin-event-id-item">
-                          <span>Evento</span>
-                          <code><%= event.gateway_event_id || '-' %></code>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td class="admin-col-details">
-                      <details class="admin-event-payload">
-                        <summary>Ver detalhes técnicos</summary>
-
-                        <div class="admin-event-technical-grid">
-                          <div>
-                            <span>Motivo</span>
-                            <strong><%= getProcessingReasonLabel(event.processing_reason) %></strong>
-                          </div>
-
-                          <div>
-                            <span>Processado em</span>
-                            <strong><%= event.processed_at ? formatDateTime(event.processed_at) : 'Não processado' %></strong>
-                          </div>
-
-                          <div>
-                            <span>Ignorado em</span>
-                            <strong><%= event.ignored_at ? formatDateTime(event.ignored_at) : 'Não ignorado' %></strong>
-                          </div>
-                        </div>
-
-                        <pre><%= JSON.stringify(event.payload || {}, null, 2) %></pre>
-                      </details>
-                    </td>
+                    <th>Data</th>
+                    <th>Evento</th>
+                    <th>Estado</th>
+                    <th>Interpretação</th>
+                    <th>Valor</th>
+                    <th>Forma</th>
+                    <th>Ação</th>
                   </tr>
-                <% }) %>
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  <% paymentEvents.forEach((event, index) => { %>
+                    <% const interpretation = getEventInterpretation(event); %>
+                    <% const eventState = getEventState(event); %>
+
+                    <tr>
+                      <td>
+                        <strong class="admin-event-date-main"><%= formatDateTime(event.created_at) %></strong>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-pill <%= getEventClass(event.event_type) %>">
+                          <%= getEventLabel(event.event_type) %>
+                        </span>
+                        <small class="admin-event-code">
+                          <%= event.event_type || 'Não informado' %>
+                        </small>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-processed <%= eventState.className %>">
+                          <i class="bi <%= eventState.icon %>"></i>
+                          <%= eventState.label %>
+                        </span>
+
+                        <% if (eventState.date) { %>
+                          <small class="admin-event-date">
+                            <%= formatDateTime(eventState.date) %>
+                          </small>
+                        <% } %>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-interpretation is-<%= interpretation.type %>">
+                          <%= interpretation.label %>
+                        </span>
+                      </td>
+
+                      <td>
+                        <strong class="admin-event-money">
+                          <%= formatCurrency(event.payment_value) %>
+                        </strong>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-status">
+                          <%= event.billing_type || 'Não informado' %>
+                        </span>
+                      </td>
+
+                      <td>
+                        <button type="button" class="admin-event-details-button" data-show-technical-event="<%= index %>">
+                          <i class="bi bi-search"></i>
+                          Ver técnico
+                        </button>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="admin-payment-view-panel" data-payment-panel="technical">
+            <div class="table-responsive admin-payment-table-wrap">
+              <table class="table align-middle admin-payment-events-table is-technical">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Evento</th>
+                    <th>Motivo</th>
+                    <th>Pagamento</th>
+                    <th>Cliente</th>
+                    <th>Assinatura</th>
+                    <th>Evento gateway</th>
+                    <th>Referência</th>
+                    <th>JSON</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% paymentEvents.forEach((event, index) => { %>
+                    <tr data-technical-event-row="<%= index %>">
+                      <td>
+                        <strong class="admin-event-date-main"><%= formatDateTime(event.created_at) %></strong>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-pill <%= getEventClass(event.event_type) %>">
+                          <%= getEventLabel(event.event_type) %>
+                        </span>
+                        <small class="admin-event-code">
+                          <%= event.status || 'Status não informado' %>
+                        </small>
+                      </td>
+
+                      <td>
+                        <span class="admin-event-technical-reason">
+                          <%= getProcessingReasonLabel(event.processing_reason) %>
+                        </span>
+                      </td>
+
+                      <td>
+                        <code><%= event.gateway_payment_id || '-' %></code>
+                      </td>
+
+                      <td>
+                        <code><%= event.gateway_customer_id || '-' %></code>
+                      </td>
+
+                      <td>
+                        <code><%= event.gateway_subscription_id || '-' %></code>
+                      </td>
+
+                      <td>
+                        <code><%= event.gateway_event_id || '-' %></code>
+                      </td>
+
+                      <td>
+                        <code><%= event.external_reference || '-' %></code>
+                      </td>
+
+                      <td>
+                        <details class="admin-event-payload">
+                          <summary>Ver JSON</summary>
+                          <pre><%= JSON.stringify(event.payload || {}, null, 2) %></pre>
+                        </details>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div class="admin-payment-footer-note">
@@ -531,8 +533,42 @@
       font-weight: 650;
     }
 
-    .admin-payment-footer-note {
-      margin: 1rem;
+    .admin-payment-view-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin: 0 1rem 1rem;
+      padding: 0.25rem;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 999px;
+      background: #eaf2ff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .admin-payment-view-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.68rem 1.1rem;
+      background: transparent;
+      color: #1e3a8a;
+      font-size: 0.86rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .admin-payment-view-button.is-active {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+    }
+
+    .admin-payment-view-panel {
+      display: none;
+    }
+
+    .admin-payment-view-panel.is-active {
+      display: block;
     }
 
     .admin-payment-table-wrap {
@@ -540,24 +576,29 @@
     }
 
     .admin-payment-events-table {
+      width: 100%;
       margin-bottom: 0;
-      min-width: 1990px;
-      table-layout: fixed;
       border-collapse: separate;
       border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    .admin-payment-events-table.is-summary {
+      min-width: 1040px;
+    }
+
+    .admin-payment-events-table.is-technical {
+      min-width: 1320px;
     }
 
     .admin-payment-events-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      color: #ffffff;
+      color: #fff;
       background: #1980ff;
       font-size: 0.81rem;
       font-weight: 850;
       white-space: nowrap;
       border-bottom: 0;
-      padding: 0.9rem 0.8rem;
+      padding: 0.82rem 0.75rem;
     }
 
     .admin-payment-events-table thead th:first-child {
@@ -569,7 +610,7 @@
     }
 
     .admin-payment-events-table tbody tr {
-      background: #ffffff;
+      background: #fff;
     }
 
     .admin-payment-events-table tbody tr:nth-child(even) {
@@ -580,28 +621,94 @@
       color: #0f172a;
       font-size: 0.9rem;
       vertical-align: top;
-      padding: 1rem 0.8rem;
+      padding: 0.9rem 0.75rem;
       border-bottom: 1px solid rgba(226, 232, 240, 0.9);
     }
 
-    .admin-payment-events-table td.admin-col-date strong {
+    .admin-payment-events-table.is-summary th:nth-child(1),
+    .admin-payment-events-table.is-summary td:nth-child(1) {
+      width: 150px;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(2),
+    .admin-payment-events-table.is-summary td:nth-child(2) {
+      width: 185px;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(3),
+    .admin-payment-events-table.is-summary td:nth-child(3) {
+      width: 165px;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(4),
+    .admin-payment-events-table.is-summary td:nth-child(4) {
+      width: 340px;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(5),
+    .admin-payment-events-table.is-summary td:nth-child(5) {
+      width: 115px;
+      white-space: nowrap;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(6),
+    .admin-payment-events-table.is-summary td:nth-child(6) {
+      width: 145px;
+    }
+
+    .admin-payment-events-table.is-summary th:nth-child(7),
+    .admin-payment-events-table.is-summary td:nth-child(7) {
+      width: 145px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(1),
+    .admin-payment-events-table.is-technical td:nth-child(1) {
+      width: 150px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(2),
+    .admin-payment-events-table.is-technical td:nth-child(2) {
+      width: 180px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(3),
+    .admin-payment-events-table.is-technical td:nth-child(3) {
+      width: 260px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(4),
+    .admin-payment-events-table.is-technical td:nth-child(4),
+    .admin-payment-events-table.is-technical th:nth-child(5),
+    .admin-payment-events-table.is-technical td:nth-child(5),
+    .admin-payment-events-table.is-technical th:nth-child(6),
+    .admin-payment-events-table.is-technical td:nth-child(6),
+    .admin-payment-events-table.is-technical th:nth-child(7),
+    .admin-payment-events-table.is-technical td:nth-child(7) {
+      width: 170px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(8),
+    .admin-payment-events-table.is-technical td:nth-child(8) {
+      width: 180px;
+    }
+
+    .admin-payment-events-table.is-technical th:nth-child(9),
+    .admin-payment-events-table.is-technical td:nth-child(9) {
+      width: 220px;
+    }
+
+    .admin-event-date-main {
       display: inline-block;
       line-height: 1.35;
       white-space: nowrap;
     }
 
-    .admin-payment-events-table td.admin-col-value,
-    .admin-payment-events-table td.admin-col-billing-type,
-    .admin-payment-events-table td.admin-col-gateway-status {
-      white-space: nowrap;
-    }
-
-    .admin-inline-code,
     .admin-payment-events-table code {
       display: inline-block;
       max-width: 100%;
       color: #1d4ed8;
       font-size: 0.8rem;
+      line-height: 1.45;
       word-break: break-word;
       white-space: normal;
     }
@@ -639,24 +746,19 @@
     }
 
     .admin-event-code,
-    .admin-event-date,
-    .admin-event-reason {
+    .admin-event-date {
       display: block;
-      margin-top: 0.26rem;
+      margin-top: 0.25rem;
       color: #64748b;
       font-size: 0.74rem;
       font-weight: 700;
       line-height: 1.34;
     }
 
-    .admin-event-reason {
-      color: #475569;
-      max-width: 100%;
-    }
-
     .admin-event-status {
       display: inline-flex;
       align-items: center;
+      width: fit-content;
       padding: 0.28rem 0.52rem;
       border-radius: 999px;
       background: #f8fafc;
@@ -728,36 +830,34 @@
       border: 1px solid rgba(249, 115, 22, 0.24);
     }
 
-    .admin-event-id-list {
-      display: grid;
-      gap: 0.55rem;
-      width: 100%;
-    }
-
-    .admin-event-id-item {
-      padding: 0.55rem 0.65rem;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-    }
-
-    .admin-event-id-item span {
-      display: block;
-      margin-bottom: 0.2rem;
-      color: #64748b;
-      font-size: 0.72rem;
-      font-weight: 850;
-      letter-spacing: 0.01em;
-      text-transform: uppercase;
-    }
-
-    .admin-event-id-item code {
-      display: block;
+    .admin-event-details-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.38rem;
+      width: fit-content;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 999px;
+      padding: 0.48rem 0.72rem;
+      background: #fff;
       color: #1d4ed8;
       font-size: 0.8rem;
-      line-height: 1.45;
-      word-break: break-word;
-      white-space: normal;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    .admin-event-details-button:hover {
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .admin-event-technical-reason {
+      display: block;
+      color: #475569;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      font-weight: 750;
     }
 
     .admin-event-payload {
@@ -788,35 +888,10 @@
       transform: rotate(90deg);
     }
 
-    .admin-event-technical-grid {
-      display: grid;
-      gap: 0.55rem;
-      margin-top: 0.8rem;
-      padding: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 14px;
-      background: #f8fafc;
-    }
-
-    .admin-event-technical-grid span {
-      display: block;
-      color: #64748b;
-      font-size: 0.74rem;
-      font-weight: 850;
-    }
-
-    .admin-event-technical-grid strong {
-      display: block;
-      color: #0f172a;
-      font-size: 0.82rem;
-      line-height: 1.36;
-      font-weight: 850;
-    }
-
     .admin-event-payload pre {
       width: 100%;
       max-width: 100%;
-      max-height: 300px;
+      max-height: 280px;
       overflow: auto;
       margin-top: 0.75rem;
       padding: 0.9rem;
@@ -827,6 +902,10 @@
       line-height: 1.5;
       white-space: pre-wrap;
       word-break: break-word;
+    }
+
+    .admin-payment-footer-note {
+      margin: 1rem;
     }
 
     @media (max-width: 1000px) {
@@ -846,6 +925,15 @@
         margin-left: 0;
       }
 
+      .admin-payment-view-switch {
+        display: flex;
+        width: calc(100% - 2rem);
+      }
+
+      .admin-payment-view-button {
+        flex: 1;
+      }
+
       .admin-payment-table-wrap {
         padding-right: 0;
         padding-left: 0;
@@ -855,6 +943,54 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const viewButtons = document.querySelectorAll('[data-payment-view]');
+      const viewPanels = document.querySelectorAll('[data-payment-panel]');
+      const technicalRows = document.querySelectorAll('[data-technical-event-row]');
+
+      function activatePaymentView(view) {
+        viewButtons.forEach((button) => {
+          const isActive = button.dataset.paymentView === view;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-selected', String(isActive));
+        });
+
+        viewPanels.forEach((panel) => {
+          panel.classList.toggle('is-active', panel.dataset.paymentPanel === view);
+        });
+      }
+
+      viewButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activatePaymentView(button.dataset.paymentView);
+        });
+      });
+
+      document.querySelectorAll('[data-show-technical-event]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const eventIndex = button.dataset.showTechnicalEvent;
+
+          activatePaymentView('technical');
+
+          const targetRow = Array.from(technicalRows).find((row) => {
+            return row.dataset.technicalEventRow === eventIndex;
+          });
+
+          if (targetRow) {
+            targetRow.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest'
+            });
+
+            targetRow.classList.add('is-highlighted');
+
+            setTimeout(() => {
+              targetRow.classList.remove('is-highlighted');
+            }, 1600);
+          }
+        });
+      });
+
       <% if (typeof success !== 'undefined' && success) { %>
         window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");
       <% } %>
