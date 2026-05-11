@@ -113,7 +113,16 @@
           <div class="comunidade-reply-box" id="responder">
             <div class="comunidade-section-header">
               <span class="comunidade-eyebrow">Participar</span>
-              <h2>Responder tópico</h2>
+
+              <% if (topico.status === 'closed') { %>
+                <h2>Tópico fechado</h2>
+              <% } else if (canReply) { %>
+                <h2>Responder tópico</h2>
+              <% } else if (typeof usuario !== 'undefined' && usuario) { %>
+                <h2>Regularize para participar</h2>
+              <% } else { %>
+                <h2>Entre para responder</h2>
+              <% } %>
             </div>
 
             <% if (errorMessage) { %>
