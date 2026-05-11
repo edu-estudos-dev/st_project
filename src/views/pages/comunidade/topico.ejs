@@ -16,6 +16,9 @@
 
     return texto.slice(0, 2).toUpperCase();
   }
+
+  const usuarioPodeModerarForum =
+    typeof canModerateForum !== 'undefined' && Boolean(canModerateForum);
 %>
 <%- include('../../partials/head', {
   title,
@@ -93,6 +96,12 @@
             </h2>
           </div>
 
+          <% if (successMessage) { %>
+            <div class="comunidade-alert comunidade-alert-success">
+              <%= successMessage %>
+            </div>
+          <% } %>
+
           <% if (respostas && respostas.length) { %>
             <div class="comunidade-reply-list">
               <% respostas.forEach((resposta, index) => { %>
@@ -114,7 +123,23 @@
                       </div>
                     </div>
 
-                    <span class="comunidade-reply-number">#<%= index + 1 %></span>
+                    <div class="comunidade-reply-side">
+                      <span class="comunidade-reply-number">#<%= index + 1 %></span>
+
+                      <% if (usuarioPodeModerarForum) { %>
+                        <form
+                          action="/admin/comunidade/resposta/<%= resposta.id %>/excluir"
+                          method="POST"
+                          class="comunidade-reply-moderation-form"
+                          onsubmit="return confirm('Excluir esta resposta? Essa ação remove o conteúdo da área pública, mas mantém o registro no banco para segurança.');"
+                        >
+                          <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
+                          <button type="submit" class="comunidade-danger-button">
+                            Excluir resposta
+                          </button>
+                        </form>
+                      <% } %>
+                    </div>
                   </header>
 
                   <div class="comunidade-rich-text comunidade-reply-text">

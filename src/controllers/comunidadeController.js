@@ -3,6 +3,7 @@ import forumTopicModel from '../models/forumTopicModel.js';
 import forumReplyModel from '../models/forumReplyModel.js';
 import forumSlugService from '../services/forumSlugService.js';
 import forumPermissionService from '../services/forumPermissionService.js';
+import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
 const SITE_URL = 'https://vendmaster.com.br';
 
@@ -412,6 +413,8 @@ const ComunidadeController = {
       const canReply =
         topico.status === 'open' && forumPermissionService.canReply(req.user);
 
+      const canModerateForum = isSaasAdminUser(req.user);
+
       return res.render('pages/comunidade/topico', {
         title: `${topico.titulo} | Comunidade VendMaster`,
         metaDescription:
@@ -429,9 +432,11 @@ const ComunidadeController = {
         },
         respostas,
         formData: {},
-        errorMessage: null,
+        successMessage: req.query.success || null,
+        errorMessage: req.query.error || null,
         formatarDataForum,
         canReply,
+        canModerateForum,
         blockedParticipationReason:
           forumPermissionService.getBlockedParticipationReason(req.user)
       });
@@ -566,9 +571,11 @@ const ComunidadeController = {
           formData: {
             conteudo
           },
+          successMessage: null,
           errorMessage,
           formatarDataForum,
           canReply,
+          canModerateForum: isSaasAdminUser(req.user),
           blockedParticipationReason:
             forumPermissionService.getBlockedParticipationReason(req.user)
         });
