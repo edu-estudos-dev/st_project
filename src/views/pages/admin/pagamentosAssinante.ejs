@@ -9,10 +9,29 @@
   <%
     const totalEventos = paymentEvents.length;
     const totalProcessados = paymentEvents.filter((event) => Boolean(event.processed_at)).length;
-    const totalNaoProcessados = totalEventos - totalProcessados;
+    const totalIgnorados = paymentEvents.filter((event) => Boolean(event.ignored_at)).length;
+    const totalApenasRegistrados = paymentEvents.filter((event) => {
+      return !event.processed_at && !event.ignored_at;
+    }).length;
+
     const totalConfirmados = paymentEvents.filter((event) => {
       return ['PAYMENT_CONFIRMED', 'PAYMENT_RECEIVED'].includes(event.event_type);
     }).length;
+
+    const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+
+    const formatCurrency = (value) => {
+      const numericValue = Number(value);
+
+      if (!Number.isFinite(numericValue)) {
+        return 'Não informado';
+      }
+
+      return currencyFormatter.format(numericValue);
+    };
 
     const getEventLabel = (eventType) => {
       const labels = {
@@ -44,11 +63,72 @@
       return 'is-muted';
     };
 
+    const getProcessingReasonLabel = (reason) => {
+      const labels = {
+        subscription_activated: 'Assinatura ativada/renovada',
+        confirmed_payment_already_processed: 'Pagamento já processado anteriormente',
+        confirmed_payment_already_processed_by_unique_index: 'Pagamento já processado pelo índice único',
+        confirmed_payment_already_processed_by_concurrent_webhook: 'Pagamento já processado por webhook concorrente',
+        confirmed_payment_without_gateway_payment_id: 'Confirmação sem ID do pagamento',
+        external_reference_mismatch_or_missing: 'Referência externa ausente ou divergente',
+        gateway_customer_mismatch: 'Cliente do gateway divergente',
+        payment_value_mismatch: 'Valor do pagamento divergente do plano',
+        payment_deleted_recorded_without_subscription_status_change: 'Cobrança removida registrada sem alterar assinatura',
+        payment_overdue_ignored_for_active_or_trial_subscription: 'Vencimento ignorado para assinatura ativa/trial',
+        payment_overdue_not_current_subscription: 'Vencimento de assinatura antiga ignorado',
+        subscription_cancelled: 'Assinatura cancelada pelo gateway',
+        subscription_cancelled_not_current_subscription: 'Cancelamento de assinatura antiga ignorado',
+        subscription_marked_overdue: 'Assinatura marcada como vencida',
+        subscription_not_changed: 'Assinatura não alterada',
+        assinante_not_found: 'Assinante não localizado',
+        event_not_actionable: 'Evento registrado sem ação automática'
+      };
+
+      return labels[reason] || reason || 'Sem motivo registrado';
+    };
+
+    const getEventState = (event) => {
+      if (event.processed_at) {
+        return {
+          type: 'processed',
+          className: 'is-processed',
+          icon: 'bi-check-circle',
+          label: 'Processado',
+          date: event.processed_at
+        };
+      }
+
+      if (event.ignored_at) {
+        return {
+          type: 'ignored',
+          className: 'is-ignored',
+          icon: 'bi-shield-exclamation',
+          label: 'Ignorado',
+          date: event.ignored_at
+        };
+      }
+
+      return {
+        type: 'registered',
+        className: 'is-pending',
+        icon: 'bi-dash-circle',
+        label: 'Registrado',
+        date: null
+      };
+    };
+
     const getEventInterpretation = (event) => {
       if (!event.assinante_id) {
         return {
           type: 'warning',
-          label: 'Evento sem assinante vinculado. Verifique se o cliente, assinatura ou cobrança está associado corretamente.'
+          label: 'Evento sem assinante vinculado. Verifique cliente, assinatura, cobrança e referência externa.'
+        };
+      }
+
+      if (event.ignored_at) {
+        return {
+          type: 'warning',
+          label: getProcessingReasonLabel(event.processing_reason)
         };
       }
 
@@ -66,8 +146,8 @@
         return {
           type: isProcessed ? 'success' : 'warning',
           label: isProcessed
-            ? 'Pagamento confirmado. A assinatura foi ativada ou renovada.'
-            : 'Pagamento confirmado, mas ainda não processado. Verifique o processamento do webhook.'
+            ? 'Pagamento confirmado e aplicado à assinatura.'
+            : 'Pagamento confirmado, mas ainda sem ação aplicada. Verifique o motivo técnico.'
         };
       }
 
@@ -75,17 +155,17 @@
         return {
           type: isProcessed ? 'warning' : 'info',
           label: isProcessed
-            ? 'Pagamento vencido. A assinatura foi marcada como vencida quando aplicável.'
-            : 'Pagamento vencido registrado, mas sem ação aplicada.'
+            ? 'Pagamento vencido e aplicado à assinatura quando permitido.'
+            : 'Pagamento vencido registrado sem alterar assinatura.'
         };
       }
 
       if (eventType === 'PAYMENT_DELETED') {
         return {
-          type: isProcessed ? 'warning' : 'info',
+          type: 'info',
           label: isProcessed
-            ? 'Cobrança removida. A assinatura foi ajustada quando aplicável.'
-            : 'Cobrança removida registrada, mas sem ação aplicada.'
+            ? 'Cobrança removida com ação aplicada.'
+            : 'Cobrança removida registrada sem alterar assinatura.'
         };
       }
 
@@ -93,8 +173,8 @@
         return {
           type: isProcessed ? 'warning' : 'info',
           label: isProcessed
-            ? 'Assinatura cancelada ou inativada no provedor. O assinante foi marcado como cancelado.'
-            : 'Evento de assinatura registrado, mas sem ação aplicada.'
+            ? 'Assinatura cancelada ou inativada no provedor e aplicada ao assinante.'
+            : 'Evento de assinatura registrado sem ação aplicada.'
         };
       }
 
@@ -146,15 +226,15 @@
         </article>
 
         <article class="admin-payment-summary-card is-warning">
-          <span>Não processados</span>
-          <strong><%= totalNaoProcessados %></strong>
-          <small>registro ou análise</small>
+          <span>Ignorados</span>
+          <strong><%= totalIgnorados %></strong>
+          <small>protegidos por regra de auditoria</small>
         </article>
 
         <article class="admin-payment-summary-card is-info">
-          <span>Pagamentos confirmados</span>
-          <strong><%= totalConfirmados %></strong>
-          <small>confirmações recebidas</small>
+          <span>Apenas registrados</span>
+          <strong><%= totalApenasRegistrados %></strong>
+          <small>sem ação automática</small>
         </article>
       </section>
 
@@ -163,9 +243,10 @@
           <div class="list-toolbar-copy">
             <h2>Histórico de eventos de cobrança</h2>
             <p>
-              Use esta tela para acompanhar confirmações, vencimentos, cancelamentos e eventos
-              registrados sem ação automática. Eventos como cobrança criada podem aparecer como
-              não processados sem indicar erro.
+              Use esta tela para acompanhar pagamentos confirmados, cobranças vencidas,
+              cancelamentos e eventos ignorados pelas regras de segurança. Eventos ignorados
+              não indicam necessariamente erro: em muitos casos, são proteções contra webhook
+              duplicado, evento antigo ou cobrança substituída.
             </p>
           </div>
 
@@ -187,25 +268,40 @@
             Nenhum evento de pagamento foi registrado para este assinante.
           </div>
         <% } else { %>
+          <div class="admin-payment-audit-note">
+            <i class="bi bi-shield-check"></i>
+            <div>
+              <strong>Leitura da auditoria</strong>
+              <span>
+                “Processado” significa que o evento alterou a assinatura.
+                “Ignorado” significa que o evento foi recebido, mas não alterou a assinatura
+                por regra de segurança. “Registrado” significa que o evento foi salvo apenas
+                para histórico.
+              </span>
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table class="table align-middle admin-payment-events-table">
               <thead>
                 <tr>
                   <th>Data</th>
                   <th>Evento</th>
-                  <th>Status</th>
+                  <th>Estado</th>
+                  <th>Status gateway</th>
                   <th>Interpretação</th>
-                  <th>ID do pagamento</th>
-                  <th>ID da assinatura</th>
-                  <th>ID do evento</th>
-                  <th>Processado</th>
-                  <th>Dados técnicos</th>
+                  <th>Valor</th>
+                  <th>Forma</th>
+                  <th>Referência</th>
+                  <th>IDs técnicos</th>
+                  <th>Detalhes</th>
                 </tr>
               </thead>
 
               <tbody>
                 <% paymentEvents.forEach((event) => { %>
                   <% const interpretation = getEventInterpretation(event); %>
+                  <% const eventState = getEventState(event); %>
 
                   <tr>
                     <td>
@@ -222,6 +318,25 @@
                     </td>
 
                     <td>
+                      <span class="admin-event-processed <%= eventState.className %>">
+                        <i class="bi <%= eventState.icon %>"></i>
+                        <%= eventState.label %>
+                      </span>
+
+                      <% if (eventState.date) { %>
+                        <small class="admin-event-date">
+                          <%= formatDateTime(eventState.date) %>
+                        </small>
+                      <% } %>
+
+                      <% if (event.processing_reason) { %>
+                        <small class="admin-event-reason">
+                          <%= getProcessingReasonLabel(event.processing_reason) %>
+                        </small>
+                      <% } %>
+                    </td>
+
+                    <td>
                       <span class="admin-event-status">
                         <%= event.status || 'Não informado' %>
                       </span>
@@ -234,37 +349,57 @@
                     </td>
 
                     <td>
-                      <code><%= event.gateway_payment_id || '-' %></code>
+                      <strong class="admin-event-money">
+                        <%= formatCurrency(event.payment_value) %>
+                      </strong>
                     </td>
 
                     <td>
-                      <code><%= event.gateway_subscription_id || '-' %></code>
+                      <span class="admin-event-status">
+                        <%= event.billing_type || 'Não informado' %>
+                      </span>
                     </td>
 
                     <td>
-                      <code><%= event.gateway_event_id || '-' %></code>
+                      <code><%= event.external_reference || '-' %></code>
                     </td>
 
                     <td>
-                      <% if (event.processed_at) { %>
-                        <span class="admin-event-processed is-processed">
-                          <i class="bi bi-check-circle"></i>
-                          Sim
-                        </span>
-                        <small class="admin-event-date">
-                          <%= formatDateTime(event.processed_at) %>
-                        </small>
-                      <% } else { %>
-                        <span class="admin-event-processed is-pending">
-                          <i class="bi bi-dash-circle"></i>
-                          Não
-                        </span>
-                      <% } %>
+                      <div class="admin-event-id-list">
+                        <span>Pagamento</span>
+                        <code><%= event.gateway_payment_id || '-' %></code>
+
+                        <span>Cliente</span>
+                        <code><%= event.gateway_customer_id || '-' %></code>
+
+                        <span>Assinatura</span>
+                        <code><%= event.gateway_subscription_id || '-' %></code>
+
+                        <span>Evento</span>
+                        <code><%= event.gateway_event_id || '-' %></code>
+                      </div>
                     </td>
 
                     <td>
                       <details class="admin-event-payload">
                         <summary>Detalhes técnicos</summary>
+                        <div class="admin-event-technical-grid">
+                          <div>
+                            <span>Motivo</span>
+                            <strong><%= getProcessingReasonLabel(event.processing_reason) %></strong>
+                          </div>
+
+                          <div>
+                            <span>Processado em</span>
+                            <strong><%= event.processed_at ? formatDateTime(event.processed_at) : 'Não processado' %></strong>
+                          </div>
+
+                          <div>
+                            <span>Ignorado em</span>
+                            <strong><%= event.ignored_at ? formatDateTime(event.ignored_at) : 'Não ignorado' %></strong>
+                          </div>
+                        </div>
+
                         <pre><%= JSON.stringify(event.payload || {}, null, 2) %></pre>
                       </details>
                     </td>
@@ -272,6 +407,11 @@
                 <% }) %>
               </tbody>
             </table>
+          </div>
+
+          <div class="admin-payment-footer-note">
+            <strong>Total de confirmações recebidas:</strong>
+            <span><%= totalConfirmados %>. Esse número pode ser maior que os pagamentos realmente aplicados, porque o gateway pode enviar mais de um evento para a mesma cobrança.</span>
           </div>
         <% } %>
       </section>
@@ -334,9 +474,48 @@
       border-color: rgba(37, 99, 235, 0.2);
     }
 
+    .admin-payment-audit-note,
+    .admin-payment-footer-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.72rem;
+      margin: 0 1rem 1rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      border-radius: 18px;
+      background: #eff6ff;
+      color: #1e3a8a;
+    }
+
+    .admin-payment-audit-note i {
+      margin-top: 0.08rem;
+      font-size: 1.08rem;
+      color: #1d4ed8;
+    }
+
+    .admin-payment-audit-note strong,
+    .admin-payment-footer-note strong {
+      display: block;
+      margin-bottom: 0.18rem;
+      font-size: 0.92rem;
+      font-weight: 900;
+    }
+
+    .admin-payment-audit-note span,
+    .admin-payment-footer-note span {
+      display: block;
+      font-size: 0.86rem;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .admin-payment-footer-note {
+      margin: 1rem;
+    }
+
     .admin-payment-events-table {
       margin-bottom: 0;
-      min-width: 1180px;
+      min-width: 1480px;
     }
 
     .admin-payment-events-table th {
@@ -354,7 +533,7 @@
 
     .admin-payment-events-table code {
       display: inline-block;
-      max-width: 180px;
+      max-width: 190px;
       color: #1d4ed8;
       font-size: 0.82rem;
       word-break: break-word;
@@ -394,12 +573,19 @@
     }
 
     .admin-event-code,
-    .admin-event-date {
+    .admin-event-date,
+    .admin-event-reason {
       display: block;
       margin-top: 0.22rem;
       color: #64748b;
       font-size: 0.74rem;
       font-weight: 700;
+    }
+
+    .admin-event-reason {
+      max-width: 220px;
+      line-height: 1.32;
+      color: #475569;
     }
 
     .admin-event-status {
@@ -417,7 +603,7 @@
 
     .admin-event-interpretation {
       display: block;
-      max-width: 280px;
+      max-width: 300px;
       line-height: 1.38;
       font-size: 0.82rem;
       font-weight: 750;
@@ -439,20 +625,57 @@
       color: #475569;
     }
 
+    .admin-event-money {
+      color: #0f172a;
+      font-size: 0.92rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
     .admin-event-processed {
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
-      font-size: 0.82rem;
-      font-weight: 850;
+      width: fit-content;
+      padding: 0.28rem 0.52rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
     .admin-event-processed.is-processed {
       color: #047857;
+      background: #ecfdf5;
+      border: 1px solid rgba(16, 185, 129, 0.22);
     }
 
     .admin-event-processed.is-pending {
       color: #92400e;
+      background: #fffbeb;
+      border: 1px solid rgba(245, 158, 11, 0.24);
+    }
+
+    .admin-event-processed.is-ignored {
+      color: #7c2d12;
+      background: #fff7ed;
+      border: 1px solid rgba(249, 115, 22, 0.24);
+    }
+
+    .admin-event-id-list {
+      display: grid;
+      gap: 0.18rem;
+      min-width: 190px;
+    }
+
+    .admin-event-id-list span {
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 850;
+    }
+
+    .admin-event-id-list code {
+      margin-bottom: 0.28rem;
     }
 
     .admin-event-payload summary {
@@ -463,8 +686,33 @@
       white-space: nowrap;
     }
 
+    .admin-event-technical-grid {
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 0.7rem;
+      padding: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      background: #f8fafc;
+    }
+
+    .admin-event-technical-grid span {
+      display: block;
+      color: #64748b;
+      font-size: 0.74rem;
+      font-weight: 850;
+    }
+
+    .admin-event-technical-grid strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.82rem;
+      line-height: 1.34;
+      font-weight: 850;
+    }
+
     .admin-event-payload pre {
-      max-width: 520px;
+      max-width: 560px;
       max-height: 280px;
       overflow: auto;
       margin-top: 0.65rem;
@@ -485,6 +733,12 @@
     @media (max-width: 768px) {
       .admin-payment-summary-grid {
         grid-template-columns: 1fr;
+      }
+
+      .admin-payment-audit-note,
+      .admin-payment-footer-note {
+        margin-right: 0;
+        margin-left: 0;
       }
 
       .admin-event-payload pre {
