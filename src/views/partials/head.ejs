@@ -527,6 +527,45 @@
         document.addEventListener('DOMContentLoaded', () => {
             const DEFAULT_NAVIGATION_LOADING_DELAY = 650;
             const HEAVY_NAVIGATION_LOADING_DELAY = 120;
+            const NAVIGATION_LOADING_SAFETY_TIMEOUT = 8000;
+
+            let navigationLoadingTimer = null;
+            let navigationSafetyTimer = null;
+
+            const clearNavigationLoadingTimers = () => {
+                if (navigationLoadingTimer) {
+                    window.clearTimeout(navigationLoadingTimer);
+                    navigationLoadingTimer = null;
+                }
+
+                if (navigationSafetyTimer) {
+                    window.clearTimeout(navigationSafetyTimer);
+                    navigationSafetyTimer = null;
+                }
+            };
+
+            const hideNavigationLoading = () => {
+                clearNavigationLoadingTimers();
+                window.AppLoading?.hide();
+            };
+
+            window.addEventListener('load', () => {
+                hideNavigationLoading();
+            });
+
+            window.addEventListener('pageshow', () => {
+                hideNavigationLoading();
+            });
+
+            window.addEventListener('pagehide', () => {
+                clearNavigationLoadingTimers();
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    hideNavigationLoading();
+                }
+            });
 
             const shouldIgnoreNavigationLoading = (link) => {
                 if (!link) return true;
@@ -582,7 +621,7 @@
                     path.includes('/assinatura') ||
                     path.includes('/pagamentos') ||
                     path.includes('/estabelecimentos/add') ||
-                    path.includes('/estabelecimentos/') && path.includes('/edit')
+                    (path.includes('/estabelecimentos/') && path.includes('/edit'))
                 );
             };
 
@@ -719,11 +758,17 @@
                     return;
                 }
 
+                clearNavigationLoadingTimers();
+
                 const copy = getNavigationLoadingCopy(link, url);
                 const delay = getNavigationLoadingDelay(url);
 
-                window.setTimeout(() => {
+                navigationLoadingTimer = window.setTimeout(() => {
                     window.AppLoading?.show(copy.title, copy.detail);
+
+                    navigationSafetyTimer = window.setTimeout(() => {
+                        window.AppLoading?.hide();
+                    }, NAVIGATION_LOADING_SAFETY_TIMEOUT);
                 }, delay);
             });
         });
