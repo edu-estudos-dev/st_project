@@ -6825,30 +6825,42 @@ thead .est-actions-sticky {
   font-weight: 650 !important;
 }
 
-/* Mobile - refinamento de densidade dos formularios */
+/* Mobile - melhor aproveitamento lateral e badges */
 
 @media (max-width: 767.98px) {
+  .form-shell-modern .modern-form.estabelecimento-form .form-card,
+  .form-shell-modern .modern-form .form-card {
+    padding: 0.88rem !important;
+    border-radius: 20px;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .row,
+  .form-shell-modern .modern-form .row {
+    --bs-gutter-x: 0.72rem;
+    --bs-gutter-y: 0.72rem;
+  }
+
   .form-shell-modern .modern-form.estabelecimento-form .form-card-header,
   .form-shell-modern .modern-form .form-card-header {
-    margin-bottom: 0.78rem;
+    margin-bottom: 0.72rem;
   }
 
   .form-shell-modern .modern-form.estabelecimento-form .form-card-header h2,
   .form-shell-modern .modern-form .form-card-header h2 {
-    font-size: 1.04rem !important;
-    line-height: 1.16 !important;
+    font-size: 1.03rem !important;
+    line-height: 1.14 !important;
   }
 
   .form-shell-modern .modern-form.estabelecimento-form .form-card-header p,
   .form-shell-modern .modern-form .form-card-header p {
-    font-size: 0.78rem !important;
-    line-height: 1.38 !important;
+    font-size: 0.77rem !important;
+    line-height: 1.36 !important;
   }
 
   .form-shell-modern .modern-form.estabelecimento-form label,
   .form-shell-modern .modern-form label {
     font-size: 0.75rem;
-    line-height: 1.24;
+    line-height: 1.22;
   }
 
   .form-shell-modern .modern-form.estabelecimento-form .form-control,
@@ -6864,8 +6876,8 @@ thead .est-actions-sticky {
   .form-shell-modern .modern-form.estabelecimento-form .single-product-card,
   .form-shell-modern .modern-form .single-product-card {
     min-height: 112px;
-    gap: 0.58rem;
-    padding: 0.82rem;
+    gap: 0.56rem;
+    padding: 0.8rem;
     border-radius: 16px;
   }
 
@@ -6878,7 +6890,7 @@ thead .est-actions-sticky {
   }
 
   .single-product-card-content span {
-    font-size: 0.64rem;
+    font-size: 0.63rem;
     letter-spacing: 0.05em;
   }
 
@@ -6889,7 +6901,7 @@ thead .est-actions-sticky {
   }
 
   .single-product-card-content small {
-    margin-top: 0.24rem;
+    margin-top: 0.22rem;
     font-size: 0.74rem;
     line-height: 1.3;
   }
@@ -6899,9 +6911,9 @@ thead .est-actions-sticky {
   }
 
   .modern-checkbox span {
-    min-height: 42px;
-    padding-block: 0.62rem;
-    font-size: 0.82rem;
+    min-height: 40px;
+    padding: 0.62rem 0.72rem;
+    font-size: 0.8rem;
   }
 
   .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
@@ -6917,7 +6929,7 @@ thead .est-actions-sticky {
 
   .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
   .form-shell-modern .modern-form .form-section-tag {
-    margin-bottom: 0.3rem !important;
+    margin-bottom: 0.28rem !important;
   }
 
   .product-badge {
@@ -6930,14 +6942,14 @@ thead .est-actions-sticky {
 
   .optional-label,
   .required-label {
-    margin-left: 4px !important;
-    transform: translateY(-1px);
+    margin-left: 0 !important;
+    margin-top: 0 !important;
   }
 
   .product-setup-block {
     margin-top: 6px;
-    padding: 12px;
-    border-radius: 15px;
+    padding: 10px 10px 11px;
+    border-radius: 14px;
   }
 
   .product-setup-block + .product-setup-block {
@@ -6945,42 +6957,48 @@ thead .est-actions-sticky {
   }
 
   .product-setup-header {
-    gap: 5px;
+    gap: 4px;
   }
 
   .product-setup-badges {
     gap: 6px;
-    margin-bottom: 0.04rem;
+    margin-bottom: 0.02rem;
   }
 
   .product-setup-header h3,
   .form-shell-modern .modern-form .product-setup-header h3 {
-    font-size: 0.86rem !important;
-    line-height: 1.16 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.15 !important;
   }
 
   .product-setup-header p,
   .form-shell-modern .modern-form .product-setup-header p {
-    font-size: 0.74rem !important;
-    line-height: 1.34 !important;
+    font-size: 0.73rem !important;
+    line-height: 1.32 !important;
   }
 
   .product-divider {
-    margin: 10px 0 11px;
+    margin: 9px 0 10px;
   }
 
   .product-setup-block .row {
-    --bs-gutter-y: 0.7rem;
+    --bs-gutter-x: 0.6rem;
+    --bs-gutter-y: 0.65rem;
   }
 
   .product-setup-block .compact-field label {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.26rem 0.18rem;
-    margin-bottom: 0.34rem;
-    text-align: center;
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    gap: 0.28rem;
+    margin-bottom: 0.32rem;
+    text-align: left;
+    line-height: 1.24;
+  }
+
+  .product-setup-block .compact-field .optional-label,
+  .product-setup-block .compact-field .required-label {
+    justify-self: start;
   }
 
   .product-setup-block .compact-field .form-control {
@@ -6988,13 +7006,13 @@ thead .est-actions-sticky {
   }
 
   .route-coordinates-private {
-    gap: 0.72rem;
-    padding: 0.78rem;
+    gap: 0.7rem;
+    padding: 0.74rem;
     border-radius: 16px;
   }
 
   .route-coordinates-private > div {
-    gap: 0.28rem;
+    gap: 0.26rem;
   }
 
   .route-coordinates-private label {
@@ -7003,26 +7021,26 @@ thead .est-actions-sticky {
 
   .route-coordinates-private .modern-note {
     font-size: 0.74rem;
-    line-height: 1.36;
+    line-height: 1.34;
   }
 
   .coordinates-capture-status {
-    margin-top: 0.04rem;
-    padding: 0.3rem 0.58rem;
+    margin-top: 0.02rem;
+    padding: 0.28rem 0.56rem;
     font-size: 0.68rem;
     line-height: 1.18;
   }
 
   .route-coordinate-button {
     min-height: 40px;
-    gap: 0.38rem;
-    padding-inline: 0.78rem;
+    gap: 0.34rem;
+    padding-inline: 0.74rem;
     font-size: 0.78rem;
   }
 
   .form-actions-bar {
-    gap: 0.85rem;
-    padding: 0.9rem;
+    gap: 0.82rem;
+    padding: 0.84rem;
     border-radius: 18px;
   }
 
@@ -7031,16 +7049,16 @@ thead .est-actions-sticky {
   }
 
   .form-actions-copy strong {
-    font-size: 0.86rem;
+    font-size: 0.85rem;
   }
 
   .form-actions-copy span {
     font-size: 0.74rem;
-    line-height: 1.35;
+    line-height: 1.34;
   }
 
   .form-actions-buttons {
-    gap: 0.52rem;
+    gap: 0.5rem;
   }
 
   .form-actions-buttons .btn-modern,
