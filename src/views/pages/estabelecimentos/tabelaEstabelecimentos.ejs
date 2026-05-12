@@ -38,6 +38,41 @@
         return rawValue;
     }; %>
 
+    <% const getProductBadges = (produtoValue) => {
+        const produtoBase = String(produtoValue || '').toUpperCase();
+        const badges = [];
+
+        if (produtoBase.includes('BOLINHAS')) {
+            badges.push({
+                label: 'Bolinhas',
+                className: 'product-badge-green'
+            });
+        }
+
+        if (produtoBase.includes('CONSIGNADOS') || produtoBase.includes('CONSIGNADO') || produtoBase.includes('FIGURINHAS') || produtoBase.includes('FIGURINHA')) {
+            badges.push({
+                label: 'Consignados',
+                className: 'product-badge-blue'
+            });
+        }
+
+        if (produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS')) {
+            badges.push({
+                label: 'Pelúcias',
+                className: 'product-badge-violet'
+            });
+        }
+
+        if (badges.length > 0) {
+            return badges;
+        }
+
+        return [{
+            label: produtoValue || 'Não informado',
+            className: 'product-badge-blue'
+        }];
+    }; %>
+
     <div class="page-spacer"></div>
 
     <div class="list-shell">
@@ -162,6 +197,7 @@
                                     <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
                                     <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
                                     <% const enderecoCompleto = [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', '); %>
+                                    <% const productBadges = getProductBadges(estabelecimento.produtoFormatado || estabelecimento.produto); %>
 
                                     <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
                                     <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
@@ -186,9 +222,13 @@
                                         </td>
 
                                         <td class="mode-all est-col-product" data-label="Produto">
-                                            <span class="table-badge table-badge-blue estabelecimento-product-badge">
-                                                <%= estabelecimento.produtoFormatado || estabelecimento.produto %>
-                                            </span>
+                                            <div class="product-setup-badges">
+                                                <% productBadges.forEach((produto) => { %>
+                                                    <span class="product-badge <%= produto.className %> estabelecimento-product-badge">
+                                                        <%= produto.label %>
+                                                    </span>
+                                                <% }) %>
+                                            </div>
                                         </td>
 
                                         <td class="mode-commercial est-col-address" data-label="Endereço">

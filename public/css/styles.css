@@ -6223,6 +6223,17 @@ footer:not(.site-footer) hr {
   margin-bottom: 0.12rem;
 }
 
+.estabelecimentos-table .est-col-product .product-setup-badges {
+  justify-content: center;
+  align-items: center;
+  gap: 0.32rem;
+  margin-bottom: 0;
+}
+
+.estabelecimentos-table .estabelecimento-product-badge {
+  max-width: 100%;
+}
+
 .product-setup-header h3,
 .form-shell-modern .modern-form .product-setup-header h3 {
   margin: 0;
@@ -7238,11 +7249,18 @@ thead .est-actions-sticky {
   }
 
   .estabelecimentos-table td.est-col-product {
-    align-items: start;
+    align-items: center;
   }
 
   .estabelecimentos-table td.est-col-product::before {
-    padding-top: 0.16rem;
+    padding-top: 0;
+  }
+
+  .estabelecimentos-table td.est-col-product .product-setup-badges {
+    justify-content: center;
+    align-items: center;
+    gap: 0.34rem;
+    width: 100%;
   }
 
   .estabelecimento-product-badge {
