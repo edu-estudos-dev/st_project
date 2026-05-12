@@ -308,10 +308,80 @@
 
             sessionStorage.setItem(storageKey, 'shown');
 
-            const openReciboUrl = (url) => {
-                const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+                const getReciboFileName = (url) => {
+                    try {
+                        const parsedUrl = new URL(url, window.location.origin);
+                        const parts = parsedUrl.pathname.split('/').filter(Boolean);
+                        const reciboId = parts[parts.length - 1] || 'recibo';
+
+                        if (parsedUrl.pathname.includes('/consignados/')) {
+                            return `recibo-consignados-${reciboId}.pdf`;
+                        }
+
+                        if (parsedUrl.pathname.includes('/pelucias/')) {
+                            return `recibo-pelucias-${reciboId}.pdf`;
+                        }
+
+                        if (parsedUrl.pathname.includes('/bolinhas/')) {
+                            return `recibo-bolinhas-${reciboId}.pdf`;
+                        }
+
+                        return `recibo-vendmaster-${reciboId}.pdf`;
+                    } catch (error) {
+                        return 'recibo-vendmaster.pdf';
+                }
+            };
+
+            const shareReciboPdf = async (url) => {
+                const absoluteUrl = new URL(url, window.location.origin).href;
+
+                const response = await fetch(absoluteUrl, {
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Não foi possível gerar o arquivo do recibo para compartilhamento.');
+                }
+
+                const blob = await response.blob();
+                const file = new File([blob], getReciboFileName(url), {
+                    type: 'application/pdf'
+                });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'Recibo VendMaster',
+                        text: 'Segue o recibo da visita.',
+                        files: [file]
+                    });
+
+                    return true;
+                }
+
+                return false;
+            };
+
+            const openReciboUrl = async (url) => {
+                const isMobile =
+                    window.matchMedia('(max-width: 767.98px)').matches ||
+                    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
                 if (isMobile) {
+                    try {
+                        const shared = await shareReciboPdf(url);
+
+                        if (shared) {
+                            return;
+                        }
+                    } catch (error) {
+                        if (error?.name === 'AbortError') {
+                            return;
+                        }
+
+                        console.error('Erro ao compartilhar recibo:', error);
+                        window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
+                    }
+
                     window.location.href = url;
                     return;
                 }
@@ -337,7 +407,7 @@
             const confirmed = await abrirRecibo();
 
             if (confirmed) {
-                openReciboUrl(reciboUrl);
+                await openReciboUrl(reciboUrl);
             }
         });
     </script>
