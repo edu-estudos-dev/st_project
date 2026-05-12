@@ -8,7 +8,11 @@
     <div class="page-spacer"></div>
 
     <% const form = typeof formData !== 'undefined' && formData ? formData : {}; %>
-    <% const selectedProducts = Array.isArray(form.produto) ? form.produto : (form.produto ? [form.produto] : []); %>
+    <% const enabledProductOptions = Array.isArray(productOptions) ? productOptions : []; %>
+    <% const singleProductMode = enabledProductOptions.length === 1; %>
+    <% const singleProduct = singleProductMode ? enabledProductOptions[0] : null; %>
+    <% const selectedProductsFromForm = Array.isArray(form.produto) ? form.produto : (form.produto ? [form.produto] : []); %>
+    <% const selectedProducts = selectedProductsFromForm.length > 0 ? selectedProductsFromForm : (singleProduct ? [singleProduct.value] : []); %>
 
     <div class="form-shell form-shell-modern">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Cadastrar Estabelecimento' }) %>
@@ -39,53 +43,52 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Operação</span>
-                            <h2>Produtos ativos e observações</h2>
-                            <p>Marque quais linhas estão ativas no estabelecimento e registre qualquer detalhe útil para visitas, sangrias ou manutenção.</p>
+                            <h2>Produto ativo e observações</h2>
+                            <p>Confira a ferramenta disponível neste plano e registre qualquer detalhe útil para visitas, sangrias ou manutenção.</p>
                         </div>
                     </div>
 
                     <div class="row g-4 align-items-start">
                         <div class="col-12 col-lg-5">
-                            <label>Produtos vinculados</label>
+                            <label><%= singleProductMode ? 'Plano atual' : 'Produtos vinculados' %></label>
 
-                            <div class="modern-checkbox-grid">
-                                <% (productOptions || []).forEach((produto, index) => { %>
-                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            id="produto<%= index + 1 %>"
-                                            name="produto"
-                                            value="<%= produto.value %>"
-                                            <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
-                                        >
-                                        <span><%= produto.label %></span>
-                                    </label>
-                                <% }) %>
+                            <% if (singleProductMode) { %>
+                                <input
+                                    type="hidden"
+                                    name="produto"
+                                    value="<%= singleProduct.value %>"
+                                >
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-green" for="produto1">
-                                        <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= selectedProducts.includes('BOLINHAS') ? 'checked' : '' %>>
-                                        <span>Bolinhas</span>
-                                    </label>
-                                <% } %>
+                                <div class="single-product-card <%= singleProduct.className || '' %>">
+                                    <div class="single-product-card-icon">
+                                        <i class="bi bi-check2-circle"></i>
+                                    </div>
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="CONSIGNADOS" <%= selectedProducts.includes('CONSIGNADOS') ? 'checked' : '' %>>
-                                        <span>Consignados</span>
-                                    </label>
-                                <% } %>
+                                    <div class="single-product-card-content">
+                                        <span>1 ferramenta ativa</span>
+                                        <strong><%= singleProduct.label %></strong>
+                                        <small>Este é o produto disponível no plano atual. O cadastro já será criado para essa operação.</small>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="modern-checkbox-grid">
+                                    <% enabledProductOptions.forEach((produto, index) => { %>
+                                        <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                id="produto<%= index + 1 %>"
+                                                name="produto"
+                                                value="<%= produto.value %>"
+                                                <%= selectedProducts.includes(produto.value) ? 'checked' : '' %>
+                                            >
+                                            <span><%= produto.label %></span>
+                                        </label>
+                                    <% }) %>
+                                </div>
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-violet" for="produto3">
-                                        <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= selectedProducts.includes('PELUCIAS') ? 'checked' : '' %>>
-                                        <span>Pelúcias</span>
-                                    </label>
-                                <% } %>
-                            </div>
-
-                            <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
+                                <small class="modern-note">Selecione pelo menos um produto para liberar os atalhos corretos no restante do sistema.</small>
+                            <% } %>
                         </div>
 
                         <div class="col-12 col-lg-7">
@@ -189,8 +192,6 @@
                             >
                         </div>
 
-                        <!-- ===== BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
-
                         <div class="col-12 d-none" data-operational-field="bolinhas-machine">
                             <div class="product-setup-block theme-green">
                                 <div class="product-setup-header">
@@ -257,11 +258,13 @@
                                             Quantidade inicial deixada <span class="required-label">obrigatório</span>
                                         </label>
                                         <input
-                                            type="number"
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
                                             class="form-control text-center"
                                             id="consignado_quantidade_inicial"
                                             name="consignado_quantidade_inicial"
-                                            min="0"
                                             value="<%= form.consignado_quantidade_inicial || form.figurinha_quantidade_inicial || '' %>"
                                             placeholder="Ex.: 100"
                                         >
@@ -336,11 +339,13 @@
                                             Leitura inicial <span class="required-label">obrigatório</span>
                                         </label>
                                         <input
-                                            type="number"
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
                                             class="form-control text-center"
                                             id="pelucia_leitura_inicial"
                                             name="pelucia_leitura_inicial"
-                                            min="0"
                                             value="<%= form.pelucia_leitura_inicial || '' %>"
                                             placeholder="Ex.: 0"
                                         >
@@ -351,11 +356,13 @@
                                             Qtde. Inicial <span class="required-label">obrigatório</span>
                                         </label>
                                         <input
-                                            type="number"
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
                                             class="form-control text-center"
                                             id="pelucia_abastecido_inicial"
                                             name="pelucia_abastecido_inicial"
-                                            min="0"
                                             value="<%= form.pelucia_abastecido_inicial || '' %>"
                                             placeholder="Ex.: 50"
                                         >
@@ -363,8 +370,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- ===== FIM DO BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
 
                         <div class="col-12">
                             <div class="route-coordinates-header route-coordinates-private">
@@ -428,232 +433,6 @@
         </main>
     </div>
 
-    <style>
-        /* =========================================================
-           CADASTRO DE ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
-           ========================================================= */
-
-        .product-setup-block {
-            border: 1px solid #d9e2f1;
-            border-radius: 20px;
-            padding: 18px 18px 16px;
-            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-            margin-top: 8px;
-            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.045);
-        }
-
-        .product-setup-header {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .product-setup-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .product-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            min-height: 32px;
-            padding: 0.25rem 0.78rem;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            border: 1px solid transparent;
-        }
-
-        .product-badge i {
-            font-size: 0.68rem;
-        }
-
-        .product-badge-green {
-            color: #166534;
-            background: rgba(34, 197, 94, 0.12);
-            border-color: rgba(34, 197, 94, 0.28);
-        }
-
-        .product-badge-blue {
-            color: #1d4ed8;
-            background: rgba(37, 99, 235, 0.12);
-            border-color: rgba(37, 99, 235, 0.24);
-        }
-
-        .product-badge-violet {
-            color: #6d28d9;
-            background: rgba(124, 58, 237, 0.12);
-            border-color: rgba(124, 58, 237, 0.24);
-        }
-
-        .product-setup-header h3 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 900;
-            color: #1f2937;
-        }
-
-        .product-setup-header p {
-            margin: 0;
-            font-size: 0.86rem;
-            line-height: 1.45;
-            color: #64748b;
-        }
-
-        .product-divider {
-            width: 100%;
-            height: 1px;
-            margin: 14px 0 16px;
-            background: linear-gradient(90deg, rgba(148, 163, 184, 0.45) 0%, rgba(148, 163, 184, 0.12) 100%);
-        }
-
-        .theme-green {
-            border-color: rgba(34, 197, 94, 0.25);
-            background: linear-gradient(180deg, rgba(240, 253, 244, 0.88) 0%, rgba(255, 255, 255, 1) 100%);
-        }
-
-        .theme-green .product-setup-header h3,
-        .theme-green label {
-            color: #166534;
-        }
-
-        .theme-green .product-divider {
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.45) 0%, rgba(34, 197, 94, 0.08) 100%);
-        }
-
-        .theme-green .form-control:focus {
-            border-color: rgba(34, 197, 94, 0.62);
-            box-shadow: 0 0 0 0.18rem rgba(34, 197, 94, 0.12);
-        }
-
-        .theme-blue {
-            border-color: rgba(37, 99, 235, 0.22);
-            background: linear-gradient(180deg, rgba(239, 246, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
-        }
-
-        .theme-blue .product-setup-header h3,
-        .theme-blue label {
-            color: #1d4ed8;
-        }
-
-        .theme-blue .product-divider {
-            background: linear-gradient(90deg, rgba(37, 99, 235, 0.40) 0%, rgba(37, 99, 235, 0.08) 100%);
-        }
-
-        .theme-blue .form-control:focus {
-            border-color: rgba(37, 99, 235, 0.58);
-            box-shadow: 0 0 0 0.18rem rgba(37, 99, 235, 0.12);
-        }
-
-        .theme-violet {
-            border-color: rgba(124, 58, 237, 0.22);
-            background: linear-gradient(180deg, rgba(245, 243, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
-        }
-
-        .theme-violet .product-setup-header h3,
-        .theme-violet label {
-            color: #6d28d9;
-        }
-
-        .theme-violet .product-divider {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.40) 0%, rgba(124, 58, 237, 0.08) 100%);
-        }
-
-        .theme-violet .form-control:focus {
-            border-color: rgba(124, 58, 237, 0.58);
-            box-shadow: 0 0 0 0.18rem rgba(124, 58, 237, 0.12);
-        }
-
-        .optional-label,
-        .required-label {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 6px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 0.66rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            vertical-align: middle;
-        }
-
-        .optional-label {
-            color: #475569;
-            background: rgba(148, 163, 184, 0.16);
-        }
-
-        .required-label {
-            color: #b91c1c;
-            background: rgba(239, 68, 68, 0.12);
-        }
-
-        .route-coordinates-private {
-            align-items: flex-start;
-        }
-
-        .coordinates-capture-status {
-            display: inline-flex;
-            align-items: center;
-            width: fit-content;
-            margin-top: 0.5rem;
-            padding: 0.35rem 0.7rem;
-            border-radius: 999px;
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: #475569;
-            background: rgba(148, 163, 184, 0.14);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        .coordinates-capture-status.is-success {
-            color: #166534;
-            background: rgba(34, 197, 94, 0.12);
-            border-color: rgba(34, 197, 94, 0.24);
-        }
-
-        @media (max-width: 767.98px) {
-            .product-setup-block {
-                padding: 16px 14px 14px;
-                border-radius: 16px;
-            }
-
-            .product-setup-header h3 {
-                font-size: 1rem;
-            }
-
-            .product-setup-header p {
-                font-size: 0.9rem;
-            }
-
-            .optional-label,
-            .required-label {
-                margin-left: 0;
-                margin-top: 4px;
-                min-height: 24px;
-                font-size: 0.74rem;
-            }
-
-            .route-coordinates-private {
-                gap: 1rem;
-            }
-
-            .coordinates-capture-status {
-                width: 100%;
-                justify-content: center;
-                font-size: 0.82rem;
-                white-space: normal;
-                text-align: center;
-            }
-        }
-    </style>
-
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
@@ -678,9 +457,47 @@
             const peluciaLeituraInicialInput = document.getElementById('pelucia_leitura_inicial');
             const peluciaAbastecidoInicialInput = document.getElementById('pelucia_abastecido_inicial');
 
+            const initialNumberInputs = [
+                consignadoQuantidadeInicialInput,
+                peluciaLeituraInicialInput,
+                peluciaAbastecidoInicialInput
+            ];
+
+            const validateInitialNumberInput = (input, label) => {
+                if (!input) return null;
+
+                const value = input.value.trim();
+
+                if (!value) {
+                    return `${label} é obrigatório.`;
+                }
+
+                if (!/^\d+$/.test(value)) {
+                    return `${label} deve conter apenas números inteiros, sem letras, negativos, decimais ou notação científica.`;
+                }
+
+                const parsed = Number(value);
+
+                if (!Number.isSafeInteger(parsed) || parsed < 0) {
+                    return `${label} deve ser um número inteiro válido.`;
+                }
+
+                if (parsed > 100000) {
+                    return `${label} não pode ser maior que 100000.`;
+                }
+
+                return null;
+            };
+
+            initialNumberInputs.forEach((input) => {
+                input?.addEventListener('input', () => {
+                    input.value = input.value.replace(/\D/g, '').slice(0, 6);
+                });
+            });
+
             const getSelectedProducts = () => produtoInputs
-                .filter((checkbox) => checkbox.checked)
-                .map((checkbox) => checkbox.value);
+                .filter((input) => input.type === 'hidden' || input.checked)
+                .map((input) => input.value);
 
             const setGroupVisibility = (fields, shouldShow) => {
                 fields.forEach((field) => field.classList.toggle('d-none', !shouldShow));
@@ -724,18 +541,33 @@
                 }
             };
 
-            produtoInputs.forEach((input) => input.addEventListener('change', syncOperationalFields));
+            produtoInputs.forEach((input) => {
+                if (input.type !== 'hidden') {
+                    input.addEventListener('change', syncOperationalFields);
+                }
+            });
+
             syncOperationalFields();
 
             telefoneInput?.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
+                const digits = e.target.value.replace(/\D/g, '').slice(0, 11);
 
-                if (value.length > 11) value = value.slice(0, 11);
-                if (value.length > 0) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-                if (value.length > 3) value = `${value.slice(0, 4)} ${value.slice(4)}`;
-                if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
+                if (digits.length <= 2) {
+                    e.target.value = digits;
+                    return;
+                }
 
-                e.target.value = value;
+                if (digits.length <= 6) {
+                    e.target.value = `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+                    return;
+                }
+
+                if (digits.length <= 10) {
+                    e.target.value = `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+                    return;
+                }
+
+                e.target.value = `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
             });
 
             captureCoordinatesButton?.addEventListener('click', () => {
@@ -786,23 +618,48 @@
 
                 if (selectedProducts.length === 0) {
                     e.preventDefault();
-                    window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
+                    window.AppAlerts?.warning('Nenhum produto ativo foi encontrado para este cadastro.');
                     return;
                 }
 
-                if (selectedProducts.includes('CONSIGNADOS') && !consignadoQuantidadeInicialInput.value) {
-                    e.preventDefault();
-                    window.AppAlerts?.warning('Informe a quantidade inicial deixada para consignados.');
-                    return;
+                if (selectedProducts.includes('CONSIGNADOS')) {
+                    const consignadoError = validateInitialNumberInput(
+                        consignadoQuantidadeInicialInput,
+                        'Quantidade inicial deixada para consignados'
+                    );
+
+                    if (consignadoError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(consignadoError);
+                        consignadoQuantidadeInicialInput?.focus();
+                        return;
+                    }
                 }
 
-                if (
-                    selectedProducts.includes('PELUCIAS') &&
-                    (!peluciaLeituraInicialInput.value || !peluciaAbastecidoInicialInput.value)
-                ) {
-                    e.preventDefault();
-                    window.AppAlerts?.warning('Informe leitura inicial e quantidade inicial para pelúcias.');
-                    return;
+                if (selectedProducts.includes('PELUCIAS')) {
+                    const leituraError = validateInitialNumberInput(
+                        peluciaLeituraInicialInput,
+                        'Leitura inicial de pelúcias'
+                    );
+
+                    if (leituraError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(leituraError);
+                        peluciaLeituraInicialInput?.focus();
+                        return;
+                    }
+
+                    const abastecidoError = validateInitialNumberInput(
+                        peluciaAbastecidoInicialInput,
+                        'Quantidade inicial de pelúcias'
+                    );
+
+                    if (abastecidoError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(abastecidoError);
+                        peluciaAbastecidoInicialInput?.focus();
+                        return;
+                    }
                 }
             });
 

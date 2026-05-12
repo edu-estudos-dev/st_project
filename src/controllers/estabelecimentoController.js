@@ -9,25 +9,113 @@ import {
   serializeProdutos
 } from '../utilities/produtoUtils.js';
 
+const INITIAL_INTEGER_MAX = 100000;
+
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+    this.statusCode = 400;
+  }
+}
+
+const isValidationError = error => error instanceof ValidationError;
+
+const normalizeSpacing = value => String(value ?? '').replace(/\s+/g, ' ').trim();
+
+const hasSuspiciousHtmlChars = value => /[<>]/.test(String(value ?? ''));
+
+const hasLetters = value => /\p{L}/u.test(String(value ?? ''));
+
+const validateTextField = (
+  value,
+  fieldLabel,
+  {
+    min = 2,
+    max = 100,
+    requireLetters = true
+  } = {}
+) => {
+  const normalized = normalizeSpacing(value);
+
+  if (!normalized) {
+    throw new ValidationError(`${fieldLabel} é obrigatório.`);
+  }
+
+  if (hasSuspiciousHtmlChars(normalized)) {
+    throw new ValidationError(`${fieldLabel} contém caracteres inválidos.`);
+  }
+
+  if (normalized.length < min) {
+    throw new ValidationError(`${fieldLabel} deve ter pelo menos ${min} caracteres.`);
+  }
+
+  if (normalized.length > max) {
+    throw new ValidationError(`${fieldLabel} deve ter no máximo ${max} caracteres.`);
+  }
+
+  if (requireLetters && !hasLetters(normalized)) {
+    throw new ValidationError(`${fieldLabel} deve conter letras.`);
+  }
+
+  return normalized;
+};
+
+const validatePhone = value => {
+  const raw = normalizeSpacing(value);
+
+  if (!raw) {
+    throw new ValidationError('Telefone é obrigatório.');
+  }
+
+  if (hasSuspiciousHtmlChars(raw)) {
+    throw new ValidationError('Telefone contém caracteres inválidos.');
+  }
+
+  if (/[a-zA-ZÀ-ÿ]/u.test(raw)) {
+    throw new ValidationError('Telefone deve conter apenas números.');
+  }
+
+  const digits = raw.replace(/\D/g, '');
+
+  if (!/^\d+$/.test(digits)) {
+    throw new ValidationError('Telefone deve conter apenas números.');
+  }
+
+  if (digits.length !== 10 && digits.length !== 11) {
+    throw new ValidationError('Telefone deve ter DDD e 10 ou 11 dígitos.');
+  }
+
+  return digits;
+};
+
 const parseCoordinate = (value, type) => {
   if (value === undefined || value === null || String(value).trim() === '') {
     return null;
   }
 
-  const normalized = Number(String(value).replace(',', '.').trim());
+  const raw = String(value).replace(',', '.').trim();
 
-  if (Number.isNaN(normalized)) {
-    throw new Error(
+  if (!/^-?\d+(\.\d+)?$/.test(raw)) {
+    throw new ValidationError(
+      `Informe uma ${type === 'latitude' ? 'latitude' : 'longitude'} válida.`
+    );
+  }
+
+  const normalized = Number(raw);
+
+  if (!Number.isFinite(normalized)) {
+    throw new ValidationError(
       `Informe uma ${type === 'latitude' ? 'latitude' : 'longitude'} válida.`
     );
   }
 
   if (type === 'latitude' && (normalized < -90 || normalized > 90)) {
-    throw new Error('A latitude deve estar entre -90 e 90.');
+    throw new ValidationError('A latitude deve estar entre -90 e 90.');
   }
 
   if (type === 'longitude' && (normalized < -180 || normalized > 180)) {
-    throw new Error('A longitude deve estar entre -180 e 180.');
+    throw new ValidationError('A longitude deve estar entre -180 e 180.');
   }
 
   return normalized;
@@ -52,27 +140,53 @@ const PRODUCT_OPTIONS = [
 ];
 
 const parseInitialInteger = (value, fieldLabel) => {
-  if (value === undefined || value === null || String(value).trim() === '') {
-    throw new Error(`${fieldLabel} é obrigatório.`);
+  const raw = normalizeSpacing(value);
+
+  if (!raw) {
+    throw new ValidationError(`${fieldLabel} é obrigatório.`);
   }
 
-  const parsed = Number.parseInt(String(value).trim(), 10);
+  if (!/^\d+$/.test(raw)) {
+    throw new ValidationError(
+      `${fieldLabel} deve conter apenas números inteiros, sem letras, negativos, decimais ou notação científica.`
+    );
+  }
 
-  if (Number.isNaN(parsed) || parsed < 0) {
-    throw new Error(
-      `${fieldLabel} deve ser um número válido maior ou igual a zero.`
+  const parsed = Number(raw);
+
+  if (!Number.isSafeInteger(parsed) || parsed < 0) {
+    throw new ValidationError(`${fieldLabel} deve ser um número inteiro válido.`);
+  }
+
+  if (parsed > INITIAL_INTEGER_MAX) {
+    throw new ValidationError(
+      `${fieldLabel} não pode ser maior que ${INITIAL_INTEGER_MAX}.`
     );
   }
 
   return parsed;
 };
 
-const getOptionalString = (value) => {
+const getOptionalString = (value, fieldLabel = 'Campo opcional', max = 100) => {
   if (value === undefined || value === null) {
     return '';
   }
 
-  return String(value).trim();
+  const normalized = normalizeSpacing(value);
+
+  if (!normalized) {
+    return '';
+  }
+
+  if (hasSuspiciousHtmlChars(normalized)) {
+    throw new ValidationError(`${fieldLabel} contém caracteres inválidos.`);
+  }
+
+  if (normalized.length > max) {
+    throw new ValidationError(`${fieldLabel} deve ter no máximo ${max} caracteres.`);
+  }
+
+  return normalized;
 };
 
 const getEnabledProductOptions = (req, selectedProdutos = []) => {
@@ -94,7 +208,7 @@ const validateProdutosEnabled = (req, produtos) => {
   const invalid = selected.filter(produto => !enabledValues.includes(produto));
 
   if (invalid.length) {
-    throw new Error('Este produto nao esta habilitado na sua assinatura.');
+    throw new ValidationError('Este produto não está habilitado na sua assinatura.');
   }
 
   return selected;
@@ -121,11 +235,15 @@ class EstabelecimentoController {
         return estabelecimento;
       });
 
+      const success = null;
+
       res.status(200).render('pages/estabelecimentos/tabelaEstabelecimentos', {
         title: 'Tabela Com os Estabelecimentos',
         estabelecimentos,
         search: false,
-        usuario
+        usuario,
+        success,
+        error: null
       });
     } catch (error) {
       console.error('Erro ao obter todos os estabelecimentos.', error);
@@ -151,7 +269,9 @@ class EstabelecimentoController {
         title: 'Search Results',
         estabelecimentos,
         search: true,
-        usuario
+        usuario,
+        success: null,
+        error: null
       });
     } catch (error) {
       console.error('Erro ao obter estabelecimento.', error);
@@ -175,20 +295,6 @@ class EstabelecimentoController {
     }
 
     try {
-      const requiredFields = [
-        'estabelecimento',
-        'endereco',
-        'bairro',
-        'responsavel_nome',
-        'telefone_contato'
-      ];
-
-      for (const field of requiredFields) {
-        if (!req.body[field]) {
-          throw new Error(`Campo obrigatório faltando: ${field}`);
-        }
-      }
-
       const produtosSelecionados = validateProdutosEnabled(
         req,
         req.body.produto
@@ -197,7 +303,7 @@ class EstabelecimentoController {
       const produtos = serializeProdutos(req.body.produto);
 
       if (!produtos) {
-        throw new Error(
+        throw new ValidationError(
           'Selecione pelo menos um produto para o estabelecimento.'
         );
       }
@@ -207,19 +313,35 @@ class EstabelecimentoController {
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
 
       const chaveBolinhas = hasBolinhas
-        ? getOptionalString(req.body.chave_bolinhas)
+        ? getOptionalString(
+            req.body.chave_bolinhas,
+            'Chave da máquina de bolinhas',
+            50
+          )
         : '';
 
       const maquinaBolinhas = hasBolinhas
-        ? getOptionalString(req.body.maquina_bolinhas)
+        ? getOptionalString(
+            req.body.maquina_bolinhas,
+            'Número da máquina de bolinhas',
+            50
+          )
         : '';
 
       const chavePelucias = hasPelucias
-        ? getOptionalString(req.body.chave_pelucias)
+        ? getOptionalString(
+            req.body.chave_pelucias,
+            'Chave da máquina de pelúcias',
+            50
+          )
         : '';
 
       const maquinaPelucias = hasPelucias
-        ? getOptionalString(req.body.maquina_pelucias)
+        ? getOptionalString(
+            req.body.maquina_pelucias,
+            'Número da máquina de pelúcias',
+            50
+          )
         : '';
 
       const chaveLegada = chaveBolinhas || chavePelucias || '';
@@ -249,7 +371,14 @@ class EstabelecimentoController {
 
       const estabelecimento = {
         assinante_id: usuario.assinante_id,
-        estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
+        estabelecimento: validateTextField(
+          req.body.estabelecimento,
+          'Nome do estabelecimento',
+          {
+            min: 2,
+            max: 100
+          }
+        ).toUpperCase(),
         produto: produtos,
 
         // Campos antigos mantidos por compatibilidade com telas antigas.
@@ -262,13 +391,28 @@ class EstabelecimentoController {
         chave_pelucias: chavePelucias,
         maquina_pelucias: maquinaPelucias,
 
-        endereco: req.body.endereco.trim().toUpperCase(),
-        bairro: req.body.bairro.trim().toUpperCase(),
-        responsavel_nome: req.body.responsavel_nome.trim().toUpperCase(),
-        telefone_contato: req.body.telefone_contato.trim(),
-        observacoes: req.body.observacoes
-          ? req.body.observacoes.trim().toUpperCase()
-          : '',
+        endereco: validateTextField(req.body.endereco, 'Endereço', {
+          min: 5,
+          max: 100
+        }).toUpperCase(),
+        bairro: validateTextField(req.body.bairro, 'Bairro', {
+          min: 2,
+          max: 30
+        }).toUpperCase(),
+        responsavel_nome: validateTextField(
+          req.body.responsavel_nome,
+          'Responsável',
+          {
+            min: 2,
+            max: 100
+          }
+        ).toUpperCase(),
+        telefone_contato: validatePhone(req.body.telefone_contato),
+        observacoes: getOptionalString(
+          req.body.observacoes,
+          'Comentários',
+          255
+        ).toUpperCase(),
         latitude: parseCoordinate(req.body.latitude, 'latitude'),
         longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
@@ -314,33 +458,22 @@ class EstabelecimentoController {
         });
       }
 
-      let estabelecimentos = await EstabelecimentoModel.findAll(
-        usuario.assinante_id
-      );
-
-      estabelecimentos = estabelecimentos.map(est => {
-        est.telefone_contato = formatTelefone(est.telefone_contato);
-        est.produtoFormatado = formatProdutoList(est.produto);
-        return est;
-      });
-
-      return res
-        .status(200)
-        .render('pages/estabelecimentos/tabelaEstabelecimentos', {
-          title: 'Tabela Com os Estabelecimentos',
-          estabelecimentos,
-          search: false,
-          usuario,
-          success: 'Estabelecimento cadastrado com sucesso!'
-        });
+      return res.redirect('/estabelecimentos');
     } catch (error) {
-      console.error(
-        'Erro ao cadastrar novo estabelecimento. Detalhes do erro:',
-        error
-      );
+      if (isValidationError(error)) {
+        console.warn(
+          'Validação bloqueou cadastro de estabelecimento:',
+          error.message
+        );
+      } else {
+        console.error(
+          'Erro ao cadastrar novo estabelecimento. Detalhes do erro:',
+          error
+        );
+      }
 
       return res
-        .status(500)
+        .status(isValidationError(error) ? 400 : 500)
         .render('pages/estabelecimentos/cadastrarEstabelecimento', {
           title: 'Cadastrar Estabelecimento',
           success: null,
@@ -368,7 +501,7 @@ class EstabelecimentoController {
       const produtos = serializeProdutos(req.body.produto);
 
       if (!produtos) {
-        throw new Error(
+        throw new ValidationError(
           'Selecione pelo menos um produto para o estabelecimento.'
         );
       }
@@ -377,19 +510,35 @@ class EstabelecimentoController {
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
 
       const chaveBolinhas = hasBolinhas
-        ? getOptionalString(req.body.chave_bolinhas)
+        ? getOptionalString(
+            req.body.chave_bolinhas,
+            'Chave da máquina de bolinhas',
+            50
+          )
         : '';
 
       const maquinaBolinhas = hasBolinhas
-        ? getOptionalString(req.body.maquina_bolinhas)
+        ? getOptionalString(
+            req.body.maquina_bolinhas,
+            'Número da máquina de bolinhas',
+            50
+          )
         : '';
 
       const chavePelucias = hasPelucias
-        ? getOptionalString(req.body.chave_pelucias)
+        ? getOptionalString(
+            req.body.chave_pelucias,
+            'Chave da máquina de pelúcias',
+            50
+          )
         : '';
 
       const maquinaPelucias = hasPelucias
-        ? getOptionalString(req.body.maquina_pelucias)
+        ? getOptionalString(
+            req.body.maquina_pelucias,
+            'Número da máquina de pelúcias',
+            50
+          )
         : '';
 
       const chaveLegada = chaveBolinhas || chavePelucias || '';
@@ -397,9 +546,19 @@ class EstabelecimentoController {
 
       const estabelecimento = {
         id,
-        estabelecimento: req.body.estabelecimento.trim().toUpperCase(),
+        estabelecimento: validateTextField(
+          req.body.estabelecimento,
+          'Nome do estabelecimento',
+          {
+            min: 2,
+            max: 100
+          }
+        ).toUpperCase(),
         status: req.body.status
-          ? req.body.status.trim().toUpperCase()
+          ? validateTextField(req.body.status, 'Status', {
+              min: 2,
+              max: 30
+            }).toUpperCase()
           : 'ATIVO',
         produto: produtos,
 
@@ -413,13 +572,28 @@ class EstabelecimentoController {
         chave_pelucias: chavePelucias,
         maquina_pelucias: maquinaPelucias,
 
-        endereco: req.body.endereco.trim().toUpperCase(),
-        bairro: req.body.bairro.trim().toUpperCase(),
-        responsavel_nome: req.body.responsavel_nome.trim().toUpperCase(),
-        telefone_contato: req.body.telefone_contato.trim(),
-        observacoes: req.body.observacoes
-          ? req.body.observacoes.trim().toUpperCase()
-          : '',
+        endereco: validateTextField(req.body.endereco, 'Endereço', {
+          min: 5,
+          max: 100
+        }).toUpperCase(),
+        bairro: validateTextField(req.body.bairro, 'Bairro', {
+          min: 2,
+          max: 30
+        }).toUpperCase(),
+        responsavel_nome: validateTextField(
+          req.body.responsavel_nome,
+          'Responsável',
+          {
+            min: 2,
+            max: 100
+          }
+        ).toUpperCase(),
+        telefone_contato: validatePhone(req.body.telefone_contato),
+        observacoes: getOptionalString(
+          req.body.observacoes,
+          'Comentários',
+          255
+        ).toUpperCase(),
         latitude: parseCoordinate(req.body.latitude, 'latitude'),
         longitude: parseCoordinate(req.body.longitude, 'longitude')
       };
@@ -445,16 +619,26 @@ class EstabelecimentoController {
           usuario
         });
     } catch (error) {
-      console.error(
-        'Erro ao atualizar o estabelecimento. Detalhes do erro:',
-        error
-      );
+      if (isValidationError(error)) {
+        console.warn(
+          'Validação bloqueou atualização de estabelecimento:',
+          error.message
+        );
+      } else {
+        console.error(
+          'Erro ao atualizar o estabelecimento. Detalhes do erro:',
+          error
+        );
+      }
 
       return res
-        .status(500)
+        .status(isValidationError(error) ? 400 : 500)
         .render('pages/estabelecimentos/editarEstabelecimento', {
           title: 'Editar Estabelecimento',
-          estabelecimento: req.body,
+          estabelecimento: {
+            ...req.body,
+            id: req.params.id
+          },
           hasProduto,
           productOptions: getEnabledProductOptions(req, req.body.produto),
           success: null,
@@ -585,7 +769,9 @@ class EstabelecimentoController {
           title: 'Resultados da Pesquisa',
           estabelecimentos,
           search: true,
-          usuario
+          usuario,
+          success: null,
+          error: null
         });
     } catch (error) {
       console.error('Erro ao buscar estabelecimentos:', error);

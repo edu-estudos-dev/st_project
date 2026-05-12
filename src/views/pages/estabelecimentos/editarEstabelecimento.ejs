@@ -6,6 +6,10 @@
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
+    <% const enabledProductOptions = Array.isArray(productOptions) ? productOptions : []; %>
+    <% const singleProductMode = enabledProductOptions.length === 1; %>
+    <% const singleProduct = singleProductMode ? enabledProductOptions[0] : null; %>
+
     <div class="form-shell form-shell-modern">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Estabelecimento' }) %>
 
@@ -13,7 +17,7 @@
             <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-pencil-square"></i> Administrativo</span>
                 <h1>Editar estabelecimento</h1>
-                <p>Atualize os dados do ponto e ajuste as coordenadas para a central de rotas trabalhar com mais precisão.</p>
+                <p>Atualize os dados do ponto e, se necessário, salve novamente a localização usada nas rotas.</p>
             </div>
 
             <div class="page-titlebar-side">
@@ -21,6 +25,7 @@
                     <strong>Registro atual</strong>
                     <span><%= estabelecimento.estabelecimento %></span>
                 </div>
+
                 <div class="page-titlebar-stat">
                     <strong>Ação</strong>
                     <span>Revisar e atualizar dados do ponto</span>
@@ -29,59 +34,63 @@
         </section>
 
         <main class="form-stage">
-            <form id="edicaoForm" class="modern-form" action="/estabelecimentos/<%= estabelecimento.id %>?_method=PUT" method="POST">
+            <form id="edicaoForm" class="modern-form estabelecimento-form" action="/estabelecimentos/<%= estabelecimento.id %>?_method=PUT" method="POST">
 
                 <section class="form-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Operação</span>
-                            <h2>Produtos e observações</h2>
-                            <p>Atualize os produtos ativos no ponto e registre comentários úteis para a equipe nas próximas visitas.</p>
+                            <h2><%= singleProductMode ? 'Produto ativo e observações' : 'Produtos e observações' %></h2>
+                            <p>
+                                <%= singleProductMode
+                                    ? 'Confira a ferramenta disponível neste plano e registre comentários úteis para próximas visitas.'
+                                    : 'Atualize os produtos ativos no ponto e registre comentários úteis para próximas visitas.'
+                                %>
+                            </p>
                         </div>
                     </div>
 
                     <div class="row g-4 align-items-start">
                         <div class="col-12 col-lg-5">
-                            <label>Produtos vinculados</label>
+                            <label><%= singleProductMode ? 'Plano atual' : 'Produtos vinculados' %></label>
 
-                            <div class="modern-checkbox-grid">
-                                <% (productOptions || []).forEach((produto, index) => { %>
-                                    <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            id="produto<%= index + 1 %>"
-                                            name="produto"
-                                            value="<%= produto.value %>"
-                                            <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>
-                                        >
-                                        <span><%= produto.label %></span>
-                                    </label>
-                                <% }) %>
+                            <% if (singleProductMode) { %>
+                                <input
+                                    type="hidden"
+                                    name="produto"
+                                    value="<%= singleProduct.value %>"
+                                >
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-green" for="produto1">
-                                        <input class="form-check-input" type="checkbox" id="produto1" name="produto" value="BOLINHAS" <%= hasProduto(estabelecimento.produto, 'BOLINHAS') ? 'checked' : '' %>>
-                                        <span>Bolinhas</span>
-                                    </label>
-                                <% } %>
+                                <div class="single-product-card <%= singleProduct.className || '' %>">
+                                    <div class="single-product-card-icon">
+                                        <i class="bi bi-check2-circle"></i>
+                                    </div>
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-blue" for="produto2">
-                                        <input class="form-check-input" type="checkbox" id="produto2" name="produto" value="CONSIGNADOS" <%= hasProduto(estabelecimento.produto, 'CONSIGNADOS') ? 'checked' : '' %>>
-                                        <span>Consignados</span>
-                                    </label>
-                                <% } %>
+                                    <div class="single-product-card-content">
+                                        <span>1 ferramenta ativa</span>
+                                        <strong><%= singleProduct.label %></strong>
+                                        <small>Este é o produto disponível no plano atual. Este ponto será mantido nessa operação.</small>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="modern-checkbox-grid">
+                                    <% enabledProductOptions.forEach((produto, index) => { %>
+                                        <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                id="produto<%= index + 1 %>"
+                                                name="produto"
+                                                value="<%= produto.value %>"
+                                                <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>
+                                            >
+                                            <span><%= produto.label %></span>
+                                        </label>
+                                    <% }) %>
+                                </div>
 
-                                <% if (false) { %>
-                                    <label class="modern-checkbox modern-checkbox-violet" for="produto3">
-                                        <input class="form-check-input" type="checkbox" id="produto3" name="produto" value="PELUCIAS" <%= hasProduto(estabelecimento.produto, 'PELUCIAS') ? 'checked' : '' %>>
-                                        <span>Pelúcias</span>
-                                    </label>
-                                <% } %>
-                            </div>
-
-                            <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
+                                <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
+                            <% } %>
                         </div>
 
                         <div class="col-12 col-lg-7">
@@ -102,7 +111,7 @@
                         <div>
                             <span class="form-section-tag">Identificação</span>
                             <h2>Dados principais do estabelecimento</h2>
-                            <p>Ajuste o nome do ponto, o responsável e o telefone de contato para manter a base sempre atualizada.</p>
+                            <p>Ajuste o nome do ponto, o responsável e o telefone de contato para manter a base atualizada.</p>
                         </div>
                     </div>
 
@@ -134,10 +143,11 @@
                         <div class="col-12 col-md-6 col-lg-4 centered-field">
                             <label for="telefone_contato">Contato</label>
                             <input
-                                type="text"
+                                type="tel"
                                 class="form-control text-center"
                                 id="telefone_contato"
                                 name="telefone_contato"
+                                placeholder="(00) 00000-0000"
                                 value="<%= estabelecimento.telefone_contato || '' %>"
                                 required
                             >
@@ -149,8 +159,8 @@
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Localização</span>
-                            <h2>Endereço, referência e coordenadas</h2>
-                            <p>Revise endereço, bairro e coordenadas do ponto para manter a operação alinhada com a realidade da rua.</p>
+                            <h2>Endereço e localização do ponto</h2>
+                            <p>Revise endereço e bairro. Se estiver no local, atualize a localização usada nas rotas.</p>
                         </div>
                     </div>
 
@@ -178,8 +188,6 @@
                                 required
                             >
                         </div>
-
-                        <!-- ===== BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
 
                         <div class="col-12 d-none" data-operational-field="bolinhas-machine">
                             <div class="product-setup-block theme-green">
@@ -277,42 +285,40 @@
                             </div>
                         </div>
 
-                        <!-- ===== FIM DO BLOCO VISUAL DOS CAMPOS OPERACIONAIS POR PRODUTO ===== -->
-
                         <div class="col-12">
-                            <div class="route-coordinates-header">
+                            <div class="route-coordinates-header route-coordinates-private">
                                 <div>
-                                    <label class="mb-1" for="latitude">Coordenadas do ponto</label>
-                                    <small class="modern-note">Você pode ajustar manualmente ou capturar a posição atual se estiver no local do estabelecimento.</small>
+                                    <label class="mb-1">Localização exata do ponto</label>
+                                    <small class="modern-note">
+                                        Se estiver no estabelecimento, clique no botão para atualizar a localização usada nas rotas.
+                                    </small>
+
+                                    <small
+                                        class="coordinates-capture-status <%= estabelecimento.latitude && estabelecimento.longitude ? 'is-success' : '' %>"
+                                        id="coordinatesCaptureStatus"
+                                    >
+                                        <%= estabelecimento.latitude && estabelecimento.longitude ? 'Localização já cadastrada para este ponto.' : 'Localização ainda não cadastrada.' %>
+                                    </small>
                                 </div>
+
                                 <button type="button" class="btn-modern-secondary route-coordinate-button" id="captureCoordinatesButton">
                                     <i class="bi bi-crosshair"></i>
                                     <span>Atualizar com minha localização atual</span>
                                 </button>
                             </div>
-                        </div>
 
-                        <div class="col-12 col-md-6">
-                            <label for="latitude">Latitude</label>
                             <input
-                                type="text"
-                                class="form-control text-center"
+                                type="hidden"
                                 id="latitude"
                                 name="latitude"
                                 value="<%= estabelecimento.latitude ?? '' %>"
-                                placeholder="-3.731862"
                             >
-                        </div>
 
-                        <div class="col-12 col-md-6">
-                            <label for="longitude">Longitude</label>
                             <input
-                                type="text"
-                                class="form-control text-center"
+                                type="hidden"
                                 id="longitude"
                                 name="longitude"
                                 value="<%= estabelecimento.longitude ?? '' %>"
-                                placeholder="-38.526669"
                             >
                         </div>
                     </div>
@@ -329,6 +335,7 @@
                             <i class="bi bi-arrow-left"></i>
                             <span>Cancelar</span>
                         </a>
+
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-check2-circle"></i>
                             <span>Atualizar estabelecimento</span>
@@ -339,168 +346,15 @@
         </main>
     </div>
 
-    <style>
-        /* =========================================================
-           EDITAR ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
-           ========================================================= */
-
-        .product-setup-block {
-            border: 1px solid #d9e2f1;
-            border-radius: 20px;
-            padding: 18px 18px 16px;
-            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-            margin-top: 8px;
-            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.045);
-        }
-
-        .product-setup-header {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .product-setup-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .product-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            min-height: 32px;
-            padding: 0.25rem 0.78rem;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            border: 1px solid transparent;
-        }
-
-        .product-badge i {
-            font-size: 0.68rem;
-        }
-
-        .product-badge-green {
-            color: #166534;
-            background: rgba(34, 197, 94, 0.12);
-            border-color: rgba(34, 197, 94, 0.28);
-        }
-
-        .product-badge-violet {
-            color: #6d28d9;
-            background: rgba(124, 58, 237, 0.12);
-            border-color: rgba(124, 58, 237, 0.24);
-        }
-
-        .product-setup-header h3 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 900;
-            color: #1f2937;
-        }
-
-        .product-setup-header p {
-            margin: 0;
-            font-size: 0.86rem;
-            line-height: 1.45;
-            color: #64748b;
-        }
-
-        .product-divider {
-            width: 100%;
-            height: 1px;
-            margin: 14px 0 16px;
-            background: linear-gradient(90deg, rgba(148, 163, 184, 0.45) 0%, rgba(148, 163, 184, 0.12) 100%);
-        }
-
-        .theme-green {
-            border-color: rgba(34, 197, 94, 0.25);
-            background: linear-gradient(180deg, rgba(240, 253, 244, 0.88) 0%, rgba(255, 255, 255, 1) 100%);
-        }
-
-        .theme-green .product-setup-header h3,
-        .theme-green label {
-            color: #166534;
-        }
-
-        .theme-green .product-divider {
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.45) 0%, rgba(34, 197, 94, 0.08) 100%);
-        }
-
-        .theme-green .form-control:focus {
-            border-color: rgba(34, 197, 94, 0.62);
-            box-shadow: 0 0 0 0.18rem rgba(34, 197, 94, 0.12);
-        }
-
-        .theme-violet {
-            border-color: rgba(124, 58, 237, 0.22);
-            background: linear-gradient(180deg, rgba(245, 243, 255, 0.92) 0%, rgba(255, 255, 255, 1) 100%);
-        }
-
-        .theme-violet .product-setup-header h3,
-        .theme-violet label {
-            color: #6d28d9;
-        }
-
-        .theme-violet .product-divider {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.40) 0%, rgba(124, 58, 237, 0.08) 100%);
-        }
-
-        .theme-violet .form-control:focus {
-            border-color: rgba(124, 58, 237, 0.58);
-            box-shadow: 0 0 0 0.18rem rgba(124, 58, 237, 0.12);
-        }
-
-        .optional-label {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 6px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 0.66rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            vertical-align: middle;
-            color: #475569;
-            background: rgba(148, 163, 184, 0.16);
-        }
-
-        @media (max-width: 767.98px) {
-            .product-setup-block {
-                padding: 16px 14px 14px;
-                border-radius: 16px;
-            }
-
-            .product-setup-header h3 {
-                font-size: 1rem;
-            }
-
-            .product-setup-header p {
-                font-size: 0.9rem;
-            }
-
-            .optional-label {
-                margin-left: 0;
-                margin-top: 4px;
-                min-height: 24px;
-                font-size: 0.74rem;
-            }
-        }
-    </style>
-
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const telefoneInput = document.getElementById('telefone_contato');
             const latitudeInput = document.getElementById('latitude');
             const longitudeInput = document.getElementById('longitude');
             const captureCoordinatesButton = document.getElementById('captureCoordinatesButton');
+            const coordinatesCaptureStatus = document.getElementById('coordinatesCaptureStatus');
             const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
 
             const bolinhasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="bolinhas-machine"]'));
@@ -512,8 +366,8 @@
             const maquinaPeluciasInput = document.getElementById('maquina_pelucias');
 
             const getSelectedProducts = () => produtoInputs
-                .filter((checkbox) => checkbox.checked)
-                .map((checkbox) => checkbox.value);
+                .filter((input) => input.type === 'hidden' || input.checked)
+                .map((input) => input.value);
 
             const setGroupVisibility = (fields, shouldShow) => {
                 fields.forEach((field) => field.classList.toggle('d-none', !shouldShow));
@@ -544,8 +398,39 @@
                 }
             };
 
-            produtoInputs.forEach((input) => input.addEventListener('change', syncOperationalFields));
+            produtoInputs.forEach((input) => {
+                if (input.type !== 'hidden') {
+                    input.addEventListener('change', syncOperationalFields);
+                }
+            });
+
             syncOperationalFields();
+
+            const applyTelefoneMask = () => {
+                if (!telefoneInput) return;
+
+                const digits = telefoneInput.value.replace(/\D/g, '').slice(0, 11);
+
+                if (digits.length <= 2) {
+                    telefoneInput.value = digits;
+                    return;
+                }
+
+                if (digits.length <= 6) {
+                    telefoneInput.value = `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+                    return;
+                }
+
+                if (digits.length <= 10) {
+                    telefoneInput.value = `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+                    return;
+                }
+
+                telefoneInput.value = `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+            };
+
+            telefoneInput?.addEventListener('input', applyTelefoneMask);
+            applyTelefoneMask();
 
             captureCoordinatesButton?.addEventListener('click', () => {
                 if (!navigator.geolocation) {
@@ -555,14 +440,30 @@
 
                 captureCoordinatesButton.disabled = true;
 
+                if (coordinatesCaptureStatus) {
+                    coordinatesCaptureStatus.textContent = 'Capturando localização...';
+                    coordinatesCaptureStatus.classList.remove('is-success');
+                }
+
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         latitudeInput.value = position.coords.latitude.toFixed(6);
                         longitudeInput.value = position.coords.longitude.toFixed(6);
+
+                        if (coordinatesCaptureStatus) {
+                            coordinatesCaptureStatus.textContent = 'Localização atualizada com sucesso.';
+                            coordinatesCaptureStatus.classList.add('is-success');
+                        }
+
                         captureCoordinatesButton.disabled = false;
-                        window.AppAlerts?.success('Coordenadas atualizadas com a sua localização atual.');
+                        window.AppAlerts?.success('Localização do ponto atualizada com sucesso.');
                     },
                     () => {
+                        if (coordinatesCaptureStatus) {
+                            coordinatesCaptureStatus.textContent = 'Não foi possível atualizar a localização agora.';
+                            coordinatesCaptureStatus.classList.remove('is-success');
+                        }
+
                         captureCoordinatesButton.disabled = false;
                         window.AppAlerts?.error('Não foi possível ler sua localização atual.');
                     },
@@ -579,7 +480,7 @@
 
                 if (!isChecked) {
                     e.preventDefault();
-                    window.AppAlerts?.warning('Por favor, marque pelo menos um produto.');
+                    window.AppAlerts?.warning('Nenhum produto ativo foi encontrado para esta edição.');
                     return;
                 }
             });
