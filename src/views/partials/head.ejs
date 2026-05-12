@@ -292,7 +292,7 @@
         });
     </script>
 
-        <!-- LOADING GLOBAL VENDMASTER -->
+    <!-- LOADING GLOBAL VENDMASTER -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (window.AppLoading) return;
@@ -374,6 +374,154 @@
         });
     </script>
 
+    <!-- LOADING AUTOMATICO EM FORMULARIOS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const getFormLoadingCopy = (form) => {
+                const customTitle = form.dataset.loadingTitle;
+                const customDetail = form.dataset.loadingDetail;
+
+                if (customTitle || customDetail) {
+                    return {
+                        title: customTitle || 'Processando...',
+                        detail: customDetail || 'Aguarde um instante.'
+                    };
+                }
+
+                const action = String(form.getAttribute('action') || '').toLowerCase();
+                const method = String(form.getAttribute('method') || 'GET').toUpperCase();
+
+                if (action.includes('/login')) {
+                    return {
+                        title: 'Entrando...',
+                        detail: 'Validando seus dados de acesso.'
+                    };
+                }
+
+                if (action.includes('/logout')) {
+                    return {
+                        title: 'Saindo...',
+                        detail: 'Encerrando sua sessão com segurança.'
+                    };
+                }
+
+                if (action.includes('/register')) {
+                    return {
+                        title: 'Criando sua conta...',
+                        detail: 'Preparando seu acesso ao VendMaster.'
+                    };
+                }
+
+                if (action.includes('/recuperar-senha') || action.includes('/forgot-password')) {
+                    return {
+                        title: 'Enviando solicitação...',
+                        detail: 'Verificando os dados para recuperação de senha.'
+                    };
+                }
+
+                if (action.includes('/redefinir-senha') || action.includes('/reset-password')) {
+                    return {
+                        title: 'Redefinindo senha...',
+                        detail: 'Atualizando sua nova senha com segurança.'
+                    };
+                }
+
+                if (action.includes('/estabelecimentos')) {
+                    return {
+                        title: 'Salvando estabelecimento...',
+                        detail: 'Registrando os dados do ponto.'
+                    };
+                }
+
+                if (action.includes('/sangrias')) {
+                    return {
+                        title: 'Salvando sangria...',
+                        detail: 'Registrando a visita e calculando os dados.'
+                    };
+                }
+
+                if (action.includes('/lancamentos') && action.includes('/pagar')) {
+                    return {
+                        title: 'Marcando como pago...',
+                        detail: 'Atualizando o vencimento financeiro.'
+                    };
+                }
+
+                if (action.includes('/lancamentos')) {
+                    return {
+                        title: 'Salvando lançamento...',
+                        detail: 'Atualizando os dados financeiros.'
+                    };
+                }
+
+                if (action.includes('/assinatura/produtos')) {
+                    return {
+                        title: 'Salvando ferramentas...',
+                        detail: 'Atualizando os produtos da sua assinatura.'
+                    };
+                }
+
+                if (action.includes('/comunidade')) {
+                    return {
+                        title: 'Enviando publicação...',
+                        detail: 'Salvando o conteúdo na Comunidade VendMaster.'
+                    };
+                }
+
+                if (action.includes('/admin')) {
+                    return {
+                        title: 'Processando ação...',
+                        detail: 'Atualizando os dados administrativos.'
+                    };
+                }
+
+                if (method === 'GET') {
+                    return {
+                        title: 'Carregando...',
+                        detail: 'Buscando as informações solicitadas.'
+                    };
+                }
+
+                return {
+                    title: 'Salvando...',
+                    detail: 'Aguarde enquanto processamos sua solicitação.'
+                };
+            };
+
+            document.querySelectorAll('form').forEach((form) => {
+                if (form.dataset.loadingBound === 'true') return;
+                if (form.dataset.noGlobalLoading === 'true') return;
+
+                form.dataset.loadingBound = 'true';
+
+                form.addEventListener('submit', () => {
+                    if (form.dataset.noGlobalLoading === 'true') return;
+
+                    const submitter = document.activeElement;
+
+                    if (
+                        submitter &&
+                        submitter.matches('button, input[type="submit"]') &&
+                        submitter.dataset.noGlobalLoading === 'true'
+                    ) {
+                        return;
+                    }
+
+                    window.setTimeout(() => {
+                        const hasInvalidField = form.querySelector(':invalid');
+
+                        if (hasInvalidField) {
+                            return;
+                        }
+
+                        const copy = getFormLoadingCopy(form);
+                        window.AppLoading?.show(copy.title, copy.detail);
+                    }, 0);
+                });
+            });
+        });
+    </script>
+
     <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -390,27 +538,27 @@
 
             sessionStorage.setItem(storageKey, 'shown');
 
-                const getReciboFileName = (url) => {
-                    try {
-                        const parsedUrl = new URL(url, window.location.origin);
-                        const parts = parsedUrl.pathname.split('/').filter(Boolean);
-                        const reciboId = parts[parts.length - 1] || 'recibo';
+            const getReciboFileName = (url) => {
+                try {
+                    const parsedUrl = new URL(url, window.location.origin);
+                    const parts = parsedUrl.pathname.split('/').filter(Boolean);
+                    const reciboId = parts[parts.length - 1] || 'recibo';
 
-                        if (parsedUrl.pathname.includes('/consignados/')) {
-                            return `recibo-consignados-${reciboId}.pdf`;
-                        }
+                    if (parsedUrl.pathname.includes('/consignados/')) {
+                        return `recibo-consignados-${reciboId}.pdf`;
+                    }
 
-                        if (parsedUrl.pathname.includes('/pelucias/')) {
-                            return `recibo-pelucias-${reciboId}.pdf`;
-                        }
+                    if (parsedUrl.pathname.includes('/pelucias/')) {
+                        return `recibo-pelucias-${reciboId}.pdf`;
+                    }
 
-                        if (parsedUrl.pathname.includes('/bolinhas/')) {
-                            return `recibo-bolinhas-${reciboId}.pdf`;
-                        }
+                    if (parsedUrl.pathname.includes('/bolinhas/')) {
+                        return `recibo-bolinhas-${reciboId}.pdf`;
+                    }
 
-                        return `recibo-vendmaster-${reciboId}.pdf`;
-                    } catch (error) {
-                        return 'recibo-vendmaster.pdf';
+                    return `recibo-vendmaster-${reciboId}.pdf`;
+                } catch (error) {
+                    return 'recibo-vendmaster.pdf';
                 }
             };
 
@@ -450,12 +598,21 @@
 
                 if (isMobile) {
                     try {
+                        window.AppLoading?.show(
+                            'Preparando recibo...',
+                            'Gerando o PDF para abrir ou compartilhar.'
+                        );
+
                         const shared = await shareReciboPdf(url);
+
+                        window.AppLoading?.hide();
 
                         if (shared) {
                             return;
                         }
                     } catch (error) {
+                        window.AppLoading?.hide();
+
                         if (error?.name === 'AbortError') {
                             return;
                         }
@@ -464,11 +621,29 @@
                         window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
                     }
 
+                    window.AppLoading?.show(
+                        'Abrindo recibo...',
+                        'Carregando o PDF na tela.'
+                    );
+
                     window.location.href = url;
                     return;
                 }
 
-                window.open(url, '_blank', 'noopener,noreferrer');
+                window.AppLoading?.show(
+                    'Abrindo recibo...',
+                    'Preparando o PDF em uma nova aba.'
+                );
+
+                const openedWindow = window.open(url, '_blank', 'noopener,noreferrer');
+
+                window.setTimeout(() => {
+                    window.AppLoading?.hide();
+
+                    if (!openedWindow) {
+                        window.AppAlerts?.warning('Não foi possível abrir o recibo em uma nova aba. Verifique se o navegador bloqueou janelas pop-up do VendMaster.');
+                    }
+                }, 600);
             };
 
             const abrirRecibo = async () => {
