@@ -300,11 +300,24 @@
 
             if (!reciboUrl) return;
 
+            if (window.VendMasterPageHandlesRecibo) return;
+
             const storageKey = `vendmaster-recibo-modal:${reciboUrl}`;
 
             if (sessionStorage.getItem(storageKey)) return;
 
             sessionStorage.setItem(storageKey, 'shown');
+
+            const openReciboUrl = (url) => {
+                const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+
+                if (isMobile) {
+                    window.location.href = url;
+                    return;
+                }
+
+                window.open(url, '_blank', 'noopener,noreferrer');
+            };
 
             const abrirRecibo = async () => {
                 if (window.AppAlerts?.confirm) {
@@ -324,7 +337,7 @@
             const confirmed = await abrirRecibo();
 
             if (confirmed) {
-                window.location.href = reciboUrl;
+                openReciboUrl(reciboUrl);
             }
         });
     </script>

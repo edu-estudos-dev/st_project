@@ -4,6 +4,11 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+
+    <script>
+        window.VendMasterPageHandlesRecibo = true;
+    </script>
+
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <div class="page-spacer"></div>
 
@@ -88,21 +93,76 @@
             </section>
         </main>
     </div>
+
     <script>
-        function saveSelectValue(selectElement) { localStorage.setItem(selectElement.id, selectElement.value); }
-        function loadSelectValue(selectElement) { const savedValue = localStorage.getItem(selectElement.id); if (savedValue) { selectElement.value = savedValue; updateSelectColor(selectElement); } }
-        function updateSelectColor(selectElement) { selectElement.classList.remove('select-sim', 'select-nao'); if (selectElement.value === 'SIM') selectElement.classList.add('select-sim'); else if (selectElement.value === 'NAO') selectElement.classList.add('select-nao'); }
-        document.querySelectorAll('.form-select.color-select').forEach(select => { loadSelectValue(select); select.addEventListener('change', () => { updateSelectColor(select); saveSelectValue(select); }); });
+        function saveSelectValue(selectElement) {
+            localStorage.setItem(selectElement.id, selectElement.value);
+        }
+
+        function loadSelectValue(selectElement) {
+            const savedValue = localStorage.getItem(selectElement.id);
+
+            if (savedValue) {
+                selectElement.value = savedValue;
+                updateSelectColor(selectElement);
+            }
+        }
+
+        function updateSelectColor(selectElement) {
+            selectElement.classList.remove('select-sim', 'select-nao');
+
+            if (selectElement.value === 'SIM') {
+                selectElement.classList.add('select-sim');
+            } else if (selectElement.value === 'NAO') {
+                selectElement.classList.add('select-nao');
+            }
+        }
+
+        document.querySelectorAll('.form-select.color-select').forEach(select => {
+            loadSelectValue(select);
+
+            select.addEventListener('change', () => {
+                updateSelectColor(select);
+                saveSelectValue(select);
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', async function() {
+            const openReciboUrl = (url) => {
+                const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+
+                if (isMobile) {
+                    window.location.href = url;
+                    return;
+                }
+
+                window.open(url, '_blank', 'noopener,noreferrer');
+            };
+
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async function() {
                     const idSangria = this.getAttribute('data-id');
-                    const confirmed = await window.AppAlerts?.confirm({ title: 'Excluir sangria', text: 'Tem certeza que deseja excluir este registro de sangria?', confirmButtonText: 'Excluir', cancelButtonText: 'Cancelar' });
+
+                    const confirmed = await window.AppAlerts?.confirm({
+                        title: 'Excluir sangria',
+                        text: 'Tem certeza que deseja excluir este registro de sangria?',
+                        confirmButtonText: 'Excluir',
+                        cancelButtonText: 'Cancelar'
+                    });
+
                     if (!confirmed) return;
+
                     try {
-                        const response = await fetch(`/pelucias/sangrias/delete/${idSangria}`, { method: 'POST' });
+                        const response = await fetch(`/pelucias/sangrias/delete/${idSangria}`, {
+                            method: 'POST'
+                        });
+
                         const data = await response.json();
-                        if (!response.ok || !data.success) throw new Error(data.message || 'Erro ao excluir sangria');
+
+                        if (!response.ok || !data.success) {
+                            throw new Error(data.message || 'Erro ao excluir sangria');
+                        }
+
                         await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
                         window.history.replaceState({}, document.title, window.location.pathname);
                         window.location.reload();
@@ -111,6 +171,7 @@
                     }
                 });
             });
+
             const urlParams = new URLSearchParams(window.location.search);
             const successMessage = urlParams.get('success');
             const errorMessage = urlParams.get('error');
@@ -122,6 +183,20 @@
 
             if (errorMessage) {
                 await window.AppAlerts?.error(errorMessage);
+            }
+
+            if (reciboUrl) {
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Gerar recibo em PDF?',
+                    text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
+                    confirmButtonText: 'Gerar recibo',
+                    cancelButtonText: 'Agora não'
+                });
+
+                if (confirmed) {
+                    openReciboUrl(reciboUrl);
+                    return;
+                }
             }
 
             if (successMessage || errorMessage || reciboUrl) {
