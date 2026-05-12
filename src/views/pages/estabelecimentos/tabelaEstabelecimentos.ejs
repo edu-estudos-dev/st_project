@@ -19,6 +19,25 @@
     <% const operationalColumnsClass = operationalColumnCount === 4 ? 'has-4-operational-cols' : operationalColumnCount === 2 ? 'has-2-operational-cols' : 'has-no-operational-cols'; %>
     <% const shouldPrefixOperationalLabel = activeOperationalProducts > 1; %>
 
+    <% const formatPhone = (value) => {
+        const rawValue = String(value || '').trim();
+        const digits = rawValue.replace(/\D/g, '');
+
+        if (!digits) {
+            return '';
+        }
+
+        if (digits.length === 11) {
+            return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+        }
+
+        if (digits.length === 10) {
+            return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+        }
+
+        return rawValue;
+    }; %>
+
     <div class="page-spacer"></div>
 
     <div class="list-shell">
@@ -150,7 +169,7 @@
                                     <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
 
                                     <tr>
-                                        <td class="est-col-name">
+                                        <td class="est-col-name" data-label="Estabelecimento">
                                             <div class="table-title-cell estabelecimento-title">
                                                 <%= estabelecimento.estabelecimento %>
                                             </div>
@@ -161,18 +180,18 @@
                                                 <% } %>
 
                                                 <% if (estabelecimento.telefone_contato) { %>
-                                                    <span><i class="bi bi-telephone"></i> <%= estabelecimento.telefone_contato %></span>
+                                                    <span><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
                                                 <% } %>
                                             </div>
                                         </td>
 
-                                        <td class="mode-all est-col-product">
+                                        <td class="mode-all est-col-product" data-label="Produto">
                                             <span class="table-badge table-badge-blue estabelecimento-product-badge">
                                                 <%= estabelecimento.produtoFormatado || estabelecimento.produto %>
                                             </span>
                                         </td>
 
-                                        <td class="mode-commercial est-col-address">
+                                        <td class="mode-commercial est-col-address" data-label="Endereço">
                                             <% if (enderecoCompleto) { %>
                                                 <button
                                                     type="button"
@@ -196,7 +215,10 @@
                                         </td>
 
                                         <% if (showBolinhasColumn) { %>
-                                            <td class="mode-operational est-col-operation est-col-operation-key">
+                                            <td
+                                                class="mode-operational est-col-operation est-col-operation-key"
+                                                data-label="<%= shouldPrefixOperationalLabel ? 'Chave bolinhas' : 'Chave' %>"
+                                            >
                                                 <% if (hasBolinhas) { %>
                                                     <span class="table-operational-pill table-operational-green <%= chaveBolinhas ? '' : 'is-empty' %>">
                                                         <%= chaveBolinhas || '-' %>
@@ -206,7 +228,10 @@
                                                 <% } %>
                                             </td>
 
-                                            <td class="mode-operational est-col-operation est-col-operation-machine">
+                                            <td
+                                                class="mode-operational est-col-operation est-col-operation-machine"
+                                                data-label="<%= shouldPrefixOperationalLabel ? 'Máquina bolinhas' : 'Máquina' %>"
+                                            >
                                                 <% if (hasBolinhas) { %>
                                                     <span class="table-operational-pill table-operational-green <%= maquinaBolinhas ? '' : 'is-empty' %>">
                                                         <%= maquinaBolinhas || '-' %>
@@ -218,7 +243,10 @@
                                         <% } %>
 
                                         <% if (showPeluciasColumn) { %>
-                                            <td class="mode-operational est-col-operation est-col-operation-key">
+                                            <td
+                                                class="mode-operational est-col-operation est-col-operation-key"
+                                                data-label="<%= shouldPrefixOperationalLabel ? 'Chave pelúcias' : 'Chave' %>"
+                                            >
                                                 <% if (hasPelucias) { %>
                                                     <span class="table-operational-pill table-operational-violet <%= chavePelucias ? '' : 'is-empty' %>">
                                                         <%= chavePelucias || '-' %>
@@ -228,7 +256,10 @@
                                                 <% } %>
                                             </td>
 
-                                            <td class="mode-operational est-col-operation est-col-operation-machine">
+                                            <td
+                                                class="mode-operational est-col-operation est-col-operation-machine"
+                                                data-label="<%= shouldPrefixOperationalLabel ? 'Máquina pelúcias' : 'Máquina' %>"
+                                            >
                                                 <% if (hasPelucias) { %>
                                                     <span class="table-operational-pill table-operational-violet <%= maquinaPelucias ? '' : 'is-empty' %>">
                                                         <%= maquinaPelucias || '-' %>
@@ -239,7 +270,7 @@
                                             </td>
                                         <% } %>
 
-                                        <td class="table-actions-cell est-actions-sticky">
+                                        <td class="table-actions-cell est-actions-sticky" data-label="Ações">
                                             <div class="table-actions estabelecimento-actions">
                                                 <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">
                                                     <i class="bi bi-eye"></i>

@@ -7117,6 +7117,188 @@ thead .est-actions-sticky {
     font-size: 0.5rem !important;
   }
 
+  .estabelecimentos-table-wrap {
+    overflow: visible;
+  }
+
+  .estabelecimentos-table-scroll {
+    overflow-x: visible;
+    border-radius: 0;
+  }
+
+  .estabelecimentos-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    border-spacing: 0;
+  }
+
+  .estabelecimentos-table thead {
+    display: none;
+  }
+
+  .estabelecimentos-table tbody {
+    display: grid;
+    gap: 0.76rem;
+    width: 100%;
+  }
+
+  .estabelecimentos-table tr {
+    display: grid;
+    gap: 0;
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid rgba(203, 213, 225, 0.72);
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 8% 8%, rgba(37, 99, 235, 0.045), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94));
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+  }
+
+  .estabelecimentos-table td {
+    display: grid;
+    grid-template-columns: minmax(82px, 0.36fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 0.72rem;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0.58rem 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.88) !important;
+    text-align: left !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .estabelecimentos-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.64rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .estabelecimentos-table td.est-col-name {
+    grid-template-columns: 1fr;
+    gap: 0.34rem;
+    padding-top: 0.12rem !important;
+  }
+
+  .estabelecimentos-table td.est-col-name::before {
+    display: none;
+  }
+
+  .estabelecimentos-table td.est-col-name .table-title-cell {
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 900;
+    line-height: 1.18;
+    text-align: left;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .estabelecimentos-table .est-mobile-meta {
+    gap: 0.28rem 0.62rem;
+    margin-top: 0;
+    font-size: 0.68rem;
+    line-height: 1.2;
+  }
+
+  .estabelecimentos-table .est-mobile-meta span {
+    min-width: 0;
+  }
+
+  .estabelecimentos-table td.est-col-product {
+    align-items: start;
+  }
+
+  .estabelecimentos-table td.est-col-product::before {
+    padding-top: 0.12rem;
+  }
+
+  .estabelecimento-product-badge {
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.32rem 0.58rem;
+    font-size: 0.66rem;
+    line-height: 1.2;
+    text-align: left;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .estabelecimento-address-link {
+    gap: 0.34rem;
+    font-size: 0.76rem;
+    line-height: 1.28;
+  }
+
+  .estabelecimento-address-link strong {
+    font-size: 0.76rem;
+    line-height: 1.28;
+  }
+
+  .estabelecimento-address-link small {
+    font-size: 0.62rem;
+  }
+
+  .est-col-operation,
+  .est-col-operation-key,
+  .est-col-operation-machine {
+    text-align: left !important;
+  }
+
+  .table-operational-pill {
+    justify-self: start;
+    min-width: 0;
+    min-height: 24px;
+    max-width: 100%;
+    padding: 0.22rem 0.52rem;
+    font-size: 0.66rem;
+    line-height: 1.15;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  .estabelecimentos-table td.est-actions-sticky {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding-bottom: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  .estabelecimentos-table td.est-actions-sticky::before {
+    display: block;
+  }
+
+  .estabelecimentos-table td.est-actions-sticky .estabelecimento-actions {
+    justify-content: flex-start;
+  }
+
+  .estabelecimento-actions {
+    gap: 0.42rem;
+  }
+
+  .estabelecimento-actions .table-btn {
+    width: 38px;
+    min-width: 38px;
+    min-height: 36px;
+    padding: 0.42rem;
+    border-radius: 12px;
+  }
+
+  .estabelecimento-actions .table-btn i {
+    font-size: 0.9rem;
+  }
+
   .form-actions-bar,
   .estabelecimento-view-panel .view-actions {
     gap: 0.78rem;
