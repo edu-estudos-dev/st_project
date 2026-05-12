@@ -21,6 +21,8 @@
    14 - Relatorios
    15 - Google Maps nas rotas
    16 - CADASTRO DE ESTABELECIMENTO - BLOCOS VISUAIS POR PRODUTO
+   17 - Tipografia padrao do SaaS
+   18 - Spinner/loading global
    ========================================================================== */
 
 /* ==========================================================================
@@ -4701,7 +4703,6 @@ body.route-neighborhood-modal-open {
   color: #6d28d9;
 }
 
-
 .table-section-title {
   margin-bottom: 0.8rem;
   font-size: 1.15rem;
@@ -5723,7 +5724,6 @@ footer:not(.site-footer) hr {
   margin-bottom: 1.2rem;
 }
 
-
 /* ==========================================================================
    RESPONSIVE ORGANIZATION
    ========================================================================== */
@@ -5954,8 +5954,16 @@ footer:not(.site-footer) hr {
   border-radius: 18px;
   border: 1px solid rgba(124, 58, 237, 0.22);
   background:
-    radial-gradient(circle at 12% 10%, rgba(124, 58, 237, 0.13), transparent 30%),
-    linear-gradient(180deg, rgba(245, 243, 255, 0.96) 0%, rgba(255, 255, 255, 1) 100%);
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(124, 58, 237, 0.13),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(245, 243, 255, 0.96) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.055);
   text-align: center;
 }
@@ -6010,8 +6018,16 @@ footer:not(.site-footer) hr {
 .single-product-card.modern-checkbox-green {
   border-color: rgba(34, 197, 94, 0.24);
   background:
-    radial-gradient(circle at 12% 10%, rgba(34, 197, 94, 0.13), transparent 30%),
-    linear-gradient(180deg, rgba(240, 253, 244, 0.96) 0%, rgba(255, 255, 255, 1) 100%);
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(34, 197, 94, 0.13),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(240, 253, 244, 0.96) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
 }
 
 .single-product-card.modern-checkbox-green .single-product-card-icon {
@@ -6027,8 +6043,16 @@ footer:not(.site-footer) hr {
 .single-product-card.modern-checkbox-blue {
   border-color: rgba(37, 99, 235, 0.22);
   background:
-    radial-gradient(circle at 12% 10%, rgba(37, 99, 235, 0.13), transparent 30%),
-    linear-gradient(180deg, rgba(239, 246, 255, 0.96) 0%, rgba(255, 255, 255, 1) 100%);
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(37, 99, 235, 0.13),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(239, 246, 255, 0.96) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
 }
 
 .single-product-card.modern-checkbox-blue .single-product-card-icon {
@@ -6044,8 +6068,16 @@ footer:not(.site-footer) hr {
 .single-product-card.modern-checkbox-violet {
   border-color: rgba(124, 58, 237, 0.22);
   background:
-    radial-gradient(circle at 12% 10%, rgba(124, 58, 237, 0.13), transparent 30%),
-    linear-gradient(180deg, rgba(245, 243, 255, 0.96) 0%, rgba(255, 255, 255, 1) 100%);
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(124, 58, 237, 0.13),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(245, 243, 255, 0.96) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
 }
 
 .single-product-card.modern-checkbox-violet .single-product-card-icon {
@@ -6110,12 +6142,18 @@ footer:not(.site-footer) hr {
   font-size: 1.08rem;
 }
 
-.form-shell-modern .modern-form.estabelecimento-form .single-product-card-content strong,
+.form-shell-modern
+  .modern-form.estabelecimento-form
+  .single-product-card-content
+  strong,
 .form-shell-modern .modern-form .single-product-card-content strong {
   font-size: 0.98rem;
 }
 
-.form-shell-modern .modern-form.estabelecimento-form .single-product-card-content small,
+.form-shell-modern
+  .modern-form.estabelecimento-form
+  .single-product-card-content
+  small,
 .form-shell-modern .modern-form .single-product-card-content small {
   max-width: 32rem;
 }
@@ -6374,7 +6412,11 @@ footer:not(.site-footer) hr {
   border: 1px solid rgba(148, 163, 184, 0.2);
   background:
     radial-gradient(circle at 6% 12%, rgba(37, 99, 235, 0.06), transparent 32%),
-    linear-gradient(180deg, rgba(248, 250, 252, 0.78), rgba(255, 255, 255, 0.96));
+    linear-gradient(
+      180deg,
+      rgba(248, 250, 252, 0.78),
+      rgba(255, 255, 255, 0.96)
+    );
 }
 
 .route-coordinates-private > div {
@@ -6788,7 +6830,11 @@ thead .est-actions-sticky {
 .view-card-product-violet {
   border-color: rgba(124, 58, 237, 0.24);
   background:
-    radial-gradient(circle at 10% 12%, rgba(124, 58, 237, 0.1), transparent 34%),
+    radial-gradient(
+      circle at 10% 12%,
+      rgba(124, 58, 237, 0.1),
+      transparent 34%
+    ),
     linear-gradient(180deg, rgba(245, 243, 255, 0.84), #ffffff);
 }
 
@@ -6905,7 +6951,9 @@ thead .est-actions-sticky {
     border-radius: 15px;
   }
 
-  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-icon,
+  .form-shell-modern
+    .modern-form.estabelecimento-form
+    .single-product-card-icon,
   .form-shell-modern .modern-form .single-product-card-icon {
     width: 36px;
     height: 36px;
@@ -6919,7 +6967,10 @@ thead .est-actions-sticky {
   }
 
   .single-product-card-content strong,
-  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-content strong,
+  .form-shell-modern
+    .modern-form.estabelecimento-form
+    .single-product-card-content
+    strong,
   .form-shell-modern .modern-form .single-product-card-content strong {
     font-size: 0.9rem;
   }
@@ -7181,8 +7232,16 @@ thead .est-actions-sticky {
     border: 1px solid rgba(203, 213, 225, 0.72);
     border-radius: 17px;
     background:
-      radial-gradient(circle at 8% 8%, rgba(37, 99, 235, 0.045), transparent 34%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.95));
+      radial-gradient(
+        circle at 8% 8%,
+        rgba(37, 99, 235, 0.045),
+        transparent 34%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.99),
+        rgba(248, 250, 252, 0.95)
+      );
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.065);
   }
 
@@ -7495,35 +7554,43 @@ thead .est-actions-sticky {
     width: 25%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-name {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-name {
     width: 29%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-product {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-product {
     width: 16%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-operation {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-operation {
     width: 15%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-actions-sticky {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-actions-sticky {
     width: 25%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-name {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-name {
     width: 21%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-product {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-product {
     width: 11%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-operation {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-operation {
     width: 10.75%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-actions-sticky {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-actions-sticky {
     width: 25%;
   }
 
@@ -7656,35 +7723,43 @@ thead .est-actions-sticky {
     width: 25%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-name {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-name {
     width: 29%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-product {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-product {
     width: 16%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-col-operation {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-col-operation {
     width: 15%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-2-operational-cols .est-actions-sticky {
+  .estabelecimentos-table.is-operational-view.has-2-operational-cols
+    .est-actions-sticky {
     width: 25%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-name {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-name {
     width: 21%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-product {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-product {
     width: 11%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-col-operation {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-col-operation {
     width: 10.75%;
   }
 
-  .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-actions-sticky {
+  .estabelecimentos-table.is-operational-view.has-4-operational-cols
+    .est-actions-sticky {
     width: 25%;
   }
 }
@@ -8504,5 +8579,173 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
     max-width: calc(100vw - 1.3rem) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   18 - SPINNER / LOADING GLOBAL
+   ==========================================================================
+
+   Overlay global reutilizavel para acoes demoradas do VendMaster:
+   salvar sangria, gerar recibo PDF, compartilhar recibo, excluir registro,
+   carregar dados e outras operacoes que precisam de retorno visual claro.
+   ========================================================================== */
+
+html.vm-loading-lock,
+html.vm-loading-lock body {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+.vm-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(37, 99, 235, 0.16),
+      transparent 34%
+    ),
+    rgba(15, 23, 42, 0.58);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease;
+}
+
+.vm-loading-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.vm-loading-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.72rem;
+  width: min(360px, 100%);
+  padding: 1.2rem 1.15rem;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 18% 10%,
+      rgba(55, 166, 71, 0.12),
+      transparent 34%
+    ),
+    radial-gradient(circle at 90% 8%, rgba(37, 99, 235, 0.16), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.34);
+  text-align: center;
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.18s ease;
+}
+
+.vm-loading-overlay.is-visible .vm-loading-card {
+  transform: translateY(0) scale(1);
+}
+
+.vm-loading-spinner {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 4px solid rgba(37, 99, 235, 0.14);
+  border-top-color: #2563eb;
+  border-right-color: #37a647;
+  animation: vm-loading-spin 0.78s linear infinite;
+}
+
+.vm-loading-title {
+  display: block;
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.02rem;
+  font-weight: 900;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+}
+
+.vm-loading-detail {
+  display: block;
+  max-width: 28ch;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 650;
+  line-height: 1.42;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-card {
+  width: min(300px, 100%);
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-spinner {
+  width: 38px;
+  height: 38px;
+  border-width: 3px;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-title {
+  font-size: 0.96rem;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-detail {
+  font-size: 0.82rem;
+}
+
+@keyframes vm-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .vm-loading-overlay {
+    padding: 1rem;
+    align-items: center;
+  }
+
+  .vm-loading-card {
+    width: min(320px, 100%);
+    padding: 1.05rem 0.95rem;
+    border-radius: 22px;
+    gap: 0.62rem;
+  }
+
+  .vm-loading-spinner {
+    width: 42px;
+    height: 42px;
+    border-width: 3px;
+  }
+
+  .vm-loading-title {
+    font-size: 0.98rem;
+    line-height: 1.16;
+  }
+
+  .vm-loading-detail {
+    max-width: 26ch;
+    font-size: 0.84rem;
+    line-height: 1.36;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vm-loading-overlay,
+  .vm-loading-card {
+    transition: none;
+  }
+
+  .vm-loading-spinner {
+    animation-duration: 1.4s;
   }
 }

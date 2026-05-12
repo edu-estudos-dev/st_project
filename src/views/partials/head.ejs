@@ -292,6 +292,88 @@
         });
     </script>
 
+        <!-- LOADING GLOBAL VENDMASTER -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.AppLoading) return;
+
+            const ensureLoadingElement = () => {
+                let overlay = document.querySelector('[data-vm-loading-overlay]');
+
+                if (overlay) {
+                    return overlay;
+                }
+
+                overlay = document.createElement('div');
+                overlay.className = 'vm-loading-overlay';
+                overlay.setAttribute('data-vm-loading-overlay', '');
+                overlay.setAttribute('aria-hidden', 'true');
+                overlay.setAttribute('data-vm-loading-compact', 'false');
+
+                overlay.innerHTML = `
+                    <div class="vm-loading-card" role="status" aria-live="polite" aria-atomic="true">
+                        <div class="vm-loading-spinner" aria-hidden="true"></div>
+                        <strong class="vm-loading-title" data-vm-loading-title>Carregando...</strong>
+                        <span class="vm-loading-detail" data-vm-loading-detail>Aguarde um instante.</span>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+
+                return overlay;
+            };
+
+            window.AppLoading = {
+                show(title = 'Carregando...', detail = 'Aguarde um instante.', options = {}) {
+                    const overlay = ensureLoadingElement();
+                    const titleElement = overlay.querySelector('[data-vm-loading-title]');
+                    const detailElement = overlay.querySelector('[data-vm-loading-detail]');
+                    const compact = Boolean(options.compact);
+
+                    if (titleElement) {
+                        titleElement.textContent = title;
+                    }
+
+                    if (detailElement) {
+                        detailElement.textContent = detail;
+                    }
+
+                    overlay.setAttribute('data-vm-loading-compact', compact ? 'true' : 'false');
+                    overlay.classList.add('is-visible');
+                    overlay.setAttribute('aria-hidden', 'false');
+
+                    document.documentElement.classList.add('vm-loading-lock');
+                },
+
+                hide() {
+                    const overlay = document.querySelector('[data-vm-loading-overlay]');
+
+                    if (!overlay) {
+                        return;
+                    }
+
+                    overlay.classList.remove('is-visible');
+                    overlay.setAttribute('aria-hidden', 'true');
+                    document.documentElement.classList.remove('vm-loading-lock');
+                },
+
+                update(title = 'Carregando...', detail = 'Aguarde um instante.') {
+                    const overlay = ensureLoadingElement();
+                    const titleElement = overlay.querySelector('[data-vm-loading-title]');
+                    const detailElement = overlay.querySelector('[data-vm-loading-detail]');
+
+                    if (titleElement) {
+                        titleElement.textContent = title;
+                    }
+
+                    if (detailElement) {
+                        detailElement.textContent = detail;
+                    }
+                }
+            };
+        });
+    </script>
+
     <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
