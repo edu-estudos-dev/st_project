@@ -525,10 +525,11 @@
         <!-- LOADING AUTOMATICO EM NAVEGACAO INTERNA -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const shouldIgnoreNavigationLoading = (link) => {
+                        const shouldIgnoreNavigationLoading = (link) => {
                 if (!link) return true;
 
                 const href = link.getAttribute('href');
+                const linkText = String(link.textContent || '').trim().toLowerCase();
 
                 if (!href) return true;
                 if (href === '#') return true;
@@ -542,9 +543,29 @@
                 if (link.dataset.noGlobalLoading === 'true') return true;
                 if (link.target && link.target !== '_self') return true;
 
+                if (
+                    linkText === 'voltar' ||
+                    linkText.includes('voltar') ||
+                    linkText === 'cancelar' ||
+                    linkText.includes('cancelar') ||
+                    linkText.includes('agora não') ||
+                    linkText.includes('fechar')
+                ) {
+                    return true;
+                }
+
+                if (
+                    link.closest('.breadcrumb') ||
+                    link.closest('.app-breadcrumb') ||
+                    link.closest('footer') ||
+                    link.closest('.site-footer')
+                ) {
+                    return true;
+                }
+
                 return false;
             };
-
+            
             const isSamePageNavigation = (url) => {
                 return (
                     url.origin === window.location.origin &&
