@@ -324,7 +324,7 @@
             const confirmed = await abrirRecibo();
 
             if (confirmed) {
-                window.open(reciboUrl, '_blank', 'noopener,noreferrer');
+                window.location.href = reciboUrl;
             }
         });
     </script>

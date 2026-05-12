@@ -129,19 +129,6 @@
                 await window.AppAlerts?.error(errorMessage);
             }
 
-            if (reciboUrl) {
-                const confirmed = await window.AppAlerts?.confirm({
-                    title: 'Gerar recibo em PDF?',
-                    text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
-                    confirmButtonText: 'Gerar recibo',
-                    cancelButtonText: 'Agora não'
-                });
-
-                if (confirmed) {
-                    window.open(reciboUrl, '_blank', 'noopener,noreferrer');
-                }
-            }
-
             if (successMessage || errorMessage || reciboUrl) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
