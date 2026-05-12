@@ -1,6 +1,15 @@
 import connection from '../db_config/connection.js';
 
 class ConsignadosModel {
+  ensureEstabelecimentoInitialColumns = async () => {
+    await connection.query(`
+      ALTER TABLE estabelecimentos
+      ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+      ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+      ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
+    `);
+  };
+
   createSangria = async sangria => {
     const {
       assinante_id,
@@ -83,18 +92,21 @@ class ConsignadosModel {
   };
 
   getEstabelecimentos = async (assinanteId) => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
       SELECT *
       FROM estabelecimentos
       WHERE assinante_id = $1
         AND UPPER(produto) LIKE '%CONSIGNADOS%'
         AND status = 'ativo'
+      ORDER BY estabelecimento ASC
     `;
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
   };
 
-    getSangriaById = async (id, assinanteId) => {
+  getSangriaById = async (id, assinanteId) => {
     const query = `
       SELECT
         s.*,
@@ -209,14 +221,60 @@ class ConsignadosModel {
   };
 
   getUltimaSangria = async (estabelecimentoId, assinanteId) => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
+      WITH ultima_sangria AS (
+        SELECT
+          sc.id,
+          sc.assinante_id,
+          sc.estabelecimento_id,
+          sc.data_sangria,
+          sc.qtde_deixada,
+          sc.abastecido,
+          sc.estoque,
+          sc.qtde_vendido,
+          sc.valor_apurado,
+          sc.tipo_pagamento,
+          sc.observacoes,
+          false AS origem_cadastro_inicial
+        FROM sangrias_consignados sc
+        WHERE sc.estabelecimento_id = $1
+          AND sc.assinante_id = $2
+        ORDER BY sc.data_sangria DESC, sc.id DESC
+        LIMIT 1
+      ),
+      cadastro_inicial AS (
+        SELECT
+          NULL::integer AS id,
+          e.assinante_id,
+          e.id AS estabelecimento_id,
+          NULL::date AS data_sangria,
+          e.consignado_quantidade_inicial AS qtde_deixada,
+          e.consignado_quantidade_inicial AS abastecido,
+          0 AS estoque,
+          0 AS qtde_vendido,
+          0::numeric AS valor_apurado,
+          'especie'::text AS tipo_pagamento,
+          '[ABERTURA INICIAL] Ponto iniciado pela edição do estabelecimento.'::text AS observacoes,
+          true AS origem_cadastro_inicial
+        FROM estabelecimentos e
+        WHERE e.id = $1
+          AND e.assinante_id = $2
+          AND e.status = 'ativo'
+          AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
+          AND e.consignado_quantidade_inicial IS NOT NULL
+          AND NOT EXISTS (SELECT 1 FROM ultima_sangria)
+      )
       SELECT *
-      FROM sangrias_consignados
-      WHERE estabelecimento_id = $1
-        AND assinante_id = $2
-      ORDER BY data_sangria DESC, id DESC
-      LIMIT 1
+      FROM ultima_sangria
+
+      UNION ALL
+
+      SELECT *
+      FROM cadastro_inicial
     `;
+
     const result = await connection.query(query, [estabelecimentoId, assinanteId]);
     return result.rows;
   };

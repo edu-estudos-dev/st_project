@@ -11,7 +11,10 @@ class EstabelecimentoModel {
         ADD COLUMN IF NOT EXISTS chave_bolinhas VARCHAR(100),
         ADD COLUMN IF NOT EXISTS maquina_bolinhas VARCHAR(100),
         ADD COLUMN IF NOT EXISTS chave_pelucias VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS maquina_pelucias VARCHAR(100)
+        ADD COLUMN IF NOT EXISTS maquina_pelucias VARCHAR(100),
+        ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
       `;
 
       await connection.query(SQL);
@@ -81,6 +84,9 @@ class EstabelecimentoModel {
     maquina_bolinhas,
     chave_pelucias,
     maquina_pelucias,
+    consignado_quantidade_inicial,
+    pelucia_leitura_inicial,
+    pelucia_abastecido_inicial,
     endereco,
     bairro,
     responsavel_nome,
@@ -103,6 +109,9 @@ class EstabelecimentoModel {
           maquina_bolinhas,
           chave_pelucias,
           maquina_pelucias,
+          consignado_quantidade_inicial,
+          pelucia_leitura_inicial,
+          pelucia_abastecido_inicial,
           endereco,
           bairro,
           responsavel_nome,
@@ -113,7 +122,7 @@ class EstabelecimentoModel {
           data_criacao,
           status
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
         RETURNING id
       `;
 
@@ -129,6 +138,9 @@ class EstabelecimentoModel {
         maquina_bolinhas || '',
         chave_pelucias || '',
         maquina_pelucias || '',
+        consignado_quantidade_inicial,
+        pelucia_leitura_inicial,
+        pelucia_abastecido_inicial,
         endereco,
         bairro,
         responsavel_nome,
@@ -159,6 +171,9 @@ class EstabelecimentoModel {
       maquina_bolinhas,
       chave_pelucias,
       maquina_pelucias,
+      consignado_quantidade_inicial,
+      pelucia_leitura_inicial,
+      pelucia_abastecido_inicial,
       endereco,
       bairro,
       responsavel_nome,
@@ -180,16 +195,19 @@ class EstabelecimentoModel {
         maquina_bolinhas = $6,
         chave_pelucias = $7,
         maquina_pelucias = $8,
-        endereco = $9,
-        bairro = $10,
-        responsavel_nome = $11,
-        telefone_contato = $12,
-        observacoes = $13,
-        latitude = $14,
-        longitude = $15,
-        data_atualizacao = $16
-      WHERE id = $17
-        AND assinante_id = $18
+        consignado_quantidade_inicial = $9,
+        pelucia_leitura_inicial = $10,
+        pelucia_abastecido_inicial = $11,
+        endereco = $12,
+        bairro = $13,
+        responsavel_nome = $14,
+        telefone_contato = $15,
+        observacoes = $16,
+        latitude = $17,
+        longitude = $18,
+        data_atualizacao = $19
+      WHERE id = $20
+        AND assinante_id = $21
     `;
 
     const dateISO = new Date();
@@ -203,6 +221,9 @@ class EstabelecimentoModel {
       maquina_bolinhas || '',
       chave_pelucias || '',
       maquina_pelucias || '',
+      consignado_quantidade_inicial,
+      pelucia_leitura_inicial,
+      pelucia_abastecido_inicial,
       endereco,
       bairro,
       responsavel_nome,
@@ -222,10 +243,48 @@ class EstabelecimentoModel {
     await this.ensureEstabelecimentoColumns();
 
     const sql = `
-      SELECT *
-      FROM estabelecimentos
-      WHERE id = $1
-        AND assinante_id = $2
+      SELECT
+        e.*,
+        COALESCE(
+          e.consignado_quantidade_inicial,
+          consignado_initial.qtde_deixada,
+          consignado_initial.abastecido
+        ) AS consignado_quantidade_inicial,
+        COALESCE(
+          e.pelucia_leitura_inicial,
+          pelucia_initial.leitura_atual
+        ) AS pelucia_leitura_inicial,
+        COALESCE(
+          e.pelucia_abastecido_inicial,
+          pelucia_initial.abastecido,
+          pelucia_initial.estoque
+        ) AS pelucia_abastecido_inicial
+      FROM estabelecimentos e
+      LEFT JOIN LATERAL (
+        SELECT
+          sc.qtde_deixada,
+          sc.abastecido
+        FROM sangrias_consignados sc
+        WHERE sc.estabelecimento_id = e.id
+          AND sc.assinante_id = e.assinante_id
+          AND COALESCE(sc.observacoes, '') LIKE '[ABERTURA INICIAL]%'
+        ORDER BY sc.data_sangria ASC, sc.id ASC
+        LIMIT 1
+      ) consignado_initial ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT
+          sp.leitura_atual,
+          sp.abastecido,
+          sp.estoque
+        FROM sangrias_pelucias sp
+        WHERE sp.estabelecimento_id = e.id
+          AND sp.assinante_id = e.assinante_id
+          AND COALESCE(sp.observacoes, '') LIKE '[ABERTURA INICIAL]%'
+        ORDER BY sp.data_sangria ASC, sp.id ASC
+        LIMIT 1
+      ) pelucia_initial ON TRUE
+      WHERE e.id = $1
+        AND e.assinante_id = $2
     `;
 
     const result = await connection.query(sql, [id, assinanteId]);
@@ -339,6 +398,9 @@ class EstabelecimentoModel {
           maquina_bolinhas,
           chave_pelucias,
           maquina_pelucias,
+          consignado_quantidade_inicial,
+          pelucia_leitura_inicial,
+          pelucia_abastecido_inicial,
           latitude,
           longitude
         FROM estabelecimentos
@@ -465,7 +527,7 @@ class EstabelecimentoModel {
       return {
         totalAtivos: Number(row.total_ativos || 0),
         bolinhasAtivas: Number(row.bolinhas_ativas || 0),
-        consignadosAtivos: Number(row.consignados_ativas || 0),
+        consignadosAtivas: Number(row.consignados_ativas || 0),
         figurinhasAtivas: Number(row.consignados_ativas || 0),
         peluciasAtivas: Number(row.pelucias_ativas || 0)
       };
@@ -475,7 +537,7 @@ class EstabelecimentoModel {
       return {
         totalAtivos: 0,
         bolinhasAtivas: 0,
-        consignadosAtivos: 0,
+        consignadosAtivas: 0,
         figurinhasAtivas: 0,
         peluciasAtivas: 0
       };

@@ -1,6 +1,15 @@
 import connection from '../db_config/connection.js';
 
 class PeluciasModel {
+  ensureEstabelecimentoInitialColumns = async () => {
+    await connection.query(`
+      ALTER TABLE estabelecimentos
+      ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+      ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+      ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
+    `);
+  };
+
   createSangria = async sangria => {
     const {
       assinante_id,
@@ -70,45 +79,59 @@ class PeluciasModel {
   };
 
   getUltimoEstoque = async (estabelecimentoId, assinanteId) => {
-    const query = `
-      SELECT estoque
-      FROM sangrias_pelucias
-      WHERE estabelecimento_id = $1
-        AND assinante_id = $2
-      ORDER BY data_sangria DESC, id DESC
-      LIMIT 1
-    `;
-
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
-    return result.rows[0] || { estoque: 0 };
+    const dados = await this.getUltimosDados(estabelecimentoId, assinanteId);
+    return { estoque: dados.estoque || 0 };
   };
 
   getUltimaLeitura = async (estabelecimentoId, assinanteId) => {
-    const query = `
-      SELECT leitura_atual AS ultima_leitura
-      FROM sangrias_pelucias
-      WHERE estabelecimento_id = $1
-        AND assinante_id = $2
-      ORDER BY data_sangria DESC, id DESC
-      LIMIT 1
-    `;
-
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
-    return result.rows[0] || { ultima_leitura: 0 };
+    const dados = await this.getUltimosDados(estabelecimentoId, assinanteId);
+    return { ultima_leitura: dados.ultima_leitura || 0 };
   };
 
   getUltimosDados = async (estabelecimentoId, assinanteId) => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
-      SELECT leitura_atual AS ultima_leitura, estoque
-      FROM sangrias_pelucias
-      WHERE estabelecimento_id = $1
-        AND assinante_id = $2
-      ORDER BY data_sangria DESC, id DESC
-      LIMIT 1
+      WITH ultimo_registro AS (
+        SELECT
+          sp.leitura_atual AS ultima_leitura,
+          sp.estoque,
+          false AS origem_cadastro_inicial
+        FROM sangrias_pelucias sp
+        WHERE sp.estabelecimento_id = $1
+          AND sp.assinante_id = $2
+        ORDER BY sp.data_sangria DESC, sp.id DESC
+        LIMIT 1
+      ),
+      cadastro_inicial AS (
+        SELECT
+          e.pelucia_leitura_inicial AS ultima_leitura,
+          e.pelucia_abastecido_inicial AS estoque,
+          true AS origem_cadastro_inicial
+        FROM estabelecimentos e
+        WHERE e.id = $1
+          AND e.assinante_id = $2
+          AND e.status = 'ativo'
+          AND UPPER(e.produto) LIKE '%PELUCIAS%'
+          AND e.pelucia_leitura_inicial IS NOT NULL
+          AND e.pelucia_abastecido_inicial IS NOT NULL
+          AND NOT EXISTS (SELECT 1 FROM ultimo_registro)
+      )
+      SELECT *
+      FROM ultimo_registro
+
+      UNION ALL
+
+      SELECT *
+      FROM cadastro_inicial
     `;
 
     const result = await connection.query(query, [estabelecimentoId, assinanteId]);
-    return result.rows[0] || { ultima_leitura: 0, estoque: 0 };
+    return result.rows[0] || {
+      ultima_leitura: 0,
+      estoque: 0,
+      origem_cadastro_inicial: false
+    };
   };
 
   getSangrias = async (assinanteId) => {
@@ -129,19 +152,22 @@ class PeluciasModel {
   };
 
   getEstabelecimentos = async (assinanteId) => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
       SELECT *
       FROM estabelecimentos
       WHERE assinante_id = $1
         AND UPPER(produto) LIKE '%PELUCIAS%'
         AND status = 'ativo'
+      ORDER BY estabelecimento ASC
     `;
 
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
   };
 
-   getSangriaById = async (id, assinanteId) => {
+  getSangriaById = async (id, assinanteId) => {
     const query = `
       SELECT
         s.*,
@@ -327,16 +353,28 @@ class PeluciasModel {
   };
 
   hasSangria = async (estabelecimentoId, assinanteId) => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
-      SELECT id
-      FROM sangrias_pelucias
-      WHERE estabelecimento_id = $1
-        AND assinante_id = $2
-      LIMIT 1
+      SELECT EXISTS (
+        SELECT 1
+        FROM sangrias_pelucias sp
+        WHERE sp.estabelecimento_id = $1
+          AND sp.assinante_id = $2
+      ) OR EXISTS (
+        SELECT 1
+        FROM estabelecimentos e
+        WHERE e.id = $1
+          AND e.assinante_id = $2
+          AND e.status = 'ativo'
+          AND UPPER(e.produto) LIKE '%PELUCIAS%'
+          AND e.pelucia_leitura_inicial IS NOT NULL
+          AND e.pelucia_abastecido_inicial IS NOT NULL
+      ) AS has_historico
     `;
 
     const result = await connection.query(query, [estabelecimentoId, assinanteId]);
-    return result.rows.length > 0;
+    return Boolean(result.rows[0]?.has_historico);
   };
 
   getAllSangrias = async (assinanteId) => {

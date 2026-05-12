@@ -27,6 +27,18 @@
         return rawValue;
     }; %>
 
+    <% const formatOperationalValue = (value) => {
+        const rawValue = String(value ?? '').trim();
+
+        if (!rawValue) {
+            return 'Não informado';
+        }
+
+        return rawValue;
+    }; %>
+
+    <% const isFilled = (value) => String(value ?? '').trim().length > 0; %>
+
     <div class="page-spacer"></div>
 
     <div class="view-shell">
@@ -56,15 +68,24 @@
             <section class="view-panel estabelecimento-view-panel">
                 <% if (estabelecimento) { %>
                     <% const produtoBase = String(estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
-                    <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
-                    <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
+                    <% const produtoNormalizado = produtoBase.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); %>
+
+                    <% const hasBolinhas = produtoNormalizado.includes('BOLINHAS'); %>
+                    <% const hasConsignados = produtoNormalizado.includes('CONSIGNADOS') || produtoNormalizado.includes('FIGURINHAS') || produtoNormalizado.includes('FIG'); %>
+                    <% const hasPelucias = produtoNormalizado.includes('PELUCIAS'); %>
 
                     <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
                     <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
+
+                    <% const consignadoQuantidadeInicial = estabelecimento.consignado_quantidade_inicial || estabelecimento.figurinha_quantidade_inicial || ''; %>
+
                     <% const chavePelucias = estabelecimento.chave_pelucias || ''; %>
                     <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
+                    <% const peluciaLeituraInicial = estabelecimento.pelucia_leitura_inicial || ''; %>
+                    <% const peluciaAbastecidoInicial = estabelecimento.pelucia_abastecido_inicial || ''; %>
 
                     <% const produtoPrincipal = estabelecimento.produtoFormatado || estabelecimento.produto || 'Não informado'; %>
+                    <% const hasOperationalData = hasBolinhas || hasConsignados || hasPelucias; %>
 
                     <div class="view-panel-header">
                         <div>
@@ -106,10 +127,10 @@
                         </div>
                     </div>
 
-                    <% if (hasBolinhas || hasPelucias) { %>
+                    <% if (hasOperationalData) { %>
                         <div class="view-section-title view-section-title-spaced">
                             <span>Dados operacionais</span>
-                            <small>Informações usadas na operação de campo e na identificação das máquinas.</small>
+                            <small>Informações usadas na operação de campo, estoque e identificação dos produtos ativos.</small>
                         </div>
 
                         <div class="view-grid view-operational-grid">
@@ -119,8 +140,8 @@
                                         <span class="view-product-tag view-product-tag-green">Bolinhas</span>
                                         Chave da máquina
                                     </strong>
-                                    <span class="<%= chaveBolinhas ? '' : 'view-empty-value' %>">
-                                        <%= chaveBolinhas || 'Não informado' %>
+                                    <span class="<%= isFilled(chaveBolinhas) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(chaveBolinhas) %>
                                     </span>
                                 </div>
 
@@ -129,8 +150,20 @@
                                         <span class="view-product-tag view-product-tag-green">Bolinhas</span>
                                         Número da máquina
                                     </strong>
-                                    <span class="<%= maquinaBolinhas ? '' : 'view-empty-value' %>">
-                                        <%= maquinaBolinhas || 'Não informado' %>
+                                    <span class="<%= isFilled(maquinaBolinhas) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(maquinaBolinhas) %>
+                                    </span>
+                                </div>
+                            <% } %>
+
+                            <% if (hasConsignados) { %>
+                                <div class="view-card view-card-product view-card-product-blue">
+                                    <strong>
+                                        <span class="view-product-tag view-product-tag-blue">Consignados</span>
+                                        Quantidade inicial deixada
+                                    </strong>
+                                    <span class="<%= isFilled(consignadoQuantidadeInicial) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(consignadoQuantidadeInicial) %>
                                     </span>
                                 </div>
                             <% } %>
@@ -141,8 +174,8 @@
                                         <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
                                         Chave da máquina
                                     </strong>
-                                    <span class="<%= chavePelucias ? '' : 'view-empty-value' %>">
-                                        <%= chavePelucias || 'Não informado' %>
+                                    <span class="<%= isFilled(chavePelucias) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(chavePelucias) %>
                                     </span>
                                 </div>
 
@@ -151,8 +184,28 @@
                                         <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
                                         Número da máquina
                                     </strong>
-                                    <span class="<%= maquinaPelucias ? '' : 'view-empty-value' %>">
-                                        <%= maquinaPelucias || 'Não informado' %>
+                                    <span class="<%= isFilled(maquinaPelucias) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(maquinaPelucias) %>
+                                    </span>
+                                </div>
+
+                                <div class="view-card view-card-product view-card-product-violet">
+                                    <strong>
+                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                        Leitura inicial
+                                    </strong>
+                                    <span class="<%= isFilled(peluciaLeituraInicial) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(peluciaLeituraInicial) %>
+                                    </span>
+                                </div>
+
+                                <div class="view-card view-card-product view-card-product-violet">
+                                    <strong>
+                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                        Quantidade inicial
+                                    </strong>
+                                    <span class="<%= isFilled(peluciaAbastecidoInicial) ? '' : 'view-empty-value' %>">
+                                        <%= formatOperationalValue(peluciaAbastecidoInicial) %>
                                     </span>
                                 </div>
                             <% } %>

@@ -55,13 +55,6 @@
                             <h2>Dados do atendimento</h2>
                             <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.</p>
                         </div>
-
-                        <% if (currentOrigem !== 'rota') { %>
-                            <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>Criar novo</span>
-                            </button>
-                        <% } %>
                     </div>
 
                     <div class="row g-3 align-items-end">
@@ -88,18 +81,11 @@
                         </div>
                     </div>
 
-                    <input class="form-check-input d-none" type="checkbox" id="abertura_inicial" name="abertura_inicial">
-
                     <div class="row g-3 mt-1">
                         <div class="col-12">
-                            <small class="modern-note" id="modoRegistroHint">Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.</small>
-                        </div>
-                    </div>
-
-                    <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
-                        <div class="col-12 col-lg-4">
-                            <label for="quantidade_inicial">Quantidade inicial deixada</label>
-                            <input type="number" class="form-control text-center" id="quantidade_inicial" name="quantidade_inicial" min="0">
+                            <small class="modern-note" id="modoRegistroHint">
+                                Os dados iniciais deste produto são definidos no cadastro ou na edição do estabelecimento.
+                            </small>
                         </div>
                     </div>
 
@@ -215,9 +201,6 @@
         window.consignadoHasHistorico = false;
 
         const estabelecimentoSelect = document.getElementById('estabelecimento');
-        const aberturaInicialInput = document.getElementById('abertura_inicial');
-        const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
-        const quantidadeInicialInput = document.getElementById('quantidade_inicial');
         const isRouteFlow = '<%= currentOrigem %>' === 'rota';
 
         function formatDateToBrazilian(dateString) {
@@ -233,7 +216,7 @@
         function updateResumoUltimaVisita(data, estoque) {
             document.getElementById('ultimaVisitaResumo').textContent = data
                 ? formatDateToBrazilian(data)
-                : 'Sem histórico';
+                : 'Sem visita registrada';
 
             document.getElementById('estoqueAnteriorResumo').textContent = `${estoque || 0} unidades`;
         }
@@ -251,64 +234,28 @@
             updateResumoQuantidade(resultado);
         }
 
-        function syncModoAberturaInicial() {
-            const isAbertura = aberturaInicialInput.checked;
+        function syncEstadoOperacional() {
             const hasSelectedEstabelecimento = Boolean(estabelecimentoSelect.value);
             const hasHistorico = window.consignadoHasHistorico === true;
-            const aberturaBox = document.getElementById('aberturaInicialBox');
-            const submitLabel = document.getElementById('consignadoSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
-            const dataSangriaLabel = document.getElementById('dataSangriaLabel');
-            const tipoPagamentoField = document.getElementById('tipoPagamentoField');
-            const camposNormais = ['valor_apurado', 'qtde_vendido', 'abastecido', 'tipo_pagamento'];
-
-            aberturaBox.classList.toggle('d-none', !isAbertura);
-            tipoPagamentoField.classList.toggle('d-none', isAbertura);
-            dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
-            quantidadeInicialInput.required = isAbertura;
-            toggleAberturaInicialButton?.classList.toggle('is-active', isAbertura);
-
-            camposNormais.forEach((id) => {
-                const field = document.getElementById(id);
-
-                field.required = !isAbertura;
-
-                if (isAbertura && field.tagName === 'INPUT') {
-                    field.value = '';
-                }
-            });
-
-            document.getElementById('movimentacaoCard').classList.toggle('opacity-50', isAbertura);
-            document.getElementById('movimentacaoCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
-            document.getElementById('pagamentoResumo').textContent = isAbertura ? 'Abertura inicial' : 'Espécie ou PIX';
-            submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
+            const movimentacaoCard = document.getElementById('movimentacaoCard');
+            const submitButton = document.querySelector('#consignadoForm button[type="submit"]');
 
             if (hasSelectedEstabelecimento && !hasHistorico) {
-                aberturaInicialInput.checked = true;
-
-                if (toggleAberturaInicialButton) {
-                    toggleAberturaInicialButton.disabled = true;
-                }
-
-                hint.textContent = isRouteFlow
-                    ? 'Este ponto ainda não tem histórico inicial de consignados. Cadastre a abertura inicial fora da rota antes de registrar a visita guiada.'
-                    : 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
-            } else {
-                if (toggleAberturaInicialButton) {
-                    toggleAberturaInicialButton.disabled = false;
-                }
-
-                hint.textContent = isRouteFlow
-                    ? 'Visita guiada em andamento. Registre apenas a sangria do ponto já inicializado.'
-                    : 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
+                hint.textContent = 'Este ponto ainda não tem dados iniciais de consignados. Abra a edição do estabelecimento, marque Consignados e informe a quantidade inicial deixada antes de registrar a sangria.';
+                movimentacaoCard.classList.add('opacity-50');
+                movimentacaoCard.style.pointerEvents = 'none';
+                submitButton.disabled = true;
+                return;
             }
 
-            if (isAbertura) {
-                const qtdInicial = parseFloat(quantidadeInicialInput.value) || 0;
-                updateResumoQuantidade(qtdInicial);
-            } else {
-                calculateQuantidadeDeixada();
-            }
+            hint.textContent = isRouteFlow
+                ? 'Visita guiada em andamento. Registre a sangria do ponto já inicializado.'
+                : 'Os dados iniciais deste produto são definidos no cadastro ou na edição do estabelecimento.';
+
+            movimentacaoCard.classList.remove('opacity-50');
+            movimentacaoCard.style.pointerEvents = 'auto';
+            submitButton.disabled = false;
         }
 
         async function loadUltimaSangriaConsignado(estabelecimentoId) {
@@ -317,7 +264,8 @@
                 window.estoqueAnterior = 0;
                 document.getElementById('ultima_visita').value = '';
                 updateResumoUltimaVisita('', 0);
-                syncModoAberturaInicial();
+                calculateQuantidadeDeixada();
+                syncEstadoOperacional();
                 return;
             }
 
@@ -335,22 +283,20 @@
                 }
 
                 window.consignadoHasHistorico = Boolean(data.hasHistorico);
-
-                if (window.consignadoHasHistorico) {
-                    aberturaInicialInput.checked = false;
-                    quantidadeInicialInput.value = '';
-                }
-
                 window.estoqueAnterior = data.estoque || 0;
 
-                syncModoAberturaInicial();
+                calculateQuantidadeDeixada();
+                syncEstadoOperacional();
             } catch (error) {
                 console.error(error);
 
                 window.consignadoHasHistorico = false;
                 window.estoqueAnterior = 0;
                 updateResumoUltimaVisita('', 0);
-                syncModoAberturaInicial();
+                calculateQuantidadeDeixada();
+                syncEstadoOperacional();
+
+                window.AppAlerts?.error('Não foi possível carregar o estoque anterior deste estabelecimento.');
             }
         }
 
@@ -362,21 +308,8 @@
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
             updateResumoUltimaVisita('', 0);
 
-            aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
-
-            toggleAberturaInicialButton?.addEventListener('click', function () {
-                if (aberturaInicialInput.disabled) return;
-
-                aberturaInicialInput.checked = !aberturaInicialInput.checked;
-                syncModoAberturaInicial();
-            });
-
-            quantidadeInicialInput.addEventListener('input', syncModoAberturaInicial);
-
             document.getElementById('consignadoForm').addEventListener('submit', (event) => {
-                const isAbertura = aberturaInicialInput.checked;
                 const hasHistorico = window.consignadoHasHistorico === true;
-                const quantidadeInicial = quantidadeInicialInput.value;
 
                 if (!estabelecimentoSelect.value) {
                     event.preventDefault();
@@ -384,28 +317,17 @@
                     return;
                 }
 
-                if (isRouteFlow && !hasHistorico) {
+                if (!hasHistorico) {
                     event.preventDefault();
-                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial de consignados. Cadastre a abertura inicial fora da rota antes de usar a visita guiada.');
+                    window.AppAlerts?.warning('Este ponto ainda não tem dados iniciais de consignados. Informe a quantidade inicial na edição do estabelecimento antes de registrar a sangria.');
                     return;
-                }
-
-                if (!hasHistorico && !isAbertura) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe a quantidade inicial.');
-                    return;
-                }
-
-                if (isAbertura && !quantidadeInicial) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Informe a quantidade inicial antes de salvar a abertura de consignados.');
                 }
             });
 
             if (estabelecimentoSelect.value) {
                 loadUltimaSangriaConsignado(estabelecimentoSelect.value);
             } else {
-                syncModoAberturaInicial();
+                syncEstadoOperacional();
             }
         });
     </script>

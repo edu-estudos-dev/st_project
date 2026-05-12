@@ -26,7 +26,7 @@
             <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
                 <h1>Registrar sangria de pelúcias</h1>
-                <p>Modernizei a tela para destacar coleta, leitura, estoque e previsão de saldo em uma interface mais clara, elegante e fácil de conferir durante a visita.</p>
+                <p>Registre coleta, leitura, estoque e previsão de saldo em uma interface clara e fácil de conferir durante a visita.</p>
             </div>
 
             <div class="page-titlebar-side">
@@ -57,13 +57,6 @@
                             <h2>Dados da coleta</h2>
                             <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avançar para os cálculos.</p>
                         </div>
-
-                        <% if (currentOrigem !== 'rota') { %>
-                            <button type="button" class="form-inline-action form-inline-action-warning" id="toggleAberturaInicial">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>Criar novo</span>
-                            </button>
-                        <% } %>
                     </div>
 
                     <div class="row g-3">
@@ -97,22 +90,11 @@
                         </div>
                     </div>
 
-                    <input class="form-check-input d-none" type="checkbox" id="abertura_inicial" name="abertura_inicial">
-
                     <div class="row g-3 mt-1">
                         <div class="col-12">
-                            <small class="modern-note" id="modoRegistroHint">Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.</small>
-                        </div>
-                    </div>
-
-                    <div id="aberturaInicialBox" class="row g-3 mt-1 d-none">
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="leitura_inicial">Leitura atual inicial</label>
-                            <input type="number" class="form-control text-center" id="leitura_inicial" name="leitura_inicial" min="0">
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label for="estoque_inicial">Abastecido inicial</label>
-                            <input type="number" class="form-control text-center" id="estoque_inicial" name="estoque_inicial" min="0">
+                            <small class="modern-note" id="modoRegistroHint">
+                                Os dados iniciais deste produto são definidos no cadastro ou na edição do estabelecimento.
+                            </small>
                         </div>
                     </div>
                 </section>
@@ -324,74 +306,35 @@
             calculateEstoquePrevisto();
         }
 
-        function syncModoAberturaInicial() {
-            const isAbertura = document.getElementById('abertura_inicial').checked;
-            const hasSelectedEstabelecimento = Boolean(document.getElementById('estabelecimento').value);
+        function syncEstadoOperacional() {
+            const estabelecimentoSelect = document.getElementById('estabelecimento');
+            const hasSelectedEstabelecimento = Boolean(estabelecimentoSelect.value);
             const hasHistorico = window.peluciaHasHistorico === true;
-            const aberturaBox = document.getElementById('aberturaInicialBox');
-            const leituraInicialField = document.getElementById('leitura_inicial');
-            const estoqueInicialField = document.getElementById('estoque_inicial');
-            const aberturaInicialCheckbox = document.getElementById('abertura_inicial');
-            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
-            const submitLabel = document.getElementById('peluciaSubmitLabel');
             const hint = document.getElementById('modoRegistroHint');
-            const dataSangriaLabel = document.getElementById('dataSangriaLabel');
-            const tipoPagamentoField = document.getElementById('tipoPagamentoField');
+            const financeiroCard = document.getElementById('financeiroCard');
+            const leiturasCard = document.getElementById('leiturasCard');
+            const submitButton = document.querySelector('#peluciaForm button[type="submit"]');
             const isRouteFlow = '<%= currentOrigem %>' === 'rota';
 
-            aberturaBox.classList.toggle('d-none', !isAbertura);
-            tipoPagamentoField.classList.toggle('d-none', isAbertura);
-            dataSangriaLabel.textContent = isAbertura ? 'Data de registro' : 'Data da sangria';
-            leituraInicialField.required = isAbertura;
-            estoqueInicialField.required = isAbertura;
-            toggleAberturaInicialButton?.classList.toggle('is-active', isAbertura);
-
-            ['tipo_pagamento', 'valor_apurado', 'comissao', 'leitura_atual', 'abastecido'].forEach((id) => {
-                const field = document.getElementById(id);
-                field.required = !isAbertura;
-
-                if (isAbertura && field.tagName === 'INPUT') {
-                    field.value = id === 'comissao' ? '15' : '';
-                }
-            });
-
-            document.getElementById('financeiroCard').classList.toggle('opacity-50', isAbertura);
-            document.getElementById('leiturasCard').classList.toggle('opacity-50', isAbertura);
-            document.getElementById('financeiroCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
-            document.getElementById('leiturasCard').style.pointerEvents = isAbertura ? 'none' : 'auto';
-            submitLabel.textContent = isAbertura && !hasHistorico ? 'Registrar' : 'Registrar sangria';
-
             if (hasSelectedEstabelecimento && !hasHistorico) {
-                aberturaInicialCheckbox.checked = true;
-
-                if (toggleAberturaInicialButton) {
-                    toggleAberturaInicialButton.disabled = true;
-                }
-
-                hint.textContent = isRouteFlow
-                    ? 'Este ponto ainda não tem histórico inicial de pelúcias. Cadastre a abertura inicial fora da rota antes de registrar a visita guiada.'
-                    : 'Este ponto ainda não tem histórico. O primeiro cadastro precisa ser o registro inicial.';
-            } else {
-                if (toggleAberturaInicialButton) {
-                    toggleAberturaInicialButton.disabled = false;
-                }
-
-                hint.textContent = isRouteFlow
-                    ? 'Visita guiada em andamento. Registre apenas a sangria do ponto já inicializado.'
-                    : 'Use "Criar novo" para cadastrar a abertura inicial de um ponto sem histórico anterior.';
+                hint.textContent = 'Este ponto ainda não tem dados iniciais de pelúcias. Abra a edição do estabelecimento, marque Pelúcias e informe leitura inicial e quantidade inicial antes de registrar a sangria.';
+                financeiroCard.classList.add('opacity-50');
+                leiturasCard.classList.add('opacity-50');
+                financeiroCard.style.pointerEvents = 'none';
+                leiturasCard.style.pointerEvents = 'none';
+                submitButton.disabled = true;
+                return;
             }
 
-            if (isAbertura) {
-                document.getElementById('qtde_vendido').value = '0';
-                document.getElementById('ultima_leitura').value = '0';
-                document.getElementById('estoque_atual').value = '0';
-                document.getElementById('estoque_previsto').value = estoqueInicialField.value || '0';
-                updateResumoOperacional();
-                calculateValues();
-            } else {
-                calculateVendido();
-                calculateValues();
-            }
+            hint.textContent = isRouteFlow
+                ? 'Visita guiada em andamento. Registre a sangria do ponto já inicializado.'
+                : 'Os dados iniciais deste produto são definidos no cadastro ou na edição do estabelecimento.';
+
+            financeiroCard.classList.remove('opacity-50');
+            leiturasCard.classList.remove('opacity-50');
+            financeiroCard.style.pointerEvents = 'auto';
+            leiturasCard.style.pointerEvents = 'auto';
+            submitButton.disabled = false;
         }
 
         async function loadUltimosDados(estabelecimentoId) {
@@ -400,6 +343,7 @@
             const estoquePrevistoInput = document.getElementById('estoque_previsto');
 
             if (!estabelecimentoId) {
+                window.peluciaHasHistorico = false;
                 ultimaLeituraInput.value = '';
                 estoqueAtualInput.value = '';
                 estoquePrevistoInput.value = '';
@@ -407,6 +351,8 @@
                 document.getElementById('abastecido').value = '';
                 document.getElementById('qtde_vendido').value = '';
                 calculateVendido();
+                updateResumoOperacional();
+                syncEstadoOperacional();
                 return;
             }
 
@@ -418,27 +364,27 @@
                 }
 
                 const data = await response.json();
-                window.peluciaHasHistorico = Boolean(data.hasHistorico);
 
-                if (window.peluciaHasHistorico) {
-                    document.getElementById('abertura_inicial').checked = false;
-                    document.getElementById('leitura_inicial').value = '';
-                    document.getElementById('estoque_inicial').value = '';
-                }
+                window.peluciaHasHistorico = Boolean(data.hasHistorico);
 
                 ultimaLeituraInput.value = Number(data.ultima_leitura || 0);
                 estoqueAtualInput.value = Number(data.estoque || 0);
+
                 calculateVendido();
                 updateResumoOperacional();
-                syncModoAberturaInicial();
+                syncEstadoOperacional();
             } catch (error) {
                 console.error('Erro ao buscar os últimos dados:', error);
+
                 window.peluciaHasHistorico = false;
                 ultimaLeituraInput.value = '';
                 estoqueAtualInput.value = '';
                 estoquePrevistoInput.value = '';
                 document.getElementById('qtde_vendido').value = '';
+
                 updateResumoOperacional();
+                syncEstadoOperacional();
+
                 window.AppAlerts?.error('Não foi possível carregar a última leitura e o estoque deste estabelecimento.');
             }
         }
@@ -449,9 +395,6 @@
             const abastecidoInput = document.getElementById('abastecido');
             const valorApuradoInput = document.getElementById('valor_apurado');
             const comissaoInput = document.getElementById('comissao');
-            const aberturaInicialInput = document.getElementById('abertura_inicial');
-            const toggleAberturaInicialButton = document.getElementById('toggleAberturaInicial');
-            const isRouteFlow = '<%= currentOrigem %>' === 'rota';
 
             estabelecimentoSelect.addEventListener('change', function () {
                 loadUltimosDados(this.value);
@@ -465,25 +408,11 @@
             abastecidoInput.addEventListener('input', calculateEstoquePrevisto);
             valorApuradoInput.addEventListener('input', calculateValues);
             comissaoInput.addEventListener('input', calculateValues);
-            aberturaInicialInput.addEventListener('change', syncModoAberturaInicial);
-
-            toggleAberturaInicialButton?.addEventListener('click', function () {
-                if (aberturaInicialInput.disabled) return;
-
-                aberturaInicialInput.checked = !aberturaInicialInput.checked;
-                syncModoAberturaInicial();
-            });
-
-            document.getElementById('leitura_inicial').addEventListener('input', syncModoAberturaInicial);
-            document.getElementById('estoque_inicial').addEventListener('input', syncModoAberturaInicial);
 
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
 
             document.getElementById('peluciaForm').addEventListener('submit', (event) => {
-                const isAbertura = aberturaInicialInput.checked;
                 const hasHistorico = window.peluciaHasHistorico === true;
-                const leituraInicial = document.getElementById('leitura_inicial').value;
-                const estoqueInicial = document.getElementById('estoque_inicial').value;
 
                 if (!estabelecimentoSelect.value) {
                     event.preventDefault();
@@ -491,28 +420,17 @@
                     return;
                 }
 
-                if (isRouteFlow && !hasHistorico) {
+                if (!hasHistorico) {
                     event.preventDefault();
-                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial de pelúcias. Cadastre a abertura inicial fora da rota antes de usar a visita guiada.');
+                    window.AppAlerts?.warning('Este ponto ainda não tem dados iniciais de pelúcias. Informe leitura inicial e quantidade inicial na edição do estabelecimento antes de registrar a sangria.');
                     return;
-                }
-
-                if (!hasHistorico && !isAbertura) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Este ponto ainda não tem registro inicial. Clique em "Criar novo" e informe leitura inicial e abastecido inicial.');
-                    return;
-                }
-
-                if (isAbertura && (!leituraInicial || !estoqueInicial)) {
-                    event.preventDefault();
-                    window.AppAlerts?.warning('Informe leitura inicial e abastecido inicial antes de salvar a abertura de pelúcias.');
                 }
             });
 
             calculateValues();
             calculateEstoquePrevisto();
             updateResumoOperacional();
-            syncModoAberturaInicial();
+            syncEstadoOperacional();
         });
     </script>
 </body>

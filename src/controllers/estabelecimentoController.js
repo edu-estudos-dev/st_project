@@ -167,6 +167,16 @@ const parseInitialInteger = (value, fieldLabel) => {
   return parsed;
 };
 
+const getOptionalInitialInteger = (value, fieldLabel) => {
+  const raw = normalizeSpacing(value);
+
+  if (!raw) {
+    return null;
+  }
+
+  return parseInitialInteger(raw, fieldLabel);
+};
+
 const getOptionalString = (value, fieldLabel = 'Campo opcional', max = 100) => {
   if (value === undefined || value === null) {
     return '';
@@ -385,11 +395,17 @@ class EstabelecimentoController {
         chave: chaveLegada,
         maquina: maquinaLegada,
 
-        // Campos novos separados por produto.
+        // Campos separados por produto.
         chave_bolinhas: chaveBolinhas,
         maquina_bolinhas: maquinaBolinhas,
         chave_pelucias: chavePelucias,
         maquina_pelucias: maquinaPelucias,
+
+        // Parâmetros iniciais salvos também no cadastro do estabelecimento
+        // para a tela de visualização conseguir exibir os dados atuais do ponto.
+        consignado_quantidade_inicial: consignadoQuantidadeInicial,
+        pelucia_leitura_inicial: peluciaLeituraInicial,
+        pelucia_abastecido_inicial: peluciaAbastecidoInicial,
 
         endereco: validateTextField(req.body.endereco, 'Endereço', {
           min: 5,
@@ -507,6 +523,7 @@ class EstabelecimentoController {
       }
 
       const hasBolinhas = produtosSelecionados.includes('BOLINHAS');
+      const hasConsignados = produtosSelecionados.includes('CONSIGNADOS');
       const hasPelucias = produtosSelecionados.includes('PELUCIAS');
 
       const chaveBolinhas = hasBolinhas
@@ -544,6 +561,28 @@ class EstabelecimentoController {
       const chaveLegada = chaveBolinhas || chavePelucias || '';
       const maquinaLegada = maquinaBolinhas || maquinaPelucias || '';
 
+      const consignadoQuantidadeInicial = hasConsignados
+        ? parseInitialInteger(
+            req.body.consignado_quantidade_inicial ||
+              req.body.figurinha_quantidade_inicial,
+            'Quantidade inicial deixada de consignados'
+          )
+        : null;
+
+      const peluciaLeituraInicial = hasPelucias
+        ? parseInitialInteger(
+            req.body.pelucia_leitura_inicial,
+            'Leitura inicial de pelúcias'
+          )
+        : null;
+
+      const peluciaAbastecidoInicial = hasPelucias
+        ? parseInitialInteger(
+            req.body.pelucia_abastecido_inicial,
+            'Abastecido inicial de pelúcias'
+          )
+        : null;
+
       const estabelecimento = {
         id,
         estabelecimento: validateTextField(
@@ -566,11 +605,16 @@ class EstabelecimentoController {
         chave: chaveLegada,
         maquina: maquinaLegada,
 
-        // Campos novos separados por produto.
+        // Campos separados por produto.
         chave_bolinhas: chaveBolinhas,
         maquina_bolinhas: maquinaBolinhas,
         chave_pelucias: chavePelucias,
         maquina_pelucias: maquinaPelucias,
+
+        // Parâmetros iniciais persistidos na edição.
+        consignado_quantidade_inicial: consignadoQuantidadeInicial,
+        pelucia_leitura_inicial: peluciaLeituraInicial,
+        pelucia_abastecido_inicial: peluciaAbastecidoInicial,
 
         endereco: validateTextField(req.body.endereco, 'Endereço', {
           min: 5,

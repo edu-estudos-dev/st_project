@@ -237,6 +237,43 @@
                             </div>
                         </div>
 
+                        <div class="col-12 d-none" data-operational-field="consignados-initial">
+                            <div class="product-setup-block theme-blue">
+                                <div class="product-setup-header">
+                                    <div class="product-setup-badges">
+                                        <span class="product-badge product-badge-blue">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Consignados
+                                        </span>
+                                    </div>
+
+                                    <h3>Parâmetro inicial de consignados</h3>
+                                    <p>Informe a quantidade inicial deixada para manter o controle deste produto no estabelecimento.</p>
+                                </div>
+
+                                <div class="product-divider"></div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 col-lg-4 compact-field centered-field">
+                                        <label for="consignado_quantidade_inicial">
+                                            Quantidade inicial deixada <span class="required-label">obrigatório</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
+                                            class="form-control text-center"
+                                            id="consignado_quantidade_inicial"
+                                            name="consignado_quantidade_inicial"
+                                            value="<%= estabelecimento.consignado_quantidade_inicial || estabelecimento.figurinha_quantidade_inicial || '' %>"
+                                            placeholder="Ex.: 100"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-12 d-none" data-operational-field="pelucias-machine">
                             <div class="product-setup-block theme-violet">
                                 <div class="product-setup-header">
@@ -279,6 +316,60 @@
                                             name="maquina_pelucias"
                                             placeholder="Número da máquina"
                                             value="<%= estabelecimento.maquina_pelucias || '' %>"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-none" data-operational-field="pelucias-initial">
+                            <div class="product-setup-block theme-violet">
+                                <div class="product-setup-header">
+                                    <div class="product-setup-badges">
+                                        <span class="product-badge product-badge-violet">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Pelúcias
+                                        </span>
+                                    </div>
+
+                                    <h3>Parâmetros iniciais de pelúcias</h3>
+                                    <p>Esses dados são usados pelo sistema para calcular estoque, vendas e próximas sangrias.</p>
+                                </div>
+
+                                <div class="product-divider"></div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 col-lg-3 compact-field centered-field">
+                                        <label for="pelucia_leitura_inicial">
+                                            Leitura inicial <span class="required-label">obrigatório</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
+                                            class="form-control text-center"
+                                            id="pelucia_leitura_inicial"
+                                            name="pelucia_leitura_inicial"
+                                            value="<%= estabelecimento.pelucia_leitura_inicial || '' %>"
+                                            placeholder="Ex.: 0"
+                                        >
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-3 compact-field centered-field">
+                                        <label for="pelucia_abastecido_inicial">
+                                            Qtde. Inicial <span class="required-label">obrigatório</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            inputmode="numeric"
+                                            pattern="[0-9]*"
+                                            maxlength="6"
+                                            class="form-control text-center"
+                                            id="pelucia_abastecido_inicial"
+                                            name="pelucia_abastecido_inicial"
+                                            value="<%= estabelecimento.pelucia_abastecido_inicial || '' %>"
+                                            placeholder="Ex.: 50"
                                         >
                                     </div>
                                 </div>
@@ -358,12 +449,55 @@
             const produtoInputs = Array.from(document.querySelectorAll('input[name="produto"]'));
 
             const bolinhasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="bolinhas-machine"]'));
+            const consignadosInitialFields = Array.from(document.querySelectorAll('[data-operational-field="consignados-initial"]'));
             const peluciasMachineFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-machine"]'));
+            const peluciasInitialFields = Array.from(document.querySelectorAll('[data-operational-field="pelucias-initial"]'));
 
             const chaveBolinhasInput = document.getElementById('chave_bolinhas');
             const maquinaBolinhasInput = document.getElementById('maquina_bolinhas');
+            const consignadoQuantidadeInicialInput = document.getElementById('consignado_quantidade_inicial');
             const chavePeluciasInput = document.getElementById('chave_pelucias');
             const maquinaPeluciasInput = document.getElementById('maquina_pelucias');
+            const peluciaLeituraInicialInput = document.getElementById('pelucia_leitura_inicial');
+            const peluciaAbastecidoInicialInput = document.getElementById('pelucia_abastecido_inicial');
+
+            const initialNumberInputs = [
+                consignadoQuantidadeInicialInput,
+                peluciaLeituraInicialInput,
+                peluciaAbastecidoInicialInput
+            ];
+
+            const validateInitialNumberInput = (input, label) => {
+                if (!input) return null;
+
+                const value = input.value.trim();
+
+                if (!value) {
+                    return `${label} é obrigatório.`;
+                }
+
+                if (!/^\d+$/.test(value)) {
+                    return `${label} deve conter apenas números inteiros, sem letras, negativos, decimais ou notação científica.`;
+                }
+
+                const parsed = Number(value);
+
+                if (!Number.isSafeInteger(parsed) || parsed < 0) {
+                    return `${label} deve ser um número inteiro válido.`;
+                }
+
+                if (parsed > 100000) {
+                    return `${label} não pode ser maior que 100000.`;
+                }
+
+                return null;
+            };
+
+            initialNumberInputs.forEach((input) => {
+                input?.addEventListener('input', () => {
+                    input.value = input.value.replace(/\D/g, '').slice(0, 6);
+                });
+            });
 
             const getSelectedProducts = () => produtoInputs
                 .filter((input) => input.type === 'hidden' || input.checked)
@@ -377,24 +511,37 @@
                 const selectedProducts = getSelectedProducts();
 
                 const hasBolinhas = selectedProducts.includes('BOLINHAS');
+                const hasConsignados = selectedProducts.includes('CONSIGNADOS');
                 const hasPelucias = selectedProducts.includes('PELUCIAS');
 
                 setGroupVisibility(bolinhasMachineFields, hasBolinhas);
+                setGroupVisibility(consignadosInitialFields, hasConsignados);
                 setGroupVisibility(peluciasMachineFields, hasPelucias);
+                setGroupVisibility(peluciasInitialFields, hasPelucias);
 
                 if (chaveBolinhasInput) chaveBolinhasInput.required = false;
                 if (maquinaBolinhasInput) maquinaBolinhasInput.required = false;
                 if (chavePeluciasInput) chavePeluciasInput.required = false;
                 if (maquinaPeluciasInput) maquinaPeluciasInput.required = false;
 
+                if (consignadoQuantidadeInicialInput) consignadoQuantidadeInicialInput.required = hasConsignados;
+                if (peluciaLeituraInicialInput) peluciaLeituraInicialInput.required = hasPelucias;
+                if (peluciaAbastecidoInicialInput) peluciaAbastecidoInicialInput.required = hasPelucias;
+
                 if (!hasBolinhas) {
                     if (chaveBolinhasInput) chaveBolinhasInput.value = '';
                     if (maquinaBolinhasInput) maquinaBolinhasInput.value = '';
                 }
 
+                if (!hasConsignados && consignadoQuantidadeInicialInput) {
+                    consignadoQuantidadeInicialInput.value = '';
+                }
+
                 if (!hasPelucias) {
                     if (chavePeluciasInput) chavePeluciasInput.value = '';
                     if (maquinaPeluciasInput) maquinaPeluciasInput.value = '';
+                    if (peluciaLeituraInicialInput) peluciaLeituraInicialInput.value = '';
+                    if (peluciaAbastecidoInicialInput) peluciaAbastecidoInicialInput.value = '';
                 }
             };
 
@@ -476,12 +623,52 @@
             });
 
             document.getElementById('edicaoForm').addEventListener('submit', (e) => {
-                const isChecked = getSelectedProducts().length > 0;
+                const selectedProducts = getSelectedProducts();
 
-                if (!isChecked) {
+                if (selectedProducts.length === 0) {
                     e.preventDefault();
                     window.AppAlerts?.warning('Nenhum produto ativo foi encontrado para esta edição.');
                     return;
+                }
+
+                if (selectedProducts.includes('CONSIGNADOS')) {
+                    const consignadoError = validateInitialNumberInput(
+                        consignadoQuantidadeInicialInput,
+                        'Quantidade inicial deixada para consignados'
+                    );
+
+                    if (consignadoError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(consignadoError);
+                        consignadoQuantidadeInicialInput?.focus();
+                        return;
+                    }
+                }
+
+                if (selectedProducts.includes('PELUCIAS')) {
+                    const leituraError = validateInitialNumberInput(
+                        peluciaLeituraInicialInput,
+                        'Leitura inicial de pelúcias'
+                    );
+
+                    if (leituraError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(leituraError);
+                        peluciaLeituraInicialInput?.focus();
+                        return;
+                    }
+
+                    const abastecidoError = validateInitialNumberInput(
+                        peluciaAbastecidoInicialInput,
+                        'Quantidade inicial de pelúcias'
+                    );
+
+                    if (abastecidoError) {
+                        e.preventDefault();
+                        window.AppAlerts?.warning(abastecidoError);
+                        peluciaAbastecidoInicialInput?.focus();
+                        return;
+                    }
                 }
             });
 
