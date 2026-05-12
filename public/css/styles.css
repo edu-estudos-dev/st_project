@@ -1531,54 +1531,260 @@ figure {
   }
 }
 
+/* Mobile - melhor aproveitamento lateral e badges */
+
 @media (max-width: 767.98px) {
-  .dashboard-intelligence-grid {
-    grid-template-columns: 1fr;
+  .form-shell-modern .form-stage {
+    padding-inline: 0.18rem !important;
   }
 
-  .dashboard-titlebar-copy {
-    padding: 1rem;
-    border-radius: 20px;
+  .form-shell-modern .modern-form {
+    gap: 1rem;
   }
 
-  .dashboard-titlebar-copy-block h1 {
-    font-size: 1.85rem;
+  .form-shell-modern .modern-form.estabelecimento-form .form-card,
+  .form-shell-modern .modern-form .form-card {
+    padding: 0.68rem !important;
+    border-radius: 18px;
   }
 
-  .dashboard-overview {
-    grid-template-columns: 1fr;
+  .form-shell-modern .modern-form.estabelecimento-form .row,
+  .form-shell-modern .modern-form .row {
+    --bs-gutter-x: 0.44rem;
+    --bs-gutter-y: 0.68rem;
   }
 
-  .dashboard-sidebar-nav {
-    grid-template-columns: 1fr;
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header,
+  .form-shell-modern .modern-form .form-card-header {
+    margin-bottom: 0.68rem;
   }
 
-  .dashboard-panel-header {
-    flex-direction: column;
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header h2,
+  .form-shell-modern .modern-form .form-card-header h2 {
+    font-size: 1.02rem !important;
+    line-height: 1.14 !important;
   }
 
-  .dashboard-panel-header p {
-    max-width: 100%;
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header p,
+  .form-shell-modern .modern-form .form-card-header p {
+    font-size: 0.76rem !important;
+    line-height: 1.34 !important;
   }
 
-  .dashboard-ranking-item,
-  .dashboard-trend-item,
-  .dashboard-stale-item {
-    grid-template-columns: 1fr;
-    align-items: start;
+  .form-shell-modern .modern-form.estabelecimento-form label,
+  .form-shell-modern .modern-form label {
+    font-size: 0.75rem;
+    line-height: 1.22;
   }
 
-  .dashboard-ranking-item > span,
-  .dashboard-trend-item span,
-  .dashboard-stale-item span,
-  .dashboard-ranking-item em,
-  .dashboard-trend-item em,
-  .dashboard-stale-item em {
-    justify-self: start;
+  .form-shell-modern .modern-form.estabelecimento-form .form-control,
+  .form-shell-modern .modern-form .form-control {
+    min-height: 40px;
+    padding-inline: 0.72rem;
+    font-size: 0.82rem;
   }
 
-  .dashboard-shortcuts {
-    grid-template-columns: 1fr;
+  .form-shell-modern .modern-form.estabelecimento-form textarea.form-control,
+  .form-shell-modern .modern-form textarea.form-control {
+    min-height: 100px;
+    padding: 0.72rem;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card,
+  .form-shell-modern .modern-form .single-product-card {
+    min-height: 108px;
+    gap: 0.52rem;
+    padding: 0.72rem;
+    border-radius: 15px;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-icon,
+  .form-shell-modern .modern-form .single-product-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    font-size: 0.94rem;
+  }
+
+  .single-product-card-content span {
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+  }
+
+  .single-product-card-content strong,
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-content strong,
+  .form-shell-modern .modern-form .single-product-card-content strong {
+    font-size: 0.9rem;
+  }
+
+  .single-product-card-content small {
+    margin-top: 0.2rem;
+    font-size: 0.73rem;
+    line-height: 1.28;
+  }
+
+  .modern-checkbox-grid {
+    gap: 0.46rem;
+  }
+
+  .modern-checkbox span {
+    min-height: 38px;
+    padding: 0.56rem 0.66rem;
+    font-size: 0.8rem;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
+  .form-shell-modern .modern-form .form-section-tag,
+  .product-badge,
+  .optional-label,
+  .required-label {
+    min-height: 19px !important;
+    padding: 2px 7px !important;
+    font-size: 0.57rem !important;
+    letter-spacing: 0.026em !important;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
+  .form-shell-modern .modern-form .form-section-tag {
+    margin-bottom: 0.26rem !important;
+  }
+
+  .product-badge {
+    gap: 4px;
+  }
+
+  .product-badge i {
+    font-size: 0.38rem;
+  }
+
+  .optional-label,
+  .required-label {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .product-setup-block {
+    margin-top: 4px;
+    padding: 0.64rem;
+    border-radius: 14px;
+  }
+
+  .product-setup-block + .product-setup-block {
+    margin-top: 0.72rem;
+  }
+
+  .product-setup-header {
+    gap: 4px;
+  }
+
+  .product-setup-badges {
+    justify-content: flex-start;
+    gap: 5px;
+    margin-bottom: 0.02rem;
+  }
+
+  .product-setup-header h3,
+  .form-shell-modern .modern-form .product-setup-header h3 {
+    font-size: 0.84rem !important;
+    line-height: 1.14 !important;
+  }
+
+  .product-setup-header p,
+  .form-shell-modern .modern-form .product-setup-header p {
+    font-size: 0.72rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .product-divider {
+    margin: 8px 0 9px;
+  }
+
+  .product-setup-block .row {
+    --bs-gutter-x: 0.44rem;
+    --bs-gutter-y: 0.62rem;
+  }
+
+  .product-setup-block .compact-field label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.26rem 0.44rem;
+    width: 100%;
+    margin-bottom: 0.3rem;
+    text-align: left;
+    line-height: 1.22;
+  }
+
+  .product-setup-block .compact-field .optional-label,
+  .product-setup-block .compact-field .required-label {
+    flex: 0 0 auto;
+  }
+
+  .product-setup-block .compact-field .form-control {
+    min-height: 39px;
+  }
+
+  .route-coordinates-private {
+    gap: 0.66rem;
+    padding: 0.66rem;
+    border-radius: 15px;
+  }
+
+  .route-coordinates-private > div {
+    gap: 0.24rem;
+  }
+
+  .route-coordinates-private label {
+    font-size: 0.81rem !important;
+  }
+
+  .route-coordinates-private .modern-note {
+    font-size: 0.73rem;
+    line-height: 1.32;
+  }
+
+  .coordinates-capture-status {
+    margin-top: 0.02rem;
+    padding: 0.26rem 0.52rem;
+    font-size: 0.67rem;
+    line-height: 1.16;
+  }
+
+  .route-coordinate-button {
+    min-height: 39px;
+    gap: 0.32rem;
+    padding-inline: 0.68rem;
+    font-size: 0.77rem;
+  }
+
+  .form-actions-bar {
+    gap: 0.78rem;
+    padding: 0.78rem;
+    border-radius: 17px;
+  }
+
+  .form-actions-copy {
+    gap: 0.16rem;
+  }
+
+  .form-actions-copy strong {
+    font-size: 0.84rem;
+  }
+
+  .form-actions-copy span {
+    font-size: 0.73rem;
+    line-height: 1.32;
+  }
+
+  .form-actions-buttons {
+    gap: 0.46rem;
+  }
+
+  .form-actions-buttons .btn-modern,
+  .form-actions-buttons .btn-modern-secondary {
+    min-height: 39px;
+    font-size: 0.77rem;
   }
 }
 
