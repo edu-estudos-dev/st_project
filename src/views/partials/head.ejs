@@ -522,6 +522,164 @@
         });
     </script>
 
+        <!-- LOADING AUTOMATICO EM NAVEGACAO INTERNA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shouldIgnoreNavigationLoading = (link) => {
+                if (!link) return true;
+
+                const href = link.getAttribute('href');
+
+                if (!href) return true;
+                if (href === '#') return true;
+                if (href.startsWith('#')) return true;
+                if (href.startsWith('javascript:')) return true;
+                if (href.startsWith('mailto:')) return true;
+                if (href.startsWith('tel:')) return true;
+                if (href.startsWith('whatsapp:')) return true;
+
+                if (link.hasAttribute('download')) return true;
+                if (link.dataset.noGlobalLoading === 'true') return true;
+                if (link.target && link.target !== '_self') return true;
+
+                return false;
+            };
+
+            const isSamePageNavigation = (url) => {
+                return (
+                    url.origin === window.location.origin &&
+                    url.pathname === window.location.pathname &&
+                    url.search === window.location.search
+                );
+            };
+
+            const getNavigationLoadingCopy = (link, url) => {
+                const customTitle = link.dataset.loadingTitle;
+                const customDetail = link.dataset.loadingDetail;
+
+                if (customTitle || customDetail) {
+                    return {
+                        title: customTitle || 'Carregando...',
+                        detail: customDetail || 'Aguarde um instante.'
+                    };
+                }
+
+                const path = `${url.pathname}${url.search}`.toLowerCase();
+                const text = String(link.textContent || '').trim().toLowerCase();
+
+                if (path.includes('/bolinhas/sangrias/add')) {
+                    return {
+                        title: 'Abrindo sangria de bolinhas...',
+                        detail: 'Carregando o formulário da visita.'
+                    };
+                }
+
+                if (path.includes('/consignados/sangrias/add')) {
+                    return {
+                        title: 'Abrindo sangria de consignados...',
+                        detail: 'Carregando o formulário da visita.'
+                    };
+                }
+
+                if (path.includes('/pelucias/sangrias/add')) {
+                    return {
+                        title: 'Abrindo sangria de pelúcias...',
+                        detail: 'Carregando o formulário da visita.'
+                    };
+                }
+
+                if (path.includes('/sangrias')) {
+                    return {
+                        title: 'Abrindo sangria...',
+                        detail: 'Carregando os dados da operação.'
+                    };
+                }
+
+                if (path.includes('/rotas')) {
+                    return {
+                        title: 'Abrindo rotas...',
+                        detail: 'Carregando os pontos e a operação.'
+                    };
+                }
+
+                if (path.includes('/estabelecimentos')) {
+                    return {
+                        title: 'Abrindo estabelecimentos...',
+                        detail: 'Carregando os dados dos pontos.'
+                    };
+                }
+
+                if (path.includes('/lancamentos') || path.includes('/fluxo-de-caixa')) {
+                    return {
+                        title: 'Abrindo financeiro...',
+                        detail: 'Carregando os dados financeiros.'
+                    };
+                }
+
+                if (path.includes('/assinatura') || path.includes('/pagamentos')) {
+                    return {
+                        title: 'Abrindo assinatura...',
+                        detail: 'Carregando os dados da sua conta.'
+                    };
+                }
+
+                if (path.includes('/comunidade')) {
+                    return {
+                        title: 'Abrindo comunidade...',
+                        detail: 'Carregando os tópicos e respostas.'
+                    };
+                }
+
+                if (text.includes('visualizar')) {
+                    return {
+                        title: 'Abrindo detalhes...',
+                        detail: 'Carregando as informações do registro.'
+                    };
+                }
+
+                if (text.includes('editar')) {
+                    return {
+                        title: 'Abrindo edição...',
+                        detail: 'Carregando os dados para alteração.'
+                    };
+                }
+
+                return {
+                    title: 'Carregando página...',
+                    detail: 'Aguarde enquanto abrimos a próxima tela.'
+                };
+            };
+
+            document.addEventListener('click', (event) => {
+                const link = event.target.closest('a[href]');
+
+                if (shouldIgnoreNavigationLoading(link)) {
+                    return;
+                }
+
+                let url;
+
+                try {
+                    url = new URL(link.getAttribute('href'), window.location.origin);
+                } catch (error) {
+                    return;
+                }
+
+                if (url.origin !== window.location.origin) {
+                    return;
+                }
+
+                if (isSamePageNavigation(url)) {
+                    return;
+                }
+
+                const copy = getNavigationLoadingCopy(link, url);
+
+                window.AppLoading?.show(copy.title, copy.detail);
+            });
+        });
+    </script>
+
     <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
