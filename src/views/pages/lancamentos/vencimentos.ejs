@@ -5,29 +5,94 @@
 <body class="list-page-body">
     <%- include('../../partials/header') %>
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
+    <%
+        const formatTipoLancamento = (value) => {
+            const labels = {
+                receita_dos_pontos: 'Receita dos pontos',
+                incremento_de_capital: 'Incremento de capital',
+                compra: 'Compra',
+                extra: 'Extra',
+                'pro-labore': 'Pró-labore',
+                gastos_recorrentes: 'Gastos recorrentes',
+                bonus: 'Bônus'
+            };
+
+            const rawValue = String(value || '').trim();
+
+            if (!rawValue) {
+                return 'Não informado';
+            }
+
+            return labels[rawValue] || rawValue.replace(/_/g, ' ');
+        };
+
+        const formatDate = (value, fallback = 'Não informado') => {
+            if (!value) {
+                return fallback;
+            }
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return fallback;
+            }
+
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const formatDescricao = (value) => {
+            const rawValue = String(value || '').trim();
+
+            if (!rawValue) {
+                return 'Sem descrição informada.';
+            }
+
+            return rawValue.charAt(0).toUpperCase() + rawValue.slice(1);
+        };
+
+        const totalProximos = Array.isArray(proximos) ? proximos.length : 0;
+        const totalAtrasados = Array.isArray(atrasados) ? atrasados.length : 0;
+    %>
+
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <div class="list-shell lancamentos-vencimentos-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Vencimentos' }) %>
 
         <section class="page-titlebar page-titlebar-neutral">
             <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-bell"></i> Financeiro</span>
                 <h1>Vencimentos e alertas</h1>
-                <p>Acompanhe boletos próximos do vencimento e registros atrasados em uma tela dedicada para a rotina financeira.</p>
+                <p>Acompanhe cobranças próximas do vencimento e registros atrasados em uma tela dedicada para a rotina financeira.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Próximos</strong><span><%= proximos.length %> registros</span></div>
-                <div class="list-stat"><strong>Atrasados</strong><span><%= atrasados.length %> registros</span></div>
+                <div class="list-stat">
+                    <strong>Próximos</strong>
+                    <span><%= totalProximos %> <%= totalProximos === 1 ? 'registro' : 'registros' %></span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Atrasados</strong>
+                    <span><%= totalAtrasados %> <%= totalAtrasados === 1 ? 'registro' : 'registros' %></span>
+                </div>
             </div>
         </section>
 
-        <main class="list-stage">
-            <section class="list-panel">
-                <h2 class="table-section-title">Vencendo nos próximos 5 dias</h2>
+        <main class="list-stage vencimentos-stage">
+            <section class="list-panel vencimentos-panel">
+                <div class="vencimentos-section-header">
+                    <div>
+                        <span class="form-section-tag">Próximos</span>
+                        <h2 class="table-section-title">Vencendo nos próximos 5 dias</h2>
+                        <p>Confira os lançamentos que precisam de atenção em breve.</p>
+                    </div>
+                </div>
+
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table vencimentos-table vencimentos-table-proximos">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -38,22 +103,49 @@
                                     <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <% if (proximos.length) { %>
+                                <% if (totalProximos) { %>
                                     <% proximos.forEach((item) => { %>
                                         <tr>
-                                            <td><span class="table-badge table-badge-neutral">#<%= item.id %></span></td>
-                                            <td><div class="table-title-cell"><%= item.tipo_de_lancamento %></div></td>
-                                            <td class="table-cell-description"><span class="table-muted"><%= item.descricao %></span></td>
-                                            <td><strong><%= new Date(item.vencimento).toLocaleDateString('pt-BR') %></strong></td>
-                                            <td><span class="table-badge table-badge-amber"><%= item.diffDays %> dia(s)</span></td>
-                                            <td>
-                                                <div class="table-actions">
-                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+                                            <td data-label="ID">
+                                                <span class="table-badge table-badge-neutral">#<%= item.id %></span>
+                                            </td>
+
+                                            <td data-label="Categoria">
+                                                <div class="table-title-cell"><%= formatTipoLancamento(item.tipo_de_lancamento) %></div>
+                                            </td>
+
+                                            <td data-label="Descrição" class="table-cell-description">
+                                                <span class="table-muted"><%= formatDescricao(item.descricao) %></span>
+                                            </td>
+
+                                            <td data-label="Vencimento">
+                                                <strong><%= formatDate(item.vencimento) %></strong>
+                                            </td>
+
+                                            <td data-label="Dias">
+                                                <span class="table-badge table-badge-amber"><%= item.diffDays %> <%= Number(item.diffDays) === 1 ? 'dia' : 'dias' %></span>
+                                            </td>
+
+                                            <td data-label="Ações">
+                                               <div class="table-actions">
+                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">
+                                                        <i class="bi bi-eye"></i>
+                                                        <span>Visualizar</span>
+                                                    </a>
+
                                                     <% if (!isReadOnly) { %>
-                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                            <span>Editar</span>
+                                                        </a>
+
                                                         <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
-                                                            <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                            <button type="submit" class="table-btn table-btn-pay">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                <span>Pago</span>
+                                                            </button>
                                                         </form>
                                                     <% } %>
                                                 </div>
@@ -61,7 +153,11 @@
                                         </tr>
                                     <% }) %>
                                 <% } else { %>
-                                    <tr><td colspan="6" class="table-empty">Nenhum vencimento próximo encontrado.</td></tr>
+                                    <tr>
+                                        <td colspan="6" class="table-empty">
+                                            Nenhum vencimento próximo encontrado.
+                                        </td>
+                                    </tr>
                                 <% } %>
                             </tbody>
                         </table>
@@ -69,11 +165,18 @@
                 </div>
             </section>
 
-            <section class="list-panel">
-                <h2 class="table-section-title">Atrasados</h2>
+            <section class="list-panel vencimentos-panel">
+                <div class="vencimentos-section-header">
+                    <div>
+                        <span class="form-section-tag">Atrasados</span>
+                        <h2 class="table-section-title">Lançamentos atrasados</h2>
+                        <p>Veja registros vencidos que ainda precisam de conferência ou baixa.</p>
+                    </div>
+                </div>
+
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table vencimentos-table vencimentos-table-atrasados">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -84,20 +187,38 @@
                                     <th class="table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <% if (atrasados.length) { %>
+                                <% if (totalAtrasados) { %>
                                     <% atrasados.forEach((item) => { %>
                                         <tr>
-                                            <td><span class="table-badge table-badge-neutral">#<%= item.id %></span></td>
-                                            <td><div class="table-title-cell"><%= item.tipo_de_lancamento %></div></td>
-                                            <td class="table-cell-description"><span class="table-muted"><%= item.descricao %></span></td>
-                                            <td><strong><%= new Date(item.vencimento).toLocaleDateString('pt-BR') %></strong></td>
-                                            <td><span class="table-badge table-badge-danger"><%= Math.abs(item.diffDays) %> dia(s)</span></td>
-                                            <td>
+                                            <td data-label="ID">
+                                                <span class="table-badge table-badge-neutral">#<%= item.id %></span>
+                                            </td>
+
+                                            <td data-label="Categoria">
+                                                <div class="table-title-cell"><%= formatTipoLancamento(item.tipo_de_lancamento) %></div>
+                                            </td>
+
+                                            <td data-label="Descrição" class="table-cell-description">
+                                                <span class="table-muted"><%= formatDescricao(item.descricao) %></span>
+                                            </td>
+
+                                            <td data-label="Vencimento">
+                                                <strong><%= formatDate(item.vencimento) %></strong>
+                                            </td>
+
+                                            <td data-label="Atraso">
+                                                <span class="table-badge table-badge-danger"><%= Math.abs(item.diffDays) %> <%= Math.abs(Number(item.diffDays)) === 1 ? 'dia' : 'dias' %></span>
+                                            </td>
+
+                                            <td data-label="Ações">
                                                 <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+
                                                     <% if (!isReadOnly) { %>
                                                         <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+
                                                         <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
                                                             <button type="submit" class="table-btn table-btn-pay">Pago</button>
                                                         </form>
@@ -107,10 +228,36 @@
                                         </tr>
                                     <% }) %>
                                 <% } else { %>
-                                    <tr><td colspan="6" class="table-empty">Nenhum vencimento atrasado encontrado.</td></tr>
+                                    <tr>
+                                        <td colspan="6" class="table-empty">
+                                            Nenhum vencimento atrasado encontrado.
+                                        </td>
+                                    </tr>
                                 <% } %>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="list-panel vencimentos-panel vencimentos-navigation-panel">
+                <div class="view-actions vencimentos-actions">
+                    <div class="view-actions-copy">
+                        Revise os vencimentos antes de voltar para a listagem geral ou cadastrar uma nova movimentação financeira.
+                    </div>
+
+                    <div class="view-actions-buttons">
+                        <a href="/lancamentos" class="btn-modern-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Voltar para lançamentos</span>
+                        </a>
+
+                        <% if (!isReadOnly) { %>
+                            <a href="/lancamentos/add" class="btn-modern">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Novo lançamento</span>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </section>
@@ -119,12 +266,14 @@
 
     <% const flashSuccess = typeof success !== 'undefined' ? success : null; %>
     <% const flashError = typeof error !== 'undefined' ? error : null; %>
+
     <% if (flashSuccess || flashError) { %>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 <% if (flashSuccess) { %>
                     window.AppAlerts?.success("<%- flashSuccess.replace(/"/g, '&quot;') %>");
                 <% } %>
+
                 <% if (flashError) { %>
                     window.AppAlerts?.error("<%- flashError.replace(/"/g, '&quot;') %>");
                 <% } %>

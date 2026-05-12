@@ -8,7 +8,7 @@
     <div class="page-spacer"></div>
     <% const currentFiltro = typeof tipoFiltro !== 'undefined' ? tipoFiltro : 'todos'; %>
 
-    <div class="list-shell">
+    <div class="list-shell lancamentos-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
 
         <section class="page-titlebar page-titlebar-neutral">
@@ -79,54 +79,65 @@
                                 </tr>
                             </thead>
                             <tbody id="launchTableBody">
-                                <% lancamentos.slice().reverse().forEach((lancamento) => { 
-                                    const vencimentoLabel = lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido';
-                                    const isParcelado = Number(lancamento.qtde_de_parcelas || 0) > 1;
-                                    const rowTone = lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger';
-                                %>
-                                    <tr id="row-<%= lancamento.id %>" data-vencimento="<%= lancamento.vencimento || '' %>" class="<%= isParcelado ? 'launch-row-parcelado' : '' %>">
-                                        <td>
-                                            <div class="table-stack-compact">
-                                                <span class="table-badge <%= rowTone %>"><%= lancamento.entrada_saida.toUpperCase() %></span>
-                                                <% if (isParcelado) { %>
-                                                    <span class="table-badge table-badge-amber">PARCELA</span>
-                                                <% } %>
-                                            </div>
-                                        </td>
-                                        <td><%= new Date(lancamento.data).toLocaleDateString('pt-BR') %></td>
-                                        <td class="table-col-category">
-                                            <div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div>
-                                        </td>
-                                        <td><%= String(lancamento.forma_de_pagamento || '').toUpperCase() %></td>
-                                        <td>
-                                            <strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
-                                        </td>
-                                        <td class="table-cell-description">
-                                            <span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span>
-                                        </td>
-                                        <td>
-                                            <div class="table-vencimento-copy <%= lancamento.vencimento ? '' : 'is-empty' %>">
-                                                <strong><%= vencimentoLabel %></strong>
-                                                <% if (isParcelado) { %>
-                                                    <span>Definido no cadastro</span>
-                                                <% } %>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="table-actions table-actions-launch">
-                                                <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Visualizar</a>
-                                                <% if (!isReadOnly) { %>
-                                                    <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                    <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="table-btn table-btn-delete">Deletar</button>
-                                                    </form>
-                                                <% } %>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <% }) %>
-                            </tbody>
+                            <% lancamentos.slice().reverse().forEach((lancamento) => { 
+                                const vencimentoLabel = lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido';
+                                const isParcelado = Number(lancamento.qtde_de_parcelas || 0) > 1;
+                                const rowTone = lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger';
+                            %>
+                                <tr id="row-<%= lancamento.id %>" data-vencimento="<%= lancamento.vencimento || '' %>" class="<%= isParcelado ? 'launch-row-parcelado' : '' %>">
+                                    <td class="launch-col-type" data-label="Tipo">
+                                        <div class="table-stack-compact">
+                                            <span class="table-badge <%= rowTone %>"><%= lancamento.entrada_saida.toUpperCase() %></span>
+                                            <% if (isParcelado) { %>
+                                                <span class="table-badge table-badge-amber">PARCELA</span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+
+                                    <td class="launch-col-date" data-label="Data">
+                                        <%= new Date(lancamento.data).toLocaleDateString('pt-BR') %>
+                                    </td>
+
+                                    <td class="table-col-category launch-col-category" data-label="Categoria">
+                                        <div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div>
+                                    </td>
+
+                                    <td class="launch-col-payment" data-label="Pagamento">
+                                        <%= String(lancamento.forma_de_pagamento || '').toUpperCase() %>
+                                    </td>
+
+                                    <td class="launch-col-value" data-label="Valor">
+                                        <strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+                                    </td>
+
+                                    <td class="table-cell-description launch-col-description" data-label="Descrição">
+                                        <span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span>
+                                    </td>
+
+                                    <td class="launch-col-due-date" data-label="Vencimento">
+                                        <div class="table-vencimento-copy <%= lancamento.vencimento ? '' : 'is-empty' %>">
+                                            <strong><%= vencimentoLabel %></strong>
+                                            <% if (isParcelado) { %>
+                                                <span>Definido no cadastro</span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+
+                                    <td class="launch-col-actions table-actions-cell" data-label="Ações">
+                                        <div class="table-actions table-actions-launch">
+                                            <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Ver</a>
+                                            <% if (!isReadOnly) { %>
+                                                <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="table-btn table-btn-delete">Excluir</button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
                         </table>
                     </div>
                 </div>
