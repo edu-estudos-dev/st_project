@@ -4701,6 +4701,7 @@ body.route-neighborhood-modal-open {
   color: #6d28d9;
 }
 
+
 .table-section-title {
   margin-bottom: 0.8rem;
   font-size: 1.15rem;
@@ -6824,6 +6825,231 @@ thead .est-actions-sticky {
   font-weight: 650 !important;
 }
 
+/* Mobile - refinamento de densidade dos formularios */
+
+@media (max-width: 767.98px) {
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header,
+  .form-shell-modern .modern-form .form-card-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header h2,
+  .form-shell-modern .modern-form .form-card-header h2 {
+    font-size: 1.04rem !important;
+    line-height: 1.16 !important;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-card-header p,
+  .form-shell-modern .modern-form .form-card-header p {
+    font-size: 0.78rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form label,
+  .form-shell-modern .modern-form label {
+    font-size: 0.75rem;
+    line-height: 1.24;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-control,
+  .form-shell-modern .modern-form .form-control {
+    font-size: 0.82rem;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form textarea.form-control,
+  .form-shell-modern .modern-form textarea.form-control {
+    min-height: 104px;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card,
+  .form-shell-modern .modern-form .single-product-card {
+    min-height: 112px;
+    gap: 0.58rem;
+    padding: 0.82rem;
+    border-radius: 16px;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-icon,
+  .form-shell-modern .modern-form .single-product-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    font-size: 0.98rem;
+  }
+
+  .single-product-card-content span {
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+  }
+
+  .single-product-card-content strong,
+  .form-shell-modern .modern-form.estabelecimento-form .single-product-card-content strong,
+  .form-shell-modern .modern-form .single-product-card-content strong {
+    font-size: 0.92rem;
+  }
+
+  .single-product-card-content small {
+    margin-top: 0.24rem;
+    font-size: 0.74rem;
+    line-height: 1.3;
+  }
+
+  .modern-checkbox-grid {
+    gap: 0.5rem;
+  }
+
+  .modern-checkbox span {
+    min-height: 42px;
+    padding-block: 0.62rem;
+    font-size: 0.82rem;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
+  .form-shell-modern .modern-form .form-section-tag,
+  .product-badge,
+  .optional-label,
+  .required-label {
+    min-height: 20px !important;
+    padding: 2px 7px !important;
+    font-size: 0.58rem !important;
+    letter-spacing: 0.028em !important;
+  }
+
+  .form-shell-modern .modern-form.estabelecimento-form .form-section-tag,
+  .form-shell-modern .modern-form .form-section-tag {
+    margin-bottom: 0.3rem !important;
+  }
+
+  .product-badge {
+    gap: 4px;
+  }
+
+  .product-badge i {
+    font-size: 0.4rem;
+  }
+
+  .optional-label,
+  .required-label {
+    margin-left: 4px !important;
+    transform: translateY(-1px);
+  }
+
+  .product-setup-block {
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: 15px;
+  }
+
+  .product-setup-block + .product-setup-block {
+    margin-top: 10px;
+  }
+
+  .product-setup-header {
+    gap: 5px;
+  }
+
+  .product-setup-badges {
+    gap: 6px;
+    margin-bottom: 0.04rem;
+  }
+
+  .product-setup-header h3,
+  .form-shell-modern .modern-form .product-setup-header h3 {
+    font-size: 0.86rem !important;
+    line-height: 1.16 !important;
+  }
+
+  .product-setup-header p,
+  .form-shell-modern .modern-form .product-setup-header p {
+    font-size: 0.74rem !important;
+    line-height: 1.34 !important;
+  }
+
+  .product-divider {
+    margin: 10px 0 11px;
+  }
+
+  .product-setup-block .row {
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .product-setup-block .compact-field label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.26rem 0.18rem;
+    margin-bottom: 0.34rem;
+    text-align: center;
+  }
+
+  .product-setup-block .compact-field .form-control {
+    min-height: 40px;
+  }
+
+  .route-coordinates-private {
+    gap: 0.72rem;
+    padding: 0.78rem;
+    border-radius: 16px;
+  }
+
+  .route-coordinates-private > div {
+    gap: 0.28rem;
+  }
+
+  .route-coordinates-private label {
+    font-size: 0.82rem !important;
+  }
+
+  .route-coordinates-private .modern-note {
+    font-size: 0.74rem;
+    line-height: 1.36;
+  }
+
+  .coordinates-capture-status {
+    margin-top: 0.04rem;
+    padding: 0.3rem 0.58rem;
+    font-size: 0.68rem;
+    line-height: 1.18;
+  }
+
+  .route-coordinate-button {
+    min-height: 40px;
+    gap: 0.38rem;
+    padding-inline: 0.78rem;
+    font-size: 0.78rem;
+  }
+
+  .form-actions-bar {
+    gap: 0.85rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+  }
+
+  .form-actions-copy {
+    gap: 0.18rem;
+  }
+
+  .form-actions-copy strong {
+    font-size: 0.86rem;
+  }
+
+  .form-actions-copy span {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .form-actions-buttons {
+    gap: 0.52rem;
+  }
+
+  .form-actions-buttons .btn-modern,
+  .form-actions-buttons .btn-modern-secondary {
+    min-height: 40px;
+    font-size: 0.78rem;
+  }
+}
+
 /* Tablet */
 
 @media (min-width: 768px) {
@@ -7120,21 +7346,7 @@ thead .est-actions-sticky {
   .estabelecimentos-table.is-operational-view.has-4-operational-cols .est-actions-sticky {
     width: 25%;
   }
-
-  .estabelecimentos-table .estabelecimento-actions {
-    justify-content: flex-end;
-    padding-right: 0.7rem;
-  }
-
-  .view-card-product {
-    padding-top: 0.82rem !important;
-    padding-bottom: 0.82rem !important;
-  }
 }
-
-
-
-
 
 /* ==========================================================================
    17 - TIPOGRAFIA PADRAO DO SAAS
