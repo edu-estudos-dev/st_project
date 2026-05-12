@@ -525,7 +525,10 @@
         <!-- LOADING AUTOMATICO EM NAVEGACAO INTERNA -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-                        const shouldIgnoreNavigationLoading = (link) => {
+            const DEFAULT_NAVIGATION_LOADING_DELAY = 650;
+            const HEAVY_NAVIGATION_LOADING_DELAY = 120;
+
+            const shouldIgnoreNavigationLoading = (link) => {
                 if (!link) return true;
 
                 const href = link.getAttribute('href');
@@ -544,19 +547,14 @@
                 if (link.target && link.target !== '_self') return true;
 
                 if (
-                    linkText === 'voltar' ||
-                    linkText.includes('voltar') ||
-                    linkText === 'cancelar' ||
-                    linkText.includes('cancelar') ||
-                    linkText.includes('agora não') ||
-                    linkText.includes('fechar')
+                    linkText === 'fechar' ||
+                    linkText.includes('fechar') ||
+                    linkText.includes('agora não')
                 ) {
                     return true;
                 }
 
                 if (
-                    link.closest('.breadcrumb') ||
-                    link.closest('.app-breadcrumb') ||
                     link.closest('footer') ||
                     link.closest('.site-footer')
                 ) {
@@ -565,13 +563,33 @@
 
                 return false;
             };
-            
+
             const isSamePageNavigation = (url) => {
                 return (
                     url.origin === window.location.origin &&
                     url.pathname === window.location.pathname &&
                     url.search === window.location.search
                 );
+            };
+
+            const isHeavyNavigation = (url) => {
+                const path = `${url.pathname}${url.search}`.toLowerCase();
+
+                return (
+                    path.includes('/sangrias/add') ||
+                    path.includes('/sangrias/edit') ||
+                    path.includes('/rotas') ||
+                    path.includes('/assinatura') ||
+                    path.includes('/pagamentos') ||
+                    path.includes('/estabelecimentos/add') ||
+                    path.includes('/estabelecimentos/') && path.includes('/edit')
+                );
+            };
+
+            const getNavigationLoadingDelay = (url) => {
+                return isHeavyNavigation(url)
+                    ? HEAVY_NAVIGATION_LOADING_DELAY
+                    : DEFAULT_NAVIGATION_LOADING_DELAY;
             };
 
             const getNavigationLoadingCopy = (link, url) => {
@@ -651,6 +669,13 @@
                     };
                 }
 
+                if (text.includes('voltar') || text.includes('cancelar')) {
+                    return {
+                        title: 'Voltando...',
+                        detail: 'Carregando a tela anterior.'
+                    };
+                }
+
                 if (text.includes('visualizar')) {
                     return {
                         title: 'Abrindo detalhes...',
@@ -695,8 +720,11 @@
                 }
 
                 const copy = getNavigationLoadingCopy(link, url);
+                const delay = getNavigationLoadingDelay(url);
 
-                window.AppLoading?.show(copy.title, copy.detail);
+                window.setTimeout(() => {
+                    window.AppLoading?.show(copy.title, copy.detail);
+                }, delay);
             });
         });
     </script>
