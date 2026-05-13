@@ -15,7 +15,7 @@
             <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-cash-coin"></i> Financeiro</span>
                 <h1>Novo lançamento</h1>
-                <p>Registre entradas e saídas com mais clareza visual, organizando o tipo financeiro, a origem do valor e os dados de pagamento em uma jornada mais objetiva.</p>
+                <p>Registre entradas e saídas com clareza, informando apenas os campos necessários para cada tipo de movimentação.</p>
             </div>
 
             <div class="page-titlebar-side">
@@ -78,14 +78,14 @@
                         <div>
                             <span class="form-section-tag">Pagamento</span>
                             <h2>Origem e forma de pagamento</h2>
-                            <p>Associe o lançamento ao produto correto, escolha a forma de pagamento e informe a quantidade de parcelas quando necessário.</p>
+                            <p>Para entradas, informe apenas Pix ou Espécie. Para saídas, informe o produto e use parcelas somente em boleto ou crédito.</p>
                         </div>
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 col-lg-3" id="produtoField">
                             <label for="produto">Produto</label>
-                            <select required class="form-select text-center" id="produto" name="produto">
+                            <select class="form-select text-center" id="produto" name="produto">
                                 <option value="" disabled selected>Selecione um produto</option>
                                 <% if (navProducts.bolinhas) { %><option value="bolinhas">Bolinhas</option><% } %>
                                 <% if (hasConsignados) { %><option value="consignados">Consignados</option><% } %>
@@ -96,10 +96,10 @@
                             <label for="forma_de_pagamento">Forma de pagamento</label>
                             <select class="form-select text-center" id="forma_de_pagamento" name="forma_de_pagamento" required>
                                 <option value="" disabled selected>Selecione um tipo</option>
-                                <option value="boleto">Boleto</option>
-                                <option value="credito">Crédito</option>
-                                <option value="pix">Pix</option>
-                                <option value="especie">Espécie</option>
+                                <option value="boleto" class="pagamento-saida">Boleto</option>
+                                <option value="credito" class="pagamento-saida">Crédito</option>
+                                <option value="pix" class="pagamento-entrada pagamento-saida">Pix</option>
+                                <option value="especie" class="pagamento-entrada pagamento-saida">Espécie</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-6 col-lg-3">
@@ -133,7 +133,7 @@
                 <section class="form-actions-bar">
                     <div class="form-actions-copy">
                         <strong>Conferência final</strong>
-                        <span>Antes de salvar, verifique tipo, data, produto e valor do lançamento.</span>
+                        <span>Antes de salvar, verifique tipo, data, forma de pagamento e valor do lançamento.</span>
                     </div>
 
                     <div class="form-actions-buttons">
@@ -159,36 +159,110 @@
             const parcelasInput = document.getElementById('qtde_de_parcelas');
             const vencimentoField = document.getElementById('vencimentoField');
             const vencimentoInput = document.getElementById('vencimento');
+            const produtoField = document.getElementById('produtoField');
+            const produtoSelect = document.getElementById('produto');
+            const tipoLancamentoSelect = document.getElementById('tipo_de_lancamento');
             const tipoEntradas = document.querySelectorAll('.tipo-entrada');
             const tipoSaidas = document.querySelectorAll('.tipo-saida');
+            const pagamentosEntrada = document.querySelectorAll('.pagamento-entrada');
+            const pagamentosSaida = document.querySelectorAll('.pagamento-saida');
+
+            function syncTipoLancamento() {
+                const isEntrada = entradaSaidaSelect.value === 'Entrada';
+                const isSaida = entradaSaidaSelect.value === 'Saida';
+
+                tipoEntradas.forEach((option) => {
+                    option.style.display = isEntrada ? 'block' : 'none';
+                    option.disabled = !isEntrada;
+                });
+
+                tipoSaidas.forEach((option) => {
+                    option.style.display = isSaida ? 'block' : 'none';
+                    option.disabled = !isSaida;
+                });
+
+                const selectedOption = tipoLancamentoSelect.options[tipoLancamentoSelect.selectedIndex];
+
+                if (selectedOption?.disabled) {
+                    tipoLancamentoSelect.value = '';
+                }
+            }
+
+            function syncProdutoField() {
+                const isEntrada = entradaSaidaSelect.value === 'Entrada';
+
+                produtoField.classList.toggle('d-none', isEntrada);
+                produtoSelect.required = !isEntrada;
+                produtoSelect.disabled = isEntrada;
+
+                if (isEntrada) {
+                    produtoSelect.value = '';
+                }
+            }
+
+            function syncFormaPagamentoOptions() {
+                const isEntrada = entradaSaidaSelect.value === 'Entrada';
+                const isSaida = entradaSaidaSelect.value === 'Saida';
+
+                pagamentosEntrada.forEach((option) => {
+                    option.style.display = isEntrada || isSaida ? 'block' : 'none';
+                    option.disabled = !(isEntrada || isSaida);
+                });
+
+                pagamentosSaida.forEach((option) => {
+                    const permitido = isSaida || option.classList.contains('pagamento-entrada');
+
+                    option.style.display = permitido ? 'block' : 'none';
+                    option.disabled = !permitido;
+                });
+
+                const selectedOption = formaPagamentoSelect.options[formaPagamentoSelect.selectedIndex];
+
+                if (selectedOption?.disabled) {
+                    formaPagamentoSelect.value = '';
+                }
+
+                if (isEntrada && !['pix', 'especie'].includes(formaPagamentoSelect.value)) {
+                    formaPagamentoSelect.value = '';
+                }
+            }
 
             function syncVencimentoField() {
-                const isParcelado = entradaSaidaSelect.value === 'Saida' && Number(parcelasInput.value || 0) > 1;
-                vencimentoField.classList.toggle('d-none', !isParcelado);
-                vencimentoInput.required = isParcelado;
-                if (!isParcelado) {
+                const formaPagamento = formaPagamentoSelect.value;
+                const permiteParcelamento = entradaSaidaSelect.value === 'Saida'
+                    && ['boleto', 'credito'].includes(formaPagamento);
+
+                if (!permiteParcelamento) {
+                    parcelasInput.value = '1';
+                }
+
+                parcelasInput.readOnly = !permiteParcelamento;
+                parcelasInput.min = '1';
+                parcelasInput.step = '1';
+
+                const precisaVencimento = permiteParcelamento && Number(parcelasInput.value || 0) > 1;
+
+                vencimentoField.classList.toggle('d-none', !precisaVencimento);
+                vencimentoInput.required = precisaVencimento;
+
+                if (!precisaVencimento) {
                     vencimentoInput.value = '';
                 }
             }
 
             entradaSaidaSelect.addEventListener('change', function () {
-                const selectedValue = this.value;
-
-                if (selectedValue === 'Entrada') {
-                    tipoEntradas.forEach((option) => option.style.display = 'block');
-                    tipoSaidas.forEach((option) => option.style.display = 'none');
-                } else if (selectedValue === 'Saida') {
-                    tipoEntradas.forEach((option) => option.style.display = 'none');
-                    tipoSaidas.forEach((option) => option.style.display = 'block');
-                }
-
+                syncTipoLancamento();
+                syncProdutoField();
+                syncFormaPagamentoOptions();
                 syncVencimentoField();
             });
 
             formaPagamentoSelect.addEventListener('change', syncVencimentoField);
             parcelasInput.addEventListener('input', syncVencimentoField);
 
-            entradaSaidaSelect.dispatchEvent(new Event('change'));
+            syncTipoLancamento();
+            syncProdutoField();
+            syncFormaPagamentoOptions();
             syncVencimentoField();
 
             <% if (success) { %>window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");<% } %>

@@ -8,6 +8,84 @@
     <div class="page-spacer"></div>
     <% const currentFiltro = typeof tipoFiltro !== 'undefined' ? tipoFiltro : 'todos'; %>
 
+    <%
+        const formatMovimento = (value) => {
+            const rawValue = String(value || '').trim().toLowerCase();
+
+            if (rawValue === 'entrada') {
+                return 'Entrada';
+            }
+
+            if (rawValue === 'saida' || rawValue === 'saída') {
+                return 'Saída';
+            }
+
+            return value || 'Não informado';
+        };
+
+        const formatCategoria = (value) => {
+            const labels = {
+                receita_dos_pontos: 'Receita dos pontos',
+                incremento_de_capital: 'Incremento de capital',
+                compra: 'Compra',
+                extra: 'Extra',
+                'pro-labore': 'Pró-labore',
+                gastos_recorrentes: 'Gastos recorrentes',
+                bonus: 'Bônus'
+            };
+
+            const rawValue = String(value || '').trim();
+
+            if (!rawValue) {
+                return 'Não informado';
+            }
+
+            return labels[rawValue] || rawValue.replace(/_/g, ' ');
+        };
+
+        const formatFormaPagamento = (value) => {
+            const labels = {
+                boleto: 'Boleto',
+                credito: 'Crédito',
+                crédito: 'Crédito',
+                pix: 'Pix',
+                especie: 'Espécie',
+                espécie: 'Espécie'
+            };
+
+            const rawValue = String(value || '').trim().toLowerCase();
+
+            return labels[rawValue] || value || 'Não informado';
+        };
+
+        const formatDate = (value, fallback = '—') => {
+            if (!value) {
+                return fallback;
+            }
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return fallback;
+            }
+
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const formatCurrency = (value) => {
+            const numericValue = Number(value);
+
+            if (!Number.isFinite(numericValue)) {
+                return 'Não informado';
+            }
+
+            return numericValue.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+        };
+    %>
+
     <div class="list-shell lancamentos-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lançamentos Cadastrados' }) %>
 
@@ -17,11 +95,13 @@
                 <h1>Lançamentos cadastrados</h1>
                 <p>Consulte entradas e saídas com destaque para parcelas, vencimentos e ações de manutenção do fluxo financeiro.</p>
             </div>
+
             <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>Total</strong>
                     <span id="launchCount"><%= lancamentos.length %> lançamentos</span>
                 </div>
+
                 <div class="list-stat">
                     <strong>Ação rápida</strong>
                     <span>Novo registro financeiro</span>
@@ -33,14 +113,16 @@
             <section class="list-panel">
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
-                        <h2>Painel de movimentações</h2>
-                        <p>Revise parcelas, categorias e datas sem depender de edição manual do vencimento na grade.</p>
+                        <h2>Base de lançamentos</h2>
+                        <p>Consulte os principais dados financeiros da operação e use os atalhos para acompanhar vencimentos,<br> entradas e saídas.</p>
                     </div>
+
                     <div class="d-flex flex-wrap gap-2">
                         <a class="list-action" href="/lancamentos/vencimentos">
                             <i class="bi bi-bell"></i>
                             <span>Vencimentos</span>
                         </a>
+
                         <% if (!isReadOnly) { %>
                             <a class="list-action" href="/lancamentos/add">
                                 <i class="bi bi-plus-circle"></i>
@@ -50,94 +132,160 @@
                     </div>
                 </div>
 
-                <div class="table-mode-switch" aria-label="Filtro de lançamentos">
-                    <a href="/lancamentos?tipo=todos" class="table-mode-btn <%= currentFiltro === 'todos' ? 'is-active' : '' %>">Todos</a>
-                    <a href="/lancamentos?tipo=entrada" class="table-mode-btn <%= currentFiltro === 'entrada' ? 'is-active' : '' %>">Entradas</a>
-                    <a href="/lancamentos?tipo=saida" class="table-mode-btn <%= currentFiltro === 'saida' ? 'is-active' : '' %>">Saídas</a>
-                </div>
-
                 <div class="list-summary-grid">
-                    <div class="list-summary-card"><strong>Entradas e saídas</strong><span>Visão consolidada</span></div>
-                    <div class="list-summary-card"><strong>Parcelas</strong><span>Destaque visual</span></div>
-                    <div class="list-summary-card"><strong>Operação</strong><span>Gestão financeira</span></div>
-                    <div class="list-summary-card"><strong>Total</strong><span id="launchSummaryCount"><%= lancamentos.length %> registros</span></div>
+                    <div class="list-summary-card">
+                        <strong>Registros</strong>
+                        <span id="launchSummaryCount"><%= lancamentos.length %> lançamentos</span>
+                    </div>
+
+                    <div class="list-summary-card">
+                        <strong>Fluxo</strong>
+                        <span>Entradas, saídas e parcelas</span>
+                    </div>
+
+                    <div class="list-summary-card">
+                        <strong>Contexto</strong>
+                        <span>Gestão financeira centralizada</span>
+                    </div>
+
+                    <div class="list-summary-card">
+                        <strong>Visualização</strong>
+                        <span>
+                            <% if (currentFiltro === 'entrada') { %>
+                                Entradas
+                            <% } else if (currentFiltro === 'saida') { %>
+                                Saídas
+                            <% } else { %>
+                                Todos os lançamentos
+                            <% } %>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
+                <div class="table-mode-switch" aria-label="Filtro de lançamentos">
+                    <a href="/lancamentos?tipo=todos" class="table-mode-btn <%= currentFiltro === 'todos' ? 'is-active' : '' %>">
+                        Todos
+                    </a>
+
+                    <a href="/lancamentos?tipo=entrada" class="table-mode-btn <%= currentFiltro === 'entrada' ? 'is-active' : '' %>">
+                        Entradas
+                    </a>
+
+                    <a href="/lancamentos?tipo=saida" class="table-mode-btn <%= currentFiltro === 'saida' ? 'is-active' : '' %>">
+                        Saídas
+                    </a>
+                </div>
+
+                <div class="modern-table-wrap launch-table-wrap">
+                    <div class="modern-table-scroll launch-table-scroll">
                         <table class="modern-table launch-table">
                             <thead>
                                 <tr>
-                                    <th>Tipo</th>
-                                    <th>Data</th>
-                                    <th class="table-col-category">Categoria</th>
-                                    <th>Pagamento</th>
-                                    <th>Valor</th>
-                                    <th class="table-col-description">Descrição</th>
-                                    <th>Vencimento</th>
-                                    <th class="table-actions-heading">Ações</th>
+                                    <th class="launch-col-movement">Movimentação</th>
+                                    <th class="launch-col-payment">Pagamento</th>
+                                    <th class="launch-col-value">Valor</th>
+                                    <th class="launch-col-description">Descrição</th>
+                                    <th class="launch-col-actions table-actions-heading">Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody id="launchTableBody">
-                            <% lancamentos.slice().reverse().forEach((lancamento) => { 
-                                const vencimentoLabel = lancamento.vencimento ? new Date(lancamento.vencimento).toLocaleDateString('pt-BR') : 'Não definido';
-                                const isParcelado = Number(lancamento.qtde_de_parcelas || 0) > 1;
-                                const rowTone = lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger';
-                            %>
-                                <tr id="row-<%= lancamento.id %>" data-vencimento="<%= lancamento.vencimento || '' %>" class="<%= isParcelado ? 'launch-row-parcelado' : '' %>">
-                                    <td class="launch-col-type" data-label="Tipo">
-                                        <div class="table-stack-compact">
-                                            <span class="table-badge <%= rowTone %>"><%= lancamento.entrada_saida.toUpperCase() %></span>
-                                            <% if (isParcelado) { %>
-                                                <span class="table-badge table-badge-amber">PARCELA</span>
-                                            <% } %>
-                                        </div>
-                                    </td>
+                                <% lancamentos.slice().reverse().forEach((lancamento) => {
+                                    const formaPagamento = String(lancamento.forma_de_pagamento || '').toLowerCase();
+                                    const parcelas = Number(lancamento.qtde_de_parcelas || 0);
+                                    const isSaida = lancamento.entrada_saida === 'Saida';
+                                    const formaParcelavel = ['boleto', 'credito'].includes(formaPagamento);
 
-                                    <td class="launch-col-date" data-label="Data">
-                                        <%= new Date(lancamento.data).toLocaleDateString('pt-BR') %>
-                                    </td>
+                                    const temVencimentoAplicavel = isSaida && formaParcelavel && parcelas > 1;
+                                    const vencimentoLabel = temVencimentoAplicavel && lancamento.vencimento
+                                        ? formatDate(lancamento.vencimento)
+                                        : '';
 
-                                    <td class="table-col-category launch-col-category" data-label="Categoria">
-                                        <div class="table-title-cell"><%= lancamento.tipo_de_lancamento.replace(/_/g, ' ').toUpperCase() %></div>
-                                    </td>
+                                    const rowTone = lancamento.entrada_saida === 'Entrada' ? 'table-badge-green' : 'table-badge-danger';
+                                    const descricaoFormatada = String(lancamento.descricao || 'Sem descrição informada.');
+                                    const categoriaFormatada = formatCategoria(lancamento.tipo_de_lancamento);
+                                    const movimentoFormatado = formatMovimento(lancamento.entrada_saida);
+                                    const pagamentoFormatado = formatFormaPagamento(lancamento.forma_de_pagamento);
+                                %>
+                                    <tr
+                                        id="row-<%= lancamento.id %>"
+                                        data-vencimento="<%= temVencimentoAplicavel ? (lancamento.vencimento || '') : '' %>"
+                                        class="<%= temVencimentoAplicavel ? 'launch-row-parcelado' : '' %>"
+                                    >
+                                        <td class="launch-col-movement" data-label="Movimentação">
+                                            <div class="launch-movement-cell">
+                                                <div class="table-stack-compact">
+                                                    <span class="table-badge <%= rowTone %>"><%= movimentoFormatado %></span>
 
-                                    <td class="launch-col-payment" data-label="Pagamento">
-                                        <%= String(lancamento.forma_de_pagamento || '').toUpperCase() %>
-                                    </td>
+                                                    <% if (temVencimentoAplicavel) { %>
+                                                        <span class="table-badge table-badge-amber">Parcela</span>
+                                                    <% } %>
+                                                </div>
 
-                                    <td class="launch-col-value" data-label="Valor">
-                                        <strong><%= Number(lancamento.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
-                                    </td>
+                                                <strong class="launch-main-title"><%= categoriaFormatada %></strong>
 
-                                    <td class="table-cell-description launch-col-description" data-label="Descrição">
-                                        <span class="table-muted"><%= String(lancamento.descricao || '').toUpperCase() %></span>
-                                    </td>
+                                                <span class="launch-meta">
+                                                    <i class="bi bi-calendar3"></i>
+                                                    <%= formatDate(lancamento.data) %>
+                                                </span>
+                                            </div>
+                                        </td>
 
-                                    <td class="launch-col-due-date" data-label="Vencimento">
-                                        <div class="table-vencimento-copy <%= lancamento.vencimento ? '' : 'is-empty' %>">
-                                            <strong><%= vencimentoLabel %></strong>
-                                            <% if (isParcelado) { %>
-                                                <span>Definido no cadastro</span>
-                                            <% } %>
-                                        </div>
-                                    </td>
+                                        <td class="launch-col-payment" data-label="Pagamento">
+                                            <div class="launch-payment-cell">
+                                                <strong><%= pagamentoFormatado %></strong>
 
-                                    <td class="launch-col-actions table-actions-cell" data-label="Ações">
-                                        <div class="table-actions table-actions-launch">
-                                            <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">Ver</a>
-                                            <% if (!isReadOnly) { %>
-                                                <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">Editar</a>
-                                                <form action="/lancamentos/<%= lancamento.id %>" method="POST" class="d-inline delete-form" data-row-id="row-<%= lancamento.id %>" data-delete-url="/lancamentos/<%= lancamento.id %>">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button type="submit" class="table-btn table-btn-delete">Excluir</button>
-                                                </form>
-                                            <% } %>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        </tbody>
+                                                <% if (temVencimentoAplicavel) { %>
+                                                    <span class="launch-meta launch-due-meta">
+                                                        <i class="bi bi-calendar-check"></i>
+                                                        Venc. <%= vencimentoLabel %>
+                                                    </span>
+                                                <% } else { %>
+                                                    <span class="launch-meta">Sem vencimento</span>
+                                                <% } %>
+                                            </div>
+                                        </td>
+
+                                        <td class="launch-col-value" data-label="Valor">
+                                            <strong><%= formatCurrency(lancamento.valor) %></strong>
+                                        </td>
+
+                                        <td class="launch-col-description" data-label="Descrição">
+                                            <span class="table-muted"><%= descricaoFormatada %></span>
+                                        </td>
+
+                                        <td class="launch-col-actions table-actions-cell" data-label="Ações">
+                                            <div class="table-actions table-actions-launch">
+                                                <a href="/lancamentos/<%= lancamento.id %>/view" class="table-btn table-btn-view">
+                                                    <i class="bi bi-eye"></i>
+                                                    <span>Ver</span>
+                                                </a>
+
+                                                <% if (!isReadOnly) { %>
+                                                    <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                        <span>Editar</span>
+                                                    </a>
+
+                                                    <form
+                                                        action="/lancamentos/<%= lancamento.id %>"
+                                                        method="POST"
+                                                        class="d-inline delete-form"
+                                                        data-row-id="row-<%= lancamento.id %>"
+                                                        data-delete-url="/lancamentos/<%= lancamento.id %>"
+                                                    >
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button type="submit" class="table-btn table-btn-delete">
+                                                            <i class="bi bi-trash3"></i>
+                                                            <span>Excluir</span>
+                                                        </button>
+                                                    </form>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -146,6 +294,7 @@
     </div>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const rows = document.querySelectorAll('tr[id^="row-"]');
@@ -157,7 +306,7 @@
             const syncCounters = () => {
                 const totalRows = tableBody.querySelectorAll('tr[id^="row-"]').length;
                 launchCount.textContent = `${totalRows} lançamentos`;
-                launchSummaryCount.textContent = `${totalRows} registros`;
+                launchSummaryCount.textContent = `${totalRows} lançamentos`;
             };
 
             rows.forEach((row) => {
@@ -177,9 +326,10 @@
             document.querySelectorAll('.delete-form').forEach((form) => {
                 form.addEventListener('submit', async (event) => {
                     event.preventDefault();
+
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Excluir lançamento',
-                        text: 'Tem certeza que deseja deletar este lançamento?',
+                        text: 'Tem certeza que deseja excluir este lançamento?',
                         confirmButtonText: 'Excluir',
                         cancelButtonText: 'Cancelar'
                     });
@@ -225,10 +375,16 @@
                 });
             });
 
-            <% if (typeof success !== 'undefined') { %>window.AppAlerts?.success("<%- success.replace(/\"/g, '&quot;') %>");<% } %>
-            <% if (typeof error !== 'undefined') { %>window.AppAlerts?.error("<%- error.replace(/\"/g, '&quot;') %>");<% } %>
+            <% if (typeof success !== 'undefined') { %>
+                window.AppAlerts?.success("<%- success.replace(/"/g, '&quot;') %>");
+            <% } %>
+
+            <% if (typeof error !== 'undefined') { %>
+                window.AppAlerts?.error("<%- error.replace(/"/g, '&quot;') %>");
+            <% } %>
         });
     </script>
+
     <%- include('../../partials/financialNotificationsPopup', { popupMode: 'launch-once' }) %>
 </body>
 </html>

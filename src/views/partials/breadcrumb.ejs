@@ -1,8 +1,171 @@
-<nav class="app-breadcrumb flex-column flex-md-row" aria-label="breadcrumb">
-    <ol class="breadcrumb flex-wrap align-items-center">
-        <li class="breadcrumb-item"><a href="/painel">Painel</a></li>
-        <li class="breadcrumb-item active fw-bold" aria-current="page"><%= pageTitle %></li>
-    </ol>
-    <span class="app-user-pill">Usuário ativo: <strong><%= usuario.username %></strong></span>
-</nav>
+<style>
+    .app-breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.72rem;
+        width: 100%;
+        margin: 0 0 0.82rem;
+        padding: 0.62rem 0.72rem;
+        border: 1px solid rgba(203, 213, 225, 0.68);
+        border-radius: 18px;
+        background:
+            radial-gradient(circle at 8% 12%, rgba(37, 99, 235, 0.045), transparent 34%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.9));
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.055);
+    }
 
+    .app-breadcrumb-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.22rem;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .app-breadcrumb .breadcrumb-item {
+        display: inline-flex;
+        align-items: center;
+        min-width: 0;
+        color: #64748b;
+        font-size: 0.78rem;
+        font-weight: 750;
+        line-height: 1.15;
+    }
+
+    .app-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        display: inline-flex;
+        align-items: center;
+        padding: 0 0.34rem;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        font-weight: 850;
+        line-height: 1;
+    }
+
+    .app-breadcrumb .breadcrumb-item a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.32rem;
+        min-width: 0;
+        color: #2563eb;
+        font-weight: 850;
+        text-decoration: none;
+    }
+
+    .app-breadcrumb .breadcrumb-item a:hover {
+        color: #1d4ed8;
+    }
+
+    .app-breadcrumb .breadcrumb-item a i {
+        flex: 0 0 auto;
+        font-size: 0.82rem;
+        line-height: 1;
+    }
+
+    .app-breadcrumb .breadcrumb-item.active {
+        color: #0f172a;
+        font-weight: 850;
+    }
+
+    .app-breadcrumb .breadcrumb-item.active span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .app-user-pill {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 0.28rem;
+        min-height: 28px;
+        padding: 0.3rem 0.62rem;
+        border-radius: 999px;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.075);
+        border: 1px solid rgba(37, 99, 235, 0.1);
+        font-size: 0.7rem;
+        font-weight: 760;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .app-user-pill strong {
+        color: #1d4ed8;
+        font-size: 0.72rem;
+        font-weight: 900;
+    }
+
+    @media (max-width: 767.98px) {
+        .app-breadcrumb {
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: center;
+            justify-items: center;
+            gap: 0.42rem;
+            margin-bottom: 0.68rem;
+            padding: 0.56rem 0.62rem;
+            border-radius: 16px;
+        }
+
+        .app-breadcrumb-list {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .app-breadcrumb .breadcrumb-item {
+            font-size: 0.74rem;
+        }
+
+        .app-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+            padding: 0 0.28rem;
+            font-size: 0.84rem;
+        }
+
+        .app-breadcrumb .breadcrumb-item a {
+            gap: 0.28rem;
+        }
+
+        .app-breadcrumb .breadcrumb-item a i {
+            font-size: 0.78rem;
+        }
+
+        .app-user-pill {
+            justify-self: center;
+            min-height: 24px;
+            padding: 0.26rem 0.52rem;
+            font-size: 0.64rem;
+        }
+
+        .app-user-pill strong {
+            font-size: 0.66rem;
+        }
+    }
+</style>
+
+<nav class="app-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb app-breadcrumb-list">
+        <li class="breadcrumb-item app-breadcrumb-item">
+            <a href="/painel">
+                <i class="bi bi-grid-1x2"></i>
+                <span>Painel</span>
+            </a>
+        </li>
+
+        <li class="breadcrumb-item app-breadcrumb-item active" aria-current="page">
+            <span><%= pageTitle %></span>
+        </li>
+    </ol>
+
+    <% if (typeof usuario !== 'undefined' && usuario?.username) { %>
+        <span class="app-user-pill">
+            <span>Usuário ativo: </span>
+            <strong><%= usuario.username %></strong>
+        </span>
+    <% } %>
+</nav>
