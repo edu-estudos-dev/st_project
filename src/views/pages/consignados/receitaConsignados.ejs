@@ -6,69 +6,176 @@
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <%
+    const anosReceita = Array.from({ length: 12 }, (_, index) => {
+        const ano = 2025 + index;
+
+        return {
+            ano,
+            periodo: ano <= 2030 ? 1 : 2
+        };
+    });
+
+    const mesesReceita = [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
+    ];
+
+    const dataAtualReceita = new Date();
+    const anoAtualReceita = dataAtualReceita.getFullYear();
+    const mesAtualReceitaIndex = dataAtualReceita.getMonth();
+
+    const periodoAtualReceita =
+        anoAtualReceita >= 2025 && anoAtualReceita <= 2030
+            ? '1'
+            : anoAtualReceita >= 2031 && anoAtualReceita <= 2036
+                ? '2'
+                : '';
+
+    const formatarMoedaReceita = (valor) => {
+        return (Number(valor) || 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    };
+
+    const obterReceitaMesAno = (ano, mes) => {
+        const item = receita.find(r => Number(r.ano) === Number(ano) && Number(r.mes) === Number(mes));
+        return item ? Number(item.total) || 0 : 0;
+    };
+
+    const obterTotalAno = (ano) => {
+        return receita
+            .filter(r => Number(r.ano) === Number(ano))
+            .reduce((sum, r) => sum + (Number(r.total) || 0), 0);
+    };
+
+    const totaisPorAno = anosReceita.map(item => ({
+        ...item,
+        total: obterTotalAno(item.ano)
+    }));
+
+    const totalPeriodoReceita = totaisPorAno.reduce((sum, item) => sum + item.total, 0);
+    const melhorAnoReceita = totaisPorAno.reduce((melhor, item) => item.total > melhor.total ? item : melhor, totaisPorAno[0]);
+    %>
+
+    <div class="list-shell receita-anual-shell receita-anual-consignados-shell" data-periodo="1" data-periodo-atual="<%= periodoAtualReceita %>">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Receita de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue receita-anual-titlebar">
             <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-graph-up-arrow"></i> Receita</span>
                 <h1>Receita consolidada dos consignados</h1>
-                <p>Compare a evolução anual das receitas dos consignados em um layout moderno, limpo e consistente com as demais áreas do sistema.</p>
+                <p>Compare a evolução anual das receitas dos consignados em uma visão por período, limpa e consistente com o sistema.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Produto</strong><span>Consignados</span></div>
-                <div class="list-stat"><strong>Faixa</strong><span>2025 a 2035</span></div>
+                <div class="list-stat">
+                    <strong>Produto</strong>
+                    <span>Consignados</span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Faixa</strong>
+                    <span>2025 a 2036</span>
+                </div>
             </div>
         </section>
 
         <main class="list-stage">
-            <section class="list-panel">
-                <div class="list-toolbar">
-                    <div class="list-toolbar-copy">
-                        <h2>Painel de receita anual</h2>
-                        <p>Visualize mês a mês e compare os totais de cada ano com mais clareza e leitura rápida.</p>
+            <section class="list-panel receita-anual-panel">
+                <div class="receita-anual-summary-grid">
+                    <article class="receita-anual-summary-card receita-anual-summary-card-featured">
+                        <span>Total do período</span>
+                        <strong><%= formatarMoedaReceita(totalPeriodoReceita) %></strong>
+                        <small>Soma das receitas registradas entre 2025 e 2036.</small>
+                    </article>
+
+                    <article class="receita-anual-summary-card">
+                        <span>Melhor ano</span>
+                        <strong><%= melhorAnoReceita.ano %></strong>
+                        <small><%= formatarMoedaReceita(melhorAnoReceita.total) %> em receita consolidada.</small>
+                    </article>
+
+                    <article class="receita-anual-summary-card">
+                        <span>Visão</span>
+                        <strong>Mensal</strong>
+                        <small>Comparativo por mês, com alternância entre períodos.</small>
+                    </article>
+                </div>
+
+                <div class="receita-anual-toolbar">
+                    <div class="receita-anual-toolbar-copy">
+                        <span class="form-section-tag">Receita anual</span>
+                        <h2>Painel de receita dos consignados</h2>
+                        <p>Alterne o período para comparar os anos sem rolagem lateral e com melhor leitura no celular.</p>
+                    </div>
+
+                    <div class="receita-anual-mode-switch" role="group" aria-label="Selecionar período">
+                        <button type="button" class="receita-anual-mode-btn is-active" data-periodo-target="1">
+                            2025 a 2030
+                        </button>
+                        <button type="button" class="receita-anual-mode-btn" data-periodo-target="2">
+                            2031 a 2036
+                        </button>
                     </div>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table class="modern-table">
+                <div class="receita-anual-table-wrap">
+                    <div class="receita-anual-table-scroll">
+                        <table class="modern-table receita-anual-table">
                             <thead>
                                 <tr>
-                                    <th>Meses</th>
-                                    <% for (let ano = 2025; ano <= 2035; ano++) { %>
-                                        <th><span class="revenue-year-chip"><%= ano %></span></th>
-                                    <% } %>
+                                    <th class="receita-anual-col-month">Meses</th>
+                                    <% anosReceita.forEach((item) => { %>
+                                        <th class="receita-anual-col-year ra-periodo-<%= item.periodo %>">
+                                            <span class="receita-anual-year-chip"><%= item.ano %></span>
+                                        </th>
+                                    <% }) %>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <% const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']; %>
-                                <% meses.forEach((mes, index) => { %>
-                                    <tr>
-                                        <td class="table-title-cell revenue-month-cell"><%= mes %></td>
-                                        <% for (let ano = 2025; ano <= 2035; ano++) { %>
-                                            <td>
-                                                <%
-                                                    const receitaMesAno = receita.find(r => Number(r.ano) === ano && Number(r.mes) === index + 1);
-                                                    const valor = receitaMesAno ? Number(receitaMesAno.total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
-                                                %>
-                                                <strong><%= valor %></strong>
+                                <% mesesReceita.forEach((mes, index) => { %>
+                                    <tr class="<%= index === mesAtualReceitaIndex ? 'receita-anual-row-current' : '' %>">
+                                        <td data-label="Mês" class="receita-anual-month-cell">
+                                            <strong><%= mes %></strong>
+                                        </td>
+
+                                        <% anosReceita.forEach((item) => {
+                                            const valorNumero = obterReceitaMesAno(item.ano, index + 1);
+                                        %>
+                                            <td data-label="<%= item.ano %>" class="ra-periodo-<%= item.periodo %>">
+                                                <span class="receita-anual-value <%= valorNumero > 0 ? 'is-positive' : 'is-neutral' %>">
+                                                    <%= formatarMoedaReceita(valorNumero) %>
+                                                </span>
                                             </td>
-                                        <% } %>
+                                        <% }) %>
                                     </tr>
                                 <% }) %>
-                                <tr class="revenue-total-row">
-                                    <td class="table-title-cell revenue-month-cell">Total</td>
-                                    <% for (let ano = 2025; ano <= 2035; ano++) { %>
-                                        <td>
-                                            <%
-                                                const totalAno = receita
-                                                    .filter(r => Number(r.ano) === ano)
-                                                    .reduce((sum, r) => sum + Number(r.total), 0);
-                                            %>
-                                            <strong><%= totalAno.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+
+                                <tr class="receita-anual-total-row">
+                                    <td data-label="Mês" class="receita-anual-month-cell">
+                                        <strong>Total</strong>
+                                    </td>
+
+                                    <% totaisPorAno.forEach((item) => { %>
+                                        <td data-label="<%= item.ano %>" class="ra-periodo-<%= item.periodo %>">
+                                            <span class="receita-anual-value <%= item.total > 0 ? 'is-positive' : 'is-neutral' %>">
+                                                <%= formatarMoedaReceita(item.total) %>
+                                            </span>
                                         </td>
-                                    <% } %>
+                                    <% }) %>
                                 </tr>
                             </tbody>
                         </table>
@@ -79,6 +186,23 @@
     </div>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const shell = document.querySelector('.receita-anual-shell');
+        const periodoButtons = document.querySelectorAll('[data-periodo-target]');
+
+        periodoButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const periodo = button.dataset.periodoTarget;
+
+                shell.dataset.periodo = periodo;
+
+                periodoButtons.forEach((item) => {
+                    item.classList.toggle('is-active', item === button);
+                });
+            });
+        });
+    });
+    </script>
 </body>
 </html>
-
