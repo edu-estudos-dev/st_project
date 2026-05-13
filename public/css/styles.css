@@ -11601,6 +11601,42 @@ thead .est-actions-sticky {
 
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:last-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:last-child
+    > span {
+    font-size: 0.92rem !important;
+    line-height: 1.16 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
     .view-card.is-wide {
     grid-column: 1 / -1 !important;
   }
