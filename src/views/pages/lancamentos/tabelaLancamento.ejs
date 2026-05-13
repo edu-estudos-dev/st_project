@@ -103,8 +103,8 @@
                 </div>
 
                 <div class="list-stat">
-                    <strong>Ação rápida</strong>
-                    <span>Novo registro financeiro</span>
+                    <strong>Gestão</strong>
+                    <span>Registros financeiros e vencimentos</span>
                 </div>
             </div>
         </section>
@@ -114,7 +114,7 @@
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
                         <h2>Base de lançamentos</h2>
-                        <p>Consulte os principais dados financeiros da operação e use os atalhos para acompanhar vencimentos,<br> entradas e saídas.</p>
+                        <p>Consulte os principais dados financeiros da operação e use os atalhos para acompanhar vencimentos, entradas e saídas.</p>
                     </div>
 
                     <div class="d-flex flex-wrap gap-2">
@@ -190,6 +190,14 @@
                             </thead>
 
                             <tbody id="launchTableBody">
+                                <% if (!lancamentos.length) { %>
+                                    <tr>
+                                        <td colspan="5" class="table-empty">
+                                            Nenhum lançamento encontrado.
+                                        </td>
+                                    </tr>
+                                <% } %>
+
                                 <% lancamentos.slice().reverse().forEach((lancamento) => {
                                     const formaPagamento = String(lancamento.forma_de_pagamento || '').toLowerCase();
                                     const parcelas = Number(lancamento.qtde_de_parcelas || 0);
