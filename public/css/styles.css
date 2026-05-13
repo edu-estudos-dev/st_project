@@ -9672,6 +9672,27 @@ thead .est-actions-sticky {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ==========================================================================
    19 - TELAS DE LANÇAMENTOS (CADASTRO, EDIÇÃO, VISUALIZAÇÃO, TABELA E VENCIMENTOS)
    Atualizado: ajustes finais de mobile, ações de vencimentos e input de valor
@@ -11557,20 +11578,34 @@ thead .est-actions-sticky {
     .view-panel-header
     + .view-section-title
     + .view-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
   }
 
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
-    .view-section-title + .view-grid
+    .view-panel-header
+    + .view-section-title
+    + .view-grid
     .view-card:first-child {
     display: none !important;
   }
 
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
-    .view-section-title + .view-grid
-    .view-card:nth-child(4) {
+    .view-panel-header
+    + .view-section-title
+    + .view-grid
+    .view-card:nth-child(4):last-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid
+    .view-card:nth-child(4):last-child {
     border-color: rgba(37, 99, 235, 0.22) !important;
     background:
       radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.07), transparent 38%),
@@ -11579,8 +11614,10 @@ thead .est-actions-sticky {
 
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
-    .view-section-title + .view-grid
-    .view-card:nth-child(4)
+    .view-panel-header
+    + .view-section-title
+    + .view-grid
+    .view-card:nth-child(4):last-child
     > span {
     color: #0f172a !important;
     font-size: 1rem !important;
@@ -11780,5 +11817,817 @@ thead .est-actions-sticky {
     .view-card {
     min-height: 52px !important;
     padding: 0.56rem 0.62rem !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   20 - FLUXO DE CAIXA
+   - Visao anual por semestre
+   - Tabela sem rolagem lateral
+   - Switch de semestre
+   - Cards mobile
+   ========================================================================== */
+
+.fluxo-caixa-shell {
+  width: min(100% - 2rem, 1460px);
+}
+
+.fluxo-caixa-shell .app-breadcrumb {
+  margin-bottom: 1rem;
+}
+
+.fluxo-caixa-titlebar .page-titlebar-side {
+  min-width: 330px;
+}
+
+.fluxo-caixa-titlebar .list-stat span.is-positive {
+  color: #4ade80;
+}
+
+.fluxo-caixa-titlebar .list-stat span.is-negative {
+  color: #fda4af;
+}
+
+.fluxo-caixa-value.is-positive,
+.fluxo-caixa-value.is-positive-soft {
+  color: #15803d;
+}
+
+.fluxo-caixa-value.is-negative,
+.fluxo-caixa-value.is-negative-soft {
+  color: #b91c1c;
+}
+
+.fluxo-caixa-titlebar .list-stat span.is-neutral,
+.fluxo-caixa-value.is-neutral {
+  color: #0f172a;
+}
+
+.fluxo-caixa-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.18rem;
+  border-radius: 24px;
+}
+
+.fluxo-caixa-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.78rem;
+}
+
+.fluxo-caixa-summary-card {
+  display: grid;
+  gap: 0.28rem;
+  min-height: 112px;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(203, 213, 225, 0.74);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(37, 99, 235, 0.055), transparent 34%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.055);
+}
+
+.fluxo-caixa-summary-card span {
+  color: #1d4ed8;
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fluxo-caixa-summary-card strong {
+  color: #0f172a;
+  font-size: clamp(1.35rem, 1.9vw, 1.86rem);
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.fluxo-caixa-summary-card small {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.fluxo-caixa-summary-card-positive {
+  border-color: rgba(22, 163, 74, 0.18);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(22, 163, 74, 0.09), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.fluxo-caixa-summary-card-positive span,
+.fluxo-caixa-summary-card-positive strong,
+.fluxo-caixa-summary-card-result-positive span,
+.fluxo-caixa-summary-card-result-positive strong {
+  color: #15803d;
+}
+
+.fluxo-caixa-summary-card-negative {
+  border-color: rgba(220, 38, 38, 0.18);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(220, 38, 38, 0.08), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+}
+
+.fluxo-caixa-summary-card-negative span,
+.fluxo-caixa-summary-card-negative strong,
+.fluxo-caixa-summary-card-result-negative span,
+.fluxo-caixa-summary-card-result-negative strong {
+  color: #b91c1c;
+}
+
+.fluxo-caixa-summary-card-result-positive {
+  border-color: rgba(37, 99, 235, 0.16);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(37, 99, 235, 0.075), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+}
+
+.fluxo-caixa-summary-card-result-negative {
+  border-color: rgba(220, 38, 38, 0.18);
+  background:
+    radial-gradient(circle at 10% 8%, rgba(220, 38, 38, 0.08), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+}
+
+.fluxo-caixa-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.94), rgba(241, 245, 249, 0.86));
+  border: 1px solid rgba(203, 213, 225, 0.64);
+}
+
+.fluxo-caixa-toolbar-copy {
+  min-width: 0;
+}
+
+.fluxo-caixa-toolbar-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.24rem;
+  line-height: 1.16;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.fluxo-caixa-toolbar-copy p {
+  max-width: 760px;
+  margin: 0.32rem 0 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.38;
+  font-weight: 500;
+}
+
+.fluxo-caixa-toolbar-actions {
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.fluxo-caixa-year-field {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 170px;
+}
+
+.fluxo-caixa-year-field .form-label {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 850;
+  line-height: 1.1;
+}
+
+.fluxo-caixa-year-field .form-control {
+  min-height: 42px;
+  border-radius: 13px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 800;
+  box-shadow: none;
+}
+
+.fluxo-caixa-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  min-height: 46px;
+  padding: 0.28rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
+}
+
+.fluxo-caixa-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.62rem 0.78rem;
+  color: #385074;
+  background: transparent;
+  font-size: 14px !important;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.fluxo-caixa-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.72);
+  color: #1d4ed8;
+}
+
+.fluxo-caixa-mode-btn:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.fluxo-caixa-mode-btn.is-active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+.fluxo-caixa-table-wrap {
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(203, 213, 225, 0.82);
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.055);
+}
+
+.fluxo-caixa-table-scroll {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.fluxo-caixa-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.fluxo-caixa-table .fluxo-caixa-col-category {
+  width: 22%;
+}
+
+.fluxo-caixa-table .fluxo-caixa-col-month {
+  width: 13%;
+}
+
+.fluxo-caixa-shell[data-semestre='1'] .fc-semestre-2,
+.fluxo-caixa-shell[data-semestre='2'] .fc-semestre-1 {
+  display: none;
+}
+
+.fluxo-caixa-table thead th {
+  padding: 0.82rem 0.52rem;
+  color: #0f3a7a;
+  background: #dcecff;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.32);
+  font-size: 0.62rem;
+  font-weight: 950;
+  line-height: 1.1;
+  letter-spacing: 0.075em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.fluxo-caixa-table tbody td {
+  padding: 0.78rem 0.52rem;
+  color: #334155;
+  font-size: 14px !important;
+  font-weight: 760 !important;
+  line-height: 1.22;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+}
+
+.fluxo-caixa-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.fluxo-caixa-table tbody tr:hover td {
+  background: rgba(248, 250, 252, 0.82);
+}
+
+.fluxo-caixa-category-cell {
+  text-align: left !important;
+}
+
+.fluxo-caixa-category-cell strong {
+  display: block;
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.fluxo-caixa-category-muted strong {
+  color: #475569;
+  font-weight: 780 !important;
+}
+
+.fluxo-caixa-row-kicker {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 19px;
+  margin-bottom: 0.26rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  font-size: 0.56rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.fluxo-caixa-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0.22rem 0.4rem;
+  border-radius: 999px;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.fluxo-caixa-value.is-positive {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.fluxo-caixa-value.is-negative {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.fluxo-caixa-value.is-neutral {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.fluxo-caixa-value.is-positive-soft {
+  color: #16a34a;
+}
+
+.fluxo-caixa-value.is-negative-soft {
+  color: #dc2626;
+}
+
+.fluxo-caixa-row-balance td {
+  background: #eff6ff;
+}
+
+.fluxo-caixa-row-entry-total td {
+  background: #ecfdf5;
+}
+
+.fluxo-caixa-row-exit-total td {
+  background: #fff1f2;
+}
+
+.fluxo-caixa-row-entry-total .fluxo-caixa-category-cell strong {
+  color: #166534;
+}
+
+.fluxo-caixa-row-exit-total .fluxo-caixa-category-cell strong {
+  color: #991b1b;
+}
+
+@media (max-width: 1199.98px) {
+  .fluxo-caixa-titlebar .page-titlebar-side {
+    min-width: 280px;
+  }
+
+  .fluxo-caixa-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fluxo-caixa-toolbar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .fluxo-caixa-toolbar-actions {
+    justify-content: space-between;
+  }
+
+  .fluxo-caixa-table .fluxo-caixa-col-category {
+    width: 24%;
+  }
+
+  .fluxo-caixa-table .fluxo-caixa-col-month {
+    width: 12.66%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .fluxo-caixa-titlebar .page-titlebar-side {
+    min-width: 0;
+  }
+
+  .fluxo-caixa-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fluxo-caixa-summary-card {
+    min-height: 94px;
+  }
+
+  .fluxo-caixa-toolbar-actions {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.72fr) minmax(270px, 1fr);
+    align-items: end;
+  }
+
+  .fluxo-caixa-mode-switch {
+    width: 100%;
+  }
+
+  .fluxo-caixa-mode-btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .fluxo-caixa-shell {
+    width: min(100% - 0.78rem, 560px);
+  }
+
+  .fluxo-caixa-titlebar {
+    padding: 0.88rem;
+    border-radius: 20px;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-content {
+    gap: 0.42rem;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-content h1 {
+    font-size: 1.62rem;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-content p {
+    margin-top: 0.2rem;
+    font-size: 0.84rem;
+    line-height: 1.34;
+  }
+
+  .fluxo-caixa-titlebar .list-kicker {
+    min-height: 26px;
+    padding: 0.34rem 0.58rem;
+    font-size: 0.64rem;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.72rem;
+  }
+
+  .fluxo-caixa-titlebar .list-stat {
+    min-height: 60px;
+    padding: 0.58rem 0.64rem;
+    border-radius: 15px;
+  }
+
+  .fluxo-caixa-titlebar .list-stat strong {
+    font-size: 0.62rem;
+    line-height: 1.1;
+  }
+
+  .fluxo-caixa-titlebar .list-stat span {
+    font-size: 0.9rem;
+    line-height: 1.1;
+  }
+
+  .fluxo-caixa-panel {
+    gap: 0.68rem;
+    padding-inline: 0.68rem !important;
+    border-radius: 18px;
+  }
+
+  .fluxo-caixa-summary-grid {
+    gap: 0.5rem;
+  }
+
+  .fluxo-caixa-summary-card {
+    min-height: 78px;
+    padding: 0.62rem 0.72rem;
+    border-radius: 15px;
+  }
+
+  .fluxo-caixa-summary-card span {
+    font-size: 0.58rem;
+    line-height: 1.08;
+  }
+
+  .fluxo-caixa-summary-card strong {
+    font-size: 1.24rem;
+    line-height: 1;
+  }
+
+  .fluxo-caixa-summary-card small {
+    margin-top: 0.02rem;
+    font-size: 0.72rem;
+    line-height: 1.24;
+  }
+
+  .fluxo-caixa-toolbar {
+    gap: 0.68rem;
+    padding: 0.72rem;
+    border-radius: 16px;
+  }
+
+  .fluxo-caixa-toolbar-copy .form-section-tag {
+    min-height: 22px;
+    margin-bottom: 0.28rem;
+    padding: 0.22rem 0.52rem;
+    font-size: 0.58rem;
+  }
+
+  .fluxo-caixa-toolbar-copy h2 {
+    font-size: 1.02rem;
+    line-height: 1.12;
+  }
+
+  .fluxo-caixa-toolbar-copy p {
+    margin-top: 0.26rem;
+    font-size: 0.74rem;
+    line-height: 1.32;
+  }
+
+  .fluxo-caixa-toolbar-actions {
+    grid-template-columns: 1fr;
+    gap: 0.56rem;
+  }
+
+  .fluxo-caixa-year-field {
+    min-width: 0;
+    gap: 0.24rem;
+  }
+
+  .fluxo-caixa-year-field .form-label {
+    font-size: 0.68rem;
+  }
+
+  .fluxo-caixa-year-field .form-control {
+    min-height: 40px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+  }
+
+  .fluxo-caixa-mode-switch {
+    min-height: 40px;
+    padding: 0.22rem;
+  }
+
+  .fluxo-caixa-mode-btn {
+    min-width: 0;
+    min-height: 34px;
+    padding: 0.54rem 0.5rem;
+    font-size: 12.5px !important;
+  }
+
+  .fluxo-caixa-table-wrap {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .fluxo-caixa-table-scroll {
+    overflow-x: visible;
+  }
+
+  .fluxo-caixa-table {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    border-spacing: 0;
+  }
+
+  .fluxo-caixa-table thead {
+    display: none;
+  }
+
+  .fluxo-caixa-table tbody {
+    display: grid;
+    gap: 0.62rem;
+    width: 100%;
+  }
+
+  .fluxo-caixa-table tbody tr {
+    display: grid;
+    gap: 0;
+    width: 100%;
+    padding: 0.58rem 0.62rem;
+    border: 1px solid rgba(203, 213, 225, 0.72);
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 8% 8%, rgba(37, 99, 235, 0.045), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.95));
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.058);
+  }
+
+  .fluxo-caixa-table tbody tr:hover td {
+    background: transparent;
+  }
+
+  .fluxo-caixa-table tbody td {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 36px;
+    padding: 0.42rem 0;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    background: transparent !important;
+    font-size: 0.8rem !important;
+    font-weight: 760 !important;
+    line-height: 1.18;
+    text-align: right !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .fluxo-caixa-table tbody td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.58rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 0.052em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .fluxo-caixa-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .fluxo-caixa-category-cell {
+    text-align: right !important;
+  }
+
+  .fluxo-caixa-category-cell strong {
+    font-size: 0.82rem !important;
+    line-height: 1.16;
+    text-align: right;
+  }
+
+  .fluxo-caixa-category-muted strong {
+    font-size: 0.78rem !important;
+  }
+
+  .fluxo-caixa-row-kicker {
+    justify-self: end;
+    min-height: 18px;
+    margin-bottom: 0.18rem;
+    padding: 2px 6px;
+    font-size: 0.52rem;
+  }
+
+  .fluxo-caixa-value {
+    justify-self: end;
+    min-height: 26px;
+    max-width: 100%;
+    padding: 0.2rem 0.38rem;
+    font-size: 0.78rem !important;
+    line-height: 1.08;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .fluxo-caixa-titlebar {
+    padding: 0.82rem;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-content h1 {
+    font-size: 1.54rem;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-content p {
+    font-size: 0.8rem;
+  }
+
+  .fluxo-caixa-titlebar .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fluxo-caixa-titlebar .list-stat {
+    min-height: 58px;
+    padding: 0.54rem 0.58rem;
+  }
+
+  .fluxo-caixa-titlebar .list-stat span {
+    font-size: 0.84rem;
+  }
+
+  .fluxo-caixa-summary-card {
+    min-height: 72px;
+    padding: 0.58rem 0.66rem;
+  }
+
+  .fluxo-caixa-summary-card strong {
+    font-size: 1.16rem;
+  }
+
+  .fluxo-caixa-summary-card small {
+    font-size: 0.68rem;
+  }
+
+  .fluxo-caixa-toolbar {
+    padding: 0.66rem;
+  }
+
+  .fluxo-caixa-toolbar-copy p {
+    font-size: 0.72rem;
+  }
+
+  .fluxo-caixa-mode-btn {
+    font-size: 12px !important;
+  }
+
+  .fluxo-caixa-table tbody {
+    gap: 0.56rem;
+  }
+
+  .fluxo-caixa-table tbody tr {
+    padding: 0.54rem 0.58rem;
+    border-radius: 15px;
+  }
+
+  .fluxo-caixa-table tbody td {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 0.44rem;
+    min-height: 34px;
+    padding: 0.38rem 0;
+  }
+
+  .fluxo-caixa-value {
+    font-size: 0.74rem !important;
   }
 }

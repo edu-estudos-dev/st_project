@@ -6,103 +6,212 @@
     <%- include('../partials/header') %>
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <%
+    const mesesFluxoCaixa = [
+        { nome: 'Janeiro', curto: 'Jan', semestre: 1 },
+        { nome: 'Fevereiro', curto: 'Fev', semestre: 1 },
+        { nome: 'Março', curto: 'Mar', semestre: 1 },
+        { nome: 'Abril', curto: 'Abr', semestre: 1 },
+        { nome: 'Maio', curto: 'Mai', semestre: 1 },
+        { nome: 'Junho', curto: 'Jun', semestre: 1 },
+        { nome: 'Julho', curto: 'Jul', semestre: 2 },
+        { nome: 'Agosto', curto: 'Ago', semestre: 2 },
+        { nome: 'Setembro', curto: 'Set', semestre: 2 },
+        { nome: 'Outubro', curto: 'Out', semestre: 2 },
+        { nome: 'Novembro', curto: 'Nov', semestre: 2 },
+        { nome: 'Dezembro', curto: 'Dez', semestre: 2 }
+    ];
+
+    const currentMonth = typeof resultadoAteMesIndex !== 'undefined' ? resultadoAteMesIndex : new Date().getMonth();
+
+    let somaTotalAnualCorrente = 0;
+    for (let i = 0; i <= currentMonth; i++) {
+        somaTotalAnualCorrente += somaMensal[i] || 0;
+    }
+
+    const totalEntradasAno = totaisEntradas.reduce((acc, valor) => acc + (Number(valor) || 0), 0);
+    const totalSaidasAno = totaisSaidas.reduce((acc, valor) => acc + (Number(valor) || 0), 0);
+    const resultadoAno = totalEntradasAno - totalSaidasAno;
+
+    const formatarMoeda = (valor) => {
+        return (Number(valor) || 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    };
+
+    const classeValor = (valor) => {
+        if ((Number(valor) || 0) > 0) return 'is-positive';
+        if ((Number(valor) || 0) < 0) return 'is-negative';
+        return 'is-neutral';
+    };
+    %>
+
+    <div class="list-shell fluxo-caixa-shell" data-semestre="1">
         <%- include('../partials/breadcrumb', { pageTitle: 'Fluxo de Caixa' }) %>
 
-        <section class="page-titlebar page-titlebar-neutral">
+        <section class="page-titlebar page-titlebar-neutral fluxo-caixa-titlebar">
             <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-graph-up-arrow"></i> Financeiro</span>
                 <h1>Fluxo de caixa anual</h1>
-                <p>Uma visão mais organizada do desempenho mensal, com resultados, entradas e saídas em uma tabela ampla, moderna e fácil de ler.</p>
+                <p>Confira entradas, saídas e resultado mensal em uma visão separada por semestre, sem precisar arrastar a tabela para o lado.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Ano</strong><span><%= year %></span></div>
-                <div class="list-stat"><strong>Visão</strong><span>Consolidado mensal do negócio</span></div>
+                <div class="list-stat">
+                    <strong>Ano</strong>
+                    <span><%= year %></span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Resultado atual</strong>
+                    <span class="<%= classeValor(somaTotalAnualCorrente) %>"><%= formatarMoeda(somaTotalAnualCorrente) %></span>
+                </div>
             </div>
         </section>
 
         <main class="list-stage">
-            <section class="list-panel">
-                <div class="list-toolbar">
-                    <div class="list-toolbar-copy">
-                        <h2>Resumo financeiro de <%= year %></h2>
-                        <p>Altere o ano para comparar rapidamente a evolução mensal de entradas, saídas e resultado acumulado.</p>
+            <section class="list-panel fluxo-caixa-panel">
+                <div class="fluxo-caixa-summary-grid">
+                    <article class="fluxo-caixa-summary-card fluxo-caixa-summary-card-positive">
+                        <span>Total de entradas</span>
+                        <strong><%= formatarMoeda(totalEntradasAno) %></strong>
+                        <small>Soma das receitas registradas no ano.</small>
+                    </article>
+
+                    <article class="fluxo-caixa-summary-card fluxo-caixa-summary-card-negative">
+                        <span>Total de saídas</span>
+                        <strong><%= formatarMoeda(totalSaidasAno) %></strong>
+                        <small>Soma das despesas registradas no ano.</small>
+                    </article>
+
+                    <article class="fluxo-caixa-summary-card <%= resultadoAno >= 0 ? 'fluxo-caixa-summary-card-result-positive' : 'fluxo-caixa-summary-card-result-negative' %>">
+                        <span>Resultado anual</span>
+                        <strong><%= formatarMoeda(resultadoAno) %></strong>
+                        <small>Entradas menos saídas no período.</small>
+                    </article>
+                </div>
+
+                <div class="fluxo-caixa-toolbar">
+                    <div class="fluxo-caixa-toolbar-copy">
+                        <span class="form-section-tag">Resumo mensal</span>
+                        <h2>Fluxo financeiro de <%= year %></h2>
+                        <p>Use o seletor para alternar entre o primeiro e o segundo semestre mantendo a leitura limpa e sem rolagem lateral.</p>
                     </div>
-                    <div style="min-width:220px;">
-                        <label for="anoInput" class="form-label">Ano para a pesquisa</label>
-                        <input type="number" id="anoInput" class="form-control text-center" value="<%= year %>" onchange="atualizarAno()">
+
+                    <div class="fluxo-caixa-toolbar-actions">
+                        <div class="fluxo-caixa-year-field">
+                            <label for="anoInput" class="form-label">Ano da consulta</label>
+                            <input type="number" id="anoInput" class="form-control text-center" value="<%= year %>">
+                        </div>
+
+                        <div class="fluxo-caixa-mode-switch" role="group" aria-label="Selecionar semestre">
+                            <button type="button" class="fluxo-caixa-mode-btn is-active" data-semestre-target="1">
+                                1º semestre
+                            </button>
+                            <button type="button" class="fluxo-caixa-mode-btn" data-semestre-target="2">
+                                2º semestre
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table id="fluxoDeCaixaTable" class="modern-table">
+                <div class="fluxo-caixa-table-wrap">
+                    <div class="fluxo-caixa-table-scroll">
+                        <table id="fluxoDeCaixaTable" class="modern-table fluxo-caixa-table">
                             <thead>
                                 <tr>
-                                    <th class="table-cell-finance">Resultado atual</th>
-                                    <th class="table-cell-month">Janeiro</th>
-                                    <th class="table-cell-month">Fevereiro</th>
-                                    <th class="table-cell-month">Março</th>
-                                    <th class="table-cell-month">Abril</th>
-                                    <th class="table-cell-month">Maio</th>
-                                    <th class="table-cell-month">Junho</th>
-                                    <th class="table-cell-month">Julho</th>
-                                    <th class="table-cell-month">Agosto</th>
-                                    <th class="table-cell-month">Setembro</th>
-                                    <th class="table-cell-month">Outubro</th>
-                                    <th class="table-cell-month">Novembro</th>
-                                    <th class="table-cell-month">Dezembro</th>
+                                    <th class="fluxo-caixa-col-category">Indicador</th>
+                                    <% mesesFluxoCaixa.forEach(function(mes) { %>
+                                        <th class="fluxo-caixa-col-month fc-semestre-<%= mes.semestre %>"><%= mes.nome %></th>
+                                    <% }) %>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <tr class="table-row-balance-highlight">
-                                    <%
-                                    const currentMonth = typeof resultadoAteMesIndex !== 'undefined' ? resultadoAteMesIndex : new Date().getMonth();
-                                    let somaTotalAnualCorrente = 0;
-                                    for (let i = 0; i <= currentMonth; i++) {
-                                        somaTotalAnualCorrente += somaMensal[i] || 0;
-                                    }
-                                    %>
-                                    <td class="table-cell-total">
-                                        <span class="table-badge <%= somaTotalAnualCorrente >= 0 ? 'table-badge-green' : 'table-badge-danger' %>">
-                                            <%= somaTotalAnualCorrente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
-                                        </span>
+                                <tr class="fluxo-caixa-row fluxo-caixa-row-balance">
+                                    <td data-label="Indicador" class="fluxo-caixa-category-cell">
+                                        <span class="fluxo-caixa-row-kicker">Resultado</span>
+                                        <strong>Resultado mensal</strong>
                                     </td>
-                                    <% somaMensal.forEach(function(total) { %>
-                                        <td class="table-cell-total">
-                                            <strong style="color:<%= total > 0 ? '#15803d' : (total < 0 ? '#b91c1c' : '#0f172a') %>;">
-                                                <%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
-                                            </strong>
+
+                                    <% somaMensal.forEach(function(total, index) { 
+                                        const mes = mesesFluxoCaixa[index];
+                                    %>
+                                        <td data-label="<%= mes.curto %>" class="fluxo-caixa-value-cell fc-semestre-<%= mes.semestre %>">
+                                            <span class="fluxo-caixa-value <%= classeValor(total) %>">
+                                                <%= formatarMoeda(total) %>
+                                            </span>
                                         </td>
                                     <% }) %>
                                 </tr>
 
-                                <tr class="table-row-entry-highlight">
-                                    <td class="table-title-cell table-cell-total">Total entradas</td>
-                                    <% totaisEntradas.forEach(function(total) { %>
-                                        <td class="table-cell-total"><strong style="color:#15803d;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                <tr class="fluxo-caixa-row fluxo-caixa-row-entry-total">
+                                    <td data-label="Indicador" class="fluxo-caixa-category-cell">
+                                        <span class="fluxo-caixa-row-kicker">Entradas</span>
+                                        <strong>Total entradas</strong>
+                                    </td>
+
+                                    <% totaisEntradas.forEach(function(total, index) { 
+                                        const mes = mesesFluxoCaixa[index];
+                                    %>
+                                        <td data-label="<%= mes.curto %>" class="fluxo-caixa-value-cell fc-semestre-<%= mes.semestre %>">
+                                            <span class="fluxo-caixa-value is-positive">
+                                                <%= formatarMoeda(total) %>
+                                            </span>
+                                        </td>
                                     <% }) %>
                                 </tr>
+
                                 <% for (let tipo in dadosEntradas) { %>
-                                    <tr>
-                                        <td class="table-muted table-cell-wrap"><%= tipo %></td>
-                                        <% for (let i = 0; i < 12; i++) { %>
-                                            <td style="color:#16a34a;"><%= dadosEntradas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                    <tr class="fluxo-caixa-row fluxo-caixa-row-entry-detail">
+                                        <td data-label="Indicador" class="fluxo-caixa-category-cell fluxo-caixa-category-muted">
+                                            <strong><%= tipo %></strong>
+                                        </td>
+
+                                        <% for (let i = 0; i < 12; i++) { 
+                                            const mes = mesesFluxoCaixa[i];
+                                        %>
+                                            <td data-label="<%= mes.curto %>" class="fluxo-caixa-value-cell fc-semestre-<%= mes.semestre %>">
+                                                <span class="fluxo-caixa-value is-positive-soft">
+                                                    <%= formatarMoeda(dadosEntradas[tipo][i]) %>
+                                                </span>
+                                            </td>
                                         <% } %>
                                     </tr>
                                 <% } %>
 
-                                <tr class="table-row-exit-highlight">
-                                    <td class="table-title-cell table-cell-total">Total saídas</td>
-                                    <% totaisSaidas.forEach(function(total) { %>
-                                        <td class="table-cell-total"><strong style="color:#dc2626;"><%= total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></td>
+                                <tr class="fluxo-caixa-row fluxo-caixa-row-exit-total">
+                                    <td data-label="Indicador" class="fluxo-caixa-category-cell">
+                                        <span class="fluxo-caixa-row-kicker">Saídas</span>
+                                        <strong>Total saídas</strong>
+                                    </td>
+
+                                    <% totaisSaidas.forEach(function(total, index) { 
+                                        const mes = mesesFluxoCaixa[index];
+                                    %>
+                                        <td data-label="<%= mes.curto %>" class="fluxo-caixa-value-cell fc-semestre-<%= mes.semestre %>">
+                                            <span class="fluxo-caixa-value is-negative">
+                                                <%= formatarMoeda(total) %>
+                                            </span>
+                                        </td>
                                     <% }) %>
                                 </tr>
+
                                 <% for (let tipo in dadosSaidas) { %>
-                                    <tr>
-                                        <td class="table-muted table-cell-wrap"><%= tipo %></td>
-                                        <% for (let i = 0; i < 12; i++) { %>
-                                            <td style="color:#dc2626;"><%= dadosSaidas[tipo][i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                    <tr class="fluxo-caixa-row fluxo-caixa-row-exit-detail">
+                                        <td data-label="Indicador" class="fluxo-caixa-category-cell fluxo-caixa-category-muted">
+                                            <strong><%= tipo %></strong>
+                                        </td>
+
+                                        <% for (let i = 0; i < 12; i++) { 
+                                            const mes = mesesFluxoCaixa[i];
+                                        %>
+                                            <td data-label="<%= mes.curto %>" class="fluxo-caixa-value-cell fc-semestre-<%= mes.semestre %>">
+                                                <span class="fluxo-caixa-value is-negative-soft">
+                                                    <%= formatarMoeda(dadosSaidas[tipo][i]) %>
+                                                </span>
+                                            </td>
                                         <% } %>
                                     </tr>
                                 <% } %>
@@ -117,14 +226,35 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
     function atualizarAno() {
-        const ano = document.getElementById('anoInput').value;
+        const anoInput = document.getElementById('anoInput');
+        const ano = anoInput.value;
+
+        if (!ano) {
+            return;
+        }
+
         window.location.href = `/fluxo-de-caixa?year=${ano}`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('anoInput').addEventListener('change', atualizarAno);
+        const shell = document.querySelector('.fluxo-caixa-shell');
+        const anoInput = document.getElementById('anoInput');
+        const semestreButtons = document.querySelectorAll('[data-semestre-target]');
+
+        anoInput?.addEventListener('change', atualizarAno);
+
+        semestreButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const semestre = button.dataset.semestreTarget;
+
+                shell.dataset.semestre = semestre;
+
+                semestreButtons.forEach((item) => {
+                    item.classList.toggle('is-active', item === button);
+                });
+            });
+        });
     });
     </script>
 </body>
 </html>
-
