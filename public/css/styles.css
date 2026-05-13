@@ -10882,8 +10882,23 @@ thead .est-actions-sticky {
     width: 100% !important;
   }
 
-  .lancamentos-vencimentos-shell .page-titlebar-side {
+  .lancamentos-vencimentos-shell .page-titlebar-side,
+  .view-shell.lancamento-view-shell .page-titlebar-side {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar {
+    gap: 0.66rem !important;
+    padding-block: 0.96rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side {
+    gap: 0.42rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat {
+    padding: 0.56rem 0.62rem !important;
+    border-radius: 14px !important;
   }
 
   .lancamentos-list-shell .page-titlebar-side .list-stat,
@@ -11582,6 +11597,15 @@ thead .est-actions-sticky {
     gap: 0.5rem !important;
   }
 
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
     .view-panel-header
@@ -11600,12 +11624,28 @@ thead .est-actions-sticky {
     grid-column: 1 / -1 !important;
   }
 
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:nth-child(4) {
+    grid-column: 1 / -1 !important;
+  }
+
   .view-shell.lancamento-view-shell
     .view-panel.lancamento-view-panel
     .view-panel-header
     + .view-section-title
     + .view-grid
-    .view-card:nth-child(4):last-child {
+    .view-card:nth-child(4):last-child,
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:nth-child(4) {
     border-color: rgba(37, 99, 235, 0.22) !important;
     background:
       radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.07), transparent 38%),
@@ -11618,6 +11658,13 @@ thead .est-actions-sticky {
     + .view-section-title
     + .view-grid
     .view-card:nth-child(4):last-child
+    > span,
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:nth-child(4)
     > span {
     color: #0f172a !important;
     font-size: 1rem !important;
@@ -11710,6 +11757,22 @@ thead .est-actions-sticky {
   .lancamento-form-shell .page-titlebar {
     padding: 0.96rem 0.92rem !important;
     border-radius: 21px !important;
+  }
+
+
+  .view-shell.lancamento-view-shell .page-titlebar {
+    gap: 0.58rem !important;
+    padding: 0.88rem 0.86rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.38rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat {
+    padding: 0.5rem 0.54rem !important;
+    border-radius: 13px !important;
   }
 
   .lancamentos-list-shell .page-titlebar-content h1,
