@@ -1,0 +1,3 @@
+ALTER TABLE sangrias_bolinha
+  ADD COLUMN IF NOT EXISTS pix_confirmado BOOLEAN,
+  ADD COLUMN IF NOT EXISTS pix_confirmado_em TIMESTAMP WITHOUT TIME ZONE;

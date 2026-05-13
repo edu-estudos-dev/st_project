@@ -6,31 +6,45 @@
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <div class="list-shell bolinhas-control-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Controle Geral das Bolinhas' }) %>
 
-        <section class="page-titlebar page-titlebar-green">
+        <section class="page-titlebar page-titlebar-green bolinhas-control-titlebar">
             <div class="page-titlebar-content">
-                <span class="list-kicker"><i class="bi bi-diagram-3"></i> Operacional</span>
+                <span class="list-kicker">
+                    <i class="bi bi-diagram-3"></i>
+                    Operacional
+                </span>
+
                 <h1>Controle geral das bolinhas</h1>
+
                 <p>Acompanhe os pontos que precisam de visita e monitore os dados mais importantes da operação.</p>
             </div>
 
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Pontos</strong><span><%= estabelecimentos.length %> registros</span></div>
-                <div class="list-stat"><strong>Produto</strong><span>Bolinhas</span></div>
+                <div class="list-stat">
+                    <strong>Pontos</strong>
+                    <span><%= estabelecimentos.length %> registros</span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Produto</strong>
+                    <span>Bolinhas</span>
+                </div>
             </div>
         </section>
 
-        <main class="list-stage">
-            <section class="list-panel">
+        <main class="list-stage bolinhas-control-stage">
+            <section class="list-panel bolinhas-control-panel">
 
-                <div class="list-toolbar roteiro-toolbar">
+                <div class="list-toolbar roteiro-toolbar bolinhas-control-toolbar">
                     <div class="list-toolbar-copy">
+                        <span class="form-section-tag">Visitas</span>
                         <h2>Pontos pendentes de visita</h2>
+                        <p>Use o prazo abaixo para identificar quais pontos já precisam de sangria.</p>
                     </div>
 
-                    <div class="dias-sangria-top">
+                    <div class="dias-sangria-top bolinhas-control-days">
                         <label for="diasSangria" class="form-label fw-bold">Dias para fazer a sangria</label>
                         <input
                             type="number"
@@ -43,16 +57,16 @@
                     </div>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table class="modern-table">
+                <div class="modern-table-wrap bolinhas-control-table-wrap">
+                    <div class="modern-table-scroll bolinhas-control-table-scroll">
+                        <table class="modern-table bolinhas-control-table">
                             <thead>
                                 <tr>
                                     <th>Estabelecimento</th>
-                                    <th>Chave</th>
-                                    <th>Máquina</th>
                                     <th>Endereço</th>
                                     <th>Bairro</th>
+                                    <th>Chave</th>
+                                    <th>Máquina</th>
                                     <th>Dias passados</th>
                                     <th>Situação</th>
                                 </tr>
@@ -66,21 +80,37 @@
                                 %>
 
                                 <tr
+                                    class="bolinhas-control-row"
                                     data-diferenca-dias="<%= diferencaDias %>"
                                     data-sem-visita="<%= data ? 'false' : 'true' %>"
                                 >
-                                    <td>
-                                        <span class="table-title-cell">
+                                    <td class="bolinhas-control-name-cell" data-label="Estabelecimento">
+                                        <span class="table-title-cell bolinhas-control-name">
                                             <%= estabelecimento.estabelecimento %>
                                         </span>
                                     </td>
 
-                                    <td><%= estabelecimento.chave_bolinhas || estabelecimento.chave || '-' %></td>
-                                    <td><%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '-' %></td>
-                                    <td class="table-cell-wrap"><%= estabelecimento.endereco || '-' %></td>
-                                    <td><%= estabelecimento.bairro || '-' %></td>
-                                    <td class="dias-passados"><%= data ? diferencaDias : 'Sem visita' %></td>
-                                    <td class="situacao"></td>
+                                    <td class="table-cell-wrap bolinhas-control-address-cell" data-label="Endereço">
+                                        <%= estabelecimento.endereco || '-' %>
+                                    </td>
+
+                                    <td class="bolinhas-control-neighborhood-cell" data-label="Bairro">
+                                        <%= estabelecimento.bairro || '-' %>
+                                    </td>
+
+                                    <td class="bolinhas-control-key-cell" data-label="Chave">
+                                        <%= estabelecimento.chave_bolinhas || estabelecimento.chave || '-' %>
+                                    </td>
+
+                                    <td class="bolinhas-control-machine-cell" data-label="Máquina">
+                                        <%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '-' %>
+                                    </td>
+
+                                    <td class="dias-passados bolinhas-control-days-cell" data-label="Dias passados">
+                                        <%= data ? diferencaDias : 'Sem visita' %>
+                                    </td>
+
+                                    <td class="situacao bolinhas-control-status-cell" data-label="Situação"></td>
                                 </tr>
 
                                 <% }); %>
@@ -96,83 +126,84 @@
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
-    function obterDiasSangria() {
-        const input = document.getElementById('diasSangria');
-        const valor = input.value.trim();
+        function obterDiasSangria() {
+            const input = document.getElementById('diasSangria');
+            const valor = input.value.trim();
 
-        if (valor === '') {
-            return 30;
-        }
-
-        const numero = Number(valor);
-
-        if (Number.isNaN(numero) || numero <= 0) {
-            return 30;
-        }
-
-        return numero;
-    }
-
-    function salvarDiasSangria() {
-        const input = document.getElementById('diasSangria');
-        localStorage.setItem('diasSangriaBolinhas', input.value);
-        atualizarSituacao();
-    }
-
-    function carregarDiasSangria() {
-        const input = document.getElementById('diasSangria');
-        const diasSalvos = localStorage.getItem('diasSangriaBolinhas');
-
-        if (diasSalvos === null || diasSalvos === '' || Number(diasSalvos) <= 0 || Number.isNaN(Number(diasSalvos))) {
-            input.value = '30';
-            localStorage.setItem('diasSangriaBolinhas', '30');
-        } else {
-            input.value = diasSalvos;
-        }
-
-        atualizarSituacao();
-    }
-
-    function atualizarSituacao() {
-        const diasSangria = obterDiasSangria();
-
-        document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
-            const semVisita = linha.getAttribute('data-sem-visita') === 'true';
-
-            let diferencaDias = Number(linha.getAttribute('data-diferenca-dias'));
-
-            if (Number.isNaN(diferencaDias)) {
-                diferencaDias = 0;
+            if (valor === '') {
+                return 30;
             }
 
-            const situacaoCelula = linha.querySelector('.situacao');
+            const numero = Number(valor);
 
-            if (semVisita) {
-                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sem visita</span>';
-                linha.classList.add('table-row-exit-highlight');
-                return;
+            if (Number.isNaN(numero) || numero <= 0) {
+                return 30;
             }
 
-            if (diferencaDias >= diasSangria) {
-                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sangria</span>';
-                linha.classList.add('table-row-exit-highlight');
-                return;
+            return numero;
+        }
+
+        function salvarDiasSangria() {
+            const input = document.getElementById('diasSangria');
+            localStorage.setItem('diasSangriaBolinhas', input.value);
+            atualizarSituacao();
+        }
+
+        function carregarDiasSangria() {
+            const input = document.getElementById('diasSangria');
+            const diasSalvos = localStorage.getItem('diasSangriaBolinhas');
+
+            if (diasSalvos === null || diasSalvos === '' || Number(diasSalvos) <= 0 || Number.isNaN(Number(diasSalvos))) {
+                input.value = '30';
+                localStorage.setItem('diasSangriaBolinhas', '30');
+            } else {
+                input.value = diasSalvos;
             }
 
-            situacaoCelula.innerHTML = '<span class="table-badge table-badge-green">Aguardar</span>';
-            linha.classList.remove('table-row-exit-highlight');
+            atualizarSituacao();
+        }
+
+        function atualizarSituacao() {
+            const diasSangria = obterDiasSangria();
+
+            document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
+                const semVisita = linha.getAttribute('data-sem-visita') === 'true';
+
+                let diferencaDias = Number(linha.getAttribute('data-diferenca-dias'));
+
+                if (Number.isNaN(diferencaDias)) {
+                    diferencaDias = 0;
+                }
+
+                const situacaoCelula = linha.querySelector('.situacao');
+
+                linha.classList.remove('table-row-exit-highlight', 'bolinhas-control-row-alert');
+
+                if (semVisita) {
+                    situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sem visita</span>';
+                    linha.classList.add('table-row-exit-highlight', 'bolinhas-control-row-alert');
+                    return;
+                }
+
+                if (diferencaDias >= diasSangria) {
+                    situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger">Sangria</span>';
+                    linha.classList.add('table-row-exit-highlight', 'bolinhas-control-row-alert');
+                    return;
+                }
+
+                situacaoCelula.innerHTML = '<span class="table-badge table-badge-green">Aguardar</span>';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputDiasSangria = document.getElementById('diasSangria');
+
+            carregarDiasSangria();
+
+            inputDiasSangria.addEventListener('input', salvarDiasSangria);
+            inputDiasSangria.addEventListener('change', salvarDiasSangria);
+            inputDiasSangria.addEventListener('keyup', salvarDiasSangria);
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputDiasSangria = document.getElementById('diasSangria');
-
-        carregarDiasSangria();
-
-        inputDiasSangria.addEventListener('input', salvarDiasSangria);
-        inputDiasSangria.addEventListener('change', salvarDiasSangria);
-        inputDiasSangria.addEventListener('keyup', salvarDiasSangria);
-    });
     </script>
 </body>
 </html>

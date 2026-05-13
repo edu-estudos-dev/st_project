@@ -60,13 +60,15 @@ class ConsignadosModel {
     ]);
 
     if (result.rowCount === 0) {
-      throw new Error('Estabelecimento de consignados nao encontrado para este assinante.');
+      throw new Error(
+        'Estabelecimento de consignados nao encontrado para este assinante.'
+      );
     }
 
     return result;
   };
 
-  getSangrias = async (assinanteId) => {
+  getSangrias = async assinanteId => {
     const query = `
       SELECT
         s.*,
@@ -91,7 +93,7 @@ class ConsignadosModel {
     return result.rows;
   };
 
-  getEstabelecimentos = async (assinanteId) => {
+  getEstabelecimentos = async assinanteId => {
     await this.ensureEstabelecimentoInitialColumns();
 
     const query = `
@@ -191,7 +193,9 @@ class ConsignadosModel {
     ]);
 
     if (result.rowCount === 0) {
-      throw new Error('Sangria de consignados nao encontrada para este assinante.');
+      throw new Error(
+        'Sangria de consignados nao encontrada para este assinante.'
+      );
     }
 
     return result;
@@ -275,11 +279,14 @@ class ConsignadosModel {
       FROM cadastro_inicial
     `;
 
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId
+    ]);
     return result.rows;
   };
 
-  getMonthlyRevenue = async (assinanteId) => {
+  getMonthlyRevenue = async assinanteId => {
     const query = `
       SELECT
         EXTRACT(YEAR FROM data_sangria) AS ano,
@@ -300,7 +307,7 @@ class ConsignadosModel {
     return result.rows;
   };
 
-  getLatestSangriaForAllEstabelecimentos = async (assinanteId) => {
+  getLatestSangriaForAllEstabelecimentos = async assinanteId => {
     const query = `
       SELECT
         sf.id,
@@ -329,6 +336,45 @@ class ConsignadosModel {
     `;
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
+  };
+
+  updatePixConfirmado = async ({ id, assinante_id, pix_confirmado }) => {
+    const query = `
+    UPDATE sangrias_consignados s
+    SET
+      pix_confirmado = $1,
+      pix_confirmado_em = CASE
+        WHEN $1 = TRUE THEN CURRENT_TIMESTAMP
+        ELSE NULL
+      END,
+      data_atualizacao = CURRENT_TIMESTAMP
+    WHERE s.id = $2
+      AND s.assinante_id = $3
+      AND s.estabelecimento_id IN (
+        SELECT e.id
+        FROM estabelecimentos e
+        WHERE e.assinante_id = $3
+          AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
+      )
+    RETURNING
+      s.id,
+      s.pix_confirmado,
+      s.pix_confirmado_em
+  `;
+
+    const result = await connection.query(query, [
+      pix_confirmado,
+      id,
+      assinante_id
+    ]);
+
+    if (result.rowCount === 0) {
+      throw new Error(
+        'Sangria de consignados não encontrada para este assinante.'
+      );
+    }
+
+    return result.rows[0];
   };
 }
 

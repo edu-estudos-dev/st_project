@@ -326,6 +326,45 @@ addSangria = async (req, res) => {
     }
   };
 
+    updatePixConfirmado = async (req, res) => {
+    try {
+      const usuario = req.user;
+      const id = req.params.id;
+      const { pix_confirmado } = req.body;
+
+      if (!['SIM', 'NAO'].includes(pix_confirmado)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Informe se o PIX foi confirmado.'
+        });
+      }
+
+      const pixConfirmadoBoolean = pix_confirmado === 'SIM';
+
+      const sangriaAtualizada = await BolinhasSangriaModel.updatePixConfirmado({
+        id,
+        assinante_id: usuario.assinante_id,
+        pix_confirmado: pixConfirmadoBoolean
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: pixConfirmadoBoolean
+          ? 'PIX marcado como confirmado.'
+          : 'PIX marcado como não confirmado.',
+        pix_confirmado: sangriaAtualizada.pix_confirmado,
+        pix_confirmado_em: sangriaAtualizada.pix_confirmado_em
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar confirmação de PIX:', error);
+
+      return res.status(500).json({
+        success: false,
+        message: 'Erro ao atualizar confirmação do PIX.'
+      });
+    }
+  };
+
   // Método para exibir os detalhes de uma sangria
   viewSangria = async (req, res) => {
     const usuario = req.user;

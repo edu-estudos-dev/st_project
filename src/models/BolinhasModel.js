@@ -226,6 +226,43 @@ class BolinhasModel {
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
   };
+
+    updatePixConfirmado = async ({ id, assinante_id, pix_confirmado }) => {
+    const query = `
+      UPDATE sangrias_bolinha s
+      SET
+        pix_confirmado = $1,
+        pix_confirmado_em = CASE
+          WHEN $1 = TRUE THEN CURRENT_TIMESTAMP
+          ELSE NULL
+        END,
+        data_atualizacao = CURRENT_TIMESTAMP
+      WHERE s.id = $2
+        AND s.assinante_id = $3
+        AND s.estabelecimento_id IN (
+          SELECT e.id
+          FROM estabelecimentos e
+          WHERE e.assinante_id = $3
+            AND UPPER(e.produto) LIKE '%BOLINHAS%'
+        )
+      RETURNING
+        s.id,
+        s.pix_confirmado,
+        s.pix_confirmado_em
+    `;
+
+    const result = await connection.query(query, [
+      pix_confirmado,
+      id,
+      assinante_id
+    ]);
+
+    if (result.rowCount === 0) {
+      throw new Error('Sangria de bolinhas nao encontrada para este assinante.');
+    }
+
+    return result.rows[0];
+  };
 }
 
 export default new BolinhasModel();

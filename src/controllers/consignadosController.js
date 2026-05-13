@@ -183,10 +183,13 @@ class ConsignadosController {
 
         if (
           !visitaDaRota ||
-          Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimento_id) ||
+          Number(visitaDaRota.estabelecimento_id) !==
+            Number(estabelecimento_id) ||
           Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
         ) {
-          throw new Error('A visita informada nao pertence a este ponto da rota.');
+          throw new Error(
+            'A visita informada nao pertence a este ponto da rota.'
+          );
         }
 
         await VisitasModel.marcarProdutoRegistrado({
@@ -219,7 +222,7 @@ class ConsignadosController {
 
           const separador = rotaRetornoSeguro.includes('?') ? '&' : '?';
 
-         return res.redirect(
+          return res.redirect(
             `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
               rota_ponto_id
             )}&success=${encodeURIComponent(
@@ -244,7 +247,7 @@ class ConsignadosController {
         }
       }
 
-     return res.redirect(
+      return res.redirect(
         `/consignados/sangrias?success=${encodeURIComponent(
           'Sangria adicionada com sucesso'
         )}&recibo_url=${encodeURIComponent(reciboUrl)}`
@@ -384,7 +387,10 @@ class ConsignadosController {
         usuario.assinante_id
       );
 
-      const result = await consignadosModel.deleteSangria(id, usuario.assinante_id);
+      const result = await consignadosModel.deleteSangria(
+        id,
+        usuario.assinante_id
+      );
 
       if (result.rowCount === 0) {
         const message = sangriaAtual
@@ -412,6 +418,45 @@ class ConsignadosController {
       res.status(500).json({
         success: false,
         message: 'Erro ao excluir'
+      });
+    }
+  };
+
+  updatePixConfirmado = async (req, res) => {
+    try {
+      const usuario = req.user;
+      const id = req.params.id;
+      const { pix_confirmado } = req.body;
+
+      if (!['SIM', 'NAO'].includes(pix_confirmado)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Informe se o PIX foi confirmado.'
+        });
+      }
+
+      const pixConfirmadoBoolean = pix_confirmado === 'SIM';
+
+      const sangriaAtualizada = await consignadosModel.updatePixConfirmado({
+        id,
+        assinante_id: usuario.assinante_id,
+        pix_confirmado: pixConfirmadoBoolean
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: pixConfirmadoBoolean
+          ? 'PIX marcado como confirmado.'
+          : 'PIX marcado como não confirmado.',
+        pix_confirmado: sangriaAtualizada.pix_confirmado,
+        pix_confirmado_em: sangriaAtualizada.pix_confirmado_em
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar confirmação de PIX:', error);
+
+      return res.status(500).json({
+        success: false,
+        message: 'Erro ao atualizar confirmação do PIX.'
       });
     }
   };
@@ -475,7 +520,7 @@ class ConsignadosController {
     }
   };
 
-    getUltimaSangria = async (req, res) => {
+  getUltimaSangria = async (req, res) => {
     try {
       const usuario = req.user;
       const estabelecimentoId = req.params.id;
@@ -540,6 +585,5 @@ class ConsignadosController {
     }
   };
 }
-
 
 export default new ConsignadosController();

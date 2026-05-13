@@ -4,118 +4,161 @@
 
 <body class="view-page-body">
     <%- include('../../partials/header') %>
+
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
     <div class="page-spacer"></div>
 
-    <div class="view-shell">
+    <div class="view-shell pelucias-view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Pelúcias' }) %>
 
-        <section class="page-titlebar page-titlebar-violet">
+        <section class="page-titlebar page-titlebar-violet pelucias-titlebar pelucias-view-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
+                <span class="form-kicker">
+                    <i class="bi bi-gift"></i>
+                    Operacional
+                </span>
+
                 <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
-                <p>Consulte em um único lugar os dados financeiros e operacionais da visita, incluindo leitura, abastecimento, vendido e saldo líquido.</p>
+
+                <p>
+                    Confira os dados da coleta, valores financeiros, pagamento, leituras e estoque registrados para este ponto.
+                </p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat">
+                <div class="page-titlebar-stat">
                     <strong>ID</strong>
                     <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>
                 </div>
-                <div class="list-stat">
+
+                <div class="page-titlebar-stat">
                     <strong>Produto</strong>
                     <span>Pelúcias</span>
                 </div>
             </div>
         </section>
 
-        <main class="view-stage">
-            <section class="view-panel">
+        <main class="view-stage pelucias-view-stage">
+            <section class="view-panel pelucias-view-panel">
                 <% if (sangria) { %>
-                    <div class="view-panel-header">
+                    <div class="view-panel-header pelucias-view-panel-header">
                         <div>
                             <span class="form-section-tag">Coleta</span>
-                            <h2>Resumo da visita</h2>
-                            <p>Os blocos abaixo destacam o financeiro da sangria e também os dados de máquina usados para o controle operacional.</p>
+                            <h2>Resumo da sangria</h2>
+                            <p>
+                                Os principais dados da operação ficam organizados em cartões para facilitar conferência e próxima ação.
+                            </p>
                         </div>
                     </div>
 
-                    <div class="view-grid">
-                        <div class="view-card">
+                    <div class="view-grid pelucias-detail-grid">
+                        <div class="view-card pelucias-detail-card">
                             <strong>Data da sangria</strong>
                             <span><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Tipo de pagamento</strong>
                             <span><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Valor apurado</strong>
                             <span><%= Number(sangria.valor_apurado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Valor líquido</strong>
                             <span><%= Number(sangria.valor_liquido).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Comissão</strong>
                             <span><%= Number(sangria.comissao).toFixed(2).replace('.', ',') %>%</span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Valor do comerciante</strong>
                             <span><%= Number(sangria.valor_comerciante).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Leitura atual</strong>
                             <span><%= sangria.leitura_atual ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Última leitura</strong>
                             <span><%= sangria.ultima_leitura ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Abastecido</strong>
                             <span><%= sangria.abastecido ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Quantidade vendida</strong>
                             <span><%= sangria.qtde_vendido ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Estoque</strong>
                             <span><%= sangria.estoque ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card pelucias-detail-card">
                             <strong>Última edição</strong>
                             <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
-                        <div class="view-card is-wide">
+
+                        <div class="view-card pelucias-detail-card pelucias-detail-card-wide">
                             <strong>Observações</strong>
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
                         </div>
                     </div>
-                <% } else { %>
-                    <p class="mb-0">Sangria não encontrada.</p>
-                <% } %>
 
-                <div class="view-actions">
-                    <div class="view-actions-copy">
-                        <%= sangria
-                            ? 'Essa visão foi pensada para deixar a conferência mais rápida sem perder os detalhes importantes da operação.'
-                            : 'Você pode voltar para a listagem geral de pelúcias e continuar a navegação normalmente.' %>
-                    </div>
-                    <div class="view-actions-buttons">
-                        <a href="/pelucias/sangrias" class="btn-modern-secondary">
-                            <i class="bi bi-arrow-left"></i>
-                            <span>Voltar</span>
-                        </a>
-                        <% if (sangria && !isReadOnly) { %>
-                            <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="btn-modern">
-                                <i class="bi bi-pencil-square"></i>
-                                <span>Editar registro</span>
+                    <div class="view-actions pelucias-view-actions">
+                        <div class="view-actions-copy">
+                            <strong>Próxima ação</strong>
+                            <span>
+                                Volte para a listagem ou edite este registro se precisar corrigir alguma informação.
+                            </span>
+                        </div>
+
+                        <div class="view-actions-buttons">
+                            <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                                <i class="bi bi-arrow-left"></i>
+                                <span>Voltar</span>
                             </a>
-                        <% } %>
+
+                            <% if (!isReadOnly) { %>
+                                <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="btn-modern">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>Editar registro</span>
+                                </a>
+                            <% } %>
+                        </div>
                     </div>
-                </div>
+                <% } else { %>
+                    <div class="view-empty-state pelucias-view-empty">
+                        <span class="form-section-tag">Registro</span>
+                        <h2>Sangria não encontrada</h2>
+                        <p>
+                            Não foi possível localizar esta sangria de pelúcias. Volte para a listagem e tente abrir o registro novamente.
+                        </p>
+
+                        <div class="view-actions pelucias-view-actions">
+                            <div class="view-actions-buttons">
+                                <a href="/pelucias/sangrias" class="btn-modern-secondary">
+                                    <i class="bi bi-arrow-left"></i>
+                                    <span>Voltar para a listagem</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
             </section>
         </main>
     </div>

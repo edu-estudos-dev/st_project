@@ -1,113 +1,169 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<%- include('../../partials/head', { title: 'Lista de Sangrias de Pelúcias' }) %>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <%- include('../../partials/head', { title: 'Lista de Sangrias de Pelúcias' }) %>
 
-<body class="list-page-body">
-    <%- include('../../partials/header') %>
+    <body class="list-page-body">
+        <%- include('../../partials/header') %>
 
-    <script>
-        window.VendMasterPageHandlesRecibo = true;
-    </script>
+        <script>
+            window.VendMasterPageHandlesRecibo = true;
+        </script>
 
-    <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
-    <div class="page-spacer"></div>
+        <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
 
-    <div class="list-shell">
-        <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Pelúcias' }) %>
+        <div class="page-spacer"></div>
 
-        <section class="page-titlebar page-titlebar-violet">
-            <div class="page-titlebar-content">
-                <span class="list-kicker"><i class="bi bi-gift"></i> Operacional</span>
-                <h1>Registro financeiro das pelúcias</h1>
-                <p>A tela agora acompanha a linguagem moderna do sistema, deixando o essencial do registro mais legível e os detalhes completos para a visualização.</p>
-            </div>
-            <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Total</strong><span><%= sangrias.length %> registros</span></div>
-                <div class="list-stat"><strong>Fluxo</strong><span>Controle diário das coletas</span></div>
-            </div>
-        </section>
+        <div class="list-shell pelucias-list-shell">
+            <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Pelúcias' }) %>
 
-        <main class="list-stage">
-            <section class="list-panel">
-                <div class="list-toolbar">
-                    <div class="list-toolbar-copy">
-                        <h2>Sangrias de pelúcias</h2>
-                        <p>Use esta lista para revisar resultados financeiros, acompanhar pagamento e acessar rapidamente os detalhes da operação.</p>
-                    </div>
-                    <% if (!isReadOnly) { %>
-                        <a class="list-action" href="/pelucias/sangrias/add">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Novo registro</span>
-                        </a>
-                    <% } %>
+            <section class="page-titlebar page-titlebar-violet pelucias-list-titlebar">
+                <div class="page-titlebar-content">
+                    <span class="list-kicker">
+                        <i class="bi bi-gift"></i>
+                        Operacional
+                    </span>
+
+                    <h1>Sangrias de pelúcias</h1>
+
+                    <p>
+                        Consulte os registros de coleta, acompanhe os valores líquidos e marque quando o recebimento em PIX for confirmado.
+                    </p>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table class="modern-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Estabelecimento</th>
-                                    <th>Data</th>
-                                    <th>Líquido</th>
-                                    <th>Pagamento</th>
-                                    <th>PIX confirmado</th>
-                                    <th class="table-actions-heading">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (sangrias.length > 0) { %>
-                                    <% sangrias.forEach(function(sangria) { %>
-                                        <tr>
-                                            <td><span class="table-badge table-badge-neutral">#<%= sangria.id %></span></td>
-                                            <td><div class="table-title-cell"><%= sangria.estabelecimento %></div></td>
-                                            <td><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></td>
-                                            <td><strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></td>
-                                            <td><span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span></td>
-                                            <td>
-                                                <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select" <%= isReadOnly ? 'disabled' : '' %>>
-                                                    <option value="" selected disabled>Selecione</option>
-                                                    <option value="SIM" class="option-sim">SIM</option>
-                                                    <option value="NAO" class="option-nao">NÃO</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <div class="table-actions">
-                                                    <a href="/pelucias/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
-                                                    <% if (!isReadOnly) { %>
-                                                        <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
-                                                        <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
-                                                    <% } %>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <% }); %>
-                                <% } else { %>
-                                    <tr><td colspan="7" class="table-empty">Nenhuma sangria encontrada</td></tr>
-                                <% } %>
-                            </tbody>
-                        </table>
+                <div class="page-titlebar-side">
+                    <div class="list-stat">
+                        <strong>Total</strong>
+                        <span><%= sangrias.length %> registros</span>
+                    </div>
+
+                    <div class="list-stat">
+                        <strong>Fluxo</strong>
+                        <span>Controle das coletas</span>
                     </div>
                 </div>
             </section>
-        </main>
-    </div>
 
-    <script>
-        function saveSelectValue(selectElement) {
-            localStorage.setItem(selectElement.id, selectElement.value);
-        }
+            <main class="list-stage">
+                <section class="list-panel pelucias-list-panel">
+                    <div class="list-toolbar">
+                        <div class="list-toolbar-copy">
+                            <h2>Registros de sangria</h2>
+                            <p>
+                                Veja o histórico das coletas, confira o valor líquido e atualize a confirmação de PIX quando necessário.
+                            </p>
+                        </div>
 
-        function loadSelectValue(selectElement) {
-            const savedValue = localStorage.getItem(selectElement.id);
+                        <% if (!isReadOnly) { %>
+                            <div class="pelucias-list-action-wrap">
+                                <a class="list-action pelucias-list-action" href="/pelucias/sangrias/add">
+                                    <i class="bi bi-plus-circle"></i>
+                                    <span>Novo registro</span>
+                                </a>
+                            </div>
+                        <% } %>
+                    </div>
 
-            if (savedValue) {
-                selectElement.value = savedValue;
-                updateSelectColor(selectElement);
-            }
-        }
+                    <div class="modern-table-wrap">
+                        <div class="modern-table-scroll">
+                            <table class="modern-table pelucias-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Estabelecimento</th>
+                                        <th>Data</th>
+                                        <th>Líquido</th>
+                                        <th>Pagamento</th>
+                                        <th>PIX confirmado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
 
+                                <tbody>
+                                    <% if (sangrias.length > 0) { %>
+                                        <% sangrias.forEach(function(sangria) { %>
+                                            <tr>
+                                                <td data-label="ID">
+                                                    <span class="table-badge table-badge-neutral">#<%= sangria.id %></span>
+                                                </td>
+
+                                                <td data-label="Estabelecimento">
+                                                    <div class="table-title-cell"><%= sangria.estabelecimento %></div>
+                                                </td>
+
+                                                <td data-label="Data">
+                                                    <%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %>
+                                                </td>
+
+                                                <td data-label="Líquido">
+                                                    <strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong>
+                                                </td>
+
+                                                <td data-label="Pagamento">
+                                                    <span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>">
+                                                        <%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %>
+                                                    </span>
+                                                </td>
+
+                                                <td data-label="PIX confirmado">
+                                                    <select
+                                                        name="pix_confirmado"
+                                                        id="pix_confirmado_<%= sangria.id %>"
+                                                        class="form-select color-select"
+                                                        data-sangria-id="<%= sangria.id %>"
+                                                        <%= isReadOnly ? 'disabled' : '' %>
+                                                    >
+                                                        <option
+                                                            value=""
+                                                            <%= sangria.pix_confirmado === null || typeof sangria.pix_confirmado === 'undefined' ? 'selected' : '' %>
+                                                            disabled
+                                                        >
+                                                            Selecione
+                                                        </option>
+
+                                                        <option
+                                                            value="SIM"
+                                                            class="option-sim"
+                                                            <%= sangria.pix_confirmado === true ? 'selected' : '' %>
+                                                        >
+                                                            SIM
+                                                        </option>
+
+                                                        <option
+                                                            value="NAO"
+                                                            class="option-nao"
+                                                            <%= sangria.pix_confirmado === false ? 'selected' : '' %>
+                                                        >
+                                                            NÃO
+                                                        </option>
+                                                    </select>
+                                                </td>
+
+                                                <td data-label="Ações">
+                                                    <div class="table-actions">
+                                                        <a href="/pelucias/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
+
+                                                        <% if (!isReadOnly) { %>
+                                                            <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
+                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                        <% } %>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="7" class="table-empty">Nenhuma sangria encontrada</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <script>
         function updateSelectColor(selectElement) {
             selectElement.classList.remove('select-sim', 'select-nao');
 
@@ -118,99 +174,148 @@
             }
         }
 
-        document.querySelectorAll('.form-select.color-select').forEach(select => {
-            loadSelectValue(select);
+        async function updatePixConfirmado(selectElement) {
+            const sangriaId = selectElement.dataset.sangriaId;
+            const valorAnterior = selectElement.dataset.previousValue || '';
+            const novoValor = selectElement.value;
 
-            select.addEventListener('change', () => {
-                updateSelectColor(select);
-                saveSelectValue(select);
+            if (!sangriaId || !['SIM', 'NAO'].includes(novoValor)) {
+                return;
+            }
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            selectElement.disabled = true;
+
+            window.AppLoading?.show(
+                'Atualizando PIX...',
+                'Salvando a confirmação do recebimento.'
+            );
+
+            try {
+                const response = await fetch(`/pelucias/sangrias/${sangriaId}/pix-confirmado`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken ? { 'CSRF-Token': csrfToken, 'X-CSRF-Token': csrfToken } : {})
+                    },
+                    body: JSON.stringify({
+                        pix_confirmado: novoValor
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Erro ao atualizar confirmação do PIX.');
+                }
+
+                selectElement.dataset.previousValue = novoValor;
+                updateSelectColor(selectElement);
+            } catch (error) {
+                selectElement.value = valorAnterior;
+                updateSelectColor(selectElement);
+
+                window.AppAlerts?.error(error.message || 'Erro ao atualizar confirmação do PIX.');
+            } finally {
+                selectElement.disabled = false;
+                window.AppLoading?.hide();
+            }
+        }
+
+        function getReciboFileName(url) {
+            try {
+                const parsedUrl = new URL(url, window.location.origin);
+                const parts = parsedUrl.pathname.split('/').filter(Boolean);
+                const reciboId = parts[parts.length - 1] || 'recibo';
+
+                if (parsedUrl.pathname.includes('/consignados/')) {
+                    return `recibo-consignados-${reciboId}.pdf`;
+                }
+
+                if (parsedUrl.pathname.includes('/pelucias/')) {
+                    return `recibo-pelucias-${reciboId}.pdf`;
+                }
+
+                if (parsedUrl.pathname.includes('/bolinhas/')) {
+                    return `recibo-bolinhas-${reciboId}.pdf`;
+                }
+
+                return `recibo-vendmaster-${reciboId}.pdf`;
+            } catch (error) {
+                return 'recibo-vendmaster.pdf';
+            }
+        }
+
+        async function shareReciboPdf(url) {
+            const absoluteUrl = new URL(url, window.location.origin).href;
+
+            const response = await fetch(absoluteUrl, {
+                credentials: 'same-origin'
             });
-        });
 
-        document.addEventListener('DOMContentLoaded', async function() {
-            const getReciboFileName = (url) => {
+            if (!response.ok) {
+                throw new Error('Não foi possível gerar o arquivo do recibo para compartilhamento.');
+            }
+
+            const blob = await response.blob();
+            const file = new File([blob], getReciboFileName(url), {
+                type: 'application/pdf'
+            });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: 'Recibo VendMaster',
+                    text: 'Segue o recibo da visita.',
+                    files: [file]
+                });
+
+                return true;
+            }
+
+            return false;
+        }
+
+        async function openReciboUrl(url) {
+            const isMobile =
+                window.matchMedia('(max-width: 767.98px)').matches ||
+                /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (isMobile) {
                 try {
-                    const parsedUrl = new URL(url, window.location.origin);
-                    const parts = parsedUrl.pathname.split('/').filter(Boolean);
-                    const reciboId = parts[parts.length - 1] || 'recibo';
+                    const shared = await shareReciboPdf(url);
 
-                    if (parsedUrl.pathname.includes('/consignados/')) {
-                        return `recibo-consignados-${reciboId}.pdf`;
+                    if (shared) {
+                        return;
                     }
-
-                    if (parsedUrl.pathname.includes('/pelucias/')) {
-                        return `recibo-pelucias-${reciboId}.pdf`;
-                    }
-
-                    if (parsedUrl.pathname.includes('/bolinhas/')) {
-                        return `recibo-bolinhas-${reciboId}.pdf`;
-                    }
-
-                    return `recibo-vendmaster-${reciboId}.pdf`;
                 } catch (error) {
-                    return 'recibo-vendmaster.pdf';
-                }
-            };
-
-            const shareReciboPdf = async (url) => {
-                const absoluteUrl = new URL(url, window.location.origin).href;
-
-                const response = await fetch(absoluteUrl, {
-                    credentials: 'same-origin'
-                });
-
-                if (!response.ok) {
-                    throw new Error('Não foi possível gerar o arquivo do recibo para compartilhamento.');
-                }
-
-                const blob = await response.blob();
-                const file = new File([blob], getReciboFileName(url), {
-                    type: 'application/pdf'
-                });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: 'Recibo VendMaster',
-                        text: 'Segue o recibo da visita.',
-                        files: [file]
-                    });
-
-                    return true;
-                }
-
-                return false;
-            };
-
-            const openReciboUrl = async (url) => {
-                const isMobile =
-                    window.matchMedia('(max-width: 767.98px)').matches ||
-                    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    try {
-                        const shared = await shareReciboPdf(url);
-
-                        if (shared) {
-                            return;
-                        }
-                    } catch (error) {
-                        if (error?.name === 'AbortError') {
-                            return;
-                        }
-
-                        console.error('Erro ao compartilhar recibo:', error);
-                        window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
+                    if (error?.name === 'AbortError') {
+                        return;
                     }
 
-                    window.location.href = url;
-                    return;
+                    console.error('Erro ao compartilhar recibo:', error);
+                    window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
                 }
 
-                window.open(url, '_blank', 'noopener,noreferrer');
-            };
+                window.location.href = url;
+                return;
+            }
+
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.form-select.color-select').forEach((select) => {
+                select.dataset.previousValue = select.value || '';
+                updateSelectColor(select);
+
+                select.addEventListener('change', () => {
+                    updatePixConfirmado(select);
+                });
+            });
 
             document.querySelectorAll('.delete-btn').forEach((button) => {
-                button.addEventListener('click', async function() {
+                button.addEventListener('click', async function () {
                     const idSangria = this.getAttribute('data-id');
 
                     const confirmed = await window.AppAlerts?.confirm({
@@ -220,9 +325,16 @@
                         cancelButtonText: 'Cancelar'
                     });
 
-                    if (!confirmed) return;
+                    if (!confirmed) {
+                        return;
+                    }
 
                     try {
+                        window.AppLoading?.show(
+                            'Excluindo sangria...',
+                            'Removendo o registro selecionado.'
+                        );
+
                         const response = await fetch(`/pelucias/sangrias/delete/${idSangria}`, {
                             method: 'POST'
                         });
@@ -233,10 +345,10 @@
                             throw new Error(data.message || 'Erro ao excluir sangria');
                         }
 
-                        await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
                         window.history.replaceState({}, document.title, window.location.pathname);
                         window.location.reload();
                     } catch (error) {
+                        window.AppLoading?.hide();
                         window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
                     }
                 });
@@ -248,32 +360,37 @@
             const reciboUrl = urlParams.get('recibo_url');
 
             if (successMessage) {
-                await window.AppAlerts?.success(successMessage);
+                window.AppAlerts?.success(successMessage);
             }
 
             if (errorMessage) {
-                await window.AppAlerts?.error(errorMessage);
+                window.AppAlerts?.error(errorMessage);
             }
 
             if (reciboUrl) {
-                const confirmed = await window.AppAlerts?.confirm({
+                window.AppAlerts?.confirm({
                     title: 'Gerar recibo em PDF?',
                     text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
                     confirmButtonText: 'Gerar recibo',
                     cancelButtonText: 'Agora não'
+                }).then(async (confirmed) => {
+                    if (confirmed) {
+                        await openReciboUrl(reciboUrl);
+                        return;
+                    }
+
+                    window.history.replaceState({}, document.title, window.location.pathname);
                 });
 
-                if (confirmed) {
-                    await openReciboUrl(reciboUrl);
-                    return;
-                }
+                return;
             }
 
-            if (successMessage || errorMessage || reciboUrl) {
+            if (successMessage || errorMessage) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
-    </script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-</body>
-</html>
+        </script>
+
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+    </html>

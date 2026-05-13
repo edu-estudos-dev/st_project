@@ -19,10 +19,10 @@
         const currentUltimoEstoque = typeof ultimoEstoque !== 'undefined' ? ultimoEstoque : '';
     %>
 
-    <div class="form-shell form-shell-modern">
+    <div class="form-shell form-shell-modern pelucias-form-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Pelúcias' }) %>
 
-        <section class="page-titlebar page-titlebar-violet">
+        <section class="page-titlebar page-titlebar-violet pelucias-titlebar">
             <div class="page-titlebar-content">
                 <span class="form-kicker"><i class="bi bi-gift"></i> Operacional</span>
                 <h1>Registrar sangria de pelúcias</h1>
@@ -35,14 +35,14 @@
                     <span>Pelúcias</span>
                 </div>
                 <div class="page-titlebar-stat">
-                    <strong>Destaque</strong>
-                    <span>Leitura, vendido e estoque previsto atualizados em tempo real</span>
+                    <strong>Controle</strong>
+                    <span>Leitura, vendido e estoque previsto calculados em tempo real</span>
                 </div>
             </div>
         </section>
 
         <main class="form-stage">
-            <form action="/pelucias/sangrias/add" method="POST" class="modern-form" id="peluciaForm">
+            <form action="/pelucias/sangrias/add" method="POST" class="modern-form pelucias-form" id="peluciaForm">
                 <input type="hidden" name="visita_id" value="<%= currentVisitaId || '' %>">
                 <input type="hidden" name="rota_id" value="<%= currentRotaId || '' %>">
                 <input type="hidden" name="rota_ponto_id" value="<%= currentRotaPontoId || '' %>">
@@ -50,12 +50,12 @@
                 <input type="hidden" name="retorno_url" value="<%= currentRetornoUrl || '/rotas' %>">
                 <input type="hidden" name="rota_retorno_url" value="<%= currentRotaRetornoUrl || currentRetornoUrl || '/rotas' %>">
 
-                <section class="form-card">
+                <section class="form-card pelucias-visit-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Visita</span>
                             <h2>Dados da coleta</h2>
-                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito antes de avançar para os cálculos.</p>
+                            <p>Escolha o estabelecimento, registre a data da sangria e informe como o recebimento foi feito.</p>
                         </div>
                     </div>
 
@@ -99,7 +99,7 @@
                     </div>
                 </section>
 
-                <section class="form-card" id="financeiroCard">
+                <section class="form-card pelucias-values-card" id="financeiroCard">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Financeiro</span>
@@ -143,12 +143,12 @@
                     </div>
                 </section>
 
-                <section class="form-card" id="leiturasCard">
+                <section class="form-card pelucias-readings-card" id="leiturasCard">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Leituras</span>
                             <h2>Controle operacional da máquina</h2>
-                            <p>Com a última leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto sem trabalho manual extra.</p>
+                            <p>Com a última leitura e o estoque atual carregados automaticamente, a tela calcula quantidade vendida e estoque previsto.</p>
                         </div>
                     </div>
 
@@ -207,7 +207,7 @@
                     </div>
                 </section>
 
-                <section class="form-card">
+                <section class="form-card pelucias-notes-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Observações</span>
@@ -224,7 +224,7 @@
                     </div>
                 </section>
 
-                <section class="form-actions-bar">
+                <section class="form-actions-bar pelucias-actions-bar">
                     <div class="form-actions-copy">
                         <strong>Concluir registro</strong>
                         <span>Revise a leitura atual, os valores financeiros e o estoque previsto antes de salvar.</span>

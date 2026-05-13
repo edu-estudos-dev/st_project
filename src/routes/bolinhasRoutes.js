@@ -22,6 +22,9 @@ router.post('/edit', requireWritableSubscription, bolinhaController.updateSangri
 // Rota para deletar uma sangria pelo ID
 router.post('/delete/:id', requireWritableSubscription, bolinhaController.deleteSangria);
 
+// Rota para atualizar confirmação de PIX da sangria
+router.post('/:id/pix-confirmado', requireWritableSubscription, bolinhaController.updatePixConfirmado);
+
 // Rota para visualizar uma sangria específica pelo ID
 router.get('/view/:id', bolinhaController.viewSangria);
 

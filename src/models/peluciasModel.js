@@ -72,7 +72,9 @@ class PeluciasModel {
     ]);
 
     if (result.rowCount === 0) {
-      throw new Error('Estabelecimento de pelucias nao encontrado para este assinante.');
+      throw new Error(
+        'Estabelecimento de pelúcias não encontrado para este assinante.'
+      );
     }
 
     return result;
@@ -126,15 +128,21 @@ class PeluciasModel {
       FROM cadastro_inicial
     `;
 
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
-    return result.rows[0] || {
-      ultima_leitura: 0,
-      estoque: 0,
-      origem_cadastro_inicial: false
-    };
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId
+    ]);
+
+    return (
+      result.rows[0] || {
+        ultima_leitura: 0,
+        estoque: 0,
+        origem_cadastro_inicial: false
+      }
+    );
   };
 
-  getSangrias = async (assinanteId) => {
+  getSangrias = async assinanteId => {
     const query = `
       SELECT s.*, e.estabelecimento
       FROM sangrias_pelucias s
@@ -151,7 +159,7 @@ class PeluciasModel {
     return result.rows;
   };
 
-  getEstabelecimentos = async (assinanteId) => {
+  getEstabelecimentos = async assinanteId => {
     await this.ensureEstabelecimentoInitialColumns();
 
     const query = `
@@ -249,7 +257,9 @@ class PeluciasModel {
     ]);
 
     if (result.rowCount === 0) {
-      throw new Error('Sangria de pelucias nao encontrada para este assinante.');
+      throw new Error(
+        'Sangria de pelúcias não encontrada para este assinante.'
+      );
     }
 
     return result;
@@ -279,7 +289,7 @@ class PeluciasModel {
     return result;
   };
 
-  getMonthlyRevenue = async (assinanteId) => {
+  getMonthlyRevenue = async assinanteId => {
     const query = `
       SELECT
         EXTRACT(YEAR FROM data_sangria) AS ano,
@@ -301,27 +311,39 @@ class PeluciasModel {
     return result.rows;
   };
 
-  getControleGeralPelucias = async (assinanteId) => {
+  getControleGeral = async assinanteId => {
     const query = `
       SELECT
-        sp.id,
+        e.id,
         e.estabelecimento,
-        sp.data_sangria AS data,
-        sp.leitura_atual,
-        sp.ultima_leitura,
-        sp.abastecido,
-        sp.observacoes
+        e.chave,
+        e.maquina,
+        e.endereco,
+        e.bairro,
+        MAX(sp.data_sangria) AS data
       FROM estabelecimentos e
-      JOIN sangrias_pelucias sp
+      LEFT JOIN sangrias_pelucias sp
         ON e.id = sp.estabelecimento_id
        AND e.assinante_id = sp.assinante_id
       WHERE e.assinante_id = $1
         AND UPPER(e.produto) LIKE '%PELUCIAS%'
-      ORDER BY sp.data_sangria DESC, sp.id DESC
+        AND e.status = 'ativo'
+      GROUP BY
+        e.id,
+        e.estabelecimento,
+        e.chave,
+        e.maquina,
+        e.endereco,
+        e.bairro
+      ORDER BY e.bairro ASC, e.estabelecimento ASC
     `;
 
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
+  };
+
+  getControleGeralPelucias = async assinanteId => {
+    return this.getControleGeral(assinanteId);
   };
 
   getUltimaSangria = async (estabelecimentoId, assinanteId) => {
@@ -334,7 +356,11 @@ class PeluciasModel {
       LIMIT 1
     `;
 
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId
+    ]);
+
     return result.rows;
   };
 
@@ -348,7 +374,11 @@ class PeluciasModel {
       LIMIT 1
     `;
 
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId
+    ]);
+
     return result.rows[0] || { data_sangria: '1970-01-01' };
   };
 
@@ -373,25 +403,34 @@ class PeluciasModel {
       ) AS has_historico
     `;
 
-    const result = await connection.query(query, [estabelecimentoId, assinanteId]);
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId
+    ]);
+
     return Boolean(result.rows[0]?.has_historico);
   };
 
-  getAllSangrias = async (assinanteId) => {
+  getAllSangrias = async assinanteId => {
     const query = `
       SELECT
         sp.id,
         e.estabelecimento,
+        e.endereco,
+        e.bairro,
+        e.maquina,
         sp.data_sangria AS data,
         sp.leitura_atual,
         sp.ultima_leitura,
         sp.abastecido,
+        sp.estoque,
         sp.observacoes
       FROM sangrias_pelucias sp
       JOIN estabelecimentos e
         ON sp.estabelecimento_id = e.id
        AND sp.assinante_id = e.assinante_id
       WHERE sp.assinante_id = $1
+        AND UPPER(e.produto) LIKE '%PELUCIAS%'
       ORDER BY sp.data_sangria DESC, sp.id DESC
     `;
 
@@ -399,7 +438,7 @@ class PeluciasModel {
     return result.rows;
   };
 
-  getLatestSangriaForAllEstabelecimentos = async (assinanteId) => {
+  getLatestSangriaForAllEstabelecimentos = async assinanteId => {
     const query = `
       SELECT
         sp.id,
@@ -431,6 +470,45 @@ class PeluciasModel {
 
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
+  };
+
+  updatePixConfirmado = async ({ id, assinante_id, pix_confirmado }) => {
+    const query = `
+      UPDATE sangrias_pelucias s
+      SET
+        pix_confirmado = $1,
+        pix_confirmado_em = CASE
+          WHEN $1 = TRUE THEN CURRENT_TIMESTAMP
+          ELSE NULL
+        END,
+        data_atualizacao = CURRENT_TIMESTAMP
+      WHERE s.id = $2
+        AND s.assinante_id = $3
+        AND s.estabelecimento_id IN (
+          SELECT e.id
+          FROM estabelecimentos e
+          WHERE e.assinante_id = $3
+            AND UPPER(e.produto) LIKE '%PELUCIAS%'
+        )
+      RETURNING
+        s.id,
+        s.pix_confirmado,
+        s.pix_confirmado_em
+    `;
+
+    const result = await connection.query(query, [
+      pix_confirmado,
+      id,
+      assinante_id
+    ]);
+
+    if (result.rowCount === 0) {
+      throw new Error(
+        'Sangria de pelúcias não encontrada para este assinante.'
+      );
+    }
+
+    return result.rows[0];
   };
 }
 

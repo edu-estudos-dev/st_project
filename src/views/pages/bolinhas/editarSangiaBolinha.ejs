@@ -7,14 +7,17 @@
 
     <div class="page-spacer"></div>
 
-    <div class="form-shell form-shell-modern">
+    <div class="form-shell form-shell-modern bolinhas-form-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Bolinhas' }) %>
 
-        <section class="page-titlebar page-titlebar-green">
+        <section class="page-titlebar page-titlebar-green bolinhas-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
+                <span class="form-kicker">
+                    <i class="bi bi-pencil-square"></i>
+                    Operacional
+                </span>
                 <h1>Editar sangria de bolinhas</h1>
-                <p>Revise os dados da coleta com a mesma linguagem visual do cadastro, deixando os valores e observações mais fáceis de conferir.</p>
+                <p>Revise os dados da coleta, atualize os valores e confirme as informações antes de salvar.</p>
             </div>
 
             <div class="page-titlebar-side">
@@ -30,15 +33,15 @@
         </section>
 
         <main class="form-stage">
-            <form action="/bolinhas/sangrias/edit" method="POST" class="modern-form">
+            <form action="/bolinhas/sangrias/edit" method="POST" class="modern-form bolinhas-form">
                 <input type="hidden" name="id" value="<%= sangria.id %>">
 
-                <section class="form-card">
+                <section class="form-card bolinhas-visit-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Visita</span>
                             <h2>Informações da coleta</h2>
-                            <p>Atualize estabelecimento, data e forma de pagamento vinculados a esta sangria.</p>
+                            <p>Atualize o estabelecimento, a data e a forma de pagamento vinculados a esta sangria.</p>
                         </div>
                     </div>
 
@@ -47,14 +50,18 @@
                             <label for="estabelecimento">Estabelecimento</label>
                             <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
                                 <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                    <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
+                                    <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>>
+                                        <%= estabelecimento.estabelecimento %>
+                                    </option>
                                 <% }); %>
                             </select>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="data_sangria">Data da sangria</label>
                             <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= new Date(sangria.data_sangria).toISOString().substring(0, 10) %>" required>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
@@ -65,12 +72,12 @@
                     </div>
                 </section>
 
-                <section class="form-card">
+                <section class="form-card bolinhas-values-card">
                     <div class="form-card-header">
                         <div>
                             <span class="form-section-tag">Financeiro</span>
                             <h2>Valores da sangria</h2>
-                            <p>Ao editar valor apurado e comissão, os valores do comerciante e líquido continuam sendo recalculados automaticamente.</p>
+                            <p>Ao editar valor apurado e comissão, os valores do comerciante e líquido são recalculados automaticamente.</p>
                         </div>
                     </div>
 
@@ -82,6 +89,7 @@
                                 <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required oninput="calculateValues()">
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
@@ -89,6 +97,7 @@
                                 <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="valor_comerciante">Valor do comerciante</label>
                             <div class="input-group">
@@ -96,6 +105,7 @@
                                 <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_comerciante" name="valor_comerciante" value="<%= sangria.valor_comerciante %>" readonly disabled>
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="valor_liquido">Valor líquido</label>
                             <div class="input-group">
@@ -111,7 +121,7 @@
                         <div>
                             <span class="form-section-tag">Observações</span>
                             <h2>Anotações da visita</h2>
-                            <p>Atualize o campo de observações se precisar deixar mais contexto sobre o atendimento ou a coleta.</p>
+                            <p>Atualize as observações se precisar deixar mais contexto sobre o atendimento ou a coleta.</p>
                         </div>
                     </div>
 
@@ -123,9 +133,9 @@
                     </div>
                 </section>
 
-                <section class="form-actions-bar">
+                <section class="form-actions-bar bolinhas-actions-bar">
                     <div class="form-actions-copy">
-                        <strong>Salvar alterações</strong>
+                        <strong>Conferência final</strong>
                         <span>Revise os valores e confirme a atualização desta sangria de bolinhas.</span>
                     </div>
 
@@ -146,15 +156,16 @@
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-    function calculateValues() {
-        const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
-        const comissao = parseFloat(document.getElementById('comissao').value) || 0;
-        const valorDaComissao = valorApurado * (comissao / 100);
-        const valorComerciante = valorDaComissao;
-        const valorLiquido = valorApurado - valorComerciante;
-        document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
-        document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
-    }
+        function calculateValues() {
+            const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
+            const comissao = parseFloat(document.getElementById('comissao').value) || 0;
+            const valorDaComissao = valorApurado * (comissao / 100);
+            const valorComerciante = valorDaComissao;
+            const valorLiquido = valorApurado - valorComerciante;
+
+            document.getElementById('valor_comerciante').value = valorComerciante.toFixed(2);
+            document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
+        }
     </script>
 </body>
 </html>

@@ -4,42 +4,58 @@
 
 <body class="list-page-body">
     <%- include('../../partials/header') %>
+
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <div class="list-shell bolinhas-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Bolinhas' }) %>
 
-        <section class="page-titlebar page-titlebar-green">
+        <section class="page-titlebar page-titlebar-green bolinhas-list-titlebar">
             <div class="page-titlebar-content">
-                <span class="list-kicker"><i class="bi bi-circle-square"></i> Operacional</span>
-                <h1>Registro financeiro das bolinhas</h1>
-                <p>Uma leitura mais agradável dos registros de sangria, com foco no essencial da operação e acesso rápido aos detalhes completos no card de visualização.</p>
+                <span class="list-kicker">
+                    <i class="bi bi-circle-square"></i>
+                    Operacional
+                </span>
+                <h1>Sangrias de bolinhas</h1>
+                <p>Consulte os registros de coleta, acompanhe os valores líquidos e marque quando o recebimento em PIX for confirmado.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Total</strong><span><%= sangrias.length %> registros</span></div>
-                <div class="list-stat"><strong>Fluxo</strong><span>Controle diário das coletas</span></div>
+                <div class="list-stat">
+                    <strong>Total</strong>
+                    <span><%= sangrias.length %> registros</span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Fluxo</strong>
+                    <span>Controle das coletas</span>
+                </div>
             </div>
         </section>
 
         <main class="list-stage">
-            <section class="list-panel">
+            <section class="list-panel bolinhas-list-panel">
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
-                        <h2>Sangrias de bolinhas</h2>
-                        <p>Consulte os registros com uma visão mais objetiva, atualize o status de PIX e abra os detalhes completos quando precisar aprofundar.</p>
+                        <h2>Registros de sangria</h2>
+                        <p>Veja o histórico das coletas, confira o valor líquido e atualize a confirmação de PIX quando necessário.</p>
                     </div>
+
                     <% if (!isReadOnly) { %>
-                        <a class="list-action" href="/bolinhas/sangrias/add">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Novo registro</span>
-                        </a>
+                        <div class="bolinhas-list-action-wrap">
+                            <a class="list-action bolinhas-list-action" href="/bolinhas/sangrias/add">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Novo registro</span>
+                            </a>
+                        </div>
                     <% } %>
                 </div>
 
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table bolinhas-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -51,25 +67,69 @@
                                     <th>Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <% if (sangrias.length > 0) { %>
                                     <% sangrias.forEach(function(sangria) { %>
                                         <tr>
-                                            <td><span class="table-badge table-badge-neutral">#<%= sangria.id %></span></td>
-                                            <td><div class="table-title-cell"><%= sangria.estabelecimento %></div></td>
-                                            <td><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></td>
-                                            <td><strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong></td>
-                                            <td><span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span></td>
-                                            <td>
-                                                <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select" <%= isReadOnly ? 'disabled' : '' %>>
-                                                    <option value="" selected disabled>Selecione</option>
-                                                    <option value="SIM" class="option-sim">SIM</option>
-                                                    <option value="NAO" class="option-nao">NÃO</option>
+                                            <td data-label="ID">
+                                                <span class="table-badge table-badge-neutral">#<%= sangria.id %></span>
+                                            </td>
+
+                                            <td data-label="Estabelecimento">
+                                                <div class="table-title-cell"><%= sangria.estabelecimento %></div>
+                                            </td>
+
+                                            <td data-label="Data">
+                                                <%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %>
+                                            </td>
+
+                                            <td data-label="Líquido">
+                                                <strong>R$ <%= Number(sangria.valor_liquido).toFixed(2) %></strong>
+                                            </td>
+
+                                            <td data-label="Pagamento">
+                                                <span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>">
+                                                    <%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %>
+                                                </span>
+                                            </td>
+
+                                            <td data-label="PIX confirmado">
+                                                <select
+                                                    name="pix_confirmado"
+                                                    id="pix_confirmado_<%= sangria.id %>"
+                                                    class="form-select color-select"
+                                                    data-sangria-id="<%= sangria.id %>"
+                                                    <%= isReadOnly ? 'disabled' : '' %>
+                                                >
+                                                    <option
+                                                        value=""
+                                                        <%= sangria.pix_confirmado === null || typeof sangria.pix_confirmado === 'undefined' ? 'selected' : '' %>
+                                                        disabled
+                                                    >
+                                                        Selecione
+                                                    </option>
+                                                    <option
+                                                        value="SIM"
+                                                        class="option-sim"
+                                                        <%= sangria.pix_confirmado === true ? 'selected' : '' %>
+                                                    >
+                                                        SIM
+                                                    </option>
+                                                    <option
+                                                        value="NAO"
+                                                        class="option-nao"
+                                                        <%= sangria.pix_confirmado === false ? 'selected' : '' %>
+                                                    >
+                                                        NÃO
+                                                    </option>
                                                 </select>
                                             </td>
-                                            <td>
+
+                                            <td data-label="Ações">
                                                 <div class="table-actions">
-                                                    <a href="/bolinhas/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/bolinhas/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
+
                                                     <% if (!isReadOnly) { %>
                                                         <a href="/bolinhas/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
                                                         <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
@@ -92,36 +152,132 @@
     </div>
 
     <script>
-        function saveSelectValue(selectElement) { localStorage.setItem(selectElement.id, selectElement.value); }
-        function loadSelectValue(selectElement) { const savedValue = localStorage.getItem(selectElement.id); if (savedValue) { selectElement.value = savedValue; updateSelectColor(selectElement); } }
-        function updateSelectColor(selectElement) { selectElement.classList.remove('select-sim', 'select-nao'); if (selectElement.value === 'SIM') selectElement.classList.add('select-sim'); else if (selectElement.value === 'NAO') selectElement.classList.add('select-nao'); }
-        document.querySelectorAll('.form-select.color-select').forEach(select => { loadSelectValue(select); select.addEventListener('change', () => { updateSelectColor(select); saveSelectValue(select); }); });
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.delete-btn').forEach((button) => {
-                button.addEventListener('click', async function() {
-                    const idSangria = this.getAttribute('data-id');
-                    const confirmed = await window.AppAlerts?.confirm({ title: 'Excluir sangria', text: 'Tem certeza que deseja excluir este registro de sangria?', confirmButtonText: 'Excluir', cancelButtonText: 'Cancelar' });
-                    if (!confirmed) return;
-                    try {
-                        const response = await fetch(`/bolinhas/sangrias/delete/${idSangria}`, { method: 'POST' });
-                        const data = await response.json();
-                        if (!response.ok || !data.success) throw new Error(data.message || 'Erro ao excluir sangria');
-                        await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        window.location.reload();
-                    } catch (error) {
-                        window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
-                    }
-                });
+    function updateSelectColor(selectElement) {
+        selectElement.classList.remove('select-sim', 'select-nao');
+
+        if (selectElement.value === 'SIM') {
+            selectElement.classList.add('select-sim');
+        } else if (selectElement.value === 'NAO') {
+            selectElement.classList.add('select-nao');
+        }
+    }
+
+    async function updatePixConfirmado(selectElement) {
+        const sangriaId = selectElement.dataset.sangriaId;
+        const valorAnterior = selectElement.dataset.previousValue || '';
+        const novoValor = selectElement.value;
+
+        if (!sangriaId || !['SIM', 'NAO'].includes(novoValor)) {
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        selectElement.disabled = true;
+
+        window.AppLoading?.show(
+            'Atualizando PIX...',
+            'Salvando a confirmação do recebimento.'
+        );
+
+        try {
+            const response = await fetch(`/bolinhas/sangrias/${sangriaId}/pix-confirmado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(csrfToken ? { 'CSRF-Token': csrfToken, 'X-CSRF-Token': csrfToken } : {})
+                },
+                body: JSON.stringify({
+                    pix_confirmado: novoValor
+                })
             });
-            const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success'); const errorMessage = urlParams.get('error');
-            if (successMessage) window.AppAlerts?.success(successMessage);
-            if (errorMessage) window.AppAlerts?.error(errorMessage);
-            if (successMessage || errorMessage) window.history.replaceState({}, document.title, window.location.pathname);
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Erro ao atualizar confirmação do PIX.');
+            }
+
+            selectElement.dataset.previousValue = novoValor;
+            updateSelectColor(selectElement);
+        } catch (error) {
+            selectElement.value = valorAnterior;
+            updateSelectColor(selectElement);
+
+            window.AppAlerts?.error(error.message || 'Erro ao atualizar confirmação do PIX.');
+        } finally {
+            selectElement.disabled = false;
+            window.AppLoading?.hide();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.form-select.color-select').forEach((select) => {
+            select.dataset.previousValue = select.value || '';
+            updateSelectColor(select);
+
+            select.addEventListener('change', () => {
+                updatePixConfirmado(select);
+            });
         });
+
+        document.querySelectorAll('.delete-btn').forEach((button) => {
+            button.addEventListener('click', async function () {
+                const idSangria = this.getAttribute('data-id');
+
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Excluir sangria',
+                    text: 'Tem certeza que deseja excluir este registro de sangria?',
+                    confirmButtonText: 'Excluir',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (!confirmed) {
+                    return;
+                }
+
+                try {
+                    window.AppLoading?.show(
+                        'Excluindo sangria...',
+                        'Removendo o registro selecionado.'
+                    );
+
+                    const response = await fetch(`/bolinhas/sangrias/delete/${idSangria}`, {
+                        method: 'POST'
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'Erro ao excluir sangria');
+                    }
+
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    window.location.reload();
+                } catch (error) {
+                    window.AppLoading?.hide();
+                    window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
+                }
+            });
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get('success');
+        const errorMessage = urlParams.get('error');
+
+        if (successMessage) {
+            window.AppAlerts?.success(successMessage);
+        }
+
+        if (errorMessage) {
+            window.AppAlerts?.error(errorMessage);
+        }
+
+        if (successMessage || errorMessage) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
     </script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
-

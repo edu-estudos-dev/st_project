@@ -477,7 +477,45 @@ class PeluciasController {
       });
     }
   };
+  
+  updatePixConfirmado = async (req, res) => {
+  try {
+    const usuario = req.user;
+    const id = req.params.id;
+    const { pix_confirmado } = req.body;
 
+    if (!['SIM', 'NAO'].includes(pix_confirmado)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Informe se o PIX foi confirmado.'
+      });
+    }
+
+    const pixConfirmadoBoolean = pix_confirmado === 'SIM';
+
+    const sangriaAtualizada = await peluciasModel.updatePixConfirmado({
+      id,
+      assinante_id: usuario.assinante_id,
+      pix_confirmado: pixConfirmadoBoolean
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: pixConfirmadoBoolean
+        ? 'PIX marcado como confirmado.'
+        : 'PIX marcado como não confirmado.',
+      pix_confirmado: sangriaAtualizada.pix_confirmado,
+      pix_confirmado_em: sangriaAtualizada.pix_confirmado_em
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar confirmação de PIX:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Erro ao atualizar confirmação do PIX.'
+    });
+  }
+};
   viewSangria = async (req, res) => {
     const usuario = req.user;
 
@@ -524,14 +562,13 @@ class PeluciasController {
     }
   };
 
-  renderControleGeralPelucias = async (req, res) => {
+   renderControleGeralPelucias = async (req, res) => {
     const usuario = req.user;
 
     try {
-      const dadosControleGeral =
-        await peluciasModel.getLatestSangriaForAllEstabelecimentos(
-          usuario.assinante_id
-        );
+      const dadosControleGeral = await peluciasModel.getControleGeral(
+        usuario.assinante_id
+      );
 
       res.render('pages/pelucias/controleGeralPelucias', {
         estabelecimentos: dadosControleGeral,

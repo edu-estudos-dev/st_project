@@ -4,23 +4,32 @@
 
 <body class="view-page-body">
     <%- include('../../partials/header') %>
+
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
     <div class="page-spacer"></div>
 
-    <div class="view-shell">
+    <div class="view-shell bolinhas-view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Bolinhas' }) %>
 
-        <section class="page-titlebar page-titlebar-green">
+        <section class="page-titlebar page-titlebar-green bolinhas-view-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-circle-square"></i> Operacional</span>
+                <span class="form-kicker">
+                    <i class="bi bi-circle-square"></i>
+                    Operacional
+                </span>
+
                 <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
-                <p>Detalhes completos da visita em um layout mais leve, destacando financeiro, pagamento e observações do ponto.</p>
+
+                <p>Confira os dados da coleta, valores financeiros, pagamento e observações registradas para este ponto.</p>
             </div>
+
             <div class="page-titlebar-side">
                 <div class="list-stat">
                     <strong>ID</strong>
                     <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>
                 </div>
+
                 <div class="list-stat">
                     <strong>Produto</strong>
                     <span>Bolinhas</span>
@@ -29,65 +38,98 @@
         </section>
 
         <main class="view-stage">
-            <section class="view-panel">
+            <section class="view-panel bolinhas-view-panel">
                 <% if (sangria) { %>
-                    <div class="view-panel-header">
+                    <div class="view-panel-header bolinhas-view-panel-header">
                         <div>
                             <span class="form-section-tag">Coleta</span>
                             <h2>Resumo da sangria</h2>
-                            <p>Os principais dados da operação ficam distribuídos em cartões para facilitar leitura, validação e próxima ação.</p>
+                            <p>Os principais dados da operação ficam organizados em cartões para facilitar conferência e próxima ação.</p>
                         </div>
                     </div>
 
-                    <div class="view-grid">
+                    <div class="view-grid bolinhas-view-grid">
                         <div class="view-card">
                             <strong>Data da sangria</strong>
                             <span><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Tipo de pagamento</strong>
                             <span><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span>
                         </div>
+
+                        <div class="view-card">
+                            <strong>PIX confirmado</strong>
+                            <span>
+                                <% if (sangria.tipo_pagamento !== 'pix') { %>
+                                    Não se aplica
+                                <% } else if (sangria.pix_confirmado === true) { %>
+                                    Sim
+                                <% } else if (sangria.pix_confirmado === false) { %>
+                                    Não
+                                <% } else { %>
+                                    Pendente
+                                <% } %>
+                            </span>
+                        </div>
+
                         <div class="view-card">
                             <strong>Valor apurado</strong>
                             <span><%= Number(sangria.valor_apurado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Valor líquido</strong>
                             <span><%= Number(sangria.valor_liquido).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Comissão</strong>
                             <span><%= Number(sangria.comissao).toFixed(2).replace('.', ',') %>%</span>
                         </div>
+
                         <div class="view-card">
                             <strong>Valor do comerciante</strong>
                             <span><%= Number(sangria.valor_comerciante).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
+
                         <div class="view-card">
                             <strong>Última edição</strong>
                             <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
+
                         <div class="view-card is-wide">
                             <strong>Observações</strong>
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
                         </div>
                     </div>
                 <% } else { %>
-                    <p class="mb-0">Sangria não encontrada.</p>
+                    <div class="view-panel-header bolinhas-view-panel-header">
+                        <div>
+                            <span class="form-section-tag">Registro</span>
+                            <h2>Sangria não encontrada</h2>
+                            <p>Não foi possível localizar este registro. Volte para a listagem e tente novamente.</p>
+                        </div>
+                    </div>
                 <% } %>
 
-                <div class="view-actions">
+                <div class="view-actions bolinhas-view-actions">
                     <div class="view-actions-copy">
-                        <%= sangria
-                            ? 'A visualização foi alinhada ao mesmo padrão moderno das demais telas para manter consistência durante a navegação.'
-                            : 'Você pode voltar para a listagem geral de bolinhas e continuar a navegação normalmente.' %>
+                        <strong>Próxima ação</strong>
+                        <span>
+                            <%= sangria
+                                ? 'Volte para a listagem ou edite este registro se precisar corrigir alguma informação.'
+                                : 'Volte para a listagem geral de bolinhas e continue a navegação normalmente.' %>
+                        </span>
                     </div>
+
                     <div class="view-actions-buttons">
                         <a href="/bolinhas/sangrias" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
+
                         <% if (sangria && !isReadOnly) { %>
                             <a href="/bolinhas/sangrias/edit/<%= sangria.id %>" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>

@@ -10,41 +10,62 @@
     </script>
 
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <div class="list-shell consignados-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue consignados-list-titlebar">
             <div class="page-titlebar-content">
-                <span class="list-kicker"><i class="bi bi-stickies"></i> Operacional</span>
-                <h1>Registro financeiro dos consignados</h1>
-                <p>A listagem agora segue a mesma linguagem moderna do restante do sistema, destacando pagamento, PIX e ações com mais clareza.</p>
+                <span class="list-kicker">
+                    <i class="bi bi-stickies"></i>
+                    Operacional
+                </span>
+
+                <h1>Sangrias de consignados</h1>
+
+                <p>
+                    Consulte os registros de coleta, acompanhe os valores apurados e marque quando o recebimento em PIX for confirmado.
+                </p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Total</strong><span><%= sangrias.length %> registros</span></div>
-                <div class="list-stat"><strong>Fluxo</strong><span>Controle das visitas</span></div>
+                <div class="list-stat">
+                    <strong>Total</strong>
+                    <span><%= sangrias.length %> registros</span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Fluxo</strong>
+                    <span>Controle das visitas</span>
+                </div>
             </div>
         </section>
 
         <main class="list-stage">
-            <section class="list-panel">
+            <section class="list-panel consignados-list-panel">
                 <div class="list-toolbar">
                     <div class="list-toolbar-copy">
-                        <h2>Sangrias de consignados</h2>
-                        <p>Consulte valores, acompanhe pagamento e use os atalhos de visualizar, editar e deletar em um layout mais limpo.</p>
+                        <h2>Registros de sangria</h2>
+                        <p>
+                            Veja o histórico das coletas, confira o valor apurado e atualize a confirmação de PIX quando necessário.
+                        </p>
                     </div>
+
                     <% if (!isReadOnly) { %>
-                        <a class="list-action" href="/consignados/sangrias/add">
-                            <i class="bi bi-plus-circle"></i>
-                            <span>Novo registro</span>
-                        </a>
+                        <div class="consignados-list-action-wrap">
+                            <a class="list-action consignados-list-action" href="/consignados/sangrias/add">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Novo registro</span>
+                            </a>
+                        </div>
                     <% } %>
                 </div>
 
                 <div class="modern-table-wrap">
                     <div class="modern-table-scroll">
-                        <table class="modern-table">
+                        <table class="modern-table consignados-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -53,34 +74,94 @@
                                     <th>Valor apurado</th>
                                     <th>Pagamento</th>
                                     <th>PIX confirmado</th>
-                                    <th class="table-actions-heading">Ações</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <% if (sangrias.length > 0) { %>
                                     <% sangrias.forEach(function(sangria) { %>
                                         <tr>
-                                            <td><span class="table-badge table-badge-neutral">#<%= sangria.id %></span></td>
-                                            <td><div class="table-title-cell"><%= sangria.estabelecimento %></div></td>
-                                            <td><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></td>
-                                            <td><strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong></td>
-                                            <td><span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>"><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span></td>
-                                            <td>
-                                                <select name="pix_confirmado" id="pix_confirmado_<%= sangria.id %>" class="form-select color-select" <%= isReadOnly ? 'disabled' : '' %>>
-                                                    <option value="" selected disabled>Selecione</option>
-                                                    <option value="SIM" class="option-sim">SIM</option>
-                                                    <option value="NAO" class="option-nao">NÃO</option>
+                                            <td data-label="ID">
+                                                <span class="table-badge table-badge-neutral">#<%= sangria.id %></span>
+                                            </td>
+
+                                            <td data-label="Estabelecimento">
+                                                <div class="table-title-cell"><%= sangria.estabelecimento %></div>
+                                            </td>
+
+                                            <td data-label="Data">
+                                                <%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %>
+                                            </td>
+
+                                            <td data-label="Valor apurado">
+                                                <strong>R$ <%= Number(sangria.valor_apurado).toFixed(2) %></strong>
+                                            </td>
+
+                                            <td data-label="Pagamento">
+                                                <span class="table-badge <%= sangria.tipo_pagamento === 'pix' ? 'table-badge-blue' : 'table-badge-amber' %>">
+                                                    <%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %>
+                                                </span>
+                                            </td>
+
+                                            <td data-label="PIX confirmado">
+                                                <select
+                                                    name="pix_confirmado"
+                                                    id="pix_confirmado_<%= sangria.id %>"
+                                                    class="form-select color-select"
+                                                    data-sangria-id="<%= sangria.id %>"
+                                                    <%= isReadOnly ? 'disabled' : '' %>
+                                                >
+                                                    <option
+                                                        value=""
+                                                        <%= sangria.pix_confirmado === null || typeof sangria.pix_confirmado === 'undefined' ? 'selected' : '' %>
+                                                        disabled
+                                                    >
+                                                        Selecione
+                                                    </option>
+
+                                                    <option
+                                                        value="SIM"
+                                                        class="option-sim"
+                                                        <%= sangria.pix_confirmado === true ? 'selected' : '' %>
+                                                    >
+                                                        SIM
+                                                    </option>
+
+                                                    <option
+                                                        value="NAO"
+                                                        class="option-nao"
+                                                        <%= sangria.pix_confirmado === false ? 'selected' : '' %>
+                                                    >
+                                                        NÃO
+                                                    </option>
                                                 </select>
                                             </td>
-                                            <td>
+
+                                            <td data-label="Ações">
                                                 <div class="table-actions">
-                                                    <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
+
                                                     <% if (!isReadOnly) { %>
                                                         <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
+
                                                         <% if (sangria.vinculada_visita) { %>
-                                                            <button type="button" class="table-btn table-btn-delete" disabled title="Registro vinculado a uma visita">Vinculado</button>
+                                                            <button
+                                                                type="button"
+                                                                class="table-btn table-btn-delete"
+                                                                disabled
+                                                                title="Registro vinculado a uma visita"
+                                                            >
+                                                                Vinculado
+                                                            </button>
                                                         <% } else { %>
-                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                            <button
+                                                                type="button"
+                                                                class="table-btn table-btn-delete delete-btn"
+                                                                data-id="<%= sangria.id %>"
+                                                            >
+                                                                Deletar
+                                                            </button>
                                                         <% } %>
                                                     <% } %>
                                                 </div>
@@ -88,7 +169,9 @@
                                         </tr>
                                     <% }); %>
                                 <% } else { %>
-                                    <tr><td colspan="7" class="table-empty">Nenhuma sangria encontrada</td></tr>
+                                    <tr>
+                                        <td colspan="7" class="table-empty">Nenhuma sangria encontrada</td>
+                                    </tr>
                                 <% } %>
                             </tbody>
                         </table>
@@ -98,187 +181,234 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
     <script>
-        function saveSelectValue(selectElement) {
-            localStorage.setItem(selectElement.id, selectElement.value);
+    function updateSelectColor(selectElement) {
+        selectElement.classList.remove('select-sim', 'select-nao');
+
+        if (selectElement.value === 'SIM') {
+            selectElement.classList.add('select-sim');
+        } else if (selectElement.value === 'NAO') {
+            selectElement.classList.add('select-nao');
+        }
+    }
+
+    async function updatePixConfirmado(selectElement) {
+        const sangriaId = selectElement.dataset.sangriaId;
+        const valorAnterior = selectElement.dataset.previousValue || '';
+        const novoValor = selectElement.value;
+
+        if (!sangriaId || !['SIM', 'NAO'].includes(novoValor)) {
+            return;
         }
 
-        function loadSelectValue(selectElement) {
-            const savedValue = localStorage.getItem(selectElement.id);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-            if (savedValue) {
-                selectElement.value = savedValue;
-                updateSelectColor(selectElement);
-            }
-        }
+        selectElement.disabled = true;
 
-        function updateSelectColor(selectElement) {
-            selectElement.classList.remove('select-sim', 'select-nao');
+        window.AppLoading?.show(
+            'Atualizando PIX...',
+            'Salvando a confirmação do recebimento.'
+        );
 
-            if (selectElement.value === 'SIM') {
-                selectElement.classList.add('select-sim');
-            } else if (selectElement.value === 'NAO') {
-                selectElement.classList.add('select-nao');
-            }
-        }
-
-        document.querySelectorAll('.form-select.color-select').forEach(select => {
-            loadSelectValue(select);
-
-            select.addEventListener('change', () => {
-                updateSelectColor(select);
-                saveSelectValue(select);
+        try {
+            const response = await fetch(`/consignados/sangrias/${sangriaId}/pix-confirmado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(csrfToken ? { 'CSRF-Token': csrfToken, 'X-CSRF-Token': csrfToken } : {})
+                },
+                body: JSON.stringify({
+                    pix_confirmado: novoValor
+                })
             });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Erro ao atualizar confirmação do PIX.');
+            }
+
+            selectElement.dataset.previousValue = novoValor;
+            updateSelectColor(selectElement);
+        } catch (error) {
+            selectElement.value = valorAnterior;
+            updateSelectColor(selectElement);
+
+            window.AppAlerts?.error(error.message || 'Erro ao atualizar confirmação do PIX.');
+        } finally {
+            selectElement.disabled = false;
+            window.AppLoading?.hide();
+        }
+    }
+
+    function getReciboFileName(url) {
+        try {
+            const parsedUrl = new URL(url, window.location.origin);
+            const parts = parsedUrl.pathname.split('/').filter(Boolean);
+            const reciboId = parts[parts.length - 1] || 'recibo';
+
+            if (parsedUrl.pathname.includes('/consignados/')) {
+                return `recibo-consignados-${reciboId}.pdf`;
+            }
+
+            if (parsedUrl.pathname.includes('/pelucias/')) {
+                return `recibo-pelucias-${reciboId}.pdf`;
+            }
+
+            if (parsedUrl.pathname.includes('/bolinhas/')) {
+                return `recibo-bolinhas-${reciboId}.pdf`;
+            }
+
+            return `recibo-vendmaster-${reciboId}.pdf`;
+        } catch (error) {
+            return 'recibo-vendmaster.pdf';
+        }
+    }
+
+    async function shareReciboPdf(url) {
+        const absoluteUrl = new URL(url, window.location.origin).href;
+
+        const response = await fetch(absoluteUrl, {
+            credentials: 'same-origin'
         });
 
-        document.addEventListener('DOMContentLoaded', async function () {
-                        const getReciboFileName = (url) => {
-                try {
-                    const parsedUrl = new URL(url, window.location.origin);
-                    const parts = parsedUrl.pathname.split('/').filter(Boolean);
-                    const reciboId = parts[parts.length - 1] || 'recibo';
+        if (!response.ok) {
+            throw new Error('Não foi possível gerar o arquivo do recibo para compartilhamento.');
+        }
 
-                    if (parsedUrl.pathname.includes('/consignados/')) {
-                        return `recibo-consignados-${reciboId}.pdf`;
-                    }
+        const blob = await response.blob();
+        const file = new File([blob], getReciboFileName(url), {
+            type: 'application/pdf'
+        });
 
-                    if (parsedUrl.pathname.includes('/pelucias/')) {
-                        return `recibo-pelucias-${reciboId}.pdf`;
-                    }
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: 'Recibo VendMaster',
+                text: 'Segue o recibo da visita.',
+                files: [file]
+            });
 
-                    if (parsedUrl.pathname.includes('/bolinhas/')) {
-                        return `recibo-bolinhas-${reciboId}.pdf`;
-                    }
+            return true;
+        }
 
-                    return `recibo-vendmaster-${reciboId}.pdf`;
-                } catch (error) {
-                    return 'recibo-vendmaster.pdf';
+        return false;
+    }
+
+    async function openReciboUrl(url) {
+        const isMobile =
+            window.matchMedia('(max-width: 767.98px)').matches ||
+            /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            try {
+                const shared = await shareReciboPdf(url);
+
+                if (shared) {
+                    return;
                 }
-            };
-
-            const shareReciboPdf = async (url) => {
-                const absoluteUrl = new URL(url, window.location.origin).href;
-
-                const response = await fetch(absoluteUrl, {
-                    credentials: 'same-origin'
-                });
-
-                if (!response.ok) {
-                    throw new Error('Não foi possível gerar o arquivo do recibo para compartilhamento.');
-                }
-
-                const blob = await response.blob();
-                const file = new File([blob], getReciboFileName(url), {
-                    type: 'application/pdf'
-                });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: 'Recibo VendMaster',
-                        text: 'Segue o recibo da visita.',
-                        files: [file]
-                    });
-
-                    return true;
-                }
-
-                return false;
-            };
-
-            const openReciboUrl = async (url) => {
-                const isMobile =
-                    window.matchMedia('(max-width: 767.98px)').matches ||
-                    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    try {
-                        const shared = await shareReciboPdf(url);
-
-                        if (shared) {
-                            return;
-                        }
-                    } catch (error) {
-                        if (error?.name === 'AbortError') {
-                            return;
-                        }
-
-                        console.error('Erro ao compartilhar recibo:', error);
-                        window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
-                    }
-
-                    window.location.href = url;
+            } catch (error) {
+                if (error?.name === 'AbortError') {
                     return;
                 }
 
-                window.open(url, '_blank', 'noopener,noreferrer');
-            };
+                console.error('Erro ao compartilhar recibo:', error);
+                window.AppAlerts?.warning('Não foi possível abrir o compartilhamento automático. O recibo será aberto na tela para você compartilhar manualmente.');
+            }
 
-            document.querySelectorAll('.delete-btn').forEach((button) => {
-                button.addEventListener('click', async function () {
-                    const idSangria = this.getAttribute('data-id');
+            window.location.href = url;
+            return;
+        }
 
-                    const confirmed = await window.AppAlerts?.confirm({
-                        title: 'Excluir sangria',
-                        text: 'Tem certeza que deseja excluir este registro de sangria?',
-                        confirmButtonText: 'Excluir',
-                        cancelButtonText: 'Cancelar'
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.form-select.color-select').forEach((select) => {
+            select.dataset.previousValue = select.value || '';
+            updateSelectColor(select);
+
+            select.addEventListener('change', () => {
+                updatePixConfirmado(select);
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach((button) => {
+            button.addEventListener('click', async function () {
+                const idSangria = this.getAttribute('data-id');
+
+                const confirmed = await window.AppAlerts?.confirm({
+                    title: 'Excluir sangria',
+                    text: 'Tem certeza que deseja excluir este registro de sangria?',
+                    confirmButtonText: 'Excluir',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (!confirmed) {
+                    return;
+                }
+
+                try {
+                    window.AppLoading?.show(
+                        'Excluindo sangria...',
+                        'Removendo o registro selecionado.'
+                    );
+
+                    const response = await fetch(`/consignados/sangrias/delete/${idSangria}`, {
+                        method: 'POST'
                     });
 
-                    if (!confirmed) return;
+                    const data = await response.json();
 
-                    try {
-                        const response = await fetch(`/consignados/sangrias/delete/${idSangria}`, {
-                            method: 'POST'
-                        });
-
-                        const data = await response.json();
-
-                        if (!response.ok || !data.success) {
-                            throw new Error(data.message || 'Erro ao excluir sangria');
-                        }
-
-                        await window.AppAlerts?.success(data.message || 'Sangria excluída com sucesso');
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        window.location.reload();
-                    } catch (error) {
-                        window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'Erro ao excluir sangria');
                     }
-                });
+
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    window.location.reload();
+                } catch (error) {
+                    window.AppLoading?.hide();
+                    window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
+                }
             });
+        });
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success');
-            const errorMessage = urlParams.get('error');
-            const reciboUrl = urlParams.get('recibo_url');
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get('success');
+        const errorMessage = urlParams.get('error');
+        const reciboUrl = urlParams.get('recibo_url');
 
-            if (successMessage) {
-                await window.AppAlerts?.success(successMessage);
-            }
+        if (successMessage) {
+            window.AppAlerts?.success(successMessage);
+        }
 
-            if (errorMessage) {
-                await window.AppAlerts?.error(errorMessage);
-            }
+        if (errorMessage) {
+            window.AppAlerts?.error(errorMessage);
+        }
 
-            if (reciboUrl) {
-                const confirmed = await window.AppAlerts?.confirm({
-                    title: 'Gerar recibo em PDF?',
-                    text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
-                    confirmButtonText: 'Gerar recibo',
-                    cancelButtonText: 'Agora não'
-                });
-
+        if (reciboUrl) {
+            window.AppAlerts?.confirm({
+                title: 'Gerar recibo em PDF?',
+                text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
+                confirmButtonText: 'Gerar recibo',
+                cancelButtonText: 'Agora não'
+            }).then(async (confirmed) => {
                 if (confirmed) {
                     await openReciboUrl(reciboUrl);
                     return;
                 }
-            }
 
-            if (successMessage || errorMessage || reciboUrl) {
                 window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        });
+            });
+
+            return;
+        }
+
+        if (successMessage || errorMessage) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
     </script>
+
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
