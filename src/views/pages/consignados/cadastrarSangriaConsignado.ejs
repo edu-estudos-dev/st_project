@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Registrar Sangria de Consignados' }) %>
 
-<body class="form-page-body">
+<body class="form-page-body consignados-page consignados-form-page consignados-create-page">
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
@@ -17,30 +17,38 @@
         const cancelarUrl = currentOrigem === 'rota' ? currentRetornoUrl : '/consignados/sangrias';
     %>
 
-    <div class="form-shell form-shell-modern">
+    <div class="form-shell form-shell-modern consignados-shell consignados-form-shell consignados-create-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Registrar Sangria de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue consignados-titlebar consignados-form-titlebar consignados-create-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-stickies"></i> Operacional</span>
+                <span class="form-kicker consignados-kicker">
+                    <i class="bi bi-stickies"></i>
+                    Operacional
+                </span>
+
                 <h1>Registrar sangria de consignados</h1>
-                <p>Organize a visita do ponto com mais contexto visual, enxergando venda, abastecimento e estoque deixado de forma mais fluida durante o preenchimento.</p>
+
+                <p>
+                    Organize a visita do ponto acompanhando venda, abastecimento e estoque deixado em um único registro.
+                </p>
             </div>
 
-            <div class="page-titlebar-side">
-                <div class="page-titlebar-stat">
+            <div class="page-titlebar-side consignados-titlebar-side">
+                <div class="page-titlebar-stat consignados-hero-stat">
                     <strong>Produto</strong>
                     <span>Consignados</span>
                 </div>
-                <div class="page-titlebar-stat">
-                    <strong>Destaque</strong>
-                    <span>Última visita e quantidade deixada calculadas na tela</span>
+
+                <div class="page-titlebar-stat consignados-hero-stat">
+                    <strong>Controle</strong>
+                    <span>Última visita e estoque calculados na tela</span>
                 </div>
             </div>
         </section>
 
-        <main class="form-stage">
-            <form action="/consignados/sangrias/add" method="POST" class="modern-form" id="consignadoForm">
+        <main class="form-stage consignados-form-stage">
+            <form action="/consignados/sangrias/add" method="POST" class="modern-form consignados-form consignados-create-form" id="consignadoForm">
                 <input type="hidden" name="visita_id" value="<%= currentVisitaId || '' %>">
                 <input type="hidden" name="rota_id" value="<%= currentRotaId || '' %>">
                 <input type="hidden" name="rota_ponto_id" value="<%= currentRotaPontoId || '' %>">
@@ -48,12 +56,16 @@
                 <input type="hidden" name="retorno_url" value="<%= currentRetornoUrl || '/rotas' %>">
                 <input type="hidden" name="rota_retorno_url" value="<%= currentRotaRetornoUrl || currentRetornoUrl || '/rotas' %>">
 
-                <section class="form-card">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-visit-card">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Visita</span>
+                            <span class="form-section-tag consignados-section-tag">Visita</span>
+
                             <h2>Dados do atendimento</h2>
-                            <p>Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.</p>
+
+                            <p>
+                                Selecione o estabelecimento, informe a data e deixe o sistema recuperar automaticamente a última visita desse ponto.
+                            </p>
                         </div>
                     </div>
 
@@ -62,7 +74,9 @@
                             <label for="estabelecimento">Estabelecimento</label>
 
                             <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
-                                <option value="" <%= selectedId ? '' : 'selected' %> disabled hidden>Selecione um estabelecimento</option>
+                                <option value="" <%= selectedId ? '' : 'selected' %> disabled hidden>
+                                    Selecione um estabelecimento
+                                </option>
 
                                 <% estabelecimentos.forEach(function(estabelecimento) { %>
                                     <option
@@ -83,41 +97,45 @@
 
                     <div class="row g-3 mt-1">
                         <div class="col-12">
-                            <small class="modern-note" id="modoRegistroHint">
+                            <small class="modern-note consignados-modern-note" id="modoRegistroHint">
                                 Os dados iniciais deste produto são definidos no cadastro ou na edição do estabelecimento.
                             </small>
                         </div>
                     </div>
 
-                    <div class="form-summary-grid mt-4">
-                        <div class="form-summary-card">
+                    <div class="form-summary-grid consignados-summary-grid mt-4">
+                        <div class="form-summary-card consignados-summary-card">
                             <strong>Última visita</strong>
                             <span id="ultimaVisitaResumo">Aguardando seleção</span>
                         </div>
 
-                        <div class="form-summary-card">
+                        <div class="form-summary-card consignados-summary-card">
                             <strong>Estoque anterior</strong>
                             <span id="estoqueAnteriorResumo">0 unidades</span>
                         </div>
 
-                        <div class="form-summary-card">
+                        <div class="form-summary-card consignados-summary-card">
                             <strong>Resultado</strong>
                             <span id="qtdeDeixadaResumo">0 unidades</span>
                         </div>
 
-                        <div class="form-summary-card">
+                        <div class="form-summary-card consignados-summary-card">
                             <strong>Pagamento</strong>
                             <span id="pagamentoResumo">Espécie ou PIX</span>
                         </div>
                     </div>
                 </section>
 
-                <section class="form-card" id="movimentacaoCard">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-movement-card" id="movimentacaoCard">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Movimentação</span>
+                            <span class="form-section-tag consignados-section-tag">Movimentação</span>
+
                             <h2>Venda, abastecimento e saldo</h2>
-                            <p>Preencha os números da visita e acompanhe a quantidade deixada e a última visita sem precisar sair da página.</p>
+
+                            <p>
+                                Preencha os números da visita e acompanhe automaticamente a quantidade deixada no ponto.
+                            </p>
                         </div>
                     </div>
 
@@ -144,6 +162,7 @@
 
                         <div class="col-12 col-md-6 col-lg-4" id="tipoPagamentoField">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
+
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
                                 <option value="especie">Espécie</option>
                                 <option value="pix">PIX</option>
@@ -157,30 +176,41 @@
                     </div>
                 </section>
 
-                <section class="form-card">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-notes-card">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Observações</span>
+                            <span class="form-section-tag consignados-section-tag">Observações</span>
+
                             <h2>Anotações sobre o ponto</h2>
-                            <p>Deixe observações complementares para orientar a próxima visita e facilitar o acompanhamento da operação.</p>
+
+                            <p>
+                                Deixe observações complementares para orientar a próxima visita e facilitar o acompanhamento da operação.
+                            </p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12">
                             <label for="observacoes">Observações</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="5" placeholder="Ex.: ponto vendeu bem, precisou de reposição extra, comerciante pediu novo horário..."></textarea>
+
+                            <textarea
+                                class="form-control"
+                                id="observacoes"
+                                name="observacoes"
+                                rows="5"
+                                placeholder="Ex.: ponto vendeu bem, precisou de reposição extra, comerciante pediu novo horário..."
+                            ></textarea>
                         </div>
                     </div>
                 </section>
 
-                <section class="form-actions-bar">
-                    <div class="form-actions-copy">
+                <section class="form-actions-bar consignados-actions-bar">
+                    <div class="form-actions-copy consignados-actions-copy">
                         <strong>Revisão final</strong>
                         <span>Confira data, quantidades e valor apurado antes de concluir o registro da visita.</span>
                     </div>
 
-                    <div class="form-actions-buttons">
+                    <div class="form-actions-buttons consignados-actions-buttons">
                         <a href="<%= cancelarUrl %>" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Cancelar</span>

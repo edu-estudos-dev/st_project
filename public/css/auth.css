@@ -313,6 +313,67 @@ svg {
   gap: 22px;
 }
 
+.auth-google-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 18px;
+  background: #fff;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 850;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.055);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.auth-google-button svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.auth-google-button:hover {
+  border-color: rgba(7, 87, 200, 0.28);
+  color: var(--vm-blue);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.09);
+  transform: translateY(-1px);
+}
+
+.auth-google-button.is-disabled {
+  opacity: 0.72;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  color: #64748b;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: rgba(15, 23, 42, 0.1);
+}
+
+.auth-divider span {
+  white-space: nowrap;
+}
+
 .auth-field {
   display: flex;
   flex-direction: column;
@@ -732,6 +793,11 @@ svg {
   .auth-submit {
     min-height: 56px;
     border-radius: 16px;
+  }
+
+  .auth-divider {
+    gap: 10px;
+    font-size: 0.78rem;
   }
 }
 

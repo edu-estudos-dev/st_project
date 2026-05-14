@@ -2,77 +2,100 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Visualizar Sangria de Consignados' }) %>
 
-<body class="view-page-body">
+<body class="view-page-body consignados-page consignados-view-page">
     <%- include('../../partials/header') %>
+
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
+
     <div class="page-spacer"></div>
 
-    <div class="view-shell">
+    <div class="view-shell consignados-shell consignados-view-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Visualizar Sangria de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue consignados-titlebar consignados-view-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-stickies"></i> Operacional</span>
+                <span class="form-kicker consignados-kicker">
+                    <i class="bi bi-stickies"></i>
+                    Operacional
+                </span>
+
                 <h1><%= sangria ? sangria.estabelecimento : 'Sangria não encontrada' %></h1>
-                <p>Veja o histórico da visita com foco em valor apurado, quantidade deixada e referência da última passagem pelo ponto.</p>
+
+                <p>
+                    Veja os dados da visita, o valor apurado, o estoque deixado e as observações registradas para este ponto.
+                </p>
             </div>
-            <div class="page-titlebar-side">
-                <div class="list-stat">
+
+            <div class="page-titlebar-side consignados-titlebar-side">
+                <div class="list-stat consignados-hero-stat">
                     <strong>ID</strong>
                     <span><%= sangria ? `#${sangria.id}` : 'N/A' %></span>
                 </div>
-                <div class="list-stat">
+
+                <div class="list-stat consignados-hero-stat">
                     <strong>Produto</strong>
                     <span>Consignados</span>
                 </div>
             </div>
         </section>
 
-        <main class="view-stage">
-            <section class="view-panel">
+        <main class="view-stage consignados-view-stage">
+            <section class="view-panel consignados-view-panel">
                 <% if (sangria) { %>
-                    <div class="view-panel-header">
+                    <div class="view-panel-header consignados-view-panel-header">
                         <div>
-                            <span class="form-section-tag">Visita</span>
+                            <span class="form-section-tag consignados-section-tag">Visita</span>
+
                             <h2>Resumo da sangria</h2>
-                            <p>As informações abaixo mostram a operação da visita atual e também o contexto da última visita registrada.</p>
+
+                            <p>
+                                Os principais dados da operação ficam organizados em cartões para facilitar conferência e próxima ação.
+                            </p>
                         </div>
                     </div>
 
-                    <div class="view-grid">
-                        <div class="view-card">
+                    <div class="view-grid consignados-view-grid">
+                        <div class="view-card consignados-view-card">
                             <strong>Data da sangria</strong>
                             <span><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Tipo de pagamento</strong>
                             <span><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Valor apurado</strong>
                             <span><%= Number(sangria.valor_apurado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Última edição</strong>
                             <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Última visita anterior</strong>
                             <span><%= sangria.data_sangria_anterior ? new Date(sangria.data_sangria_anterior).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Quantidade anterior</strong>
                             <span><%= sangria.qtde_anterior ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Nova quantidade deixada</strong>
                             <span><%= sangria.qtde_deixada ?? 'Não informado' %></span>
                         </div>
-                        <div class="view-card">
+
+                        <div class="view-card consignados-view-card">
                             <strong>Observações anteriores</strong>
                             <span><%= sangria.observacoes_anteriores || 'Sem observações anteriores.' %></span>
                         </div>
-                        <div class="view-card is-wide">
+
+                        <div class="view-card consignados-view-card consignados-view-card-wide is-wide">
                             <strong>Observações desta visita</strong>
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
                         </div>
@@ -81,17 +104,22 @@
                     <p class="mb-0">Sangria não encontrada.</p>
                 <% } %>
 
-                <div class="view-actions">
-                    <div class="view-actions-copy">
-                        <%= sangria
-                            ? 'Use esta visualização para conferir o histórico do ponto antes de editar ou registrar a próxima visita.'
-                            : 'Você pode voltar para a listagem geral de consignados e continuar a navegação normalmente.' %>
+                <div class="view-actions consignados-view-actions">
+                    <div class="view-actions-copy consignados-view-actions-copy">
+                        <strong>Próxima ação</strong>
+                        <span>
+                            <%= sangria
+                                ? 'Volte para a listagem ou edite este registro se precisar corrigir alguma informação.'
+                                : 'Você pode voltar para a listagem geral de consignados e continuar a navegação normalmente.' %>
+                        </span>
                     </div>
-                    <div class="view-actions-buttons">
+
+                    <div class="view-actions-buttons consignados-view-actions-buttons">
                         <a href="/consignados/sangrias" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
+
                         <% if (sangria && !isReadOnly) { %>
                             <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="btn-modern">
                                 <i class="bi bi-pencil-square"></i>

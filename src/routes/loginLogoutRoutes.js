@@ -39,6 +39,8 @@ const requirePublicRegistrationAccess = (req, res, next) => {
 
 router.get('/login', LoginLogoutController.login);
 router.post('/login', loginRateLimiter, LoginLogoutController.processLogin);
+router.get('/auth/google', LoginLogoutController.googleLogin);
+router.get('/auth/google/callback', LoginLogoutController.processGoogleCallback);
 
 router.get('/register', requirePublicRegistrationAccess, LoginLogoutController.register);
 router.post('/register', requirePublicRegistrationAccess, registerRateLimiter, LoginLogoutController.processRegister);

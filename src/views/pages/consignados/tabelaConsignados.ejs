@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Lista de Sangrias de Consignados' }) %>
 
-<body class="list-page-body">
+<body class="list-page-body consignados-page consignados-list-page">
     <%- include('../../partials/header') %>
 
     <script>
@@ -13,12 +13,12 @@
 
     <div class="page-spacer"></div>
 
-    <div class="list-shell consignados-list-shell">
+    <div class="list-shell consignados-shell consignados-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Lista de Sangrias de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue consignados-list-titlebar">
+        <section class="page-titlebar page-titlebar-blue consignados-titlebar consignados-list-titlebar">
             <div class="page-titlebar-content">
-                <span class="list-kicker">
+                <span class="list-kicker consignados-kicker">
                     <i class="bi bi-stickies"></i>
                     Operacional
                 </span>
@@ -30,24 +30,25 @@
                 </p>
             </div>
 
-            <div class="page-titlebar-side">
-                <div class="list-stat">
+            <div class="page-titlebar-side consignados-titlebar-side">
+                <div class="list-stat consignados-hero-stat">
                     <strong>Total</strong>
                     <span><%= sangrias.length %> registros</span>
                 </div>
 
-                <div class="list-stat">
+                <div class="list-stat consignados-hero-stat">
                     <strong>Fluxo</strong>
                     <span>Controle das visitas</span>
                 </div>
             </div>
         </section>
 
-        <main class="list-stage">
-            <section class="list-panel consignados-list-panel">
-                <div class="list-toolbar">
-                    <div class="list-toolbar-copy">
+        <main class="list-stage consignados-list-stage">
+            <section class="list-panel consignados-panel consignados-list-panel">
+                <div class="list-toolbar consignados-toolbar consignados-list-toolbar">
+                    <div class="list-toolbar-copy consignados-toolbar-copy">
                         <h2>Registros de sangria</h2>
+
                         <p>
                             Veja o histórico das coletas, confira o valor apurado e atualize a confirmação de PIX quando necessário.
                         </p>
@@ -63,9 +64,9 @@
                     <% } %>
                 </div>
 
-                <div class="modern-table-wrap">
-                    <div class="modern-table-scroll">
-                        <table class="modern-table consignados-table">
+                <div class="modern-table-wrap consignados-table-wrap consignados-list-table-wrap">
+                    <div class="modern-table-scroll consignados-table-scroll consignados-list-table-scroll">
+                        <table class="modern-table consignados-table consignados-list-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -87,7 +88,9 @@
                                             </td>
 
                                             <td data-label="Estabelecimento">
-                                                <div class="table-title-cell"><%= sangria.estabelecimento %></div>
+                                                <div class="table-title-cell consignados-point-name">
+                                                    <%= sangria.estabelecimento %>
+                                                </div>
                                             </td>
 
                                             <td data-label="Data">
@@ -108,7 +111,7 @@
                                                 <select
                                                     name="pix_confirmado"
                                                     id="pix_confirmado_<%= sangria.id %>"
-                                                    class="form-select color-select"
+                                                    class="form-select color-select consignados-pix-select"
                                                     data-sangria-id="<%= sangria.id %>"
                                                     <%= isReadOnly ? 'disabled' : '' %>
                                                 >
@@ -139,7 +142,7 @@
                                             </td>
 
                                             <td data-label="Ações">
-                                                <div class="table-actions">
+                                                <div class="table-actions consignados-table-actions">
                                                     <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
 
                                                     <% if (!isReadOnly) { %>
@@ -170,7 +173,9 @@
                                     <% }); %>
                                 <% } else { %>
                                     <tr>
-                                        <td colspan="7" class="table-empty">Nenhuma sangria encontrada</td>
+                                        <td colspan="7" class="table-empty consignados-empty">
+                                            Nenhuma sangria encontrada.
+                                        </td>
                                     </tr>
                                 <% } %>
                             </tbody>

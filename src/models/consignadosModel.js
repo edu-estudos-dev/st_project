@@ -306,34 +306,50 @@ class ConsignadosModel {
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
   };
-
   getLatestSangriaForAllEstabelecimentos = async assinanteId => {
+    await this.ensureEstabelecimentoInitialColumns();
+
     const query = `
       SELECT
-        sf.id,
+        ultima.id,
+        e.id AS estabelecimento_id,
         e.estabelecimento,
         e.endereco,
         e.bairro,
         e.telefone_contato,
-        sf.data_sangria,
-        sf.abastecido,
-        sf.estoque,
         e.maquina,
-        sf.observacoes
+        ultima.data_sangria,
+        COALESCE(ultima.qtde_deixada, e.consignado_quantidade_inicial, 0) AS qtde_deixada,
+        ultima.abastecido,
+        ultima.estoque,
+        ultima.observacoes,
+        CASE
+          WHEN ultima.id IS NULL THEN TRUE
+          ELSE FALSE
+        END AS sem_sangria_registrada
       FROM estabelecimentos e
-      JOIN sangrias_consignados sf
-        ON e.id = sf.estabelecimento_id
-       AND e.assinante_id = sf.assinante_id
+      LEFT JOIN LATERAL (
+        SELECT
+          sf.id,
+          sf.data_sangria,
+          sf.qtde_deixada,
+          sf.abastecido,
+          sf.estoque,
+          sf.observacoes
+        FROM sangrias_consignados sf
+        WHERE sf.estabelecimento_id = e.id
+          AND sf.assinante_id = e.assinante_id
+        ORDER BY sf.data_sangria DESC, sf.id DESC
+        LIMIT 1
+      ) ultima ON TRUE
       WHERE e.assinante_id = $1
+        AND e.status = 'ativo'
         AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
-        AND sf.data_sangria = (
-          SELECT MAX(inner_sf.data_sangria)
-          FROM sangrias_consignados inner_sf
-          WHERE inner_sf.estabelecimento_id = e.id
-            AND inner_sf.assinante_id = e.assinante_id
-        )
-      ORDER BY sf.data_sangria DESC
+      ORDER BY
+        ultima.data_sangria ASC NULLS FIRST,
+        e.estabelecimento ASC
     `;
+
     const result = await connection.query(query, [assinanteId]);
     return result.rows;
   };

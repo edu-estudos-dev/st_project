@@ -1,4 +1,5 @@
 import LoginLogout from '../models/loginLogoutModel.js';
+import crypto from 'crypto';
 import {
     buildEmailVerificationUrl,
     dispatchEmailVerificationLink
@@ -20,6 +21,10 @@ const PRODUCT_OPTIONS = [
 
 const TRIAL_PRODUCTS = PRODUCT_OPTIONS.map((produto) => produto.value);
 const MIN_PASSWORD_LENGTH = 8;
+const GOOGLE_OAUTH_STATE_COOKIE = 'google_oauth_state';
+const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
+const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
+const GOOGLE_USERINFO_URL = 'https://openidconnect.googleapis.com/v1/userinfo';
 
 const PLAN_OPTIONS = {
     '1-ferramenta': {
@@ -49,18 +54,177 @@ const PLAN_OPTIONS = {
 };
 
 class LoginLogoutController {
+    constructor() {
+        this.login = this.login.bind(this);
+        this.googleLogin = this.googleLogin.bind(this);
+        this.processGoogleCallback = this.processGoogleCallback.bind(this);
+        this.processLogin = this.processLogin.bind(this);
+    }
+
+    getGoogleClientConfig(req) {
+        const clientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
+        const clientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
+        const redirectUri = String(process.env.GOOGLE_REDIRECT_URI || '').trim()
+            || `${req.protocol}://${req.get('host')}/auth/google/callback`;
+
+        return {
+            clientId,
+            clientSecret,
+            redirectUri,
+            isConfigured: Boolean(clientId && clientSecret)
+        };
+    }
+
+    getGoogleStateCookieOptions() {
+        return {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 1000 * 60 * 10,
+            path: '/'
+        };
+    }
+
+    clearGoogleStateCookie(res) {
+        res.clearCookie(GOOGLE_OAUTH_STATE_COOKIE, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            path: '/'
+        });
+    }
+
+    signInUser(res, usuario) {
+        const authToken = signAuthToken({
+            sub: usuario.user_id,
+            username: usuario.username,
+            assinante_id: usuario.assinante_id,
+            status_assinatura: usuario.status_assinatura
+        });
+
+        const redirectAfterLogin = ['bloqueado', 'cancelado'].includes(usuario.status_assinatura)
+            ? '/assinatura/status?success=Login realizado com sucesso'
+            : '/painel?success=Login realizado com sucesso';
+
+        res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
+        return res.redirect(redirectAfterLogin);
+    }
+
     login(req, res) {
         if (req.user) {
             return res.redirect('/painel');
         }
+
+        const googleConfig = this.getGoogleClientConfig(req);
 
         return res.render('pages/login', {
             title: 'Login',
             erro: req.query.erro,
             success: req.query.success,
             resendVerificationEmail: null,
+            googleAuthConfigured: googleConfig.isConfigured,
             robotsMeta: 'noindex, follow',
         });
+    }
+
+    googleLogin(req, res) {
+        if (req.user) {
+            return res.redirect('/painel');
+        }
+
+        const googleConfig = this.getGoogleClientConfig(req);
+
+        if (!googleConfig.isConfigured) {
+            return res.redirect('/login?erro=Login com Google ainda nao foi configurado.');
+        }
+
+        const state = crypto.randomBytes(32).toString('hex');
+        const params = new URLSearchParams({
+            client_id: googleConfig.clientId,
+            redirect_uri: googleConfig.redirectUri,
+            response_type: 'code',
+            scope: 'openid email profile',
+            state,
+            prompt: 'select_account'
+        });
+
+        res.cookie(GOOGLE_OAUTH_STATE_COOKIE, state, this.getGoogleStateCookieOptions());
+        return res.redirect(`${GOOGLE_AUTH_URL}?${params.toString()}`);
+    }
+
+    async processGoogleCallback(req, res) {
+        if (req.user) {
+            return res.redirect('/painel');
+        }
+
+        const googleConfig = this.getGoogleClientConfig(req);
+        const code = String(req.query.code || '').trim();
+        const state = String(req.query.state || '').trim();
+        const storedState = String(req.cookies?.[GOOGLE_OAUTH_STATE_COOKIE] || '').trim();
+
+        this.clearGoogleStateCookie(res);
+
+        if (!googleConfig.isConfigured) {
+            return res.redirect('/login?erro=Login com Google ainda nao foi configurado.');
+        }
+
+        if (!code || !state || !storedState || state !== storedState) {
+            return res.redirect('/login?erro=Nao foi possivel validar o login com Google. Tente novamente.');
+        }
+
+        try {
+            const tokenResponse = await fetch(GOOGLE_TOKEN_URL, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    code,
+                    client_id: googleConfig.clientId,
+                    client_secret: googleConfig.clientSecret,
+                    redirect_uri: googleConfig.redirectUri,
+                    grant_type: 'authorization_code'
+                })
+            });
+
+            if (!tokenResponse.ok) {
+                throw new Error(`Falha ao trocar codigo OAuth: ${tokenResponse.status}`);
+            }
+
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData?.access_token;
+
+            if (!accessToken) {
+                throw new Error('Google nao retornou access_token.');
+            }
+
+            const profileResponse = await fetch(GOOGLE_USERINFO_URL, {
+                headers: {
+                    authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error(`Falha ao buscar perfil Google: ${profileResponse.status}`);
+            }
+
+            const profile = await profileResponse.json();
+
+            if (!profile?.email || profile.email_verified !== true) {
+                return res.redirect('/login?erro=Use uma conta Google com e-mail verificado.');
+            }
+
+            const usuario = await LoginLogout.loginWithGoogle({
+                googleId: profile.sub,
+                email: profile.email,
+                name: profile.name
+            });
+
+            return this.signInUser(res, usuario);
+        } catch (error) {
+            console.error('Erro no login com Google:', error);
+            return res.redirect('/login?erro=Nao foi possivel entrar com Google. Tente novamente.');
+        }
     }
 
     register(req, res) {
@@ -393,6 +557,7 @@ class LoginLogoutController {
                     erro: 'Credenciais inválidas',
                     success: null,
                     resendVerificationEmail: null,
+                    googleAuthConfigured: this.getGoogleClientConfig(req).isConfigured,
                     robotsMeta: 'noindex, follow',
                 });
             }
@@ -403,23 +568,12 @@ class LoginLogoutController {
                     erro: 'Confirme seu e-mail antes de acessar o sistema. Se necessario, reenvie o link de verificacao.',
                     success: null,
                     resendVerificationEmail: usuario.email,
+                    googleAuthConfigured: this.getGoogleClientConfig(req).isConfigured,
                     robotsMeta: 'noindex, follow',
                 });
             }
 
-            const authToken = signAuthToken({
-                sub: usuario.user_id,
-                username: usuario.username,
-                assinante_id: usuario.assinante_id,
-                status_assinatura: usuario.status_assinatura
-            });
-
-            const redirectAfterLogin = ['bloqueado', 'cancelado'].includes(usuario.status_assinatura)
-                ? '/assinatura/status?success=Login realizado com sucesso'
-                : '/painel?success=Login realizado com sucesso';
-
-            res.cookie(getAuthCookieName(), authToken, getAuthCookieOptions());
-            return res.redirect(redirectAfterLogin);
+            return this.signInUser(res, usuario);
         } catch (error) {
             console.error('Erro ao processar o login:', error);
 
@@ -427,7 +581,8 @@ class LoginLogoutController {
                 title: 'Login',
                 erro: 'Erro no servidor. Tente novamente mais tarde.',
                 success: null,
-                resendVerificationEmail: null
+                resendVerificationEmail: null,
+                googleAuthConfigured: this.getGoogleClientConfig(req).isConfigured
             });
         }
     }

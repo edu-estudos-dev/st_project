@@ -12,6 +12,7 @@ class LoginLogout {
     this.passwordResetTableReady = false;
     this.emailVerificationTableReady = false;
     this.userEmailVerificationColumnReady = false;
+    this.googleAuthColumnsReady = false;
   }
 
   buildTrialDates() {
@@ -126,6 +127,26 @@ class LoginLogout {
     `);
 
     this.emailVerificationTableReady = true;
+  }
+
+  async ensureGoogleAuthColumns() {
+    if (this.googleAuthColumnsReady) return;
+
+    await this.ensureUserEmailVerificationColumn();
+
+    await connection.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS google_id TEXT NULL,
+      ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(30) NOT NULL DEFAULT 'local'
+    `);
+
+    await connection.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_id_unique
+      ON users (google_id)
+      WHERE google_id IS NOT NULL
+    `);
+
+    this.googleAuthColumnsReady = true;
   }
 
   /**
@@ -715,6 +736,125 @@ class LoginLogout {
     } finally {
       client.release();
     }
+  }
+
+  async buildUniqueUsernameFromEmail(email, fallbackName = '') {
+    const emailPrefix = String(email || '').split('@')[0] || fallbackName || 'usuario';
+    const baseUsername = emailPrefix
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9._-]/g, '')
+      .slice(0, 32)
+      || `usuario${crypto.randomInt(1000, 9999)}`;
+
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      const candidate = attempt === 0
+        ? baseUsername
+        : `${baseUsername}${crypto.randomInt(1000, 9999)}`;
+
+      const result = await connection.query(
+        'SELECT id FROM users WHERE LOWER(TRIM(username)) = LOWER($1) LIMIT 1',
+        [candidate]
+      );
+
+      if (!result.rows[0]) {
+        return candidate;
+      }
+    }
+
+    return `usuario${Date.now()}`;
+  }
+
+  async loginWithGoogle({ googleId, email, name }) {
+    await this.ensureGoogleAuthColumns();
+
+    const normalizedGoogleId = String(googleId || '').trim();
+    const normalizedEmail = this.normalizeEmail(email);
+
+    if (!normalizedGoogleId || !normalizedEmail) {
+      throw new Error('Google id and email must be provided');
+    }
+
+    const existingResult = await connection.query(
+      `SELECT
+        u.id,
+        u.username,
+        u.email,
+        u.google_id,
+        a.id AS assinante_id,
+        a.status_assinatura
+      FROM users u
+      LEFT JOIN assinantes a ON a.user_id = u.id
+      WHERE u.google_id = $1
+         OR LOWER(TRIM(u.email)) = $2
+      LIMIT 1`,
+      [normalizedGoogleId, normalizedEmail]
+    );
+
+    let usuario = existingResult.rows[0] || null;
+
+    if (usuario) {
+      if (usuario.google_id && usuario.google_id !== normalizedGoogleId) {
+        throw new Error('Este e-mail ja esta vinculado a outra conta Google.');
+      }
+
+      await connection.query(
+        `UPDATE users
+         SET google_id = COALESCE(google_id, $1),
+             auth_provider = CASE
+               WHEN auth_provider = 'local' THEN 'local_google'
+               ELSE auth_provider
+             END,
+             email_verified_at = COALESCE(email_verified_at, NOW())
+         WHERE id = $2`,
+        [normalizedGoogleId, usuario.id]
+      );
+    } else {
+      const username = await this.buildUniqueUsernameFromEmail(normalizedEmail, name);
+      const senhaHash = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 12);
+      const client = await connection.connect();
+
+      try {
+        await client.query('BEGIN');
+
+        const userResult = await client.query(
+          `INSERT INTO users (
+            username,
+            email,
+            senha,
+            email_verified_at,
+            google_id,
+            auth_provider
+          )
+          VALUES ($1, $2, $3, NOW(), $4, 'google')
+          RETURNING id, username, email, google_id`,
+          [username, normalizedEmail, senhaHash, normalizedGoogleId]
+        );
+
+        usuario = userResult.rows[0];
+        await this.createAssinanteForUser(client, usuario.id);
+
+        await client.query('COMMIT');
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    }
+
+    const assinante = await this.ensureAssinanteForUser(usuario.id, {
+      username: usuario.username
+    });
+
+    return {
+      id: usuario.id,
+      user_id: usuario.id,
+      username: usuario.username,
+      email: usuario.email,
+      assinante_id: assinante.id,
+      status_assinatura: assinante.status_assinatura
+    };
   }
 }
 

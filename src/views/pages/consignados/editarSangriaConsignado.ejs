@@ -2,61 +2,87 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Editar Sangria de Consignados' }) %>
 
-<body class="form-page-body">
+<body class="form-page-body consignados-page consignados-form-page consignados-edit-page">
     <%- include('../../partials/header') %>
 
     <div class="page-spacer"></div>
 
-    <div class="form-shell form-shell-modern">
+    <div class="form-shell form-shell-modern consignados-shell consignados-form-shell consignados-edit-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Sangria de Consignados' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue consignados-titlebar consignados-form-titlebar consignados-edit-titlebar">
             <div class="page-titlebar-content">
-                <span class="form-kicker"><i class="bi bi-pencil-square"></i> Operacional</span>
+                <span class="form-kicker consignados-kicker">
+                    <i class="bi bi-pencil-square"></i>
+                    Operacional
+                </span>
+
                 <h1>Editar sangria de consignados</h1>
-                <p>Deixei a edição com o mesmo padrão visual do cadastro para facilitar a revisão de quantidades, data da visita e observações.</p>
+
+                <p>
+                    Revise a visita do ponto e atualize data, quantidades, pagamento e observações quando necessário.
+                </p>
             </div>
 
-            <div class="page-titlebar-side">
-                <div class="page-titlebar-stat">
+            <div class="page-titlebar-side consignados-titlebar-side">
+                <div class="page-titlebar-stat consignados-hero-stat">
                     <strong>Produto</strong>
                     <span>Consignados</span>
                 </div>
-                <div class="page-titlebar-stat">
+
+                <div class="page-titlebar-stat consignados-hero-stat">
                     <strong>Registro</strong>
                     <span>ID <%= sangria.id %></span>
                 </div>
             </div>
         </section>
 
-        <main class="form-stage">
-            <form action="/consignados/sangrias/edit" method="POST" class="modern-form">
+        <main class="form-stage consignados-form-stage">
+            <form action="/consignados/sangrias/edit" method="POST" class="modern-form consignados-form consignados-edit-form">
                 <input type="hidden" name="id" value="<%= sangria.id %>">
 
-                <section class="form-card">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-visit-card">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Visita</span>
+                            <span class="form-section-tag consignados-section-tag">Visita</span>
+
                             <h2>Dados do atendimento</h2>
-                            <p>Atualize estabelecimento, data e tipo de pagamento vinculados ao registro desta visita.</p>
+
+                            <p>
+                                Atualize o estabelecimento, a data da visita e a forma de pagamento vinculada a este registro.
+                            </p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-lg-6">
                             <label for="estabelecimento">Estabelecimento</label>
+
                             <select class="form-select" id="estabelecimento" name="estabelecimento_id" required>
                                 <% estabelecimentos.forEach(function(estabelecimento) { %>
-                                    <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>><%= estabelecimento.estabelecimento %></option>
+                                    <option value="<%= estabelecimento.id %>" <%= estabelecimento.id === sangria.estabelecimento_id ? 'selected' : '' %>>
+                                        <%= estabelecimento.estabelecimento %>
+                                    </option>
                                 <% }); %>
                             </select>
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="data_sangria">Data da sangria</label>
-                            <input type="date" class="form-control text-center" id="data_sangria" name="data_sangria" value="<%= sangria.data_sangria.toISOString().split('T')[0] %>" required>
+
+                            <input
+                                type="date"
+                                class="form-control text-center"
+                                id="data_sangria"
+                                name="data_sangria"
+                                value="<%= sangria.data_sangria.toISOString().split('T')[0] %>"
+                                required
+                            >
                         </div>
+
                         <div class="col-12 col-md-6 col-lg-3">
                             <label for="tipo_pagamento">Tipo de pagamento</label>
+
                             <select class="form-select" id="tipo_pagamento" name="tipo_pagamento" required>
                                 <option value="especie" <%= sangria.tipo_pagamento === 'especie' ? 'selected' : '' %>>Espécie</option>
                                 <option value="pix" <%= sangria.tipo_pagamento === 'pix' ? 'selected' : '' %>>PIX</option>
@@ -65,44 +91,90 @@
                     </div>
                 </section>
 
-                <section class="form-card">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-movement-card">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Movimentação</span>
+                            <span class="form-section-tag consignados-section-tag">Movimentação</span>
+
                             <h2>Venda, abastecimento e saldo</h2>
-                            <p>Ao ajustar as quantidades, a quantidade deixada continua sendo recalculada automaticamente.</p>
+
+                            <p>
+                                Ao ajustar as quantidades, a quantidade deixada continua sendo recalculada automaticamente.
+                            </p>
                         </div>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="valor_apurado">Valor apurado</label>
+
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required>
+
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control text-center"
+                                    id="valor_apurado"
+                                    name="valor_apurado"
+                                    value="<%= sangria.valor_apurado %>"
+                                    required
+                                >
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="qtde_vendido">Vendido</label>
-                            <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" value="<%= sangria.qtde_vendido %>" required>
+
+                            <input
+                                type="number"
+                                class="form-control text-center"
+                                id="qtde_vendido"
+                                name="qtde_vendido"
+                                value="<%= sangria.qtde_vendido %>"
+                                required
+                            >
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>" required>
+
+                            <input
+                                type="number"
+                                class="form-control text-center"
+                                id="abastecido"
+                                name="abastecido"
+                                value="<%= sangria.abastecido %>"
+                                required
+                            >
                         </div>
+
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="qtde_deixada">Quantidade deixada</label>
-                            <input type="number" class="form-control text-center readonly-input" id="qtde_deixada" name="qtde_deixada" value="<%= sangria.qtde_deixada %>" readonly disabled>
+
+                            <input
+                                type="number"
+                                class="form-control text-center readonly-input"
+                                id="qtde_deixada"
+                                name="qtde_deixada"
+                                value="<%= sangria.qtde_deixada %>"
+                                readonly
+                                disabled
+                            >
                         </div>
                     </div>
                 </section>
 
-                <section class="form-card">
-                    <div class="form-card-header">
+                <section class="form-card consignados-form-card consignados-notes-card">
+                    <div class="form-card-header consignados-form-card-header">
                         <div>
-                            <span class="form-section-tag">Observações</span>
+                            <span class="form-section-tag consignados-section-tag">Observações</span>
+
                             <h2>Anotações sobre o ponto</h2>
-                            <p>Atualize as observações para refletir o contexto real da visita ou da alteração feita neste registro.</p>
+
+                            <p>
+                                Atualize as observações para refletir o contexto real da visita ou da alteração feita neste registro.
+                            </p>
                         </div>
                     </div>
 
@@ -114,17 +186,18 @@
                     </div>
                 </section>
 
-                <section class="form-actions-bar">
-                    <div class="form-actions-copy">
+                <section class="form-actions-bar consignados-actions-bar">
+                    <div class="form-actions-copy consignados-actions-copy">
                         <strong>Atualizar visita</strong>
                         <span>Revise as quantidades e confirme a atualização desta sangria de consignados.</span>
                     </div>
 
-                    <div class="form-actions-buttons">
+                    <div class="form-actions-buttons consignados-actions-buttons">
                         <a href="/consignados/sangrias" class="btn-modern-secondary">
                             <i class="bi bi-arrow-left"></i>
                             <span>Cancelar</span>
                         </a>
+
                         <button type="submit" class="btn-modern">
                             <i class="bi bi-check2-circle"></i>
                             <span>Atualizar sangria</span>
@@ -136,11 +209,13 @@
     </div>
 
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <script>
     function calculateQuantidadeDeixada() {
         const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
         const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
         const qtdeDeixada = abastecido - qtdeVendido;
+
         document.getElementById('qtde_deixada').value = qtdeDeixada;
     }
 
