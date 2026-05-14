@@ -71,11 +71,6 @@
                         </div>
 
                         <div class="view-card consignados-view-card">
-                            <strong>Última edição</strong>
-                            <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
-                        </div>
-
-                        <div class="view-card consignados-view-card">
                             <strong>Última visita anterior</strong>
                             <span><%= sangria.data_sangria_anterior ? new Date(sangria.data_sangria_anterior).toLocaleDateString('pt-BR') : 'Não informado' %></span>
                         </div>
@@ -90,7 +85,7 @@
                             <span><%= sangria.qtde_deixada ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card consignados-view-card">
+                        <div class="view-card consignados-view-card consignados-view-card-wide is-wide">
                             <strong>Observações anteriores</strong>
                             <span><%= sangria.observacoes_anteriores || 'Sem observações anteriores.' %></span>
                         </div>
@@ -98,6 +93,11 @@
                         <div class="view-card consignados-view-card consignados-view-card-wide is-wide">
                             <strong>Observações desta visita</strong>
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
+
+                            <small class="view-card-meta consignados-view-card-meta">
+                                Última edição:
+                                <%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %>
+                            </small>
                         </div>
                     </div>
                 <% } else { %>

@@ -10079,10 +10079,37 @@ html.vm-loading-lock body {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ==========================================================================
    21 - RECEITAS ANUAIS POR PRODUTO
    - Bolinhas, Consignados e Pelúcias
-   - Visao por periodo
+   - Visão por período
    - 2025 a 2036, com 6 anos por switch
    - Tabela sem rolagem lateral
    - Cards no mobile
@@ -10411,6 +10438,10 @@ html.vm-loading-lock body {
   background: rgba(255, 255, 255, 0.12);
 }
 
+/* ==========================================================================
+   Responsividade
+   ========================================================================== */
+
 @media (max-width: 1199.98px) {
   .receita-anual-titlebar .page-titlebar-side {
     min-width: 280px;
@@ -10462,66 +10493,92 @@ html.vm-loading-lock body {
 
 @media (max-width: 767.98px) {
   .receita-anual-shell {
-    width: min(100% - 0.78rem, 560px);
+    width: calc(100% - 1.25rem);
+    padding-bottom: 3rem;
   }
 
+  .receita-anual-shell .app-breadcrumb {
+    margin-bottom: 0.72rem;
+  }
+
+ .receita-anual-shell .list-stage {
+  margin-top: 0.72rem;
+  padding-inline: 0 !important;
+}
+
   .receita-anual-titlebar {
-    padding: 0.82rem;
-    border-radius: 19px;
+    gap: 0.72rem;
+    margin-bottom: 0.72rem;
+    padding: 0.92rem !important;
+    border-radius: 22px;
+  }
+
+  .receita-anual-titlebar .page-titlebar-content {
+    display: grid;
+    gap: 0.42rem;
   }
 
   .receita-anual-titlebar .page-titlebar-content h1 {
-    font-size: 1.54rem;
-    line-height: 1.07;
-    letter-spacing: -0.04em;
+    max-width: 13ch;
+    margin: 0;
+    font-size: 1.48rem !important;
+    line-height: 1.03 !important;
+    letter-spacing: -0.045em;
   }
 
   .receita-anual-titlebar .page-titlebar-content p {
-    margin-top: 0.18rem;
-    font-size: 0.8rem;
-    line-height: 1.32;
+    max-width: 30ch;
+    margin: 0;
+    font-size: 0.82rem !important;
+    line-height: 1.36 !important;
   }
 
   .receita-anual-titlebar .list-kicker {
-    min-height: 25px;
-    padding: 0.32rem 0.56rem;
-    font-size: 0.62rem;
+    width: fit-content;
+    min-height: 28px;
+    margin-bottom: 0;
+    padding: 0.3rem 0.62rem;
+    font-size: 0.68rem;
   }
 
   .receita-anual-titlebar .page-titlebar-side {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.48rem;
+    gap: 0.52rem;
     width: 100%;
-    margin-top: 0.66rem;
+    min-width: 0;
+    margin-top: 0;
   }
 
   .receita-anual-titlebar .list-stat {
-    min-height: 56px;
-    padding: 0.52rem 0.58rem;
+    display: grid;
+    align-content: center;
+    min-height: 58px;
+    padding: 0.58rem 0.62rem;
     border-radius: 14px;
   }
 
   .receita-anual-titlebar .list-stat strong {
     font-size: 0.58rem;
-    line-height: 1.1;
+    line-height: 1.12;
   }
 
   .receita-anual-titlebar .list-stat span {
-    font-size: 0.82rem;
-    line-height: 1.1;
+    font-size: 0.72rem;
+    line-height: 1.16;
   }
 
   .receita-anual-panel {
-    gap: 0.6rem;
-    padding-inline: 0.62rem !important;
+    display: grid;
+    gap: 0.72rem;
+    padding: 0.64rem !important;
     border-radius: 18px;
   }
 
   .receita-anual-summary-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.48rem;
+    gap: 0.5rem;
   }
 
   .receita-anual-summary-card-featured {
@@ -10529,13 +10586,13 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-summary-card {
-    min-height: 68px;
-    padding: 0.56rem 0.64rem;
-    border-radius: 14px;
+    min-height: 64px;
+    padding: 0.62rem;
+    border-radius: 13px;
   }
 
   .receita-anual-summary-card span {
-    font-size: 0.54rem;
+    font-size: 0.56rem;
     line-height: 1.08;
   }
 
@@ -10551,38 +10608,57 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-toolbar {
-    gap: 0.58rem;
-    padding: 0.64rem;
-    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.72rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .receita-anual-toolbar-copy {
+    display: grid;
+    gap: 0.24rem;
+    width: 100%;
   }
 
   .receita-anual-toolbar-copy .form-section-tag {
-    min-height: 21px;
-    margin-bottom: 0.24rem;
-    padding: 0.2rem 0.5rem;
-    font-size: 0.56rem;
+    width: fit-content;
+    min-height: 20px !important;
+    margin-bottom: 0.3rem !important;
+    padding: 2px 7px !important;
+    font-size: 0.58rem !important;
   }
 
   .receita-anual-toolbar-copy h2 {
-    font-size: 0.98rem;
-    line-height: 1.12;
+    max-width: 18ch;
+    margin: 0;
+    font-size: 1.18rem;
+    line-height: 1.08;
+    font-weight: 880;
+    letter-spacing: -0.045em;
   }
 
   .receita-anual-toolbar-copy p {
-    margin-top: 0.22rem;
-    font-size: 0.7rem;
-    line-height: 1.3;
+    max-width: 30ch;
+    margin: 0;
+    font-size: 0.76rem;
+    line-height: 1.38;
   }
 
   .receita-anual-mode-switch {
-    min-height: 38px;
-    padding: 0.2rem;
+    width: 100%;
+    min-height: 40px;
+    padding: 0.22rem;
   }
 
   .receita-anual-mode-btn {
+    flex: 1;
     min-width: 0;
-    min-height: 32px;
-    padding: 0.5rem 0.46rem;
+    min-height: 34px;
+    padding: 0.52rem 0.46rem;
     font-size: 12px !important;
   }
 
@@ -10611,7 +10687,7 @@ html.vm-loading-lock body {
 
   .receita-anual-table tbody {
     display: grid;
-    gap: 0.52rem;
+    gap: 0.72rem;
     width: 100%;
   }
 
@@ -10619,21 +10695,17 @@ html.vm-loading-lock body {
     display: grid;
     gap: 0;
     width: 100%;
-    padding: 0.5rem 0.58rem;
-    border: 1px solid rgba(203, 213, 225, 0.72);
-    border-radius: 15px;
+    padding: 0.82rem;
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    border-radius: 18px;
     background:
       radial-gradient(
         circle at 8% 8%,
         color-mix(in srgb, var(--receita-accent) 6%, transparent),
         transparent 34%
       ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.99),
-        rgba(248, 250, 252, 0.95)
-      );
-    box-shadow: 0 9px 22px rgba(15, 23, 42, 0.052);
+      linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
   }
 
   .receita-anual-table tbody tr:hover td {
@@ -10716,18 +10788,19 @@ html.vm-loading-lock body {
 
   .receita-anual-table tbody td {
     display: grid;
-    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-columns: 96px minmax(0, 1fr);
     align-items: center;
-    gap: 0.46rem;
-    min-height: 32px;
-    padding: 0.34rem 0;
+    gap: 0.58rem;
+    min-height: 38px;
+    padding: 0.54rem 0.64rem 0 0.12rem !important;
     border-bottom: 1px solid rgba(226, 232, 240, 0.9);
     background: transparent !important;
-    font-size: 0.76rem !important;
-    font-weight: 760 !important;
-    line-height: 1.16;
+    color: #0f172a;
+    font-size: 0.78rem !important;
+    font-weight: 780 !important;
+    line-height: 1.25;
     text-align: right !important;
-    white-space: normal;
+    word-break: normal;
     overflow-wrap: anywhere;
   }
 
@@ -10736,8 +10809,8 @@ html.vm-loading-lock body {
     color: #64748b;
     font-size: 0.56rem;
     font-weight: 900;
-    line-height: 1.08;
-    letter-spacing: 0.052em;
+    line-height: 1.12;
+    letter-spacing: 0.055em;
     text-align: left;
     text-transform: uppercase;
   }
@@ -10751,6 +10824,7 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-month-cell strong {
+    color: #0f172a;
     font-size: 0.78rem !important;
     line-height: 1.14;
     text-align: right;
@@ -10772,39 +10846,61 @@ html.vm-loading-lock body {
     border-color: rgba(15, 23, 42, 0.88) !important;
   }
 
+  .receita-anual-total-row td {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
   .receita-anual-total-row td::before {
     color: rgba(226, 232, 240, 0.82);
   }
 
-  .receita-anual-total-row td {
-    border-bottom-color: rgba(255, 255, 255, 0.12);
+  .receita-anual-total-row .receita-anual-month-cell strong {
+    color: #ffffff;
+  }
+
+  .receita-anual-total-row .receita-anual-value {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
   }
 }
 
 @media (max-width: 479.98px) {
+  .receita-anual-shell {
+    width: calc(100% - 1rem);
+  }
+
+ .receita-anual-shell .list-stage {
+  padding-inline: 0 !important;
+}
+
   .receita-anual-titlebar {
-    padding: 0.76rem;
+    padding: 0.86rem !important;
   }
 
   .receita-anual-titlebar .page-titlebar-content h1 {
-    font-size: 1.44rem;
+    font-size: 1.38rem !important;
   }
 
   .receita-anual-titlebar .page-titlebar-content p {
-    font-size: 0.76rem;
+    font-size: 0.78rem !important;
   }
 
   .receita-anual-titlebar .page-titlebar-side {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.44rem;
   }
 
   .receita-anual-titlebar .list-stat {
     min-height: 54px;
-    padding: 0.5rem 0.54rem;
+    padding: 0.54rem;
   }
 
   .receita-anual-titlebar .list-stat span {
-    font-size: 0.78rem;
+    font-size: 0.68rem;
+  }
+
+  .receita-anual-panel {
+    padding: 0.58rem !important;
   }
 
   .receita-anual-summary-grid {
@@ -10816,8 +10912,8 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-summary-card {
-    min-height: 62px;
-    padding: 0.52rem 0.6rem;
+    min-height: 58px;
+    padding: 0.56rem;
   }
 
   .receita-anual-summary-card strong {
@@ -10837,11 +10933,15 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-toolbar {
-    padding: 0.6rem;
+    padding: 0.74rem;
+  }
+
+  .receita-anual-toolbar-copy h2 {
+    font-size: 1.08rem;
   }
 
   .receita-anual-toolbar-copy p {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
   }
 
   .receita-anual-mode-btn {
@@ -10853,8 +10953,8 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-table tbody tr {
-    padding: 0.48rem 0.54rem;
-    border-radius: 14px;
+    padding: 0.78rem;
+    border-radius: 16px;
   }
 
   .receita-anual-shell[data-periodo='1'][data-periodo-atual='1']
@@ -10884,22 +10984,21 @@ html.vm-loading-lock body {
   }
 
   .receita-anual-table tbody td {
-    grid-template-columns: 56px minmax(0, 1fr);
-    gap: 0.4rem;
-    min-height: 30px;
-    padding: 0.32rem 0;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 0.58rem;
+    min-height: 38px;
+    padding: 0.54rem 0.64rem 0 0.12rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .receita-anual-table tbody td::before {
+    font-size: 0.56rem;
   }
 
   .receita-anual-value {
     font-size: 0.7rem !important;
   }
 }
-
-
-
-
-
-
 
 
 
@@ -11732,12 +11831,20 @@ html.vm-loading-lock body {
     width: calc(100% - 1.25rem);
   }
 
-  .bolinhas-form-shell .form-stage,
-  .bolinhas-list-shell .list-stage,
-  .bolinhas-view-shell .view-stage,
-  .bolinhas-control-shell .bolinhas-control-stage {
+  .bolinhas-form-shell .form-stage {
     margin-top: 0.72rem;
     padding-inline: 0.52rem !important;
+  }
+
+  .bolinhas-view-shell .view-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-list-shell .list-stage,
+  .bolinhas-control-shell .bolinhas-control-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
   }
 
   .bolinhas-form-shell .bolinhas-titlebar,
@@ -12564,11 +12671,17 @@ html.vm-loading-lock body {
     width: calc(100% - 1rem);
   }
 
-  .bolinhas-form-shell .form-stage,
-  .bolinhas-list-shell .list-stage,
-  .bolinhas-view-shell .view-stage,
-  .bolinhas-control-shell .bolinhas-control-stage {
+  .bolinhas-form-shell .form-stage {
     padding-inline: 0.44rem !important;
+  }
+
+  .bolinhas-view-shell .view-stage {
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-list-shell .list-stage,
+  .bolinhas-control-shell .bolinhas-control-stage {
+    padding-inline: 0 !important;
   }
 
   .bolinhas-form-shell .bolinhas-titlebar,
@@ -12749,79 +12862,6 @@ html.vm-loading-lock body {
     font-size: 0.76rem;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* ==========================================================================
@@ -13632,12 +13672,20 @@ html.vm-loading-lock body {
     width: calc(100% - 1.25rem);
   }
 
-  .pelucias-form-shell .form-stage,
-  .pelucias-list-shell .list-stage,
-  .pelucias-view-shell .view-stage,
-  .pelucias-control-shell .pelucias-control-stage {
+  .pelucias-form-shell .form-stage {
     margin-top: 0.72rem;
     padding-inline: 0.52rem !important;
+  }
+
+  .pelucias-view-shell .view-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-list-shell .list-stage,
+  .pelucias-control-shell .pelucias-control-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
   }
 
   .pelucias-form-shell .pelucias-titlebar,
@@ -14464,11 +14512,17 @@ html.vm-loading-lock body {
     width: calc(100% - 1rem);
   }
 
-  .pelucias-form-shell .form-stage,
-  .pelucias-list-shell .list-stage,
-  .pelucias-view-shell .view-stage,
-  .pelucias-control-shell .pelucias-control-stage {
+  .pelucias-form-shell .form-stage {
     padding-inline: 0.44rem !important;
+  }
+
+  .pelucias-view-shell .view-stage {
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-list-shell .list-stage,
+  .pelucias-control-shell .pelucias-control-stage {
+    padding-inline: 0 !important;
   }
 
   .pelucias-form-shell .pelucias-titlebar,
@@ -14651,49 +14705,6 @@ html.vm-loading-lock body {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ==========================================================================
    24 - TELAS OPERACIONAIS DE CONSIGNADOS
    Cadastro, edição, listagem, visualização e controle geral
@@ -14708,116 +14719,92 @@ html.vm-loading-lock body {
 }
 
 .consignados-shell,
-.consignados-list-shell {
-  width: min(1260px, calc(100% - 1.5rem));
+.consignados-form-shell,
+.consignados-list-shell,
+.consignados-view-shell,
+.consignados-control-shell {
+  margin-inline: auto;
 }
 
+.consignados-form-shell,
+.consignados-view-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.consignados-list-shell,
 .consignados-control-shell {
   width: min(1320px, calc(100% - 1.5rem));
 }
 
-.consignados-view-shell {
-  width: min(1180px, calc(100% - 2rem));
-}
-
-.consignados-form-shell {
-  width: min(980px, calc(100% - 1.5rem)) !important;
+.consignados-form-stage,
+.consignados-list-stage,
+.consignados-view-stage,
+.consignados-control-stage {
+  margin-top: 0.95rem;
 }
 
 /* Hero / titlebar */
 
-.consignados-titlebar,
-.consignados-list-titlebar,
-.consignados-control-titlebar,
-.consignados-view-titlebar {
+.consignados-titlebar {
+  overflow: hidden;
   gap: 1rem;
-  border-radius: 24px;
+  border-radius: 28px;
   background:
-    radial-gradient(circle at 12% 10%, rgba(96, 165, 250, 0.18), transparent 34%),
-    linear-gradient(135deg, #2563eb 0%, #1d4ed8 52%, #143a76 100%) !important;
-  box-shadow: 0 18px 38px rgba(30, 64, 175, 0.18);
+    radial-gradient(circle at 12% 10%, rgba(96, 165, 250, 0.22), transparent 30%),
+    radial-gradient(circle at 86% 10%, rgba(29, 78, 216, 0.34), transparent 34%),
+    linear-gradient(135deg, #2563eb 0%, #1d4ed8 52%, #1e3a8a 100%) !important;
+  box-shadow: 0 22px 50px rgba(30, 64, 175, 0.2);
 }
 
-.consignados-titlebar .page-titlebar-content h1,
-.consignados-list-titlebar .page-titlebar-content h1,
-.consignados-control-titlebar .page-titlebar-content h1,
-.consignados-view-titlebar .page-titlebar-content h1 {
-  margin: 0;
+.consignados-titlebar .page-titlebar-content {
+  min-width: 0;
+}
+
+.consignados-titlebar .page-titlebar-content h1 {
   color: #fff;
-  font-size: clamp(1.55rem, 2.25vw, 2.12rem) !important;
-  line-height: 1.04 !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.045em;
+  font-weight: 900;
+  letter-spacing: -0.055em;
 }
 
-.consignados-titlebar .page-titlebar-content p,
-.consignados-list-titlebar .page-titlebar-content p,
-.consignados-control-titlebar .page-titlebar-content p,
-.consignados-view-titlebar .page-titlebar-content p {
-  max-width: 620px;
-  margin: 0.46rem 0 0;
-  color: rgba(239, 246, 255, 0.94);
-  font-size: 0.9rem !important;
-  line-height: 1.42 !important;
-  font-weight: 600;
+.consignados-titlebar .page-titlebar-content p {
+  max-width: 760px;
+  color: rgba(239, 246, 255, 0.92);
+  font-weight: 500;
 }
 
 .consignados-kicker,
 .consignados-titlebar .form-kicker,
-.consignados-titlebar .list-kicker,
-.consignados-list-titlebar .list-kicker,
-.consignados-control-titlebar .list-kicker,
-.consignados-view-titlebar .form-kicker {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 0.36rem;
+.consignados-titlebar .list-kicker {
   width: fit-content;
-  min-height: 24px;
-  margin-bottom: 0.56rem;
-  padding: 0.28rem 0.62rem;
-  border-radius: 999px;
-  color: #eff6ff !important;
-  background: rgba(255, 255, 255, 0.14) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 0.72rem !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  color: #eff6ff;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(191, 219, 254, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .consignados-titlebar-side,
-.consignados-titlebar .page-titlebar-side,
-.consignados-list-titlebar .page-titlebar-side,
-.consignados-control-titlebar .page-titlebar-side,
-.consignados-view-titlebar .page-titlebar-side {
+.consignados-titlebar .page-titlebar-side {
   align-self: stretch;
 }
 
 .consignados-hero-stat,
 .consignados-titlebar .page-titlebar-stat,
-.consignados-titlebar .list-stat,
-.consignados-list-titlebar .list-stat,
-.consignados-control-titlebar .list-stat,
-.consignados-view-titlebar .page-titlebar-stat,
-.consignados-view-titlebar .list-stat {
+.consignados-titlebar .list-stat {
   display: grid;
   align-content: center;
-  min-height: 70px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 68px;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(191, 219, 254, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .consignados-hero-stat strong,
 .consignados-titlebar .page-titlebar-stat strong,
-.consignados-titlebar .list-stat strong,
-.consignados-list-titlebar .list-stat strong,
-.consignados-control-titlebar .list-stat strong,
-.consignados-view-titlebar .page-titlebar-stat strong,
-.consignados-view-titlebar .list-stat strong {
+.consignados-titlebar .list-stat strong {
   color: rgba(219, 234, 254, 0.86);
-  font-size: 0.64rem;
+  font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -14825,62 +14812,17 @@ html.vm-loading-lock body {
 
 .consignados-hero-stat span,
 .consignados-titlebar .page-titlebar-stat span,
-.consignados-titlebar .list-stat span,
-.consignados-list-titlebar .list-stat span,
-.consignados-control-titlebar .list-stat span,
-.consignados-view-titlebar .page-titlebar-stat span,
-.consignados-view-titlebar .list-stat span {
+.consignados-titlebar .list-stat span {
   color: #fff;
-  font-size: 0.9rem;
-  font-weight: 900;
+  font-size: 0.98rem;
+  font-weight: 850;
   line-height: 1.18;
 }
 
-/* Formulários de Consignados */
-
-.consignados-form-stage {
-  margin-top: 0.95rem;
-}
-
-.consignados-form {
-  display: grid;
-  gap: 0.78rem;
-}
-
-.consignados-form-card {
-  overflow: hidden;
-  padding: 0.9rem;
-  border-radius: 20px;
-}
-
-.consignados-form-card-header {
-  margin-bottom: 0.95rem;
-}
-
-.consignados-form-card-header h2,
-.consignados-panel h2,
-.consignados-view-panel-header h2 {
-  margin: 0;
-  color: #0f172a;
-  font-size: 1.12rem !important;
-  line-height: 1.18 !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.025em;
-}
-
-.consignados-form-card-header p,
-.consignados-toolbar-copy p,
-.consignados-view-panel-header p {
-  max-width: 680px;
-  margin: 0.34rem 0 0;
-  color: #64748b;
-  font-size: 0.82rem !important;
-  line-height: 1.45 !important;
-  font-weight: 500 !important;
-}
+/* Tags internas */
 
 .consignados-section-tag,
-.consignados-form .form-section-tag,
+.consignados-form-shell .form-section-tag,
 .consignados-view-shell .form-section-tag,
 .consignados-control-shell .form-section-tag {
   display: inline-flex !important;
@@ -14891,9 +14833,9 @@ html.vm-loading-lock body {
   margin-bottom: 0.38rem !important;
   padding: 2px 8px !important;
   border-radius: 999px !important;
-  color: #2563eb;
-  background: rgba(37, 99, 235, 0.1);
-  border: 1px solid rgba(37, 99, 235, 0.14);
+  color: #2563eb !important;
+  background: rgba(37, 99, 235, 0.1) !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
   font-size: 0.64rem !important;
   font-weight: 820 !important;
   line-height: 1 !important;
@@ -14902,13 +14844,49 @@ html.vm-loading-lock body {
   white-space: nowrap !important;
 }
 
-.consignados-form .row {
+/* ==========================================================================
+   Formulários de cadastro e edição
+   ========================================================================== */
+
+.consignados-form-shell .modern-form.consignados-form {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card {
+  overflow: hidden;
+  padding: 0.9rem;
+  border-radius: 20px;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header {
+  margin-bottom: 0.95rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.12rem !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header p {
+  max-width: 680px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.consignados-form-shell .modern-form.consignados-form .row {
   --bs-gutter-x: 0.58rem;
   --bs-gutter-y: 0.78rem;
 }
 
-.consignados-form label,
-.consignados-control-panel label {
+.consignados-form-shell .modern-form.consignados-form label {
   display: block;
   margin-bottom: 0.34rem;
   color: #334155;
@@ -14917,18 +14895,14 @@ html.vm-loading-lock body {
   line-height: 1.22;
 }
 
-.consignados-form .form-control,
-.consignados-form .form-select,
-.consignados-form .input-group-text,
-.consignados-control-panel .form-control,
-.consignados-list-panel .form-select {
+.consignados-form-shell .modern-form.consignados-form .form-control,
+.consignados-form-shell .modern-form.consignados-form .form-select,
+.consignados-form-shell .modern-form.consignados-form .input-group-text {
   font-size: 0.86rem;
 }
 
-.consignados-form .form-control,
-.consignados-form .form-select,
-.consignados-control-panel .form-control,
-.consignados-list-panel .form-select {
+.consignados-form-shell .modern-form.consignados-form .form-control,
+.consignados-form-shell .modern-form.consignados-form .form-select {
   min-height: 42px;
   color: #0f172a;
   font-weight: 650;
@@ -14937,20 +14911,23 @@ html.vm-loading-lock body {
   box-shadow: none;
 }
 
-.consignados-form textarea.form-control {
+.consignados-form-shell .modern-form.consignados-form textarea.form-control {
   min-height: 132px;
   padding: 0.76rem;
   resize: vertical;
 }
 
-.consignados-form .input-group {
+.consignados-form-shell .modern-form.consignados-form .input-group {
   display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
   width: 100%;
 }
 
-.consignados-form .input-group > .input-group-text {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group
+  > .input-group-text {
   flex: 0 0 48px;
   width: 48px;
   min-width: 48px;
@@ -14960,7 +14937,7 @@ html.vm-loading-lock body {
   color: #2563eb;
   font-weight: 850;
   background: #eff6ff;
-  border-color: rgba(147, 197, 253, 0.95);
+  border-color: rgba(191, 219, 254, 0.95);
   border-right: 0;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
@@ -14968,7 +14945,10 @@ html.vm-loading-lock body {
   border-bottom-right-radius: 0;
 }
 
-.consignados-form .input-group > .form-control {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group
+  > .form-control {
   flex: 1 1 auto;
   width: 1%;
   min-width: 0;
@@ -14982,24 +14962,32 @@ html.vm-loading-lock body {
   box-shadow: none;
 }
 
-.consignados-form .input-group:focus-within > .input-group-text,
-.consignados-form .input-group:focus-within > .form-control {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group:focus-within
+  > .input-group-text,
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group:focus-within
+  > .form-control {
   border-color: rgba(37, 99, 235, 0.58);
 }
 
-.consignados-form .readonly-input {
+.consignados-form-shell .modern-form.consignados-form .readonly-input {
   color: #475569;
   background: #e2e8f0;
   cursor: not-allowed;
 }
 
-.consignados-summary-grid {
+/* Resumo dos formulários */
+
+.consignados-form-shell .modern-form.consignados-form .form-summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.58rem;
 }
 
-.consignados-summary-card {
+.consignados-form-shell .modern-form.consignados-form .form-summary-card {
   display: grid;
   align-content: center;
   gap: 0.3rem;
@@ -15009,10 +14997,10 @@ html.vm-loading-lock body {
   background:
     radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.08), transparent 38%),
     linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
-  border: 1px solid rgba(147, 197, 253, 0.72);
+  border: 1px solid rgba(147, 197, 253, 0.65);
 }
 
-.consignados-summary-card strong {
+.consignados-form-shell .modern-form.consignados-form .form-summary-card strong {
   color: #2563eb;
   font-size: 0.62rem;
   font-weight: 900;
@@ -15021,14 +15009,16 @@ html.vm-loading-lock body {
   text-transform: uppercase;
 }
 
-.consignados-summary-card span {
+.consignados-form-shell .modern-form.consignados-form .form-summary-card span {
   color: #0f172a;
   font-size: 0.88rem;
   font-weight: 850;
   line-height: 1.18;
 }
 
-.consignados-actions-bar {
+/* Barra final dos formulários */
+
+.consignados-form-shell .modern-form.consignados-form .consignados-actions-bar {
   display: grid !important;
   gap: 0.74rem !important;
   margin-top: 0 !important;
@@ -15039,38 +15029,59 @@ html.vm-loading-lock body {
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08) !important;
 }
 
-.consignados-actions-copy {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy {
   display: grid;
   gap: 0.22rem;
   min-width: 0;
 }
 
-.consignados-actions-copy strong {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy
+  strong {
   color: #0f172a !important;
   font-size: 0.92rem;
   line-height: 1.18;
   font-weight: 850;
 }
 
-.consignados-actions-copy span {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy
+  span {
   color: #64748b !important;
   font-size: 0.78rem;
   line-height: 1.42;
+  font-weight: 500;
 }
 
-.consignados-actions-buttons {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-buttons {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.58rem;
   width: 100%;
 }
 
-.consignados-actions-bar .btn-modern,
-.consignados-actions-bar .btn-modern-secondary {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern,
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.44rem;
   width: 100%;
   min-height: 46px;
   padding: 0.76rem 0.95rem;
@@ -15081,62 +15092,73 @@ html.vm-loading-lock body {
   text-decoration: none;
 }
 
-.consignados-actions-bar .btn-modern-secondary {
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern {
+  color: #fff !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22) !important;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern-secondary {
   color: #2563eb !important;
   background: #eff6ff !important;
   border: 1px solid rgba(147, 197, 253, 0.72) !important;
 }
 
-.consignados-actions-bar .btn-modern-secondary:hover {
-  color: #1d4ed8 !important;
-  background: #dbeafe !important;
-  border-color: rgba(96, 165, 250, 0.86) !important;
+/* ==========================================================================
+   Listagem de sangrias de consignados
+   ========================================================================== */
+
+.consignados-list-shell .consignados-list-panel,
+.consignados-control-shell .consignados-control-panel {
+  padding: 1.35rem;
+  border-radius: 24px;
 }
 
-/* Listagem e Controle Geral */
-
-.consignados-panel,
-.consignados-list-panel,
-.consignados-control-panel {
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(203, 213, 225, 0.72);
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
-}
-
-.consignados-toolbar,
-.consignados-control-toolbar {
-  align-items: center;
+.consignados-list-shell .consignados-list-toolbar,
+.consignados-control-shell .consignados-control-toolbar {
+  align-items: end;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.consignados-toolbar-copy {
+.consignados-list-shell .consignados-toolbar-copy,
+.consignados-control-shell .consignados-toolbar-copy {
   display: grid;
-  gap: 0.16rem;
+  gap: 0.26rem;
   min-width: 0;
 }
 
-.consignados-toolbar-copy h2 {
-  margin: 0;
-}
-
-.consignados-days-filter {
-  display: grid;
-  gap: 0.32rem;
-  width: min(240px, 100%);
-}
-
-.consignados-days-filter label {
+.consignados-list-shell .consignados-toolbar-copy h2,
+.consignados-control-shell .consignados-toolbar-copy h2 {
   margin: 0;
   color: #0f172a;
-  font-size: 0.76rem;
-  font-weight: 850;
-  text-align: center;
+  font-size: 1.45rem;
+  line-height: 1.08;
+  font-weight: 880;
+  letter-spacing: -0.04em;
 }
 
-.consignados-days-filter input {
-  min-height: 38px;
-  font-size: 0.95rem;
+.consignados-list-shell .consignados-toolbar-copy p,
+.consignados-control-shell .consignados-toolbar-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.consignados-list-action {
+  min-height: 42px;
+  border-radius: 13px;
+  font-size: 0.86rem;
   font-weight: 850;
 }
 
@@ -15152,6 +15174,10 @@ html.vm-loading-lock body {
 
 .consignados-table {
   min-width: 920px;
+}
+
+.consignados-list-table {
+  min-width: 980px;
 }
 
 .consignados-control-table {
@@ -15180,42 +15206,6 @@ html.vm-loading-lock body {
   text-align: left;
 }
 
-.consignados-control-table .dias-passados {
-  display: grid;
-  gap: 0.14rem;
-}
-
-.consignados-control-table .dias-passados span {
-  color: #0f172a;
-  font-weight: 850;
-}
-
-.consignados-control-table .dias-passados small {
-  color: #64748b;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
-.consignados-mobile-status {
-  display: none;
-}
-
-.consignados-status-badge {
-  min-width: 74px;
-  justify-content: center;
-}
-
-.consignados-row-alert {
-  background: rgba(254, 242, 242, 0.55);
-}
-
-.consignados-list-action {
-  min-height: 42px;
-  border-radius: 13px;
-  font-size: 0.86rem;
-  font-weight: 850;
-}
-
 .consignados-table .color-select {
   min-width: 126px;
   min-height: 34px;
@@ -15239,236 +15229,1178 @@ html.vm-loading-lock body {
   font-weight: 850;
 }
 
-/* Visualização de sangria de consignados */
-
-.consignados-view-stage {
-  margin-top: 0.95rem;
+.consignados-table .select-sim {
+  color: #166534;
+  background-color: #dcfce7;
+  border-color: rgba(22, 163, 74, 0.35);
 }
 
-.consignados-view-panel {
+.consignados-table .select-nao {
+  color: #991b1b;
+  background-color: #fee2e2;
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+/* ==========================================================================
+   Visualização de sangria de consignados
+   ========================================================================== */
+
+.consignados-view-shell {
+  width: min(1040px, calc(100% - 1.5rem));
+}
+
+.consignados-view-shell .consignados-view-panel {
   padding: 1rem;
-  border-radius: 22px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid rgba(203, 213, 225, 0.86);
-  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.12);
+  border-radius: 24px;
 }
 
-.consignados-view-panel-header {
-  margin-bottom: 0.86rem;
+.consignados-view-shell .consignados-view-panel-header {
+  margin-bottom: 0.9rem;
 }
 
-.consignados-view-panel-header h2 {
+.consignados-view-shell .consignados-view-panel-header h2 {
   margin: 0;
   color: #0f172a;
-  font-size: clamp(1.24rem, 1.72vw, 1.68rem) !important;
-  line-height: 1.08 !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.045em;
+  font-size: 1.26rem;
+  line-height: 1.1;
+  font-weight: 880;
+  letter-spacing: -0.04em;
 }
 
-.consignados-view-panel-header p {
-  max-width: 760px;
+.consignados-view-shell .consignados-view-panel-header p {
+  max-width: 620px;
   margin: 0.34rem 0 0;
   color: #64748b;
-  font-size: 0.9rem !important;
-  line-height: 1.42 !important;
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
 
-.consignados-view-grid {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 0.62rem !important;
-  width: 100%;
+.consignados-view-shell .consignados-view-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.68rem;
 }
 
-.consignados-view-card {
-  display: grid !important;
+.consignados-view-shell .consignados-view-grid .view-card {
+  display: grid;
   align-content: center;
-  gap: 0.26rem;
-  width: auto !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  min-height: 70px;
-  padding: 0.66rem 0.72rem;
-  border-radius: 14px;
-  background:
-    radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.045), transparent 42%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid rgba(203, 213, 225, 0.92);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.035);
+  gap: 0.32rem;
+  min-height: 92px;
+  padding: 0.78rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.82);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
 }
 
-.consignados-view-card strong {
-  display: block;
+.consignados-view-shell .consignados-view-grid .view-card strong {
   color: #64748b;
-  font-size: 0.58rem !important;
-  font-weight: 900 !important;
-  line-height: 1.13 !important;
-  letter-spacing: 0.065em;
+  font-size: 0.62rem;
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.consignados-view-card span {
-  display: block;
-  color: #0f172a;
-  font-size: 0.82rem !important;
-  font-weight: 800 !important;
-  line-height: 1.18 !important;
-  overflow-wrap: anywhere;
-}
-
-.consignados-view-card-wide,
-.consignados-view-card.is-wide {
-  grid-column: 1 / -1 !important;
-  min-height: 64px;
-}
-
-.consignados-view-actions {
-  display: grid;
-  gap: 0.66rem;
-  margin-top: 0.72rem;
-  padding: 0.76rem;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-}
-
-.consignados-view-actions-copy {
-  display: grid;
-  gap: 0.16rem;
-  color: #64748b;
-  font-size: 0.82rem;
-  line-height: 1.38;
-}
-
-.consignados-view-actions-copy strong {
+.consignados-view-shell .consignados-view-grid .view-card span {
   color: #0f172a;
   font-size: 0.9rem;
   font-weight: 850;
-  line-height: 1.16;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
 }
 
-.consignados-view-actions-copy span {
+.consignados-view-shell .consignados-view-grid .view-card.is-wide,
+.consignados-view-shell .consignados-view-grid .consignados-view-card-wide {
+  grid-column: 1 / -1;
+  min-height: 104px;
+  align-content: start;
+}
+
+.consignados-view-shell .view-card-meta {
+  display: block;
+  margin-top: 0.6rem;
   color: #64748b;
-  font-size: 0.8rem;
-  line-height: 1.38;
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.35;
 }
 
-.consignados-view-actions-buttons {
+.consignados-view-shell .consignados-view-actions {
   display: grid;
-  grid-template-columns: minmax(0, 190px) minmax(0, 220px);
-  gap: 0.62rem;
-  justify-content: start;
+  gap: 0.74rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
 }
 
-.consignados-view-actions .btn-modern,
-.consignados-view-actions .btn-modern-secondary {
+.consignados-view-shell .consignados-view-actions .view-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-copy strong {
+  color: #0f172a;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-copy span {
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+  font-weight: 500;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern,
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.42rem;
+  gap: 0.4rem;
   width: 100%;
-  min-height: 42px;
-  padding: 0.68rem 0.9rem;
-  border-radius: 12px;
-  font-size: 0.82rem;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
   font-weight: 850;
   line-height: 1;
   text-decoration: none;
 }
 
-.consignados-view-actions .btn-modern-secondary {
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary {
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid rgba(147, 197, 253, 0.72);
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary:hover {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border-color: rgba(96, 165, 250, 0.86);
+}
+
+/* ==========================================================================
+   24 - TELAS OPERACIONAIS DE CONSIGNADOS
+   Cadastro, edição, listagem, visualização e controle geral
+   ========================================================================== */
+
+/* Base encapsulada */
+
+.consignados-page {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 28%),
+    linear-gradient(180deg, #f6f8fc 0%, #edf2f7 100%);
+}
+
+.consignados-shell,
+.consignados-form-shell,
+.consignados-list-shell,
+.consignados-view-shell,
+.consignados-control-shell {
+  margin-inline: auto;
+}
+
+.consignados-form-shell,
+.consignados-view-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.consignados-list-shell {
+  width: min(1180px, calc(100% - 1.5rem));
+}
+
+.consignados-control-shell {
+  width: min(1320px, calc(100% - 1.5rem));
+}
+
+.consignados-form-stage,
+.consignados-list-stage,
+.consignados-view-stage,
+.consignados-control-stage {
+  margin-top: 0.95rem;
+}
+
+/* Hero / titlebar */
+
+.consignados-titlebar {
+  overflow: hidden;
+  gap: 1rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(96, 165, 250, 0.22), transparent 30%),
+    radial-gradient(circle at 86% 10%, rgba(29, 78, 216, 0.34), transparent 34%),
+    linear-gradient(135deg, #2563eb 0%, #1d4ed8 52%, #1e3a8a 100%) !important;
+  box-shadow: 0 22px 50px rgba(30, 64, 175, 0.2);
+}
+
+.consignados-titlebar .page-titlebar-content {
+  min-width: 0;
+}
+
+.consignados-titlebar .page-titlebar-content h1 {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+
+.consignados-titlebar .page-titlebar-content p {
+  max-width: 760px;
+  color: rgba(239, 246, 255, 0.92);
+  font-weight: 500;
+}
+
+.consignados-kicker,
+.consignados-titlebar .form-kicker,
+.consignados-titlebar .list-kicker {
+  width: fit-content;
+  color: #eff6ff;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(191, 219, 254, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.consignados-titlebar-side,
+.consignados-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.consignados-hero-stat,
+.consignados-titlebar .page-titlebar-stat,
+.consignados-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+  min-height: 68px;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(191, 219, 254, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.consignados-hero-stat strong,
+.consignados-titlebar .page-titlebar-stat strong,
+.consignados-titlebar .list-stat strong {
+  color: rgba(219, 234, 254, 0.86);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.consignados-hero-stat span,
+.consignados-titlebar .page-titlebar-stat span,
+.consignados-titlebar .list-stat span {
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+/* Tags internas */
+
+.consignados-section-tag,
+.consignados-form-shell .form-section-tag,
+.consignados-view-shell .form-section-tag,
+.consignados-control-shell .form-section-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-height: 22px !important;
+  margin-bottom: 0.38rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  color: #2563eb !important;
+  background: rgba(37, 99, 235, 0.1) !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
+  font-size: 0.64rem !important;
+  font-weight: 820 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   Formulários de cadastro e edição
+   ========================================================================== */
+
+.consignados-form-shell .modern-form.consignados-form {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card {
+  overflow: hidden;
+  padding: 0.9rem;
+  border-radius: 20px;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header {
+  margin-bottom: 0.95rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.12rem !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-card-header p {
+  max-width: 680px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.consignados-form-shell .modern-form.consignados-form .row {
+  --bs-gutter-x: 0.58rem;
+  --bs-gutter-y: 0.78rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form label {
+  display: block;
+  margin-bottom: 0.34rem;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-control,
+.consignados-form-shell .modern-form.consignados-form .form-select,
+.consignados-form-shell .modern-form.consignados-form .input-group-text {
+  font-size: 0.86rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-control,
+.consignados-form-shell .modern-form.consignados-form .form-select {
+  min-height: 42px;
+  color: #0f172a;
+  font-weight: 650;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.consignados-form-shell .modern-form.consignados-form textarea.form-control {
+  min-height: 132px;
+  padding: 0.76rem;
+  resize: vertical;
+}
+
+/* Inputs monetários */
+
+.consignados-form-shell .modern-form.consignados-form .input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group
+  > .input-group-text {
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  min-height: 42px;
+  justify-content: center;
+  padding-inline: 0;
+  color: #2563eb;
+  font-weight: 850;
+  background: #eff6ff;
+  border-color: rgba(191, 219, 254, 0.95);
+  border-right: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group
+  > .form-control {
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+  min-height: 42px;
+  border-left: 0;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: none;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group:focus-within
+  > .input-group-text,
+.consignados-form-shell
+  .modern-form.consignados-form
+  .input-group:focus-within
+  > .form-control {
+  border-color: rgba(37, 99, 235, 0.58);
+}
+
+.consignados-form-shell .modern-form.consignados-form .readonly-input {
+  color: #475569;
+  background: #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* Cards de resumo dos formulários */
+
+.consignados-form-shell .modern-form.consignados-form .form-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-summary-card {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  min-height: 70px;
+  padding: 0.72rem 0.78rem;
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.08), transparent 38%),
+    linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid rgba(147, 197, 253, 0.65);
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-summary-card strong {
+  color: #2563eb;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.consignados-form-shell .modern-form.consignados-form .form-summary-card span {
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+/* Barra final dos formulários */
+
+.consignados-form-shell .modern-form.consignados-form .consignados-actions-bar {
+  display: grid !important;
+  gap: 0.74rem !important;
+  margin-top: 0 !important;
+  padding: 0.9rem !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08) !important;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy
+  strong {
+  color: #0f172a !important;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-copy
+  span {
+  color: #64748b !important;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .form-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern,
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern {
+  color: #fff !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22) !important;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern-secondary {
   color: #2563eb !important;
   background: #eff6ff !important;
-  border: 1px solid rgba(147, 197, 253, 0.76) !important;
+  border: 1px solid rgba(147, 197, 253, 0.72) !important;
 }
 
-.consignados-view-actions .btn-modern-secondary:hover {
-  color: #1d4ed8 !important;
-  background: #dbeafe !important;
-  border-color: rgba(96, 165, 250, 0.88) !important;
+/* ==========================================================================
+   Listagem de sangrias de consignados
+   ========================================================================== */
+
+.consignados-list-shell .consignados-list-stage {
+  margin-top: 0.95rem;
 }
 
-/* Tablet */
+.consignados-list-shell .consignados-list-titlebar {
+  gap: 1rem;
+}
+
+.consignados-list-shell .consignados-list-titlebar .page-titlebar-content p {
+  max-width: 680px;
+}
+
+.consignados-list-shell .consignados-list-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.consignados-list-shell .consignados-list-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.consignados-list-shell .consignados-list-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.consignados-list-shell .consignados-list-toolbar {
+  margin-bottom: 0.95rem;
+}
+
+.consignados-list-shell .consignados-toolbar-copy h2 {
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+}
+
+.consignados-list-shell .consignados-toolbar-copy p {
+  max-width: 720px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.consignados-list-shell .consignados-list-action {
+  min-height: 42px;
+  border-radius: 13px;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.consignados-table-wrap {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(203, 213, 225, 0.82);
+}
+
+.consignados-table-scroll {
+  overflow-x: auto;
+}
+
+.consignados-table {
+  min-width: 920px;
+}
+
+.consignados-list-shell .consignados-list-table {
+  min-width: 980px;
+  table-layout: fixed;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(1),
+.consignados-list-shell .consignados-list-table td:nth-child(1) {
+  width: 72px;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(2),
+.consignados-list-shell .consignados-list-table td:nth-child(2) {
+  width: 25%;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(3),
+.consignados-list-shell .consignados-list-table td:nth-child(3) {
+  width: 112px;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(4),
+.consignados-list-shell .consignados-list-table td:nth-child(4) {
+  width: 126px;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(5),
+.consignados-list-shell .consignados-list-table td:nth-child(5) {
+  width: 118px;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(6),
+.consignados-list-shell .consignados-list-table td:nth-child(6) {
+  width: 150px;
+}
+
+.consignados-list-shell .consignados-list-table th:nth-child(7),
+.consignados-list-shell .consignados-list-table td:nth-child(7) {
+  width: 210px;
+}
+
+.consignados-table thead th {
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.consignados-table tbody td {
+  vertical-align: middle;
+  color: #0f172a;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.consignados-point-name,
+.consignados-list-shell .consignados-table .table-title-cell {
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.22;
+  text-align: left;
+}
+
+.consignados-list-shell .consignados-table td[data-label='Data'] {
+  color: #0f172a;
+  font-weight: 750;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.consignados-table .color-select {
+  min-height: 38px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  border-radius: 12px;
+}
+
+.consignados-table-actions,
+.consignados-table .table-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.32rem !important;
+  align-items: center !important;
+}
+
+.consignados-table .table-actions .table-btn,
+.consignados-table .table-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 0.46rem 0.48rem !important;
+  border-radius: 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.consignados-table .table-actions .table-btn-view {
+  grid-column: auto !important;
+}
+
+.consignados-table .select-sim {
+  color: #166534;
+  background-color: #dcfce7;
+  border-color: rgba(22, 163, 74, 0.35);
+}
+
+.consignados-table .select-nao {
+  color: #991b1b;
+  background-color: #fee2e2;
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+/* ==========================================================================
+   Visualização de sangria de consignados
+   ========================================================================== */
+
+.consignados-view-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.consignados-view-shell .consignados-view-stage {
+  margin-top: 0.95rem;
+}
+
+.consignados-view-shell .consignados-view-titlebar {
+  gap: 1rem;
+}
+
+.consignados-view-shell .consignados-view-titlebar .page-titlebar-content p {
+  max-width: 620px;
+}
+
+.consignados-view-shell .consignados-view-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.consignados-view-shell .consignados-view-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.consignados-view-shell .consignados-view-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.consignados-view-shell .consignados-view-panel-header {
+  margin-bottom: 0.95rem;
+}
+
+.consignados-view-shell .consignados-view-panel-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.consignados-view-shell .consignados-view-panel-header p {
+  max-width: 720px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.consignados-view-shell .consignados-view-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.consignados-view-shell .consignados-view-grid .view-card {
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  min-height: 82px;
+  padding: 0.82rem 0.9rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.consignados-view-shell .consignados-view-grid .view-card strong {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.consignados-view-shell .consignados-view-grid .view-card span {
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+}
+
+.consignados-view-shell .consignados-view-grid .view-card.is-wide,
+.consignados-view-shell .consignados-view-grid .consignados-view-card-wide {
+  grid-column: 1 / -1;
+}
+
+.consignados-view-shell .view-card-meta {
+  display: block;
+  margin-top: 0.6rem;
+  color: #64748b;
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.consignados-view-shell .consignados-view-actions {
+  display: grid;
+  gap: 0.74rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-copy strong {
+  color: #0f172a;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-copy span {
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.consignados-view-shell .consignados-view-actions .view-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern,
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary {
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid rgba(147, 197, 253, 0.72);
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern-secondary:hover {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border-color: rgba(96, 165, 250, 0.86);
+}
+
+/* ==========================================================================
+   Controle geral de consignados
+   ========================================================================== */
+
+.consignados-control-shell .consignados-control-stage {
+  margin-top: 0.95rem;
+}
+
+.consignados-control-shell .consignados-control-titlebar {
+  gap: 1rem;
+}
+
+.consignados-control-shell .consignados-control-titlebar .page-titlebar-content p {
+  max-width: 760px;
+}
+
+.consignados-control-shell .consignados-control-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.consignados-control-shell .consignados-control-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.consignados-control-shell .consignados-control-panel {
+  padding: 1.35rem;
+  border-radius: 24px;
+}
+
+.consignados-control-shell .consignados-control-toolbar {
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.consignados-control-shell .consignados-control-toolbar .list-toolbar-copy {
+  display: grid;
+  gap: 0.26rem;
+}
+
+.consignados-control-shell .consignados-control-toolbar .list-toolbar-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.45rem;
+  line-height: 1.08;
+  font-weight: 880;
+  letter-spacing: -0.04em;
+}
+
+.consignados-control-shell .consignados-control-toolbar .list-toolbar-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.consignados-control-shell .consignados-days-filter {
+  width: 242px;
+  min-width: 242px;
+}
+
+.consignados-control-shell .consignados-days-filter .form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+  line-height: 1.2;
+  font-weight: 850 !important;
+  text-align: center;
+}
+
+.consignados-control-shell .consignados-days-filter .form-control {
+  min-height: 38px;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850 !important;
+  border-radius: 9px;
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: none;
+}
+
+.consignados-control-shell .consignados-control-table {
+  min-width: 980px;
+  table-layout: fixed;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(1),
+.consignados-control-shell .consignados-control-table td:nth-child(1) {
+  width: 20%;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(2),
+.consignados-control-shell .consignados-control-table td:nth-child(2) {
+  width: 29%;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(3),
+.consignados-control-shell .consignados-control-table td:nth-child(3) {
+  width: 20%;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(4),
+.consignados-control-shell .consignados-control-table td:nth-child(4) {
+  width: 130px;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(5),
+.consignados-control-shell .consignados-control-table td:nth-child(5) {
+  width: 130px;
+}
+
+.consignados-control-shell .consignados-control-table th:nth-child(6),
+.consignados-control-shell .consignados-control-table td:nth-child(6) {
+  width: 120px;
+}
+
+.consignados-control-shell .consignados-control-table td {
+  vertical-align: middle;
+}
+
+.consignados-control-shell .consignados-control-name {
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 880;
+  line-height: 1.18;
+}
+
+.consignados-control-shell .consignados-control-address-cell {
+  white-space: normal;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   Responsividade tablet
+   ========================================================================== */
 
 @media (max-width: 991.98px) {
   .consignados-form-shell {
-    width: min(760px, calc(100% - 1.25rem)) !important;
+    width: min(760px, calc(100% - 1.25rem));
   }
 
   .consignados-view-shell {
     width: min(820px, calc(100% - 1.25rem));
   }
 
-  .consignados-control-shell {
+  .consignados-control-shell,
+  .consignados-list-shell {
     width: min(900px, calc(100% - 1.25rem));
   }
 
   .consignados-form-shell .page-titlebar,
   .consignados-view-shell .page-titlebar,
-  .consignados-control-shell .page-titlebar {
+  .consignados-control-shell .page-titlebar,
+  .consignados-list-shell .page-titlebar {
     gap: 0.9rem;
   }
 
   .consignados-form-shell .page-titlebar-side,
   .consignados-view-shell .page-titlebar-side,
-  .consignados-control-shell .page-titlebar-side {
+  .consignados-control-shell .page-titlebar-side,
+  .consignados-list-shell .page-titlebar-side {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .consignados-summary-grid {
+  .consignados-form-shell .modern-form.consignados-form .form-summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .consignados-view-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  .consignados-view-shell .consignados-view-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .consignados-view-card-wide {
-    grid-column: 1 / -1 !important;
+  .consignados-view-shell .consignados-view-grid .view-card.is-wide,
+  .consignados-view-shell .consignados-view-grid .consignados-view-card-wide {
+    grid-column: 1 / -1;
+  }
+
+  .consignados-control-shell .consignados-control-toolbar {
+    align-items: start;
+  }
+
+  .consignados-control-shell .consignados-days-filter {
+    width: 220px;
+    min-width: 220px;
   }
 }
 
-/* Mobile - formulários, visualização, listagem e controle geral */
+/* ==========================================================================
+   Responsividade mobile
+   ========================================================================== */
 
 @media (max-width: 767.98px) {
   .consignados-form-shell,
+  .consignados-list-shell,
   .consignados-view-shell,
   .consignados-control-shell,
-  .consignados-list-shell,
   .consignados-shell {
     width: calc(100% - 1.25rem);
   }
 
-  .consignados-form-stage,
-  .consignados-view-stage,
-  .consignados-control-stage,
-  .consignados-list-stage {
+  .consignados-form-stage {
     margin-top: 0.72rem;
     padding-inline: 0.52rem !important;
   }
 
+  .consignados-view-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .consignados-list-stage,
+  .consignados-control-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
   .consignados-titlebar,
+  .consignados-form-titlebar,
+  .consignados-list-titlebar,
   .consignados-view-titlebar,
-  .consignados-control-titlebar,
-  .consignados-list-titlebar {
+  .consignados-control-titlebar {
     gap: 0.72rem;
     padding: 0.92rem !important;
     border-radius: 22px;
   }
 
   .consignados-titlebar .page-titlebar-content,
+  .consignados-form-titlebar .page-titlebar-content,
+  .consignados-list-titlebar .page-titlebar-content,
   .consignados-view-titlebar .page-titlebar-content,
-  .consignados-control-titlebar .page-titlebar-content,
-  .consignados-list-titlebar .page-titlebar-content {
+  .consignados-control-titlebar .page-titlebar-content {
     display: grid;
     gap: 0.42rem;
   }
 
   .consignados-titlebar .page-titlebar-content h1,
+  .consignados-form-titlebar .page-titlebar-content h1,
+  .consignados-list-titlebar .page-titlebar-content h1,
   .consignados-view-titlebar .page-titlebar-content h1,
-  .consignados-control-titlebar .page-titlebar-content h1,
-  .consignados-list-titlebar .page-titlebar-content h1 {
+  .consignados-control-titlebar .page-titlebar-content h1 {
     max-width: 13ch;
     margin: 0;
     font-size: 1.48rem !important;
@@ -15481,9 +16413,10 @@ html.vm-loading-lock body {
   }
 
   .consignados-titlebar .page-titlebar-content p,
+  .consignados-form-titlebar .page-titlebar-content p,
+  .consignados-list-titlebar .page-titlebar-content p,
   .consignados-view-titlebar .page-titlebar-content p,
-  .consignados-control-titlebar .page-titlebar-content p,
-  .consignados-list-titlebar .page-titlebar-content p {
+  .consignados-control-titlebar .page-titlebar-content p {
     max-width: 30ch;
     margin: 0;
     font-size: 0.82rem !important;
@@ -15491,20 +16424,22 @@ html.vm-loading-lock body {
   }
 
   .consignados-titlebar .form-kicker,
-  .consignados-view-titlebar .form-kicker,
-  .consignados-control-titlebar .list-kicker,
+  .consignados-titlebar .list-kicker,
+  .consignados-form-titlebar .form-kicker,
   .consignados-list-titlebar .list-kicker,
-  .consignados-kicker {
+  .consignados-view-titlebar .form-kicker,
+  .consignados-control-titlebar .list-kicker {
     width: fit-content;
     min-height: 28px;
     padding: 0.3rem 0.62rem;
-    font-size: 0.68rem !important;
+    font-size: 0.68rem;
   }
 
   .consignados-titlebar .page-titlebar-side,
+  .consignados-form-titlebar .page-titlebar-side,
+  .consignados-list-titlebar .page-titlebar-side,
   .consignados-view-titlebar .page-titlebar-side,
-  .consignados-control-titlebar .page-titlebar-side,
-  .consignados-list-titlebar .page-titlebar-side {
+  .consignados-control-titlebar .page-titlebar-side {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.52rem;
@@ -15513,10 +16448,10 @@ html.vm-loading-lock body {
   }
 
   .consignados-titlebar .page-titlebar-stat,
-  .consignados-view-titlebar .page-titlebar-stat,
+  .consignados-form-titlebar .page-titlebar-stat,
+  .consignados-list-titlebar .list-stat,
   .consignados-view-titlebar .list-stat,
   .consignados-control-titlebar .list-stat,
-  .consignados-list-titlebar .list-stat,
   .consignados-hero-stat {
     min-height: 58px;
     padding: 0.58rem 0.62rem;
@@ -15524,52 +16459,27 @@ html.vm-loading-lock body {
   }
 
   .consignados-titlebar .page-titlebar-stat strong,
-  .consignados-view-titlebar .page-titlebar-stat strong,
+  .consignados-form-titlebar .page-titlebar-stat strong,
+  .consignados-list-titlebar .list-stat strong,
   .consignados-view-titlebar .list-stat strong,
   .consignados-control-titlebar .list-stat strong,
-  .consignados-list-titlebar .list-stat strong,
   .consignados-hero-stat strong {
     font-size: 0.58rem;
     line-height: 1.12;
   }
 
   .consignados-titlebar .page-titlebar-stat span,
-  .consignados-view-titlebar .page-titlebar-stat span,
+  .consignados-form-titlebar .page-titlebar-stat span,
+  .consignados-list-titlebar .list-stat span,
   .consignados-view-titlebar .list-stat span,
   .consignados-control-titlebar .list-stat span,
-  .consignados-list-titlebar .list-stat span,
   .consignados-hero-stat span {
     font-size: 0.72rem;
     line-height: 1.16;
   }
 
-  .consignados-form {
-    gap: 0.72rem;
-  }
-
-  .consignados-form-card {
-    padding: 0.64rem;
-    border-radius: 18px;
-  }
-
-  .consignados-form-card-header {
-    margin-bottom: 0.78rem;
-  }
-
-  .consignados-form-card-header h2 {
-    font-size: 1.02rem !important;
-    line-height: 1.14 !important;
-    letter-spacing: -0.03em;
-  }
-
-  .consignados-form-card-header p {
-    max-width: 30ch;
-    font-size: 0.76rem !important;
-    line-height: 1.42 !important;
-  }
-
   .consignados-section-tag,
-  .consignados-form .form-section-tag,
+  .consignados-form-shell .form-section-tag,
   .consignados-view-shell .form-section-tag,
   .consignados-control-shell .form-section-tag {
     min-height: 20px !important;
@@ -15578,35 +16488,65 @@ html.vm-loading-lock body {
     font-size: 0.58rem !important;
   }
 
-  .consignados-form .row {
+  /* Mobile - formulários */
+
+  .consignados-form-shell .modern-form.consignados-form {
+    gap: 0.72rem;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .form-card {
+    padding: 0.64rem;
+    border-radius: 18px;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .form-card-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .form-card-header h2 {
+    font-size: 1.02rem !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.03em;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .form-card-header p {
+    max-width: 30ch;
+    font-size: 0.76rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .row {
     --bs-gutter-x: 0.5rem;
     --bs-gutter-y: 0.7rem;
   }
 
-  .consignados-form label {
+  .consignados-form-shell .modern-form.consignados-form label {
     margin-bottom: 0.3rem;
     font-size: 0.76rem;
   }
 
-  .consignados-form .form-control,
-  .consignados-form .form-select,
-  .consignados-form .input-group-text {
+  .consignados-form-shell .modern-form.consignados-form .form-control,
+  .consignados-form-shell .modern-form.consignados-form .form-select,
+  .consignados-form-shell .modern-form.consignados-form .input-group-text {
     font-size: 0.82rem;
   }
 
-  .consignados-form .form-control,
-  .consignados-form .form-select {
+  .consignados-form-shell .modern-form.consignados-form .form-control,
+  .consignados-form-shell .modern-form.consignados-form .form-select {
     min-height: 40px;
     padding-inline: 0.72rem;
     border-radius: 12px;
   }
 
-  .consignados-form textarea.form-control {
+  .consignados-form-shell .modern-form.consignados-form textarea.form-control {
     min-height: 112px;
     padding: 0.72rem;
   }
 
-  .consignados-form .input-group > .input-group-text {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .input-group
+    > .input-group-text {
     flex: 0 0 42px;
     width: 42px;
     min-width: 42px;
@@ -15615,286 +16555,385 @@ html.vm-loading-lock body {
     border-bottom-left-radius: 12px;
   }
 
-  .consignados-form .input-group > .form-control {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .input-group
+    > .form-control {
     min-height: 40px;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
   }
 
-  .consignados-create-form .consignados-visit-card > .row,
-  .consignados-edit-form .consignados-visit-card > .row {
+  .consignados-form-shell .modern-form.consignados-form .consignados-visit-card > .row {
     display: flex;
     flex-wrap: wrap;
     --bs-gutter-x: 0.5rem;
     --bs-gutter-y: 0.7rem;
   }
 
-  .consignados-create-form .consignados-visit-card > .row > [class*='col-'],
-  .consignados-edit-form .consignados-visit-card > .row > [class*='col-'] {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-visit-card
+    > .row
+    > [class*='col-'] {
     flex: 0 0 100% !important;
     width: 100% !important;
     max-width: 100% !important;
   }
 
-  .consignados-create-form .consignados-movement-card > .row,
-  .consignados-edit-form .consignados-movement-card > .row {
+  .consignados-form-shell .modern-form.consignados-form .consignados-movement-card > .row {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .consignados-create-form .consignados-movement-card > .row > [class*='col-'],
-  .consignados-edit-form .consignados-movement-card > .row > [class*='col-'] {
-    display: grid;
-    grid-template-rows: 2.35em auto;
-    align-content: start;
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-movement-card
+    > .row
+    > [class*='col-'] {
     flex: 0 0 50% !important;
     width: 50% !important;
     max-width: 50% !important;
   }
 
-  .consignados-create-form .consignados-movement-card label,
-  .consignados-edit-form .consignados-movement-card label {
+  .consignados-form-shell .modern-form.consignados-form .consignados-movement-card label {
+    min-height: 2.15em;
     display: flex;
     align-items: flex-end;
-    min-height: 2.35em;
-    margin-bottom: 0.3rem;
     line-height: 1.12;
   }
 
-  .consignados-create-form .consignados-movement-card .form-control,
-  .consignados-create-form .consignados-movement-card .form-select,
-  .consignados-create-form .consignados-movement-card .input-group,
-  .consignados-edit-form .consignados-movement-card .form-control,
-  .consignados-edit-form .consignados-movement-card .form-select,
-  .consignados-edit-form .consignados-movement-card .input-group {
-    align-self: start;
-  }
-
-  .consignados-create-form .consignados-movement-card .form-control,
-  .consignados-create-form .consignados-movement-card .form-select,
-  .consignados-create-form .consignados-movement-card .input-group-text,
-  .consignados-edit-form .consignados-movement-card .form-control,
-  .consignados-edit-form .consignados-movement-card .form-select,
-  .consignados-edit-form .consignados-movement-card .input-group-text {
-    font-size: 0.78rem;
-  }
-
-  .consignados-summary-grid {
+  .consignados-form-shell .modern-form.consignados-form .form-summary-grid {
     display: none !important;
   }
 
-  .consignados-actions-bar {
+  .consignados-form-shell .modern-form.consignados-form .consignados-actions-bar {
     padding: 0.82rem !important;
     border-radius: 18px !important;
   }
 
-  .consignados-actions-copy strong {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-actions-bar
+    .form-actions-copy
+    strong {
     font-size: 0.9rem;
   }
 
-  .consignados-actions-copy span {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-actions-bar
+    .form-actions-copy
+    span {
     font-size: 0.78rem;
     line-height: 1.42;
   }
 
-  .consignados-actions-buttons {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-actions-bar
+    .form-actions-buttons {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
-  .consignados-actions-bar .btn-modern,
-  .consignados-actions-bar .btn-modern-secondary {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-actions-bar
+    .btn-modern,
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-actions-bar
+    .btn-modern-secondary {
     min-height: 48px;
     padding: 0.78rem 1rem;
     border-radius: 13px;
     font-size: 0.84rem;
   }
 
-  /* Visualização mobile */
+  /* Mobile - listagem */
 
-  .consignados-view-panel {
+  .consignados-list-shell .consignados-list-panel {
     padding: 0.64rem !important;
     border-radius: 18px;
   }
 
-  .consignados-view-panel-header {
-    margin-bottom: 0.78rem;
-  }
-
-  .consignados-view-panel-header h2 {
-    font-size: 1.02rem !important;
-    line-height: 1.14 !important;
-  }
-
-  .consignados-view-panel-header p {
-    max-width: 30ch;
-    font-size: 0.76rem !important;
-    line-height: 1.42 !important;
-  }
-
-  .consignados-view-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.58rem !important;
-  }
-
-  .consignados-view-card {
-    min-height: 74px;
-    padding: 0.68rem;
-    border-radius: 14px;
-  }
-
-  .consignados-view-card strong {
-    font-size: 0.58rem !important;
-  }
-
-  .consignados-view-card span {
-    font-size: 0.82rem !important;
-    line-height: 1.2 !important;
-  }
-
-  .consignados-view-card-wide,
-  .consignados-view-card.is-wide {
-    grid-column: 1 / -1 !important;
-  }
-
-  .consignados-view-actions {
-    margin-top: 0.72rem;
+  .consignados-list-shell .consignados-list-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
     padding: 0.82rem;
     border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
   }
 
-  .consignados-view-actions-copy strong {
-    font-size: 0.9rem;
+  .consignados-list-shell .consignados-toolbar-copy {
+    display: grid;
+    gap: 0.24rem;
+    width: 100%;
+    justify-self: stretch;
   }
 
-  .consignados-view-actions-copy span {
-    font-size: 0.78rem;
-    line-height: 1.42;
+  .consignados-list-shell .consignados-toolbar-copy h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1rem;
+    line-height: 1.14;
+    font-weight: 850;
+    letter-spacing: -0.025em;
   }
 
-  .consignados-view-actions-buttons {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .consignados-list-shell .consignados-toolbar-copy p {
+    max-width: 31ch;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.74rem;
+    line-height: 1.38;
   }
 
-  .consignados-view-actions .btn-modern,
-  .consignados-view-actions .btn-modern-secondary {
-    min-height: 48px;
-    padding: 0.78rem 1rem;
-    border-radius: 13px;
-    font-size: 0.84rem;
+  .consignados-list-shell .consignados-list-action-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
   }
 
-  /* Listagem mobile */
-
-  .consignados-table-wrap {
-    border: 0;
-    border-radius: 0;
-    background: transparent;
+  .consignados-list-shell .consignados-list-action-wrap .consignados-list-action,
+  .consignados-list-shell .consignados-list-toolbar > .list-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    width: 220px !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 auto !important;
+    padding-inline: 1rem !important;
+    border-radius: 13px !important;
+    font-size: 0.82rem !important;
+    font-weight: 850 !important;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18) !important;
   }
 
-  .consignados-table-scroll {
+  .consignados-list-shell .modern-table-wrap,
+  .consignados-list-shell .modern-table-scroll,
+  .consignados-list-shell .consignados-list-table-wrap,
+  .consignados-list-shell .consignados-list-table-scroll {
     overflow: visible;
   }
 
-  .consignados-table,
-  .consignados-control-table {
+  .consignados-list-shell .consignados-list-table {
     display: block;
-    min-width: 0;
     width: 100%;
+    min-width: 0;
+    table-layout: auto;
   }
 
-  .consignados-table thead,
-  .consignados-control-table thead {
+  .consignados-list-shell .consignados-list-table thead {
     display: none;
   }
 
-  .consignados-table tbody,
-  .consignados-control-table tbody {
+  .consignados-list-shell .consignados-list-table tbody {
     display: grid;
     gap: 0.72rem;
   }
 
-  .consignados-table tr,
-  .consignados-control-table tr {
+  .consignados-list-shell .consignados-list-table tr {
     display: grid;
-    gap: 0.5rem 0.68rem;
-    width: 100%;
-    min-width: 0;
-    padding: 0.9rem;
+    gap: 0.58rem;
+    padding: 0.82rem;
     border-radius: 18px;
     background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
     border: 1px solid rgba(203, 213, 225, 0.9);
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
   }
 
-  .consignados-control-table tr.consignados-row-alert,
-  .consignados-table tr.consignados-row-alert {
-    background: linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
-    border-color: rgba(248, 113, 113, 0.38);
-    box-shadow: 0 14px 34px rgba(127, 29, 29, 0.08);
-  }
-
-  .consignados-table td,
-  .consignados-control-table td {
+  .consignados-list-shell .consignados-list-table td {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.72rem;
     width: 100% !important;
     padding: 0 !important;
     border: 0 !important;
-    background: transparent !important;
     color: #0f172a;
     font-size: 0.84rem;
-    line-height: 1.25;
+    line-height: 1.28;
     text-align: left;
   }
 
-  .consignados-table td::before,
-  .consignados-control-table td::before {
+  .consignados-list-shell .consignados-list-table td::before {
     content: attr(data-label);
     color: #64748b;
-    font-size: 0.62rem;
+    font-size: 0.68rem;
     font-weight: 900;
-    line-height: 1.12;
+    line-height: 1.15;
     letter-spacing: 0.055em;
     text-transform: uppercase;
   }
 
-  .consignados-table-actions,
-  .consignados-table .table-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    width: 100%;
+  .consignados-list-shell .consignados-list-table td[data-label='Ponto']::before {
+    content: 'Ponto';
   }
 
-  .consignados-table .table-btn {
-    min-height: 44px;
+  .consignados-list-shell .consignados-list-table td[data-label='Data'] {
+    color: #0f172a;
+    font-size: 0.94rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .consignados-list-shell .consignados-list-table .table-title-cell {
+    font-size: 0.9rem;
+    line-height: 1.18;
+  }
+
+  .consignados-list-shell .consignados-list-table .table-badge {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.76rem;
+  }
+
+  .consignados-list-shell .consignados-list-table .color-select {
+    width: 100%;
+    min-height: 40px;
+    font-size: 0.8rem;
     border-radius: 12px;
-    font-size: 0.84rem;
   }
 
-  .consignados-table .table-btn-view {
-    grid-column: 1 / -1;
+  .consignados-list-shell .consignados-list-table td[data-label='Ações'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.52rem;
+    padding-top: 0.2rem !important;
   }
 
-  .consignados-list-action-wrap,
-  .consignados-list-action {
+  .consignados-list-shell .consignados-list-table td[data-label='Ações']::before {
+    display: block;
+  }
+
+   .consignados-list-shell .consignados-list-table .table-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
     width: 100%;
   }
 
-  .consignados-list-action {
-    justify-content: center;
-    min-height: 48px;
-    border-radius: 13px;
+  .consignados-list-shell .consignados-list-table .table-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+    padding: 0.68rem 0.5rem !important;
+    border-radius: 12px !important;
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
   }
 
-  /* Controle geral mobile */
+  .consignados-list-shell .consignados-list-table .table-btn-view {
+    grid-column: auto !important;
+  }
 
-  .consignados-control-panel {
+  .consignados-list-shell .consignados-list-table .table-empty {
+    display: block;
+    padding: 1rem !important;
+    text-align: center;
+  }
+
+  .consignados-list-shell .consignados-list-table .table-empty::before {
+    display: none;
+  }
+
+  /* Mobile - visualização */
+
+  .consignados-view-shell .consignados-view-panel {
     padding: 0.64rem !important;
     border-radius: 18px;
   }
 
-  .consignados-control-toolbar {
+  .consignados-view-shell .consignados-view-panel-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .consignados-view-shell .consignados-view-panel-header h2 {
+    font-size: 1.02rem;
+    line-height: 1.14;
+  }
+
+  .consignados-view-shell .consignados-view-panel-header p {
+    max-width: 30ch;
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+
+  .consignados-view-shell .consignados-view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.58rem;
+  }
+
+  .consignados-view-shell .consignados-view-grid .view-card {
+    min-height: 74px;
+    padding: 0.68rem;
+    border-radius: 14px;
+  }
+
+  .consignados-view-shell .consignados-view-grid .view-card strong {
+    font-size: 0.58rem;
+  }
+
+  .consignados-view-shell .consignados-view-grid .view-card span {
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+  .consignados-view-shell .consignados-view-grid .view-card.is-wide,
+  .consignados-view-shell .consignados-view-grid .consignados-view-card-wide {
+    grid-column: 1 / -1;
+  }
+
+  .consignados-view-shell .consignados-view-actions {
+    margin-top: 0.72rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+  }
+
+  .consignados-view-shell .consignados-view-actions .view-actions-copy strong {
+    font-size: 0.9rem;
+  }
+
+  .consignados-view-shell .consignados-view-actions .view-actions-copy span {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .consignados-view-shell .consignados-view-actions .view-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .consignados-view-shell .consignados-view-actions .btn-modern,
+  .consignados-view-shell .consignados-view-actions .btn-modern-secondary {
+    min-height: 48px;
+    padding: 0.78rem 1rem;
+    border-radius: 13px;
+    font-size: 0.84rem;
+  }
+
+  /* Mobile - controle geral */
+
+  .consignados-control-shell .consignados-control-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .consignados-control-shell .consignados-control-toolbar {
     display: grid !important;
     grid-template-columns: 1fr !important;
     justify-items: stretch !important;
@@ -15907,13 +16946,13 @@ html.vm-loading-lock body {
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
   }
 
-  .consignados-control-toolbar .list-toolbar-copy {
+  .consignados-control-shell .consignados-control-toolbar .list-toolbar-copy {
     display: grid;
     gap: 0.28rem;
     width: 100%;
   }
 
-  .consignados-control-toolbar .list-toolbar-copy h2 {
+  .consignados-control-shell .consignados-control-toolbar .list-toolbar-copy h2 {
     max-width: 18ch;
     margin: 0;
     color: #0f172a;
@@ -15923,7 +16962,7 @@ html.vm-loading-lock body {
     letter-spacing: -0.045em;
   }
 
-  .consignados-control-toolbar .list-toolbar-copy p {
+  .consignados-control-shell .consignados-control-toolbar .list-toolbar-copy p {
     max-width: 30ch;
     margin: 0;
     color: #64748b;
@@ -15931,7 +16970,7 @@ html.vm-loading-lock body {
     line-height: 1.38;
   }
 
-  .consignados-days-filter {
+  .consignados-control-shell .consignados-days-filter {
     display: grid;
     gap: 0.38rem;
     width: min(220px, 100%);
@@ -15939,7 +16978,7 @@ html.vm-loading-lock body {
     justify-self: center;
   }
 
-  .consignados-days-filter label {
+  .consignados-control-shell .consignados-days-filter .form-label {
     margin: 0;
     color: #0f172a;
     font-size: 0.72rem;
@@ -15948,18 +16987,73 @@ html.vm-loading-lock body {
     text-align: center;
   }
 
-  .consignados-days-filter .form-control,
-  .consignados-days-filter input {
+  .consignados-control-shell .consignados-days-filter .form-control {
     min-height: 36px;
     font-size: 0.86rem;
     border-radius: 10px;
   }
 
-  .consignados-control-table tr {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .consignados-control-shell .consignados-control-table-wrap,
+  .consignados-control-shell .consignados-control-table-scroll {
+    overflow: visible;
   }
 
-  .consignados-control-table td[data-label='Estabelecimento'] {
+  .consignados-control-shell .consignados-control-table {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    table-layout: auto;
+  }
+
+  .consignados-control-shell .consignados-control-table thead {
+    display: none;
+  }
+
+  .consignados-control-shell .consignados-control-table tbody {
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .consignados-control-shell .consignados-control-table .consignados-control-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem 0.68rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  }
+
+  .consignados-control-shell .consignados-control-table .consignados-control-row-alert,
+  .consignados-control-shell .consignados-control-table .consignados-row-alert {
+    background: linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
+    border-color: rgba(248, 113, 113, 0.38);
+    box-shadow: 0 14px 34px rgba(127, 29, 29, 0.08);
+  }
+
+  .consignados-control-shell .consignados-control-table td {
+    width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .consignados-control-shell .consignados-control-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .consignados-control-shell .consignados-control-name-cell {
     grid-column: 1 / 2;
     order: 1;
     display: flex !important;
@@ -15969,28 +17063,22 @@ html.vm-loading-lock body {
     text-align: left;
   }
 
-  .consignados-control-table td[data-label='Estabelecimento']::before {
+  .consignados-control-shell .consignados-control-name-cell::before {
     display: none !important;
   }
 
-  .consignados-control-card-head {
-    display: contents !important;
-  }
-
-  .consignados-control-name {
+  .consignados-control-shell .consignados-control-name {
     display: block;
-    width: 100%;
     color: #0f172a;
     font-size: 0.92rem;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.015em;
-    text-align: left;
     word-break: normal;
     overflow-wrap: anywhere;
   }
 
-  .consignados-control-mobile-status {
+  .consignados-control-shell .consignados-control-status-cell {
     grid-column: 2 / 3;
     order: 1;
     display: flex !important;
@@ -16003,7 +17091,11 @@ html.vm-loading-lock body {
     text-align: right;
   }
 
-  .consignados-control-mobile-status .table-badge {
+  .consignados-control-shell .consignados-control-status-cell::before {
+    display: none !important;
+  }
+
+  .consignados-control-shell .consignados-control-status-cell .table-badge {
     width: fit-content;
     min-height: 28px;
     padding: 0.38rem 0.62rem;
@@ -16011,17 +17103,26 @@ html.vm-loading-lock body {
     white-space: nowrap;
   }
 
-  .consignados-control-table .situacao {
-    display: none !important;
+  .consignados-control-shell
+    .consignados-control-row-alert
+    .consignados-control-status-cell
+    .table-badge,
+  .consignados-control-shell
+    .consignados-row-alert
+    .consignados-control-status-cell
+    .table-badge {
+    color: #b91c1c;
+    background: #fee2e2;
+    border: 1px solid rgba(248, 113, 113, 0.28);
   }
 
-  .consignados-control-table td[data-label='Endereço'],
-  .consignados-control-table td[data-label='Bairro'],
-  .consignados-control-table td[data-label='Estoque deixado'],
-  .consignados-control-table td[data-label='Dias passados'] {
+  .consignados-control-shell .consignados-control-address-cell,
+  .consignados-control-shell .consignados-control-neighborhood-cell,
+  .consignados-control-shell .consignados-control-stock-cell,
+  .consignados-control-shell .consignados-control-days-cell {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-columns: 104px minmax(0, 1fr);
     align-items: center;
     gap: 0.7rem;
     min-height: 40px;
@@ -16035,14 +17136,34 @@ html.vm-loading-lock body {
     overflow-wrap: anywhere;
   }
 
-  .consignados-control-table tr.consignados-row-alert td[data-label='Endereço'],
-  .consignados-control-table tr.consignados-row-alert td[data-label='Bairro'],
-  .consignados-control-table tr.consignados-row-alert td[data-label='Estoque deixado'],
-  .consignados-control-table tr.consignados-row-alert td[data-label='Dias passados'] {
+  .consignados-control-shell
+    .consignados-control-row-alert
+    .consignados-control-address-cell,
+  .consignados-control-shell
+    .consignados-control-row-alert
+    .consignados-control-neighborhood-cell,
+  .consignados-control-shell
+    .consignados-control-row-alert
+    .consignados-control-stock-cell,
+  .consignados-control-shell
+    .consignados-control-row-alert
+    .consignados-control-days-cell,
+  .consignados-control-shell
+    .consignados-row-alert
+    .consignados-control-address-cell,
+  .consignados-control-shell
+    .consignados-row-alert
+    .consignados-control-neighborhood-cell,
+  .consignados-control-shell
+    .consignados-row-alert
+    .consignados-control-stock-cell,
+  .consignados-control-shell
+    .consignados-row-alert
+    .consignados-control-days-cell {
     border-top-color: rgba(254, 202, 202, 0.72) !important;
   }
 
-  .consignados-control-table td[data-label='Endereço'] {
+  .consignados-control-shell .consignados-control-address-cell {
     order: 2;
     align-items: start;
     color: #334155;
@@ -16050,226 +17171,241 @@ html.vm-loading-lock body {
     line-height: 1.34;
   }
 
-  .consignados-control-table td[data-label='Bairro'] {
+  .consignados-control-shell .consignados-control-neighborhood-cell {
     order: 3;
   }
 
-  .consignados-control-table td[data-label='Estoque deixado'] {
+  .consignados-control-shell .consignados-control-stock-cell {
     order: 4;
   }
 
-  .consignados-control-table td[data-label='Dias passados'] {
+  .consignados-control-shell .consignados-control-days-cell {
     order: 5;
   }
 
-  .consignados-control-table td[data-label='Endereço']::before,
-  .consignados-control-table td[data-label='Bairro']::before,
-  .consignados-control-table td[data-label='Estoque deixado']::before,
-  .consignados-control-table td[data-label='Dias passados']::before {
+  .consignados-control-shell .consignados-control-address-cell::before,
+  .consignados-control-shell .consignados-control-neighborhood-cell::before,
+  .consignados-control-shell .consignados-control-stock-cell::before,
+  .consignados-control-shell .consignados-control-days-cell::before {
     display: block !important;
     text-align: left;
   }
-
-  .consignados-control-table .dias-passados {
-    text-align: right;
-  }
-
-  .consignados-control-table .dias-passados small {
-    display: block;
-    margin-top: 0.18rem;
-    color: #64748b;
-    font-size: 0.68rem;
-    line-height: 1.15;
-  }
 }
 
-/* Mobile estreito */
+/* ==========================================================================
+   Mobile estreito
+   ========================================================================== */
 
 @media (max-width: 379.98px) {
   .consignados-form-shell,
+  .consignados-list-shell,
   .consignados-view-shell,
   .consignados-control-shell,
-  .consignados-list-shell,
   .consignados-shell {
     width: calc(100% - 1rem);
   }
 
-  .consignados-form-stage,
-  .consignados-view-stage,
-  .consignados-control-stage,
-  .consignados-list-stage {
+  .consignados-form-stage {
     padding-inline: 0.44rem !important;
   }
 
+  .consignados-view-stage {
+    padding-inline: 0 !important;
+  }
+
+  .consignados-list-stage,
+  .consignados-control-stage {
+    padding-inline: 0 !important;
+  }
+
   .consignados-titlebar,
+  .consignados-form-titlebar,
+  .consignados-list-titlebar,
   .consignados-view-titlebar,
-  .consignados-control-titlebar,
-  .consignados-list-titlebar {
+  .consignados-control-titlebar {
     padding: 0.86rem !important;
   }
 
   .consignados-titlebar .page-titlebar-content h1,
+  .consignados-form-titlebar .page-titlebar-content h1,
+  .consignados-list-titlebar .page-titlebar-content h1,
   .consignados-view-titlebar .page-titlebar-content h1,
-  .consignados-control-titlebar .page-titlebar-content h1,
-  .consignados-list-titlebar .page-titlebar-content h1 {
+  .consignados-control-titlebar .page-titlebar-content h1 {
     font-size: 1.38rem !important;
   }
 
   .consignados-titlebar .page-titlebar-content p,
+  .consignados-form-titlebar .page-titlebar-content p,
+  .consignados-list-titlebar .page-titlebar-content p,
   .consignados-view-titlebar .page-titlebar-content p,
-  .consignados-control-titlebar .page-titlebar-content p,
-  .consignados-list-titlebar .page-titlebar-content p {
+  .consignados-control-titlebar .page-titlebar-content p {
     font-size: 0.78rem !important;
   }
 
   .consignados-titlebar .page-titlebar-side,
+  .consignados-form-titlebar .page-titlebar-side,
+  .consignados-list-titlebar .page-titlebar-side,
   .consignados-view-titlebar .page-titlebar-side,
-  .consignados-control-titlebar .page-titlebar-side,
-  .consignados-list-titlebar .page-titlebar-side {
+  .consignados-control-titlebar .page-titlebar-side {
     gap: 0.44rem;
   }
 
   .consignados-titlebar .page-titlebar-stat,
-  .consignados-view-titlebar .page-titlebar-stat,
+  .consignados-form-titlebar .page-titlebar-stat,
+  .consignados-list-titlebar .list-stat,
   .consignados-view-titlebar .list-stat,
   .consignados-control-titlebar .list-stat,
-  .consignados-list-titlebar .list-stat,
   .consignados-hero-stat {
     min-height: 54px;
     padding: 0.54rem;
   }
 
   .consignados-titlebar .page-titlebar-stat span,
-  .consignados-view-titlebar .page-titlebar-stat span,
+  .consignados-form-titlebar .page-titlebar-stat span,
+  .consignados-list-titlebar .list-stat span,
   .consignados-view-titlebar .list-stat span,
   .consignados-control-titlebar .list-stat span,
-  .consignados-list-titlebar .list-stat span,
   .consignados-hero-stat span {
     font-size: 0.68rem;
   }
 
-  .consignados-form-card {
-    padding: 0.56rem;
+  .consignados-form-shell .modern-form.consignados-form .consignados-visit-card > .row {
+    --bs-gutter-x: 0.42rem;
   }
 
-  .consignados-form-card-header h2 {
-    font-size: 0.98rem !important;
-  }
-
-  .consignados-form-card-header p {
-    font-size: 0.72rem !important;
-  }
-
-  .consignados-form label {
+  .consignados-form-shell .modern-form.consignados-form .consignados-visit-card label {
     font-size: 0.7rem;
   }
 
-  .consignados-form .form-control,
-  .consignados-form .form-select,
-  .consignados-form .input-group-text {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-visit-card
+    .form-control,
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-visit-card
+    .form-select {
+    font-size: 0.74rem;
+    padding-inline: 0.58rem;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .consignados-movement-card > .row {
+    --bs-gutter-x: 0.42rem;
+    --bs-gutter-y: 0.62rem;
+  }
+
+  .consignados-form-shell .modern-form.consignados-form .consignados-movement-card label {
+    font-size: 0.7rem;
+  }
+
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-movement-card
+    .form-control,
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-movement-card
+    .input-group-text {
     font-size: 0.74rem;
   }
 
-  .consignados-form .input-group > .input-group-text {
+  .consignados-form-shell
+    .modern-form.consignados-form
+    .consignados-movement-card
+    .input-group
+    > .input-group-text {
     flex-basis: 38px;
     width: 38px;
     min-width: 38px;
   }
 
-  .consignados-create-form .consignados-movement-card > .row,
-  .consignados-edit-form .consignados-movement-card > .row {
-    --bs-gutter-x: 0.42rem;
-    --bs-gutter-y: 0.62rem;
+  .consignados-list-shell .consignados-list-table td {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0.58rem;
+    font-size: 0.8rem;
   }
 
-  .consignados-create-form .consignados-movement-card > .row > [class*='col-'],
-  .consignados-edit-form .consignados-movement-card > .row > [class*='col-'] {
-    grid-template-rows: 2.5em auto;
+  .consignados-list-shell .consignados-list-table td::before {
+    font-size: 0.62rem;
   }
 
-  .consignados-create-form .consignados-movement-card label,
-  .consignados-edit-form .consignados-movement-card label {
-    min-height: 2.5em;
-    font-size: 0.7rem;
+  .consignados-list-shell .consignados-list-table .table-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.44rem !important;
   }
 
-  .consignados-create-form .consignados-movement-card .form-control,
-  .consignados-create-form .consignados-movement-card .form-select,
-  .consignados-edit-form .consignados-movement-card .form-control,
-  .consignados-edit-form .consignados-movement-card .form-select,
-  .consignados-edit-form .consignados-movement-card .input-group-text {
-    font-size: 0.74rem;
+  .consignados-list-shell .consignados-list-table .table-btn {
+    min-height: 40px !important;
+    padding-inline: 0.42rem !important;
+    font-size: 0.76rem !important;
+    white-space: nowrap !important;
   }
 
-  .consignados-view-panel {
-    padding: 0.56rem !important;
+  .consignados-list-shell .consignados-list-table .table-btn-view {
+    grid-column: auto !important;
   }
 
-  .consignados-view-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.42rem !important;
+  .consignados-view-shell .consignados-view-grid {
+    gap: 0.48rem;
   }
 
-  .consignados-view-card {
-    width: auto !important;
-    max-width: none !important;
-    min-height: 62px;
-    padding: 0.52rem 0.56rem;
+  .consignados-view-shell .consignados-view-grid .view-card {
+    min-height: 68px;
+    padding: 0.58rem;
   }
 
-  .consignados-view-card strong {
-    font-size: 0.5rem !important;
+  .consignados-view-shell .consignados-view-grid .view-card strong {
+    font-size: 0.54rem;
   }
 
-  .consignados-view-card span {
-    font-size: 0.72rem !important;
+  .consignados-view-shell .consignados-view-grid .view-card span {
+    font-size: 0.78rem;
   }
 
-  .consignados-view-card-wide {
-    grid-column: 1 / -1 !important;
-  }
-
-  .consignados-control-toolbar {
+  .consignados-control-shell .consignados-control-toolbar {
     padding: 0.74rem;
   }
 
-  .consignados-control-toolbar .list-toolbar-copy h2 {
+  .consignados-control-shell .consignados-control-toolbar .list-toolbar-copy h2 {
     font-size: 1.08rem;
   }
 
-  .consignados-control-toolbar .list-toolbar-copy p {
+  .consignados-control-shell .consignados-control-toolbar .list-toolbar-copy p {
     font-size: 0.72rem;
   }
 
-  .consignados-control-table tr {
+  .consignados-control-shell .consignados-control-table .consignados-control-row {
     gap: 0.46rem 0.6rem;
     padding: 0.78rem;
     border-radius: 16px;
   }
 
-  .consignados-control-name {
+  .consignados-control-shell .consignados-control-name {
     font-size: 0.86rem;
   }
 
-  .consignados-control-mobile-status .table-badge {
+  .consignados-control-shell .consignados-control-status-cell .table-badge {
     min-height: 26px;
     padding: 0.34rem 0.5rem;
     font-size: 0.66rem;
   }
 
-  .consignados-control-table td[data-label='Endereço'],
-  .consignados-control-table td[data-label='Bairro'],
-  .consignados-control-table td[data-label='Estoque deixado'],
-  .consignados-control-table td[data-label='Dias passados'] {
-    grid-template-columns: 100px minmax(0, 1fr);
+  .consignados-control-shell .consignados-control-address-cell,
+  .consignados-control-shell .consignados-control-neighborhood-cell,
+  .consignados-control-shell .consignados-control-stock-cell,
+  .consignados-control-shell .consignados-control-days-cell {
+    grid-template-columns: 92px minmax(0, 1fr);
     gap: 0.58rem;
     min-height: 38px;
     padding: 0.54rem 0.64rem 0 0.12rem !important;
     font-size: 0.78rem;
   }
 
-  .consignados-control-table td::before {
+  .consignados-control-shell .consignados-control-table td::before {
     font-size: 0.56rem;
+  }
+
+  .consignados-control-shell .consignados-control-address-cell {
+    font-size: 0.76rem;
   }
 }

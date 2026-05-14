@@ -19,7 +19,7 @@
                 <h1>Controle geral dos consignados</h1>
 
                 <p>
-                    Acompanhe os pontos que precisam de visita e veja rapidamente o estoque deixado em cada estabelecimento.
+                    Acompanhe os pontos que precisam de visita e veja rapidamente a quantidade deixada em cada estabelecimento.
                 </p>
             </div>
 
@@ -38,7 +38,7 @@
 
         <main class="list-stage consignados-control-stage">
             <section class="list-panel consignados-panel consignados-control-panel">
-                <div class="list-toolbar consignados-toolbar consignados-control-toolbar">
+                <div class="list-toolbar roteiro-toolbar consignados-toolbar consignados-control-toolbar">
                     <div class="list-toolbar-copy consignados-toolbar-copy">
                         <span class="form-section-tag consignados-section-tag">Visitas</span>
 
@@ -50,11 +50,11 @@
                     </div>
 
                     <div class="dias-sangria-top consignados-days-filter">
-                        <label for="diasSangria" class="form-label">Dias para fazer a sangria</label>
+                        <label for="diasSangria" class="form-label fw-bold">Dias para fazer a sangria</label>
 
                         <input
                             type="number"
-                            class="form-control text-center"
+                            class="form-control text-center fw-bold"
                             id="diasSangria"
                             name="diasSangria"
                             min="1"
@@ -71,7 +71,7 @@
                                     <th>Estabelecimento</th>
                                     <th>Endereço</th>
                                     <th>Bairro</th>
-                                    <th>Estoque deixado</th>
+                                    <th>Qtde. deixado</th>
                                     <th>Dias passados</th>
                                     <th>Situação</th>
                                 </tr>
@@ -80,45 +80,65 @@
                             <tbody id="tabelaEstabelecimentos">
                                 <% if (estabelecimentos.length > 0) { %>
                                     <% estabelecimentos.forEach(function(estabelecimento) {
-                                        const dataBase = estabelecimento.data_sangria ? new Date(estabelecimento.data_sangria) : null;
-                                        const dataValida = dataBase && !Number.isNaN(dataBase.getTime());
-                                        const hoje = new Date();
-                                        const diferencaDias = dataValida ? Math.floor((hoje - dataBase) / (1000 * 60 * 60 * 24)) : 0;
-                                        const dataFormatada = dataValida ? dataBase.toLocaleDateString('pt-BR') : 'Sem visita registrada';
-                                        const endereco = estabelecimento.endereco || 'Endereço não informado';
-                                        const bairro = estabelecimento.bairro || 'Bairro não informado';
+                                        const dataBaseOriginal = estabelecimento.data_sangria
+                                            ? new Date(estabelecimento.data_sangria)
+                                            : null;
+
+                                        const dataUltimaVisita = dataBaseOriginal && !Number.isNaN(dataBaseOriginal.getTime())
+                                            ? new Date(
+                                                dataBaseOriginal.getFullYear(),
+                                                dataBaseOriginal.getMonth(),
+                                                dataBaseOriginal.getDate()
+                                            )
+                                            : null;
+
+                                        const hojeOriginal = new Date();
+
+                                        const hoje = new Date(
+                                            hojeOriginal.getFullYear(),
+                                            hojeOriginal.getMonth(),
+                                            hojeOriginal.getDate()
+                                        );
+
+                                        const dataValida = Boolean(dataUltimaVisita);
+
+                                        const diferencaDias = dataValida
+                                            ? Math.max(0, Math.floor((hoje - dataUltimaVisita) / (1000 * 60 * 60 * 24)))
+                                            : '';
+
+                                        const endereco = estabelecimento.endereco || '-';
+                                        const bairro = estabelecimento.bairro || '-';
                                         const qtdeDeixada = Number(estabelecimento.qtde_deixada || 0);
                                     %>
 
-                                    <tr data-diferenca-dias="<%= diferencaDias %>">
-                                        <td data-label="Estabelecimento">
-                                            <div class="consignados-card-head consignados-control-card-head">
-                                                <span class="table-title-cell consignados-point-name consignados-control-name">
-                                                    <%= estabelecimento.estabelecimento %>
-                                                </span>
-
-                                                <span class="consignados-mobile-status consignados-control-mobile-status situacao-mobile"></span>
-                                            </div>
+                                    <tr
+                                        class="consignados-control-row"
+                                        data-diferenca-dias="<%= diferencaDias %>"
+                                        data-sem-visita="<%= dataValida ? 'false' : 'true' %>"
+                                    >
+                                        <td class="consignados-control-name-cell" data-label="Estabelecimento">
+                                            <span class="table-title-cell consignados-point-name consignados-control-name">
+                                                <%= estabelecimento.estabelecimento %>
+                                            </span>
                                         </td>
 
-                                        <td data-label="Endereço">
+                                        <td class="table-cell-wrap consignados-control-address-cell" data-label="Endereço">
                                             <%= endereco %>
                                         </td>
 
-                                        <td data-label="Bairro">
+                                        <td class="consignados-control-neighborhood-cell" data-label="Bairro">
                                             <%= bairro %>
                                         </td>
 
-                                        <td data-label="Estoque deixado">
+                                        <td class="consignados-control-stock-cell" data-label="Qtde. deixado">
                                             <%= qtdeDeixada %> unidades
                                         </td>
 
-                                        <td data-label="Dias passados" class="dias-passados">
-                                            <span><%= dataValida ? diferencaDias : 'Sem histórico' %></span>
-                                            <small><%= dataFormatada %></small>
+                                        <td class="dias-passados consignados-control-days-cell" data-label="Dias passados">
+                                            <%= dataValida ? diferencaDias : 'Sem visita' %>
                                         </td>
 
-                                        <td data-label="Situação" class="situacao"></td>
+                                        <td class="situacao consignados-control-status-cell" data-label="Situação"></td>
                                     </tr>
 
                                     <% }); %>
@@ -168,23 +188,22 @@
         const input = document.getElementById('diasSangria');
         const diasSalvos = localStorage.getItem('diasSangriaConsignados');
 
-        input.value = diasSalvos !== null ? diasSalvos : '7';
-
-        atualizarSituacao();
-    }
-
-    function criarBadgeSituacao(diferencaDias, diasSangria) {
-        if (diferencaDias >= diasSangria) {
-            return '<span class="table-badge table-badge-danger consignados-status-badge">Sangria</span>';
+        if (diasSalvos === null || diasSalvos === '' || Number(diasSalvos) <= 0 || Number.isNaN(Number(diasSalvos))) {
+            input.value = '7';
+            localStorage.setItem('diasSangriaConsignados', '7');
+        } else {
+            input.value = diasSalvos;
         }
 
-        return '<span class="table-badge table-badge-green consignados-status-badge">Aguardar</span>';
+        atualizarSituacao();
     }
 
     function atualizarSituacao() {
         const diasSangria = obterDiasSangria();
 
         document.querySelectorAll('#tabelaEstabelecimentos tr').forEach(linha => {
+            const semVisita = linha.getAttribute('data-sem-visita') === 'true';
+
             let diferencaDias = Number(linha.getAttribute('data-diferenca-dias'));
 
             if (Number.isNaN(diferencaDias)) {
@@ -192,23 +211,22 @@
             }
 
             const situacaoCelula = linha.querySelector('.situacao');
-            const situacaoMobile = linha.querySelector('.situacao-mobile');
-            const badge = criarBadgeSituacao(diferencaDias, diasSangria);
 
-            if (situacaoCelula) {
-                situacaoCelula.innerHTML = badge;
-            }
+            linha.classList.remove('table-row-exit-highlight', 'consignados-control-row-alert', 'consignados-row-alert');
 
-            if (situacaoMobile) {
-                situacaoMobile.innerHTML = badge;
-            }
-
-            if (diferencaDias >= diasSangria) {
-                linha.classList.add('table-row-exit-highlight', 'consignados-row-alert');
+            if (semVisita) {
+                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger consignados-status-badge">Sem visita</span>';
+                linha.classList.add('table-row-exit-highlight', 'consignados-control-row-alert', 'consignados-row-alert');
                 return;
             }
 
-            linha.classList.remove('table-row-exit-highlight', 'consignados-row-alert');
+            if (diferencaDias >= diasSangria) {
+                situacaoCelula.innerHTML = '<span class="table-badge table-badge-danger consignados-status-badge">Sangria</span>';
+                linha.classList.add('table-row-exit-highlight', 'consignados-control-row-alert', 'consignados-row-alert');
+                return;
+            }
+
+            situacaoCelula.innerHTML = '<span class="table-badge table-badge-green consignados-status-badge">Aguardar</span>';
         });
     }
 
