@@ -52,70 +52,85 @@
                         </div>
                     </div>
 
-                    <div class="view-grid pelucias-detail-grid">
-                        <div class="view-card pelucias-detail-card">
+                    <div class="view-grid pelucias-view-grid">
+                        <div class="view-card">
                             <strong>Data da sangria</strong>
                             <span><%= new Date(sangria.data_sangria).toLocaleDateString('pt-BR') %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Tipo de pagamento</strong>
                             <span><%= sangria.tipo_pagamento === 'pix' ? 'PIX' : 'Espécie' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
+                            <strong>PIX confirmado</strong>
+                            <span>
+                                <% if (sangria.tipo_pagamento !== 'pix') { %>
+                                    Não se aplica
+                                <% } else if (sangria.pix_confirmado === true) { %>
+                                    Sim
+                                <% } else if (sangria.pix_confirmado === false) { %>
+                                    Não
+                                <% } else { %>
+                                    Pendente
+                                <% } %>
+                            </span>
+                        </div>
+
+                        <div class="view-card">
                             <strong>Valor apurado</strong>
                             <span><%= Number(sangria.valor_apurado).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Valor líquido</strong>
                             <span><%= Number(sangria.valor_liquido).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Comissão</strong>
                             <span><%= Number(sangria.comissao).toFixed(2).replace('.', ',') %>%</span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
-                            <strong>Valor do comerciante</strong>
+                        <div class="view-card">
+                            <strong>Valor comerc.</strong>
                             <span><%= Number(sangria.valor_comerciante).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Leitura atual</strong>
                             <span><%= sangria.leitura_atual ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Última leitura</strong>
                             <span><%= sangria.ultima_leitura ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Abastecido</strong>
                             <span><%= sangria.abastecido ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Quantidade vendida</strong>
                             <span><%= sangria.qtde_vendido ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
+                        <div class="view-card">
                             <strong>Estoque</strong>
                             <span><%= sangria.estoque ?? 'Não informado' %></span>
                         </div>
 
-                        <div class="view-card pelucias-detail-card">
-                            <strong>Última edição</strong>
-                            <span><%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
-                        </div>
-
-                        <div class="view-card pelucias-detail-card pelucias-detail-card-wide">
+                        <div class="view-card is-wide">
                             <strong>Observações</strong>
                             <span><%= sangria.observacoes || 'Sem observações registradas.' %></span>
+
+                            <small class="view-card-meta">
+                                Última edição:
+                                <%= sangria.data_atualizacao ? new Date(sangria.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %>
+                            </small>
                         </div>
                     </div>
 
