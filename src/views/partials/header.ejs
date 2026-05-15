@@ -16,28 +16,85 @@
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto app-primary-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-header fs-6" href="/painel">Painel</a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
                         data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                        id="navbarDropdownCadastros" aria-expanded="false">
-                        Estabelecimentos
+                        id="navbarDropdownPontos" aria-expanded="false">
+                        Pontos
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownCadastros">
-                        <li class="menu-group-label">Base de pontos</li>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownPontos">
+                        <li class="menu-group-label">Base operacional</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/estabelecimentos">
-                                <span class="menu-link-title">Estabelecimentos cadastrados</span>
-                                <small class="menu-link-text">Veja a lista completa dos pontos ativos.</small>
+                                <span class="menu-link-title">Pontos cadastrados</span>
+                                <small class="menu-link-text">Consulte estabelecimentos, contatos e produtos.</small>
                             </a>
                         </li>
                         <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/estabelecimentos/add">
-                                <span class="menu-link-title">Cadastrar estabelecimento</span>
-                                <small class="menu-link-text">Abra o formulário para incluir um novo ponto.</small>
+                                <span class="menu-link-title">Novo ponto</span>
+                                <small class="menu-link-text">Inclua um estabelecimento na base.</small>
                             </a>
                         </li>
                         <% } %>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownRegistrar" aria-expanded="false">
+                        Registrar
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownRegistrar">
+                        <li class="menu-group-label">Rotina de campo</li>
+                        <% if (navProducts.bolinhas) { %>
+                            <% if (!isReadOnly) { %>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/bolinhas/sangrias/add">
+                                    <span class="menu-link-title">Novo registro de bolinhas</span>
+                                    <small class="menu-link-text">Lance a coleta ou venda do ponto.</small>
+                                </a>
+                            </li>
+                            <% } %>
+                            <li><a class="dropdown-item" href="/bolinhas/sangrias">Registros de bolinhas</a></li>
+                            <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle de bolinhas</a></li>
+                        <% } %>
+                        <% if (hasConsignados) { %>
+                            <% if (!isReadOnly) { %>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/consignados/sangrias/add">
+                                    <span class="menu-link-title">Novo registro de consignados</span>
+                                    <small class="menu-link-text">Registre vendas e ajuste o controle.</small>
+                                </a>
+                            </li>
+                            <% } %>
+                            <li><a class="dropdown-item" href="/consignados/sangrias">Registros de consignados</a></li>
+                            <li><a class="dropdown-item" href="/consignados/sangrias/controle-geral">Controle de consignados</a></li>
+                        <% } %>
+                        <% if (navProducts.pelucias) { %>
+                            <% if (!isReadOnly) { %>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/pelucias/sangrias/add">
+                                    <span class="menu-link-title">Novo registro de pelúcias</span>
+                                    <small class="menu-link-text">Registre a leitura e a receita do ponto.</small>
+                                </a>
+                            </li>
+                            <% } %>
+                            <li><a class="dropdown-item" href="/pelucias/sangrias">Registros de pelúcias</a></li>
+                            <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle de pelúcias</a></li>
+                        <% } %>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/rotas">
+                                <span class="menu-link-title">Rotas dos pontos</span>
+                                <small class="menu-link-text">Monte visitas por bairro e acompanhe a próxima parada.</small>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -48,18 +105,18 @@
                         Financeiro
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownFinanceiro">
-                        <li class="menu-group-label">Fluxo e lançamentos</li>
+                        <li class="menu-group-label">Caixa e receitas</li>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos">
-                                <span class="menu-link-title">Lançamentos cadastrados</span>
+                                <span class="menu-link-title">Lançamentos</span>
                                 <small class="menu-link-text">Consulte entradas, saídas e histórico financeiro.</small>
                             </a>
                         </li>
                         <% if (!isReadOnly) { %>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos/add">
-                                <span class="menu-link-title">Fazer lançamento</span>
-                                <small class="menu-link-text">Registre uma nova movimentação financeira.</small>
+                                <span class="menu-link-title">Novo lançamento</span>
+                                <small class="menu-link-text">Registre uma movimentação financeira.</small>
                             </a>
                         </li>
                         <% } %>
@@ -69,52 +126,49 @@
                                 <small class="menu-link-text">Acompanhe saldo e consolidado do período.</small>
                             </a>
                         </li>
-                        <% if (navProducts.hasAny) { %>
-                            <li class="dropdown-submenu">
-                                <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
-                                    id="navbarDropdownReceitas" aria-expanded="false">
-                                    <span class="menu-link-title">Receitas por produto</span>
-                                    <small class="menu-link-text">Abra os relatórios consolidados de receita.</small>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownReceitas">
-                                    <% if (navProducts.bolinhas) { %>
-                                        <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Bolinhas</a></li>
-                                    <% } %>
-                                    <% if (hasConsignados) { %>
-                                        <li><a class="dropdown-item" href="/consignados/receita-consignados">Consignados</a></li>
-                                    <% } %>
-                                    <% if (navProducts.pelucias) { %>
-                                        <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Pelúcias</a></li>
-                                    <% } %>
-                                </ul>
-                            </li>
-                        <% } %>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
-                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                        id="navbarDropdownPlanejamento" aria-expanded="false">
-                        Planejamento
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownPlanejamento">
-                        <li class="menu-group-label">Visão gerencial</li>
-                        <li>
-                            <a class="dropdown-item menu-link" href="/relatorios">
-                                <span class="menu-link-title">relatórios</span>
-                                <small class="menu-link-text">Indicadores, rankings e resumos do sistema.</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item menu-link" href="/rotas">
-                                <span class="menu-link-title">Rotas dos pontos</span>
-                                <small class="menu-link-text">Organize visitas por bairro com navegação assistida.</small>
-                            </a>
-                        </li>
                         <li>
                             <a class="dropdown-item menu-link" href="/lancamentos/vencimentos">
                                 <span class="menu-link-title">Alertas financeiros</span>
                                 <small class="menu-link-text">Veja vencimentos próximos e itens atrasados.</small>
+                            </a>
+                        </li>
+                        <% if (navProducts.hasAny) { %>
+                            <li class="menu-group-label">Receitas por produto</li>
+                            <% if (navProducts.bolinhas) { %>
+                                <li><a class="dropdown-item" href="/bolinhas/receita-bolinha">Receita de bolinhas</a></li>
+                            <% } %>
+                            <% if (hasConsignados) { %>
+                                <li><a class="dropdown-item" href="/consignados/receita-consignados">Receita de consignados</a></li>
+                            <% } %>
+                            <% if (navProducts.pelucias) { %>
+                                <li><a class="dropdown-item" href="/pelucias/receita-pelucia">Receita de pelúcias</a></li>
+                            <% } %>
+                        <% } %>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn-header fs-6" href="/relatorios">Relatórios</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                        id="navbarDropdownMais" aria-expanded="false">
+                        Mais
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMais">
+                        <li class="menu-group-label">Acesso rápido</li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/comunidade">
+                                <span class="menu-link-title">Comunidade</span>
+                                <small class="menu-link-text">Dúvidas, avisos e conversas do VendMaster.</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item menu-link" href="/assinatura/status">
+                                <span class="menu-link-title">Minha assinatura</span>
+                                <small class="menu-link-text">Plano, status e dados de cobrança.</small>
                             </a>
                         </li>
                         <% if (canAccessProductSettings) { %>
@@ -125,105 +179,14 @@
                             </a>
                         </li>
                         <% } %>
-                    </ul>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link btn-header fs-6" href="/comunidade">
-                        Comunidade
-                    </a>
-                </li>
-
-                <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
-                <li class="nav-item dropdown">
-                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
-                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                        id="navbarDropdownAdministrativo" aria-expanded="false">
-                        Administrativo
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdministrativo">
-                        <li class="menu-group-label">Gestão do SaaS</li>
-                        <li>
-                            <a class="dropdown-item menu-link" href="/admin/assinantes">
-                                <span class="menu-link-title">Assinantes</span>
-                                <small class="menu-link-text">Status, cobrança, produtos e vencimentos.</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item menu-link" href="/admin/interessados">
-                                <span class="menu-link-title">Interessados</span>
-                                <small class="menu-link-text">Fila comercial dos formulários do site.</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item menu-link" href="/admin/comunidade">
-                                <span class="menu-link-title">Comunidade</span>
-                                <small class="menu-link-text">Modere tópicos, respostas e discussões públicas.</small>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <% } %>
-
-                <% if (navProducts.hasAny) { %>
-                <li class="nav-item dropdown">
-                    <button class="nav-link dropdown-toggle btn-header fs-6 border-0 bg-transparent" type="button"
-                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                        id="navbarDropdownOperacional" aria-expanded="false">
-                        Operacional
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownOperacional">
-                        <% if (navProducts.bolinhas) { %>
-                        <li class="dropdown-submenu">
-                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
-                                id="navbarDropdownBolinhas" aria-expanded="false">
-                                <span class="menu-link-title">Bolinhas</span>
-                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownBolinhas">
-                                <% if (!isReadOnly) { %>
-                                    <li><a class="dropdown-item" href="/bolinhas/sangrias/add">Cadastro de receita</a></li>
-                                <% } %>
-                                <li><a class="dropdown-item" href="/bolinhas/sangrias">Registro de vendas</a></li>
-                                <li><a class="dropdown-item" href="/bolinhas/sangrias/controle-geral">Controle geral</a></li>
-                            </ul>
-                        </li>
-                        <% } %>
-                        <% if (hasConsignados) { %>
-                        <li class="dropdown-submenu">
-                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
-                                id="navbarDropdownConsignados" aria-expanded="false">
-                                <span class="menu-link-title">Consignados</span>
-                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownConsignados">
-                                <% if (!isReadOnly) { %>
-                                    <li><a class="dropdown-item" href="/consignados/sangrias/add">Cadastro de receita</a></li>
-                                <% } %>
-                                <li><a class="dropdown-item" href="/consignados/sangrias">Registro de vendas</a></li>
-                                <li><a class="dropdown-item" href="/consignados/sangrias/controle-geral">Controle geral</a></li>
-                            </ul>
-                        </li>
-                        <% } %>
-                        <% if (navProducts.pelucias) { %>
-                        <li class="dropdown-submenu">
-                            <button class="dropdown-item dropdown-toggle submenu-toggle menu-link menu-link-button" type="button"
-                                id="navbarDropdownPelucias" aria-expanded="false">
-                                <span class="menu-link-title">Pelúcias</span>
-                                <small class="menu-link-text">Cadastro de receita, registro de vendas e controle geral.</small>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownPelucias">
-                                <% if (!isReadOnly) { %>
-                                    <li><a class="dropdown-item" href="/pelucias/sangrias/add">Cadastro de receita</a></li>
-                                <% } %>
-                                <li><a class="dropdown-item" href="/pelucias/sangrias">Registro de vendas</a></li>
-                                <li><a class="dropdown-item" href="/pelucias/sangrias/controle-geral">Controle geral</a></li>
-                            </ul>
-                        </li>
+                        <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
+                            <li class="menu-group-label">Administrativo</li>
+                            <li><a class="dropdown-item" href="/admin/assinantes">Assinantes</a></li>
+                            <li><a class="dropdown-item" href="/admin/interessados">Interessados</a></li>
+                            <li><a class="dropdown-item" href="/admin/comunidade">Moderação da comunidade</a></li>
                         <% } %>
                     </ul>
                 </li>
-                <% } %>
             </ul>
 
             <% const financialAlertTotal = financialNotifications?.total || 0; %>
@@ -275,7 +238,7 @@
                         <div class="nav-account-divider"></div>
                         <a href="/assinatura/status"><i class="bi bi-person-badge"></i><span>Minha assinatura</span></a>
                         <a href="/comunidade"><i class="bi bi-chat-dots"></i><span>Comunidade</span></a>
-                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>relatórios</span></a>
+                        <a href="/relatorios"><i class="bi bi-graph-up-arrow"></i><span>Relatórios</span></a>
                         <a href="/rotas"><i class="bi bi-map"></i><span>Rotas dos pontos</span></a>
                         <% if (canAccessProductSettings) { %>
                             <a href="/assinatura/produtos"><i class="bi bi-grid-3x3-gap"></i><span>Ferramentas da assinatura</span></a>
@@ -396,7 +359,7 @@
         <% if (!isReadOnly && navProducts.pelucias) { %>
             <a href="/pelucias/sangrias/add">
                 <i class="bi bi-stars" aria-hidden="true"></i>
-                <span><strong>Pelucias</strong><small>Novo registro</small></span>
+                <span><strong>Pelúcias</strong><small>Novo registro</small></span>
             </a>
         <% } %>
         <a href="/rotas">
@@ -406,15 +369,14 @@
         <% if (!isReadOnly) { %>
             <a href="/lancamentos/add">
                 <i class="bi bi-receipt" aria-hidden="true"></i>
-                <span><strong>Financeiro</strong><small>Novo lancamento</small></span>
+                <span><strong>Financeiro</strong><small>Novo lançamento</small></span>
             </a>
         <% } %>
     </div>
 </aside>
 
 <style>
-    .app-nav .navbar-collapse > .d-flex.align-items-center.gap-2,
-    .app-nav .nav-item:has(#navbarDropdownPlanejamento) {
+    .app-nav .navbar-collapse > .d-flex.align-items-center.gap-2 {
         display: none !important;
     }
 
@@ -842,11 +804,17 @@
         }
 
         .app-primary-nav {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: static;
             z-index: 2;
-            transform: translate(-50%, -50%);
+            flex-wrap: nowrap;
+            gap: 0.12rem;
+            margin-left: 1rem !important;
+            margin-right: 1rem !important;
+            transform: none;
+        }
+
+        .app-primary-nav .nav-link {
+            white-space: nowrap;
         }
 
         .dropdown-submenu:hover > .dropdown-menu {
