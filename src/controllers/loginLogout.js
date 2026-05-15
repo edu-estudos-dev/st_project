@@ -100,6 +100,11 @@ class LoginLogoutController {
         });
     }
 
+    failGoogleLogin(res, message) {
+        res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
+        return res.redirect(`/login?erro=${encodeURIComponent(message)}`);
+    }
+
     signInUser(res, usuario) {
         const authToken = signAuthToken({
             sub: usuario.user_id,
@@ -159,10 +164,6 @@ class LoginLogoutController {
     }
 
     async processGoogleCallback(req, res) {
-        if (req.user) {
-            return res.redirect('/painel');
-        }
-
         const googleConfig = this.getGoogleClientConfig(req);
         const code = String(req.query.code || '').trim();
         const state = String(req.query.state || '').trim();
@@ -171,11 +172,11 @@ class LoginLogoutController {
         this.clearGoogleStateCookie(res);
 
         if (!googleConfig.isConfigured) {
-            return res.redirect('/login?erro=Login com Google ainda nao foi configurado.');
+            return this.failGoogleLogin(res, 'Login com Google ainda nao foi configurado.');
         }
 
         if (!code || !state || !storedState || state !== storedState) {
-            return res.redirect('/login?erro=Nao foi possivel validar o login com Google. Tente novamente.');
+            return this.failGoogleLogin(res, 'Nao foi possivel validar o login com Google. Tente novamente.');
         }
 
         try {
@@ -217,7 +218,7 @@ class LoginLogoutController {
             const profile = await profileResponse.json();
 
             if (!profile?.email || profile.email_verified !== true) {
-                return res.redirect('/login?erro=Use uma conta Google com e-mail verificado.');
+                return this.failGoogleLogin(res, 'Use uma conta Google com e-mail verificado.');
             }
 
             const usuario = await LoginLogout.loginWithGoogle({
@@ -228,13 +229,13 @@ class LoginLogoutController {
             });
 
             if (usuario?.error === 'google_signup_disabled') {
-                return res.redirect('/login?erro=Conta nao encontrada. O cadastro automatico pelo Google esta indisponivel no momento.');
+                return this.failGoogleLogin(res, 'Conta nao encontrada. O cadastro automatico pelo Google esta indisponivel no momento.');
             }
 
             return this.signInUser(res, usuario);
         } catch (error) {
             console.error('Erro no login com Google:', error);
-            return res.redirect('/login?erro=Nao foi possivel entrar com Google. Tente novamente.');
+            return this.failGoogleLogin(res, 'Nao foi possivel entrar com Google. Tente novamente.');
         }
     }
 

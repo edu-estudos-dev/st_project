@@ -60,10 +60,10 @@ addCheck(
   'Google OAuth nao usa excecao localhost para criar conta',
   'src/controllers/loginLogout.js',
   allOf(
-    includesAll('allowCreateUser: isPublicAuthEnabled()'),
+    includesAll('allowCreateUser: isPublicAuthEnabled()', 'failGoogleLogin(res, message)', 'res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions())'),
     excludesAll('allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)')
   ),
-  'O ambiente local tambem precisa respeitar cadastro publico fechado no login Google.'
+  'O callback Google deve validar a conta escolhida e limpar cookie antigo em falhas.'
 );
 
 addCheck(
