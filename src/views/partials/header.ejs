@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg fixed-top app-nav">
     <div class="container-fluid">
-        <a href="/painel" style="display:flex; align-items:center;">
+        <a href="/painel" class="app-nav-brand" style="display:flex; align-items:center;">
             <img src="/images/brand/logo.webp" style="height:50px;" alt="VendMaster">
         </a>
 
@@ -378,6 +378,17 @@
 <style>
     .app-nav .navbar-collapse > .d-flex.align-items-center.gap-2 {
         display: none !important;
+    }
+
+    .app-nav-brand {
+        flex: 0 0 auto;
+        text-decoration: none;
+    }
+
+    .app-nav-brand img {
+        display: block;
+        height: 46px !important;
+        width: auto;
     }
 
     .app-nav-actions {
@@ -801,20 +812,28 @@
     @media (min-width: 992px) {
         .app-nav .container-fluid {
             position: relative;
+            gap: 1rem;
         }
 
         .app-primary-nav {
             position: static;
+            flex: 1 1 auto;
+            justify-content: center;
             z-index: 2;
             flex-wrap: nowrap;
-            gap: 0.12rem;
-            margin-left: 1rem !important;
-            margin-right: 1rem !important;
+            gap: 0.28rem;
+            margin-left: clamp(1.6rem, 3vw, 3.2rem) !important;
+            margin-right: clamp(1rem, 2vw, 2.4rem) !important;
             transform: none;
         }
 
         .app-primary-nav .nav-link {
+            padding-inline: 0.72rem;
             white-space: nowrap;
+        }
+
+        .app-nav-actions {
+            flex: 0 0 auto;
         }
 
         .dropdown-submenu:hover > .dropdown-menu {

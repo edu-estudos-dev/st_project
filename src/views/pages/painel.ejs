@@ -53,9 +53,10 @@
    <% const operationalShortcuts = [
       { href: '/bolinhas/sangrias/add', title: 'Novo registro de bolinhas', description: 'Registrar uma nova leitura de bolinhas.', tone: 'green', productKey: 'bolinhas' },
       { href: '/consignados/sangrias/add', title: 'Novo registro de consignados', description: 'Registrar uma nova leitura de consignados.', tone: 'blue', productKey: 'consignados' },
-      { href: '/pelucias/sangrias/add', title: 'Novo registro de pelucias', description: 'Registrar uma nova leitura de pelucias.', tone: 'violet', productKey: 'pelucias' }
+      { href: '/pelucias/sangrias/add', title: 'Novo registro de pelúcias', description: 'Registrar uma nova leitura de pelúcias.', tone: 'violet', productKey: 'pelucias' }
    ]; %>
    <% const visibleOperationalShortcuts = operationalShortcuts.filter((item) => navProducts[item.productKey]); %>
+   <% const primaryRegisterHref = visibleOperationalShortcuts[0]?.href || '/rotas'; %>
    <% const visibleAdminShortcuts = adminShortcuts.filter((item) => !(isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href))); %>
    <% const mobilePrimaryShortcuts = [
       { href: '/estabelecimentos', title: 'Pontos', description: 'Base cadastrada', tone: 'blue', icon: 'bi-geo-alt' },
@@ -204,6 +205,37 @@
                      </div>
                   </div>
                </div>
+            </section>
+
+            <section class="dashboard-action-hub" aria-label="Ações rápidas do painel">
+               <a href="/estabelecimentos/add" class="dashboard-action-hub-item dashboard-action-hub-item-blue <%= isReadOnly ? 'is-disabled' : '' %>" <%= isReadOnly ? 'aria-disabled="true" tabindex="-1"' : '' %>>
+                  <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                  <span>
+                     <strong>Novo ponto</strong>
+                     <small>Cadastre estabelecimento</small>
+                  </span>
+               </a>
+               <a href="<%= primaryRegisterHref %>" class="dashboard-action-hub-item dashboard-action-hub-item-green">
+                  <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                  <span>
+                     <strong>Registrar</strong>
+                     <small>Nova leitura ou venda</small>
+                  </span>
+               </a>
+               <a href="/rotas" class="dashboard-action-hub-item dashboard-action-hub-item-amber">
+                  <i class="bi bi-signpost-2" aria-hidden="true"></i>
+                  <span>
+                     <strong>Rotas</strong>
+                     <small>Próximos pontos</small>
+                  </span>
+               </a>
+               <a href="/lancamentos/add" class="dashboard-action-hub-item dashboard-action-hub-item-violet <%= isReadOnly ? 'is-disabled' : '' %>" <%= isReadOnly ? 'aria-disabled="true" tabindex="-1"' : '' %>>
+                  <i class="bi bi-receipt" aria-hidden="true"></i>
+                  <span>
+                     <strong>Lançar valor</strong>
+                     <small>Entrada ou saída</small>
+                  </span>
+               </a>
             </section>
 
             <section class="dashboard-mobile-access" aria-labelledby="dashboard-mobile-access-title">
