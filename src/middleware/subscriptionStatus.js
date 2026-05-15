@@ -79,12 +79,14 @@ export const attachSubscriptionStatus = async (req, res, next) => {
         const assinante = await AssinanteModel.findById(req.user.assinante_id);
 
         if (!assinante) {
-            req.user.status_assinatura = null;
-            req.user.assinatura = null;
-            res.locals.usuario = req.user;
-            res.locals.isSaasAdmin = isSaasAdminUser(req.user);
-            res.locals.assinaturaSomenteLeitura = false;
-            return next();
+            return deny(
+                req,
+                res,
+                401,
+                'Sessao invalida. Faca login novamente.',
+                '/login',
+                true
+            );
         }
 
         req.user.status_assinatura = assinante.status_assinatura;

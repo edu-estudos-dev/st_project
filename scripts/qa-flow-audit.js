@@ -77,6 +77,13 @@ addCheck(
 );
 
 addCheck(
+  'Sessoes com assinante removido sao invalidadas',
+  'src/middleware/subscriptionStatus.js',
+  includesAll("if (!assinante)", 'Sessao invalida. Faca login novamente.', 'clearAuthCookie'),
+  'JWT antigo de usuario removido nao pode continuar acessando o sistema.'
+);
+
+addCheck(
   'Express confia no proxy para rate limit em producao',
   'app.js',
   includesAll("app.set('trust proxy', 1);"),
