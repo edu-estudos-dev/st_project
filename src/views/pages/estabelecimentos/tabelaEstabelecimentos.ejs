@@ -183,149 +183,157 @@
                             </thead>
 
                             <tbody>
-                                <% estabelecimentos.forEach((estabelecimento) => { %>
-                                    <% const produtoBase = String(estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
-                                    <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
-                                    <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
-                                    <% const enderecoCompleto = [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', '); %>
-                                    <% const productBadges = getProductBadges(estabelecimento.produtoFormatado || estabelecimento.produto); %>
+                                <% if (estabelecimentos.length > 0) { %>
+                                    <% estabelecimentos.forEach((estabelecimento) => { %>
+                                        <% const produtoBase = String(estabelecimento.produtoFormatado || estabelecimento.produto || '').toUpperCase(); %>
+                                        <% const hasBolinhas = produtoBase.includes('BOLINHAS'); %>
+                                        <% const hasPelucias = produtoBase.includes('PELUCIAS') || produtoBase.includes('PELÚCIAS'); %>
+                                        <% const enderecoCompleto = [estabelecimento.endereco, estabelecimento.bairro].filter(Boolean).join(', '); %>
+                                        <% const productBadges = getProductBadges(estabelecimento.produtoFormatado || estabelecimento.produto); %>
 
-                                    <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
-                                    <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
-                                    <% const chavePelucias = estabelecimento.chave_pelucias || ''; %>
-                                    <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
+                                        <% const chaveBolinhas = estabelecimento.chave_bolinhas || (hasBolinhas ? estabelecimento.chave : ''); %>
+                                        <% const maquinaBolinhas = estabelecimento.maquina_bolinhas || (hasBolinhas ? estabelecimento.maquina : ''); %>
+                                        <% const chavePelucias = estabelecimento.chave_pelucias || ''; %>
+                                        <% const maquinaPelucias = estabelecimento.maquina_pelucias || ''; %>
 
-                                    <tr>
-                                        <td class="est-col-name" data-label="Estabelecimento">
-                                            <div class="table-title-cell estabelecimento-title">
-                                                <%= estabelecimento.estabelecimento %>
-                                            </div>
+                                        <tr>
+                                            <td class="est-col-name" data-label="Estabelecimento">
+                                                <div class="table-title-cell estabelecimento-title">
+                                                    <%= estabelecimento.estabelecimento %>
+                                                </div>
 
-                                            <div class="est-mobile-meta mode-operational">
-                                                <% if (estabelecimento.responsavel_nome) { %>
-                                                    <span><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
-                                                <% } %>
-
-                                                <% if (estabelecimento.telefone_contato) { %>
-                                                    <span><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
-                                                <% } %>
-                                            </div>
-                                        </td>
-
-                                        <td class="mode-operational est-col-product" data-label="Produto">
-                                            <div class="product-setup-badges">
-                                                <% productBadges.forEach((produto) => { %>
-                                                    <span class="product-badge <%= produto.className %> estabelecimento-product-badge">
-                                                        <%= produto.label %>
-                                                    </span>
-                                                <% }) %>
-                                            </div>
-                                        </td>
-
-                                        <td class="mode-commercial est-col-location" data-label="Localização">
-                                            <% if (estabelecimento.endereco || estabelecimento.bairro) { %>
-                                                <button
-                                                    type="button"
-                                                    class="table-address-link route-address-link estabelecimento-address-link"
-                                                    data-address="<%= enderecoCompleto %>"
-                                                    data-name="<%= estabelecimento.estabelecimento %>"
-                                                    data-latitude="<%= estabelecimento.latitude ?? '' %>"
-                                                    data-longitude="<%= estabelecimento.longitude ?? '' %>"
-                                                >
-                                                    <i class="bi bi-geo-alt"></i>
-                                                    <span>
-                                                        <% if (estabelecimento.endereco) { %>
-                                                            <strong><%= estabelecimento.endereco %></strong>
-                                                        <% } %>
-
-                                                        <% if (estabelecimento.bairro) { %>
-                                                            <small><%= estabelecimento.bairro %></small>
-                                                        <% } %>
-                                                    </span>
-                                                </button>
-                                            <% } else { %>
-                                                <span class="table-muted">Não informado</span>
-                                            <% } %>
-                                        </td>
-
-                                        <td class="mode-commercial est-col-responsible" data-label="Responsável">
-                                            <% if (estabelecimento.responsavel_nome || estabelecimento.telefone_contato) { %>
-                                                <div class="estabelecimento-responsible-stack">
+                                                <div class="est-mobile-meta mode-operational">
                                                     <% if (estabelecimento.responsavel_nome) { %>
-                                                        <span class="estabelecimento-table-value"><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
+                                                        <span><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
                                                     <% } %>
 
                                                     <% if (estabelecimento.telefone_contato) { %>
-                                                        <span class="estabelecimento-table-value estabelecimento-table-phone"><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
+                                                        <span><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
                                                     <% } %>
                                                 </div>
-                                            <% } else { %>
-                                                <span class="table-muted">Não informado</span>
+                                            </td>
+
+                                            <td class="mode-operational est-col-product" data-label="Produto">
+                                                <div class="product-setup-badges">
+                                                    <% productBadges.forEach((produto) => { %>
+                                                        <span class="product-badge <%= produto.className %> estabelecimento-product-badge">
+                                                            <%= produto.label %>
+                                                        </span>
+                                                    <% }) %>
+                                                </div>
+                                            </td>
+
+                                            <td class="mode-commercial est-col-location" data-label="Localização">
+                                                <% if (estabelecimento.endereco || estabelecimento.bairro) { %>
+                                                    <button
+                                                        type="button"
+                                                        class="table-address-link route-address-link estabelecimento-address-link"
+                                                        data-address="<%= enderecoCompleto %>"
+                                                        data-name="<%= estabelecimento.estabelecimento %>"
+                                                        data-latitude="<%= estabelecimento.latitude ?? '' %>"
+                                                        data-longitude="<%= estabelecimento.longitude ?? '' %>"
+                                                    >
+                                                        <i class="bi bi-geo-alt"></i>
+                                                        <span>
+                                                            <% if (estabelecimento.endereco) { %>
+                                                                <strong><%= estabelecimento.endereco %></strong>
+                                                            <% } %>
+
+                                                            <% if (estabelecimento.bairro) { %>
+                                                                <small><%= estabelecimento.bairro %></small>
+                                                            <% } %>
+                                                        </span>
+                                                    </button>
+                                                <% } else { %>
+                                                    <span class="table-muted">Não informado</span>
+                                                <% } %>
+                                            </td>
+
+                                            <td class="mode-commercial est-col-responsible" data-label="Responsável">
+                                                <% if (estabelecimento.responsavel_nome || estabelecimento.telefone_contato) { %>
+                                                    <div class="estabelecimento-responsible-stack">
+                                                        <% if (estabelecimento.responsavel_nome) { %>
+                                                            <span class="estabelecimento-table-value"><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
+                                                        <% } %>
+
+                                                        <% if (estabelecimento.telefone_contato) { %>
+                                                            <span class="estabelecimento-table-value estabelecimento-table-phone"><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
+                                                        <% } %>
+                                                    </div>
+                                                <% } else { %>
+                                                    <span class="table-muted">Não informado</span>
+                                                <% } %>
+                                            </td>
+
+                                            <% if (showBolinhasColumn) { %>
+                                                <td class="mode-operational est-col-operation-group est-col-bolinhas" data-label="Bolinhas">
+                                                    <% if (hasBolinhas) { %>
+                                                        <div class="estabelecimento-operation-stack estabelecimento-operation-stack-green">
+                                                            <div class="estabelecimento-operation-line">
+                                                                <span>Chave</span>
+                                                                <strong><%= chaveBolinhas || '-' %></strong>
+                                                            </div>
+
+                                                            <div class="estabelecimento-operation-line">
+                                                                <span>Máquina</span>
+                                                                <strong><%= maquinaBolinhas || '-' %></strong>
+                                                            </div>
+                                                        </div>
+                                                    <% } else { %>
+                                                        <span class="table-operational-pill is-empty">-</span>
+                                                    <% } %>
+                                                </td>
                                             <% } %>
-                                        </td>
 
-                                        <% if (showBolinhasColumn) { %>
-                                            <td class="mode-operational est-col-operation-group est-col-bolinhas" data-label="Bolinhas">
-                                                <% if (hasBolinhas) { %>
-                                                    <div class="estabelecimento-operation-stack estabelecimento-operation-stack-green">
-                                                        <div class="estabelecimento-operation-line">
-                                                            <span>Chave</span>
-                                                            <strong><%= chaveBolinhas || '-' %></strong>
+                                            <% if (showPeluciasColumn) { %>
+                                                <td class="mode-operational est-col-operation-group est-col-pelucias" data-label="Pelúcias">
+                                                    <% if (hasPelucias) { %>
+                                                        <div class="estabelecimento-operation-stack estabelecimento-operation-stack-violet">
+                                                            <div class="estabelecimento-operation-line">
+                                                                <span>Chave</span>
+                                                                <strong><%= chavePelucias || '-' %></strong>
+                                                            </div>
+
+                                                            <div class="estabelecimento-operation-line">
+                                                                <span>Máquina</span>
+                                                                <strong><%= maquinaPelucias || '-' %></strong>
+                                                            </div>
                                                         </div>
+                                                    <% } else { %>
+                                                        <span class="table-operational-pill is-empty">-</span>
+                                                    <% } %>
+                                                </td>
+                                            <% } %>
 
-                                                        <div class="estabelecimento-operation-line">
-                                                            <span>Máquina</span>
-                                                            <strong><%= maquinaBolinhas || '-' %></strong>
-                                                        </div>
-                                                    </div>
-                                                <% } else { %>
-                                                    <span class="table-operational-pill is-empty">-</span>
-                                                <% } %>
-                                            </td>
-                                        <% } %>
-
-                                        <% if (showPeluciasColumn) { %>
-                                            <td class="mode-operational est-col-operation-group est-col-pelucias" data-label="Pelúcias">
-                                                <% if (hasPelucias) { %>
-                                                    <div class="estabelecimento-operation-stack estabelecimento-operation-stack-violet">
-                                                        <div class="estabelecimento-operation-line">
-                                                            <span>Chave</span>
-                                                            <strong><%= chavePelucias || '-' %></strong>
-                                                        </div>
-
-                                                        <div class="estabelecimento-operation-line">
-                                                            <span>Máquina</span>
-                                                            <strong><%= maquinaPelucias || '-' %></strong>
-                                                        </div>
-                                                    </div>
-                                                <% } else { %>
-                                                    <span class="table-operational-pill is-empty">-</span>
-                                                <% } %>
-                                            </td>
-                                        <% } %>
-
-                                        <td class="table-actions-cell est-actions-sticky" data-label="Ações">
-                                            <div class="table-actions estabelecimento-actions">
-                                                <a class="table-btn table-btn-view view-btn" href="/estabelecimentos/<%= estabelecimento.id %>/view" data-id="<%= estabelecimento.id %>">
-                                                    <i class="bi bi-eye"></i>
-                                                    <span>Ver</span>
-                                                </a>
-
-                                                <% if (!isReadOnly) { %>
-                                                    <a class="table-btn table-btn-edit edit-btn" href="/estabelecimentos/<%= estabelecimento.id %>/edit" data-id="<%= estabelecimento.id %>">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                        <span>Editar</span>
+                                            <td class="table-actions-cell est-actions-sticky" data-label="Ações">
+                                                <div class="table-actions estabelecimento-actions">
+                                                    <a class="table-btn table-btn-view view-btn" href="/estabelecimentos/<%= estabelecimento.id %>/view" data-id="<%= estabelecimento.id %>">
+                                                        <i class="bi bi-eye"></i>
+                                                        <span>Ver</span>
                                                     </a>
 
-                                                    <a class="table-btn table-btn-delete delete-btn" href="#" data-id="<%= estabelecimento.id %>">
-                                                        <i class="bi bi-trash"></i>
-                                                        <span>Excluir</span>
-                                                    </a>
-                                                <% } %>
-                                            </div>
+                                                    <% if (!isReadOnly) { %>
+                                                        <a class="table-btn table-btn-edit edit-btn" href="/estabelecimentos/<%= estabelecimento.id %>/edit" data-id="<%= estabelecimento.id %>">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                            <span>Editar</span>
+                                                        </a>
+
+                                                        <a class="table-btn table-btn-delete delete-btn" href="#" data-id="<%= estabelecimento.id %>">
+                                                            <i class="bi bi-trash"></i>
+                                                            <span>Excluir</span>
+                                                        </a>
+                                                    <% } %>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="<%= 4 + (showBolinhasColumn ? 1 : 0) + (showPeluciasColumn ? 1 : 0) %>" class="table-empty estabelecimentos-empty">
+                                            Nenhum estabelecimento encontrado.
                                         </td>
                                     </tr>
-                                <% }) %>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>

@@ -132,7 +132,7 @@
                                                <div class="table-actions">
                                                     <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">
                                                         <i class="bi bi-eye"></i>
-                                                        <span>Visualizar</span>
+                                                        <span>Ver</span>
                                                     </a>
 
                                                     <% if (!isReadOnly) { %>
@@ -214,13 +214,22 @@
 
                                             <td data-label="Ações">
                                                 <div class="table-actions">
-                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">Visualizar</a>
+                                                    <a href="/lancamentos/<%= item.id %>/view" class="table-btn table-btn-view">
+                                                        <i class="bi bi-eye"></i>
+                                                        <span>Ver</span>
+                                                    </a>
 
                                                     <% if (!isReadOnly) { %>
-                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">Editar</a>
+                                                        <a href="/lancamentos/<%= item.id %>/edit" class="table-btn table-btn-edit">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                            <span>Editar</span>
+                                                        </a>
 
                                                         <form action="/lancamentos/<%= item.id %>/pagar" method="POST" class="d-inline">
-                                                            <button type="submit" class="table-btn table-btn-pay">Pago</button>
+                                                            <button type="submit" class="table-btn table-btn-pay">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                <span>Pago</span>
+                                                            </button>
                                                         </form>
                                                     <% } %>
                                                 </div>
