@@ -45,9 +45,16 @@ addCheck(
 
 addCheck(
   'Google OAuth nao cria trial publico quando cadastro esta fechado',
-  'src/controllers/loginLogout.js',
-  includesAll('allowCreateUser', 'PUBLIC_AUTH_ENABLED', 'google_signup_disabled'),
-  'Login com Google nao pode virar cadastro publico quando o cadastro normal esta fechado.'
+  'src/models/loginLogoutModel.js',
+  includesAll('allowCreateUser', 'auth_provider', "usuario.auth_provider === 'google'", 'google_signup_disabled'),
+  'Login com Google nao pode reabrir contas criadas automaticamente quando o cadastro normal esta fechado.'
+);
+
+addCheck(
+  'Sessoes antigas de contas Google automaticas sao bloqueadas',
+  'src/middleware/subscriptionStatus.js',
+  includesAll("authProvider === 'google'", 'PUBLIC_AUTH_ENABLED', 'clearAuthCookie'),
+  'Contas Google criadas antes da correcao nao podem continuar usando cookie valido.'
 );
 
 addCheck(

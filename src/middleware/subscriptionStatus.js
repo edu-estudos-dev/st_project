@@ -1,4 +1,5 @@
 import AssinanteModel from '../models/assinanteModel.js';
+import connection from '../db_config/connection.js';
 import { getAuthCookieName, getClearAuthCookieOptions } from '../utilities/authToken.js';
 import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
@@ -25,6 +26,31 @@ const isBillingRegularizationPath = (req) => {
     );
 };
 
+const isPublicAuthEnabled = () => {
+    return ['1', 'true', 'yes', 'on'].includes(
+        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
+    );
+};
+
+const isLocalhostRequest = (req) => {
+    const hostname = String(req.hostname || '').toLowerCase();
+
+    return hostname === 'localhost'
+        || hostname === '127.0.0.1'
+        || hostname === '::1'
+        || hostname === '[::1]'
+        || hostname.endsWith('.localhost');
+};
+
+const getUserAuthProvider = async (userId) => {
+    const result = await connection.query(
+        'SELECT auth_provider FROM users WHERE id = $1 LIMIT 1',
+        [userId]
+    );
+
+    return result.rows?.[0]?.auth_provider || null;
+};
+
 const deny = (req, res, statusCode, message, redirectPath = '/painel', clearAuthCookie = false) => {
     if (clearAuthCookie) {
         res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
@@ -45,6 +71,21 @@ export const attachSubscriptionStatus = async (req, res, next) => {
     }
 
     try {
+        if (!isPublicAuthEnabled() && !isLocalhostRequest(req)) {
+            const authProvider = await getUserAuthProvider(req.user.id);
+
+            if (authProvider === 'google') {
+                return deny(
+                    req,
+                    res,
+                    403,
+                    'Conta criada automaticamente pelo Google nao esta autorizada. Solicite acesso ao suporte.',
+                    '/login',
+                    true
+                );
+            }
+        }
+
         const assinante = await AssinanteModel.findById(req.user.assinante_id);
 
         if (!assinante) {

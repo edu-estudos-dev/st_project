@@ -781,6 +781,7 @@ class LoginLogout {
         u.username,
         u.email,
         u.google_id,
+        u.auth_provider,
         a.id AS assinante_id,
         a.status_assinatura
       FROM users u
@@ -794,6 +795,12 @@ class LoginLogout {
     let usuario = existingResult.rows[0] || null;
 
     if (usuario) {
+      if (!allowCreateUser && usuario.auth_provider === 'google') {
+        return {
+          error: 'google_signup_disabled'
+        };
+      }
+
       if (usuario.google_id && usuario.google_id !== normalizedGoogleId) {
         throw new Error('Este e-mail ja esta vinculado a outra conta Google.');
       }
