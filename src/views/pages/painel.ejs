@@ -96,55 +96,54 @@
                </a>
             </div>
 
-            <div class="dashboard-sidebar-summary" aria-label="Resumo de pontos ativos">
-               <% overviewStats.forEach((item) => { %>
-                  <div class="dashboard-sidebar-stat">
-                     <strong><%= item.value %></strong>
-                     <span><%= item.label %></span>
-                  </div>
-               <% }) %>
-            </div>
-
             <div class="dashboard-sidebar-section">
-               <h2 class="dashboard-sidebar-title">Operação</h2>
-               <nav class="dashboard-sidebar-nav" aria-label="Atalhos administrativos">
-                  <% visibleAdminShortcuts.forEach((item) => { %>
-                     <a href="<%= item.href %>" class="dashboard-sidebar-link dashboard-sidebar-link-<%= item.tone %>">
-                        <span><%= item.title %></span>
-                        <small>&rarr;</small>
-                     </a>
-                  <% }) %>
+               <h2 class="dashboard-sidebar-title">Navegação</h2>
+               <nav class="dashboard-sidebar-nav" aria-label="Navegação principal do painel">
+                  <a href="/estabelecimentos" class="dashboard-sidebar-link dashboard-sidebar-link-blue">
+                     <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                     <span>Pontos</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <a href="<%= primaryRegisterHref %>" class="dashboard-sidebar-link dashboard-sidebar-link-green">
+                     <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                     <span>Registrar</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <a href="/rotas" class="dashboard-sidebar-link dashboard-sidebar-link-amber">
+                     <i class="bi bi-signpost-2" aria-hidden="true"></i>
+                     <span>Rotas</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <a href="/lancamentos" class="dashboard-sidebar-link dashboard-sidebar-link-violet">
+                     <i class="bi bi-cash-coin" aria-hidden="true"></i>
+                     <span>Financeiro</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <a href="/relatorios" class="dashboard-sidebar-link dashboard-sidebar-link-slate">
+                     <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                     <span>Relatórios</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <a href="/comunidade" class="dashboard-sidebar-link dashboard-sidebar-link-community">
+                     <i class="bi bi-chat-dots" aria-hidden="true"></i>
+                     <span>Comunidade</span>
+                     <small>&rarr;</small>
+                  </a>
                </nav>
             </div>
 
-            <% if (!isReadOnly && visibleOperationalShortcuts.length) { %>
+            <% if (typeof canModerateCommunity !== 'undefined' && canModerateCommunity) { %>
                <div class="dashboard-sidebar-section">
-                  <h2 class="dashboard-sidebar-title">Cadastros rápidos</h2>
-                  <nav class="dashboard-sidebar-nav" aria-label="Cadastros operacionais">
-                     <% visibleOperationalShortcuts.forEach((item) => { %>
-                        <a href="<%= item.href %>" class="dashboard-sidebar-link dashboard-sidebar-link-<%= item.tone %>">
-                           <span><%= item.title %></span>
-                           <small>&rarr;</small>
-                        </a>
-                     <% }) %>
+                  <h2 class="dashboard-sidebar-title">Administração</h2>
+                  <nav class="dashboard-sidebar-nav" aria-label="Navegação administrativa">
+                     <a href="/admin/comunidade" class="dashboard-sidebar-link dashboard-sidebar-link-community">
+                        <i class="bi bi-shield-check" aria-hidden="true"></i>
+                        <span>Moderação</span>
+                        <small>&rarr;</small>
+                     </a>
                   </nav>
                </div>
             <% } %>
-
-            <div class="dashboard-sidebar-section">
-               <h2 class="dashboard-sidebar-title">Atenção</h2>
-               <div class="dashboard-sidebar-alerts">
-                  <a href="/lancamentos/vencimentos" class="dashboard-sidebar-alert dashboard-sidebar-alert-<%= financeAlertTone %>">
-                     <strong><%= financeTitle %></strong>
-                     <p><%= financeDescription %></p>
-                  </a>
-
-                  <a href="<%= visitAlertHref %>" class="dashboard-sidebar-alert dashboard-sidebar-alert-<%= visitAlert.tone %>">
-                     <strong><%= visitAlert.title %></strong>
-                     <span><%= visitAlert.description %></span>
-                  </a>
-               </div>
-            </div>
 
             <div class="dashboard-sidebar-footer">
                <form action="/logout" method="POST">
