@@ -137,6 +137,20 @@
 
     <% if (typeof skipGlobalStyles === 'undefined' || !skipGlobalStyles) { %>
         <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/styles.css') : '/css/styles.css' %>">
+
+        <% const globalStyleModules = [
+            '/css/lancamentos.css',
+            '/css/fluxo-caixa.css',
+            '/css/receitas.css',
+            '/css/bolinhas.css',
+            '/css/pelucias.css',
+            '/css/consignados.css',
+            '/css/estabelecimentos.css'
+        ]; %>
+
+        <% globalStyleModules.forEach((href) => { %>
+            <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>">
+        <% }) %>
     <% } %>
 
     <% if (typeof extraStyles !== 'undefined' && extraStyles) { %>

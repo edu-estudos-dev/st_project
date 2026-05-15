@@ -1,0 +1,2235 @@
+/* ==========================================================================
+   18 - TELAS DE LANCAMENTOS (CADASTRO, EDICAO, VISUALIZACAO, TABELA E VENCIMENTOS)
+   Atualizado: ajustes finais de mobile, ações de vencimentos e input de valor
+   ========================================================================== */
+
+/* Base compartilhada */
+
+.lancamento-form-shell .modern-form.lancamento-form .form-card-header {
+  margin-bottom: 0.95rem;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-card-header h2,
+.lancamentos-vencimentos-shell .table-section-title {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.12rem !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-card-header p {
+  max-width: 680px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-section-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-height: 22px !important;
+  margin-bottom: 0.38rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  font-size: 0.64rem !important;
+  font-weight: 820 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form label {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-control,
+.lancamento-form-shell .modern-form.lancamento-form .form-select,
+.lancamento-form-shell .modern-form.lancamento-form .input-group-text {
+  font-size: 0.86rem;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form textarea.form-control {
+  min-height: 132px;
+  resize: vertical;
+}
+
+/* Formulários de cadastro e edição */
+
+.lancamento-form-shell .modern-form.lancamento-form .form-card {
+  overflow: hidden;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .input-group-text {
+  min-width: 48px;
+  justify-content: center;
+  color: #475569;
+  font-weight: 800;
+  background: #f8fafc;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-select {
+  min-height: 42px;
+  color: #0f172a;
+  font-weight: 650;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .form-control {
+  min-height: 42px;
+  color: #0f172a;
+  font-weight: 650;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .row {
+  --bs-gutter-x: 0.58rem;
+  --bs-gutter-y: 0.78rem;
+}
+
+.lancamento-form-shell .modern-form.lancamento-form .input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .input-group
+  > .input-group-text {
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  min-height: 42px;
+  padding-inline: 0;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-right: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .input-group
+  > .form-control {
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+  min-height: 42px;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: none;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .input-group:focus-within
+  > .input-group-text,
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .input-group:focus-within
+  > .form-control {
+  border-color: rgba(37, 99, 235, 0.58);
+}
+
+/* Listagem de lançamentos */
+
+.lancamentos-list-shell .list-panel {
+  padding: 1.18rem;
+  border-radius: 24px;
+}
+
+.lancamentos-list-shell .list-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lancamentos-list-shell .list-toolbar-copy {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.lancamentos-list-shell .list-toolbar-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.62rem !important;
+  line-height: 1.08 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.035em;
+}
+
+.lancamentos-list-shell .list-toolbar-copy p {
+  max-width: 760px;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.92rem !important;
+  line-height: 1.42 !important;
+  font-weight: 500 !important;
+}
+
+.lancamentos-list-shell .list-toolbar .d-flex {
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.52rem !important;
+  margin-left: auto;
+}
+
+.lancamentos-list-shell .list-action {
+  min-height: 46px;
+  padding: 0.72rem 1.04rem;
+  border-radius: 14px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
+}
+
+.lancamentos-list-shell .list-action i {
+  font-size: 0.92rem;
+}
+
+/* Cards superiores */
+
+.lancamentos-list-shell .list-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.82rem;
+  margin: 0 0 1rem;
+}
+
+.lancamentos-list-shell .list-summary-card {
+  display: grid;
+  align-content: start;
+  gap: 0.34rem;
+  min-height: 102px;
+  padding: 1.02rem 1.05rem;
+  border-radius: 18px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.08), transparent 34%),
+    linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.045);
+}
+
+.lancamentos-list-shell .list-summary-card strong {
+  color: #2563eb;
+  font-size: 0.7rem;
+  font-weight: 950;
+  line-height: 1.05;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+}
+
+.lancamentos-list-shell .list-summary-card span {
+  display: block;
+  color: #334155;
+  font-size: 1.02rem;
+  font-weight: 820;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+/* Filtro */
+
+.lancamentos-list-shell .table-mode-switch {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+  padding: 0.28rem;
+  border-radius: 999px;
+  background: #eaf2ff;
+  border: 1px solid rgba(37, 99, 235, 0.14);
+}
+
+.lancamentos-list-shell .table-mode-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 112px;
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.62rem 0.68rem;
+  color: #385074;
+  background: transparent;
+  font-size: 14px !important;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.lancamentos-list-shell .table-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.72);
+  color: #1d4ed8;
+}
+
+.lancamentos-list-shell .table-mode-btn:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.lancamentos-list-shell .table-mode-btn.is-active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+/* Tabelas de lançamentos e vencimentos */
+
+.lancamentos-list-shell .launch-table-wrap,
+.lancamentos-vencimentos-shell .vencimentos-table-wrap,
+.lancamentos-vencimentos-shell .modern-table-wrap {
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(203, 213, 225, 0.82);
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.055);
+}
+
+.lancamentos-list-shell .launch-table-scroll,
+.lancamentos-vencimentos-shell .modern-table-scroll {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.lancamentos-list-shell .launch-table,
+.lancamentos-vencimentos-shell .modern-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.lancamentos-list-shell .launch-table thead th,
+.lancamentos-vencimentos-shell .modern-table thead th {
+  padding: 0.78rem 0.48rem;
+  color: #0f3a7a;
+  background: #dcecff;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.32);
+  font-size: 0.58rem;
+  font-weight: 950;
+  line-height: 1.1;
+  letter-spacing: 0.075em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.lancamentos-list-shell .launch-table tbody td,
+.lancamentos-vencimentos-shell .modern-table tbody td {
+  padding: 0.76rem 0.48rem;
+  color: #334155;
+  font-size: 14px !important;
+  font-weight: 760 !important;
+  line-height: 1.22;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+}
+
+.lancamentos-list-shell .launch-table tbody tr:last-child td,
+.lancamentos-vencimentos-shell .modern-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.lancamentos-list-shell .launch-table tbody tr:hover td,
+.lancamentos-vencimentos-shell .modern-table tbody tr:hover td {
+  background: rgba(248, 250, 252, 0.82);
+}
+
+/* Larguras da tabela principal de lançamentos */
+
+.lancamentos-list-shell .launch-col-movement {
+  width: 25%;
+}
+
+.lancamentos-list-shell .launch-col-payment {
+  width: 18%;
+}
+
+.lancamentos-list-shell .launch-col-value {
+  width: 13%;
+}
+
+.lancamentos-list-shell .launch-col-description {
+  width: auto;
+}
+
+.lancamentos-list-shell .launch-col-actions {
+  width: 230px;
+}
+
+/* Conteúdo interno da tabela principal */
+
+.lancamentos-list-shell .launch-movement-cell,
+.lancamentos-list-shell .launch-payment-cell {
+  display: grid;
+  justify-items: center;
+  gap: 0.34rem;
+  min-width: 0;
+}
+
+.lancamentos-list-shell .launch-main-title {
+  display: block;
+  max-width: 100%;
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.lancamentos-list-shell .launch-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.24rem;
+  color: #64748b;
+  font-size: 13px !important;
+  font-weight: 780 !important;
+  line-height: 1.18 !important;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.lancamentos-list-shell .launch-meta i {
+  font-size: 13px !important;
+  line-height: 1;
+}
+
+.lancamentos-list-shell .launch-payment-cell strong {
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+}
+
+.lancamentos-list-shell .launch-payment-cell .launch-meta {
+  font-size: 14px !important;
+  font-weight: 780 !important;
+  line-height: 1.2 !important;
+}
+
+.lancamentos-list-shell .launch-payment-cell .launch-meta i {
+  font-size: 14px !important;
+}
+
+.lancamentos-list-shell .launch-due-meta {
+  color: #92400e;
+}
+
+.lancamentos-list-shell .launch-table tbody td.launch-col-payment,
+.lancamentos-list-shell .launch-table tbody td.launch-col-value {
+  color: #334155;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+.lancamentos-list-shell .launch-table tbody td.launch-col-value strong {
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  white-space: nowrap;
+}
+
+.lancamentos-list-shell .launch-table tbody td.launch-col-description {
+  color: #475569;
+  font-size: 14px !important;
+  font-weight: 760 !important;
+}
+
+.lancamentos-list-shell .table-muted,
+.lancamentos-vencimentos-shell .table-muted {
+  display: -webkit-box;
+  color: #64748b;
+  font-size: 14px !important;
+  font-weight: 760 !important;
+  line-height: 1.38 !important;
+  text-align: left;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.lancamentos-list-shell .table-title-cell,
+.lancamentos-vencimentos-shell .table-title-cell {
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 820 !important;
+  line-height: 1.24 !important;
+  text-align: left;
+}
+
+.lancamentos-list-shell .table-vencimento-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+}
+
+.lancamentos-list-shell .table-vencimento-copy strong {
+  color: #0f172a;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  line-height: 1.16 !important;
+}
+
+.lancamentos-list-shell .table-vencimento-copy span {
+  color: #64748b;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.12 !important;
+  text-transform: uppercase;
+}
+
+.lancamentos-list-shell .table-vencimento-copy.is-empty strong {
+  color: #94a3b8;
+}
+
+/* Badges */
+
+.lancamentos-list-shell .table-stack-compact {
+  display: inline-grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: max-content !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.34rem !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+
+.lancamentos-list-shell .table-badge,
+.lancamentos-vencimentos-shell .table-badge {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-width: max-content !important;
+  min-height: 23px !important;
+  padding: 4px 9px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  white-space: nowrap !important;
+  vertical-align: middle;
+}
+
+.lancamentos-list-shell .table-badge-green,
+.lancamentos-vencimentos-shell .table-badge-green {
+  color: #166534;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.lancamentos-list-shell .table-badge-danger,
+.lancamentos-vencimentos-shell .table-badge-danger {
+  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.14);
+}
+
+.lancamentos-list-shell .table-badge-amber,
+.lancamentos-vencimentos-shell .table-badge-amber {
+  color: #92400e;
+  background: rgba(245, 158, 11, 0.11);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+}
+
+.lancamentos-list-shell .table-badge-neutral,
+.lancamentos-vencimentos-shell .table-badge-neutral {
+  color: #475569;
+  background: rgba(148, 163, 184, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+/* Ações - tabela principal de lançamentos */
+
+.lancamentos-list-shell .table-actions-launch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.38rem;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.lancamentos-list-shell .table-actions-launch > a,
+.lancamentos-list-shell .table-actions-launch > form {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.lancamentos-list-shell .table-actions-launch .delete-form {
+  display: inline-flex !important;
+  width: auto;
+  margin: 0;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 78px;
+  min-width: 78px;
+  max-width: 78px;
+  min-height: 32px;
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  border-radius: 9px;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn i {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn span {
+  display: inline;
+  min-width: 0;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn-view {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn-edit {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn-delete {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.lancamentos-list-shell .table-actions-launch .table-btn:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+/* Vencimentos */
+
+.lancamentos-vencimentos-shell .list-panel {
+  padding: 1.18rem;
+  border-radius: 24px;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-panel {
+  overflow: hidden;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-section-header > div {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.lancamentos-vencimentos-shell .table-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lancamentos-vencimentos-shell .table-section-copy {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.lancamentos-vencimentos-shell .table-section-title {
+  font-size: 1.24rem !important;
+  line-height: 1.16 !important;
+  font-weight: 850 !important;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-section-header p,
+.lancamentos-vencimentos-shell .table-section-description {
+  max-width: 680px;
+  margin: 0;
+  color: #334155;
+  font-size: 0.84rem;
+  line-height: 1.38;
+  font-weight: 500;
+}
+
+.lancamentos-vencimentos-shell .form-section-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 24px;
+  margin-bottom: 0.24rem;
+  padding: 0.24rem 0.58rem;
+  border-radius: 999px;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  font-size: 0.62rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Colunas da tela de vencimentos */
+
+.lancamentos-vencimentos-shell .vencimentos-table {
+  table-layout: fixed;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(1),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(1) {
+  width: 8%;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(2),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(2) {
+  width: 13%;
+  text-align: center;
+}
+
+.lancamentos-vencimentos-shell
+  .vencimentos-table
+  td:nth-child(2)
+  .table-title-cell {
+  text-align: center;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(3),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(3) {
+  width: 25%;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(4),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(4) {
+  width: 14%;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(5),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(5) {
+  width: 9%;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-table th:nth-child(6),
+.lancamentos-vencimentos-shell .vencimentos-table td:nth-child(6) {
+  width: 310px;
+}
+
+.lancamentos-vencimentos-shell
+  .vencimentos-table
+  .table-cell-description
+  .table-muted {
+  max-width: 100%;
+  text-align: center;
+  -webkit-line-clamp: 1;
+}
+
+.lancamentos-vencimentos-shell .table-empty {
+  padding: 1rem !important;
+  color: #334155;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.3;
+  text-align: center !important;
+}
+
+/* Ações - tela de vencimentos */
+
+.lancamentos-vencimentos-shell .table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.38rem;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.lancamentos-vencimentos-shell .table-actions > a,
+.lancamentos-vencimentos-shell .table-actions > form {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.lancamentos-vencimentos-shell .table-actions form {
+  display: inline-flex !important;
+  width: auto;
+  margin: 0;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: auto;
+  min-width: 72px;
+  min-height: 32px;
+  padding: 0.35rem 0.62rem;
+  border: 0;
+  border-radius: 9px;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn-view {
+  min-width: 98px;
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn-edit {
+  min-width: 72px;
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn-pay {
+  min-width: 72px;
+  color: #166534;
+  background: #dcfce7;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn i {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn span {
+  display: inline;
+  min-width: 0;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.lancamentos-vencimentos-shell .table-actions .table-btn:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+.lancamentos-vencimentos-shell .vencimentos-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-actions .list-action,
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern,
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
+  min-height: 44px;
+  padding: 0.64rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
+  color: #334155 !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06) !important;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary i,
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary span {
+  color: #334155 !important;
+}
+
+.lancamentos-vencimentos-shell .vencimentos-actions .btn-modern {
+  color: #ffffff !important;
+  background: #2563eb !important;
+  border: 1px solid #2563eb !important;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Visualização de lançamento - isolada */
+
+.view-shell.lancamento-view-shell .view-panel.lancamento-view-panel {
+  padding: 1.18rem !important;
+  border-radius: 24px !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-panel-header {
+  margin-bottom: 1rem !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .form-section-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-height: 22px !important;
+  margin-bottom: 0.38rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  color: #2563eb !important;
+  background: rgba(37, 99, 235, 0.1) !important;
+  border: 1px solid rgba(37, 99, 235, 0.14) !important;
+  font-size: 0.64rem !important;
+  font-weight: 820 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-panel-header
+  h2 {
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: 2.06rem !important;
+  line-height: 1.05 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-panel-header
+  p {
+  max-width: 680px !important;
+  margin: 0.34rem 0 0 !important;
+  color: #64748b !important;
+  font-size: 1rem !important;
+  line-height: 1.42 !important;
+  font-weight: 500 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-section-title {
+  display: grid !important;
+  gap: 0.22rem !important;
+  margin: 0 0 0.78rem !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-section-title-spaced {
+  margin-top: 1.12rem !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-section-title
+  span {
+  color: #0f172a !important;
+  font-size: 0.88rem !important;
+  font-weight: 850 !important;
+  line-height: 1.15 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-section-title
+  small {
+  color: #64748b !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  line-height: 1.28 !important;
+}
+
+.view-shell.lancamento-view-shell .view-panel.lancamento-view-panel .view-grid {
+  gap: 0.72rem !important;
+}
+
+/* Primeiro grupo da visualizacao: no desktop, os cards financeiros ficam na mesma linha */
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-panel-header
+  + .view-section-title
+  + .view-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-panel-header
+  + .view-section-title
+  + .view-grid:has(.view-card:nth-child(4)) {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.view-shell.lancamento-view-shell .view-panel.lancamento-view-panel .view-card {
+  min-height: 68px !important;
+  padding: 0.76rem 0.86rem !important;
+  border-radius: 15px !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-card
+  strong {
+  color: #64748b !important;
+  font-size: 0.62rem !important;
+  font-weight: 850 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.055em !important;
+  text-transform: uppercase !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-card
+  > span {
+  color: #0f172a !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-card
+  > span.view-empty-value {
+  color: #64748b !important;
+  font-weight: 650 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-card.is-wide {
+  grid-column: 1 / -1 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-actions {
+  gap: 1rem !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-actions-copy {
+  color: #64748b !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+/* Destaques */
+
+.lancamentos-list-shell .table-cell-highlight,
+.lancamentos-vencimentos-shell .table-cell-highlight {
+  background: rgba(245, 158, 11, 0.07) !important;
+}
+
+.lancamentos-list-shell .launch-row-parcelado td {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 251, 235, 0.26),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+/* Tablet */
+
+@media (max-width: 991.98px) {
+  .lancamentos-list-shell .list-toolbar {
+    align-items: stretch;
+  }
+
+  .lancamentos-list-shell .list-toolbar .d-flex {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  .lancamentos-list-shell .list-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lancamentos-list-shell .list-summary-card {
+    min-height: 96px;
+  }
+
+  .lancamentos-list-shell .launch-table-scroll,
+  .lancamentos-vencimentos-shell .modern-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lancamentos-list-shell .launch-table {
+    min-width: 860px;
+  }
+
+  .lancamentos-vencimentos-shell .modern-table {
+    min-width: 980px;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    h2 {
+    font-size: 2rem !important;
+    line-height: 1.06 !important;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+  .lancamento-form-shell .form-stage,
+  .lancamentos-list-shell .list-stage,
+  .lancamentos-vencimentos-shell .list-stage,
+  .lancamento-view-shell .view-stage {
+    padding-inline: 0.18rem !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar,
+  .lancamentos-vencimentos-shell .page-titlebar,
+  .view-shell.lancamento-view-shell .page-titlebar,
+  .lancamento-form-shell .page-titlebar {
+    gap: 0.78rem !important;
+    margin-bottom: 0.72rem !important;
+    padding: 1.04rem 1rem !important;
+    border-radius: 22px !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-content,
+  .lancamentos-vencimentos-shell .page-titlebar-content,
+  .view-shell.lancamento-view-shell .page-titlebar-content,
+  .lancamento-form-shell .page-titlebar-content {
+    gap: 0.42rem !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-content h1,
+  .lancamentos-vencimentos-shell .page-titlebar-content h1,
+  .view-shell.lancamento-view-shell .page-titlebar-content h1,
+  .lancamento-form-shell .page-titlebar-content h1 {
+    max-width: 15rem;
+    font-size: 1.54rem !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-content p,
+  .lancamentos-vencimentos-shell .page-titlebar-content p,
+  .view-shell.lancamento-view-shell .page-titlebar-content p,
+  .lancamento-form-shell .page-titlebar-content p {
+    max-width: 18rem;
+    font-size: 0.82rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-side,
+  .lancamentos-vencimentos-shell .page-titlebar-side,
+  .view-shell.lancamento-view-shell .page-titlebar-side,
+  .lancamento-form-shell .page-titlebar-side {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .lancamentos-vencimentos-shell .page-titlebar-side,
+  .view-shell.lancamento-view-shell .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar {
+    gap: 0.66rem !important;
+    padding-block: 0.96rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side {
+    gap: 0.42rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat {
+    padding: 0.56rem 0.62rem !important;
+    border-radius: 14px !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-side .list-stat,
+  .lancamentos-vencimentos-shell .page-titlebar-side .list-stat,
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat,
+  .lancamento-form-shell .page-titlebar-side .page-titlebar-stat,
+  .lancamento-form-shell .page-titlebar-side .list-stat {
+    min-height: auto !important;
+    padding: 0.64rem 0.78rem !important;
+    border-radius: 15px !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-side .list-stat:nth-child(2) {
+    display: none !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-side .list-stat strong,
+  .lancamentos-vencimentos-shell .page-titlebar-side .list-stat strong,
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat strong,
+  .lancamento-form-shell .page-titlebar-side .page-titlebar-stat strong,
+  .lancamento-form-shell .page-titlebar-side .list-stat strong {
+    font-size: 0.62rem !important;
+    line-height: 1 !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-side .list-stat span,
+  .lancamentos-vencimentos-shell .page-titlebar-side .list-stat span,
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat span,
+  .lancamento-form-shell .page-titlebar-side .page-titlebar-stat span,
+  .lancamento-form-shell .page-titlebar-side .list-stat span {
+    font-size: 0.9rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .lancamentos-vencimentos-shell .page-titlebar-side .list-stat {
+    padding-inline: 0.72rem !important;
+  }
+
+  .lancamentos-vencimentos-shell .page-titlebar-side .list-stat span {
+    font-size: 0.86rem !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-card,
+  .lancamentos-list-shell .list-panel,
+  .lancamentos-vencimentos-shell .list-panel {
+    padding: 0.68rem !important;
+    border-radius: 18px;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-card-header {
+    margin-bottom: 0.68rem;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-card-header h2,
+  .lancamentos-vencimentos-shell .table-section-title {
+    font-size: 1.02rem !important;
+    line-height: 1.14 !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-card-header p {
+    font-size: 0.76rem !important;
+    line-height: 1.34 !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .row {
+    --bs-gutter-x: 0.44rem;
+    --bs-gutter-y: 0.68rem;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form label {
+    font-size: 0.75rem;
+    line-height: 1.22;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-control,
+  .lancamento-form-shell .modern-form.lancamento-form .form-select,
+  .lancamento-form-shell .modern-form.lancamento-form .input-group-text {
+    min-height: 40px;
+    padding-inline: 0.72rem;
+    font-size: 0.82rem;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .input-group {
+    flex-wrap: nowrap !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .input-group
+    > .input-group-text {
+    flex: 0 0 48px;
+    width: 48px;
+    min-width: 48px;
+    padding-inline: 0 !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .input-group
+    > .form-control {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form textarea.form-control {
+    min-height: 100px;
+    padding: 0.72rem;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-section-tag {
+    min-height: 19px !important;
+    margin-bottom: 0.26rem !important;
+    padding: 2px 7px !important;
+    font-size: 0.57rem !important;
+    letter-spacing: 0.026em !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-bar {
+    gap: 0.72rem !important;
+    margin-top: 0.92rem !important;
+    padding: 0.86rem !important;
+    border-radius: 18px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(203, 213, 225, 0.74) !important;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-copy {
+    display: grid !important;
+    gap: 0.22rem !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-copy
+    strong {
+    color: #0f172a !important;
+    font-size: 0.92rem !important;
+    font-weight: 900 !important;
+    line-height: 1.16 !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-copy span {
+    color: #64748b !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    line-height: 1.32 !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.52rem !important;
+    width: 100% !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern-secondary,
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern {
+    width: 100% !important;
+    min-height: 44px !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+    font-size: 0.84rem !important;
+    font-weight: 850 !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern-secondary {
+    color: #1d4ed8 !important;
+    background: #eaf2ff !important;
+    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    box-shadow: none !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern-secondary
+    i,
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern-secondary
+    span {
+    color: #1d4ed8 !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern {
+    color: #ffffff !important;
+    background: #2563eb !important;
+    border: 1px solid #2563eb !important;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18) !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern
+    i,
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern
+    span {
+    color: #ffffff !important;
+  }
+
+  .lancamentos-list-shell .list-toolbar {
+    display: grid;
+    gap: 0.64rem;
+    margin-bottom: 0.68rem;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy {
+    gap: 0.22rem;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy h2 {
+    font-size: 1.2rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.035em;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy p {
+    max-width: 100%;
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy p br {
+    display: none;
+  }
+
+  .lancamentos-list-shell .list-toolbar .d-flex {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+    gap: 0.4rem !important;
+    width: 100%;
+  }
+
+  .lancamentos-list-shell .list-toolbar .d-flex .list-action:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .lancamentos-list-shell .list-action {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0.56rem 0.46rem;
+    border-radius: 13px;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  .lancamentos-list-shell .list-action i {
+    flex: 0 0 auto;
+    font-size: 0.84rem;
+  }
+
+  .lancamentos-list-shell .list-action span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lancamentos-list-shell .list-toolbar .list-action:first-child {
+    color: #1d4ed8;
+    background: #eaf2ff;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    box-shadow: none;
+  }
+
+  .lancamentos-list-shell .list-toolbar .list-action:first-child i {
+    color: #1d4ed8;
+  }
+
+  .lancamentos-list-shell .list-toolbar .list-action:nth-child(2) {
+    color: #ffffff;
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+  }
+
+  .lancamentos-list-shell .list-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0.64rem;
+  }
+
+  .lancamentos-list-shell .list-summary-card {
+    min-height: auto;
+    padding: 0.68rem 0.78rem;
+    border-radius: 15px;
+  }
+
+  .lancamentos-list-shell .list-summary-card:not(:first-child) {
+    display: none;
+  }
+
+  .lancamentos-list-shell .list-summary-card strong {
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+  }
+
+  .lancamentos-list-shell .list-summary-card span {
+    font-size: 0.92rem;
+    line-height: 1.18;
+  }
+
+  .lancamentos-list-shell .table-mode-switch {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    gap: 0.24rem;
+    margin-bottom: 0.72rem;
+    padding: 0.22rem;
+  }
+
+  .lancamentos-list-shell .table-mode-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0.6rem 0.42rem;
+    font-size: 13px !important;
+  }
+
+  .lancamentos-list-shell .launch-table-wrap,
+  .lancamentos-vencimentos-shell .modern-table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .lancamentos-list-shell .launch-table-scroll,
+  .lancamentos-vencimentos-shell .modern-table-scroll {
+    overflow: visible;
+  }
+
+  .lancamentos-list-shell .modern-table,
+  .lancamentos-vencimentos-shell .modern-table {
+    min-width: 0;
+  }
+
+  .lancamentos-list-shell .modern-table thead,
+  .lancamentos-vencimentos-shell .modern-table thead {
+    display: none;
+  }
+
+  .lancamentos-list-shell .modern-table tbody,
+  .lancamentos-vencimentos-shell .modern-table tbody {
+    display: grid;
+    gap: 0.66rem;
+  }
+
+  .lancamentos-list-shell .modern-table tbody tr,
+  .lancamentos-vencimentos-shell .modern-table tbody tr {
+    display: grid;
+    width: 100%;
+    padding: 0.72rem 0.78rem;
+    border: 1px solid rgba(203, 213, 225, 0.72);
+    border-radius: 18px;
+    background:
+      radial-gradient(
+        circle at 8% 8%,
+        rgba(37, 99, 235, 0.045),
+        transparent 34%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.99),
+        rgba(248, 250, 252, 0.95)
+      );
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.065);
+  }
+
+  .lancamentos-list-shell .modern-table tbody tr:hover td,
+  .lancamentos-vencimentos-shell .modern-table tbody tr:hover td {
+    background: transparent;
+  }
+
+  .lancamentos-list-shell .modern-table td,
+  .lancamentos-vencimentos-shell .modern-table td {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.62rem;
+    min-height: 42px;
+    width: 100% !important;
+    padding: 0.5rem 0 !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+    font-size: 14px !important;
+    text-align: left !important;
+  }
+
+  .lancamentos-list-shell .modern-table td:last-child,
+  .lancamentos-vencimentos-shell .modern-table td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .lancamentos-list-shell .modern-table td::before,
+  .lancamentos-vencimentos-shell .modern-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: 0.052em;
+    text-transform: uppercase;
+  }
+
+  .lancamentos-list-shell .modern-table .table-empty,
+  .lancamentos-vencimentos-shell .modern-table .table-empty {
+    display: block !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 0.92rem 0.76rem !important;
+    border-bottom: 0 !important;
+    color: #475569 !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+    line-height: 1.32 !important;
+    text-align: center !important;
+  }
+
+  .lancamentos-list-shell .modern-table .table-empty::before,
+  .lancamentos-vencimentos-shell .modern-table .table-empty::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-movement {
+    grid-template-columns: 1fr;
+    gap: 0.34rem;
+    min-height: auto;
+    padding-top: 0.14rem !important;
+    padding-bottom: 0.62rem !important;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-movement::before {
+    display: none;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-payment,
+  .lancamentos-list-shell .launch-table td.launch-col-value {
+    grid-template-columns: 108px minmax(0, 1fr);
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-description {
+    display: none;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-actions {
+    grid-template-columns: 1fr;
+    gap: 0.46rem;
+    padding-top: 0.62rem !important;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-actions::before {
+    display: none;
+  }
+
+  .lancamentos-list-shell .launch-movement-cell {
+    justify-items: start;
+    gap: 0.38rem;
+  }
+
+  .lancamentos-list-shell .launch-payment-cell {
+    justify-items: start;
+    gap: 0.12rem;
+  }
+
+  .lancamentos-list-shell .launch-main-title {
+    font-size: 1rem !important;
+    line-height: 1.16 !important;
+    text-align: left;
+    letter-spacing: -0.02em;
+  }
+
+  .lancamentos-list-shell .launch-meta {
+    justify-content: flex-start;
+    color: #64748b;
+    font-size: 13px !important;
+    line-height: 1.18 !important;
+    text-align: left;
+  }
+
+  .lancamentos-list-shell .launch-payment-cell strong {
+    font-size: 14px !important;
+    line-height: 1.16 !important;
+    text-align: left;
+  }
+
+  .lancamentos-list-shell .launch-payment-cell .launch-meta,
+  .lancamentos-list-shell .launch-payment-cell .launch-meta i {
+    font-size: 13px !important;
+  }
+
+  .lancamentos-list-shell .launch-col-value strong {
+    color: #0f172a;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.02em;
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(1)::before {
+    content: 'ID';
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(2)::before {
+    content: 'Categoria';
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(3)::before {
+    content: 'Descrição';
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(4)::before {
+    content: 'Vencimento';
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(5)::before {
+    content: 'Prazo';
+  }
+
+  .lancamentos-vencimentos-shell .modern-table td:nth-child(6)::before {
+    content: 'Ações';
+  }
+
+  .lancamentos-list-shell .table-actions,
+  .lancamentos-vencimentos-shell .table-actions {
+    justify-content: flex-start !important;
+  }
+
+  .lancamentos-list-shell .table-stack-compact {
+    display: inline-grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: max-content !important;
+    gap: 0.34rem !important;
+  }
+
+  .lancamentos-list-shell .table-badge,
+  .lancamentos-vencimentos-shell .table-badge {
+    min-height: 24px !important;
+    padding: 0.26rem 0.58rem !important;
+    border-radius: 999px;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    line-height: 1.1 !important;
+  }
+
+  .lancamentos-list-shell .table-title-cell,
+  .lancamentos-vencimentos-shell .table-title-cell {
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    text-align: left;
+  }
+
+  .lancamentos-vencimentos-shell
+    .vencimentos-table
+    td:nth-child(2)
+    .table-title-cell {
+    text-align: left;
+  }
+
+  .lancamentos-list-shell .table-muted,
+  .lancamentos-vencimentos-shell .table-muted {
+    font-size: 14px !important;
+    line-height: 1.34 !important;
+    text-align: left;
+    -webkit-line-clamp: 3;
+  }
+
+  .lancamentos-vencimentos-shell
+    .vencimentos-table
+    .table-cell-description
+    .table-muted {
+    text-align: left;
+    -webkit-line-clamp: 3;
+  }
+
+  .lancamentos-list-shell .table-vencimento-copy {
+    justify-items: start;
+  }
+
+  .lancamentos-list-shell .table-vencimento-copy strong {
+    font-size: 14px !important;
+  }
+
+  .lancamentos-list-shell .table-actions-launch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: stretch !important;
+    gap: 0.44rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lancamentos-list-shell .table-actions,
+  .lancamentos-vencimentos-shell .table-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: stretch !important;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lancamentos-list-shell .table-actions-launch > a,
+  .lancamentos-list-shell .table-actions-launch > form,
+  .lancamentos-vencimentos-shell .table-actions > a,
+  .lancamentos-vencimentos-shell .table-actions > form {
+    width: 100%;
+  }
+
+  .lancamentos-list-shell .table-actions-launch .table-btn,
+  .lancamentos-list-shell .table-actions-launch .delete-form .table-btn,
+  .lancamentos-vencimentos-shell .table-actions .table-btn,
+  .lancamentos-vencimentos-shell .table-actions form .table-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    min-height: 40px;
+    padding: 0.48rem 0.54rem;
+    border-radius: 13px;
+    font-size: 0.72rem !important;
+  }
+
+  .lancamentos-list-shell .table-actions-launch .table-btn i,
+  .lancamentos-vencimentos-shell .table-actions .table-btn i {
+    font-size: 0.8rem;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-section-header,
+  .lancamentos-vencimentos-shell .table-section-header {
+    display: grid;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-section-header p,
+  .lancamentos-vencimentos-shell .table-section-description {
+    font-size: 0.76rem;
+    line-height: 1.34;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-top: 0.88rem;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions .list-action,
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern,
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    font-weight: 850;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
+    color: #1d4ed8 !important;
+    background: #eaf2ff !important;
+    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    box-shadow: none !important;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary i,
+  .lancamentos-vencimentos-shell
+    .vencimentos-actions
+    .btn-modern-secondary
+    span {
+    color: #1d4ed8 !important;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern {
+    color: #ffffff !important;
+    background: #2563eb !important;
+    border: 1px solid #2563eb !important;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+  }
+
+  .view-shell.lancamento-view-shell .view-panel.lancamento-view-panel {
+    padding: 0.72rem !important;
+    border-radius: 18px !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header {
+    margin-bottom: 0.62rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    p {
+    font-size: 0.82rem !important;
+    line-height: 1.34 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .form-section-tag {
+    min-height: 19px !important;
+    margin-bottom: 0.22rem !important;
+    padding: 2px 7px !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.026em !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid
+    .view-card:first-child {
+    display: none !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:last-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    + .view-section-title
+    + .view-grid:has(.view-card:nth-child(4))
+    .view-card:last-child
+    > span {
+    font-size: 0.92rem !important;
+    line-height: 1.16 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-card.is-wide {
+    grid-column: 1 / -1 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-card {
+    min-height: 54px !important;
+    padding: 0.58rem 0.66rem !important;
+    border-radius: 14px !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-card
+    strong {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-card
+    > span {
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-section-title {
+    gap: 0.12rem !important;
+    margin-bottom: 0.48rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-section-title-spaced {
+    margin-top: 0.66rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-section-title
+    span {
+    font-size: 0.78rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-section-title
+    small {
+    font-size: 0.68rem !important;
+    line-height: 1.26 !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-actions {
+    gap: 0.66rem !important;
+    margin-top: 0.7rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-actions-copy {
+    font-size: 0.72rem !important;
+    line-height: 1.32 !important;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .lancamento-form-shell .modern-form.lancamento-form .form-card,
+  .lancamentos-list-shell .list-panel,
+  .lancamentos-vencimentos-shell .list-panel {
+    padding-inline: 0.62rem;
+  }
+
+  .view-shell.lancamento-view-shell .view-panel.lancamento-view-panel {
+    padding-inline: 0.62rem !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar,
+  .lancamentos-vencimentos-shell .page-titlebar,
+  .view-shell.lancamento-view-shell .page-titlebar,
+  .lancamento-form-shell .page-titlebar {
+    padding: 0.96rem 0.92rem !important;
+    border-radius: 21px !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar {
+    gap: 0.58rem !important;
+    padding: 0.88rem 0.86rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.38rem !important;
+  }
+
+  .view-shell.lancamento-view-shell .page-titlebar-side .list-stat {
+    padding: 0.5rem 0.54rem !important;
+    border-radius: 13px !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-content h1,
+  .lancamentos-vencimentos-shell .page-titlebar-content h1,
+  .view-shell.lancamento-view-shell .page-titlebar-content h1,
+  .lancamento-form-shell .page-titlebar-content h1 {
+    font-size: 1.44rem !important;
+  }
+
+  .lancamentos-list-shell .page-titlebar-content p,
+  .lancamentos-vencimentos-shell .page-titlebar-content p,
+  .view-shell.lancamento-view-shell .page-titlebar-content p,
+  .lancamento-form-shell .page-titlebar-content p {
+    font-size: 0.8rem !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-bar {
+    padding: 0.78rem !important;
+    border-radius: 17px !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-copy
+    strong {
+    font-size: 0.88rem !important;
+  }
+
+  .lancamento-form-shell .modern-form.lancamento-form .form-actions-copy span {
+    font-size: 0.68rem !important;
+  }
+
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern-secondary,
+  .lancamento-form-shell
+    .modern-form.lancamento-form
+    .form-actions-buttons
+    .btn-modern {
+    min-height: 42px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy h2 {
+    font-size: 1.16rem !important;
+  }
+
+  .lancamentos-list-shell .list-toolbar-copy p {
+    font-size: 0.72rem !important;
+  }
+
+  .lancamentos-list-shell .list-toolbar .d-flex {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 0.34rem !important;
+  }
+
+  .lancamentos-list-shell .list-action {
+    min-height: 40px;
+    padding-inline: 0.36rem;
+    font-size: 0.68rem;
+  }
+
+  .lancamentos-list-shell .list-action i {
+    font-size: 0.76rem;
+  }
+
+  .lancamentos-list-shell .list-summary-card span {
+    font-size: 0.88rem;
+  }
+
+  .lancamentos-list-shell .modern-table td,
+  .lancamentos-vencimentos-shell .modern-table td {
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 0.58rem;
+  }
+
+  .lancamentos-list-shell .launch-table td.launch-col-payment,
+  .lancamentos-list-shell .launch-table td.launch-col-value {
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+
+  .lancamentos-list-shell .launch-main-title,
+  .lancamentos-list-shell .launch-col-value strong {
+    font-size: 0.96rem !important;
+  }
+
+  .lancamentos-list-shell .table-actions-launch {
+    gap: 0.38rem;
+  }
+
+  .lancamentos-list-shell .table-actions-launch .table-btn,
+  .lancamentos-vencimentos-shell .table-actions .table-btn {
+    min-height: 38px;
+    font-size: 0.68rem !important;
+    padding-inline: 0.42rem;
+  }
+
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern,
+  .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
+    min-height: 42px;
+    font-size: 0.76rem;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-panel-header
+    h2 {
+    font-size: 1.38rem !important;
+  }
+
+  .view-shell.lancamento-view-shell
+    .view-panel.lancamento-view-panel
+    .view-card {
+    min-height: 52px !important;
+    padding: 0.56rem 0.62rem !important;
+  }
+}

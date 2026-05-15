@@ -1,0 +1,1838 @@
+/* ==========================================================================
+   22 - TELAS OPERACIONAIS DE PELUCIAS
+   Cadastro, edição, listagem, visualização e controle geral de sangrias de pelúcias
+   ========================================================================== */
+
+/* Base encapsulada - formulários */
+
+.pelucias-form-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.pelucias-form-shell .form-stage {
+  margin-top: 0.95rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-card {
+  overflow: hidden;
+  padding: 0.9rem;
+  border-radius: 20px;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-card-header {
+  margin-bottom: 0.95rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-card-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.12rem !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-card-header p {
+  max-width: 680px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-section-tag,
+.pelucias-view-shell .form-section-tag,
+.pelucias-control-shell .form-section-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-height: 22px !important;
+  margin-bottom: 0.38rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.14);
+  font-size: 0.64rem !important;
+  font-weight: 820 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .row {
+  --bs-gutter-x: 0.58rem;
+  --bs-gutter-y: 0.78rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form label {
+  display: block;
+  margin-bottom: 0.34rem;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-control,
+.pelucias-form-shell .modern-form.pelucias-form .form-select,
+.pelucias-form-shell .modern-form.pelucias-form .input-group-text {
+  font-size: 0.86rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-control,
+.pelucias-form-shell .modern-form.pelucias-form .form-select {
+  min-height: 42px;
+  color: #0f172a;
+  font-weight: 650;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form textarea.form-control {
+  min-height: 132px;
+  padding: 0.76rem;
+  resize: vertical;
+}
+
+/* Hero dos formulários */
+
+.pelucias-form-shell .pelucias-titlebar {
+  gap: 1rem;
+}
+
+.pelucias-form-shell .pelucias-titlebar .page-titlebar-content p {
+  max-width: 620px;
+}
+
+.pelucias-form-shell .pelucias-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.pelucias-form-shell .pelucias-titlebar .page-titlebar-stat {
+  display: grid;
+  align-content: center;
+}
+
+/* Inputs monetários e percentuais */
+
+.pelucias-form-shell .modern-form.pelucias-form .input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .input-group
+  > .input-group-text {
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  min-height: 42px;
+  justify-content: center;
+  padding-inline: 0;
+  color: #7c3aed;
+  font-weight: 850;
+  background: #f5f3ff;
+  border-color: rgba(196, 181, 253, 0.95);
+  border-right: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .input-group > .form-control {
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+  min-height: 42px;
+  border-left: 0;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: none;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .input-group:focus-within
+  > .input-group-text,
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .input-group:focus-within
+  > .form-control {
+  border-color: rgba(124, 58, 237, 0.58);
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .readonly-input {
+  color: #475569;
+  background: #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* Cards de resumo - desktop/tablet */
+
+.pelucias-form-shell .modern-form.pelucias-form .form-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-summary-card {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  min-height: 70px;
+  padding: 0.72rem 0.78rem;
+  border-radius: 15px;
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(124, 58, 237, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(180deg, #f5f3ff 0%, #ede9fe 100%);
+  border: 1px solid rgba(196, 181, 253, 0.65);
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-summary-card strong {
+  color: #7c3aed;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pelucias-form-shell .modern-form.pelucias-form .form-summary-card span {
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+/* Barra final dos formulários */
+
+.pelucias-form-shell .modern-form.pelucias-form .pelucias-actions-bar {
+  display: grid !important;
+  gap: 0.74rem !important;
+  margin-top: 0 !important;
+  padding: 0.9rem !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08) !important;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .form-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .form-actions-copy
+  strong {
+  color: #0f172a !important;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .form-actions-copy
+  span {
+  color: #64748b !important;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .form-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .btn-modern,
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .btn-modern-secondary {
+  color: #7c3aed !important;
+  background: #f5f3ff !important;
+  border: 1px solid rgba(196, 181, 253, 0.72) !important;
+}
+
+.pelucias-form-shell
+  .modern-form.pelucias-form
+  .pelucias-actions-bar
+  .btn-modern-secondary:hover {
+  color: #6d28d9 !important;
+  background: #ede9fe !important;
+  border-color: rgba(167, 139, 250, 0.86) !important;
+}
+
+/* Listagem de sangrias de pelucias - desktop/tablet */
+
+.pelucias-list-shell {
+  width: min(1180px, calc(100% - 1.5rem));
+}
+
+.pelucias-list-shell .list-stage {
+  margin-top: 0.95rem;
+}
+
+.pelucias-list-shell .pelucias-list-titlebar {
+  gap: 1rem;
+}
+
+.pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content p {
+  max-width: 680px;
+}
+
+.pelucias-list-shell .pelucias-list-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.pelucias-list-shell .pelucias-list-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.pelucias-list-shell .pelucias-list-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.pelucias-list-shell .list-toolbar {
+  margin-bottom: 0.95rem;
+}
+
+.pelucias-list-shell .list-toolbar-copy h2 {
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+}
+
+.pelucias-list-shell .list-toolbar-copy p {
+  max-width: 720px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.pelucias-list-shell .pelucias-table {
+  table-layout: fixed;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(1),
+.pelucias-list-shell .pelucias-table td:nth-child(1) {
+  width: 72px;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(2),
+.pelucias-list-shell .pelucias-table td:nth-child(2) {
+  width: 25%;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(3),
+.pelucias-list-shell .pelucias-table td:nth-child(3) {
+  width: 112px;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(4),
+.pelucias-list-shell .pelucias-table td:nth-child(4) {
+  width: 118px;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(5),
+.pelucias-list-shell .pelucias-table td:nth-child(5) {
+  width: 118px;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(6),
+.pelucias-list-shell .pelucias-table td:nth-child(6) {
+  width: 150px;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(7),
+.pelucias-list-shell .pelucias-table td:nth-child(7) {
+  width: 210px;
+}
+
+.pelucias-list-shell .pelucias-table .table-title-cell {
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.22;
+}
+
+.pelucias-list-shell .pelucias-table td {
+  vertical-align: middle;
+}
+
+.pelucias-list-shell .pelucias-table td[data-label='Data'] {
+  color: #0f172a;
+  font-weight: 750;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.pelucias-list-shell .pelucias-table th:nth-child(3),
+.pelucias-list-shell .pelucias-table td[data-label='Data'] {
+  vertical-align: middle;
+}
+
+.pelucias-list-shell .pelucias-table .color-select {
+  min-height: 38px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  border-radius: 12px;
+}
+
+.pelucias-list-shell .pelucias-table .table-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.32rem !important;
+  align-items: center !important;
+}
+
+.pelucias-list-shell .pelucias-table .table-actions .table-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 0.46rem 0.48rem !important;
+  border-radius: 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.pelucias-list-shell .pelucias-table .table-actions .table-btn-view {
+  grid-column: auto !important;
+}
+
+/* Visualização de sangria de pelucias - desktop/tablet */
+
+.pelucias-view-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.pelucias-view-shell .view-stage {
+  margin-top: 0.95rem;
+}
+
+.pelucias-view-shell .pelucias-view-titlebar {
+  gap: 1rem;
+}
+
+.pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content p {
+  max-width: 620px;
+}
+
+.pelucias-view-shell .pelucias-view-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.pelucias-view-shell .pelucias-view-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.pelucias-view-shell .pelucias-view-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.pelucias-view-shell .pelucias-view-panel-header {
+  margin-bottom: 0.95rem;
+}
+
+.pelucias-view-shell .pelucias-view-panel-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.pelucias-view-shell .pelucias-view-panel-header p {
+  max-width: 720px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.pelucias-view-shell .pelucias-view-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.pelucias-view-shell .pelucias-view-grid .view-card {
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  min-height: 82px;
+  padding: 0.82rem 0.9rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.pelucias-view-shell .pelucias-view-grid .view-card strong {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pelucias-view-shell .pelucias-view-grid .view-card span {
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.22;
+}
+
+.pelucias-view-shell .pelucias-view-grid .view-card.is-wide {
+  grid-column: 1 / -1;
+}
+
+.pelucias-view-shell .pelucias-view-actions {
+  display: grid;
+  gap: 0.74rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.pelucias-view-shell .pelucias-view-actions .view-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.pelucias-view-shell .pelucias-view-actions .view-actions-copy strong {
+  color: #0f172a;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.pelucias-view-shell .pelucias-view-actions .view-actions-copy span {
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.pelucias-view-shell .pelucias-view-actions .view-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.pelucias-view-shell .pelucias-view-actions .btn-modern,
+.pelucias-view-shell .pelucias-view-actions .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.pelucias-view-shell .pelucias-view-actions .btn-modern-secondary {
+  color: #7c3aed;
+  background: #f5f3ff;
+  border: 1px solid rgba(196, 181, 253, 0.72);
+}
+
+.pelucias-view-shell .pelucias-view-actions .btn-modern-secondary:hover {
+  color: #6d28d9;
+  background: #ede9fe;
+  border-color: rgba(167, 139, 250, 0.86);
+}
+
+/* Controle geral de pelucias - desktop/tablet */
+
+.pelucias-control-shell {
+  width: min(1320px, calc(100% - 1.5rem));
+}
+
+.pelucias-control-shell .pelucias-control-stage {
+  margin-top: 0.95rem;
+}
+
+.pelucias-control-shell .pelucias-control-titlebar {
+  gap: 1rem;
+}
+
+.pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content p {
+  max-width: 760px;
+}
+
+.pelucias-control-shell .pelucias-control-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.pelucias-control-shell .pelucias-control-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.pelucias-control-shell .pelucias-control-panel {
+  padding: 1.35rem;
+  border-radius: 24px;
+}
+
+.pelucias-control-shell .pelucias-control-toolbar {
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy {
+  display: grid;
+  gap: 0.26rem;
+}
+
+.pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.45rem;
+  line-height: 1.08;
+  font-weight: 880;
+  letter-spacing: -0.04em;
+}
+
+.pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.pelucias-control-shell .pelucias-control-days {
+  width: 242px;
+  min-width: 242px;
+}
+
+.pelucias-control-shell .pelucias-control-days .form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+  line-height: 1.2;
+  font-weight: 850 !important;
+  text-align: center;
+}
+
+.pelucias-control-shell .pelucias-control-days .form-control {
+  min-height: 38px;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850 !important;
+  border-radius: 9px;
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: none;
+}
+
+.pelucias-control-shell .pelucias-control-table {
+  table-layout: fixed;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(1),
+.pelucias-control-shell .pelucias-control-table td:nth-child(1) {
+  width: 19%;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(2),
+.pelucias-control-shell .pelucias-control-table td:nth-child(2) {
+  width: 25%;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(3),
+.pelucias-control-shell .pelucias-control-table td:nth-child(3) {
+  width: 18%;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(4),
+.pelucias-control-shell .pelucias-control-table td:nth-child(4) {
+  width: 82px;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(5),
+.pelucias-control-shell .pelucias-control-table td:nth-child(5) {
+  width: 120px;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(6),
+.pelucias-control-shell .pelucias-control-table td:nth-child(6) {
+  width: 130px;
+}
+
+.pelucias-control-shell .pelucias-control-table th:nth-child(7),
+.pelucias-control-shell .pelucias-control-table td:nth-child(7) {
+  width: 120px;
+}
+
+.pelucias-control-shell .pelucias-control-table td {
+  vertical-align: middle;
+}
+
+.pelucias-control-shell .pelucias-control-name {
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 880;
+  line-height: 1.18;
+}
+
+.pelucias-control-shell .pelucias-control-address-cell {
+  white-space: normal;
+  line-height: 1.3;
+}
+
+/* Tablet */
+
+@media (max-width: 991.98px) {
+  .pelucias-form-shell {
+    width: min(760px, calc(100% - 1.25rem));
+  }
+
+  .pelucias-control-shell {
+    width: min(900px, calc(100% - 1.25rem));
+  }
+
+  .pelucias-form-shell .page-titlebar,
+  .pelucias-control-shell .page-titlebar {
+    gap: 0.9rem;
+  }
+
+  .pelucias-form-shell .page-titlebar-side,
+  .pelucias-control-shell .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar {
+    align-items: start;
+  }
+
+  .pelucias-control-shell .pelucias-control-days {
+    width: 220px;
+    min-width: 220px;
+  }
+}
+
+/* Mobile - formulários, listagem, visualização e controle geral */
+
+@media (max-width: 767.98px) {
+  .pelucias-form-shell,
+  .pelucias-list-shell,
+  .pelucias-view-shell,
+  .pelucias-control-shell {
+    width: calc(100% - 1.25rem);
+  }
+
+  .pelucias-form-shell .form-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0.52rem !important;
+  }
+
+  .pelucias-view-shell .view-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-list-shell .list-stage,
+  .pelucias-control-shell .pelucias-control-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar,
+  .pelucias-list-shell .pelucias-list-titlebar,
+  .pelucias-view-shell .pelucias-view-titlebar,
+  .pelucias-control-shell .pelucias-control-titlebar {
+    gap: 0.72rem;
+    padding: 0.92rem;
+    border-radius: 22px;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-content,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content {
+    display: grid;
+    gap: 0.42rem;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-content h1,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content h1,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content h1,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content h1 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: 1.48rem !important;
+    line-height: 1.03 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content h1 {
+    max-width: 12ch;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-content p,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content p,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content p,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content p {
+    max-width: 30ch;
+    margin: 0;
+    font-size: 0.82rem !important;
+    line-height: 1.36 !important;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .form-kicker,
+  .pelucias-list-shell .pelucias-list-titlebar .list-kicker,
+  .pelucias-view-shell .pelucias-view-titlebar .form-kicker,
+  .pelucias-control-shell .pelucias-control-titlebar .list-kicker {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.3rem 0.62rem;
+    font-size: 0.68rem;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-side,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-side,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-side,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.52rem;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-stat,
+  .pelucias-list-shell .pelucias-list-titlebar .list-stat,
+  .pelucias-view-shell .pelucias-view-titlebar .list-stat,
+  .pelucias-control-shell .pelucias-control-titlebar .list-stat {
+    min-height: 58px;
+    padding: 0.58rem 0.62rem;
+    border-radius: 14px;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-stat strong,
+  .pelucias-list-shell .pelucias-list-titlebar .list-stat strong,
+  .pelucias-view-shell .pelucias-view-titlebar .list-stat strong,
+  .pelucias-control-shell .pelucias-control-titlebar .list-stat strong {
+    font-size: 0.58rem;
+    line-height: 1.12;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-stat span,
+  .pelucias-list-shell .pelucias-list-titlebar .list-stat span,
+  .pelucias-view-shell .pelucias-view-titlebar .list-stat span,
+  .pelucias-control-shell .pelucias-control-titlebar .list-stat span {
+    font-size: 0.72rem;
+    line-height: 1.16;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form {
+    gap: 0.72rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-card {
+    padding: 0.64rem;
+    border-radius: 18px;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-card-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-card-header h2 {
+    font-size: 1.02rem !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.03em;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-card-header p {
+    max-width: 30ch;
+    font-size: 0.76rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-section-tag,
+  .pelucias-view-shell .form-section-tag,
+  .pelucias-control-shell .form-section-tag {
+    min-height: 20px !important;
+    margin-bottom: 0.3rem !important;
+    padding: 2px 7px !important;
+    font-size: 0.58rem !important;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .row {
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form label {
+    margin-bottom: 0.3rem;
+    font-size: 0.76rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-control,
+  .pelucias-form-shell .modern-form.pelucias-form .form-select,
+  .pelucias-form-shell .modern-form.pelucias-form .input-group-text {
+    font-size: 0.82rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-control,
+  .pelucias-form-shell .modern-form.pelucias-form .form-select {
+    min-height: 40px;
+    padding-inline: 0.72rem;
+    border-radius: 12px;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form textarea.form-control {
+    min-height: 112px;
+    padding: 0.72rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .input-group
+    > .input-group-text {
+    flex: 0 0 42px;
+    width: 42px;
+    min-width: 42px;
+    min-height: 40px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .input-group > .form-control {
+    min-height: 40px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-visit-card > .row {
+    display: flex;
+    flex-wrap: wrap;
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    > .row
+    > [class*='col-'] {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    > .row
+    > [class*='col-']:nth-child(2),
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    > .row
+    > [class*='col-']:nth-child(3) {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    .form-control,
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    .form-select {
+    font-size: 0.8rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-values-card > .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    > .row
+    > [class*='col-'] {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-values-card label {
+    min-height: 2.15em;
+    display: flex;
+    align-items: flex-end;
+    line-height: 1.12;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    .form-control,
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    .input-group-text {
+    font-size: 0.78rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .form-summary-grid {
+    display: none !important;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-actions-bar {
+    padding: 0.82rem !important;
+    border-radius: 18px !important;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-actions-bar
+    .form-actions-copy
+    strong {
+    font-size: 0.9rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-actions-bar
+    .form-actions-copy
+    span {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-actions-bar
+    .form-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-actions-bar
+    .btn-modern,
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-actions-bar
+    .btn-modern-secondary {
+    min-height: 48px;
+    padding: 0.78rem 1rem;
+    border-radius: 13px;
+    font-size: 0.84rem;
+  }
+
+  /* Listagem mobile */
+
+  .pelucias-list-shell .pelucias-list-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .pelucias-list-shell .list-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .pelucias-list-shell .list-toolbar-copy {
+    display: grid;
+    gap: 0.24rem;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .pelucias-list-shell .list-toolbar-copy h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1rem;
+    line-height: 1.14;
+    font-weight: 850;
+    letter-spacing: -0.025em;
+  }
+
+  .pelucias-list-shell .list-toolbar-copy p {
+    max-width: 31ch;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.74rem;
+    line-height: 1.38;
+  }
+
+  .pelucias-list-shell .pelucias-list-action-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .pelucias-list-shell .pelucias-list-action-wrap .pelucias-list-action,
+  .pelucias-list-shell .list-toolbar > .list-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    width: 220px !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 auto !important;
+    padding-inline: 1rem !important;
+    border-radius: 13px !important;
+    font-size: 0.82rem !important;
+    font-weight: 850 !important;
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.18) !important;
+  }
+
+  .pelucias-list-shell .modern-table-wrap,
+  .pelucias-list-shell .modern-table-scroll {
+    overflow: visible;
+  }
+
+  .pelucias-list-shell .pelucias-table {
+    display: block;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .pelucias-list-shell .pelucias-table thead {
+    display: none;
+  }
+
+  .pelucias-list-shell .pelucias-table tbody {
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .pelucias-list-shell .pelucias-table tr {
+    display: grid;
+    gap: 0.58rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  }
+
+  .pelucias-list-shell .pelucias-table td {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.72rem;
+    width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    line-height: 1.28;
+    text-align: left;
+  }
+
+  .pelucias-list-shell .pelucias-table td[data-label='Data'] {
+    color: #0f172a;
+    font-size: 0.94rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .pelucias-list-shell .pelucias-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-title-cell {
+    font-size: 0.9rem;
+    line-height: 1.18;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-badge {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.76rem;
+  }
+
+  .pelucias-list-shell .pelucias-table .color-select {
+    width: 100%;
+    min-height: 40px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+  }
+
+  .pelucias-list-shell .pelucias-table td[data-label='Ações'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.52rem;
+    padding-top: 0.2rem !important;
+  }
+
+  .pelucias-list-shell .pelucias-table td[data-label='Ações']::before {
+    display: block;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-btn {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+    padding: 0.68rem 0.72rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-btn-view {
+    grid-column: 1 / -1;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-empty {
+    display: block;
+    padding: 1rem !important;
+    text-align: center;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-empty::before {
+    display: none;
+  }
+
+  /* Visualização mobile */
+
+  .pelucias-view-shell .pelucias-view-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .pelucias-view-shell .pelucias-view-panel-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-panel-header h2 {
+    font-size: 1.02rem;
+    line-height: 1.14;
+  }
+
+  .pelucias-view-shell .pelucias-view-panel-header p {
+    max-width: 30ch;
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.58rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card {
+    min-height: 74px;
+    padding: 0.68rem;
+    border-radius: 14px;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card strong {
+    font-size: 0.58rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card span {
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+ .pelucias-view-shell .pelucias-view-grid .view-card.is-wide {
+  grid-column: 1 / -1;
+}
+
+  .pelucias-view-shell .pelucias-view-actions {
+    margin-top: 0.72rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+  }
+
+  .pelucias-view-shell .pelucias-view-actions .view-actions-copy strong {
+    font-size: 0.9rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-actions .view-actions-copy span {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .pelucias-view-shell .pelucias-view-actions .view-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-actions .btn-modern,
+  .pelucias-view-shell .pelucias-view-actions .btn-modern-secondary {
+    min-height: 48px;
+    padding: 0.78rem 1rem;
+    border-radius: 13px;
+    font-size: 0.84rem;
+  }
+
+  /* Controle geral mobile */
+
+  .pelucias-control-shell .pelucias-control-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: stretch !important;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy {
+    display: grid;
+    gap: 0.28rem;
+    width: 100%;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy h2 {
+    max-width: 18ch;
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.18rem;
+    line-height: 1.08;
+    font-weight: 880;
+    letter-spacing: -0.045em;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy p {
+    max-width: 30ch;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.76rem;
+    line-height: 1.38;
+  }
+
+  .pelucias-control-shell .pelucias-control-days {
+    display: grid;
+    gap: 0.38rem;
+    width: min(220px, 100%);
+    min-width: 0;
+    justify-self: center;
+  }
+
+  .pelucias-control-shell .pelucias-control-days .form-label {
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.72rem;
+    line-height: 1.18;
+    font-weight: 850 !important;
+    text-align: center;
+  }
+
+  .pelucias-control-shell .pelucias-control-days .form-control {
+    min-height: 36px;
+    font-size: 0.86rem;
+    border-radius: 10px;
+  }
+
+  .pelucias-control-shell .pelucias-control-table-wrap,
+  .pelucias-control-shell .pelucias-control-table-scroll {
+    overflow: visible;
+  }
+
+  .pelucias-control-shell .pelucias-control-table {
+    display: block;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .pelucias-control-shell .pelucias-control-table thead {
+    display: none;
+  }
+
+  .pelucias-control-shell .pelucias-control-table tbody {
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-table .pelucias-control-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem 0.68rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  }
+
+  .pelucias-control-shell .pelucias-control-table .pelucias-control-row-alert {
+    background: linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
+    border-color: rgba(248, 113, 113, 0.38);
+    box-shadow: 0 14px 34px rgba(127, 29, 29, 0.08);
+  }
+
+  .pelucias-control-shell .pelucias-control-table td {
+    width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .pelucias-control-shell .pelucias-control-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+ .pelucias-control-shell .pelucias-control-name-cell {
+  grid-column: 1 / 2;
+  order: 1;
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+  text-align: left;
+}
+
+
+ .pelucias-control-shell .pelucias-control-name-cell::before {
+  display: none !important;
+}
+
+  .pelucias-control-shell .pelucias-control-name {
+    display: block;
+    color: #0f172a;
+    font-size: 0.92rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .pelucias-control-shell .pelucias-control-status-cell {
+    grid-column: 2 / 3;
+    order: 1;
+    display: flex !important;
+    align-items: flex-start;
+    justify-content: flex-end;
+    justify-self: stretch;
+    align-self: start;
+    min-width: 0;
+    width: auto !important;
+    text-align: right;
+  }
+
+  .pelucias-control-shell .pelucias-control-status-cell::before {
+    display: none !important;
+  }
+
+  .pelucias-control-shell .pelucias-control-status-cell .table-badge {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-status-cell
+    .table-badge {
+    color: #b91c1c;
+    background: #fee2e2;
+    border: 1px solid rgba(248, 113, 113, 0.28);
+  }
+
+  .pelucias-control-shell .pelucias-control-address-cell,
+  .pelucias-control-shell .pelucias-control-neighborhood-cell,
+  .pelucias-control-shell .pelucias-control-key-cell,
+  .pelucias-control-shell .pelucias-control-machine-cell,
+  .pelucias-control-shell .pelucias-control-days-cell {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 40px;
+    padding: 0.58rem 0.7rem 0 0.18rem !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.9) !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    font-weight: 780;
+    text-align: right;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-address-cell,
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-neighborhood-cell,
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-key-cell,
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-machine-cell,
+  .pelucias-control-shell
+    .pelucias-control-row-alert
+    .pelucias-control-days-cell {
+    border-top-color: rgba(254, 202, 202, 0.72) !important;
+  }
+
+  .pelucias-control-shell .pelucias-control-address-cell {
+    order: 2;
+    align-items: start;
+    color: #334155;
+    font-size: 0.8rem;
+    line-height: 1.34;
+  }
+
+  .pelucias-control-shell .pelucias-control-neighborhood-cell {
+    order: 3;
+  }
+
+  .pelucias-control-shell .pelucias-control-key-cell {
+    order: 4;
+  }
+
+  .pelucias-control-shell .pelucias-control-machine-cell {
+    order: 5;
+  }
+
+  .pelucias-control-shell .pelucias-control-days-cell {
+    order: 6;
+  }
+
+  .pelucias-control-shell .pelucias-control-address-cell::before,
+  .pelucias-control-shell .pelucias-control-neighborhood-cell::before,
+  .pelucias-control-shell .pelucias-control-key-cell::before,
+  .pelucias-control-shell .pelucias-control-machine-cell::before,
+  .pelucias-control-shell .pelucias-control-days-cell::before {
+    display: block !important;
+    text-align: left;
+  }
+}
+
+/* Mobile estreito */
+
+@media (max-width: 379.98px) {
+  .pelucias-form-shell,
+  .pelucias-list-shell,
+  .pelucias-view-shell,
+  .pelucias-control-shell {
+    width: calc(100% - 1rem);
+  }
+
+  .pelucias-form-shell .form-stage {
+    padding-inline: 0.44rem !important;
+  }
+
+  .pelucias-view-shell .view-stage {
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-list-shell .list-stage,
+  .pelucias-control-shell .pelucias-control-stage {
+    padding-inline: 0 !important;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar,
+  .pelucias-list-shell .pelucias-list-titlebar,
+  .pelucias-view-shell .pelucias-view-titlebar,
+  .pelucias-control-shell .pelucias-control-titlebar {
+    padding: 0.86rem;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-content h1,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content h1,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content h1,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content h1 {
+    font-size: 1.38rem !important;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-content p,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-content p,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-content p,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-content p {
+    font-size: 0.78rem !important;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-side,
+  .pelucias-list-shell .pelucias-list-titlebar .page-titlebar-side,
+  .pelucias-view-shell .pelucias-view-titlebar .page-titlebar-side,
+  .pelucias-control-shell .pelucias-control-titlebar .page-titlebar-side {
+    gap: 0.44rem;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-stat,
+  .pelucias-list-shell .pelucias-list-titlebar .list-stat,
+  .pelucias-view-shell .pelucias-view-titlebar .list-stat,
+  .pelucias-control-shell .pelucias-control-titlebar .list-stat {
+    min-height: 54px;
+    padding: 0.54rem;
+  }
+
+  .pelucias-form-shell .pelucias-titlebar .page-titlebar-stat span,
+  .pelucias-list-shell .pelucias-list-titlebar .list-stat span,
+  .pelucias-view-shell .pelucias-view-titlebar .list-stat span,
+  .pelucias-control-shell .pelucias-control-titlebar .list-stat span {
+    font-size: 0.68rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-visit-card > .row {
+    --bs-gutter-x: 0.42rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-visit-card label {
+    font-size: 0.7rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    .form-control,
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-visit-card
+    .form-select {
+    font-size: 0.74rem;
+    padding-inline: 0.58rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-values-card > .row {
+    --bs-gutter-x: 0.42rem;
+    --bs-gutter-y: 0.62rem;
+  }
+
+  .pelucias-form-shell .modern-form.pelucias-form .pelucias-values-card label {
+    font-size: 0.7rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    .form-control,
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    .input-group-text {
+    font-size: 0.74rem;
+  }
+
+  .pelucias-form-shell
+    .modern-form.pelucias-form
+    .pelucias-values-card
+    .input-group
+    > .input-group-text {
+    flex-basis: 38px;
+    width: 38px;
+    min-width: 38px;
+  }
+
+  .pelucias-list-shell .pelucias-table td {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0.58rem;
+    font-size: 0.8rem;
+  }
+
+  .pelucias-list-shell .pelucias-table td::before {
+    font-size: 0.62rem;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-actions {
+    gap: 0.44rem;
+  }
+
+  .pelucias-list-shell .pelucias-table .table-btn {
+    min-height: 40px;
+    font-size: 0.76rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid {
+    gap: 0.48rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card {
+    min-height: 68px;
+    padding: 0.58rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card strong {
+    font-size: 0.54rem;
+  }
+
+  .pelucias-view-shell .pelucias-view-grid .view-card span {
+    font-size: 0.78rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar {
+    padding: 0.74rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy h2 {
+    font-size: 1.08rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-toolbar .list-toolbar-copy p {
+    font-size: 0.72rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-table .pelucias-control-row {
+    gap: 0.46rem 0.6rem;
+    padding: 0.78rem;
+    border-radius: 16px;
+  }
+
+  .pelucias-control-shell .pelucias-control-name {
+    font-size: 0.86rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-status-cell .table-badge {
+    min-height: 26px;
+    padding: 0.34rem 0.5rem;
+    font-size: 0.66rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-address-cell,
+  .pelucias-control-shell .pelucias-control-neighborhood-cell,
+  .pelucias-control-shell .pelucias-control-key-cell,
+  .pelucias-control-shell .pelucias-control-machine-cell,
+  .pelucias-control-shell .pelucias-control-days-cell {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 0.58rem;
+    min-height: 38px;
+    padding: 0.54rem 0.64rem 0 0.12rem !important;
+    font-size: 0.78rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-table td::before {
+    font-size: 0.56rem;
+  }
+
+  .pelucias-control-shell .pelucias-control-address-cell {
+    font-size: 0.76rem;
+  }
+}

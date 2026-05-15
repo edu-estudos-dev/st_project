@@ -1,0 +1,1838 @@
+/* ==========================================================================
+   21 - TELAS OPERACIONAIS DE BOLINHAS
+   Cadastro, edição, listagem, visualização e controle geral
+   ========================================================================== */
+
+/* Base encapsulada - formulários */
+
+.bolinhas-form-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.bolinhas-form-shell .form-stage {
+  margin-top: 0.95rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-card {
+  overflow: hidden;
+  padding: 0.9rem;
+  border-radius: 20px;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-card-header {
+  margin-bottom: 0.95rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-card-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.12rem !important;
+  line-height: 1.18 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-card-header p {
+  max-width: 680px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-section-tag,
+.bolinhas-view-shell .form-section-tag,
+.bolinhas-control-shell .form-section-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  min-height: 22px !important;
+  margin-bottom: 0.38rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  font-size: 0.64rem !important;
+  font-weight: 820 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .row {
+  --bs-gutter-x: 0.58rem;
+  --bs-gutter-y: 0.78rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form label {
+  display: block;
+  margin-bottom: 0.34rem;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-control,
+.bolinhas-form-shell .modern-form.bolinhas-form .form-select,
+.bolinhas-form-shell .modern-form.bolinhas-form .input-group-text {
+  font-size: 0.86rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-control,
+.bolinhas-form-shell .modern-form.bolinhas-form .form-select {
+  min-height: 42px;
+  color: #0f172a;
+  font-weight: 650;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form textarea.form-control {
+  min-height: 132px;
+  padding: 0.76rem;
+  resize: vertical;
+}
+
+/* Hero dos formulários */
+
+.bolinhas-form-shell .bolinhas-titlebar {
+  gap: 1rem;
+}
+
+.bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content p {
+  max-width: 620px;
+}
+
+.bolinhas-form-shell .bolinhas-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat {
+  display: grid;
+  align-content: center;
+}
+
+/* Inputs monetários e percentuais */
+
+.bolinhas-form-shell .modern-form.bolinhas-form .input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .input-group
+  > .input-group-text {
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  min-height: 42px;
+  justify-content: center;
+  padding-inline: 0;
+  color: #2563eb;
+  font-weight: 850;
+  background: #eff6ff;
+  border-color: rgba(191, 219, 254, 0.95);
+  border-right: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .input-group > .form-control {
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+  min-height: 42px;
+  border-left: 0;
+  border-color: rgba(203, 213, 225, 0.95);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: none;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .input-group:focus-within
+  > .input-group-text,
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .input-group:focus-within
+  > .form-control {
+  border-color: rgba(37, 99, 235, 0.58);
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .readonly-input {
+  color: #475569;
+  background: #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* Cards de resumo - desktop/tablet */
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-summary-card {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  min-height: 70px;
+  padding: 0.72rem 0.78rem;
+  border-radius: 15px;
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(37, 99, 235, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid rgba(147, 197, 253, 0.65);
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-summary-card strong {
+  color: #2563eb;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bolinhas-form-shell .modern-form.bolinhas-form .form-summary-card span {
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+/* Barra final dos formulários */
+
+.bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-actions-bar {
+  display: grid !important;
+  gap: 0.74rem !important;
+  margin-top: 0 !important;
+  padding: 0.9rem !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08) !important;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .form-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .form-actions-copy
+  strong {
+  color: #0f172a !important;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .form-actions-copy
+  span {
+  color: #64748b !important;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .form-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .btn-modern,
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .btn-modern-secondary {
+  color: #2563eb !important;
+  background: #eff6ff !important;
+  border: 1px solid rgba(147, 197, 253, 0.72) !important;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .btn-modern-secondary:hover {
+  color: #1d4ed8 !important;
+  background: #dbeafe !important;
+  border-color: rgba(96, 165, 250, 0.86) !important;
+}
+
+/* Listagem de sangrias de bolinhas - desktop/tablet */
+
+.bolinhas-list-shell {
+  width: min(1180px, calc(100% - 1.5rem));
+}
+
+.bolinhas-list-shell .list-stage {
+  margin-top: 0.95rem;
+}
+
+.bolinhas-list-shell .bolinhas-list-titlebar {
+  gap: 1rem;
+}
+
+.bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content p {
+  max-width: 680px;
+}
+
+.bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.bolinhas-list-shell .bolinhas-list-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.bolinhas-list-shell .bolinhas-list-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.bolinhas-list-shell .list-toolbar {
+  margin-bottom: 0.95rem;
+}
+
+.bolinhas-list-shell .list-toolbar-copy h2 {
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+}
+
+.bolinhas-list-shell .list-toolbar-copy p {
+  max-width: 720px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.bolinhas-list-shell .bolinhas-table {
+  table-layout: fixed;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(1),
+.bolinhas-list-shell .bolinhas-table td:nth-child(1) {
+  width: 72px;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(2),
+.bolinhas-list-shell .bolinhas-table td:nth-child(2) {
+  width: 25%;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(3),
+.bolinhas-list-shell .bolinhas-table td:nth-child(3) {
+  width: 112px;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(4),
+.bolinhas-list-shell .bolinhas-table td:nth-child(4) {
+  width: 118px;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(5),
+.bolinhas-list-shell .bolinhas-table td:nth-child(5) {
+  width: 118px;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(6),
+.bolinhas-list-shell .bolinhas-table td:nth-child(6) {
+  width: 150px;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(7),
+.bolinhas-list-shell .bolinhas-table td:nth-child(7) {
+  width: 210px;
+}
+
+.bolinhas-list-shell .bolinhas-table .table-title-cell {
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.22;
+}
+
+.bolinhas-list-shell .bolinhas-table td {
+  vertical-align: middle;
+}
+
+.bolinhas-list-shell .bolinhas-table td[data-label='Data'] {
+  color: #0f172a;
+  font-weight: 750;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bolinhas-list-shell .bolinhas-table th:nth-child(3),
+.bolinhas-list-shell .bolinhas-table td[data-label='Data'] {
+  vertical-align: middle;
+}
+
+.bolinhas-list-shell .bolinhas-table .color-select {
+  min-height: 38px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  border-radius: 12px;
+}
+
+.bolinhas-list-shell .bolinhas-table .table-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.32rem !important;
+  align-items: center !important;
+}
+
+.bolinhas-list-shell .bolinhas-table .table-actions .table-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 0.46rem 0.48rem !important;
+  border-radius: 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.bolinhas-list-shell .bolinhas-table .table-actions .table-btn-view {
+  grid-column: auto !important;
+}
+
+/* Visualização de sangria de bolinhas - desktop/tablet */
+
+.bolinhas-view-shell {
+  width: min(980px, calc(100% - 1.5rem));
+}
+
+.bolinhas-view-shell .view-stage {
+  margin-top: 0.95rem;
+}
+
+.bolinhas-view-shell .bolinhas-view-titlebar {
+  gap: 1rem;
+}
+
+.bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content p {
+  max-width: 620px;
+}
+
+.bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.bolinhas-view-shell .bolinhas-view-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.bolinhas-view-shell .bolinhas-view-panel {
+  padding: 1.05rem;
+  border-radius: 24px;
+}
+
+.bolinhas-view-shell .bolinhas-view-panel-header {
+  margin-bottom: 0.95rem;
+}
+
+.bolinhas-view-shell .bolinhas-view-panel-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.16rem;
+  line-height: 1.16;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.bolinhas-view-shell .bolinhas-view-panel-header p {
+  max-width: 720px;
+  margin: 0.34rem 0 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.bolinhas-view-shell .bolinhas-view-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.bolinhas-view-shell .bolinhas-view-grid .view-card {
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  min-height: 82px;
+  padding: 0.82rem 0.9rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.bolinhas-view-shell .bolinhas-view-grid .view-card strong {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bolinhas-view-shell .bolinhas-view-grid .view-card span {
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.22;
+}
+
+.bolinhas-view-shell .bolinhas-view-grid .view-card.is-wide {
+  grid-column: 1 / -1;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions {
+  display: grid;
+  gap: 0.74rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .view-actions-copy {
+  display: grid;
+  gap: 0.22rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .view-actions-copy strong {
+  color: #0f172a;
+  font-size: 0.92rem;
+  line-height: 1.18;
+  font-weight: 850;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .view-actions-copy span {
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .view-actions-buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.58rem;
+  width: 100%;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern,
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 46px;
+  padding: 0.76rem 0.95rem;
+  border-radius: 13px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary {
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid rgba(147, 197, 253, 0.72);
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary:hover {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border-color: rgba(96, 165, 250, 0.86);
+}
+
+/* Controle geral de bolinhas - desktop/tablet */
+
+.bolinhas-control-shell {
+  width: min(1320px, calc(100% - 1.5rem));
+}
+
+.bolinhas-control-shell .bolinhas-control-stage {
+  margin-top: 0.95rem;
+}
+
+.bolinhas-control-shell .bolinhas-control-titlebar {
+  gap: 1rem;
+}
+
+.bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content p {
+  max-width: 760px;
+}
+
+.bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-side {
+  align-self: stretch;
+}
+
+.bolinhas-control-shell .bolinhas-control-titlebar .list-stat {
+  display: grid;
+  align-content: center;
+}
+
+.bolinhas-control-shell .bolinhas-control-panel {
+  padding: 1.35rem;
+  border-radius: 24px;
+}
+
+.bolinhas-control-shell .bolinhas-control-toolbar {
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy {
+  display: grid;
+  gap: 0.26rem;
+}
+
+.bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.45rem;
+  line-height: 1.08;
+  font-weight: 880;
+  letter-spacing: -0.04em;
+}
+
+.bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.bolinhas-control-shell .bolinhas-control-days {
+  width: 242px;
+  min-width: 242px;
+}
+
+.bolinhas-control-shell .bolinhas-control-days .form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+  line-height: 1.2;
+  font-weight: 850 !important;
+  text-align: center;
+}
+
+.bolinhas-control-shell .bolinhas-control-days .form-control {
+  min-height: 38px;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 850 !important;
+  border-radius: 9px;
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: none;
+}
+
+.bolinhas-control-shell .bolinhas-control-table {
+  table-layout: fixed;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(1),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(1) {
+  width: 19%;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(2),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(2) {
+  width: 25%;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(3),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(3) {
+  width: 18%;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(4),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(4) {
+  width: 82px;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(5),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(5) {
+  width: 120px;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(6),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(6) {
+  width: 130px;
+}
+
+.bolinhas-control-shell .bolinhas-control-table th:nth-child(7),
+.bolinhas-control-shell .bolinhas-control-table td:nth-child(7) {
+  width: 120px;
+}
+
+.bolinhas-control-shell .bolinhas-control-table td {
+  vertical-align: middle;
+}
+
+.bolinhas-control-shell .bolinhas-control-name {
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 880;
+  line-height: 1.18;
+}
+
+.bolinhas-control-shell .bolinhas-control-address-cell {
+  white-space: normal;
+  line-height: 1.3;
+}
+
+/* Tablet */
+
+@media (max-width: 991.98px) {
+  .bolinhas-form-shell {
+    width: min(760px, calc(100% - 1.25rem));
+  }
+
+  .bolinhas-control-shell {
+    width: min(900px, calc(100% - 1.25rem));
+  }
+
+  .bolinhas-form-shell .page-titlebar,
+  .bolinhas-control-shell .page-titlebar {
+    gap: 0.9rem;
+  }
+
+  .bolinhas-form-shell .page-titlebar-side,
+  .bolinhas-control-shell .page-titlebar-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar {
+    align-items: start;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-days {
+    width: 220px;
+    min-width: 220px;
+  }
+}
+
+/* Mobile - formulários, listagem, visualização e controle geral */
+
+@media (max-width: 767.98px) {
+  .bolinhas-form-shell,
+  .bolinhas-list-shell,
+  .bolinhas-view-shell,
+  .bolinhas-control-shell {
+    width: calc(100% - 1.25rem);
+  }
+
+  .bolinhas-form-shell .form-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0.52rem !important;
+  }
+
+  .bolinhas-view-shell .view-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-list-shell .list-stage,
+  .bolinhas-control-shell .bolinhas-control-stage {
+    margin-top: 0.72rem;
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar,
+  .bolinhas-list-shell .bolinhas-list-titlebar,
+  .bolinhas-view-shell .bolinhas-view-titlebar,
+  .bolinhas-control-shell .bolinhas-control-titlebar {
+    gap: 0.72rem;
+    padding: 0.92rem;
+    border-radius: 22px;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content {
+    display: grid;
+    gap: 0.42rem;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content h1,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content h1,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content h1,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content h1 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: 1.48rem !important;
+    line-height: 1.03 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content h1 {
+    max-width: 12ch;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content p,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content p,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content p,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content p {
+    max-width: 30ch;
+    margin: 0;
+    font-size: 0.82rem !important;
+    line-height: 1.36 !important;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .form-kicker,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-kicker,
+  .bolinhas-view-shell .bolinhas-view-titlebar .form-kicker,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-kicker {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.3rem 0.62rem;
+    font-size: 0.68rem;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-side,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-side,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-side,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.52rem;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-stat,
+  .bolinhas-view-shell .bolinhas-view-titlebar .list-stat,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-stat {
+    min-height: 58px;
+    padding: 0.58rem 0.62rem;
+    border-radius: 14px;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat strong,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-stat strong,
+  .bolinhas-view-shell .bolinhas-view-titlebar .list-stat strong,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-stat strong {
+    font-size: 0.58rem;
+    line-height: 1.12;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat span,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-stat span,
+  .bolinhas-view-shell .bolinhas-view-titlebar .list-stat span,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-stat span {
+    font-size: 0.72rem;
+    line-height: 1.16;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form {
+    gap: 0.72rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-card {
+    padding: 0.64rem;
+    border-radius: 18px;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-card-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-card-header h2 {
+    font-size: 1.02rem !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.03em;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-card-header p {
+    max-width: 30ch;
+    font-size: 0.76rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-section-tag,
+  .bolinhas-view-shell .form-section-tag,
+  .bolinhas-control-shell .form-section-tag {
+    min-height: 20px !important;
+    margin-bottom: 0.3rem !important;
+    padding: 2px 7px !important;
+    font-size: 0.58rem !important;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .row {
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form label {
+    margin-bottom: 0.3rem;
+    font-size: 0.76rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-control,
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-select,
+  .bolinhas-form-shell .modern-form.bolinhas-form .input-group-text {
+    font-size: 0.82rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-control,
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-select {
+    min-height: 40px;
+    padding-inline: 0.72rem;
+    border-radius: 12px;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form textarea.form-control {
+    min-height: 112px;
+    padding: 0.72rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .input-group
+    > .input-group-text {
+    flex: 0 0 42px;
+    width: 42px;
+    min-width: 42px;
+    min-height: 40px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .input-group > .form-control {
+    min-height: 40px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-visit-card > .row {
+    display: flex;
+    flex-wrap: wrap;
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    > .row
+    > [class*='col-'] {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    > .row
+    > [class*='col-']:nth-child(2),
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    > .row
+    > [class*='col-']:nth-child(3) {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    .form-control,
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    .form-select {
+    font-size: 0.8rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-values-card > .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    > .row
+    > [class*='col-'] {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-values-card label {
+    min-height: 2.15em;
+    display: flex;
+    align-items: flex-end;
+    line-height: 1.12;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    .form-control,
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    .input-group-text {
+    font-size: 0.78rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .form-summary-grid {
+    display: none !important;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-actions-bar {
+    padding: 0.82rem !important;
+    border-radius: 18px !important;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-actions-bar
+    .form-actions-copy
+    strong {
+    font-size: 0.9rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-actions-bar
+    .form-actions-copy
+    span {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-actions-bar
+    .form-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-actions-bar
+    .btn-modern,
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-actions-bar
+    .btn-modern-secondary {
+    min-height: 48px;
+    padding: 0.78rem 1rem;
+    border-radius: 13px;
+    font-size: 0.84rem;
+  }
+
+  /* Listagem mobile */
+
+  .bolinhas-list-shell .bolinhas-list-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .bolinhas-list-shell .list-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .bolinhas-list-shell .list-toolbar-copy {
+    display: grid;
+    gap: 0.24rem;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .bolinhas-list-shell .list-toolbar-copy h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1rem;
+    line-height: 1.14;
+    font-weight: 850;
+    letter-spacing: -0.025em;
+  }
+
+  .bolinhas-list-shell .list-toolbar-copy p {
+    max-width: 31ch;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.74rem;
+    line-height: 1.38;
+  }
+
+  .bolinhas-list-shell .bolinhas-list-action-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .bolinhas-list-shell .bolinhas-list-action-wrap .bolinhas-list-action,
+  .bolinhas-list-shell .list-toolbar > .list-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    width: 220px !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 auto !important;
+    padding-inline: 1rem !important;
+    border-radius: 13px !important;
+    font-size: 0.82rem !important;
+    font-weight: 850 !important;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18) !important;
+  }
+
+  .bolinhas-list-shell .modern-table-wrap,
+  .bolinhas-list-shell .modern-table-scroll {
+    overflow: visible;
+  }
+
+  .bolinhas-list-shell .bolinhas-table {
+    display: block;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .bolinhas-list-shell .bolinhas-table thead {
+    display: none;
+  }
+
+  .bolinhas-list-shell .bolinhas-table tbody {
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table tr {
+    display: grid;
+    gap: 0.58rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  }
+
+  .bolinhas-list-shell .bolinhas-table td {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.72rem;
+    width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    line-height: 1.28;
+    text-align: left;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td[data-label='Data'] {
+    color: #0f172a;
+    font-size: 0.94rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-title-cell {
+    font-size: 0.9rem;
+    line-height: 1.18;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-badge {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.76rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .color-select {
+    width: 100%;
+    min-height: 40px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td[data-label='Ações'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.52rem;
+    padding-top: 0.2rem !important;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td[data-label='Ações']::before {
+    display: block;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-btn {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+    padding: 0.68rem 0.72rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-btn-view {
+    grid-column: 1 / -1;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-empty {
+    display: block;
+    padding: 1rem !important;
+    text-align: center;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-empty::before {
+    display: none;
+  }
+
+  /* Visualização mobile */
+
+  .bolinhas-view-shell .bolinhas-view-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-panel-header {
+    margin-bottom: 0.78rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-panel-header h2 {
+    font-size: 1.02rem;
+    line-height: 1.14;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-panel-header p {
+    max-width: 30ch;
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.58rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card {
+    min-height: 74px;
+    padding: 0.68rem;
+    border-radius: 14px;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card strong {
+    font-size: 0.58rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card span {
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+ .bolinhas-view-shell .bolinhas-view-grid .view-card.is-wide {
+  grid-column: 1 / -1;
+}
+
+  .bolinhas-view-shell .bolinhas-view-actions {
+    margin-top: 0.72rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-actions .view-actions-copy strong {
+    font-size: 0.9rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-actions .view-actions-copy span {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-actions .view-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-actions .btn-modern,
+  .bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary {
+    min-height: 48px;
+    padding: 0.78rem 1rem;
+    border-radius: 13px;
+    font-size: 0.84rem;
+  }
+
+  /* Controle geral mobile */
+
+  .bolinhas-control-shell .bolinhas-control-panel {
+    padding: 0.64rem !important;
+    border-radius: 18px;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: stretch !important;
+    gap: 0.72rem;
+    margin-bottom: 0.82rem;
+    padding: 0.82rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.82);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy {
+    display: grid;
+    gap: 0.28rem;
+    width: 100%;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy h2 {
+    max-width: 18ch;
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.18rem;
+    line-height: 1.08;
+    font-weight: 880;
+    letter-spacing: -0.045em;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy p {
+    max-width: 30ch;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.76rem;
+    line-height: 1.38;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-days {
+    display: grid;
+    gap: 0.38rem;
+    width: min(220px, 100%);
+    min-width: 0;
+    justify-self: center;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-days .form-label {
+    margin: 0;
+    color: #0f172a;
+    font-size: 0.72rem;
+    line-height: 1.18;
+    font-weight: 850 !important;
+    text-align: center;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-days .form-control {
+    min-height: 36px;
+    font-size: 0.86rem;
+    border-radius: 10px;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table-wrap,
+  .bolinhas-control-shell .bolinhas-control-table-scroll {
+    overflow: visible;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table {
+    display: block;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table thead {
+    display: none;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table tbody {
+    display: grid;
+    gap: 0.72rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table .bolinhas-control-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem 0.68rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table .bolinhas-control-row-alert {
+    background: linear-gradient(180deg, #ffffff 0%, #fffafa 100%);
+    border-color: rgba(248, 113, 113, 0.38);
+    box-shadow: 0 14px 34px rgba(127, 29, 29, 0.08);
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table td {
+    width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+ .bolinhas-control-shell .bolinhas-control-name-cell {
+  grid-column: 1 / 2;
+  order: 1;
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+  text-align: left;
+}
+
+
+ .bolinhas-control-shell .bolinhas-control-name-cell::before {
+  display: none !important;
+}
+
+  .bolinhas-control-shell .bolinhas-control-name {
+    display: block;
+    color: #0f172a;
+    font-size: 0.92rem;
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-status-cell {
+    grid-column: 2 / 3;
+    order: 1;
+    display: flex !important;
+    align-items: flex-start;
+    justify-content: flex-end;
+    justify-self: stretch;
+    align-self: start;
+    min-width: 0;
+    width: auto !important;
+    text-align: right;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-status-cell::before {
+    display: none !important;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-status-cell .table-badge {
+    width: fit-content;
+    min-height: 28px;
+    padding: 0.38rem 0.62rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-status-cell
+    .table-badge {
+    color: #b91c1c;
+    background: #fee2e2;
+    border: 1px solid rgba(248, 113, 113, 0.28);
+  }
+
+  .bolinhas-control-shell .bolinhas-control-address-cell,
+  .bolinhas-control-shell .bolinhas-control-neighborhood-cell,
+  .bolinhas-control-shell .bolinhas-control-key-cell,
+  .bolinhas-control-shell .bolinhas-control-machine-cell,
+  .bolinhas-control-shell .bolinhas-control-days-cell {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 40px;
+    padding: 0.58rem 0.7rem 0 0.18rem !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.9) !important;
+    color: #0f172a;
+    font-size: 0.84rem;
+    font-weight: 780;
+    text-align: right;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-address-cell,
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-neighborhood-cell,
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-key-cell,
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-machine-cell,
+  .bolinhas-control-shell
+    .bolinhas-control-row-alert
+    .bolinhas-control-days-cell {
+    border-top-color: rgba(254, 202, 202, 0.72) !important;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-address-cell {
+    order: 2;
+    align-items: start;
+    color: #334155;
+    font-size: 0.8rem;
+    line-height: 1.34;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-neighborhood-cell {
+    order: 3;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-key-cell {
+    order: 4;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-machine-cell {
+    order: 5;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-days-cell {
+    order: 6;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-address-cell::before,
+  .bolinhas-control-shell .bolinhas-control-neighborhood-cell::before,
+  .bolinhas-control-shell .bolinhas-control-key-cell::before,
+  .bolinhas-control-shell .bolinhas-control-machine-cell::before,
+  .bolinhas-control-shell .bolinhas-control-days-cell::before {
+    display: block !important;
+    text-align: left;
+  }
+}
+
+/* Mobile estreito */
+
+@media (max-width: 379.98px) {
+  .bolinhas-form-shell,
+  .bolinhas-list-shell,
+  .bolinhas-view-shell,
+  .bolinhas-control-shell {
+    width: calc(100% - 1rem);
+  }
+
+  .bolinhas-form-shell .form-stage {
+    padding-inline: 0.44rem !important;
+  }
+
+  .bolinhas-view-shell .view-stage {
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-list-shell .list-stage,
+  .bolinhas-control-shell .bolinhas-control-stage {
+    padding-inline: 0 !important;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar,
+  .bolinhas-list-shell .bolinhas-list-titlebar,
+  .bolinhas-view-shell .bolinhas-view-titlebar,
+  .bolinhas-control-shell .bolinhas-control-titlebar {
+    padding: 0.86rem;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content h1,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content h1,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content h1,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content h1 {
+    font-size: 1.38rem !important;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-content p,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-content p,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-content p,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-content p {
+    font-size: 0.78rem !important;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-side,
+  .bolinhas-list-shell .bolinhas-list-titlebar .page-titlebar-side,
+  .bolinhas-view-shell .bolinhas-view-titlebar .page-titlebar-side,
+  .bolinhas-control-shell .bolinhas-control-titlebar .page-titlebar-side {
+    gap: 0.44rem;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-stat,
+  .bolinhas-view-shell .bolinhas-view-titlebar .list-stat,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-stat {
+    min-height: 54px;
+    padding: 0.54rem;
+  }
+
+  .bolinhas-form-shell .bolinhas-titlebar .page-titlebar-stat span,
+  .bolinhas-list-shell .bolinhas-list-titlebar .list-stat span,
+  .bolinhas-view-shell .bolinhas-view-titlebar .list-stat span,
+  .bolinhas-control-shell .bolinhas-control-titlebar .list-stat span {
+    font-size: 0.68rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-visit-card > .row {
+    --bs-gutter-x: 0.42rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-visit-card label {
+    font-size: 0.7rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    .form-control,
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-visit-card
+    .form-select {
+    font-size: 0.74rem;
+    padding-inline: 0.58rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-values-card > .row {
+    --bs-gutter-x: 0.42rem;
+    --bs-gutter-y: 0.62rem;
+  }
+
+  .bolinhas-form-shell .modern-form.bolinhas-form .bolinhas-values-card label {
+    font-size: 0.7rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    .form-control,
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    .input-group-text {
+    font-size: 0.74rem;
+  }
+
+  .bolinhas-form-shell
+    .modern-form.bolinhas-form
+    .bolinhas-values-card
+    .input-group
+    > .input-group-text {
+    flex-basis: 38px;
+    width: 38px;
+    min-width: 38px;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0.58rem;
+    font-size: 0.8rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table td::before {
+    font-size: 0.62rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-actions {
+    gap: 0.44rem;
+  }
+
+  .bolinhas-list-shell .bolinhas-table .table-btn {
+    min-height: 40px;
+    font-size: 0.76rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid {
+    gap: 0.48rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card {
+    min-height: 68px;
+    padding: 0.58rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card strong {
+    font-size: 0.54rem;
+  }
+
+  .bolinhas-view-shell .bolinhas-view-grid .view-card span {
+    font-size: 0.78rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar {
+    padding: 0.74rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy h2 {
+    font-size: 1.08rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-toolbar .list-toolbar-copy p {
+    font-size: 0.72rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table .bolinhas-control-row {
+    gap: 0.46rem 0.6rem;
+    padding: 0.78rem;
+    border-radius: 16px;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-name {
+    font-size: 0.86rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-status-cell .table-badge {
+    min-height: 26px;
+    padding: 0.34rem 0.5rem;
+    font-size: 0.66rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-address-cell,
+  .bolinhas-control-shell .bolinhas-control-neighborhood-cell,
+  .bolinhas-control-shell .bolinhas-control-key-cell,
+  .bolinhas-control-shell .bolinhas-control-machine-cell,
+  .bolinhas-control-shell .bolinhas-control-days-cell {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 0.58rem;
+    min-height: 38px;
+    padding: 0.54rem 0.64rem 0 0.12rem !important;
+    font-size: 0.78rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-table td::before {
+    font-size: 0.56rem;
+  }
+
+  .bolinhas-control-shell .bolinhas-control-address-cell {
+    font-size: 0.76rem;
+  }
+}
