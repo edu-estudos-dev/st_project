@@ -53,6 +53,22 @@ const PLAN_OPTIONS = {
     }
 };
 
+const isPublicAuthEnabled = () => {
+    return ['1', 'true', 'yes', 'on'].includes(
+        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
+    );
+};
+
+const isLocalhostRequest = (req) => {
+    const hostname = String(req.hostname || '').toLowerCase();
+
+    return hostname === 'localhost'
+        || hostname === '127.0.0.1'
+        || hostname === '::1'
+        || hostname === '[::1]'
+        || hostname.endsWith('.localhost');
+};
+
 class LoginLogoutController {
     constructor() {
         this.login = this.login.bind(this);
@@ -217,8 +233,13 @@ class LoginLogoutController {
             const usuario = await LoginLogout.loginWithGoogle({
                 googleId: profile.sub,
                 email: profile.email,
-                name: profile.name
+                name: profile.name,
+                allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)
             });
+
+            if (usuario?.error === 'google_signup_disabled') {
+                return res.redirect('/login?erro=Conta nao encontrada. O cadastro automatico pelo Google esta indisponivel no momento.');
+            }
 
             return this.signInUser(res, usuario);
         } catch (error) {

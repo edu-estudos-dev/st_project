@@ -44,6 +44,13 @@ addCheck(
 );
 
 addCheck(
+  'Google OAuth nao cria trial publico quando cadastro esta fechado',
+  'src/controllers/loginLogout.js',
+  includesAll('allowCreateUser', 'PUBLIC_AUTH_ENABLED', 'google_signup_disabled'),
+  'Login com Google nao pode virar cadastro publico quando o cadastro normal esta fechado.'
+);
+
+addCheck(
   'Express confia no proxy para rate limit em producao',
   'app.js',
   includesAll("app.set('trust proxy', 1);"),

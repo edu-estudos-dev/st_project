@@ -765,7 +765,7 @@ class LoginLogout {
     return `usuario${Date.now()}`;
   }
 
-  async loginWithGoogle({ googleId, email, name }) {
+  async loginWithGoogle({ googleId, email, name, allowCreateUser = false }) {
     await this.ensureGoogleAuthColumns();
 
     const normalizedGoogleId = String(googleId || '').trim();
@@ -810,6 +810,12 @@ class LoginLogout {
         [normalizedGoogleId, usuario.id]
       );
     } else {
+      if (!allowCreateUser) {
+        return {
+          error: 'google_signup_disabled'
+        };
+      }
+
       const username = await this.buildUniqueUsernameFromEmail(normalizedEmail, name);
       const senhaHash = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 12);
       const client = await connection.connect();
