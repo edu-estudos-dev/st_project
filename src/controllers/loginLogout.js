@@ -609,7 +609,7 @@ class LoginLogoutController {
 
             if (!planoSelecionado) {
                 return res.status(400).render('pages/register', {
-                    title: 'Cadastro de UsuÃ¡rio',
+                    title: 'Cadastro de Usuário',
                     error: 'Escolha um plano comercial antes de criar sua conta.',
                     formData,
                     productOptions: PRODUCT_OPTIONS,
