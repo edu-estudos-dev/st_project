@@ -67,6 +67,16 @@ addCheck(
 );
 
 addCheck(
+  'Inicio do Google OAuth nao reaproveita sessao ativa',
+  'src/controllers/loginLogout.js',
+  allOf(
+    includesAll('googleLogin(req, res)', 'res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions())', "prompt: 'select_account'"),
+    excludesAll("googleLogin(req, res) {\r\n        if (req.user)", "googleLogin(req, res) {\n        if (req.user)")
+  ),
+  'Clicar em Entrar com Google precisa validar a conta escolhida, nao reaproveitar cookie anterior.'
+);
+
+addCheck(
   'Sessoes antigas de contas Google automaticas sao bloqueadas',
   'src/middleware/subscriptionStatus.js',
   allOf(
@@ -81,6 +91,27 @@ addCheck(
   'src/middleware/subscriptionStatus.js',
   includesAll("if (!assinante)", 'Sessao invalida. Faca login novamente.', 'clearAuthCookie'),
   'JWT antigo de usuario removido nao pode continuar acessando o sistema.'
+);
+
+addCheck(
+  'JWT de sessao e reconciliado com o banco',
+  'src/middleware/isAuthenticated.js',
+  includesAll('findSessionUser', 'INNER JOIN assinantes', "sessionUser.auth_provider === 'google'", 'clearInvalidSession(res)'),
+  'Cookie antigo nao pode autenticar usuario removido ou conta Google automatica bloqueada.'
+);
+
+addCheck(
+  'Bypass localhost do cadastro nao vale em producao',
+  'src/routes/loginLogoutRoutes.js',
+  includesAll("process.env.NODE_ENV !== 'production' && isLocalhostRequest(req)", 'requirePublicRegistrationAccess'),
+  'Header Host localhost nao pode abrir cadastro publico em producao.'
+);
+
+addCheck(
+  'Admin SaaS nao usa fallback silencioso em producao',
+  'src/utilities/saasAdmin.js',
+  includesAll("!rawConfigured && process.env.NODE_ENV === 'production'", 'return [];'),
+  'Em producao, admin precisa ser configurado explicitamente por SAAS_ADMIN_USER_IDS.'
 );
 
 addCheck(

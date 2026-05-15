@@ -139,10 +139,6 @@ class LoginLogoutController {
     }
 
     googleLogin(req, res) {
-        if (req.user) {
-            return res.redirect('/painel');
-        }
-
         const googleConfig = this.getGoogleClientConfig(req);
 
         if (!googleConfig.isConfigured) {
@@ -159,6 +155,7 @@ class LoginLogoutController {
             prompt: 'select_account'
         });
 
+        res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
         res.cookie(GOOGLE_OAUTH_STATE_COOKIE, state, this.getGoogleStateCookieOptions());
         return res.redirect(`${GOOGLE_AUTH_URL}?${params.toString()}`);
     }

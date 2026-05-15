@@ -1,5 +1,11 @@
 const parseAdminUserIds = () => {
-  const configured = String(process.env.SAAS_ADMIN_USER_IDS || '1')
+  const rawConfigured = String(process.env.SAAS_ADMIN_USER_IDS || '').trim();
+
+  if (!rawConfigured && process.env.NODE_ENV === 'production') {
+    return [];
+  }
+
+  const configured = String(rawConfigured || '1')
     .split(',')
     .map((value) => Number(value.trim()))
     .filter((value) => Number.isInteger(value) && value > 0);

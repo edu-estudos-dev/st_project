@@ -26,7 +26,10 @@ const isLocalhostRequest = (req) => {
 };
 
 const requirePublicRegistrationAccess = (req, res, next) => {
-    if (isPublicAuthEnabled() || isLocalhostRequest(req)) {
+    const canUseLocalhostBypass =
+        process.env.NODE_ENV !== 'production' && isLocalhostRequest(req);
+
+    if (isPublicAuthEnabled() || canUseLocalhostBypass) {
         return next();
     }
 

@@ -1,6 +1,35 @@
 import { getAuthCookieName, getClearAuthCookieOptions, verifyAuthToken } from '../utilities/authToken.js';
+import connection from '../db_config/connection.js';
 
-export const attachAuthenticatedUser = (req, res, next) => {
+const isPublicAuthEnabled = () => {
+    return ['1', 'true', 'yes', 'on'].includes(
+        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
+    );
+};
+
+const findSessionUser = async (userId) => {
+    const result = await connection.query(
+        `SELECT
+            u.id,
+            u.username,
+            u.auth_provider,
+            a.id AS assinante_id,
+            a.status_assinatura
+         FROM users u
+         INNER JOIN assinantes a ON a.user_id = u.id
+         WHERE u.id = $1
+         LIMIT 1`,
+        [userId]
+    );
+
+    return result.rows?.[0] || null;
+};
+
+const clearInvalidSession = (res) => {
+    res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
+};
+
+export const attachAuthenticatedUser = async (req, res, next) => {
     const token = req.cookies?.[getAuthCookieName()];
     req.user = null;
     res.locals.usuario = null;
@@ -11,17 +40,29 @@ export const attachAuthenticatedUser = (req, res, next) => {
 
     try {
         const payload = verifyAuthToken(token);
+        const sessionUser = await findSessionUser(payload.sub);
+
+        if (!sessionUser) {
+            clearInvalidSession(res);
+            return next();
+        }
+
+        if (!isPublicAuthEnabled() && sessionUser.auth_provider === 'google') {
+            clearInvalidSession(res);
+            return next();
+        }
+
         req.user = {
-            id: payload.sub,
-            user_id: payload.sub,
-            username: payload.username,
-            assinante_id: payload.assinante_id,
-            status_assinatura: payload.status_assinatura
+            id: sessionUser.id,
+            user_id: sessionUser.id,
+            username: sessionUser.username,
+            assinante_id: sessionUser.assinante_id,
+            status_assinatura: sessionUser.status_assinatura
         };
         res.locals.usuario = req.user;
         return next();
     } catch (error) {
-        res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions());
+        clearInvalidSession(res);
         return next();
     }
 };
