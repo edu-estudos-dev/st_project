@@ -1,0 +1,817 @@
+/* ==========================================================================
+   16 - TIPOGRAFIA PADRAO DO SAAS
+   ==========================================================================
+
+   Espelha a escala publica em telas internas sem reestruturar as views.
+   Mantem a leitura confortavel no mobile e cobre dashboard, formularios,
+   listagens, tabelas, detalhes e navegacao interna.
+   ========================================================================== */
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+  font-size: var(--vm-font-body);
+  line-height: var(--vm-line-body);
+  color: #0f172a;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  main,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) li,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) td,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-text,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .text-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .view-actions-copy {
+  font-size: var(--vm-font-body);
+  line-height: var(--vm-line-body-compact);
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  small,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .small,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table-muted,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .optional-label,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .required-label {
+  font-size: var(--vm-font-small);
+  line-height: 1.45;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h1,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .page-titlebar
+  h1 {
+  font-size: var(--vm-font-dashboard-title);
+  line-height: var(--vm-line-title);
+  letter-spacing: -0.035em;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-card-header
+  h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .view-panel-header
+  h2,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table-section-title {
+  font-size: var(--vm-font-inner-title);
+  line-height: var(--vm-line-title);
+  letter-spacing: -0.032em;
+}
+
+body.dashboard-body .dashboard-sidebar-title {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.75);
+  font-size: 0.72rem;
+  line-height: 1.1;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-card-header
+  h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .product-setup-header
+  h3,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .view-card
+  span,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .list-summary-card
+  span {
+  font-size: var(--vm-font-card-title);
+  line-height: var(--vm-line-card);
+  letter-spacing: -0.02em;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .app-nav
+  .nav-link,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .app-nav
+  .dropdown-item,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .dashboard-sidebar-menu
+  a,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .dashboard-logout-btn {
+  font-size: var(--vm-font-button);
+  line-height: 1.2;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-label,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  label:not(.form-check-label),
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .list-kicker,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-kicker,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-section-tag,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .dashboard-kicker,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .dashboard-section-tag,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .page-titlebar-stat
+  strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .list-stat
+  strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .view-card
+  strong,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .modern-table
+  thead
+  th,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table
+  thead
+  th {
+  font-size: var(--vm-font-label);
+  line-height: 1.35;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-control,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-select,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  textarea,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .input-group-text {
+  font-size: var(--vm-font-body);
+  line-height: 1.35;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .btn-modern,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .btn-modern-secondary,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table-btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table-mode-btn,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .btn-route-secondary,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .btn-route-ghost {
+  font-size: var(--vm-font-button);
+  line-height: 1.2;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .modern-table
+  tbody
+  td,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .table
+  td {
+  font-size: var(--vm-font-body-small);
+  line-height: 1.45;
+}
+
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .page-titlebar
+  p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .form-card-header
+  p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .product-setup-header
+  p,
+body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+  .view-panel-header
+  p {
+  font-size: var(--vm-font-section-text);
+  line-height: var(--vm-line-body-compact);
+}
+
+@media (max-width: 991.98px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.8rem;
+    --vm-font-caption: 0.84rem;
+    --vm-font-small: 0.92rem;
+    --vm-font-button: 0.96rem;
+    --vm-font-body: 0.98rem;
+    --vm-font-body-small: 0.94rem;
+    --vm-font-section-text: 1rem;
+    --vm-font-card-title: clamp(1.08rem, 2.4vw, 1.22rem);
+    --vm-font-inner-title: clamp(1.38rem, 4vw, 1.9rem);
+    --vm-font-dashboard-title: clamp(2rem, 6vw, 2.8rem);
+    --vm-line-body: 1.62;
+    --vm-line-body-compact: 1.52;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.8rem;
+    --vm-font-caption: 0.84rem;
+    --vm-font-small: 0.92rem;
+    --vm-font-button: 0.96rem;
+    --vm-font-body: 0.97rem;
+    --vm-font-body-small: 0.92rem;
+    --vm-font-section-text: 0.98rem;
+    --vm-font-card-title: clamp(1.02rem, 4.6vw, 1.14rem);
+    --vm-font-inner-title: clamp(1.32rem, 6.4vw, 1.72rem);
+    --vm-font-dashboard-title: clamp(1.82rem, 8vw, 2.18rem);
+    --vm-line-title: 1.06;
+    --vm-line-body: 1.58;
+    --vm-line-body-compact: 1.5;
+  }
+
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+    .modern-table
+    tbody
+    td,
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+    .table
+    td,
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
+    .table-btn {
+    font-size: var(--vm-font-body);
+  }
+}
+
+@media (max-width: 390px) {
+  body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body) {
+    --vm-font-label: 0.8rem;
+    --vm-font-caption: 0.82rem;
+    --vm-font-small: 0.9rem;
+    --vm-font-button: 0.94rem;
+    --vm-font-body: 0.95rem;
+    --vm-font-body-small: 0.9rem;
+    --vm-font-section-text: 0.95rem;
+    --vm-font-card-title: clamp(1rem, 5vw, 1.08rem);
+    --vm-font-inner-title: clamp(1.26rem, 6.5vw, 1.55rem);
+    --vm-font-dashboard-title: clamp(1.66rem, 7.8vw, 1.98rem);
+  }
+}
+
+/* Ajuste final do painel no mobile: a sidebar fixa do desktop vira redundante
+   no celular, onde o header hamburguer e os cards do painel assumem a navegacao. */
+@media (max-width: 991.98px) {
+  html:has(body.dashboard-body),
+  body.dashboard-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    padding-bottom: calc(5.8rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.dashboard-body .dashboard-shell {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.65rem 0.75rem 1.4rem !important;
+  }
+
+  body.dashboard-body .dashboard-layout {
+    display: block !important;
+  }
+
+  body.dashboard-body .dashboard-sidebar {
+    display: none !important;
+  }
+
+  body.dashboard-body.dashboard-mobile-menu-open {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+
+  body.dashboard-body .dashboard-main {
+    display: grid !important;
+    gap: 0.78rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy,
+  body.dashboard-body .dashboard-panel,
+  body.dashboard-body .dashboard-revenue-hero,
+  body.dashboard-body .dashboard-kpi-card,
+  body.dashboard-body .dashboard-titlebar-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy {
+    padding: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-access {
+    display: grid !important;
+    gap: 0.9rem !important;
+    width: 100% !important;
+    padding: 1rem !important;
+    border: 1px solid rgba(148, 163, 184, 0.18) !important;
+    border-radius: 20px !important;
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(34, 197, 94, 0.14),
+        transparent 34%
+      ),
+      linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-access-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 0.85rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-access-head h2 {
+    margin: 0.38rem 0 0 !important;
+    color: #0f172a !important;
+    font-size: 1.18rem !important;
+    line-height: 1.18 !important;
+    letter-spacing: 0 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-trigger {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.38rem !important;
+    min-width: 82px !important;
+    min-height: 44px !important;
+    padding: 0.62rem 0.75rem !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    background: #0f172a !important;
+    color: #ffffff !important;
+    font-size: 0.82rem !important;
+    font-weight: 900 !important;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-trigger i {
+    font-size: 1.05rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action {
+    display: grid !important;
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 0.58rem !important;
+    min-height: 74px !important;
+    padding: 0.78rem !important;
+    border-radius: 16px !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+    box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06) !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action:active {
+    transform: translateY(1px) scale(0.99) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.68) !important;
+    color: #0f172a !important;
+    font-size: 1.05rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action span {
+    display: grid !important;
+    gap: 0.15rem !important;
+    min-width: 0 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action strong {
+    color: #0f172a !important;
+    font-size: 0.92rem !important;
+    line-height: 1.12 !important;
+    white-space: normal !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action small {
+    color: #475569 !important;
+    font-size: 0.8rem !important;
+    line-height: 1.28 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-blue {
+    background: linear-gradient(180deg, #eef4ff 0%, #dce9ff 100%) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-amber,
+  body.dashboard-body .dashboard-mobile-action-gold {
+    background: linear-gradient(180deg, #fff7e6 0%, #ffe9b2 100%) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-violet {
+    background: linear-gradient(180deg, #f4ecff 0%, #e8dbff 100%) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-slate {
+    background: linear-gradient(180deg, #f3f5f9 0%, #e4e9f2 100%) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-action-green {
+    background: linear-gradient(180deg, #ebfff1 0%, #d7f7e3 100%) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-bottom-nav {
+    position: fixed !important;
+    left: max(0.65rem, env(safe-area-inset-left, 0px)) !important;
+    right: max(0.65rem, env(safe-area-inset-right, 0px)) !important;
+    bottom: max(0.55rem, env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 1040 !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0.25rem !important;
+    min-height: 64px !important;
+    padding: 0.42rem !important;
+    border-radius: 22px !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 44px rgba(15, 23, 42, 0.32) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-bottom-nav a,
+  body.dashboard-body .dashboard-mobile-bottom-nav button {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.22rem !important;
+    min-width: 0 !important;
+    min-height: 52px !important;
+    padding: 0.3rem 0.12rem !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.72) !important;
+    text-decoration: none !important;
+    font-size: 0.8rem !important;
+    font-weight: 850 !important;
+    line-height: 1.05 !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-bottom-nav i {
+    font-size: 1.16rem !important;
+    line-height: 1 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-bottom-nav .is-active,
+  body.dashboard-body .dashboard-mobile-bottom-nav a:active,
+  body.dashboard-body .dashboard-mobile-bottom-nav button:active {
+    background: rgba(37, 99, 235, 0.92) !important;
+    color: #ffffff !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1050 !important;
+    display: block !important;
+    background: rgba(15, 23, 42, 0.58) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-overlay[hidden] {
+    display: none !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1060 !important;
+    display: block !important;
+    max-height: min(82vh, 690px) !important;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+    border-radius: 26px 26px 0 0 !important;
+    background: #ffffff !important;
+    box-shadow: 0 -24px 56px rgba(15, 23, 42, 0.28) !important;
+    transform: translateY(105%) !important;
+    transition: transform 0.26s ease !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu.is-open {
+    transform: translateY(0) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1rem !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-head h2 {
+    margin: 0.24rem 0 0 !important;
+    color: #0f172a !important;
+    font-size: 1.28rem !important;
+    letter-spacing: 0 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-brand {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 0 !important;
+    font-weight: 950 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-brand span {
+    color: #0b63ce !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-brand strong {
+    color: #2cad45 !important;
+    font-weight: 950 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-head button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    font-size: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-body {
+    display: grid !important;
+    gap: 1rem !important;
+    padding-top: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-body section {
+    display: grid !important;
+    gap: 0.48rem !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-body h3 {
+    margin: 0 0 0.12rem !important;
+    color: #64748b !important;
+    font-size: 0.78rem !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-body a,
+  body.dashboard-body .dashboard-mobile-menu-logout {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+    min-height: 48px !important;
+    width: 100% !important;
+    padding: 0.8rem 0.9rem !important;
+    border: 1px solid rgba(148, 163, 184, 0.18) !important;
+    border-radius: 16px !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+    font-size: 0.94rem !important;
+    font-weight: 850 !important;
+  }
+
+  body.dashboard-body .dashboard-mobile-menu-logout {
+    justify-content: center !important;
+    background: #fff1f2 !important;
+    color: #9f1239 !important;
+    border-color: rgba(225, 29, 72, 0.18) !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-main {
+    display: block !important;
+  }
+
+  body.dashboard-body .dashboard-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+    margin-top: 0.9rem !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card {
+    min-width: 0 !important;
+    min-height: 64px !important;
+    padding: 0.62rem 0.5rem !important;
+  }
+
+  body.dashboard-body .dashboard-intelligence-grid,
+  body.dashboard-body .dashboard-titlebar-insights,
+  body.dashboard-body .dashboard-insight-layout,
+  body.dashboard-body .dashboard-grid,
+  body.dashboard-body .dashboard-shortcuts {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.78rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block,
+  body.dashboard-body .dashboard-panel-header,
+  body.dashboard-body .dashboard-product-row,
+  body.dashboard-body .dashboard-product-row-head,
+  body.dashboard-body .dashboard-empty-state-light,
+  body.dashboard-body .dashboard-ranking-item,
+  body.dashboard-body .dashboard-trend-item,
+  body.dashboard-body .dashboard-stale-item {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block h1,
+  body.dashboard-body .dashboard-titlebar-copy-block p,
+  body.dashboard-body .dashboard-section-heading h2,
+  body.dashboard-body .dashboard-section-heading p,
+  body.dashboard-body .dashboard-panel h2,
+  body.dashboard-body .dashboard-panel p,
+  body.dashboard-body .dashboard-revenue-hero p,
+  body.dashboard-body .dashboard-kpi-card p,
+  body.dashboard-body .dashboard-titlebar-card strong,
+  body.dashboard-body .dashboard-titlebar-card p,
+  body.dashboard-body .dashboard-product-row-head strong,
+  body.dashboard-body .dashboard-product-row-head span,
+  body.dashboard-body .dashboard-product-row small {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  body.dashboard-body .dashboard-section-heading {
+    grid-template-columns: 1fr !important;
+    gap: 0.35rem !important;
+    margin-top: 0.35rem !important;
+    padding-left: 0.42rem !important;
+    padding-right: 0.16rem !important;
+  }
+
+  body.dashboard-body .dashboard-section-heading p {
+    text-align: left !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body.dashboard-body .dashboard-shell {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.5rem 0.65rem 2rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block h1 {
+    font-size: 1.55rem !important;
+    line-height: 1.08 !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy-block p {
+    font-size: 0.92rem !important;
+    line-height: 1.45 !important;
+  }
+
+  body.dashboard-body .dashboard-overview {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card {
+    min-height: 54px !important;
+    padding: 0.58rem 0.7rem !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card strong {
+    font-size: 1rem !important;
+  }
+
+  body.dashboard-body .dashboard-overview-card span {
+    font-size: 0.78rem !important;
+    line-height: 1.24 !important;
+  }
+
+  body.dashboard-body .dashboard-section-heading h2,
+  body.dashboard-body .dashboard-panel h2 {
+    font-size: 1.42rem !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item {
+    grid-template-columns: minmax(44px, auto) minmax(0, 1fr) !important;
+    align-items: center !important;
+    column-gap: 0.72rem !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item > span {
+    min-width: 44px !important;
+    height: 34px !important;
+    padding: 0 0.62rem !important;
+    border-radius: 12px !important;
+    justify-self: start !important;
+  }
+
+  body.dashboard-body .dashboard-ranking-item em {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+
+  body.dashboard-body .dashboard-revenue-hero h2 {
+    font-size: 1.8rem !important;
+  }
+
+  body.dashboard-body .dashboard-kpi-card,
+  body.dashboard-body .dashboard-revenue-hero {
+    min-height: auto !important;
+    padding: 0.95rem !important;
+  }
+
+  body.dashboard-body .dashboard-kpi-card p,
+  body.dashboard-body .dashboard-revenue-hero p,
+  body.dashboard-body .dashboard-section-heading p,
+  body.dashboard-body .dashboard-panel p {
+    font-size: 0.9rem !important;
+    line-height: 1.48 !important;
+  }
+
+  body.dashboard-body .dashboard-kpi-card span,
+  body.dashboard-body .dashboard-revenue-hero-meta strong,
+  body.dashboard-body .dashboard-revenue-hero-meta span {
+    font-size: 0.8rem !important;
+    line-height: 1.28 !important;
+  }
+
+  body.dashboard-body .dashboard-product-row-head {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.18rem !important;
+  }
+
+  body.dashboard-body .dashboard-product-row-head span {
+    text-align: left !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-card {
+    min-height: auto !important;
+    padding: 0.9rem 0.95rem !important;
+  }
+
+  body.dashboard-body .dashboard-titlebar-copy,
+  body.dashboard-body .dashboard-panel,
+  body.dashboard-body .dashboard-revenue-hero,
+  body.dashboard-body .dashboard-kpi-card,
+  body.dashboard-body .dashboard-titlebar-card {
+    width: calc(100vw - 1.3rem) !important;
+    max-width: calc(100vw - 1.3rem) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}

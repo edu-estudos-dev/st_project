@@ -1,0 +1,272 @@
+/* ==========================================================================
+   17 - SPINNER / LOADING GLOBAL
+   ==========================================================================
+
+   Overlay global reutilizavel para acoes demoradas do VendMaster:
+   salvar sangria, gerar recibo PDF, compartilhar recibo, excluir registro,
+   carregar dados e outras operacoes que precisam de retorno visual claro.
+   ========================================================================== */
+
+html.vm-loading-lock,
+html.vm-loading-lock body {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+.vm-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background:
+    radial-gradient(
+      circle at 18% 14%,
+      rgba(55, 166, 71, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 84% 18%,
+      rgba(37, 99, 235, 0.26),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 50% 78%,
+      rgba(124, 58, 237, 0.14),
+      transparent 32%
+    ),
+    rgba(15, 23, 42, 0.66);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  backdrop-filter: blur(10px) saturate(1.12);
+  -webkit-backdrop-filter: blur(10px) saturate(1.12);
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease;
+}
+
+.vm-loading-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.vm-loading-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  justify-items: center;
+  gap: 1.05rem;
+  width: min(380px, 100%);
+  min-height: 235px;
+  overflow: hidden;
+  padding: 2rem 1.35rem 1.75rem;
+  border-radius: 30px;
+  background:
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(55, 166, 71, 0.08),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(37, 99, 235, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(248, 251, 255, 0.94) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 34px 88px rgba(15, 23, 42, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  text-align: center;
+  transform: translateY(10px) scale(0.97);
+  transition: transform 0.2s ease;
+}
+
+.vm-loading-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb 0%, #37a647 52%, #7c3aed 100%);
+}
+
+.vm-loading-card::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -78px;
+  width: 165px;
+  height: 165px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.vm-loading-overlay.is-visible .vm-loading-card {
+  transform: translateY(0) scale(1);
+}
+
+.vm-loading-spinner {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 0deg,
+      #2563eb 0deg,
+      #37a647 135deg,
+      #7c3aed 260deg,
+      transparent 330deg
+    ),
+    rgba(37, 99, 235, 0.08);
+  animation: vm-loading-spin 0.82s linear infinite;
+  box-shadow:
+    0 16px 34px rgba(37, 99, 235, 0.22),
+    0 0 0 10px rgba(37, 99, 235, 0.055);
+}
+
+.vm-loading-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: inherit;
+  background: #ffffff;
+}
+
+.vm-loading-spinner::after {
+  content: '';
+  position: absolute;
+  inset: 21px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #2563eb 0%, #37a647 100%);
+  box-shadow: 0 7px 16px rgba(15, 23, 42, 0.15);
+}
+
+.vm-loading-title {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.08rem;
+  font-weight: 920;
+  line-height: 1.16;
+  letter-spacing: -0.018em;
+}
+
+.vm-loading-detail {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 30ch;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 680;
+  line-height: 1.42;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-card {
+  width: min(320px, 100%);
+  min-height: 180px;
+  gap: 0.82rem;
+  padding: 1.45rem 1rem 1.25rem;
+  border-radius: 25px;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-spinner {
+  width: 52px;
+  height: 52px;
+  box-shadow:
+    0 10px 22px rgba(37, 99, 235, 0.18),
+    0 0 0 7px rgba(37, 99, 235, 0.05);
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true']
+  .vm-loading-spinner::before {
+  inset: 5px;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-spinner::after {
+  inset: 16px;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-title {
+  font-size: 0.98rem;
+}
+
+.vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-detail {
+  font-size: 0.82rem;
+}
+
+@keyframes vm-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .vm-loading-overlay {
+    padding: 1rem;
+    align-items: center;
+  }
+
+  .vm-loading-card {
+    width: min(335px, 100%);
+    min-height: 225px;
+    gap: 0.98rem;
+    padding: 1.9rem 1rem 1.55rem;
+    border-radius: 28px;
+  }
+
+  .vm-loading-spinner {
+    width: 64px;
+    height: 64px;
+    box-shadow:
+      0 14px 30px rgba(37, 99, 235, 0.2),
+      0 0 0 9px rgba(37, 99, 235, 0.052);
+  }
+
+  .vm-loading-spinner::before {
+    inset: 6px;
+  }
+
+  .vm-loading-spinner::after {
+    inset: 20px;
+  }
+
+  .vm-loading-title {
+    font-size: 1.04rem;
+    line-height: 1.16;
+  }
+
+  .vm-loading-detail {
+    max-width: 27ch;
+    font-size: 0.86rem;
+    line-height: 1.36;
+  }
+
+  .vm-loading-overlay[data-vm-loading-compact='true'] .vm-loading-card {
+    min-height: 172px;
+    padding: 1.35rem 0.95rem 1.12rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vm-loading-overlay,
+  .vm-loading-card {
+    transition: none;
+  }
+
+  .vm-loading-spinner {
+    animation-duration: 1.4s;
+  }
+}

@@ -1,0 +1,47 @@
+/* ==========================================================================
+   11 - RODAPE DO SISTEMA
+   ========================================================================== */
+
+/* Links e textos do footer legado */
+footer:not(.site-footer) a {
+  color: #22c55e; /* VERDE DA MARCA */
+  text-decoration: none;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+footer:not(.site-footer) a:hover {
+  color: #2563eb; /* AZUL NO HOVER */
+}
+
+footer:not(.site-footer) h5 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+footer:not(.site-footer) h6 {
+  color: #9ca3af;
+}
+
+footer:not(.site-footer) i {
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+footer:not(.site-footer) i:hover {
+  color: #22c55e;
+}
+
+footer:not(.site-footer) hr {
+  border-color: #1f2937;
+}
+
+#contactStatus {
+  flex: 0 0 100%;
+  text-align: center;
+  margin: 0.25rem 0 0;
+}
+
+/* Breakpoint preservado para compatibilidade com estilos antigos */
+@media (max-width: 768px) {
+}
