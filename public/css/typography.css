@@ -723,22 +723,36 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
     line-height: 1.45 !important;
   }
 
+  body.dashboard-body .dashboard-titlebar-copy {
+    padding: 0.88rem !important;
+  }
+
+  body.dashboard-body .dashboard-kicker,
+  body.dashboard-body .dashboard-section-tag {
+    padding: 0.28rem 0.58rem !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.06em !important;
+  }
+
   body.dashboard-body .dashboard-overview {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.42rem !important;
+    margin-top: 0.72rem !important;
   }
 
   body.dashboard-body .dashboard-overview-card {
-    min-height: 54px !important;
-    padding: 0.58rem 0.7rem !important;
+    min-height: 58px !important;
+    padding: 0.5rem 0.42rem !important;
+    border-radius: 14px !important;
   }
 
   body.dashboard-body .dashboard-overview-card strong {
-    font-size: 1rem !important;
+    font-size: 0.96rem !important;
   }
 
   body.dashboard-body .dashboard-overview-card span {
-    font-size: 0.78rem !important;
-    line-height: 1.24 !important;
+    font-size: 0.66rem !important;
+    line-height: 1.16 !important;
   }
 
   body.dashboard-body .dashboard-section-heading h2,
@@ -774,7 +788,7 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
   body.dashboard-body .dashboard-kpi-card,
   body.dashboard-body .dashboard-revenue-hero {
     min-height: auto !important;
-    padding: 0.95rem !important;
+    padding: 0.85rem !important;
   }
 
   body.dashboard-body .dashboard-kpi-card p,
@@ -804,7 +818,11 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
 
   body.dashboard-body .dashboard-titlebar-card {
     min-height: auto !important;
-    padding: 0.9rem 0.95rem !important;
+    padding: 0.82rem 0.88rem !important;
+  }
+
+  body.dashboard-body .dashboard-final-grid > .dashboard-panel:last-child {
+    display: none !important;
   }
 
   body.dashboard-body .dashboard-titlebar-copy,
