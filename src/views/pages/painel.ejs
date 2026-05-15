@@ -104,11 +104,43 @@
                      <span>Pontos</span>
                      <small>&rarr;</small>
                   </a>
-                  <a href="<%= primaryRegisterHref %>" class="dashboard-sidebar-link dashboard-sidebar-link-green">
-                     <i class="bi bi-plus-circle" aria-hidden="true"></i>
-                     <span>Registrar</span>
-                     <small>&rarr;</small>
-                  </a>
+                  <div class="dashboard-sidebar-flyout">
+                     <a href="<%= primaryRegisterHref %>" class="dashboard-sidebar-link dashboard-sidebar-link-green" aria-haspopup="true">
+                        <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                        <span>Registrar</span>
+                        <small>&rarr;</small>
+                     </a>
+                     <div class="dashboard-sidebar-submenu" aria-label="Opções de registro">
+                        <% if (!isReadOnly && navProducts.bolinhas) { %>
+                           <a href="/bolinhas/sangrias/add">
+                              <i class="bi bi-circle-fill" aria-hidden="true"></i>
+                              <span>Bolinhas</span>
+                           </a>
+                        <% } %>
+                        <% if (!isReadOnly && (navProducts.consignados || navProducts.figurinhas)) { %>
+                           <a href="/consignados/sangrias/add">
+                              <i class="bi bi-box-seam" aria-hidden="true"></i>
+                              <span>Consignados</span>
+                           </a>
+                        <% } %>
+                        <% if (!isReadOnly && navProducts.pelucias) { %>
+                           <a href="/pelucias/sangrias/add">
+                              <i class="bi bi-stars" aria-hidden="true"></i>
+                              <span>Pelúcias</span>
+                           </a>
+                        <% } %>
+                        <a href="/rotas">
+                           <i class="bi bi-signpost-2" aria-hidden="true"></i>
+                           <span>Rotas dos pontos</span>
+                        </a>
+                        <% if (!isReadOnly) { %>
+                           <a href="/lancamentos/add">
+                              <i class="bi bi-receipt" aria-hidden="true"></i>
+                              <span>Lançamento financeiro</span>
+                           </a>
+                        <% } %>
+                     </div>
+                  </div>
                   <a href="/rotas" class="dashboard-sidebar-link dashboard-sidebar-link-amber">
                      <i class="bi bi-signpost-2" aria-hidden="true"></i>
                      <span>Rotas</span>
