@@ -8,7 +8,14 @@ const escapeHtml = value => String(value ?? '')
     .replace(/'/g, '&#39;');
 
 export const buildPasswordResetUrl = (req, token) => {
-    const configuredBaseUrl = String(process.env.PASSWORD_RESET_BASE_URL || '').trim().replace(/\/$/, '');
+    const configuredBaseUrl = String(process.env.PASSWORD_RESET_BASE_URL || process.env.APP_PUBLIC_BASE_URL || '')
+        .trim()
+        .replace(/\/$/, '');
+
+    if (!configuredBaseUrl && process.env.NODE_ENV === 'production') {
+        throw new Error('PASSWORD_RESET_BASE_URL ou APP_PUBLIC_BASE_URL deve ser definida em producao.');
+    }
+
     const baseUrl = configuredBaseUrl || `${req.protocol}://${req.get('host')}`;
     return `${baseUrl}/redefinir-senha?token=${encodeURIComponent(token)}`;
 };

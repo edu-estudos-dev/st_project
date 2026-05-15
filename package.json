@@ -18,6 +18,7 @@
     "db:migrate:dev": "node scripts/run-migrations.js dev",
     "db:migrate:clean": "node scripts/run-migrations.js clean",
     "db:seed-admin": "node scripts/seed-saas-admin.js",
+    "subscriptions:sync": "node scripts/sync-subscription-status.js",
     "predev": "npm run free:port",
     "dev": "node --watch server.js"
   },

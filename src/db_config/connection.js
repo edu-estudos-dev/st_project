@@ -7,11 +7,18 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL nao foi definida.');
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+const databaseUrl = process.env.DATABASE_URL;
+const sslEnabled = String(process.env.DB_SSL || 'true').trim().toLowerCase() !== 'false';
+const rejectUnauthorized = String(
+  process.env.DB_SSL_REJECT_UNAUTHORIZED || (isProduction ? 'true' : 'false')
+).trim().toLowerCase() !== 'false';
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: databaseUrl,
+  ssl: sslEnabled
+    ? { rejectUnauthorized }
+    : false
 });
 
 const testConnection = async () => {

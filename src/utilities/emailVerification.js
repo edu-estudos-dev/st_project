@@ -8,9 +8,19 @@ const escapeHtml = value => String(value ?? '')
     .replace(/'/g, '&#39;');
 
 export const buildEmailVerificationUrl = (req, token) => {
-    const configuredBaseUrl = String(process.env.EMAIL_VERIFICATION_BASE_URL || process.env.PASSWORD_RESET_BASE_URL || '')
+    const configuredBaseUrl = String(
+        process.env.EMAIL_VERIFICATION_BASE_URL ||
+        process.env.PASSWORD_RESET_BASE_URL ||
+        process.env.APP_PUBLIC_BASE_URL ||
+        ''
+    )
         .trim()
         .replace(/\/$/, '');
+
+    if (!configuredBaseUrl && process.env.NODE_ENV === 'production') {
+        throw new Error('EMAIL_VERIFICATION_BASE_URL, PASSWORD_RESET_BASE_URL ou APP_PUBLIC_BASE_URL deve ser definida em producao.');
+    }
+
     const baseUrl = configuredBaseUrl || `${req.protocol}://${req.get('host')}`;
     return `${baseUrl}/verificar-email?token=${encodeURIComponent(token)}`;
 };

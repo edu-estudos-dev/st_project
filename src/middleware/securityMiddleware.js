@@ -2,7 +2,24 @@ import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
 
 export const securityHeaders = helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+            defaultSrc: ["'self'"],
+            baseUri: ["'self'"],
+            objectSrc: ["'none'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            fontSrc: ["'self'", 'data:'],
+            imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+            connectSrc: ["'self'", 'https://nominatim.openstreetmap.org'],
+            frameSrc: ["'self'", 'https://www.google.com'],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"],
+            upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null
+        }
+    },
     crossOriginEmbedderPolicy: false
 });
 
