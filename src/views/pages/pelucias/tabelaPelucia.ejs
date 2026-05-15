@@ -140,11 +140,20 @@
 
                                                 <td data-label="Ações">
                                                     <div class="table-actions">
-                                                        <a href="/pelucias/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
+                                                        <a href="/pelucias/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">
+                                                            <i class="bi bi-eye"></i>
+                                                            <span>Ver</span>
+                                                        </a>
 
                                                         <% if (!isReadOnly) { %>
-                                                            <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
-                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">Deletar</button>
+                                                            <a href="/pelucias/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">
+                                                                <i class="bi bi-pencil-square"></i>
+                                                                <span>Editar</span>
+                                                            </a>
+                                                            <button type="button" class="table-btn table-btn-delete delete-btn" data-id="<%= sangria.id %>">
+                                                                <i class="bi bi-trash"></i>
+                                                                <span>Excluir</span>
+                                                            </button>
                                                         <% } %>
                                                     </div>
                                                 </td>

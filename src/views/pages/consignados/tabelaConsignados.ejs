@@ -143,10 +143,16 @@
 
                                             <td data-label="Ações">
                                                 <div class="table-actions consignados-table-actions">
-                                                    <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">Ver</a>
+                                                    <a href="/consignados/sangrias/view/<%= sangria.id %>" class="table-btn table-btn-view">
+                                                        <i class="bi bi-eye"></i>
+                                                        <span>Ver</span>
+                                                    </a>
 
                                                     <% if (!isReadOnly) { %>
-                                                        <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">Editar</a>
+                                                        <a href="/consignados/sangrias/edit/<%= sangria.id %>" class="table-btn table-btn-edit">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                            <span>Editar</span>
+                                                        </a>
 
                                                         <% if (sangria.vinculada_visita) { %>
                                                             <button
@@ -155,7 +161,8 @@
                                                                 disabled
                                                                 title="Registro vinculado a uma visita"
                                                             >
-                                                                Vinculado
+                                                                <i class="bi bi-lock"></i>
+                                                                <span>Vinculado</span>
                                                             </button>
                                                         <% } else { %>
                                                             <button
@@ -163,7 +170,8 @@
                                                                 class="table-btn table-btn-delete delete-btn"
                                                                 data-id="<%= sangria.id %>"
                                                             >
-                                                                Deletar
+                                                                <i class="bi bi-trash"></i>
+                                                                <span>Excluir</span>
                                                             </button>
                                                         <% } %>
                                                     <% } %>
