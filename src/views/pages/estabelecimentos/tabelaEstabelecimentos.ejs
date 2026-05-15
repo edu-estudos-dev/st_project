@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <%- include('../../partials/head', { title: 'Estabelecimentos Cadastrados' }) %>
 
-<body class="list-page-body">
+<body class="list-page-body estabelecimentos-list-page">
     <%- include('../../partials/header') %>
     <% const isReadOnly = Boolean(typeof assinaturaSomenteLeitura !== 'undefined' && assinaturaSomenteLeitura); %>
     <% const navProducts = typeof navigationProducts !== 'undefined' && navigationProducts ? navigationProducts : null; %>
@@ -78,7 +78,7 @@
     <div class="list-shell estabelecimentos-list-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Estabelecimentos Cadastrados' }) %>
 
-        <section class="page-titlebar page-titlebar-neutral">
+        <section class="page-titlebar page-titlebar-neutral estabelecimentos-titlebar">
             <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-buildings"></i> Administrativo</span>
                 <h1>Estabelecimentos cadastrados</h1>
@@ -99,9 +99,9 @@
         </section>
 
         <main class="list-stage">
-            <section class="list-panel">
-                <div class="list-toolbar">
-                    <div class="list-toolbar-copy">
+            <section class="list-panel estabelecimentos-list-panel">
+                <div class="list-toolbar estabelecimentos-list-toolbar">
+                    <div class="list-toolbar-copy estabelecimentos-list-toolbar-copy">
                         <h2>Base de estabelecimentos</h2>
                         <p>Consulte os principais dados da operação e use os atalhos para abrir a tela certa sem perder contexto.</p>
                     </div>
@@ -114,23 +114,23 @@
                     <% } %>
                 </div>
 
-                <div class="list-summary-grid">
-                    <div class="list-summary-card">
+                <div class="list-summary-grid estabelecimentos-summary-grid">
+                    <div class="list-summary-card estabelecimentos-summary-card">
                         <strong>Registros</strong>
                         <span><%= estabelecimentos.length %> pontos</span>
                     </div>
 
-                    <div class="list-summary-card">
+                    <div class="list-summary-card estabelecimentos-summary-card">
                         <strong>Fluxo</strong>
                         <span>Consultar, editar e visualizar</span>
                     </div>
 
-                    <div class="list-summary-card">
+                    <div class="list-summary-card estabelecimentos-summary-card">
                         <strong>Contexto</strong>
                         <span>Operação centralizada</span>
                     </div>
 
-                    <div class="list-summary-card">
+                    <div class="list-summary-card estabelecimentos-summary-card">
                         <strong>Visualização</strong>
                         <span id="estabelecimentosModeLabel">Dados comerciais</span>
                     </div>
@@ -166,25 +166,16 @@
                             <thead>
                                 <tr>
                                     <th class="est-col-name">Estabelecimento</th>
-                                    <th class="mode-all est-col-product">Produto</th>
-                                    <th class="mode-commercial est-col-address">Endereço</th>
+                                    <th class="mode-commercial est-col-location">Localização</th>
+                                    <th class="mode-commercial est-col-responsible">Responsável e contato</th>
+                                    <th class="mode-operational est-col-product">Produtos</th>
 
                                     <% if (showBolinhasColumn) { %>
-                                        <th class="mode-operational est-col-operation est-col-operation-key">
-                                            <%= shouldPrefixOperationalLabel ? 'Chave bolinhas' : 'Chave' %>
-                                        </th>
-                                        <th class="mode-operational est-col-operation est-col-operation-machine">
-                                            <%= shouldPrefixOperationalLabel ? 'Máquina bolinhas' : 'Máquina' %>
-                                        </th>
+                                        <th class="mode-operational est-col-operation-group est-col-bolinhas">Bolinhas</th>
                                     <% } %>
 
                                     <% if (showPeluciasColumn) { %>
-                                        <th class="mode-operational est-col-operation est-col-operation-key">
-                                            <%= shouldPrefixOperationalLabel ? 'Chave pelúcias' : 'Chave' %>
-                                        </th>
-                                        <th class="mode-operational est-col-operation est-col-operation-machine">
-                                            <%= shouldPrefixOperationalLabel ? 'Máquina pelúcias' : 'Máquina' %>
-                                        </th>
+                                        <th class="mode-operational est-col-operation-group est-col-pelucias">Pelúcias</th>
                                     <% } %>
 
                                     <th class="table-actions-heading est-actions-sticky">Ações</th>
@@ -210,7 +201,7 @@
                                                 <%= estabelecimento.estabelecimento %>
                                             </div>
 
-                                            <div class="est-mobile-meta">
+                                            <div class="est-mobile-meta mode-operational">
                                                 <% if (estabelecimento.responsavel_nome) { %>
                                                     <span><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
                                                 <% } %>
@@ -221,7 +212,7 @@
                                             </div>
                                         </td>
 
-                                        <td class="mode-all est-col-product" data-label="Produto">
+                                        <td class="mode-operational est-col-product" data-label="Produto">
                                             <div class="product-setup-badges">
                                                 <% productBadges.forEach((produto) => { %>
                                                     <span class="product-badge <%= produto.className %> estabelecimento-product-badge">
@@ -231,8 +222,8 @@
                                             </div>
                                         </td>
 
-                                        <td class="mode-commercial est-col-address" data-label="Endereço">
-                                            <% if (enderecoCompleto) { %>
+                                        <td class="mode-commercial est-col-location" data-label="Localização">
+                                            <% if (estabelecimento.endereco || estabelecimento.bairro) { %>
                                                 <button
                                                     type="button"
                                                     class="table-address-link route-address-link estabelecimento-address-link"
@@ -243,7 +234,10 @@
                                                 >
                                                     <i class="bi bi-geo-alt"></i>
                                                     <span>
-                                                        <strong><%= estabelecimento.endereco %></strong>
+                                                        <% if (estabelecimento.endereco) { %>
+                                                            <strong><%= estabelecimento.endereco %></strong>
+                                                        <% } %>
+
                                                         <% if (estabelecimento.bairro) { %>
                                                             <small><%= estabelecimento.bairro %></small>
                                                         <% } %>
@@ -254,76 +248,76 @@
                                             <% } %>
                                         </td>
 
-                                        <% if (showBolinhasColumn) { %>
-                                            <td
-                                                class="mode-operational est-col-operation est-col-operation-key"
-                                                data-label="<%= shouldPrefixOperationalLabel ? 'Chave bolinhas' : 'Chave' %>"
-                                            >
-                                                <% if (hasBolinhas) { %>
-                                                    <span class="table-operational-pill table-operational-green <%= chaveBolinhas ? '' : 'is-empty' %>">
-                                                        <%= chaveBolinhas || '-' %>
-                                                    </span>
-                                                <% } else { %>
-                                                    <span class="table-muted">-</span>
-                                                <% } %>
-                                            </td>
+                                        <td class="mode-commercial est-col-responsible" data-label="Responsável">
+                                            <% if (estabelecimento.responsavel_nome || estabelecimento.telefone_contato) { %>
+                                                <div class="estabelecimento-responsible-stack">
+                                                    <% if (estabelecimento.responsavel_nome) { %>
+                                                        <span class="estabelecimento-table-value"><i class="bi bi-person"></i> <%= estabelecimento.responsavel_nome %></span>
+                                                    <% } %>
 
-                                            <td
-                                                class="mode-operational est-col-operation est-col-operation-machine"
-                                                data-label="<%= shouldPrefixOperationalLabel ? 'Máquina bolinhas' : 'Máquina' %>"
-                                            >
+                                                    <% if (estabelecimento.telefone_contato) { %>
+                                                        <span class="estabelecimento-table-value estabelecimento-table-phone"><i class="bi bi-telephone"></i> <%= formatPhone(estabelecimento.telefone_contato) %></span>
+                                                    <% } %>
+                                                </div>
+                                            <% } else { %>
+                                                <span class="table-muted">Não informado</span>
+                                            <% } %>
+                                        </td>
+
+                                        <% if (showBolinhasColumn) { %>
+                                            <td class="mode-operational est-col-operation-group est-col-bolinhas" data-label="Bolinhas">
                                                 <% if (hasBolinhas) { %>
-                                                    <span class="table-operational-pill table-operational-green <%= maquinaBolinhas ? '' : 'is-empty' %>">
-                                                        <%= maquinaBolinhas || '-' %>
-                                                    </span>
+                                                    <div class="estabelecimento-operation-stack estabelecimento-operation-stack-green">
+                                                        <div class="estabelecimento-operation-line">
+                                                            <span>Chave</span>
+                                                            <strong><%= chaveBolinhas || '-' %></strong>
+                                                        </div>
+
+                                                        <div class="estabelecimento-operation-line">
+                                                            <span>Máquina</span>
+                                                            <strong><%= maquinaBolinhas || '-' %></strong>
+                                                        </div>
+                                                    </div>
                                                 <% } else { %>
-                                                    <span class="table-muted">-</span>
+                                                    <span class="table-operational-pill is-empty">-</span>
                                                 <% } %>
                                             </td>
                                         <% } %>
 
                                         <% if (showPeluciasColumn) { %>
-                                            <td
-                                                class="mode-operational est-col-operation est-col-operation-key"
-                                                data-label="<%= shouldPrefixOperationalLabel ? 'Chave pelúcias' : 'Chave' %>"
-                                            >
+                                            <td class="mode-operational est-col-operation-group est-col-pelucias" data-label="Pelúcias">
                                                 <% if (hasPelucias) { %>
-                                                    <span class="table-operational-pill table-operational-violet <%= chavePelucias ? '' : 'is-empty' %>">
-                                                        <%= chavePelucias || '-' %>
-                                                    </span>
-                                                <% } else { %>
-                                                    <span class="table-muted">-</span>
-                                                <% } %>
-                                            </td>
+                                                    <div class="estabelecimento-operation-stack estabelecimento-operation-stack-violet">
+                                                        <div class="estabelecimento-operation-line">
+                                                            <span>Chave</span>
+                                                            <strong><%= chavePelucias || '-' %></strong>
+                                                        </div>
 
-                                            <td
-                                                class="mode-operational est-col-operation est-col-operation-machine"
-                                                data-label="<%= shouldPrefixOperationalLabel ? 'Máquina pelúcias' : 'Máquina' %>"
-                                            >
-                                                <% if (hasPelucias) { %>
-                                                    <span class="table-operational-pill table-operational-violet <%= maquinaPelucias ? '' : 'is-empty' %>">
-                                                        <%= maquinaPelucias || '-' %>
-                                                    </span>
+                                                        <div class="estabelecimento-operation-line">
+                                                            <span>Máquina</span>
+                                                            <strong><%= maquinaPelucias || '-' %></strong>
+                                                        </div>
+                                                    </div>
                                                 <% } else { %>
-                                                    <span class="table-muted">-</span>
+                                                    <span class="table-operational-pill is-empty">-</span>
                                                 <% } %>
                                             </td>
                                         <% } %>
 
                                         <td class="table-actions-cell est-actions-sticky" data-label="Ações">
                                             <div class="table-actions estabelecimento-actions">
-                                                <a class="table-btn table-btn-view view-btn" data-id="<%= estabelecimento.id %>">
+                                                <a class="table-btn table-btn-view view-btn" href="/estabelecimentos/<%= estabelecimento.id %>/view" data-id="<%= estabelecimento.id %>">
                                                     <i class="bi bi-eye"></i>
                                                     <span>Ver</span>
                                                 </a>
 
                                                 <% if (!isReadOnly) { %>
-                                                    <a class="table-btn table-btn-edit edit-btn" data-id="<%= estabelecimento.id %>">
+                                                    <a class="table-btn table-btn-edit edit-btn" href="/estabelecimentos/<%= estabelecimento.id %>/edit" data-id="<%= estabelecimento.id %>">
                                                         <i class="bi bi-pencil-square"></i>
                                                         <span>Editar</span>
                                                     </a>
 
-                                                    <a class="table-btn table-btn-delete delete-btn" data-id="<%= estabelecimento.id %>">
+                                                    <a class="table-btn table-btn-delete delete-btn" href="#" data-id="<%= estabelecimento.id %>">
                                                         <i class="bi bi-trash"></i>
                                                         <span>Excluir</span>
                                                     </a>
@@ -463,19 +457,22 @@
             });
 
             document.querySelectorAll('.view-btn').forEach((button) => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
                     window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/view`;
                 });
             });
 
             document.querySelectorAll('.edit-btn').forEach((button) => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
                     window.location.href = `/estabelecimentos/${this.getAttribute('data-id')}/edit`;
                 });
             });
 
             document.querySelectorAll('.delete-btn').forEach((button) => {
-                button.addEventListener('click', async function () {
+                button.addEventListener('click', async function (event) {
+                    event.preventDefault();
                     const idEstabelecimento = this.getAttribute('data-id');
 
                     const confirmed = await window.AppAlerts?.confirm({

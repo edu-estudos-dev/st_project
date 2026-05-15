@@ -87,7 +87,7 @@
                     <% const produtoPrincipal = estabelecimento.produtoFormatado || estabelecimento.produto || 'Não informado'; %>
                     <% const hasOperationalData = hasBolinhas || hasConsignados || hasPelucias; %>
 
-                    <div class="view-panel-header">
+                    <div class="view-panel-header estabelecimento-view-panel-header">
                         <div>
                             <span class="form-section-tag">Resumo</span>
                             <h2>Dados do estabelecimento</h2>
@@ -95,161 +95,171 @@
                         </div>
                     </div>
 
-                    <div class="view-section-title">
-                        <span>Dados comerciais</span>
-                        <small>Identificação, contato e endereço do ponto.</small>
-                    </div>
+                    <div class="estabelecimento-view-content">
+                        <section class="estabelecimento-view-section estabelecimento-view-commercial-section">
+                            <div class="view-section-title">
+                                <span>Dados comerciais</span>
+                                <small>Identificação, contato e endereço do ponto.</small>
+                            </div>
 
-                    <div class="view-grid">
-                        <div class="view-card">
-                            <strong>Produtos vinculados</strong>
-                            <span><%= produtoPrincipal %></span>
-                        </div>
+                            <div class="view-grid estabelecimento-view-grid">
+                                <div class="view-card">
+                                    <strong>Produtos vinculados</strong>
+                                    <span><%= produtoPrincipal %></span>
+                                </div>
 
-                        <div class="view-card">
-                            <strong>Responsável</strong>
-                            <span><%= estabelecimento.responsavel_nome || 'Não informado' %></span>
-                        </div>
+                                <div class="view-card">
+                                    <strong>Responsável</strong>
+                                    <span><%= estabelecimento.responsavel_nome || 'Não informado' %></span>
+                                </div>
 
-                        <div class="view-card">
-                            <strong>Contato</strong>
-                            <span><%= formatPhone(estabelecimento.telefone_contato) %></span>
-                        </div>
+                                <div class="view-card">
+                                    <strong>Contato</strong>
+                                    <span><%= formatPhone(estabelecimento.telefone_contato) %></span>
+                                </div>
 
-                        <div class="view-card">
-                            <strong>Bairro</strong>
-                            <span><%= estabelecimento.bairro || 'Não informado' %></span>
-                        </div>
+                                <div class="view-card">
+                                    <strong>Bairro</strong>
+                                    <span><%= estabelecimento.bairro || 'Não informado' %></span>
+                                </div>
 
-                        <div class="view-card is-wide">
-                            <strong>Endereço</strong>
-                            <span><%= estabelecimento.endereco || 'Não informado' %></span>
-                        </div>
-                    </div>
+                                <div class="view-card is-wide">
+                                    <strong>Endereço</strong>
+                                    <span><%= estabelecimento.endereco || 'Não informado' %></span>
+                                </div>
+                            </div>
+                        </section>
 
-                    <% if (hasOperationalData) { %>
-                        <div class="view-section-title view-section-title-spaced">
-                            <span>Dados operacionais</span>
-                            <small>Informações usadas na operação de campo, estoque e identificação dos produtos ativos.</small>
-                        </div>
+                        <% if (hasOperationalData) { %>
+                            <section class="estabelecimento-view-section estabelecimento-view-operational-section">
+                                <div class="view-section-title">
+                                    <span>Dados operacionais</span>
+                                    <small>Informações usadas na operação de campo, estoque e identificação dos produtos ativos.</small>
+                                </div>
 
-                        <div class="view-grid view-operational-grid">
-                            <% if (hasBolinhas) { %>
-                                <div class="view-card view-card-product view-card-product-green">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-green">Bolinhas</span>
-                                        Chave da máquina
-                                    </strong>
-                                    <span class="<%= isFilled(chaveBolinhas) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(chaveBolinhas) %>
+                                <div class="view-grid estabelecimento-view-grid estabelecimento-operational-grid">
+                                    <% if (hasBolinhas) { %>
+                                        <div class="view-card view-card-product view-card-product-green">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-green">Bolinhas</span>
+                                                Chave da máquina
+                                            </strong>
+                                            <span class="<%= isFilled(chaveBolinhas) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(chaveBolinhas) %>
+                                            </span>
+                                        </div>
+
+                                        <div class="view-card view-card-product view-card-product-green">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-green">Bolinhas</span>
+                                                Número da máquina
+                                            </strong>
+                                            <span class="<%= isFilled(maquinaBolinhas) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(maquinaBolinhas) %>
+                                            </span>
+                                        </div>
+                                    <% } %>
+
+                                    <% if (hasConsignados) { %>
+                                        <div class="view-card view-card-product view-card-product-blue">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-blue">Consignados</span>
+                                                Quantidade inicial
+                                            </strong>
+                                            <span class="<%= isFilled(consignadoQuantidadeInicial) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(consignadoQuantidadeInicial) %>
+                                            </span>
+                                        </div>
+                                    <% } %>
+
+                                    <% if (hasPelucias) { %>
+                                        <div class="view-card view-card-product view-card-product-violet">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                                Chave da máquina
+                                            </strong>
+                                            <span class="<%= isFilled(chavePelucias) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(chavePelucias) %>
+                                            </span>
+                                        </div>
+
+                                        <div class="view-card view-card-product view-card-product-violet">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                                Número da máquina
+                                            </strong>
+                                            <span class="<%= isFilled(maquinaPelucias) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(maquinaPelucias) %>
+                                            </span>
+                                        </div>
+
+                                        <div class="view-card view-card-product view-card-product-violet">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                                Leitura inicial
+                                            </strong>
+                                            <span class="<%= isFilled(peluciaLeituraInicial) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(peluciaLeituraInicial) %>
+                                            </span>
+                                        </div>
+
+                                        <div class="view-card view-card-product view-card-product-violet">
+                                            <strong>
+                                                <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
+                                                Quantidade inicial
+                                            </strong>
+                                            <span class="<%= isFilled(peluciaAbastecidoInicial) ? '' : 'view-empty-value' %>">
+                                                <%= formatOperationalValue(peluciaAbastecidoInicial) %>
+                                            </span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </section>
+                        <% } %>
+
+                        <section class="estabelecimento-view-section estabelecimento-view-history-section">
+                            <div class="view-section-title">
+                                <span>Histórico e observações</span>
+                                <small>Datas de cadastro, última atualização e observações internas.</small>
+                            </div>
+
+                            <div class="view-grid estabelecimento-view-grid">
+                                <div class="view-card">
+                                    <strong>Data de cadastro</strong>
+                                    <span><%= estabelecimento.data_criacao ? new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
+                                </div>
+
+                                <div class="view-card">
+                                    <strong>Última edição</strong>
+                                    <span class="<%= estabelecimento.data_atualizacao ? '' : 'view-empty-value' %>">
+                                        <%= estabelecimento.data_atualizacao ? new Date(estabelecimento.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %>
                                     </span>
                                 </div>
 
-                                <div class="view-card view-card-product view-card-product-green">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-green">Bolinhas</span>
-                                        Número da máquina
-                                    </strong>
-                                    <span class="<%= isFilled(maquinaBolinhas) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(maquinaBolinhas) %>
+                                <div class="view-card is-wide">
+                                    <strong>Observações</strong>
+                                    <span class="<%= estabelecimento.observacoes ? '' : 'view-empty-value' %>">
+                                        <%= estabelecimento.observacoes || 'Sem observações cadastradas.' %>
                                     </span>
                                 </div>
-                            <% } %>
-
-                            <% if (hasConsignados) { %>
-                                <div class="view-card view-card-product view-card-product-blue">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-blue">Consignados</span>
-                                        Quantidade inicial deixada
-                                    </strong>
-                                    <span class="<%= isFilled(consignadoQuantidadeInicial) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(consignadoQuantidadeInicial) %>
-                                    </span>
-                                </div>
-                            <% } %>
-
-                            <% if (hasPelucias) { %>
-                                <div class="view-card view-card-product view-card-product-violet">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
-                                        Chave da máquina
-                                    </strong>
-                                    <span class="<%= isFilled(chavePelucias) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(chavePelucias) %>
-                                    </span>
-                                </div>
-
-                                <div class="view-card view-card-product view-card-product-violet">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
-                                        Número da máquina
-                                    </strong>
-                                    <span class="<%= isFilled(maquinaPelucias) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(maquinaPelucias) %>
-                                    </span>
-                                </div>
-
-                                <div class="view-card view-card-product view-card-product-violet">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
-                                        Leitura inicial
-                                    </strong>
-                                    <span class="<%= isFilled(peluciaLeituraInicial) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(peluciaLeituraInicial) %>
-                                    </span>
-                                </div>
-
-                                <div class="view-card view-card-product view-card-product-violet">
-                                    <strong>
-                                        <span class="view-product-tag view-product-tag-violet">Pelúcias</span>
-                                        Quantidade inicial
-                                    </strong>
-                                    <span class="<%= isFilled(peluciaAbastecidoInicial) ? '' : 'view-empty-value' %>">
-                                        <%= formatOperationalValue(peluciaAbastecidoInicial) %>
-                                    </span>
-                                </div>
-                            <% } %>
-                        </div>
-                    <% } %>
-
-                    <div class="view-section-title view-section-title-spaced">
-                        <span>Histórico e observações</span>
-                        <small>Datas de cadastro, última atualização e observações internas.</small>
-                    </div>
-
-                    <div class="view-grid">
-                        <div class="view-card">
-                            <strong>Data de cadastro</strong>
-                            <span><%= estabelecimento.data_criacao ? new Date(estabelecimento.data_criacao).toLocaleDateString('pt-BR') : 'Não informado' %></span>
-                        </div>
-
-                        <div class="view-card">
-                            <strong>Última edição</strong>
-                            <span class="<%= estabelecimento.data_atualizacao ? '' : 'view-empty-value' %>">
-                                <%= estabelecimento.data_atualizacao ? new Date(estabelecimento.data_atualizacao).toLocaleDateString('pt-BR') : 'Não informado' %>
-                            </span>
-                        </div>
-
-                        <div class="view-card is-wide">
-                            <strong>Observações</strong>
-                            <span class="<%= estabelecimento.observacoes ? '' : 'view-empty-value' %>">
-                                <%= estabelecimento.observacoes || 'Sem observações cadastradas.' %>
-                            </span>
-                        </div>
+                            </div>
+                        </section>
                     </div>
                 <% } else { %>
-                    <p class="mb-0">Estabelecimento não encontrado.</p>
+                    <div class="estabelecimento-view-empty">
+                        <p class="mb-0">Estabelecimento não encontrado.</p>
+                    </div>
                 <% } %>
 
-                <div class="view-actions">
-                    <div class="view-actions-copy">
+                <section class="view-actions estabelecimento-view-actions">
+                    <div class="view-actions-copy estabelecimento-view-actions-copy">
                         <%= estabelecimento
                             ? 'Revise este cadastro antes de editar, gerar uma rota ou retornar para a listagem geral.'
                             : 'Você pode voltar para a listagem geral de estabelecimentos e continuar a navegação normalmente.' %>
                     </div>
 
-                    <div class="view-actions-buttons">
-                        <a href="/estabelecimentos" class="btn-modern-secondary">
+                    <div class="view-actions-buttons estabelecimento-view-actions-buttons">
+                        <a href="/estabelecimentos" class="btn-modern-secondary estabelecimento-view-action-button">
                             <i class="bi bi-arrow-left"></i>
                             <span>Voltar</span>
                         </a>
@@ -257,7 +267,7 @@
                         <% if (estabelecimento && enderecoCompleto) { %>
                             <button
                                 type="button"
-                                class="btn-route-secondary"
+                                class="btn-route-secondary estabelecimento-view-action-button"
                                 id="openRouteFromViewButton"
                                 data-address="<%= enderecoCompleto %>"
                                 data-name="<%= estabelecimento.estabelecimento %>"
@@ -270,13 +280,13 @@
                         <% } %>
 
                         <% if (estabelecimento && !isReadOnly) { %>
-                            <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern">
+                            <a href="/estabelecimentos/<%= estabelecimento.id %>/edit" class="btn-modern estabelecimento-view-action-button">
                                 <i class="bi bi-pencil-square"></i>
                                 <span>Editar cadastro</span>
                             </a>
                         <% } %>
                     </div>
-                </div>
+                </section>
             </section>
         </main>
     </div>

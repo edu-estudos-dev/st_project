@@ -10,7 +10,7 @@
     <% const singleProductMode = enabledProductOptions.length === 1; %>
     <% const singleProduct = singleProductMode ? enabledProductOptions[0] : null; %>
 
-    <div class="form-shell form-shell-modern">
+    <div class="form-shell form-shell-modern estabelecimentos-form-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Editar Estabelecimento' }) %>
 
         <section class="page-titlebar page-titlebar-neutral">
@@ -73,21 +73,21 @@
                                     </div>
                                 </div>
                             <% } else { %>
-                                <div class="modern-checkbox-grid">
-                                    <% enabledProductOptions.forEach((produto, index) => { %>
-                                        <label class="modern-checkbox <%= produto.className %>" for="produto<%= index + 1 %>">
-                                            <input
-                                                class="form-check-input"
-                                                type="checkbox"
-                                                id="produto<%= index + 1 %>"
-                                                name="produto"
-                                                value="<%= produto.value %>"
-                                                <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>
-                                            >
-                                            <span><%= produto.label %></span>
-                                        </label>
-                                    <% }) %>
-                                </div>
+                              <div class="estabelecimento-products-grid">
+                                <% enabledProductOptions.forEach((produto, index) => { %>
+                                    <label class="estabelecimento-product-option <%= produto.className %>" for="produto<%= index + 1 %>">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="produto<%= index + 1 %>"
+                                            name="produto"
+                                            value="<%= produto.value %>"
+                                            <%= hasProduto(estabelecimento.produto, produto.value) ? 'checked' : '' %>
+                                        >
+                                        <span><%= produto.label %></span>
+                                    </label>
+                                <% }) %>
+                            </div>
 
                                 <small class="modern-note">Deixe pelo menos um produto marcado para manter os atalhos e relatórios coerentes com o ponto.</small>
                             <% } %>
@@ -132,7 +132,7 @@
                             <label for="responsavel_nome">Responsável</label>
                             <input
                                 type="text"
-                                class="form-control text-center"
+                                class="form-control"
                                 id="responsavel_nome"
                                 name="responsavel_nome"
                                 value="<%= estabelecimento.responsavel_nome || '' %>"
@@ -144,7 +144,7 @@
                             <label for="telefone_contato">Contato</label>
                             <input
                                 type="tel"
-                                class="form-control text-center"
+                                class="form-control"
                                 id="telefone_contato"
                                 name="telefone_contato"
                                 placeholder="(00) 00000-0000"
@@ -190,7 +190,7 @@
                         </div>
 
                         <div class="col-12 d-none" data-operational-field="bolinhas-machine">
-                            <div class="product-setup-block theme-green">
+                            <div class="product-setup-block estabelecimento-operational-block theme-green">
                                 <div class="product-setup-header">
                                     <div class="product-setup-badges">
                                         <span class="product-badge product-badge-green">
@@ -206,13 +206,13 @@
                                 <div class="product-divider"></div>
 
                                 <div class="row g-3">
-                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                    <div class="col-12 col-md-6 compact-field estabelecimento-operational-field">
                                         <label for="chave_bolinhas">
                                             Chave da máquina de bolinhas <span class="optional-label">opcional</span>
                                         </label>
                                         <input
                                             type="text"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="chave_bolinhas"
                                             name="chave_bolinhas"
                                             placeholder="Código da chave"
@@ -220,13 +220,13 @@
                                         >
                                     </div>
 
-                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                    <div class="col-12 col-md-6 compact-field estabelecimento-operational-field">
                                         <label for="maquina_bolinhas">
                                             Número da máquina de bolinhas <span class="optional-label">opcional</span>
                                         </label>
                                         <input
                                             type="text"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="maquina_bolinhas"
                                             name="maquina_bolinhas"
                                             placeholder="Número da máquina"
@@ -238,7 +238,7 @@
                         </div>
 
                         <div class="col-12 d-none" data-operational-field="consignados-initial">
-                            <div class="product-setup-block theme-blue">
+                            <div class="product-setup-block estabelecimento-operational-block theme-blue">
                                 <div class="product-setup-header">
                                     <div class="product-setup-badges">
                                         <span class="product-badge product-badge-blue">
@@ -254,7 +254,7 @@
                                 <div class="product-divider"></div>
 
                                 <div class="row g-3">
-                                    <div class="col-12 col-md-6 col-lg-4 compact-field centered-field">
+                                    <div class="col-12 col-md-6 col-lg-4 compact-field estabelecimento-operational-field">
                                         <label for="consignado_quantidade_inicial">
                                             Quantidade inicial deixada <span class="required-label">obrigatório</span>
                                         </label>
@@ -263,7 +263,7 @@
                                             inputmode="numeric"
                                             pattern="[0-9]*"
                                             maxlength="6"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="consignado_quantidade_inicial"
                                             name="consignado_quantidade_inicial"
                                             value="<%= estabelecimento.consignado_quantidade_inicial || estabelecimento.figurinha_quantidade_inicial || '' %>"
@@ -275,7 +275,7 @@
                         </div>
 
                         <div class="col-12 d-none" data-operational-field="pelucias-machine">
-                            <div class="product-setup-block theme-violet">
+                            <div class="product-setup-block estabelecimento-operational-block theme-violet">
                                 <div class="product-setup-header">
                                     <div class="product-setup-badges">
                                         <span class="product-badge product-badge-violet">
@@ -291,13 +291,13 @@
                                 <div class="product-divider"></div>
 
                                 <div class="row g-3">
-                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                    <div class="col-12 col-md-6 compact-field estabelecimento-operational-field">
                                         <label for="chave_pelucias">
                                             Chave da máquina de pelúcias <span class="optional-label">opcional</span>
                                         </label>
                                         <input
                                             type="text"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="chave_pelucias"
                                             name="chave_pelucias"
                                             placeholder="Código da chave"
@@ -305,13 +305,13 @@
                                         >
                                     </div>
 
-                                    <div class="col-12 col-md-6 compact-field centered-field">
+                                    <div class="col-12 col-md-6 compact-field estabelecimento-operational-field">
                                         <label for="maquina_pelucias">
                                             Número da máquina de pelúcias <span class="optional-label">opcional</span>
                                         </label>
                                         <input
                                             type="text"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="maquina_pelucias"
                                             name="maquina_pelucias"
                                             placeholder="Número da máquina"
@@ -323,7 +323,7 @@
                         </div>
 
                         <div class="col-12 d-none" data-operational-field="pelucias-initial">
-                            <div class="product-setup-block theme-violet">
+                            <div class="product-setup-block estabelecimento-operational-block theme-violet">
                                 <div class="product-setup-header">
                                     <div class="product-setup-badges">
                                         <span class="product-badge product-badge-violet">
@@ -339,7 +339,7 @@
                                 <div class="product-divider"></div>
 
                                 <div class="row g-3">
-                                    <div class="col-12 col-md-6 col-lg-3 compact-field centered-field">
+                                    <div class="col-12 col-md-6 col-lg-3 compact-field estabelecimento-operational-field">
                                         <label for="pelucia_leitura_inicial">
                                             Leitura inicial <span class="required-label">obrigatório</span>
                                         </label>
@@ -348,7 +348,7 @@
                                             inputmode="numeric"
                                             pattern="[0-9]*"
                                             maxlength="6"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="pelucia_leitura_inicial"
                                             name="pelucia_leitura_inicial"
                                             value="<%= estabelecimento.pelucia_leitura_inicial || '' %>"
@@ -356,7 +356,7 @@
                                         >
                                     </div>
 
-                                    <div class="col-12 col-md-6 col-lg-3 compact-field centered-field">
+                                    <div class="col-12 col-md-6 col-lg-3 compact-field estabelecimento-operational-field">
                                         <label for="pelucia_abastecido_inicial">
                                             Qtde. Inicial <span class="required-label">obrigatório</span>
                                         </label>
@@ -365,7 +365,7 @@
                                             inputmode="numeric"
                                             pattern="[0-9]*"
                                             maxlength="6"
-                                            class="form-control text-center"
+                                            class="form-control estabelecimento-operational-input"
                                             id="pelucia_abastecido_inicial"
                                             name="pelucia_abastecido_inicial"
                                             value="<%= estabelecimento.pelucia_abastecido_inicial || '' %>"
@@ -415,24 +415,25 @@
                     </div>
                 </section>
 
-                <section class="form-actions-bar">
+                <section class="form-actions-bar estabelecimentos-form-actions">
                     <div class="form-actions-copy">
                         <strong>Atualização do cadastro</strong>
                         <span>Revise os dados do estabelecimento antes de confirmar as alterações.</span>
                     </div>
 
-                    <div class="form-actions-buttons">
-                        <a href="/estabelecimentos" class="btn-modern-secondary">
+                    <div class="form-actions-buttons estabelecimentos-form-actions-buttons">
+                        <a href="/estabelecimentos" class="btn-modern-secondary estabelecimento-action-button">
                             <i class="bi bi-arrow-left"></i>
                             <span>Cancelar</span>
                         </a>
 
-                        <button type="submit" class="btn-modern">
+                        <button type="submit" class="btn-modern estabelecimento-action-button">
                             <i class="bi bi-check2-circle"></i>
                             <span>Atualizar estabelecimento</span>
                         </button>
                     </div>
                 </section>
+
             </form>
         </main>
     </div>
