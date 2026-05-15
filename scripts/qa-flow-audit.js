@@ -9,6 +9,12 @@ const addCheck = (name, file, predicate, hint) => {
 const includesAll = (...needles) => (content) =>
   needles.every((needle) => content.includes(needle));
 
+const excludesAll = (...needles) => (content) =>
+  needles.every((needle) => !content.includes(needle));
+
+const allOf = (...predicates) => (content) =>
+  predicates.every((predicate) => predicate(content));
+
 const matchesAll = (...patterns) => (content) =>
   patterns.every((pattern) => pattern.test(content));
 
@@ -51,9 +57,22 @@ addCheck(
 );
 
 addCheck(
+  'Google OAuth nao usa excecao localhost para criar conta',
+  'src/controllers/loginLogout.js',
+  allOf(
+    includesAll('allowCreateUser: isPublicAuthEnabled()'),
+    excludesAll('allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)')
+  ),
+  'O ambiente local tambem precisa respeitar cadastro publico fechado no login Google.'
+);
+
+addCheck(
   'Sessoes antigas de contas Google automaticas sao bloqueadas',
   'src/middleware/subscriptionStatus.js',
-  includesAll("authProvider === 'google'", 'PUBLIC_AUTH_ENABLED', 'clearAuthCookie'),
+  allOf(
+    includesAll("authProvider === 'google'", 'PUBLIC_AUTH_ENABLED', 'clearAuthCookie', 'Conta criada automaticamente pelo Google nao esta autorizada', 'if (!isPublicAuthEnabled())'),
+    excludesAll('!isPublicAuthEnabled() && !isLocalhostRequest(req)')
+  ),
   'Contas Google criadas antes da correcao nao podem continuar usando cookie valido.'
 );
 

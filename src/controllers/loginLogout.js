@@ -59,16 +59,6 @@ const isPublicAuthEnabled = () => {
     );
 };
 
-const isLocalhostRequest = (req) => {
-    const hostname = String(req.hostname || '').toLowerCase();
-
-    return hostname === 'localhost'
-        || hostname === '127.0.0.1'
-        || hostname === '::1'
-        || hostname === '[::1]'
-        || hostname.endsWith('.localhost');
-};
-
 class LoginLogoutController {
     constructor() {
         this.login = this.login.bind(this);
@@ -234,7 +224,7 @@ class LoginLogoutController {
                 googleId: profile.sub,
                 email: profile.email,
                 name: profile.name,
-                allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)
+                allowCreateUser: isPublicAuthEnabled()
             });
 
             if (usuario?.error === 'google_signup_disabled') {

@@ -32,16 +32,6 @@ const isPublicAuthEnabled = () => {
     );
 };
 
-const isLocalhostRequest = (req) => {
-    const hostname = String(req.hostname || '').toLowerCase();
-
-    return hostname === 'localhost'
-        || hostname === '127.0.0.1'
-        || hostname === '::1'
-        || hostname === '[::1]'
-        || hostname.endsWith('.localhost');
-};
-
 const getUserAuthProvider = async (userId) => {
     const result = await connection.query(
         'SELECT auth_provider FROM users WHERE id = $1 LIMIT 1',
@@ -71,7 +61,7 @@ export const attachSubscriptionStatus = async (req, res, next) => {
     }
 
     try {
-        if (!isPublicAuthEnabled() && !isLocalhostRequest(req)) {
+        if (!isPublicAuthEnabled()) {
             const authProvider = await getUserAuthProvider(req.user.id);
 
             if (authProvider === 'google') {
