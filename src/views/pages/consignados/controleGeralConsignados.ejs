@@ -212,6 +212,10 @@
 
             const situacaoCelula = linha.querySelector('.situacao');
 
+            if (!situacaoCelula) {
+                return;
+            }
+
             linha.classList.remove('table-row-exit-highlight', 'consignados-control-row-alert', 'consignados-row-alert');
 
             if (semVisita) {

@@ -73,47 +73,55 @@
                             </thead>
 
                             <tbody id="tabelaEstabelecimentos">
-                                <% estabelecimentos.forEach(function(estabelecimento) {
-                                    const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
-                                    const hoje = new Date();
-                                    const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
-                                %>
+                                <% if (estabelecimentos.length > 0) { %>
+                                    <% estabelecimentos.forEach(function(estabelecimento) {
+                                        const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
+                                        const hoje = new Date();
+                                        const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
+                                    %>
 
-                                <tr
-                                    class="bolinhas-control-row"
-                                    data-diferenca-dias="<%= diferencaDias %>"
-                                    data-sem-visita="<%= data ? 'false' : 'true' %>"
-                                >
-                                    <td class="bolinhas-control-name-cell" data-label="Estabelecimento">
-                                        <span class="table-title-cell bolinhas-control-name">
-                                            <%= estabelecimento.estabelecimento %>
-                                        </span>
-                                    </td>
+                                    <tr
+                                        class="bolinhas-control-row"
+                                        data-diferenca-dias="<%= diferencaDias %>"
+                                        data-sem-visita="<%= data ? 'false' : 'true' %>"
+                                    >
+                                        <td class="bolinhas-control-name-cell" data-label="Estabelecimento">
+                                            <span class="table-title-cell bolinhas-control-name">
+                                                <%= estabelecimento.estabelecimento %>
+                                            </span>
+                                        </td>
 
-                                    <td class="table-cell-wrap bolinhas-control-address-cell" data-label="Endereço">
-                                        <%= estabelecimento.endereco || '-' %>
-                                    </td>
+                                        <td class="table-cell-wrap bolinhas-control-address-cell" data-label="Endereço">
+                                            <%= estabelecimento.endereco || '-' %>
+                                        </td>
 
-                                    <td class="bolinhas-control-neighborhood-cell" data-label="Bairro">
-                                        <%= estabelecimento.bairro || '-' %>
-                                    </td>
+                                        <td class="bolinhas-control-neighborhood-cell" data-label="Bairro">
+                                            <%= estabelecimento.bairro || '-' %>
+                                        </td>
 
-                                    <td class="bolinhas-control-key-cell" data-label="Chave">
-                                        <%= estabelecimento.chave_bolinhas || estabelecimento.chave || '-' %>
-                                    </td>
+                                        <td class="bolinhas-control-key-cell" data-label="Chave">
+                                            <%= estabelecimento.chave_bolinhas || estabelecimento.chave || '-' %>
+                                        </td>
 
-                                    <td class="bolinhas-control-machine-cell" data-label="Máquina">
-                                        <%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '-' %>
-                                    </td>
+                                        <td class="bolinhas-control-machine-cell" data-label="Máquina">
+                                            <%= estabelecimento.maquina_bolinhas || estabelecimento.maquina || '-' %>
+                                        </td>
 
-                                    <td class="dias-passados bolinhas-control-days-cell" data-label="Dias passados">
-                                        <%= data ? diferencaDias : 'Sem visita' %>
-                                    </td>
+                                        <td class="dias-passados bolinhas-control-days-cell" data-label="Dias passados">
+                                            <%= data ? diferencaDias : 'Sem visita' %>
+                                        </td>
 
-                                    <td class="situacao bolinhas-control-status-cell" data-label="Situação"></td>
-                                </tr>
+                                        <td class="situacao bolinhas-control-status-cell" data-label="Situação"></td>
+                                    </tr>
 
-                                <% }); %>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7" class="table-empty bolinhas-empty">
+                                            Nenhum ponto de bolinhas encontrado.
+                                        </td>
+                                    </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -176,6 +184,10 @@
                 }
 
                 const situacaoCelula = linha.querySelector('.situacao');
+
+                if (!situacaoCelula) {
+                    return;
+                }
 
                 linha.classList.remove('table-row-exit-highlight', 'bolinhas-control-row-alert');
 

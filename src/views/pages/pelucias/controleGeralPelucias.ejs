@@ -73,47 +73,55 @@
                             </thead>
 
                             <tbody id="tabelaEstabelecimentos">
-                                <% estabelecimentos.forEach(function(estabelecimento) {
-                                    const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
-                                    const hoje = new Date();
-                                    const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
-                                %>
+                                <% if (estabelecimentos.length > 0) { %>
+                                    <% estabelecimentos.forEach(function(estabelecimento) {
+                                        const data = estabelecimento.data ? new Date(estabelecimento.data) : null;
+                                        const hoje = new Date();
+                                        const diferencaDias = data ? Math.floor((hoje - data) / (1000 * 60 * 60 * 24)) : '';
+                                    %>
 
-                                <tr
-                                    class="pelucias-control-row"
-                                    data-diferenca-dias="<%= diferencaDias %>"
-                                    data-sem-visita="<%= data ? 'false' : 'true' %>"
-                                >
-                                   <td class="pelucias-control-name-cell" data-label="Estabelecimento">
-                                        <span class="table-title-cell pelucias-control-name">
-                                            <%= estabelecimento.estabelecimento %>
-                                        </span>
-                                    </td>
+                                    <tr
+                                        class="pelucias-control-row"
+                                        data-diferenca-dias="<%= diferencaDias %>"
+                                        data-sem-visita="<%= data ? 'false' : 'true' %>"
+                                    >
+                                       <td class="pelucias-control-name-cell" data-label="Estabelecimento">
+                                            <span class="table-title-cell pelucias-control-name">
+                                                <%= estabelecimento.estabelecimento %>
+                                            </span>
+                                        </td>
 
-                                    <td class="table-cell-wrap pelucias-control-address-cell" data-label="Endereço">
-                                        <%= estabelecimento.endereco || '-' %>
-                                    </td>
+                                        <td class="table-cell-wrap pelucias-control-address-cell" data-label="Endereço">
+                                            <%= estabelecimento.endereco || '-' %>
+                                        </td>
 
-                                    <td class="pelucias-control-neighborhood-cell" data-label="Bairro">
-                                        <%= estabelecimento.bairro || '-' %>
-                                    </td>
+                                        <td class="pelucias-control-neighborhood-cell" data-label="Bairro">
+                                            <%= estabelecimento.bairro || '-' %>
+                                        </td>
 
-                                    <td class="pelucias-control-key-cell" data-label="Chave">
-                                        <%= estabelecimento.chave_pelucias || estabelecimento.chave || '-' %>
-                                    </td>
+                                        <td class="pelucias-control-key-cell" data-label="Chave">
+                                            <%= estabelecimento.chave_pelucias || estabelecimento.chave || '-' %>
+                                        </td>
 
-                                    <td class="pelucias-control-machine-cell" data-label="Máquina">
-                                        <%= estabelecimento.maquina_pelucias || estabelecimento.maquina || '-' %>
-                                    </td>
+                                        <td class="pelucias-control-machine-cell" data-label="Máquina">
+                                            <%= estabelecimento.maquina_pelucias || estabelecimento.maquina || '-' %>
+                                        </td>
 
-                                    <td class="dias-passados pelucias-control-days-cell" data-label="Dias passados">
-                                        <%= data ? diferencaDias : 'Sem visita' %>
-                                    </td>
+                                        <td class="dias-passados pelucias-control-days-cell" data-label="Dias passados">
+                                            <%= data ? diferencaDias : 'Sem visita' %>
+                                        </td>
 
-                                    <td class="situacao pelucias-control-status-cell" data-label="Situação"></td>
-                                </tr>
+                                        <td class="situacao pelucias-control-status-cell" data-label="Situação"></td>
+                                    </tr>
 
-                                <% }); %>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7" class="table-empty pelucias-empty">
+                                            Nenhum ponto de pelúcias encontrado.
+                                        </td>
+                                    </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -176,6 +184,10 @@
                 }
 
                 const situacaoCelula = linha.querySelector('.situacao');
+
+                if (!situacaoCelula) {
+                    return;
+                }
 
                 linha.classList.remove('table-row-exit-highlight', 'pelucias-control-row-alert');
 

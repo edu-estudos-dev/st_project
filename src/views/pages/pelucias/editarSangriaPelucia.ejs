@@ -69,38 +69,6 @@
                     </div>
                 </section>
 
-                <section class="form-card pelucias-readings-card">
-                    <div class="form-card-header">
-                        <div>
-                            <span class="form-section-tag">Leituras</span>
-                            <h2>Controle operacional</h2>
-                            <p>Revise leitura atual, abastecimento e vendido. Os valores financeiros continuam sendo recalculados automaticamente.</p>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <label for="leitura_atual">Leitura atual</label>
-                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
-                        </div>
-
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <label for="ultima_leitura">Última leitura</label>
-                            <input class="form-control readonly-input text-center" id="ultima_leitura" name="ultima_leitura" value="<%= sangria.ultima_leitura %>" disabled readonly>
-                        </div>
-
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
-                        </div>
-
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <label for="vendido">Vendido</label>
-                            <input class="form-control text-center readonly-input" id="vendido" name="vendido" value="<%= sangria.vendido %>" disabled readonly>
-                        </div>
-                    </div>
-                </section>
-
                 <section class="form-card pelucias-values-card">
                     <div class="form-card-header">
                         <div>
@@ -141,6 +109,38 @@
                                 <span class="input-group-text">R$</span>
                                 <input type="number" step="0.01" class="form-control text-center readonly-input" id="valor_liquido" name="valor_liquido" value="<%= sangria.valor_liquido %>" readonly disabled>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-card pelucias-readings-card">
+                    <div class="form-card-header">
+                        <div>
+                            <span class="form-section-tag">Leituras</span>
+                            <h2>Controle operacional</h2>
+                            <p>Revise leitura atual, abastecimento e vendido. Os valores financeiros continuam sendo recalculados automaticamente.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="leitura_atual">Leitura atual</label>
+                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="ultima_leitura">Última leitura</label>
+                            <input class="form-control readonly-input text-center" id="ultima_leitura" name="ultima_leitura" value="<%= sangria.ultima_leitura %>" disabled readonly>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="abastecido">Abastecido</label>
+                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label for="vendido">Vendido</label>
+                            <input class="form-control text-center readonly-input" id="vendido" name="vendido" value="<%= sangria.vendido %>" disabled readonly>
                         </div>
                     </div>
                 </section>
