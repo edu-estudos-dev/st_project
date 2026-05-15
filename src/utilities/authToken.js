@@ -46,7 +46,7 @@ export const getAuthCookieName = () => TOKEN_COOKIE_NAME;
 
 export const getAuthCookieOptions = () => ({
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 1000 * 60 * 60 * 8,
     path: '/'
