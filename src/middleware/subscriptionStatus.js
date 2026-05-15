@@ -26,12 +26,6 @@ const isBillingRegularizationPath = (req) => {
     );
 };
 
-const isPublicAuthEnabled = () => {
-    return ['1', 'true', 'yes', 'on'].includes(
-        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
-    );
-};
-
 const getUserAuthProvider = async (userId) => {
     const result = await connection.query(
         'SELECT auth_provider FROM users WHERE id = $1 LIMIT 1',
@@ -61,19 +55,17 @@ export const attachSubscriptionStatus = async (req, res, next) => {
     }
 
     try {
-        if (!isPublicAuthEnabled()) {
-            const authProvider = await getUserAuthProvider(req.user.id);
+        const authProvider = await getUserAuthProvider(req.user.id);
 
-            if (authProvider === 'google') {
-                return deny(
-                    req,
-                    res,
-                    403,
-                    'Conta criada automaticamente pelo Google nao esta autorizada. Solicite acesso ao suporte.',
-                    '/login',
-                    true
-                );
-            }
+        if (authProvider === 'google') {
+            return deny(
+                req,
+                res,
+                403,
+                'Conta criada automaticamente pelo Google nao esta autorizada. Solicite acesso ao suporte.',
+                '/login',
+                true
+            );
         }
 
         const assinante = await AssinanteModel.findById(req.user.assinante_id);

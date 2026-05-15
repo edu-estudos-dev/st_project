@@ -60,10 +60,10 @@ addCheck(
   'Google OAuth nao usa excecao localhost para criar conta',
   'src/controllers/loginLogout.js',
   allOf(
-    includesAll('allowCreateUser: isPublicAuthEnabled()', 'failGoogleLogin(res, message)', 'res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions())'),
-    excludesAll('allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)')
+    includesAll('allowCreateUser: false', 'failGoogleLogin(res, message)', 'res.clearCookie(getAuthCookieName(), getClearAuthCookieOptions())'),
+    excludesAll('allowCreateUser: isPublicAuthEnabled()', 'allowCreateUser: isPublicAuthEnabled() || isLocalhostRequest(req)')
   ),
-  'O callback Google deve validar a conta escolhida e limpar cookie antigo em falhas.'
+  'O callback Google deve validar a conta escolhida, limpar cookie antigo em falhas e nunca criar usuario automaticamente.'
 );
 
 addCheck(
@@ -80,8 +80,8 @@ addCheck(
   'Sessoes antigas de contas Google automaticas sao bloqueadas',
   'src/middleware/subscriptionStatus.js',
   allOf(
-    includesAll("authProvider === 'google'", 'PUBLIC_AUTH_ENABLED', 'clearAuthCookie', 'Conta criada automaticamente pelo Google nao esta autorizada', 'if (!isPublicAuthEnabled())'),
-    excludesAll('!isPublicAuthEnabled() && !isLocalhostRequest(req)')
+    includesAll("authProvider === 'google'", 'clearAuthCookie', 'Conta criada automaticamente pelo Google nao esta autorizada'),
+    excludesAll('!isPublicAuthEnabled()', 'PUBLIC_AUTH_ENABLED')
   ),
   'Contas Google criadas antes da correcao nao podem continuar usando cookie valido.'
 );
@@ -96,7 +96,10 @@ addCheck(
 addCheck(
   'JWT de sessao e reconciliado com o banco',
   'src/middleware/isAuthenticated.js',
-  includesAll('findSessionUser', 'INNER JOIN assinantes', "sessionUser.auth_provider === 'google'", 'clearInvalidSession(res)'),
+  allOf(
+    includesAll('findSessionUser', 'INNER JOIN assinantes', "sessionUser.auth_provider === 'google'", 'clearInvalidSession(res)'),
+    excludesAll('PUBLIC_AUTH_ENABLED')
+  ),
   'Cookie antigo nao pode autenticar usuario removido ou conta Google automatica bloqueada.'
 );
 

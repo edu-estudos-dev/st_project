@@ -53,12 +53,6 @@ const PLAN_OPTIONS = {
     }
 };
 
-const isPublicAuthEnabled = () => {
-    return ['1', 'true', 'yes', 'on'].includes(
-        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
-    );
-};
-
 class LoginLogoutController {
     constructor() {
         this.login = this.login.bind(this);
@@ -222,7 +216,7 @@ class LoginLogoutController {
                 googleId: profile.sub,
                 email: profile.email,
                 name: profile.name,
-                allowCreateUser: isPublicAuthEnabled()
+                allowCreateUser: false
             });
 
             if (usuario?.error === 'google_signup_disabled') {

@@ -1,12 +1,6 @@
 import { getAuthCookieName, getClearAuthCookieOptions, verifyAuthToken } from '../utilities/authToken.js';
 import connection from '../db_config/connection.js';
 
-const isPublicAuthEnabled = () => {
-    return ['1', 'true', 'yes', 'on'].includes(
-        String(process.env.PUBLIC_AUTH_ENABLED || '').trim().toLowerCase()
-    );
-};
-
 const findSessionUser = async (userId) => {
     const result = await connection.query(
         `SELECT
@@ -47,7 +41,7 @@ export const attachAuthenticatedUser = async (req, res, next) => {
             return next();
         }
 
-        if (!isPublicAuthEnabled() && sessionUser.auth_provider === 'google') {
+        if (sessionUser.auth_provider === 'google') {
             clearInvalidSession(res);
             return next();
         }
