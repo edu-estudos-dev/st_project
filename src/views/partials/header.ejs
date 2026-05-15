@@ -346,6 +346,72 @@
     </div>
 </aside>
 
+<nav class="app-mobile-bottom-nav" aria-label="Navegacao principal mobile">
+    <a href="/painel" class="<%= String(typeof activeNav !== 'undefined' ? activeNav : '').includes('painel') ? 'is-active' : '' %>">
+        <i class="bi bi-house-door" aria-hidden="true"></i>
+        <span>Inicio</span>
+    </a>
+    <a href="/estabelecimentos" class="<%= String(typeof activeNav !== 'undefined' ? activeNav : '').includes('estabelecimentos') ? 'is-active' : '' %>">
+        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+        <span>Pontos</span>
+    </a>
+    <button type="button" class="app-mobile-bottom-primary" id="mobileRegisterOpen" aria-controls="mobileRegisterSheet" aria-expanded="false">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i>
+        <span>Registrar</span>
+    </button>
+    <a href="/lancamentos" class="<%= String(typeof activeNav !== 'undefined' ? activeNav : '').includes('financeiro') ? 'is-active' : '' %>">
+        <i class="bi bi-cash-coin" aria-hidden="true"></i>
+        <span>Financeiro</span>
+    </a>
+    <button type="button" id="mobileMoreOpen" aria-controls="accountMenu" aria-expanded="false">
+        <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
+        <span>Mais</span>
+    </button>
+</nav>
+
+<div class="mobile-register-backdrop" id="mobileRegisterBackdrop" hidden></div>
+<aside class="mobile-register-sheet" id="mobileRegisterSheet" aria-hidden="true" aria-label="Registrar movimentacao">
+    <div class="mobile-register-sheet-head">
+        <div>
+            <span>Registro rapido</span>
+            <h2>O que voce quer registrar?</h2>
+        </div>
+        <button type="button" id="mobileRegisterClose" aria-label="Fechar registros">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="mobile-register-sheet-body">
+        <% if (!isReadOnly && navProducts.bolinhas) { %>
+            <a href="/bolinhas/sangrias/add">
+                <i class="bi bi-circle-fill" aria-hidden="true"></i>
+                <span><strong>Bolinhas</strong><small>Novo registro</small></span>
+            </a>
+        <% } %>
+        <% if (!isReadOnly && hasConsignados) { %>
+            <a href="/consignados/sangrias/add">
+                <i class="bi bi-box-seam" aria-hidden="true"></i>
+                <span><strong>Consignados</strong><small>Novo registro</small></span>
+            </a>
+        <% } %>
+        <% if (!isReadOnly && navProducts.pelucias) { %>
+            <a href="/pelucias/sangrias/add">
+                <i class="bi bi-stars" aria-hidden="true"></i>
+                <span><strong>Pelucias</strong><small>Novo registro</small></span>
+            </a>
+        <% } %>
+        <a href="/rotas">
+            <i class="bi bi-signpost-2" aria-hidden="true"></i>
+            <span><strong>Rotas</strong><small>Visitas dos pontos</small></span>
+        </a>
+        <% if (!isReadOnly) { %>
+            <a href="/lancamentos/add">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <span><strong>Financeiro</strong><small>Novo lancamento</small></span>
+            </a>
+        <% } %>
+    </div>
+</aside>
+
 <style>
     .app-nav .navbar-collapse > .d-flex.align-items-center.gap-2,
     .app-nav .nav-item:has(#navbarDropdownPlanejamento) {
@@ -674,6 +740,12 @@
         color: #cbd5e1;
     }
 
+    .app-mobile-bottom-nav,
+    .mobile-register-backdrop,
+    .mobile-register-sheet {
+        display: none;
+    }
+
     .dropdown-submenu {
         position: relative;
     }
@@ -837,6 +909,10 @@
     }
 
     @media (max-width: 575.98px) {
+        body:not(.dashboard-body) {
+            padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+        }
+
         .app-nav .container-fluid {
             gap: 0.45rem;
             padding: 0.62rem;
@@ -850,8 +926,7 @@
         }
 
         .app-nav-search {
-            grid-column: 1 / -1;
-            order: 2;
+            display: none;
         }
 
         .app-nav-search .form-control {
@@ -874,6 +949,12 @@
             width: auto;
             max-height: calc(100vh - 5.7rem);
             overflow-y: auto;
+        }
+
+        body:not(.dashboard-body) .nav-account-dropdown {
+            top: auto;
+            bottom: calc(5.65rem + env(safe-area-inset-bottom, 0px));
+            max-height: calc(100vh - 7rem);
         }
 
         .menu-group-label {
@@ -915,6 +996,167 @@
 
         .notification-drawer-footer {
             padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        body:not(.dashboard-body) .app-mobile-bottom-nav {
+            position: fixed;
+            right: 0.75rem;
+            bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+            left: 0.75rem;
+            z-index: 1180;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.25rem;
+            padding: 0.45rem;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.96);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.28);
+        }
+
+        .app-mobile-bottom-nav a,
+        .app-mobile-bottom-nav button {
+            display: grid;
+            place-items: center;
+            gap: 0.24rem;
+            min-width: 0;
+            min-height: 54px;
+            padding: 0.34rem 0.15rem;
+            border: 0;
+            border-radius: 15px;
+            background: transparent;
+            color: #cbd5e1;
+            font-size: 0.68rem;
+            font-weight: 900;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .app-mobile-bottom-nav i {
+            font-size: 1.16rem;
+        }
+
+        .app-mobile-bottom-nav .is-active,
+        .app-mobile-bottom-nav a:active,
+        .app-mobile-bottom-nav button:active {
+            background: rgba(37, 99, 235, 0.22);
+            color: #fff;
+        }
+
+        .app-mobile-bottom-nav .app-mobile-bottom-primary {
+            background: linear-gradient(135deg, #2563eb, #16a34a);
+            color: #fff;
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24);
+        }
+
+        .mobile-register-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1210;
+            background: rgba(15, 23, 42, 0.42);
+            backdrop-filter: blur(2px);
+        }
+
+        .mobile-register-backdrop:not([hidden]) {
+            display: block;
+        }
+
+        .mobile-register-sheet {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1220;
+            display: grid;
+            gap: 0.8rem;
+            padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
+            border-radius: 24px 24px 0 0;
+            background: #f8fafc;
+            color: #0f172a;
+            transform: translateY(108%);
+            transition: transform 260ms ease;
+            box-shadow: 0 -22px 54px rgba(15, 23, 42, 0.28);
+        }
+
+        .mobile-register-sheet.is-open {
+            transform: translateY(0);
+        }
+
+        .mobile-register-sheet-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .mobile-register-sheet-head span {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .mobile-register-sheet-head h2 {
+            margin: 0.1rem 0 0;
+            font-size: 1.22rem;
+            font-weight: 900;
+        }
+
+        .mobile-register-sheet-head button {
+            display: inline-grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 14px;
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .mobile-register-sheet-body {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .mobile-register-sheet-body a {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: 0.8rem;
+            min-height: 62px;
+            padding: 0.75rem;
+            border: 1px solid #dbe4ef;
+            border-radius: 16px;
+            background: #fff;
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+        .mobile-register-sheet-body i {
+            display: inline-grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 13px;
+            background: #e0ecff;
+            color: #1d4ed8;
+        }
+
+        .mobile-register-sheet-body span {
+            display: grid;
+            gap: 0.16rem;
+            min-width: 0;
+        }
+
+        .mobile-register-sheet-body strong {
+            font-size: 0.98rem;
+            font-weight: 900;
+        }
+
+        .mobile-register-sheet-body small {
+            color: #64748b;
+            font-weight: 800;
         }
     }
 </style>
@@ -1010,6 +1252,7 @@
                 closeTopLevelMenus();
                 closeAccountMenu();
                 closeNotificationDrawer();
+                closeMobileRegisterSheet();
             }
         });
 
@@ -1057,11 +1300,37 @@
             document.body.classList.add('notification-drawer-open');
             document.getElementById('notificationDrawer')?.setAttribute('aria-hidden', 'false');
             closeAccountMenu();
+            closeMobileRegisterSheet();
         }
 
         function closeNotificationDrawer() {
             document.body.classList.remove('notification-drawer-open');
             document.getElementById('notificationDrawer')?.setAttribute('aria-hidden', 'true');
+        }
+
+        var mobileRegisterOpen = document.getElementById('mobileRegisterOpen');
+        var mobileRegisterClose = document.getElementById('mobileRegisterClose');
+        var mobileRegisterSheet = document.getElementById('mobileRegisterSheet');
+        var mobileRegisterBackdrop = document.getElementById('mobileRegisterBackdrop');
+        var mobileMoreOpen = document.getElementById('mobileMoreOpen');
+
+        function openMobileRegisterSheet() {
+            closeTopLevelMenus();
+            closeAccountMenu();
+            closeNotificationDrawer();
+            if (!mobileRegisterSheet || !mobileRegisterBackdrop) return;
+            mobileRegisterBackdrop.hidden = false;
+            mobileRegisterSheet.classList.add('is-open');
+            mobileRegisterSheet.setAttribute('aria-hidden', 'false');
+            mobileRegisterOpen?.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMobileRegisterSheet() {
+            if (!mobileRegisterSheet || !mobileRegisterBackdrop) return;
+            mobileRegisterSheet.classList.remove('is-open');
+            mobileRegisterSheet.setAttribute('aria-hidden', 'true');
+            mobileRegisterBackdrop.hidden = true;
+            mobileRegisterOpen?.setAttribute('aria-expanded', 'false');
         }
 
         accountMenuToggle?.addEventListener('click', function (e) {
@@ -1071,6 +1340,7 @@
             var shouldOpen = !wrapper.classList.contains('is-open');
             closeTopLevelMenus();
             closeNotificationDrawer();
+            closeMobileRegisterSheet();
             wrapper.classList.toggle('is-open', shouldOpen);
             this.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
         });
@@ -1087,6 +1357,27 @@
         notificationClose?.addEventListener('click', closeNotificationDrawer);
         notificationBackdrop?.addEventListener('click', closeNotificationDrawer);
         notificationDismissToday?.addEventListener('click', markNotificationsDismissed);
+        mobileRegisterOpen?.addEventListener('click', function (e) {
+            e.preventDefault();
+            openMobileRegisterSheet();
+        });
+        mobileRegisterClose?.addEventListener('click', closeMobileRegisterSheet);
+        mobileRegisterBackdrop?.addEventListener('click', closeMobileRegisterSheet);
+        mobileMoreOpen?.addEventListener('click', function (e) {
+            e.preventDefault();
+            accountMenuToggle?.click();
+        });
+
+        var currentPath = window.location.pathname;
+        document.querySelectorAll('.app-mobile-bottom-nav a').forEach(function (link) {
+            var href = link.getAttribute('href') || '';
+            var isCurrent =
+                (href === '/painel' && currentPath.startsWith('/painel')) ||
+                (href === '/estabelecimentos' && currentPath.startsWith('/estabelecimentos')) ||
+                (href === '/lancamentos' && (currentPath.startsWith('/lancamentos') || currentPath.startsWith('/fluxo-de-caixa')));
+
+            link.classList.toggle('is-active', isCurrent);
+        });
 
         document.addEventListener('click', closeAccountMenu);
     }

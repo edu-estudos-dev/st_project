@@ -385,14 +385,17 @@ body:is(.dashboard-body, .form-page-body, .list-page-body, .view-page-body)
     grid-template-columns: 34px minmax(0, 1fr) !important;
     align-items: center !important;
     gap: 0.58rem !important;
+    width: 100% !important;
     min-height: 74px !important;
     padding: 0.78rem !important;
     border-radius: 16px !important;
     color: #0f172a !important;
     text-decoration: none !important;
+    text-align: left !important;
     border: 1px solid rgba(148, 163, 184, 0.2) !important;
     box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06) !important;
     -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
   }
 
   body.dashboard-body .dashboard-mobile-action:active {

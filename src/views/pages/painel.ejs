@@ -51,15 +51,15 @@
       ];
    %>
    <% const operationalShortcuts = [
-      { href: '/bolinhas/sangrias/add', title: 'Cadastro de bolinhas', description: 'Abrir o formulário operacional de bolinhas.', tone: 'green', productKey: 'bolinhas' },
-      { href: '/consignados/sangrias/add', title: 'Cadastro de consignados', description: 'Abrir o formulário operacional de consignados.', tone: 'blue', productKey: 'consignados' },
-      { href: '/pelucias/sangrias/add', title: 'Cadastro de pelúcias', description: 'Abrir o formulário operacional de pelúcias.', tone: 'violet', productKey: 'pelucias' }
+      { href: '/bolinhas/sangrias/add', title: 'Novo registro de bolinhas', description: 'Registrar uma nova leitura de bolinhas.', tone: 'green', productKey: 'bolinhas' },
+      { href: '/consignados/sangrias/add', title: 'Novo registro de consignados', description: 'Registrar uma nova leitura de consignados.', tone: 'blue', productKey: 'consignados' },
+      { href: '/pelucias/sangrias/add', title: 'Novo registro de pelucias', description: 'Registrar uma nova leitura de pelucias.', tone: 'violet', productKey: 'pelucias' }
    ]; %>
    <% const visibleOperationalShortcuts = operationalShortcuts.filter((item) => navProducts[item.productKey]); %>
    <% const visibleAdminShortcuts = adminShortcuts.filter((item) => !(isReadOnly && ['/estabelecimentos/add', '/lancamentos/add'].includes(item.href))); %>
    <% const mobilePrimaryShortcuts = [
       { href: '/estabelecimentos', title: 'Pontos', description: 'Base cadastrada', tone: 'blue', icon: 'bi-geo-alt' },
-      { href: '/rotas', title: 'Rotas', description: 'Visitas por bairro', tone: 'amber', icon: 'bi-signpost-2' },
+      { href: '#dashboard-mobile-menu', title: 'Registrar', description: 'Novo registro', tone: 'green', icon: 'bi-plus-circle', opensMenu: true },
       { href: '/lancamentos', title: 'Financeiro', description: 'Entradas e saídas', tone: 'violet', icon: 'bi-cash-coin' },
       { href: '/relatorios', title: 'Relatórios', description: 'Indicadores da operação', tone: 'slate', icon: 'bi-graph-up-arrow' },
       { href: '/estabelecimentos/add', title: 'Novo ponto', description: 'Cadastrar máquina', tone: 'gold', icon: 'bi-plus-circle', writeOnly: true },
@@ -225,13 +225,23 @@
 
                <div class="dashboard-mobile-action-grid">
                   <% mobilePrimaryShortcuts.forEach((item) => { %>
-                     <a href="<%= item.href %>" class="dashboard-mobile-action dashboard-mobile-action-<%= item.tone %>">
-                        <i class="bi <%= item.icon %>" aria-hidden="true"></i>
-                        <span>
-                           <strong><%= item.title %></strong>
-                           <small><%= item.description %></small>
-                        </span>
-                     </a>
+                     <% if (item.opensMenu) { %>
+                        <button type="button" class="dashboard-mobile-action dashboard-mobile-action-<%= item.tone %>" data-dashboard-menu-open aria-controls="dashboard-mobile-menu" aria-expanded="false">
+                           <i class="bi <%= item.icon %>" aria-hidden="true"></i>
+                           <span>
+                              <strong><%= item.title %></strong>
+                              <small><%= item.description %></small>
+                           </span>
+                        </button>
+                     <% } else { %>
+                        <a href="<%= item.href %>" class="dashboard-mobile-action dashboard-mobile-action-<%= item.tone %>">
+                           <i class="bi <%= item.icon %>" aria-hidden="true"></i>
+                           <span>
+                              <strong><%= item.title %></strong>
+                              <small><%= item.description %></small>
+                           </span>
+                        </a>
+                     <% } %>
                   <% }) %>
                </div>
             </section>
@@ -505,10 +515,14 @@
          <i class="bi bi-geo-alt" aria-hidden="true"></i>
          <span>Pontos</span>
       </a>
-      <a href="/rotas">
-         <i class="bi bi-signpost-2" aria-hidden="true"></i>
-         <span>Rotas</span>
-      </a>
+      <button
+         type="button"
+         data-dashboard-menu-open
+         aria-controls="dashboard-mobile-menu"
+         aria-expanded="false">
+         <i class="bi bi-plus-circle" aria-hidden="true"></i>
+         <span>Registrar</span>
+      </button>
       <a href="/lancamentos">
          <i class="bi bi-cash-coin" aria-hidden="true"></i>
          <span>Caixa</span>
@@ -519,7 +533,7 @@
          aria-controls="dashboard-mobile-menu"
          aria-expanded="false">
          <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
-         <span>Menu</span>
+         <span>Mais</span>
       </button>
    </nav>
 
@@ -543,6 +557,26 @@
       </div>
 
       <div class="dashboard-mobile-menu-body">
+         <% if (!isReadOnly && visibleOperationalShortcuts.length) { %>
+            <section>
+               <h3>Registrar</h3>
+               <% visibleOperationalShortcuts.forEach((item) => { %>
+                  <a href="<%= item.href %>">
+                     <span><%= item.title %></span>
+                     <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                  </a>
+               <% }) %>
+               <a href="/rotas">
+                  <span>Rotas e visitas</span>
+                  <i class="bi bi-chevron-right" aria-hidden="true"></i>
+               </a>
+               <a href="/lancamentos/add">
+                  <span>Novo lancamento</span>
+                  <i class="bi bi-chevron-right" aria-hidden="true"></i>
+               </a>
+            </section>
+         <% } %>
+
          <section>
             <h3>Operação</h3>
             <% visibleAdminShortcuts.forEach((item) => { %>
@@ -552,18 +586,6 @@
                </a>
             <% }) %>
          </section>
-
-         <% if (!isReadOnly && visibleOperationalShortcuts.length) { %>
-            <section>
-               <h3>Cadastros rápidos</h3>
-               <% visibleOperationalShortcuts.forEach((item) => { %>
-                  <a href="<%= item.href %>">
-                     <span><%= item.title %></span>
-                     <i class="bi bi-chevron-right" aria-hidden="true"></i>
-                  </a>
-               <% }) %>
-            </section>
-         <% } %>
 
          <section>
             <h3>Acompanhar</h3>
@@ -581,6 +603,14 @@
             </a>
             <a href="/assinatura/produtos">
                <span>Ferramentas da assinatura</span>
+               <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            </a>
+            <a href="/assinatura/status">
+               <span>Minha assinatura</span>
+               <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            </a>
+            <a href="/comunidade">
+               <span>Comunidade</span>
                <i class="bi bi-chevron-right" aria-hidden="true"></i>
             </a>
          </section>
