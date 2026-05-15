@@ -20,10 +20,10 @@
   <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/typography.css') : '/css/typography.css' %>">
   <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/loading.css') : '/css/loading.css' %>">
 
-  <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-  <script defer src="/js/appAlerts.js"></script>
-  <script defer src="/js/csrf.js"></script>
+  <script nonce="<%= cspNonce || '' %>" defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script nonce="<%= cspNonce || '' %>" defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+  <script nonce="<%= cspNonce || '' %>" defer src="/js/appAlerts.js"></script>
+  <script nonce="<%= cspNonce || '' %>" defer src="/js/csrf.js"></script>
 
   <style>
     .billing-page {
@@ -522,7 +522,7 @@
     </div>
   </main>
 
-  <script>
+  <script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', () => {
       const billingForm = document.getElementById('billingForm');
       const saveBillingButton = document.getElementById('saveBillingButton');

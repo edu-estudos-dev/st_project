@@ -83,7 +83,7 @@
                             <label for="valor_apurado">Valor apurado</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required oninput="calculateValues()">
+                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required>
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@
                             <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required oninput="calculateValues()">
+                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required>
                             </div>
                         </div>
 
@@ -184,9 +184,9 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         function calculateValues() {
             const valorApurado = parseFloat(document.getElementById('valor_apurado').value) || 0;
             const comissao = parseFloat(document.getElementById('comissao').value) || 0;
@@ -199,6 +199,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+            ['valor_apurado', 'comissao'].forEach((fieldId) => {
+                document.getElementById(fieldId)?.addEventListener('input', calculateValues);
+            });
+
             calculateValues();
         });
     </script>

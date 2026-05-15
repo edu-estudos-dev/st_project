@@ -44,7 +44,7 @@
   </div>
 </header>
 
-<script>
+<script nonce="<%= cspNonce || '' %>">
   document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('[data-blog-public-menu-toggle]');
     const blogPublicNav = document.querySelector('[data-blog-public-nav]');

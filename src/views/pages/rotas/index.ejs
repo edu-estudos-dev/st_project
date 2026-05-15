@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <%- include('../../partials/head', { title: 'Rotas dos Pontos' }) %>
 
@@ -12,9 +12,9 @@
 
         <section class="page-titlebar page-titlebar-neutral">
             <div class="page-titlebar-content">
-                <span class="list-kicker"><i class="bi bi-sign-turn-right"></i> OperaÃ§Ã£o</span>
+                <span class="list-kicker"><i class="bi bi-sign-turn-right"></i> Operação</span>
                 <h1>Central de rotas</h1>
-                <p>Selecione um ou mais bairros, organize a sequÃªncia de visitas e avance ponto a ponto sem rodar Ã  toa.</p>
+                <p>Selecione um ou mais bairros, organize a sequência de visitas e avance ponto a ponto sem rodar à toa.</p>
             </div>
 
             <div class="page-titlebar-side">
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="route-planner-footer">
-                        <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posiÃ§Ã£o atual.</p>
+                        <p>O sistema usa os pontos ativos dos bairros escolhidos para montar uma fila de visitas baseada na sua posição atual.</p>
 
                         <div class="route-planner-actions">
                             <% if (selectedBairros?.length || routeItems?.length) { %>
@@ -101,11 +101,11 @@
                 <article class="dashboard-panel dashboard-panel-primary">
                     <div class="dashboard-panel-header">
                         <div>
-                            <span class="dashboard-section-tag">ExecuÃ§Ã£o</span>
+                            <span class="dashboard-section-tag">Execução</span>
                             <h2>Modo de visita</h2>
                         </div>
 
-                        <p>Comece pela sua localizaÃ§Ã£o atual, confirme a chegada e deixe o sistema apontar o prÃ³ximo destino.</p>
+                        <p>Comece pela sua localização atual, confirme a chegada e deixe o sistema apontar o próximo destino.</p>
                     </div>
 
                     <section class="route-journey-card">
@@ -117,12 +117,12 @@
                             </strong>
 
                             <p id="routeJourneyText">
-                                <%= routeSummary.total ? 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localizaÃ§Ã£o atual.' : 'Assim que houver pontos na seleÃ§Ã£o, o sistema libera o modo de visita.' %>
+                                <%= routeSummary.total ? 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localização atual.' : 'Assim que houver pontos na seleção, o sistema libera o modo de visita.' %>
                             </p>
 
                             <% if (routeSummary.total) { %>
                                 <small class="route-journey-note">
-                                    <%= routeSummary.coordinatesCoverage %> de <%= routeSummary.total %> ponto(s) jÃ¡ tÃªm latitude e longitude salvas.
+                                    <%= routeSummary.coordinatesCoverage %> de <%= routeSummary.total %> ponto(s) já têm latitude e longitude salvas.
                                     Quanto mais coordenadas cadastradas, melhor fica a ordem sugerida.
                                 </small>
                             <% } %>
@@ -130,12 +130,12 @@
 
                         <div class="route-next-stop route-next-stop-featured route-next-stop-priority" id="routeNextStopCard">
                             <div class="route-next-stop-heading">
-                                <strong>PrÃ³ximo ponto</strong>
+                                <strong>Próximo ponto</strong>
                                 <small>Destino atual da rota</small>
                             </div>
 
-                            <span id="routeNextStopName">Aguardando inÃ­cio da rota</span>
-                            <small id="routeNextStopMeta">O sistema vai calcular a melhor prÃ³xima visita com base na sua posiÃ§Ã£o atual.</small>
+                            <span id="routeNextStopName">Aguardando início da rota</span>
+                            <small id="routeNextStopMeta">O sistema vai calcular a melhor próxima visita com base na sua posição atual.</small>
 
                             <div class="route-next-stop-actions route-next-stop-actions-priority">
                                 <a href="#" class="table-btn table-btn-view is-disabled" id="routeOpenGoogleButton" aria-disabled="true">Abrir no Google Maps</a>
@@ -163,14 +163,14 @@
                         <div class="route-journey-helper">
                             <i class="bi bi-info-circle"></i>
                             <span id="routeJourneyHelperText">
-                                <%= routeSummary.total ? 'O botÃ£o "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.' : 'Selecione ao menos um bairro para liberar a rota assistida.' %>
+                                <%= routeSummary.total ? 'O botão "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.' : 'Selecione ao menos um bairro para liberar a rota assistida.' %>
                             </span>
                         </div>
 
                         <div class="route-progress-strip" id="routeProgressStrip">
                             <div class="route-progress-pill">
                                 <strong id="routeProgressDone">0</strong>
-                                <span>concluÃ­dos</span>
+                                <span>concluídos</span>
                             </div>
 
                             <div class="route-progress-pill">
@@ -190,15 +190,15 @@
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Resumo</span>
-                            <h2>Leitura rÃ¡pida da rota</h2>
+                            <h2>Leitura rápida da rota</h2>
                         </div>
 
-                        <p>ConferÃªncia rÃ¡pida antes de sair para a rua.</p>
+                        <p>Conferência rápida antes de sair para a rua.</p>
                     </div>
 
                     <section class="route-summary-card">
                         <div class="route-summary-top">
-                            <strong><%= routeSummary.total %> ponto(s) na seleÃ§Ã£o</strong>
+                            <strong><%= routeSummary.total %> ponto(s) na seleção</strong>
                             <span><%= selectedBairros?.length ? `Bairros ${selectedBairros.join(', ')}` : 'Escolha ao menos um bairro para montar a rota.' %></span>
                         </div>
 
@@ -211,8 +211,8 @@
 
                             <article class="route-summary-item">
                                 <strong>Coordenadas salvas</strong>
-                                <span><%= routeSummary.coordinatesCoverage %> ponto(s) com latitude e longitude jÃ¡ cadastradas.</span>
-                                <em>PrecisÃ£o</em>
+                                <span><%= routeSummary.coordinatesCoverage %> ponto(s) com latitude e longitude já cadastradas.</span>
+                                <em>Precisão</em>
                             </article>
                         </div>
                     </section>
@@ -229,7 +229,7 @@
                             </a>
                         </div>
 
-                        <div class="route-circuit-map" id="routeCircuitMap" aria-label="Mapa esquemÃ¡tico do circuito da rota">
+                        <div class="route-circuit-map" id="routeCircuitMap" aria-label="Mapa esquemático do circuito da rota">
                             <% if (mapsEmbedApiKey) { %>
                                 <iframe
                                     id="routeGoogleMapFrame"
@@ -247,7 +247,7 @@
                             </svg>
 
                             <div class="route-circuit-empty" id="routeCircuitEmpty">
-                                O circuito aparece aqui depois que a localizaÃ§Ã£o atual for liberada.
+                                O circuito aparece aqui depois que a localização atual for liberada.
                             </div>
                         </div>
 
@@ -280,7 +280,7 @@
 
                     <% if (routeItems?.length) { %>
                         <div class="route-list-header-actions">
-                            <p>Imprima a sequÃªncia atual da rota ou ajuste a ordem antes de gerar o PDF.</p>
+                            <p>Imprima a sequência atual da rota ou ajuste a ordem antes de gerar o PDF.</p>
 
                             <button type="button" class="btn-modern-secondary route-planner-pdf-button" id="routePdfButton">
                                 <i class="bi bi-printer"></i>
@@ -288,7 +288,7 @@
                             </button>
                         </div>
                     <% } else { %>
-                        <p>Selecione os bairros e gere a rota para imprimir a sequÃªncia de visitas.</p>
+                        <p>Selecione os bairros e gere a rota para imprimir a sequência de visitas.</p>
                     <% } %>
                 </div>
 
@@ -300,7 +300,7 @@
                 <% } else if (!routeItems.length) { %>
                     <div class="dashboard-empty-state dashboard-empty-state-light">
                         <h3>Sem pontos para esse filtro</h3>
-                        <p>NÃ£o hÃ¡ estabelecimentos ativos nos bairros e produto escolhidos.</p>
+                        <p>Não há estabelecimentos ativos nos bairros e produto escolhidos.</p>
                     </div>
                 <% } else { %>
                     <div class="route-point-list" id="routePointList">
@@ -329,11 +329,11 @@
                                     <h3><%= item.estabelecimento %></h3>
 
                                     <p><strong>Produtos:</strong> <%= item.produtoLabel %></p>
-                                    <p><strong>EndereÃ§o:</strong> <%= item.enderecoCompleto %></p>
-                                    <p><strong>ResponsÃ¡vel:</strong> <%= item.responsavel_nome || 'NÃ£o informado' %> | <strong>Contato:</strong> <%= item.telefone_contato || 'NÃ£o informado' %></p>
-                                    <p><strong>Coordenadas:</strong> <%= item.hasCoordinates ? `${item.latitude}, ${item.longitude}` : 'Ainda nÃ£o cadastradas' %></p>
+                                    <p><strong>Endereço:</strong> <%= item.enderecoCompleto %></p>
+                                    <p><strong>Responsável:</strong> <%= item.responsavel_nome || 'Não informado' %> | <strong>Contato:</strong> <%= item.telefone_contato || 'Não informado' %></p>
+                                    <p><strong>Coordenadas:</strong> <%= item.hasCoordinates ? `${item.latitude}, ${item.longitude}` : 'Ainda não cadastradas' %></p>
 
-                                    <small class="route-point-status" data-route-status>Aguardando organizaÃ§Ã£o da rota</small>
+                                    <small class="route-point-status" data-route-status>Aguardando organização da rota</small>
                                 </div>
 
                                 <div class="route-point-actions">
@@ -382,7 +382,7 @@
                     <h2 id="routeNeighborhoodModalTitle">Selecionar bairros</h2>
                 </div>
 
-                <button type="button" class="route-neighborhood-modal-close" data-route-neighborhood-close aria-label="Fechar seleÃ§Ã£o de bairros">
+                <button type="button" class="route-neighborhood-modal-close" data-route-neighborhood-close aria-label="Fechar seleção de bairros">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
@@ -422,7 +422,7 @@
 
                 <button type="button" class="btn-route-secondary" data-route-neighborhood-apply>
                     <i class="bi bi-check2"></i>
-                    <span>Aplicar seleÃ§Ã£o</span>
+                    <span>Aplicar seleção</span>
                 </button>
             </div>
         </div>
@@ -623,11 +623,11 @@
 </style>
 
     <% if (routeItems?.length) { %>
-        <script src="/vendor/jspdf/jspdf.umd.min.js"></script>
-        <script src="/vendor/jspdf-autotable/jspdf.plugin.autotable.min.js"></script>
+        <script nonce="<%= cspNonce || '' %>" src="/vendor/jspdf/jspdf.umd.min.js"></script>
+        <script nonce="<%= cspNonce || '' %>" src="/vendor/jspdf-autotable/jspdf.plugin.autotable.min.js"></script>
     <% } %>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             const plannerForm = document.querySelector('.route-planner-form');
             const clearRouteButton = document.getElementById('clearRouteButton');
@@ -654,7 +654,7 @@
                 if (window.Swal) {
                     await window.Swal.fire({
                         icon: 'warning',
-                        title: 'AtenÃ§Ã£o',
+                        title: 'Atenção',
                         text: message,
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#2563eb'
@@ -682,7 +682,7 @@
                 if (window.Swal) {
                     await window.Swal.fire({
                         icon: 'warning',
-                        title: 'AtenÃ§Ã£o',
+                        title: 'Atenção',
                         text: message,
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#2563eb'
@@ -875,7 +875,7 @@
     </script>
 
     <% if (routeItems?.length) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', async () => {
                 let routeItems = Array.from(document.querySelectorAll('[data-route-item]'));
 
@@ -962,7 +962,7 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error('Falha ao geocodificar endereÃ§o.');
+                        throw new Error('Falha ao geocodificar endereço.');
                     }
 
                     const results = await response.json();
@@ -1094,7 +1094,7 @@
 
                     routeCircuitMap.classList.add('has-route');
                     routeCircuitDistance.textContent = `${totalDistanceKm.toFixed(1)} km`;
-                    routeCircuitSummary.textContent = `Circuito com saÃ­da e retorno ao ponto inicial, passando por ${orderedWithCoords.length} parada(s).`;
+                    routeCircuitSummary.textContent = `Circuito com saída e retorno ao ponto inicial, passando por ${orderedWithCoords.length} parada(s).`;
                 };
 
                 const calculateCircuitDistance = (startPosition, orderedWithCoords) => {
@@ -1181,7 +1181,7 @@
                     const data = await response.json().catch(() => null);
 
                     if (!response.ok || !data?.success) {
-                        throw new Error(data?.message || 'NÃ£o foi possÃ­vel salvar a rota operacional.');
+                        throw new Error(data?.message || 'Não foi possível salvar a rota operacional.');
                     }
 
                     return data;
@@ -1214,14 +1214,14 @@
                         try {
                             response = await fetch(chegadaUrl, requestOptions);
                         } catch (retryError) {
-                            throw new Error('A conexÃ£o com o servidor caiu ao registrar a chegada. Recarregue a pÃ¡gina e tente novamente.');
+                            throw new Error('A conexão com o servidor caiu ao registrar a chegada. Recarregue a página e tente novamente.');
                         }
                     }
 
                     const data = await response.json().catch(() => null);
 
                     if (!response.ok || !data?.success) {
-                        throw new Error(data?.message || 'NÃ£o foi possÃ­vel registrar a chegada ao ponto.');
+                        throw new Error(data?.message || 'Não foi possível registrar a chegada ao ponto.');
                     }
 
                     return data;
@@ -1355,19 +1355,19 @@
                         card.classList.toggle('route-point-card-visited', isVisited);
 
                         if (orderEl) {
-                            orderEl.textContent = `${index + 1}Âº ponto`;
+                            orderEl.textContent = `${index + 1}º ponto`;
                         }
 
                         if (!statusEl) return;
 
                         if (!routeState.started) {
-                            statusEl.textContent = 'Aguardando organizaÃ§Ã£o da rota';
+                            statusEl.textContent = 'Aguardando organização da rota';
                         } else if (isVisited) {
-                            statusEl.textContent = 'Visita concluÃ­da';
+                            statusEl.textContent = 'Visita concluída';
                         } else if (isCurrent) {
-                            statusEl.textContent = 'PrÃ³ximo destino da rota';
+                            statusEl.textContent = 'Próximo destino da rota';
                         } else if (isPending) {
-                            statusEl.textContent = 'Na fila das prÃ³ximas visitas';
+                            statusEl.textContent = 'Na fila das próximas visitas';
                         }
                     });
 
@@ -1393,7 +1393,7 @@
                         titleEl.textContent = 'Nenhum ponto na rota';
                         textEl.textContent = 'Todos os pontos foram removidos desta rota.';
                         helperTextEl.textContent = 'Gere uma nova rota para voltar a listar pontos.';
-                        nextStopNameEl.textContent = 'Nenhum ponto disponÃ­vel';
+                        nextStopNameEl.textContent = 'Nenhum ponto disponível';
                         nextStopMetaEl.textContent = 'A rota atual ficou vazia.';
 
                         setActionLinkState(googleButton, null);
@@ -1411,18 +1411,18 @@
                         titleEl.textContent = routeState.started ? 'Rota finalizada' : 'Pronto para organizar a fila de visitas.';
 
                         textEl.textContent = routeState.started
-                            ? 'Todos os pontos da fila jÃ¡ foram marcados como visitados.'
-                            : 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localizaÃ§Ã£o atual.';
+                            ? 'Todos os pontos da fila já foram marcados como visitados.'
+                            : 'Clique em "Iniciar rota inteligente" para ordenar os pontos a partir da sua localização atual.';
 
                         helperTextEl.textContent = routeState.started
-                            ? 'VocÃª concluiu a rota selecionada. Se quiser, reinicie a rota para montar uma nova ordem.'
-                            : 'O botÃ£o "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.';
+                            ? 'Você concluiu a rota selecionada. Se quiser, reinicie a rota para montar uma nova ordem.'
+                            : 'O botão "Cheguei neste ponto" fica liberado logo depois que a rota for iniciada.';
 
-                        nextStopNameEl.textContent = routeState.started ? 'Nenhum ponto pendente' : 'Aguardando inÃ­cio da rota';
+                        nextStopNameEl.textContent = routeState.started ? 'Nenhum ponto pendente' : 'Aguardando início da rota';
 
                         nextStopMetaEl.textContent = routeState.started
-                            ? 'VocÃª concluiu a rota selecionada.'
-                            : 'O sistema vai calcular a melhor prÃ³xima visita com base na sua posiÃ§Ã£o atual.';
+                            ? 'Você concluiu a rota selecionada.'
+                            : 'O sistema vai calcular a melhor próxima visita com base na sua posição atual.';
 
                         setActionLinkState(googleButton, null);
                         setActionLinkState(wazeButton, null);
@@ -1440,7 +1440,7 @@
                     titleEl.textContent = `Rota em andamento: ${routeState.currentIndex + 1}/${routeItems.length}`;
                     textEl.textContent = 'Confira o destino em destaque e, ao chegar, clique em "Cheguei neste ponto" para abrir a visita guiada.';
                     helperTextEl.textContent = routeState.rotaId
-                        ? 'A aÃ§Ã£o principal agora Ã© confirmar a chegada no prÃ³ximo ponto destacado acima.'
+                        ? 'A ação principal agora é confirmar a chegada no próximo ponto destacado acima.'
                         : 'Inicie a rota inteligente para salvar a rota operacional antes da visita.';
                     nextStopNameEl.textContent = name;
                     nextStopMetaEl.textContent = address;
@@ -1482,7 +1482,7 @@
                         titleEl.textContent = 'Nenhum ponto na rota';
                         textEl.textContent = 'Todos os pontos foram removidos desta rota.';
                         helperTextEl.textContent = 'Gere uma nova rota para voltar a listar pontos.';
-                        nextStopNameEl.textContent = 'Nenhum ponto disponÃ­vel';
+                        nextStopNameEl.textContent = 'Nenhum ponto disponível';
                         nextStopMetaEl.textContent = 'A rota atual ficou vazia.';
                         progressDoneEl.textContent = '0';
                         progressPendingEl.textContent = '0';
@@ -1511,7 +1511,7 @@
                         }
 
                         if (routeCircuitSummary) {
-                            routeCircuitSummary.textContent = 'Nenhum ponto disponÃ­vel para montar o circuito.';
+                            routeCircuitSummary.textContent = 'Nenhum ponto disponível para montar o circuito.';
                         }
 
                         updateRouteButtonsState();
@@ -1539,8 +1539,8 @@
                     routeItems.forEach((item) => routePointList.appendChild(item));
 
                     helperTextEl.textContent = routeState.started
-                        ? 'Ordem ajustada manualmente. O prÃ³ximo destino agora segue a nova ordem da fila.'
-                        : 'Ordem ajustada manualmente. VocÃª ainda pode iniciar a rota inteligente ou seguir esta ordem.';
+                        ? 'Ordem ajustada manualmente. O próximo destino agora segue a nova ordem da fila.'
+                        : 'Ordem ajustada manualmente. Você ainda pode iniciar a rota inteligente ou seguir esta ordem.';
 
                     syncRouteAfterManualChange();
                     saveRouteState();
@@ -1551,7 +1551,7 @@
 
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Remover ponto da rota',
-                        text: `Deseja remover ${pointName} apenas desta rota? O estabelecimento nÃ£o serÃ¡ excluÃ­do do sistema.`,
+                        text: `Deseja remover ${pointName} apenas desta rota? O estabelecimento não será excluído do sistema.`,
                         confirmButtonText: 'Remover da rota',
                         cancelButtonText: 'Cancelar'
                     });
@@ -1707,7 +1707,7 @@
                             routeState = createEmptyRouteState();
 
                             helperTextEl.textContent =
-                                'A rota anterior jÃ¡ estava concluÃ­da. Inicie uma nova rota inteligente para comeÃ§ar novamente.';
+                                'A rota anterior já estava concluída. Inicie uma nova rota inteligente para começar novamente.';
 
                             return false;
                         }
@@ -1719,8 +1719,8 @@
                         }
 
                         helperTextEl.textContent = routeState.started
-                            ? 'Rota retomada automaticamente a partir do progresso salvo nesta mÃ¡quina.'
-                            : 'Ordem manual retomada automaticamente. VocÃª pode iniciar a rota quando quiser.';
+                            ? 'Rota retomada automaticamente a partir do progresso salvo nesta máquina.'
+                            : 'Ordem manual retomada automaticamente. Você pode iniciar a rota quando quiser.';
 
                         reorderCards();
 
@@ -1765,7 +1765,7 @@
                         title: 'Gerar recibo em PDF?',
                         text: 'A sangria foi registrada com sucesso. Deseja gerar um recibo em PDF para entregar ao comerciante?',
                         confirmButtonText: 'Gerar recibo',
-                        cancelButtonText: 'Agora nÃ£o'
+                        cancelButtonText: 'Agora não'
                     });
 
                     if (confirmed) {
@@ -1850,9 +1850,9 @@
                     if (window.Swal) {
                         window.Swal.fire({
                             icon: 'success',
-                            title: 'Rota concluÃ­da!',
+                            title: 'Rota concluída!',
                             html: `
-                                <strong>ParabÃ©ns!</strong><br>
+                                <strong>Parabéns!</strong><br>
                                 Todos os pontos desta rota foram visitados com sucesso.
                             `,
                             confirmButtonText: 'Excelente',
@@ -1870,7 +1870,7 @@
                         return;
                     }
 
-                    window.AppAlerts?.success?.('Rota concluÃ­da! Todos os pontos foram visitados com sucesso.');
+                    window.AppAlerts?.success?.('Rota concluída! Todos os pontos foram visitados com sucesso.');
                 };
 
                 const applyFinishedRoutePointFromUrl = async () => {
@@ -1915,11 +1915,11 @@
                         showRouteCompletedCelebration();
                         clearSavedRouteState();
 
-                        titleEl.textContent = 'Rota concluÃ­da';
+                        titleEl.textContent = 'Rota concluída';
                         textEl.textContent =
-                            'Todos os pontos desta rota foram visitados. VocÃª jÃ¡ pode gerar uma nova rota ou iniciar outra sequÃªncia.';
+                            'Todos os pontos desta rota foram visitados. Você já pode gerar uma nova rota ou iniciar outra sequência.';
                         helperTextEl.textContent =
-                            'O progresso antigo foi limpo para evitar que um ponto jÃ¡ visitado seja iniciado novamente.';
+                            'O progresso antigo foi limpo para evitar que um ponto já visitado seja iniciado novamente.';
                         nextStopNameEl.textContent = 'Nenhum ponto pendente';
                         nextStopMetaEl.textContent = 'Rota finalizada com sucesso.';
 
@@ -1990,12 +1990,12 @@
 
                 const sortRouteByNearest = async () => {
                     titleEl.textContent = 'Calculando a rota';
-                    textEl.textContent = 'Pegando sua localizaÃ§Ã£o e organizando os pontos selecionados para evitar deslocamento desnecessÃ¡rio.';
-                    helperTextEl.textContent = 'Se um ponto ainda nÃ£o tiver coordenadas salvas, o sistema usa o endereÃ§o como apoio.';
+                    textEl.textContent = 'Pegando sua localização e organizando os pontos selecionados para evitar deslocamento desnecessário.';
+                    helperTextEl.textContent = 'Se um ponto ainda não tiver coordenadas salvas, o sistema usa o endereço como apoio.';
 
                     const currentPosition = await new Promise((resolve, reject) => {
                         if (!navigator.geolocation) {
-                            reject(new Error('GeolocalizaÃ§Ã£o indisponÃ­vel.'));
+                            reject(new Error('Geolocalização indisponível.'));
                             return;
                         }
 
@@ -2006,7 +2006,7 @@
                                     lon: position.coords.longitude
                                 });
                             },
-                            () => reject(new Error('NÃ£o foi possÃ­vel ler sua localizaÃ§Ã£o atual.')),
+                            () => reject(new Error('Não foi possível ler sua localização atual.')),
                             {
                                 enableHighAccuracy: true,
                                 timeout: 12000,
@@ -2150,10 +2150,10 @@
                         await sortRouteByNearest();
                     } catch (error) {
                         console.error(error);
-                        window.AppAlerts?.error(error.message || 'NÃ£o foi possÃ­vel iniciar a rota inteligente.');
+                        window.AppAlerts?.error(error.message || 'Não foi possível iniciar a rota inteligente.');
                         titleEl.textContent = 'Falha ao iniciar a rota';
-                        textEl.textContent = 'Permita a localizaÃ§Ã£o e tente novamente para organizar os pontos.';
-                        helperTextEl.textContent = 'Se preferir, cadastre latitude e longitude nos estabelecimentos para melhorar a precisÃ£o.';
+                        textEl.textContent = 'Permita a localização e tente novamente para organizar os pontos.';
+                        helperTextEl.textContent = 'Se preferir, cadastre latitude e longitude nos estabelecimentos para melhorar a precisão.';
                     } finally {
                         updateRouteButtonsState();
                     }
@@ -2167,13 +2167,13 @@
                     const rotaPonto = getRotaPontoForCard(currentCard);
 
                     if (!rotaPonto?.id) {
-                        window.AppAlerts?.error('NÃ£o encontrei o vÃ­nculo deste ponto com a rota operacional. Reinicie a rota e tente novamente.');
+                        window.AppAlerts?.error('Não encontrei o vínculo deste ponto com a rota operacional. Reinicie a rota e tente novamente.');
                         return;
                     }
 
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Confirmar chegada',
-                        text: `VocÃª chegou em ${currentName}? Vamos abrir a visita guiada deste ponto.`,
+                        text: `Você chegou em ${currentName}? Vamos abrir a visita guiada deste ponto.`,
                         confirmButtonText: 'Abrir visita',
                         cancelButtonText: 'Cancelar'
                     });
@@ -2195,10 +2195,10 @@
                             return;
                         }
 
-                        window.AppAlerts?.error('Chegada registrada, mas a tela de visita nÃ£o foi retornada.');
+                        window.AppAlerts?.error('Chegada registrada, mas a tela de visita não foi retornada.');
                     } catch (error) {
                         console.error(error);
-                        window.AppAlerts?.error(error.message || 'NÃ£o foi possÃ­vel abrir a visita guiada.');
+                        window.AppAlerts?.error(error.message || 'Não foi possível abrir a visita guiada.');
                         markVisitedButton.disabled = false;
                         syncCurrentStop();
                     }
@@ -2207,7 +2207,7 @@
                 resetRouteButton.addEventListener('click', async () => {
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Reiniciar rota',
-                        text: 'Deseja apagar o progresso salvo desta rota e comeÃ§ar de novo?',
+                        text: 'Deseja apagar o progresso salvo desta rota e começar de novo?',
                         confirmButtonText: 'Reiniciar',
                         cancelButtonText: 'Cancelar'
                     });

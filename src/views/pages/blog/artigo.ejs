@@ -328,7 +328,7 @@
             </section>
       </main>
 
-      <script>
+      <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
           const shareCopyButton = document.querySelector('[data-share-copy-link]');
 

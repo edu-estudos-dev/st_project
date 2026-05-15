@@ -1,5 +1,11 @@
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
+import crypto from 'crypto';
+
+export const attachCspNonce = (req, res, next) => {
+    res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+    return next();
+};
 
 export const securityHeaders = helmet({
     contentSecurityPolicy: {
@@ -8,8 +14,8 @@ export const securityHeaders = helmet({
             defaultSrc: ["'self'"],
             baseUri: ["'self'"],
             objectSrc: ["'none'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
-            scriptSrcAttr: ["'unsafe-inline'"],
+            scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
+            scriptSrcAttr: ["'none'"],
             styleSrc: ["'self'", "'unsafe-inline'"],
             fontSrc: ["'self'", 'data:'],
             imgSrc: ["'self'", 'data:', 'blob:', 'https:'],

@@ -1,4 +1,4 @@
-<script>
+<script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', async () => {
         const waitForSwalToClose = async () => {
             if (typeof Swal === 'undefined') return;

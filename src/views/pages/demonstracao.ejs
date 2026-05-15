@@ -330,7 +330,7 @@
 
             <%- include('../partials/footer') %>
 
-                <script>
+                <script nonce="<%= cspNonce || '' %>">
                     document.addEventListener('DOMContentLoaded', () => {
                         const form = document.getElementById('demoContactForm');
                         const statusElement = document.getElementById('demoContactStatus');

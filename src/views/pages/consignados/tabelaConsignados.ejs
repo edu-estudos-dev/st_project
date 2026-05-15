@@ -5,7 +5,7 @@
 <body class="list-page-body consignados-page consignados-list-page">
     <%- include('../../partials/header') %>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         window.VendMasterPageHandlesRecibo = true;
     </script>
 
@@ -194,7 +194,7 @@
         </main>
     </div>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
     function updateSelectColor(selectElement) {
         selectElement.classList.remove('select-sim', 'select-nao');
 
@@ -422,6 +422,6 @@
     });
     </script>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

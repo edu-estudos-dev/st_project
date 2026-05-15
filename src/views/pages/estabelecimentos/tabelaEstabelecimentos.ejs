@@ -351,9 +351,9 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', function () {
             const table = document.getElementById('estabelecimentosTable');
             const modeButtons = document.querySelectorAll('.estabelecimentos-view-tab');

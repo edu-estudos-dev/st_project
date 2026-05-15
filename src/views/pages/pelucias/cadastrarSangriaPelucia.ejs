@@ -246,9 +246,9 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         window.peluciaHasHistorico = false;
 
         function updateResumoOperacional() {

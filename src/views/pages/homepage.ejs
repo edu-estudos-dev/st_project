@@ -822,8 +822,7 @@
                 <div class="vm-guarantee-seal-card">
                   <img src="/images/home/garantia-30-dias-vendmaster.webp" width="1254" height="1254"
                     alt="Selo de garantia de 30 dias do VendMaster com satisfação garantida" loading="lazy"
-                    decoding="async"
-                    onerror="this.hidden=true; this.closest('.vm-guarantee-seal-card')?.classList.add('is-image-missing');">
+                    decoding="async">
 
                   <div class="vm-guarantee-seal-fallback" aria-hidden="true">
                     <strong>30 dias</strong>
@@ -1084,17 +1083,17 @@
         <span>Falar no WhatsApp</span>
       </a>
 
-      <script type="application/ld+json">
+      <script nonce="<%= cspNonce || '' %>" type="application/ld+json">
         {"@context":"https://schema.org","@type":"SoftwareApplication","name":"VendMaster","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://vendmaster.com.br/","description":"Sistema de gestão para máquinas de bolinhas, gruas, pelúcias e produtos consignados, com controle de rotas, sangrias, estoque, comissões e financeiro."}
       </script>
 
-      <script type="application/ld+json">
+      <script nonce="<%= cspNonce || '' %>" type="application/ld+json">
         {"@context":"https://schema.org","@type":["Organization","LocalBusiness"],"name":"VendMaster","url":"https://vendmaster.com.br/","logo":"https://vendmaster.com.br/images/brand/logo.webp","areaServed":"BR","address":{"@type":"PostalAddress","addressLocality":"Fortaleza","addressRegion":"CE","addressCountry":"BR"},"contactPoint":{"@type":"ContactPoint","contactType":"sales","telephone":"+55-85-98699-2706","areaServed":"BR","availableLanguage":"Portuguese"}}
       </script>
 
       <%- include('../partials/footer') %>
 
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
           document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.querySelector('[data-menu-toggle]');
             const homepageNav = document.querySelector('[data-homepage-nav]');
@@ -1500,7 +1499,7 @@
           });
         </script>
 
-        <script defer src="/js/homepage.js"></script>
+        <script nonce="<%= cspNonce || '' %>" defer src="/js/homepage.js"></script>
   </body>
 
 </html>

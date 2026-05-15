@@ -919,7 +919,7 @@
     }
 </style>
 
-<script>
+<script nonce="<%= cspNonce || '' %>">
     function initHeaderNavigation() {
         if (document.body.dataset.headerNavInitialized === 'true') return;
         document.body.dataset.headerNavInitialized = 'true';

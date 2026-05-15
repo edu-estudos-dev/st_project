@@ -594,7 +594,7 @@
       </div>
    </aside>
 
-   <script>
+   <script nonce="<%= cspNonce || '' %>">
       document.addEventListener('DOMContentLoaded', async () => {
          const mobileMenu = document.querySelector('[data-dashboard-mobile-menu]');
          const mobileMenuOverlay = document.querySelector('[data-dashboard-menu-overlay]');

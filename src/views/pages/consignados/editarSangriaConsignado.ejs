@@ -208,9 +208,9 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
     function calculateQuantidadeDeixada() {
         const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
         const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;

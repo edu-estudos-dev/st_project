@@ -1245,7 +1245,7 @@
   </style>
 
   <% if (canPreparePayment) { %>
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
       document.addEventListener('DOMContentLoaded', () => {
         const prepararPagamentoBtn = document.getElementById('prepararPagamentoStatusBtn');
         const prepararPagamentoReadonlyBtn = document.getElementById('prepararPagamentoReadonlyBtn');

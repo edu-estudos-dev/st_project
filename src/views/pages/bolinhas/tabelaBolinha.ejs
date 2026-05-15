@@ -160,7 +160,7 @@
         </main>
     </div>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
     function updateSelectColor(selectElement) {
         selectElement.classList.remove('select-sim', 'select-nao');
 
@@ -287,6 +287,6 @@
         }
     });
     </script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

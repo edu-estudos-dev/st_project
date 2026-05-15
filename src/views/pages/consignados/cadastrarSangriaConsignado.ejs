@@ -147,12 +147,12 @@
 
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="qtde_vendido">Qtde. vendida</label>
-                            <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" required oninput="calculateQuantidadeDeixada()">
+                            <input type="number" class="form-control text-center" id="qtde_vendido" name="qtde_vendido" required>
                         </div>
 
                         <div class="col-12 col-md-6 col-lg-4">
                             <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required oninput="calculateQuantidadeDeixada()">
+                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
                         </div>
 
                         <div class="col-12 col-md-6 col-lg-4">
@@ -226,7 +226,7 @@
         </main>
     </div>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         window.estoqueAnterior = 0;
         window.consignadoHasHistorico = false;
 
@@ -335,6 +335,10 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
+            ['qtde_vendido', 'abastecido'].forEach((fieldId) => {
+                document.getElementById(fieldId)?.addEventListener('input', calculateQuantidadeDeixada);
+            });
+
             document.getElementById('data_sangria').value = new Date().toISOString().split('T')[0];
             updateResumoUltimaVisita('', 0);
 

@@ -50,23 +50,23 @@
     <meta name="twitter:image" content="<%= pageOgImage %>">
 
     <% if (typeof faqJsonLd !== 'undefined' && faqJsonLd) { %>
-        <script type="application/ld+json"><%- JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') %></script>
+        <script nonce="<%= cspNonce || '' %>" type="application/ld+json"><%- JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
     <% if (typeof articleJsonLd !== 'undefined' && articleJsonLd) { %>
-        <script type="application/ld+json"><%- JSON.stringify(articleJsonLd).replace(/</g, '\\u003c') %></script>
+        <script nonce="<%= cspNonce || '' %>" type="application/ld+json"><%- JSON.stringify(articleJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
     <% if (typeof breadcrumbJsonLd !== 'undefined' && breadcrumbJsonLd) { %>
-        <script type="application/ld+json"><%- JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') %></script>
+        <script nonce="<%= cspNonce || '' %>" type="application/ld+json"><%- JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
     <% if (typeof collectionJsonLd !== 'undefined' && collectionJsonLd) { %>
-        <script type="application/ld+json"><%- JSON.stringify(collectionJsonLd).replace(/</g, '\\u003c') %></script>
+        <script nonce="<%= cspNonce || '' %>" type="application/ld+json"><%- JSON.stringify(collectionJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
     <% if (typeof offerCatalogJsonLd !== 'undefined' && offerCatalogJsonLd) { %>
-        <script type="application/ld+json"><%- JSON.stringify(offerCatalogJsonLd).replace(/</g, '\\u003c') %></script>
+        <script nonce="<%= cspNonce || '' %>" type="application/ld+json"><%- JSON.stringify(offerCatalogJsonLd).replace(/</g, '\\u003c') %></script>
     <% } %>
 
     <!-- FAVICONS / PWA - VENDMASTER -->
@@ -170,15 +170,10 @@
         <% extraStyles.forEach((href) => { %>
             <% if (typeof preloadExtraStyles !== 'undefined' && preloadExtraStyles) { %>
                 <link
-                    rel="preload"
+                    rel="stylesheet"
                     href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>"
-                    as="style"
-                    onload="this.onload=null;this.rel='stylesheet'"
                 >
 
-                <noscript>
-                    <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>">
-                </noscript>
             <% } else { %>
                 <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath(href) : href %>">
             <% } %>
@@ -188,29 +183,32 @@
     <% if (typeof disableBootstrapIcons === 'undefined' || !disableBootstrapIcons) { %>
         <!-- ÍCONES BOOTSTRAP — CARREGAMENTO NÃO BLOQUEANTE -->
         <link
-            rel="preload"
+            rel="stylesheet"
             href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
-            as="style"
-            onload="this.onload=null;this.rel='stylesheet'"
         >
 
-        <noscript>
-            <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
-        </noscript>
     <% } %>
 
     <!-- SCRIPTS NÃO BLOQUEANTES -->
     <% if (typeof disableBootstrap === 'undefined' || !disableBootstrap) { %>
-        <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script nonce="<%= cspNonce || '' %>" defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <% } %>
     <% if (typeof disableInteractionScripts === 'undefined' || !disableInteractionScripts) { %>
-        <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-        <script defer src="/js/appAlerts.js"></script>
-        <script defer src="/js/csrf.js"></script>
+        <script nonce="<%= cspNonce || '' %>" defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+        <script nonce="<%= cspNonce || '' %>" defer src="/js/appAlerts.js"></script>
+        <script nonce="<%= cspNonce || '' %>" defer src="/js/csrf.js"></script>
     <% } %>
 
     <!-- MÁSCARA DE TELEFONE SEM BIBLIOTECA EXTERNA -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
+        document.addEventListener('submit', (event) => {
+            const confirmationMessage = event.target?.dataset?.confirm;
+
+            if (confirmationMessage && !window.confirm(confirmationMessage)) {
+                event.preventDefault();
+            }
+        }, true);
+
         document.addEventListener('DOMContentLoaded', () => {
             const phoneInputs = document.querySelectorAll('[data-phone-mask]');
 
@@ -238,7 +236,7 @@
     </script>
 
     <!-- INPUT NUMBER CONTROL -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             const numericInputs = document.querySelectorAll('.modern-form input[type="number"]:not([readonly]):not(:disabled)');
 
@@ -297,7 +295,7 @@
     </script>
 
     <!-- MOBILE TABLE LABELS -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.modern-table').forEach((table) => {
                 const headers = Array.from(table.querySelectorAll('thead th')).map((header) =>
@@ -320,7 +318,7 @@
     </script>
 
     <!-- LOADING GLOBAL VENDMASTER -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             if (window.AppLoading) return;
 
@@ -402,7 +400,7 @@
     </script>
 
     <!-- LOADING AUTOMATICO EM FORMULARIOS -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             const getFormLoadingCopy = (form) => {
                 const customTitle = form.dataset.loadingTitle;
@@ -550,7 +548,7 @@
     </script>
 
         <!-- LOADING AUTOMATICO EM NAVEGACAO INTERNA -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             const DEFAULT_NAVIGATION_LOADING_DELAY = 650;
             const HEAVY_NAVIGATION_LOADING_DELAY = 120;
@@ -802,7 +800,7 @@
     </script>
 
     <!-- MODAL GLOBAL DE RECIBO DE SANGRIA -->
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const reciboUrl = urlParams.get('recibo_url');

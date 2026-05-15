@@ -213,8 +213,8 @@
         </main>
     </div>
 
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script>
+    <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', () => {
         const entradaSaidaSelect = document.getElementById('entrada_saida_visual');
         const formaPagamentoSelect = document.getElementById('forma_de_pagamento');

@@ -13,9 +13,9 @@
 
     <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/auth.css') : '/css/auth.css' %>">
 
-    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-    <script defer src="/js/appAlerts.js"></script>
-    <script defer src="/js/csrf.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/js/appAlerts.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/js/csrf.js"></script>
 </head>
 
 <body class="auth-body">
@@ -98,7 +98,7 @@
     </main>
 
     <% if (success) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', () => {
                 window.AppAlerts?.success(<%- JSON.stringify(success) %>);
             });
@@ -106,7 +106,7 @@
     <% } %>
 
     <% if (error) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', () => {
                 window.AppAlerts?.error(<%- JSON.stringify(error) %>, 'Falha no reenvio');
             });

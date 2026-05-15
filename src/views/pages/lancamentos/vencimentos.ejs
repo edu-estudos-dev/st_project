@@ -277,7 +277,7 @@
     <% const flashError = typeof error !== 'undefined' ? error : null; %>
 
     <% if (flashSuccess || flashError) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', () => {
                 <% if (flashSuccess) { %>
                     window.AppAlerts?.success("<%- flashSuccess.replace(/"/g, '&quot;') %>");

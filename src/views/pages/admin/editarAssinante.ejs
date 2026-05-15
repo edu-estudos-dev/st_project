@@ -290,7 +290,7 @@
     }
   </style>
 
-  <script>
+  <script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', () => {
       const planoCodigoSelect = document.getElementById('plano_codigo');
       const planoNomeInput = document.getElementById('plano_nome');

@@ -348,7 +348,7 @@
         </main>
     </div>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             const tratarReciboDaSangria = async () => {
                 const url = new URL(window.location.href);

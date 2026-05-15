@@ -131,7 +131,7 @@
                           action="/admin/comunidade/resposta/<%= resposta.id %>/excluir"
                           method="POST"
                           class="comunidade-reply-moderation-form"
-                          onsubmit="return confirm('Excluir esta resposta? Essa ação remove o conteúdo da área pública, mas mantém o registro no banco para segurança.');"
+                          data-confirm="Excluir esta resposta? Essa ação remove o conteúdo da área pública, mas mantém o registro no banco para segurança."
                         >
                           <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                           <button type="submit" class="comunidade-danger-button">

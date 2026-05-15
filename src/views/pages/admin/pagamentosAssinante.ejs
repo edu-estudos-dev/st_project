@@ -941,7 +941,7 @@
     }
   </style>
 
-  <script>
+  <script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', () => {
       const viewButtons = document.querySelectorAll('[data-payment-view]');
       const viewPanels = document.querySelectorAll('[data-payment-panel]');

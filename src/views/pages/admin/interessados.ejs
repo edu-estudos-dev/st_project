@@ -189,7 +189,7 @@
           </main>
       </div>
 
-      <script>
+      <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
       <% if (typeof success !== 'undefined' && success) { %> window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");<% } %>
       <% if (typeof error !== 'undefined' && error) { %> window.AppAlerts?.error("<%- String(error).replace(/\"/g, '&quot;') %>");<% } %>

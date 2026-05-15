@@ -16,6 +16,7 @@ import {
 import { attachNavigationContext } from './src/middleware/navigationContext.js';
 import { requireProductAvailable } from './src/middleware/productAvailability.js';
 import {
+  attachCspNonce,
   disableAuthenticatedCache,
   securityHeaders
 } from './src/middleware/securityMiddleware.js';
@@ -97,6 +98,7 @@ const getAssetPath = (assetPath) => {
 app.set('views', viewsDir);
 app.set('view engine', 'ejs');
 
+app.use(attachCspNonce);
 app.use(securityHeaders);
 app.use(
   compression({

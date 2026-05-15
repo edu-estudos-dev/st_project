@@ -918,7 +918,7 @@
     }
   </style>
 
-  <script>
+  <script nonce="<%= cspNonce || '' %>">
     document.addEventListener('DOMContentLoaded', () => {
       <% if (typeof success !== 'undefined' && success) { %>
         window.AppAlerts?.success("<%- String(success).replace(/\"/g, '&quot;') %>");

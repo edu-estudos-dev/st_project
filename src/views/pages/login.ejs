@@ -13,9 +13,9 @@
 
     <link rel="stylesheet" href="<%= typeof assetPath !== 'undefined' ? assetPath('/css/auth.css') : '/css/auth.css' %>">
 
-    <script defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-    <script defer src="/js/appAlerts.js"></script>
-    <script defer src="/js/csrf.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/js/appAlerts.js"></script>
+    <script nonce="<%= cspNonce || '' %>" defer src="/js/csrf.js"></script>
 </head>
 
 <body class="auth-body">
@@ -217,7 +217,7 @@
         </section>
     </main>
 
-    <script>
+    <script nonce="<%= cspNonce || '' %>">
         document.addEventListener('DOMContentLoaded', () => {
             window.sessionStorage.removeItem('vendmaster-financial-alerts-dashboard-shown');
             window.sessionStorage.removeItem('vendmaster-financial-alerts-launch-shown');
@@ -243,7 +243,7 @@
     </script>
 
     <% if (erro) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', () => {
                 window.AppAlerts?.error(<%- JSON.stringify(erro) %>, 'Falha no login');
             });
@@ -251,7 +251,7 @@
     <% } %>
 
     <% if (typeof success !== 'undefined' && success) { %>
-        <script>
+        <script nonce="<%= cspNonce || '' %>">
             document.addEventListener('DOMContentLoaded', () => {
                 window.AppAlerts?.success(<%- JSON.stringify(success) %>);
             });

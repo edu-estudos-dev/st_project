@@ -678,7 +678,7 @@
                 <form
                   action="/admin/comunidade/topico/<%= topico.id %>/excluir"
                   method="POST"
-                  onsubmit="return confirm('Excluir este tópico? Essa ação remove o conteúdo da área pública e da moderação principal, mas mantém o registro no banco para segurança.');"
+                  data-confirm="Excluir este tópico? Essa ação remove o conteúdo da área pública e da moderação principal, mas mantém o registro no banco para segurança."
                 >
                   <input type="hidden" name="_csrf" value="<%= csrfToken || '' %>">
                   <button type="submit" class="admin-btn-danger">
