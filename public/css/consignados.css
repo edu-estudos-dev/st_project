@@ -1447,7 +1447,7 @@
     width: 100% !important;
   }
 
-  .consignados-list-shell .consignados-list-table .table-btn {
+  .consignados-list-shell .consignados-list-table .table-actions .table-btn {
     display: inline-flex !important;
     align-items: center !important;
     width: 100% !important;
@@ -1463,7 +1463,7 @@
     white-space: nowrap !important;
   }
 
-  .consignados-list-shell .consignados-list-table .table-btn-view {
+  .consignados-list-shell .consignados-list-table .table-actions .table-btn-view {
     grid-column: 1 / -1 !important;
   }
 
@@ -1960,14 +1960,14 @@
     gap: 0.44rem !important;
   }
 
-  .consignados-list-shell .consignados-list-table .table-btn {
+  .consignados-list-shell .consignados-list-table .table-actions .table-btn {
     min-height: 40px !important;
     padding-inline: 0.54rem !important;
     font-size: 12px !important;
     white-space: nowrap !important;
   }
 
-  .consignados-list-shell .consignados-list-table .table-btn-view {
+  .consignados-list-shell .consignados-list-table .table-actions .table-btn-view {
     grid-column: 1 / -1 !important;
   }
 

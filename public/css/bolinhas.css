@@ -1281,7 +1281,7 @@
     width: 100% !important;
   }
 
-  .bolinhas-list-shell .bolinhas-table .table-btn {
+  .bolinhas-list-shell .bolinhas-table .table-actions .table-btn {
     display: inline-flex !important;
     align-items: center !important;
     width: 100% !important;
@@ -1296,7 +1296,7 @@
     line-height: 1 !important;
   }
 
-  .bolinhas-list-shell .bolinhas-table .table-btn-view {
+  .bolinhas-list-shell .bolinhas-table .table-actions .table-btn-view {
     grid-column: 1 / -1 !important;
   }
 
@@ -1772,7 +1772,7 @@
     gap: 0.44rem !important;
   }
 
-  .bolinhas-list-shell .bolinhas-table .table-btn {
+  .bolinhas-list-shell .bolinhas-table .table-actions .table-btn {
     min-height: 40px !important;
     font-size: 12px !important;
   }
