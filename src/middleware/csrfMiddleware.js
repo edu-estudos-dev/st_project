@@ -34,8 +34,7 @@ const safeCompare = (left, right) => {
 
 const getRequestCsrfToken = (req) => {
   return req.get('x-csrf-token')
-    || req.body?._csrf
-    || req.query?._csrf;
+    || req.body?._csrf;
 };
 
 const isCsrfExemptPath = (req) => {
@@ -50,7 +49,23 @@ const rejectCsrfRequest = (req, res) => {
     return res.status(403).json({ message });
   }
 
-  const fallbackPath = req.get('referer') || '/login';
+  const fallbackPath = (() => {
+    try {
+      const referer = req.get('referer');
+      if (!referer) return '/login';
+
+      const currentOrigin = `${req.protocol}://${req.get('host')}`;
+      const refererUrl = new URL(referer, currentOrigin);
+
+      if (refererUrl.origin !== currentOrigin) {
+        return '/login';
+      }
+
+      return `${refererUrl.pathname}${refererUrl.search}`;
+    } catch {
+      return '/login';
+    }
+  })();
   const separator = fallbackPath.includes('?') ? '&' : '?';
 
   return res.redirect(`${fallbackPath}${separator}error=${encodeURIComponent(message)}`);

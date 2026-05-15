@@ -7,7 +7,7 @@ const TIPOS_POR_MOVIMENTO = {
   Saida: new Set(['compra', 'extra', 'pro-labore', 'gastos_recorrentes', 'bonus'])
 };
 
-const FORMAS_PAGAMENTO_POR_MOVIMENTO = {
+const FORMAS_PAGAMENTO = {
   Entrada: new Set(['pix', 'especie']),
   Saida: new Set(['boleto', 'credito', 'pix', 'especie'])
 };
@@ -61,7 +61,7 @@ const validateLancamentoPayload = ({
     throw new Error('Tipo de lançamento não corresponde à movimentação escolhida.');
   }
 
-  if (!FORMAS_PAGAMENTO_POR_MOVIMENTO[entrada_saida]?.has(forma_de_pagamento)) {
+  if (!FORMAS_PAGAMENTO[entrada_saida]?.has(forma_de_pagamento)) {
     if (entrada_saida === 'Entrada') {
       throw new Error('Para entradas, use apenas Pix ou Espécie como forma de pagamento.');
     }
@@ -69,9 +69,9 @@ const validateLancamentoPayload = ({
     throw new Error('Forma de pagamento inválida.');
   }
 
-  const parcelasInformadas = Number(qtde_de_parcelas);
+  const parcelas = Number(qtde_de_parcelas);
 
-  if (!Number.isInteger(parcelasInformadas) || parcelasInformadas < 1 || parcelasInformadas > 120) {
+  if (!Number.isInteger(parcelas) || parcelas < 1 || parcelas > 120) {
     throw new Error('Quantidade de parcelas inválida.');
   }
 
@@ -80,11 +80,11 @@ const validateLancamentoPayload = ({
     forma_de_pagamento
   });
 
-  if (!podeParcelarComVencimento && parcelasInformadas > 1) {
+  if (!podeParcelarComVencimento && parcelas > 1) {
     throw new Error('Parcelamento só está disponível para saídas em boleto ou crédito.');
   }
 
-  const parcelas = podeParcelarComVencimento ? parcelasInformadas : 1;
+  const parcelasNormalizadas = podeParcelarComVencimento ? parcelas : 1;
 
   const valorNumerico = Number(valor);
   if (!Number.isFinite(valorNumerico) || valorNumerico <= 0) {
@@ -107,18 +107,18 @@ const validateLancamentoPayload = ({
     );
 
     if (!produtoLiberado && produtoNormalizado !== allowCurrentProduct) {
-      throw new Error('Produto não liberado para este assinante.');
+      throw new Error('Produto nao liberado para este assinante.');
     }
   }
 
   return {
-    parcelas,
+    parcelas: parcelasNormalizadas,
     valorNumerico,
     produtoNormalizado,
     vencimentoObrigatorio: exigeVencimentoParcelado({
       entrada_saida,
       forma_de_pagamento,
-      qtde_de_parcelas: parcelas
+      qtde_de_parcelas: parcelasNormalizadas
     })
   };
 };

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import connection from '../db_config/connection.js';
 import AssinanteModel from '../models/assinanteModel.js';
 import PaymentEventModel from '../models/paymentEventModel.js';
@@ -5,6 +6,17 @@ import { normalizeAsaasWebhookPayload } from '../services/asaasWebhookNormalizer
 
 function getHeaderValue(req, headerName) {
   return req.get(headerName) || req.headers[headerName.toLowerCase()] || null;
+}
+
+function safeCompare(left, right) {
+  const leftBuffer = Buffer.from(String(left || ''), 'utf8');
+  const rightBuffer = Buffer.from(String(right || ''), 'utf8');
+
+  if (leftBuffer.length !== rightBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(leftBuffer, rightBuffer);
 }
 
 function isWebhookTokenValid(req) {
@@ -17,7 +29,7 @@ function isWebhookTokenValid(req) {
 
   const receivedToken = getHeaderValue(req, 'asaas-access-token');
 
-  return receivedToken === expectedToken;
+  return safeCompare(receivedToken, expectedToken);
 }
 
 function isUniqueViolationError(error) {
