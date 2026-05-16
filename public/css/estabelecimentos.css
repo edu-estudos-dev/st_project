@@ -2298,4 +2298,22 @@
     font-size: var(--vm-mobile-system-micro) !important;
     line-height: var(--vm-mobile-system-line-compact) !important;
   }
+
+  .estabelecimentos-form-shell .product-badge,
+  .estabelecimentos-list-shell .estabelecimento-product-badge,
+  .estabelecimentos-list-shell .product-setup-badges .product-badge,
+  .estabelecimento-view-shell .view-product-tag {
+    min-height: 20px !important;
+    padding: 0.18rem 0.48rem !important;
+    border-radius: 999px !important;
+    font-size: 0.68rem !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .estabelecimentos-form-shell .product-badge i {
+    width: 0.36rem !important;
+    height: 0.36rem !important;
+    font-size: 0.36rem !important;
+  }
 }

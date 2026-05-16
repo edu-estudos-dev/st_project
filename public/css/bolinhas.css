@@ -303,19 +303,37 @@
 .bolinhas-form-shell
   .modern-form.bolinhas-form
   .bolinhas-actions-bar
+  .btn-modern {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.24) !important;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
+  .btn-modern:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  box-shadow: 0 16px 30px rgba(34, 197, 94, 0.3) !important;
+}
+
+.bolinhas-form-shell
+  .modern-form.bolinhas-form
+  .bolinhas-actions-bar
   .btn-modern-secondary {
-  color: #2563eb !important;
-  background: #eff6ff !important;
-  border: 1px solid rgba(147, 197, 253, 0.72) !important;
+  color: #15803d !important;
+  background: #ecfdf3 !important;
+  border: 1px solid rgba(134, 239, 172, 0.8) !important;
 }
 
 .bolinhas-form-shell
   .modern-form.bolinhas-form
   .bolinhas-actions-bar
   .btn-modern-secondary:hover {
-  color: #1d4ed8 !important;
-  background: #dbeafe !important;
-  border-color: rgba(96, 165, 250, 0.86) !important;
+  color: #166534 !important;
+  background: #dcfce7 !important;
+  border-color: rgba(74, 222, 128, 0.86) !important;
 }
 
 /* Listagem de sangrias de bolinhas - desktop/tablet */
@@ -608,16 +626,28 @@
   text-decoration: none;
 }
 
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.24) !important;
+}
+
+.bolinhas-view-shell .bolinhas-view-actions .btn-modern:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  box-shadow: 0 16px 30px rgba(34, 197, 94, 0.3) !important;
+}
+
 .bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary {
-  color: #2563eb;
-  background: #eff6ff;
-  border: 1px solid rgba(147, 197, 253, 0.72);
+  color: #15803d !important;
+  background: #ecfdf3 !important;
+  border: 1px solid rgba(134, 239, 172, 0.8) !important;
 }
 
 .bolinhas-view-shell .bolinhas-view-actions .btn-modern-secondary:hover {
-  color: #1d4ed8;
-  background: #dbeafe;
-  border-color: rgba(96, 165, 250, 0.86);
+  color: #166534 !important;
+  background: #dcfce7 !important;
+  border-color: rgba(74, 222, 128, 0.86) !important;
 }
 
 /* Controle geral de bolinhas - desktop/tablet */

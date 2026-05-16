@@ -396,7 +396,15 @@
   color: #fff !important;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
   border: 0 !important;
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22) !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24) !important;
+}
+
+.consignados-form-shell
+  .modern-form.consignados-form
+  .consignados-actions-bar
+  .btn-modern:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.3) !important;
 }
 
 .consignados-form-shell
@@ -768,16 +776,28 @@
   text-decoration: none;
 }
 
+.consignados-view-shell .consignados-view-actions .btn-modern {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24) !important;
+}
+
+.consignados-view-shell .consignados-view-actions .btn-modern:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.3) !important;
+}
+
 .consignados-view-shell .consignados-view-actions .btn-modern-secondary {
-  color: #2563eb;
-  background: #eff6ff;
-  border: 1px solid rgba(147, 197, 253, 0.72);
+  color: #2563eb !important;
+  background: #eff6ff !important;
+  border: 1px solid rgba(147, 197, 253, 0.8) !important;
 }
 
 .consignados-view-shell .consignados-view-actions .btn-modern-secondary:hover {
-  color: #1d4ed8;
-  background: #dbeafe;
-  border-color: rgba(96, 165, 250, 0.86);
+  color: #1d4ed8 !important;
+  background: #dbeafe !important;
+  border-color: rgba(96, 165, 250, 0.86) !important;
 }
 
 /* ==========================================================================
