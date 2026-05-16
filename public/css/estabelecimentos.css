@@ -577,6 +577,10 @@
   .form-actions-buttons
   .btn-modern-secondary,
 .estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-bar
+  .btn-modern-secondary,
+.estabelecimentos-form-shell
   .estabelecimento-actions-buttons
   .btn-modern-secondary {
   color: #334155 !important;
@@ -590,12 +594,37 @@
   .form-actions-buttons
   .btn-modern,
 .estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-bar
+  .btn-modern,
+.estabelecimentos-form-shell
   .estabelecimento-actions-buttons
   .btn-modern {
-  color: #ffffff !important;
-  background: #111827 !important;
-  border: 1px solid #111827 !important;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.92) !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18) !important;
+}
+
+.estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-bar
+  .btn-modern
+  i,
+.estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-bar
+  .btn-modern
+  span,
+.estabelecimentos-form-shell
+  .estabelecimento-actions-buttons
+  .btn-modern
+  i,
+.estabelecimentos-form-shell
+  .estabelecimento-actions-buttons
+  .btn-modern
+  span {
+  color: #0f172a !important;
 }
 
 /* Listagem */
@@ -649,10 +678,17 @@
   min-height: 46px;
   padding: 0.72rem 1.04rem;
   border-radius: 14px;
+  color: #ffffff !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
   font-size: 0.84rem;
   font-weight: 850;
   line-height: 1;
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.18);
+}
+
+.estabelecimentos-list-shell .list-action:hover {
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.24);
 }
 
 .estabelecimentos-list-shell .list-summary-grid {
@@ -736,14 +772,14 @@
 }
 
 .estabelecimentos-list-shell .estabelecimentos-view-tab:hover {
-  color: #1d4ed8;
+  color: #0f172a;
   transform: translateY(-1px);
 }
 
 .estabelecimentos-list-shell .estabelecimentos-view-tab.is-active {
   color: #ffffff;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+  background: #111827;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.2);
 }
 
 .estabelecimentos-list-shell .est-mobile-meta {
@@ -1221,10 +1257,10 @@
 .estabelecimento-view-shell .view-product-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 18px;
-  padding: 0.14rem 0.38rem;
+  min-height: 14px;
+  padding: 0.06rem 0.24rem;
   border-radius: 999px;
-  font-size: 0.54rem;
+  font-size: 0.42rem !important;
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
@@ -1797,6 +1833,10 @@
     .form-actions-buttons
     .btn-modern-secondary,
   .estabelecimentos-form-shell
+    .modern-form.estabelecimento-form
+    .form-actions-bar
+    .btn-modern-secondary,
+  .estabelecimentos-form-shell
     .estabelecimento-actions-buttons
     .btn-modern-secondary {
     color: #334155 !important;
@@ -1810,12 +1850,16 @@
     .form-actions-buttons
     .btn-modern,
   .estabelecimentos-form-shell
+    .modern-form.estabelecimento-form
+    .form-actions-bar
+    .btn-modern,
+  .estabelecimentos-form-shell
     .estabelecimento-actions-buttons
     .btn-modern {
-    color: #ffffff !important;
-    background: #111827 !important;
-    border: 1px solid #111827 !important;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(226, 232, 240, 0.92) !important;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18) !important;
   }
 
   .estabelecimentos-list-shell .list-toolbar {
@@ -2196,9 +2240,9 @@
   }
 
   .estabelecimento-view-shell .view-product-tag {
-    min-height: 18px;
-    padding: 0.16rem 0.42rem;
-    font-size: 0.54rem;
+    min-height: 14px !important;
+    padding: 0.06rem 0.24rem !important;
+    font-size: 0.42rem !important;
   }
 
   .estabelecimento-view-shell .estabelecimento-view-actions {
@@ -2350,10 +2394,10 @@
   .estabelecimentos-list-shell .estabelecimento-product-badge,
   .estabelecimentos-list-shell .product-setup-badges .product-badge,
   .estabelecimento-view-shell .view-product-tag {
-    min-height: 18px !important;
-    padding: 0.14rem 0.38rem !important;
+    min-height: 14px !important;
+    padding: 0.06rem 0.24rem !important;
     border-radius: 999px !important;
-    font-size: 0.54rem !important;
+    font-size: 0.42rem !important;
     line-height: 1 !important;
     letter-spacing: 0 !important;
   }
