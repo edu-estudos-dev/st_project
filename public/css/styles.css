@@ -371,7 +371,7 @@ figure {
   align-self: start;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1.15rem;
   min-height: calc(100svh - 2rem);
   max-height: none;
@@ -667,7 +667,7 @@ figure {
 }
 
 .dashboard-sidebar-footer {
-  margin-top: 0;
+  margin-top: auto;
   padding-top: 0.35rem;
   flex: 0 0 auto;
 }

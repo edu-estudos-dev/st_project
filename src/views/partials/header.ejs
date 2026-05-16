@@ -181,9 +181,24 @@
                         <% } %>
                         <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
                             <li class="menu-group-label">Administrativo</li>
-                            <li><a class="dropdown-item" href="/admin/assinantes">Assinantes</a></li>
-                            <li><a class="dropdown-item" href="/admin/interessados">Interessados</a></li>
-                            <li><a class="dropdown-item" href="/admin/comunidade">Moderação da comunidade</a></li>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/admin/assinantes">
+                                    <span class="menu-link-title">Controle de assinaturas</span>
+                                    <small class="menu-link-text">Assinantes, planos, status e pagamentos.</small>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/admin/interessados">
+                                    <span class="menu-link-title">Interessados</span>
+                                    <small class="menu-link-text">Contatos recebidos e funil comercial.</small>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item menu-link" href="/admin/comunidade">
+                                    <span class="menu-link-title">Moderação da comunidade</span>
+                                    <small class="menu-link-text">Tópicos, respostas e destaques.</small>
+                                </a>
+                            </li>
                         <% } %>
                     </ul>
                 </li>
@@ -245,7 +260,7 @@
                         <% } %>
                         <a href="/lancamentos/vencimentos"><i class="bi bi-bell"></i><span>Alertas financeiros</span></a>
                         <% if (typeof isSaasAdmin !== 'undefined' && isSaasAdmin) { %>
-                            <a href="/admin/assinantes"><i class="bi bi-shield-check"></i><span>Assinantes</span></a>
+                            <a href="/admin/assinantes"><i class="bi bi-person-vcard"></i><span>Controle de assinaturas</span></a>
                             <a href="/admin/interessados"><i class="bi bi-person-lines-fill"></i><span>Interessados</span></a>
                             <a href="/admin/comunidade"><i class="bi bi-chat-square-text"></i><span>Moderação da comunidade</span></a>
                         <% } %>

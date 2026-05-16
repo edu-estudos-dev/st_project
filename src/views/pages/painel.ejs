@@ -22,8 +22,10 @@
       ? dashboardVisitAlert
       : { tone: 'safe', title: 'Sem alertas', description: 'Nenhum ponto crítico encontrado.', items: [], actionHref: '/estabelecimentos', actionLabel: 'Ver estabelecimentos' }; %>
    <%
-      const canAccessCommunityAdmin =
-         typeof canModerateCommunity !== 'undefined' && Boolean(canModerateCommunity);
+      const canAccessSaasAdmin =
+         typeof isSaasAdmin !== 'undefined' && Boolean(isSaasAdmin);
+      const canAccessProductSettings =
+         Boolean(usuario?.status_assinatura === 'trial' || canAccessSaasAdmin);
 
       const adminShortcutsBase = [
          { href: '/estabelecimentos', title: 'Estabelecimentos', description: 'Consulte a base cadastrada e acompanhe os pontos ativos.', tone: 'blue' },
@@ -34,8 +36,20 @@
          { href: '/fluxo-de-caixa', title: 'Fluxo de caixa', description: 'Acompanhe o consolidado financeiro e o saldo do período.', tone: 'violet' }
       ];
 
-      const communityAdminShortcuts = canAccessCommunityAdmin
+      const communityAdminShortcuts = canAccessSaasAdmin
          ? [
+            {
+               href: '/admin/assinantes',
+               title: 'Controle de assinaturas',
+               description: 'Acompanhe assinantes, planos, status e pagamentos.',
+               tone: 'slate'
+            },
+            {
+               href: '/admin/interessados',
+               title: 'Interessados',
+               description: 'Gerencie contatos recebidos e oportunidades comerciais.',
+               tone: 'blue'
+            },
             {
                href: '/admin/comunidade',
                title: 'Moderação da Comunidade',
@@ -287,10 +301,20 @@
                </nav>
             </div>
 
-            <% if (typeof canModerateCommunity !== 'undefined' && canModerateCommunity) { %>
+            <% if (canAccessSaasAdmin) { %>
                <div class="dashboard-sidebar-section">
                   <h2 class="dashboard-sidebar-title">Administração</h2>
                   <nav class="dashboard-sidebar-nav" aria-label="Navegação administrativa">
+                     <a href="/admin/assinantes" class="dashboard-sidebar-link dashboard-sidebar-link-slate">
+                        <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                        <span>Assinaturas</span>
+                        <small>&rarr;</small>
+                     </a>
+                     <a href="/admin/interessados" class="dashboard-sidebar-link dashboard-sidebar-link-blue">
+                        <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+                        <span>Interessados</span>
+                        <small>&rarr;</small>
+                     </a>
                      <a href="/admin/comunidade" class="dashboard-sidebar-link dashboard-sidebar-link-community">
                         <i class="bi bi-shield-check" aria-hidden="true"></i>
                         <span>Moderação</span>
@@ -299,6 +323,29 @@
                   </nav>
                </div>
             <% } %>
+
+            <div class="dashboard-sidebar-section">
+               <h2 class="dashboard-sidebar-title">Conta</h2>
+               <nav class="dashboard-sidebar-nav" aria-label="NavegaÃ§Ã£o de conta">
+                  <a href="/assinatura/status" class="dashboard-sidebar-link dashboard-sidebar-link-slate">
+                     <i class="bi bi-person-badge" aria-hidden="true"></i>
+                     <span>Minha assinatura</span>
+                     <small>&rarr;</small>
+                  </a>
+                  <% if (canAccessProductSettings) { %>
+                     <a href="/assinatura/produtos" class="dashboard-sidebar-link dashboard-sidebar-link-green">
+                        <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
+                        <span>Ferramentas</span>
+                        <small>&rarr;</small>
+                     </a>
+                  <% } %>
+                  <a href="/lancamentos/vencimentos" class="dashboard-sidebar-link dashboard-sidebar-link-amber">
+                     <i class="bi bi-bell" aria-hidden="true"></i>
+                     <span>Alertas</span>
+                     <small>&rarr;</small>
+                  </a>
+               </nav>
+            </div>
 
             <div class="dashboard-sidebar-footer">
                <form action="/logout" method="POST">
