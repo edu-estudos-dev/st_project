@@ -1,13 +1,24 @@
 import connection from '../db_config/connection.js';
 
 class PeluciasModel {
+  constructor() {
+    this.estabelecimentoInitialColumnsReadyPromise = null;
+  }
+
   ensureEstabelecimentoInitialColumns = async () => {
-    await connection.query(`
-      ALTER TABLE estabelecimentos
-      ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
-      ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
-      ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
-    `);
+    if (!this.estabelecimentoInitialColumnsReadyPromise) {
+      this.estabelecimentoInitialColumnsReadyPromise = connection.query(`
+        ALTER TABLE estabelecimentos
+        ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
+      `).catch((error) => {
+        this.estabelecimentoInitialColumnsReadyPromise = null;
+        throw error;
+      });
+    }
+
+    await this.estabelecimentoInitialColumnsReadyPromise;
   };
 
   createSangria = async sangria => {
@@ -441,31 +452,37 @@ class PeluciasModel {
   getLatestSangriaForAllEstabelecimentos = async assinanteId => {
     const query = `
       SELECT
-        sp.id,
         e.estabelecimento,
         e.endereco,
         e.bairro,
         e.telefone_contato,
-        sp.data_sangria AS data,
-        sp.leitura_atual,
-        sp.ultima_leitura,
-        sp.abastecido,
-        sp.estoque,
         e.maquina,
-        sp.observacoes
+        ultima.id,
+        ultima.data_sangria AS data,
+        ultima.leitura_atual,
+        ultima.ultima_leitura,
+        ultima.abastecido,
+        ultima.estoque,
+        ultima.observacoes
       FROM estabelecimentos e
-      JOIN sangrias_pelucias sp
-        ON e.id = sp.estabelecimento_id
-       AND e.assinante_id = sp.assinante_id
+      JOIN LATERAL (
+        SELECT
+          sp.id,
+          sp.data_sangria,
+          sp.leitura_atual,
+          sp.ultima_leitura,
+          sp.abastecido,
+          sp.estoque,
+          sp.observacoes
+        FROM sangrias_pelucias sp
+        WHERE sp.estabelecimento_id = e.id
+          AND sp.assinante_id = e.assinante_id
+        ORDER BY sp.data_sangria DESC, sp.id DESC
+        LIMIT 1
+      ) ultima ON TRUE
       WHERE e.assinante_id = $1
         AND UPPER(e.produto) LIKE '%PELUCIAS%'
-        AND sp.data_sangria = (
-          SELECT MAX(inner_sp.data_sangria)
-          FROM sangrias_pelucias inner_sp
-          WHERE inner_sp.estabelecimento_id = e.id
-            AND inner_sp.assinante_id = e.assinante_id
-        )
-      ORDER BY sp.data_sangria DESC, sp.id DESC
+      ORDER BY ultima.data_sangria DESC, ultima.id DESC
     `;
 
     const result = await connection.query(query, [assinanteId]);

@@ -1,13 +1,24 @@
 import connection from '../db_config/connection.js';
 
 class ConsignadosModel {
+  constructor() {
+    this.estabelecimentoInitialColumnsReadyPromise = null;
+  }
+
   ensureEstabelecimentoInitialColumns = async () => {
-    await connection.query(`
-      ALTER TABLE estabelecimentos
-      ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
-      ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
-      ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
-    `);
+    if (!this.estabelecimentoInitialColumnsReadyPromise) {
+      this.estabelecimentoInitialColumnsReadyPromise = connection.query(`
+        ALTER TABLE estabelecimentos
+        ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+        ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
+      `).catch((error) => {
+        this.estabelecimentoInitialColumnsReadyPromise = null;
+        throw error;
+      });
+    }
+
+    await this.estabelecimentoInitialColumnsReadyPromise;
   };
 
   createSangria = async sangria => {
@@ -125,15 +136,21 @@ class ConsignadosModel {
       JOIN estabelecimentos e
         ON s.estabelecimento_id = e.id
        AND s.assinante_id = e.assinante_id
-      LEFT JOIN sangrias_consignados prev
-        ON prev.estabelecimento_id = s.estabelecimento_id
-       AND prev.assinante_id = s.assinante_id
-       AND prev.data_sangria < s.data_sangria
+      LEFT JOIN LATERAL (
+        SELECT
+          prev.data_sangria,
+          prev.qtde_deixada,
+          prev.observacoes
+        FROM sangrias_consignados prev
+        WHERE prev.estabelecimento_id = s.estabelecimento_id
+          AND prev.assinante_id = s.assinante_id
+          AND prev.data_sangria < s.data_sangria
+        ORDER BY prev.data_sangria DESC, prev.id DESC
+        LIMIT 1
+      ) prev ON TRUE
       WHERE s.id = $1
         AND s.assinante_id = $2
         AND UPPER(e.produto) LIKE '%CONSIGNADOS%'
-      ORDER BY prev.data_sangria DESC
-      LIMIT 1
     `;
 
     const result = await connection.query(query, [id, assinanteId]);

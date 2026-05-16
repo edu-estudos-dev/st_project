@@ -2,26 +2,65 @@ import connection from '../db_config/connection.js';
 import { hasProduto } from '../utilities/produtoUtils.js';
 
 class EstabelecimentoModel {
+  constructor() {
+    this.estabelecimentoColumnsReadyPromise = null;
+    this.assinanteProdutosColumnReadyPromise = null;
+    this.lancamentoPagoColumnReadyPromise = null;
+  }
+
   ensureEstabelecimentoColumns = async () => {
     try {
-      const SQL = `
-        ALTER TABLE estabelecimentos
-        ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION,
-        ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION,
-        ADD COLUMN IF NOT EXISTS chave_bolinhas VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS maquina_bolinhas VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS chave_pelucias VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS maquina_pelucias VARCHAR(100),
-        ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
-        ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
-        ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
-      `;
+      if (!this.estabelecimentoColumnsReadyPromise) {
+        this.estabelecimentoColumnsReadyPromise = connection.query(`
+          ALTER TABLE estabelecimentos
+          ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION,
+          ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION,
+          ADD COLUMN IF NOT EXISTS chave_bolinhas VARCHAR(100),
+          ADD COLUMN IF NOT EXISTS maquina_bolinhas VARCHAR(100),
+          ADD COLUMN IF NOT EXISTS chave_pelucias VARCHAR(100),
+          ADD COLUMN IF NOT EXISTS maquina_pelucias VARCHAR(100),
+          ADD COLUMN IF NOT EXISTS consignado_quantidade_inicial INTEGER,
+          ADD COLUMN IF NOT EXISTS pelucia_leitura_inicial INTEGER,
+          ADD COLUMN IF NOT EXISTS pelucia_abastecido_inicial INTEGER
+        `).catch((error) => {
+          this.estabelecimentoColumnsReadyPromise = null;
+          throw error;
+        });
+      }
 
-      await connection.query(SQL);
+      await this.estabelecimentoColumnsReadyPromise;
     } catch (error) {
       console.error('Erro ao garantir colunas extras dos estabelecimentos:', error);
       throw new Error('Erro ao preparar colunas dos estabelecimentos.');
     }
+  };
+
+  ensureAssinanteProdutosColumn = async () => {
+    if (!this.assinanteProdutosColumnReadyPromise) {
+      this.assinanteProdutosColumnReadyPromise = connection.query(`
+        ALTER TABLE assinantes
+        ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
+      `).catch((error) => {
+        this.assinanteProdutosColumnReadyPromise = null;
+        throw error;
+      });
+    }
+
+    await this.assinanteProdutosColumnReadyPromise;
+  };
+
+  ensureLancamentoPagoColumn = async () => {
+    if (!this.lancamentoPagoColumnReadyPromise) {
+      this.lancamentoPagoColumnReadyPromise = connection.query(`
+        ALTER TABLE lancamentos
+        ADD COLUMN IF NOT EXISTS pago BOOLEAN NOT NULL DEFAULT FALSE
+      `).catch((error) => {
+        this.lancamentoPagoColumnReadyPromise = null;
+        throw error;
+      });
+    }
+
+    await this.lancamentoPagoColumnReadyPromise;
   };
 
   ensureCoordinatesColumns = async () => {
@@ -423,10 +462,7 @@ class EstabelecimentoModel {
     try {
       await this.ensureEstabelecimentoColumns();
 
-      await connection.query(`
-        ALTER TABLE assinantes
-        ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT
-      `);
+      await this.ensureAssinanteProdutosColumn();
 
       const assinaturaResult = await connection.query(
         `
@@ -576,10 +612,7 @@ class EstabelecimentoModel {
 
     try {
       await this.ensureEstabelecimentoColumns();
-      await connection.query(`
-        ALTER TABLE lancamentos
-        ADD COLUMN IF NOT EXISTS pago BOOLEAN NOT NULL DEFAULT FALSE
-      `);
+      await this.ensureLancamentoPagoColumn();
 
       const SQL = `
         WITH params AS (

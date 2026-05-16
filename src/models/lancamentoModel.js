@@ -22,6 +22,22 @@ const getUsuarioPersistido = (usuario) => {
   return usuario?.username || null;
 };
 
+const getMonthRange = (ano, mes) => {
+  const year = Number(ano);
+  const month = Number(mes);
+
+  if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) {
+    throw new Error('Periodo invalido.');
+  }
+
+  const start = `${year}-${String(month).padStart(2, '0')}-01`;
+  const nextYear = month === 12 ? year + 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const end = `${nextYear}-${String(nextMonth).padStart(2, '0')}-01`;
+
+  return { start, end };
+};
+
 class LancamentoModel {
   constructor() {
     this.paymentColumnReady = false;
@@ -102,6 +118,8 @@ class LancamentoModel {
   }
 
   async findMonthlyConsolidatedRevenue(produto, ano, mes, assinanteId) {
+    const { start, end } = getMonthRange(ano, mes);
+
     const SQL = `
       SELECT *
       FROM lancamentos
@@ -110,12 +128,12 @@ class LancamentoModel {
         AND tipo_de_lancamento = 'receita_dos_pontos'
         AND usuario = 'sistema'
         AND produto = $2
-        AND EXTRACT(YEAR FROM data) = $3
-        AND EXTRACT(MONTH FROM data) = $4
+        AND data >= $3::date
+        AND data < $4::date
       ORDER BY id ASC
     `;
 
-    const result = await connection.query(SQL, [assinanteId, produto, ano, mes]);
+    const result = await connection.query(SQL, [assinanteId, produto, start, end]);
     return result.rows;
   }
 
@@ -138,6 +156,8 @@ class LancamentoModel {
   }
 
   async deleteConsolidatedRevenueEntry(produto, ano, mes, assinanteId) {
+    const { start, end } = getMonthRange(ano, mes);
+
     const SQL = `
       DELETE FROM lancamentos
       WHERE assinante_id = $1
@@ -145,14 +165,16 @@ class LancamentoModel {
         AND tipo_de_lancamento = 'receita_dos_pontos'
         AND usuario = 'sistema'
         AND produto = $2
-        AND EXTRACT(YEAR FROM data) = $3
-        AND EXTRACT(MONTH FROM data) = $4
+        AND data >= $3::date
+        AND data < $4::date
     `;
 
-    await connection.query(SQL, [assinanteId, produto, ano, mes]);
+    await connection.query(SQL, [assinanteId, produto, start, end]);
   }
 
   async deleteConsolidatedRevenueDuplicates(produto, ano, mes, assinanteId, keepId) {
+    const { start, end } = getMonthRange(ano, mes);
+
     const SQL = `
       DELETE FROM lancamentos
       WHERE assinante_id = $1
@@ -160,12 +182,12 @@ class LancamentoModel {
         AND tipo_de_lancamento = 'receita_dos_pontos'
         AND usuario = 'sistema'
         AND produto = $2
-        AND EXTRACT(YEAR FROM data) = $3
-        AND EXTRACT(MONTH FROM data) = $4
+        AND data >= $3::date
+        AND data < $4::date
         AND id <> $5
     `;
 
-    await connection.query(SQL, [assinanteId, produto, ano, mes, keepId]);
+    await connection.query(SQL, [assinanteId, produto, start, end, keepId]);
   }
 
   async getNotificationAlerts(daysAhead = 5, assinanteId) {
