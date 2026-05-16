@@ -1937,3 +1937,35 @@ figure {
   font-size: 0.82rem;
   font-weight: 800;
 }
+
+/* ==========================================================================
+   MOBILE TYPE TOKENS DO SISTEMA
+   --------------------------------------------------------------------------
+   Tokens compartilhados para padronizar a leitura nas telas privadas.
+   As paginas publicas possuem tokens proprios porque usam outra densidade.
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  :root {
+    --vm-mobile-system-text: 1rem;
+    --vm-mobile-system-small: 0.875rem;
+    --vm-mobile-system-micro: 0.8125rem;
+    --vm-mobile-system-line: 1.58;
+    --vm-mobile-system-line-compact: 1.35;
+  }
+
+  .dashboard-content :is(p, li, span, small),
+  .dashboard-main :is(p, li, span, small),
+  .container-painel :is(p, li, span, small),
+  .app-breadcrumb,
+  .app-nav :is(.form-control, .btn, .dropdown-item) {
+    font-size: var(--vm-mobile-system-text);
+    line-height: var(--vm-mobile-system-line);
+  }
+
+  .app-user-pill,
+  .app-breadcrumb .breadcrumb-item {
+    font-size: var(--vm-mobile-system-small);
+    line-height: var(--vm-mobile-system-line-compact);
+  }
+}

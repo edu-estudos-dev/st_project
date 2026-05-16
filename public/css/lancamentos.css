@@ -2241,3 +2241,33 @@
     padding: 0.56rem 0.62rem !important;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .lancamentos-form-shell :is(p, li, textarea, .form-control, .form-select, .input-group-text),
+  .lancamentos-list-shell :is(p, td, .launch-main-title, .launch-col-value strong),
+  .lancamentos-vencimentos-shell :is(p, td, .form-control, .form-select),
+  .lancamento-view-shell :is(p, .view-card span) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .lancamentos-form-shell :is(label, small, .form-actions-copy span),
+  .lancamentos-list-shell :is(.list-toolbar-copy p, .list-summary-card span, .table-badge),
+  .lancamentos-vencimentos-shell :is(label, small, .table-badge),
+  .lancamento-view-shell :is(.view-actions-copy span) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .lancamentos-form-shell :is(.form-kicker, .form-section-tag),
+  .lancamentos-list-shell :is(.list-kicker, td::before),
+  .lancamentos-vencimentos-shell :is(.list-kicker, td::before),
+  .lancamento-view-shell :is(.form-section-tag, .view-card strong) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

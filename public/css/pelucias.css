@@ -1842,3 +1842,33 @@
     font-size: 0.76rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .pelucias-form-shell :is(p, li, textarea, .form-control, .form-select, .input-group-text),
+  .pelucias-list-shell :is(p, td, .color-select),
+  .pelucias-view-shell :is(p, .view-card span),
+  .pelucias-control-shell :is(p, td, .form-control) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .pelucias-form-shell :is(label, small, .form-actions-copy span),
+  .pelucias-list-shell :is(.list-toolbar-copy p, .table-badge),
+  .pelucias-view-shell :is(.view-actions-copy span),
+  .pelucias-control-shell :is(.form-label, .table-badge) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .pelucias-form-shell :is(.form-kicker, .form-section-tag),
+  .pelucias-list-shell :is(.list-kicker, td::before),
+  .pelucias-view-shell :is(.form-kicker, .form-section-tag, .view-card strong),
+  .pelucias-control-shell :is(.list-kicker, td::before) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

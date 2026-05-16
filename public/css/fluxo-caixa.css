@@ -824,3 +824,28 @@
     font-size: 0.74rem !important;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .fluxo-caixa-shell :is(p, li, td, .form-control, .form-select),
+  .fluxo-caixa-titlebar .page-titlebar-content p,
+  .fluxo-caixa-table tbody td {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .fluxo-caixa-shell :is(label, small, .list-toolbar-copy p, .table-badge, .fluxo-caixa-summary-card small),
+  .fluxo-caixa-toolbar-copy p {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .fluxo-caixa-shell :is(.list-kicker, .form-section-tag, .fluxo-caixa-table tbody td::before, .fluxo-caixa-row-kicker),
+  .fluxo-caixa-summary-card span {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

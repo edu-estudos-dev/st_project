@@ -435,3 +435,33 @@
   font-weight: 800;
   color: #0f172a;
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .modern-form :is(p, li, textarea, .form-control, .form-select, .input-group-text),
+  .form-shell :is(p, li, textarea, .form-control, .form-select, .input-group-text) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .modern-form :is(label, small, .form-actions-copy span),
+  .form-shell :is(label, small, .form-actions-copy span),
+  .readonly-panel strong {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .modern-form :is(.form-section-tag, .form-kicker),
+  .form-shell :is(.form-section-tag, .form-kicker) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .btn-modern,
+  .btn-modern-secondary {
+    font-size: var(--vm-mobile-system-text) !important;
+  }
+}

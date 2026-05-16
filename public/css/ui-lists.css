@@ -639,3 +639,25 @@
     margin-bottom: 0.55rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  body.list-page-body :is(.list-toolbar-copy p, .modern-table tbody td, .table-title-cell, .table-muted, .table-cell-wrap) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  body.list-page-body :is(.table-badge, .list-action, .table-btn) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  body.list-page-body .modern-table tbody td::before,
+  body.list-page-body :is(.list-kicker, .form-section-tag) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

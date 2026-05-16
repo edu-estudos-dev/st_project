@@ -2272,3 +2272,30 @@
     font-size: 0.82rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+  .estabelecimentos-form-shell :is(p, li, textarea, .form-control, .form-select, .input-group-text),
+  .estabelecimentos-list-shell :is(p, td, .table-muted),
+  .estabelecimento-view-shell :is(p, .view-card span, .estabelecimento-view-grid .view-card span) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .estabelecimentos-form-shell :is(label, small, .modern-note, .coordinates-capture-status, .form-actions-copy span, .estabelecimento-actions-copy span),
+  .estabelecimentos-list-shell :is(.list-toolbar-copy p, .table-operational-pill, .estabelecimento-product-badge, .product-badge),
+  .estabelecimento-view-shell :is(.view-section-title small, .estabelecimento-view-actions-copy) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .estabelecimentos-form-shell :is(.form-kicker, .form-section-tag, .optional-label, .required-label),
+  .estabelecimentos-list-shell :is(td::before, .list-stat strong),
+  .estabelecimento-view-shell :is(.form-section-tag, .view-card strong, .view-product-tag) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

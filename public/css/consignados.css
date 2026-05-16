@@ -2035,3 +2035,34 @@
     font-size: 0.76rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .consignados-form-shell :is(p, li, textarea, .form-control, .form-select, .input-group-text),
+  .consignados-list-shell :is(p, td, .color-select),
+  .consignados-view-shell :is(p, .view-card span),
+  .consignados-control-shell :is(p, td, .form-control),
+  .consignados-hero :is(p, li) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .consignados-form-shell :is(label, small, .form-actions-copy span),
+  .consignados-list-shell :is(.consignados-toolbar-copy p, .table-badge),
+  .consignados-view-shell :is(.view-actions-copy span),
+  .consignados-control-shell :is(.form-label, .table-badge) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .consignados-form-shell :is(.form-kicker, .form-section-tag, .consignados-section-tag),
+  .consignados-list-shell :is(.list-kicker, td::before),
+  .consignados-view-shell :is(.form-kicker, .form-section-tag, .view-card strong),
+  .consignados-control-shell :is(.list-kicker, td::before) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

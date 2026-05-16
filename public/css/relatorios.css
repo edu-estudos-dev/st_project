@@ -539,3 +539,28 @@
     font-size: 0.82rem;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .reports-page-shell :is(p, li, td, .form-control, .form-select),
+  .reports-shell :is(p, li, td, .form-control, .form-select),
+  .reports-shell :is(.reports-kpi, .reports-panel, .reports-list-item) :is(p, span, small) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .reports-page-shell :is(label, small, .report-chip, .report-pill, .table-badge),
+  .reports-shell :is(label, small, .report-chip, .report-pill, .table-badge, .reports-badge) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .reports-page-shell :is(.report-kicker, .list-kicker, td::before),
+  .reports-shell :is(.report-kicker, .list-kicker, td::before) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

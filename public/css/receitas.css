@@ -891,3 +891,27 @@
     font-size: 0.7rem !important;
   }
 }
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .receita-anual-shell :is(p, li, td, .form-control, .form-select),
+  [class*='receita'] :is(p, li, td, .form-control, .form-select) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .receita-anual-shell :is(label, small, .table-badge, .list-toolbar-copy p),
+  [class*='receita'] :is(label, small, .table-badge) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .receita-anual-shell :is(.list-kicker, .form-section-tag, td::before),
+  [class*='receita'] :is(.list-kicker, .form-section-tag, td::before) {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}

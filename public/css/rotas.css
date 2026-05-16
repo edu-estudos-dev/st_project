@@ -1646,3 +1646,32 @@ body.route-neighborhood-modal-open {
 /* ==========================================================================
    FIM - ROTAS DOS PONTOS
    ========================================================================== */
+
+/* ==========================================================================
+   MOBILE TYPE NORMALIZATION
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+  .route-planner-form :is(p, li, label, .form-select, .form-control),
+  .route-summary-card :is(p, span, small),
+  .route-journey-card :is(p, span, small),
+  .route-point-card :is(p, span, small),
+  .guided-visit-page :is(p, li, label, .form-control, .form-select, textarea) {
+    font-size: var(--vm-mobile-system-text) !important;
+    line-height: var(--vm-mobile-system-line) !important;
+  }
+
+  .route-neighborhood-actions button,
+  .route-point-order,
+  .route-progress-pill span,
+  .guided-visit-page :is(small, .form-text) {
+    font-size: var(--vm-mobile-system-small) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+
+  .route-journey-pill,
+  .route-circuit-header span {
+    font-size: var(--vm-mobile-system-micro) !important;
+    line-height: var(--vm-mobile-system-line-compact) !important;
+  }
+}
