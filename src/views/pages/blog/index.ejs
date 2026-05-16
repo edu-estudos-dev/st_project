@@ -25,12 +25,12 @@
           <div class="blog-hero-content">
             <span class="blog-eyebrow">Blog VendMaster</span>
 
-            <h1>Conteúdos para operadores de máquinas recreativas e pontos consignados</h1>
+            <h1>Conteúdos para operadores de máquinas recreativas</h1>
 
             <p>
               Estratégias práticas para melhorar rotas, sangrias, estoque,
-              financeiro e controle operacional de quem trabalha com máquinas
-              de bolinhas, consignados, pelúcias e produtos por comissão.
+              financeiro e controle operacional de máquinas de bolinhas,
+              pelúcias, consignados e produtos por comissão.
             </p>
 
             <div class="blog-hero-actions">
@@ -153,45 +153,57 @@
         </div>
 
         <% if (posts && posts.length) { %>
-          <div class="blog-grid blog-articles-grid">
-            <% posts.forEach((post) => { %>
-              <article class="blog-card">
-                <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
-                  <% if (post.imagem_capa) { %>
-                    <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
-                  <% } else { %>
-                    <div class="blog-card-image-placeholder">
-                      <span>VendMaster</span>
+          <% const postsCarrossel = posts.length > 3 ? posts.concat(posts) : posts; %>
+
+          <div
+            class="blog-articles-carousel <%= posts.length > 3 ? 'is-looping' : 'is-static' %>"
+            aria-label="Publicações mais recentes do Blog VendMaster"
+          >
+            <div class="blog-articles-carousel-viewport">
+              <div class="blog-articles-carousel-track">
+                <% postsCarrossel.forEach((post, index) => { %>
+                  <article
+                    class="blog-card blog-carousel-card"
+                    <%= index >= posts.length ? 'aria-hidden="true"' : '' %>
+                  >
+                    <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">
+                      <% if (post.imagem_capa) { %>
+                        <img src="<%= post.imagem_capa %>" alt="<%= post.titulo %>" loading="lazy">
+                      <% } else { %>
+                        <div class="blog-card-image-placeholder">
+                          <span>VendMaster</span>
+                        </div>
+                      <% } %>
+                    </a>
+
+                    <div class="blog-card-body">
+                      <div class="blog-card-meta">
+                        <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
+                          <%= post.categoria %>
+                        </a>
+
+                        <% if (post.data_publicacao) { %>
+                          <span><%= formatarDataPost(post.data_publicacao) %></span>
+                        <% } %>
+                      </div>
+
+                      <h3>
+                        <a href="/blog/<%= post.slug %>">
+                          <%= post.titulo %>
+                        </a>
+                      </h3>
+
+                      <p><%= post.resumo %></p>
+
+                      <a href="/blog/<%= post.slug %>" class="blog-read-more">
+                        Ler artigo
+                        <span aria-hidden="true">→</span>
+                      </a>
                     </div>
-                  <% } %>
-                </a>
-
-                <div class="blog-card-body">
-                  <div class="blog-card-meta">
-                    <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(post.categoria) %>">
-                      <%= post.categoria %>
-                    </a>
-
-                    <% if (post.data_publicacao) { %>
-                      <span><%= formatarDataPost(post.data_publicacao) %></span>
-                    <% } %>
-                  </div>
-
-                  <h3>
-                    <a href="/blog/<%= post.slug %>">
-                      <%= post.titulo %>
-                    </a>
-                  </h3>
-
-                  <p><%= post.resumo %></p>
-
-                  <a href="/blog/<%= post.slug %>" class="blog-read-more">
-                    Ler artigo
-                    <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-              </article>
-            <% }) %>
+                  </article>
+                <% }) %>
+              </div>
+            </div>
           </div>
         <% } else { %>
           <div class="blog-empty blog-empty-premium">

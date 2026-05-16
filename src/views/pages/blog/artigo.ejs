@@ -42,21 +42,17 @@
                   </p>
                 <% } %>
 
-                <div class="blog-article-meta">
-                  <span class="blog-article-author-name">
-                    <%= post.autor || 'VendMaster' %>
-                  </span>
-
+                <div class="blog-article-meta" aria-label="Informações do artigo">
                   <% if (post.data_publicacao) { %>
-                    <span aria-hidden="true">•</span>
                     <time
-                      datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>">
+                      class="blog-article-meta-item"
+                      datetime="<%= post.data_publicacao.toISOString ? post.data_publicacao.toISOString() : post.data_publicacao %>"
+                    >
                       <%= formatarDataPost(post.data_publicacao) %>
                     </time>
                   <% } %>
 
-                  <span aria-hidden="true">•</span>
-                  <span>Leitura estratégica</span>
+                  <span class="blog-article-meta-item">Leitura estratégica</span>
                 </div>
 
                 <div class="blog-article-hero-actions" aria-label="Ações do artigo">
@@ -79,20 +75,10 @@
                     decoding="async"
                     fetchpriority="high"
                   >
-
-                  <figcaption class="blog-article-featured-caption">
-                    <span>Conteúdo VendMaster</span>
-                    <strong><%= post.categoria %></strong>
-                  </figcaption>
                 </figure>
               <% } else { %>
                 <figure class="blog-article-featured-cover blog-article-featured-placeholder" aria-label="VendMaster">
                   <span>VendMaster</span>
-
-                  <figcaption class="blog-article-featured-caption">
-                    <span>Conteúdo VendMaster</span>
-                    <strong><%= post.categoria %></strong>
-                  </figcaption>
                 </figure>
               <% } %>
             </div>
@@ -111,7 +97,7 @@
             %>
 
             <aside class="blog-article-sidebar" aria-label="Navegação lateral do artigo">
-              <div class="blog-sidebar-card">
+              <div class="blog-sidebar-card blog-sidebar-categories-card">
                 <h2>Categorias</h2>
 
                 <% if (categorias && categorias.length) { %>
@@ -200,12 +186,15 @@
             </aside>
 
             <section class="blog-article-content" id="conteudo-artigo">
+              <p class="blog-article-byline">
+                Por: <strong><%= post.autor || 'VendMaster' %></strong>
+              </p>
+
               <aside class="blog-article-reading-card">
                 <span>Guia prático</span>
                 <strong>Leia com foco em aplicação, não apenas em teoria.</strong>
                 <p>
-                  Este conteúdo foi pensado para ajudar operadores a transformar controle,
-                  rota, sangria e gestão em uma rotina mais clara e profissional.
+                  Use as ideias deste artigo para melhorar controle, rota, sangria e gestão na rotina da operação.
                 </p>
               </aside>
 
@@ -256,7 +245,7 @@
                 </p>
               </div>
 
-              <div class="blog-grid">
+              <div class="blog-grid blog-related-grid">
                 <% postsRelacionados.forEach((postRelacionado)=> { %>
                   <article class="blog-card">
                     <a href="/blog/<%= postRelacionado.slug %>" class="blog-card-image"

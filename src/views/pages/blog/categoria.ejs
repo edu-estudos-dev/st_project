@@ -9,11 +9,46 @@
     extraStyles
 }) %>
 
-<body class="blog-page">
+<body class="blog-page blog-category-page">
   <%- include('../../partials/blogPublicHeader') %>
 
   <main class="blog-main">
-    <section class="blog-hero blog-hero-compact">
+    <%
+      const categoriaSlug = normalizarCategoriaParaUrl(categoria);
+      const totalPostsCategoria = posts ? posts.length : 0;
+      const textoTotalPosts = totalPostsCategoria === 1 ? '1 publicação' : `${totalPostsCategoria} publicações`;
+
+      const copysCategoria = {
+        financeiro: {
+          titulo: 'Financeiro para operar com mais clareza',
+          descricao: 'Conteúdos para organizar sangrias, comissões, entradas, saídas e resultado dos seus pontos sem depender de controles soltos.',
+          secao: 'Veja materiais práticos sobre financeiro operacional para tomar decisões com mais segurança no dia a dia.'
+        },
+        rotas: {
+          titulo: 'Rotas mais organizadas e produtivas',
+          descricao: 'Conteúdos para priorizar visitas, reduzir improvisos e acompanhar os pontos que precisam de atenção na operação.',
+          secao: 'Veja materiais práticos sobre rotas para melhorar a rotina de visitas e o acompanhamento dos seus pontos.'
+        },
+        operacao: {
+          titulo: 'Operação mais simples de acompanhar',
+          descricao: 'Conteúdos para melhorar a rotina de campo, controlar pontos, máquinas, reposições e registros importantes da operação.',
+          secao: 'Veja materiais práticos sobre operação para deixar sua gestão mais clara e menos dependente da memória.'
+        },
+        ferramentas: {
+          titulo: 'Ferramentas para sair da planilha',
+          descricao: 'Conteúdos para substituir controles manuais por processos mais organizados, rastreáveis e fáceis de acompanhar.',
+          secao: 'Veja materiais práticos sobre ferramentas para melhorar seu controle e reduzir retrabalho.'
+        }
+      };
+
+      const copyCategoria = copysCategoria[categoriaSlug] || {
+        titulo: `Artigos sobre ${categoria}`,
+        descricao: 'Conteúdos selecionados para ajudar você a melhorar a operação, o controle e a gestão dos seus pontos.',
+        secao: `Veja os conteúdos disponíveis sobre ${categoria} no Blog VendMaster.`
+      };
+    %>
+
+    <section class="blog-hero blog-hero-compact blog-category-hero">
       <div class="blog-container">
         <nav class="blog-breadcrumb" aria-label="Breadcrumb">
           <a href="/">Início</a>
@@ -26,37 +61,47 @@
         <div class="blog-hero-content">
           <span class="blog-eyebrow">Categoria</span>
 
-          <h1>Artigos sobre <%= categoria %></h1>
+          <h1><%= copyCategoria.titulo %></h1>
 
-          <p>
-            Conteúdos selecionados para ajudar você a melhorar a operação,
-            o controle e a gestão dos seus pontos.
-          </p>
+          <p><%= copyCategoria.descricao %></p>
         </div>
 
-        <div class="blog-category-list" aria-label="Categoria atual">
-          <a href="/blog/categoria/<%= normalizarCategoriaParaUrl(categoria) %>" class="is-active">
-            <%= categoria %>
-            <span><%= posts ? posts.length : 0 %></span>
+        <div class="blog-category-hero-summary" aria-label="Resumo da categoria">
+          <a
+            href="/blog/categoria/<%= categoriaSlug %>"
+            class="blog-category-current-pill"
+            aria-current="page"
+          >
+            <span><%= categoria %></span>
+            <strong><%= textoTotalPosts %></strong>
+          </a>
+
+          <a href="/blog" class="blog-category-back-link">
+            Ver todas as categorias
+            <span aria-hidden="true">→</span>
           </a>
         </div>
       </div>
     </section>
 
-    <section class="blog-section blog-articles-section">
+    <section class="blog-section blog-articles-section blog-category-posts-section">
       <div class="blog-container">
         <div class="blog-section-header blog-articles-header blog-category-posts-header">
           <span class="blog-eyebrow">Publicações</span>
 
-          <h2>Todos os artigos desta categoria</h2>
+          <h2>
+            <% if (totalPostsCategoria === 1) { %>
+              Artigo disponível nesta categoria
+            <% } else { %>
+              Artigos disponíveis nesta categoria
+            <% } %>
+          </h2>
 
-          <p>
-            Veja os conteúdos disponíveis sobre <%= categoria %> no Blog VendMaster.
-          </p>
+          <p><%= copyCategoria.secao %></p>
         </div>
 
         <% if (posts && posts.length) { %>
-          <div class="blog-grid blog-articles-grid">
+          <div class="blog-grid blog-articles-grid blog-category-grid">
             <% posts.forEach((post) => { %>
               <article class="blog-card">
                 <a href="/blog/<%= post.slug %>" class="blog-card-image" aria-label="Ler artigo: <%= post.titulo %>">

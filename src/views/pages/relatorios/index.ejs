@@ -6,18 +6,26 @@
     <%- include('../../partials/header') %>
     <div class="page-spacer"></div>
 
-    <div class="list-shell">
+    <div class="list-shell reports-page-shell">
         <%- include('../../partials/breadcrumb', { pageTitle: 'Relatórios' }) %>
 
-        <section class="page-titlebar page-titlebar-blue">
+        <section class="page-titlebar page-titlebar-blue reports-titlebar">
             <div class="page-titlebar-content">
                 <span class="list-kicker"><i class="bi bi-bar-chart-line"></i> Gestão</span>
                 <h1>Central de relatórios</h1>
                 <p>Uma visão rápida dos indicadores do sistema, com distribuição dos pontos, alertas financeiros e atividade operacional recente.</p>
             </div>
+
             <div class="page-titlebar-side">
-                <div class="list-stat"><strong>Pontos ativos</strong><span><%= dashboardSummary.totalAtivos %> cadastrados</span></div>
-                <div class="list-stat"><strong>Alertas</strong><span><%= financialNotifications.total %> financeiros</span></div>
+                <div class="list-stat">
+                    <strong>Pontos ativos</strong>
+                    <span><%= dashboardSummary.totalAtivos %> cadastrados</span>
+                </div>
+
+                <div class="list-stat">
+                    <strong>Alertas</strong>
+                    <span><%= financialNotifications.total %> financeiros</span>
+                </div>
             </div>
         </section>
 
@@ -28,17 +36,20 @@
                     <strong><%= totalEstabelecimentos %></strong>
                     <small>Base ativa atualmente no sistema.</small>
                 </article>
+
                 <article class="reports-kpi">
                     <span>Coordenadas salvas</span>
                     <strong><%= coordinatesCoverage %></strong>
                     <small><%= totalEstabelecimentos ? Math.round((coordinatesCoverage / totalEstabelecimentos) * 100) : 0 %>% da base pronta para rotas.</small>
                 </article>
+
                 <article class="reports-kpi">
                     <span>Contatos válidos</span>
                     <strong><%= contactCoverage %></strong>
                     <small><%= totalEstabelecimentos ? Math.round((contactCoverage / totalEstabelecimentos) * 100) : 0 %>% dos pontos com telefone preenchido.</small>
                 </article>
-                <article class="reports-kpi">
+
+                <article class="reports-kpi reports-kpi-financial">
                     <span>Saldo financeiro</span>
                     <strong><%= financialSummary.saldoLabel %></strong>
                     <small><%= financialSummary.entradasLabel %> em entradas e <%= financialSummary.saidasLabel %> em saídas.</small>
@@ -46,7 +57,7 @@
             </section>
 
             <section class="reports-grid">
-                <article class="list-panel reports-panel-half">
+                <article class="list-panel reports-panel reports-panel-half">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Distribuição</span>
@@ -72,7 +83,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-half">
+                <article class="list-panel reports-panel reports-panel-half">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Território</span>
@@ -98,7 +109,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-third">
+                <article class="list-panel reports-panel reports-panel-third">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Financeiro</span>
@@ -125,7 +136,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-third">
+                <article class="list-panel reports-panel reports-panel-third">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Financeiro</span>
@@ -142,6 +153,7 @@
                             </div>
                             <span class="reports-badge"><%= financialSummary.entradasLabel %></span>
                         </div>
+
                         <div class="reports-list-item">
                             <div>
                                 <strong>Saídas</strong>
@@ -149,6 +161,7 @@
                             </div>
                             <span class="reports-badge"><%= financialSummary.saidasLabel %></span>
                         </div>
+
                         <div class="reports-list-item">
                             <div>
                                 <strong>Saldo</strong>
@@ -159,7 +172,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-third">
+                <article class="list-panel reports-panel reports-panel-third">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Receita</span>
@@ -185,7 +198,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-half">
+                <article class="list-panel reports-panel reports-panel-half">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Operação</span>
@@ -211,7 +224,7 @@
                     </div>
                 </article>
 
-                <article class="list-panel reports-panel-half">
+                <article class="list-panel reports-panel reports-panel-half">
                     <div class="dashboard-panel-header">
                         <div>
                             <span class="dashboard-section-tag">Operação</span>

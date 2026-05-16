@@ -2268,11 +2268,13 @@ html:has(.homepage-body) {
     gap: 1rem;
   }
 
-  .homepage-body .vm-arrow-divider {
-    width: 100%;
-    min-height: 42px;
-    font-size: 0;
-  }
+ .homepage-body .vm-arrow-divider {
+  width: 100%;
+  min-height: 42px;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+}
 
   .homepage-body .vm-arrow-divider::before {
     content: '↓';
