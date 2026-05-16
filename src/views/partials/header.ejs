@@ -871,6 +871,13 @@
             transform: none;
         }
 
+        .app-nav .navbar-collapse {
+            max-height: calc(100dvh - 8.5rem);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding-bottom: 0.5rem;
+        }
+
         .nav-account-dropdown {
             right: 0;
         }
@@ -919,6 +926,11 @@
         .app-nav-search .form-control {
             min-height: 44px;
             font-size: 0.96rem;
+        }
+
+        .app-nav .navbar-collapse {
+            max-height: calc(100dvh - 9.4rem - env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
         }
 
         .nav-alert-link,

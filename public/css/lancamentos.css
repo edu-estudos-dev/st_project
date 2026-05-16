@@ -151,6 +151,56 @@
 
 /* Listagem de lançamentos */
 
+/* Acoes do formulario */
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern-secondary {
+  color: #334155 !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.48) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06) !important;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern-secondary
+  i,
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern-secondary
+  span {
+  color: #334155 !important;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern {
+  color: #ffffff !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+}
+
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern
+  i,
+.lancamento-form-shell
+  .modern-form.lancamento-form
+  .form-actions-buttons
+  .btn-modern
+  span {
+  color: #ffffff !important;
+}
+
+/* Listagem de lancamentos */
+
 .lancamentos-list-shell .list-panel {
   padding: 1.18rem;
   border-radius: 24px;
@@ -913,9 +963,9 @@
 
 .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern {
   color: #ffffff !important;
-  background: #2563eb !important;
-  border: 1px solid #2563eb !important;
-  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.2) !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.2) !important;
 }
 
 /* Visualização de lançamento - isolada */
@@ -1087,6 +1137,26 @@
   font-size: 0.78rem !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-actions-buttons
+  .btn-modern-secondary {
+  color: #334155 !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.48) !important;
+  box-shadow: none !important;
+}
+
+.view-shell.lancamento-view-shell
+  .view-panel.lancamento-view-panel
+  .view-actions-buttons
+  .btn-modern {
+  color: #ffffff !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
 }
 
 /* Destaques */
@@ -1398,9 +1468,9 @@
     .modern-form.lancamento-form
     .form-actions-buttons
     .btn-modern-secondary {
-    color: #1d4ed8 !important;
-    background: #eaf2ff !important;
-    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    color: #334155 !important;
+    background: #e2e8f0 !important;
+    border: 1px solid rgba(148, 163, 184, 0.48) !important;
     box-shadow: none !important;
   }
 
@@ -1414,7 +1484,7 @@
     .form-actions-buttons
     .btn-modern-secondary
     span {
-    color: #1d4ed8 !important;
+    color: #334155 !important;
   }
 
   .lancamento-form-shell
@@ -1422,9 +1492,9 @@
     .form-actions-buttons
     .btn-modern {
     color: #ffffff !important;
-    background: #2563eb !important;
-    border: 1px solid #2563eb !important;
-    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18) !important;
+    background: #111827 !important;
+    border: 1px solid #111827 !important;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.2) !important;
   }
 
   .lancamento-form-shell
@@ -1906,9 +1976,9 @@
   }
 
   .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern-secondary {
-    color: #1d4ed8 !important;
-    background: #eaf2ff !important;
-    border: 1px solid rgba(37, 99, 235, 0.2) !important;
+    color: #334155 !important;
+    background: #e2e8f0 !important;
+    border: 1px solid rgba(148, 163, 184, 0.48) !important;
     box-shadow: none !important;
   }
 
@@ -1917,14 +1987,14 @@
     .vencimentos-actions
     .btn-modern-secondary
     span {
-    color: #1d4ed8 !important;
+    color: #334155 !important;
   }
 
   .lancamentos-vencimentos-shell .vencimentos-actions .btn-modern {
     color: #ffffff !important;
-    background: #2563eb !important;
-    border: 1px solid #2563eb !important;
-    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+    background: #111827 !important;
+    border: 1px solid #111827 !important;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.2);
   }
 
   .view-shell.lancamento-view-shell .view-panel.lancamento-view-panel {

@@ -572,6 +572,32 @@
   font-weight: 850;
 }
 
+.estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-buttons
+  .btn-modern-secondary,
+.estabelecimentos-form-shell
+  .estabelecimento-actions-buttons
+  .btn-modern-secondary {
+  color: #334155 !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.48) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06) !important;
+}
+
+.estabelecimentos-form-shell
+  .modern-form.estabelecimento-form
+  .form-actions-buttons
+  .btn-modern,
+.estabelecimentos-form-shell
+  .estabelecimento-actions-buttons
+  .btn-modern {
+  color: #ffffff !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+}
+
 /* Listagem */
 
 .estabelecimentos-list-shell {
@@ -1195,10 +1221,10 @@
 .estabelecimento-view-shell .view-product-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 22px;
-  padding: 0.2rem 0.5rem;
+  min-height: 18px;
+  padding: 0.14rem 0.38rem;
   border-radius: 999px;
-  font-size: 0.62rem;
+  font-size: 0.54rem;
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
@@ -1268,6 +1294,27 @@
   border-radius: 13px;
   font-size: 0.78rem;
   font-weight: 850;
+}
+
+.estabelecimento-view-shell
+  .estabelecimento-view-actions-buttons
+  .btn-modern-secondary,
+.estabelecimento-view-shell
+  .estabelecimento-view-actions-buttons
+  .btn-route-secondary {
+  color: #334155 !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.48) !important;
+  box-shadow: none !important;
+}
+
+.estabelecimento-view-shell
+  .estabelecimento-view-actions-buttons
+  .btn-modern {
+  color: #ffffff !important;
+  background: #111827 !important;
+  border: 1px solid #111827 !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
 }
 
 /* Responsivo */
@@ -1753,8 +1800,8 @@
     .estabelecimento-actions-buttons
     .btn-modern-secondary {
     color: #334155 !important;
-    background: #eaf2ff !important;
-    border: 1px solid rgba(37, 99, 235, 0.18) !important;
+    background: #e2e8f0 !important;
+    border: 1px solid rgba(148, 163, 184, 0.48) !important;
     box-shadow: none !important;
   }
 
@@ -1766,9 +1813,9 @@
     .estabelecimento-actions-buttons
     .btn-modern {
     color: #ffffff !important;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-    border: 0 !important;
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2) !important;
+    background: #111827 !important;
+    border: 1px solid #111827 !important;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
   }
 
   .estabelecimentos-list-shell .list-toolbar {
@@ -2218,16 +2265,16 @@
   .estabelecimento-view-shell .estabelecimento-view-actions-buttons .btn-modern-secondary,
   .estabelecimento-view-shell .estabelecimento-view-actions-buttons .btn-route-secondary {
     color: #334155 !important;
-    background: #eaf2ff !important;
-    border: 1px solid rgba(37, 99, 235, 0.18) !important;
+    background: #e2e8f0 !important;
+    border: 1px solid rgba(148, 163, 184, 0.48) !important;
     box-shadow: none !important;
   }
 
   .estabelecimento-view-shell .estabelecimento-view-actions-buttons .btn-modern {
     color: #ffffff !important;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-    border: 0 !important;
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2) !important;
+    background: #111827 !important;
+    border: 1px solid #111827 !important;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
   }
 }
 
@@ -2303,10 +2350,10 @@
   .estabelecimentos-list-shell .estabelecimento-product-badge,
   .estabelecimentos-list-shell .product-setup-badges .product-badge,
   .estabelecimento-view-shell .view-product-tag {
-    min-height: 20px !important;
-    padding: 0.18rem 0.48rem !important;
+    min-height: 18px !important;
+    padding: 0.14rem 0.38rem !important;
     border-radius: 999px !important;
-    font-size: 0.68rem !important;
+    font-size: 0.54rem !important;
     line-height: 1 !important;
     letter-spacing: 0 !important;
   }
