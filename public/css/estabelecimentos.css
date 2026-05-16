@@ -1257,10 +1257,10 @@
 .estabelecimento-view-shell .view-product-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 14px;
-  padding: 0.06rem 0.24rem;
+  min-height: 20px;
+  padding: 0.16rem 0.44rem;
   border-radius: 999px;
-  font-size: 0.42rem !important;
+  font-size: 0.6rem !important;
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
@@ -2240,9 +2240,9 @@
   }
 
   .estabelecimento-view-shell .view-product-tag {
-    min-height: 14px !important;
-    padding: 0.06rem 0.24rem !important;
-    font-size: 0.42rem !important;
+    min-height: 17px !important;
+    padding: 0.1rem 0.34rem !important;
+    font-size: 0.56rem !important;
   }
 
   .estabelecimento-view-shell .estabelecimento-view-actions {
@@ -2385,19 +2385,27 @@
 
   .estabelecimentos-form-shell :is(.form-kicker, .form-section-tag, .optional-label, .required-label),
   .estabelecimentos-list-shell :is(td::before, .list-stat strong),
-  .estabelecimento-view-shell :is(.form-section-tag, .view-card strong, .view-product-tag) {
+  .estabelecimento-view-shell :is(.form-section-tag, .view-card strong) {
     font-size: var(--vm-mobile-system-micro) !important;
     line-height: var(--vm-mobile-system-line-compact) !important;
   }
 
   .estabelecimentos-form-shell .product-badge,
   .estabelecimentos-list-shell .estabelecimento-product-badge,
-  .estabelecimentos-list-shell .product-setup-badges .product-badge,
-  .estabelecimento-view-shell .view-product-tag {
-    min-height: 14px !important;
-    padding: 0.06rem 0.24rem !important;
+  .estabelecimentos-list-shell .product-setup-badges .product-badge {
+    min-height: 18px !important;
+    padding: 0.14rem 0.38rem !important;
     border-radius: 999px !important;
-    font-size: 0.42rem !important;
+    font-size: 0.54rem !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .estabelecimento-view-shell .view-product-tag {
+    min-height: 17px !important;
+    padding: 0.1rem 0.34rem !important;
+    border-radius: 999px !important;
+    font-size: 0.56rem !important;
     line-height: 1 !important;
     letter-spacing: 0 !important;
   }
