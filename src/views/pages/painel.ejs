@@ -305,21 +305,40 @@
                <div class="dashboard-sidebar-section">
                   <h2 class="dashboard-sidebar-title">Administração</h2>
                   <nav class="dashboard-sidebar-nav" aria-label="Navegação administrativa">
-                     <a href="/admin/assinantes" class="dashboard-sidebar-link dashboard-sidebar-link-slate">
-                        <i class="bi bi-person-vcard" aria-hidden="true"></i>
-                        <span>Assinaturas</span>
-                        <small>&rarr;</small>
-                     </a>
-                     <a href="/admin/interessados" class="dashboard-sidebar-link dashboard-sidebar-link-blue">
-                        <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
-                        <span>Interessados</span>
-                        <small>&rarr;</small>
-                     </a>
-                     <a href="/admin/comunidade" class="dashboard-sidebar-link dashboard-sidebar-link-community">
-                        <i class="bi bi-shield-check" aria-hidden="true"></i>
-                        <span>Moderação</span>
-                        <small>&rarr;</small>
-                     </a>
+                     <div class="dashboard-sidebar-flyout">
+                        <a href="/admin/assinantes" class="dashboard-sidebar-link dashboard-sidebar-link-slate" aria-haspopup="true">
+                           <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                           <span>Assinaturas</span>
+                           <small>&rarr;</small>
+                        </a>
+                        <div class="dashboard-sidebar-submenu" aria-label="Opções de assinaturas">
+                           <a href="/admin/assinantes">
+                              <i class="bi bi-people" aria-hidden="true"></i>
+                              <span>Controle de assinantes</span>
+                           </a>
+                           <a href="/admin/interessados">
+                              <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+                              <span>Interessados</span>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="dashboard-sidebar-flyout">
+                        <a href="/admin/comunidade" class="dashboard-sidebar-link dashboard-sidebar-link-community" aria-haspopup="true">
+                           <i class="bi bi-shield-check" aria-hidden="true"></i>
+                           <span>Moderação</span>
+                           <small>&rarr;</small>
+                        </a>
+                        <div class="dashboard-sidebar-submenu" aria-label="Opções de moderação">
+                           <a href="/admin/comunidade">
+                              <i class="bi bi-chat-square-text" aria-hidden="true"></i>
+                              <span>Moderar comunidade</span>
+                           </a>
+                           <a href="/comunidade">
+                              <i class="bi bi-chat-dots" aria-hidden="true"></i>
+                              <span>Abrir comunidade</span>
+                           </a>
+                        </div>
+                     </div>
                   </nav>
                </div>
             <% } %>

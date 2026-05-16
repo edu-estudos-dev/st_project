@@ -20,50 +20,45 @@ const ADMIN_UPDATE_FIELDS = new Set([
 ]);
 
 class AssinanteModel {
-  async ensureProdutosHabilitadosColumn() {
-    await connection.query(`
-      ALTER TABLE assinantes
-      ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT,
-      ADD COLUMN IF NOT EXISTS plano_codigo VARCHAR(50),
-      ADD COLUMN IF NOT EXISTS plano_nome VARCHAR(100),
-      ADD COLUMN IF NOT EXISTS valor_mensal NUMERIC(10, 2)
-    `);
+  constructor() {
+    this.produtosSchemaReadyPromise = null;
+    this.billingSchemaReadyPromise = null;
+  }
 
-    await connection.query(`
-      UPDATE assinantes a
-      SET produtos_habilitados = produtos.produtos_habilitados
-      FROM (
-        SELECT
-          assinante_id,
-          STRING_AGG(produto_key, ', ' ORDER BY produto_order) AS produtos_habilitados
-        FROM (
-          SELECT DISTINCT assinante_id, 'BOLINHAS' AS produto_key, 1 AS produto_order
-          FROM estabelecimentos
-          WHERE status = 'ativo' AND UPPER(produto) LIKE '%BOLINHAS%'
-          UNION
-          SELECT DISTINCT assinante_id, 'CONSIGNADOS' AS produto_key, 2 AS produto_order
-          FROM estabelecimentos
-          WHERE status = 'ativo' AND UPPER(produto) LIKE '%CONSIGNADOS%'
-          UNION
-          SELECT DISTINCT assinante_id, 'PELUCIAS' AS produto_key, 3 AS produto_order
-          FROM estabelecimentos
-          WHERE status = 'ativo' AND UPPER(produto) LIKE '%PELUCIAS%'
-        ) origem
-        GROUP BY assinante_id
-      ) produtos
-      WHERE a.id = produtos.assinante_id
-        AND COALESCE(TRIM(a.produtos_habilitados), '') = ''
-    `);
+  async ensureProdutosHabilitadosColumn() {
+    if (!this.produtosSchemaReadyPromise) {
+      this.produtosSchemaReadyPromise = (async () => {
+        await connection.query(`
+          ALTER TABLE assinantes
+          ADD COLUMN IF NOT EXISTS produtos_habilitados TEXT,
+          ADD COLUMN IF NOT EXISTS plano_codigo VARCHAR(50),
+          ADD COLUMN IF NOT EXISTS plano_nome VARCHAR(100),
+          ADD COLUMN IF NOT EXISTS valor_mensal NUMERIC(10, 2)
+        `);
+      })().catch((error) => {
+        this.produtosSchemaReadyPromise = null;
+        throw error;
+      });
+    }
+
+    return this.produtosSchemaReadyPromise;
   }
 
   async ensureBillingColumns() {
-    await connection.query(`
-      ALTER TABLE assinantes
-      ADD COLUMN IF NOT EXISTS billing_nome VARCHAR(150),
-      ADD COLUMN IF NOT EXISTS billing_cpf_cnpj VARCHAR(20),
-      ADD COLUMN IF NOT EXISTS billing_email VARCHAR(150),
-      ADD COLUMN IF NOT EXISTS billing_telefone VARCHAR(30)
-    `);
+    if (!this.billingSchemaReadyPromise) {
+      this.billingSchemaReadyPromise = connection.query(`
+        ALTER TABLE assinantes
+        ADD COLUMN IF NOT EXISTS billing_nome VARCHAR(150),
+        ADD COLUMN IF NOT EXISTS billing_cpf_cnpj VARCHAR(20),
+        ADD COLUMN IF NOT EXISTS billing_email VARCHAR(150),
+        ADD COLUMN IF NOT EXISTS billing_telefone VARCHAR(30)
+      `).catch((error) => {
+        this.billingSchemaReadyPromise = null;
+        throw error;
+      });
+    }
+
+    return this.billingSchemaReadyPromise;
   }
 
   normalizeRow(row) {
