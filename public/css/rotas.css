@@ -1589,18 +1589,160 @@ body.route-neighborhood-modal-open {
 
 @media (max-width: 575.98px) {
   body.list-page-body .list-shell:has(.route-planner-form) {
-    width: calc(100% - 1rem);
+    width: calc(100% - 0.75rem);
   }
 
   body.list-page-body .list-shell:has(.route-planner-form) .list-stage {
     gap: 0.85rem;
+    padding-inline: 0;
   }
 
   body.list-page-body .list-shell:has(.route-planner-form) .list-panel,
   body.list-page-body .list-shell:has(.route-planner-form) .dashboard-panel {
     width: 100%;
-    padding: 1rem;
+    padding: 0.95rem;
     border-radius: 22px;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-operational-grid {
+    gap: 0.85rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel {
+    padding: 1rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .dashboard-panel-header {
+    margin-bottom: 0.9rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .dashboard-panel-header p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-journey-card {
+    gap: 0.85rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-journey-status {
+    gap: 0.5rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-journey-status strong {
+    font-size: 1.02rem;
+    line-height: 1.35;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-journey-note {
+    font-size: 0.9rem !important;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-next-stop-priority {
+    padding: 0.9rem;
+    border-radius: 18px;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-journey-helper {
+    align-items: flex-start;
+    padding: 0.85rem;
+    border-radius: 16px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-progress-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-progress-pill {
+    min-height: 92px;
+    padding: 0.85rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-execution-panel .route-progress-pill:last-child {
+    grid-column: 1 / -1;
+    min-height: 78px;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-header {
+    margin-bottom: 0.75rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-form {
+    margin-top: 0.35rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-field,
+  body.list-page-body .list-shell:has(.route-planner-form) .route-neighborhood-picker {
+    gap: 0.45rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-field .form-select,
+  body.list-page-body .list-shell:has(.route-planner-form) .route-neighborhood-trigger {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 50px;
+    box-sizing: border-box;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-neighborhood-trigger {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-neighborhood-trigger span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-footer {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-footer p {
+    font-size: 0.94rem;
+    line-height: 1.48;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-actions {
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-submit-button {
+    width: min(100%, 260px) !important;
+    min-width: 0;
+    min-height: 48px;
+    padding-inline: 1.1rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .route-planner-clear-button {
+    width: min(100%, 220px) !important;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 1rem;
   }
 
   .guided-visit-page .form-shell-modern {
