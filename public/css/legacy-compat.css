@@ -2,16 +2,6 @@
    AJUSTES GLOBAIS, DETALHES E FORMULARIOS LEGADOS
    ========================================================================== */
 
-.auth-shell {
-  padding: 1.25rem;
-}
-
-.auth-card {
-  background-color: var(--secondary-light-1);
-  width: 100%;
-  max-width: 480px;
-}
-
 .page-spacer {
   height: 5.9rem;
 }
