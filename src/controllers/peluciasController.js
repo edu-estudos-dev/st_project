@@ -6,6 +6,7 @@ import {
   gerarNomeArquivoRecibo,
   gerarReciboPdfBuffer
 } from '../utils/reciboPdf.js';
+import { buildPagination, parsePagination } from '../utilities/pagination.js';
 class PeluciasController {
   addSangriaForm = async (req, res) => {
     const usuario = req.user || null;
@@ -331,14 +332,24 @@ class PeluciasController {
     const usuario = req.user;
 
     try {
-      const sangrias = await peluciasModel.getSangrias(usuario.assinante_id);
+      const pageOptions = parsePagination(req.query);
+      const { rows: sangrias, total } = await peluciasModel.getSangriasPage(
+        usuario.assinante_id,
+        pageOptions
+      );
       const { success, error } = req.query;
 
       res.render('pages/pelucias/tabelaPelucia', {
         sangrias,
         usuario,
         success,
-        error
+        error,
+        pagination: buildPagination({
+          ...pageOptions,
+          totalItems: total,
+          basePath: '/pelucias/sangrias',
+          query: req.query
+        })
       });
     } catch (error) {
       console.error('Erro ao listar sangrias:', error);

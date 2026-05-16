@@ -619,6 +619,50 @@ figure {
   font-size: 0.96rem;
 }
 
+.vm-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #64748b;
+  font-size: 0.92rem;
+  font-weight: 750;
+}
+
+.vm-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.vm-pagination a,
+.vm-pagination .is-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 850;
+}
+
+.vm-pagination a {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.vm-pagination .is-disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+}
+
 .dashboard-sidebar-alerts {
   display: grid;
   gap: 0.6rem;

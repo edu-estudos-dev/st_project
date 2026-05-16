@@ -1,0 +1,47 @@
+<% if (typeof pagination !== 'undefined' && pagination && pagination.totalPages > 1) { %>
+  <%
+    const buildPageHref = (targetPage) => {
+      const params = new URLSearchParams();
+      const sourceQuery = pagination.query || {};
+
+      Object.entries(sourceQuery).forEach(([key, value]) => {
+        if (key === 'page') return;
+        if (value === undefined || value === null || value === '') return;
+        if (Array.isArray(value)) {
+          value.forEach(item => params.append(key, item));
+          return;
+        }
+        params.set(key, value);
+      });
+
+      params.set('page', String(targetPage));
+
+      if (pagination.perPage) {
+        params.set('perPage', String(pagination.perPage));
+      }
+
+      return `${pagination.basePath || ''}?${params.toString()}`;
+    };
+  %>
+
+  <nav class="vm-pagination" aria-label="Paginação">
+    <span>
+      Página <strong><%= pagination.page %></strong> de <strong><%= pagination.totalPages %></strong>
+      · <%= pagination.totalItems %> registro(s)
+    </span>
+
+    <div>
+      <% if (pagination.hasPrevious) { %>
+        <a href="<%= buildPageHref(pagination.page - 1) %>">Anterior</a>
+      <% } else { %>
+        <span class="is-disabled">Anterior</span>
+      <% } %>
+
+      <% if (pagination.hasNext) { %>
+        <a href="<%= buildPageHref(pagination.page + 1) %>">Próxima</a>
+      <% } else { %>
+        <span class="is-disabled">Próxima</span>
+      <% } %>
+    </div>
+  </nav>
+<% } %>

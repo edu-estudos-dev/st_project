@@ -3,6 +3,7 @@ import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
 import { recalculateConsolidatedRevenueForDates } from '../services/monthlyRevenueConsolidation.js';
+import { buildPagination, parsePagination } from '../utilities/pagination.js';
 
 class BolinhasController {
 
@@ -190,15 +191,26 @@ addSangria = async (req, res) => {
     const usuario = req.user;
 
     try {
-      const sangriasFiltradas = await BolinhasSangriaModel.getSangrias(
-        usuario.assinante_id
+      const pageOptions = parsePagination(req.query);
+      const {
+        rows: sangriasFiltradas,
+        total
+      } = await BolinhasSangriaModel.getSangriasPage(
+        usuario.assinante_id,
+        pageOptions
       );
       const { success, error } = req.query;
       res.render('pages/bolinhas/tabelaBolinha', {
         sangrias: sangriasFiltradas,
         usuario,
         success,
-        error
+        error,
+        pagination: buildPagination({
+          ...pageOptions,
+          totalItems: total,
+          basePath: '/bolinhas/sangrias',
+          query: req.query
+        })
       });
     } catch (error) {
       console.error('Erro ao listar sangrias:', error);

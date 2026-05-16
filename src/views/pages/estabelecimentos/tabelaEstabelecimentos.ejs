@@ -340,6 +340,10 @@
                 </div>
             </section>
 
+            <% if (!search) { %>
+                <%- include('../../partials/pagination', { pagination }) %>
+            <% } %>
+
             <% if (search) { %>
                 <section class="list-panel">
                     <a href="/estabelecimentos" class="list-action">

@@ -137,6 +137,28 @@ app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
+  const startedAt = process.hrtime.bigint();
+
+  res.once('finish', () => {
+    const elapsedMs = Number(process.hrtime.bigint() - startedAt) / 1_000_000;
+    const thresholdMs = Number(process.env.SLOW_REQUEST_THRESHOLD_MS || 1500);
+
+    if (elapsedMs >= thresholdMs) {
+      console.warn('[slow-request]', {
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: res.statusCode,
+        durationMs: Number(elapsedMs.toFixed(1)),
+        userId: req.user?.user_id || req.user?.id || null,
+        assinanteId: req.user?.assinante_id || null
+      });
+    }
+  });
+
+  next();
+});
+
+app.use((req, res, next) => {
   res.locals.assetVersion = assetVersion;
   res.locals.assetPath = getAssetPath;
 

@@ -1,6 +1,7 @@
 import LancamentoModel from '../models/lancamentoModel.js';
 import { addMonths } from 'date-fns';
 import { hasProduto } from '../utilities/produtoUtils.js';
+import { buildPagination, parsePagination } from '../utilities/pagination.js';
 
 const TIPOS_POR_MOVIMENTO = {
   Entrada: new Set(['receita_dos_pontos', 'incremento_de_capital']),
@@ -128,20 +129,24 @@ class LancamentoController {
     try {
       const usuario = req.user;
       const tipoFiltro = (req.query.tipo || 'todos').toLowerCase();
-      let lancamentos = await LancamentoModel.findAll(usuario.assinante_id);
-
-      if (tipoFiltro === 'entrada') {
-        lancamentos = lancamentos.filter((item) => item.entrada_saida === 'Entrada');
-      } else if (tipoFiltro === 'saida') {
-        lancamentos = lancamentos.filter((item) => item.entrada_saida === 'Saida');
-      }
+      const pageOptions = parsePagination(req.query);
+      const { rows: lancamentos, total } = await LancamentoModel.findPage(
+        usuario.assinante_id,
+        { ...pageOptions, tipo: tipoFiltro }
+      );
 
       return res.status(200).render('pages/lancamentos/tabelaLancamento', {
         title: 'Lançamentos Cadastrados',
         lancamentos,
         pageTitle: 'Lançamentos Cadastrados',
         usuario,
-        tipoFiltro
+        tipoFiltro,
+        pagination: buildPagination({
+          ...pageOptions,
+          totalItems: total,
+          basePath: '/lancamentos',
+          query: req.query
+        })
       });
     } catch (error) {
       console.error('Erro ao listar lançamentos:', error);

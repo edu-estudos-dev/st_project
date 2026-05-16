@@ -170,6 +170,29 @@ class PeluciasModel {
     return result.rows;
   };
 
+  getSangriasPage = async (assinanteId, { limit = 50, offset = 0 } = {}) => {
+    const query = `
+      SELECT s.*, e.estabelecimento, COUNT(*) OVER()::int AS total_count
+      FROM sangrias_pelucias s
+      JOIN estabelecimentos e
+        ON s.estabelecimento_id = e.id
+       AND s.assinante_id = e.assinante_id
+      WHERE s.assinante_id = $1
+        AND UPPER(e.produto) LIKE '%PELUCIAS%'
+        AND s.valor_apurado <> 0
+      ORDER BY s.data_sangria DESC, s.id DESC
+      LIMIT $2
+      OFFSET $3
+    `;
+
+    const result = await connection.query(query, [assinanteId, limit, offset]);
+
+    return {
+      rows: result.rows,
+      total: result.rows[0]?.total_count || 0
+    };
+  };
+
   getEstabelecimentos = async assinanteId => {
     await this.ensureEstabelecimentoInitialColumns();
 

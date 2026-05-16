@@ -8,6 +8,7 @@ import {
   normalizeSelectedProdutos,
   serializeProdutos
 } from '../utilities/produtoUtils.js';
+import { buildPagination, parsePagination } from '../utilities/pagination.js';
 
 const INITIAL_INTEGER_MAX = 100000;
 
@@ -229,11 +230,16 @@ class EstabelecimentoController {
     const usuario = req.user;
 
     try {
-      let estabelecimentos = await EstabelecimentoModel.findAll(
-        usuario.assinante_id
+      const pageOptions = parsePagination(req.query);
+      const {
+        rows: estabelecimentosPage,
+        total
+      } = await EstabelecimentoModel.findPage(
+        usuario.assinante_id,
+        pageOptions
       );
 
-      estabelecimentos = estabelecimentos.map(estabelecimento => {
+      const estabelecimentos = estabelecimentosPage.map(estabelecimento => {
         estabelecimento.telefone_contato = formatTelefone(
           estabelecimento.telefone_contato
         );
@@ -253,7 +259,13 @@ class EstabelecimentoController {
         search: false,
         usuario,
         success,
-        error: null
+        error: null,
+        pagination: buildPagination({
+          ...pageOptions,
+          totalItems: total,
+          basePath: '/estabelecimentos',
+          query: req.query
+        })
       });
     } catch (error) {
       console.error('Erro ao obter todos os estabelecimentos.', error);

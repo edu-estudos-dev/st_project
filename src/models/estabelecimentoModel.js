@@ -86,6 +86,37 @@ class EstabelecimentoModel {
     }
   };
 
+  findPage = async (assinanteId, { limit = 50, offset = 0 } = {}) => {
+    try {
+      await this.ensureEstabelecimentoColumns();
+
+      const SQL = `
+        SELECT *, COUNT(*) OVER()::int AS total_count
+        FROM estabelecimentos
+        WHERE status = $1
+          AND assinante_id = $2
+        ORDER BY estabelecimento ASC, id ASC
+        LIMIT $3
+        OFFSET $4
+      `;
+
+      const result = await connection.query(SQL, [
+        'ativo',
+        assinanteId,
+        limit,
+        offset
+      ]);
+
+      return {
+        rows: result.rows,
+        total: result.rows[0]?.total_count || 0
+      };
+    } catch (error) {
+      console.error('Erro ao executar a query paginada:', error);
+      throw new Error('Erro ao buscar estabelecimentos ativos.');
+    }
+  };
+
   search = async (query, assinanteId) => {
     try {
       await this.ensureEstabelecimentoColumns();

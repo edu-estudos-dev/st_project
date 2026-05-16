@@ -250,6 +250,46 @@ class LancamentoModel {
     return result.rows;
   };
 
+  findPage = async (assinanteId, {
+    tipo = 'todos',
+    limit = 50,
+    offset = 0
+  } = {}) => {
+    const params = [assinanteId];
+    let typeFilter = '';
+
+    if (tipo === 'entrada') {
+      params.push('Entrada');
+      typeFilter = `AND entrada_saida = $${params.length}`;
+    } else if (tipo === 'saida') {
+      params.push('Saida');
+      typeFilter = `AND entrada_saida = $${params.length}`;
+    }
+
+    params.push(limit, offset);
+
+    const SQL = `
+      SELECT *, COUNT(*) OVER()::int AS total_count
+      FROM lancamentos
+      WHERE assinante_id = $1
+        ${typeFilter}
+      ORDER BY data ASC, id ASC
+      LIMIT $${params.length - 1}
+      OFFSET $${params.length}
+    `;
+
+    const result = await connection.query(SQL, params);
+
+    result.rows.forEach((lancamento) => {
+      lancamento.tipo_de_lancamento = formatarTexto(lancamento.tipo_de_lancamento);
+    });
+
+    return {
+      rows: result.rows,
+      total: result.rows[0]?.total_count || 0
+    };
+  };
+
   getRecentMovements = async (assinanteId, limit = 6) => {
     const SQL = `
       SELECT *

@@ -6,6 +6,7 @@ import {
   gerarNomeArquivoRecibo,
   gerarReciboPdfBuffer
 } from '../utils/reciboPdf.js';
+import { buildPagination, parsePagination } from '../utilities/pagination.js';
 
 class ConsignadosController {
   addSangriaForm = async (req, res) => {
@@ -263,14 +264,24 @@ class ConsignadosController {
   index = async (req, res) => {
     const usuario = req.user;
     try {
-      const sangrias = await consignadosModel.getSangrias(usuario.assinante_id);
+      const pageOptions = parsePagination(req.query);
+      const { rows: sangrias, total } = await consignadosModel.getSangriasPage(
+        usuario.assinante_id,
+        pageOptions
+      );
       const { success, error } = req.query;
 
       res.render('pages/consignados/tabelaConsignados', {
         sangrias,
         usuario,
         success,
-        error
+        error,
+        pagination: buildPagination({
+          ...pageOptions,
+          totalItems: total,
+          basePath: '/consignados/sangrias',
+          query: req.query
+        })
       });
     } catch (error) {
       console.error('Erro ao listar consignados:', error);

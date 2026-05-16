@@ -70,6 +70,28 @@ class BolinhasModel {
     return result.rows;
   };
 
+  getSangriasPage = async (assinanteId, { limit = 50, offset = 0 } = {}) => {
+    const query = `
+      SELECT s.*, e.estabelecimento, COUNT(*) OVER()::int AS total_count
+      FROM sangrias_bolinha s
+      JOIN estabelecimentos e
+        ON s.estabelecimento_id = e.id
+       AND s.assinante_id = e.assinante_id
+      WHERE s.assinante_id = $1
+        AND UPPER(e.produto) LIKE '%BOLINHAS%'
+      ORDER BY s.data_sangria DESC, s.id DESC
+      LIMIT $2
+      OFFSET $3
+    `;
+
+    const result = await connection.query(query, [assinanteId, limit, offset]);
+
+    return {
+      rows: result.rows,
+      total: result.rows[0]?.total_count || 0
+    };
+  };
+
   getSangriaById = async (id, assinanteId) => {
     const query = `
       SELECT s.*, e.estabelecimento
