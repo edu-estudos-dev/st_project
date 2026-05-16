@@ -931,7 +931,8 @@ body.comunidade-page {
 
   .comunidade-hero p,
   .comunidade-page-title p {
-    font-size: 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.62;
   }
 
   .comunidade-hero-actions,
@@ -1002,5 +1003,38 @@ body.comunidade-page {
   .comunidade-reply-side {
     width: 100%;
     align-items: flex-start;
+  }
+
+  .comunidade-section-header p,
+  .comunidade-category-card p,
+  .comunidade-topic-card p,
+  .comunidade-topic-detail-content,
+  .comunidade-topic-detail-content p,
+  .comunidade-reply-content,
+  .comunidade-reply-content p,
+  .comunidade-sidebar-card p,
+  .comunidade-check-list li,
+  .comunidade-form-card input,
+  .comunidade-form-card textarea,
+  .comunidade-form-card select {
+    font-size: 1.0625rem;
+    line-height: 1.62;
+  }
+
+  .comunidade-breadcrumb,
+  .comunidade-topic-meta,
+  .comunidade-topic-stats,
+  .comunidade-reply-meta,
+  .comunidade-form-card label {
+    font-size: 0.875rem;
+  }
+
+  .comunidade-primary-link,
+  .comunidade-secondary-link,
+  .comunidade-small-action,
+  .comunidade-primary-button {
+    min-height: 50px;
+    font-size: 1.0625rem;
+    line-height: 1.15;
   }
 }

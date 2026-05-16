@@ -1110,9 +1110,9 @@ html:has(.commercial-page) {
 
 @media (max-width: 575.98px) {
   .commercial-page {
-    --commercial-font-label: 0.8rem !important;
-    --commercial-font-body: 1rem;
-    --commercial-font-section-text: 1rem;
+    --commercial-font-label: 0.875rem !important;
+    --commercial-font-body: 1.0625rem;
+    --commercial-font-section-text: 1.0625rem;
     --commercial-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
     --commercial-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
     --commercial-font-hero-title: clamp(2rem, 9.2vw, 2.45rem) !important;
@@ -1125,7 +1125,7 @@ html:has(.commercial-page) {
   .commercial-tools-grid article p,
   .commercial-faq-list details p,
   .commercial-final-cta p {
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.6 !important;
   }
 
@@ -1135,7 +1135,7 @@ html:has(.commercial-page) {
   .commercial-card-cta {
     min-height: 52px !important;
     padding: 0.88rem 1.05rem !important;
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.15 !important;
   }
 
@@ -1146,7 +1146,7 @@ html:has(.commercial-page) {
     .commercial-example-card span,
     .commercial-before-after-card span
   ) {
-    font-size: 0.8rem !important;
+    font-size: 0.875rem !important;
     line-height: 1.16 !important;
     white-space: normal !important;
   }
@@ -1154,9 +1154,9 @@ html:has(.commercial-page) {
 
 @media (max-width: 390px) {
   .commercial-page {
-    --commercial-font-label: 0.8rem !important;
-    --commercial-font-body: 0.98rem;
-    --commercial-font-section-text: 0.98rem;
+    --commercial-font-label: 0.875rem !important;
+    --commercial-font-body: 1.0625rem;
+    --commercial-font-section-text: 1.0625rem;
     --commercial-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
     --commercial-font-hero-title: clamp(1.9rem, 9vw, 2.22rem) !important;
   }

@@ -2649,7 +2649,7 @@
   .blog-topic-card p,
   .blog-sidebar-card p,
   .blog-cta-card p {
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.6;
   }
 
@@ -2661,8 +2661,17 @@
   }
 
   .blog-article-content {
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.75;
+  }
+
+  .blog-breadcrumb,
+  .blog-article-meta-item,
+  .blog-hero-panel-label,
+  .blog-hero-topic > span,
+  .blog-article-featured-caption span,
+  .blog-article-featured-caption strong {
+    font-size: 0.875rem;
   }
 
   .blog-sidebar-share-links a,
@@ -2677,7 +2686,7 @@
   .blog-empty-link,
   .blog-read-more {
     min-height: 50px;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.15;
   }
 }
@@ -2710,6 +2719,6 @@
   .blog-sidebar-card p,
   .blog-cta-card p,
   .blog-article-content {
-    font-size: 0.98rem;
+    font-size: 1.0625rem;
   }
 }

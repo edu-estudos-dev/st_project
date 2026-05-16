@@ -1300,9 +1300,9 @@ html:has(.demo-page) {
 
 @media (max-width: 575.98px) {
   .demo-page {
-    --demo-font-label: 0.8rem;
-    --demo-font-body: 1rem;
-    --demo-font-section-text: 1rem;
+    --demo-font-label: 0.875rem;
+    --demo-font-body: 1.0625rem;
+    --demo-font-section-text: 1.0625rem;
     --demo-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
     --demo-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
     --demo-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
@@ -1317,7 +1317,7 @@ html:has(.demo-page) {
   .demo-final-cta p,
   .demo-form-field input,
   .demo-form-products label {
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.6 !important;
   }
 
@@ -1327,12 +1327,12 @@ html:has(.demo-page) {
   .demo-card-cta {
     min-height: 52px !important;
     padding: 0.88rem 1.05rem !important;
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.15 !important;
   }
 
   .demo-page :is(.demo-kicker, .demo-badge, .demo-tools-grid article span) {
-    font-size: 0.8rem !important;
+    font-size: 0.875rem !important;
     line-height: 1.16 !important;
     white-space: normal !important;
   }
@@ -1340,9 +1340,9 @@ html:has(.demo-page) {
 
 @media (max-width: 390px) {
   .demo-page {
-    --demo-font-label: 0.8rem;
-    --demo-font-body: 0.98rem;
-    --demo-font-section-text: 0.98rem;
+    --demo-font-label: 0.875rem;
+    --demo-font-body: 1.0625rem;
+    --demo-font-section-text: 1.0625rem;
     --demo-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
     --demo-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
   }

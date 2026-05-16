@@ -1085,9 +1085,9 @@ html:has(.pricing-page) {
 
 @media (max-width: 575.98px) {
   .pricing-page {
-    --pricing-font-label: 0.8rem;
-    --pricing-font-body: 1rem;
-    --pricing-font-section-text: 1rem;
+    --pricing-font-label: 0.875rem;
+    --pricing-font-body: 1.0625rem;
+    --pricing-font-section-text: 1.0625rem;
     --pricing-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
     --pricing-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
     --pricing-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
@@ -1100,7 +1100,7 @@ html:has(.pricing-page) {
   .pricing-tools-grid article p,
   .pricing-faq-list details p,
   .pricing-final-cta p {
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.6 !important;
   }
 
@@ -1110,12 +1110,12 @@ html:has(.pricing-page) {
   .pricing-card-cta {
     min-height: 52px !important;
     padding: 0.88rem 1.05rem !important;
-    font-size: 1rem !important;
+    font-size: 1.0625rem !important;
     line-height: 1.15 !important;
   }
 
   .pricing-page :is(.pricing-kicker, .pricing-badge, .pricing-tools-grid article span) {
-    font-size: 0.8rem !important;
+    font-size: 0.875rem !important;
     line-height: 1.16 !important;
     white-space: normal !important;
   }
@@ -1123,9 +1123,9 @@ html:has(.pricing-page) {
 
 @media (max-width: 390px) {
   .pricing-page {
-    --pricing-font-label: 0.8rem;
-    --pricing-font-body: 0.98rem;
-    --pricing-font-section-text: 0.98rem;
+    --pricing-font-label: 0.875rem;
+    --pricing-font-body: 1.0625rem;
+    --pricing-font-section-text: 1.0625rem;
     --pricing-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
     --pricing-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
   }
