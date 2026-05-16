@@ -314,47 +314,87 @@ class AssinanteModel {
   }
 
   async listForAdmin() {
-    await this.expireOverdueSubscriptions('TRUE', []);
-    await this.ensureBillingColumns();
+    const traceId = `AssinanteModel.listForAdmin-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+    console.time(`[${traceId}] total`);
+    console.time(`[${traceId}] expireOverdueSubscriptions`);
+    await this.expireOverdueSubscriptions('TRUE', []);
+    console.timeEnd(`[${traceId}] expireOverdueSubscriptions`);
+
+    console.time(`[${traceId}] ensureBillingColumns`);
+    await this.ensureBillingColumns();
+    console.timeEnd(`[${traceId}] ensureBillingColumns`);
+
+    console.time(`[${traceId}] query`);
     const result = await connection.query(
-      `SELECT
-        a.id,
-        a.user_id,
-        u.username,
-        u.email,
-        a.status_assinatura,
-        a.tipo_cobranca,
-        a.trial_inicio,
-        a.trial_fim,
-        a.data_ativacao,
-        a.data_vencimento,
-        a.data_limite_exclusao,
-        a.billing_nome,
-        a.billing_cpf_cnpj,
-        a.billing_email,
-        a.billing_telefone,
-        a.produtos_habilitados,
-        a.plano_codigo,
-        a.plano_nome,
-        a.valor_mensal,
-        a.created_at,
-        a.updated_at,
-        COUNT(DISTINCT e.id)::int AS estabelecimentos,
-        COUNT(DISTINCT l.id)::int AS lancamentos,
-        COUNT(DISTINCT sb.id)::int AS bolinhas,
-        COUNT(DISTINCT sf.id)::int AS consignados,
-        COUNT(DISTINCT sp.id)::int AS pelucias
+      `WITH
+        estabelecimentos_count AS (
+          SELECT assinante_id, COUNT(*)::int AS total
+          FROM estabelecimentos
+          GROUP BY assinante_id
+        ),
+        lancamentos_count AS (
+          SELECT assinante_id, COUNT(*)::int AS total
+          FROM lancamentos
+          GROUP BY assinante_id
+        ),
+        bolinhas_count AS (
+          SELECT assinante_id, COUNT(*)::int AS total
+          FROM sangrias_bolinha
+          GROUP BY assinante_id
+        ),
+        consignados_count AS (
+          SELECT assinante_id, COUNT(*)::int AS total
+          FROM sangrias_consignados
+          GROUP BY assinante_id
+        ),
+        pelucias_count AS (
+          SELECT assinante_id, COUNT(*)::int AS total
+          FROM sangrias_pelucias
+          GROUP BY assinante_id
+        )
+       SELECT
+         a.id,
+         a.user_id,
+         u.username,
+         u.email,
+         a.status_assinatura,
+         a.tipo_cobranca,
+         a.trial_inicio,
+         a.trial_fim,
+         a.data_ativacao,
+         a.data_vencimento,
+         a.data_limite_exclusao,
+         a.billing_nome,
+         a.billing_cpf_cnpj,
+         a.billing_email,
+         a.billing_telefone,
+         a.produtos_habilitados,
+         a.plano_codigo,
+         a.plano_nome,
+         a.valor_mensal,
+         a.created_at,
+         a.updated_at,
+         COALESCE(ec.total, 0)::int AS estabelecimentos,
+         COALESCE(lc.total, 0)::int AS lancamentos,
+         COALESCE(bc.total, 0)::int AS bolinhas,
+         COALESCE(cc.total, 0)::int AS consignados,
+         COALESCE(pc.total, 0)::int AS pelucias
       FROM assinantes a
       INNER JOIN users u ON u.id = a.user_id
-      LEFT JOIN estabelecimentos e ON e.assinante_id = a.id
-      LEFT JOIN lancamentos l ON l.assinante_id = a.id
-      LEFT JOIN sangrias_bolinha sb ON sb.assinante_id = a.id
-      LEFT JOIN sangrias_consignados sf ON sf.assinante_id = a.id
-      LEFT JOIN sangrias_pelucias sp ON sp.assinante_id = a.id
-      GROUP BY a.id, u.id
+      LEFT JOIN estabelecimentos_count ec ON ec.assinante_id = a.id
+      LEFT JOIN lancamentos_count lc ON lc.assinante_id = a.id
+      LEFT JOIN bolinhas_count bc ON bc.assinante_id = a.id
+      LEFT JOIN consignados_count cc ON cc.assinante_id = a.id
+      LEFT JOIN pelucias_count pc ON pc.assinante_id = a.id
       ORDER BY a.id ASC`
     );
+    console.timeEnd(`[${traceId}] query`);
+
+    console.log(`[${traceId}] rows`, {
+      totalAssinantes: result.rowCount
+    });
+    console.timeEnd(`[${traceId}] total`);
 
     return result.rows.map(row => this.normalizeRow(row));
   }

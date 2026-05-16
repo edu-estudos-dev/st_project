@@ -71,8 +71,27 @@ const formatDateTime = (value) => {
 
 class AdminAssinantesController {
   index = async (req, res) => {
+    const traceId = `admin-assinantes-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    let listTimerActive = false;
+
+    console.time(`[${traceId}] GET /admin/assinantes total`);
+    res.once('finish', () => {
+      console.log(`[${traceId}] response finished`, {
+        statusCode: res.statusCode
+      });
+      console.timeEnd(`[${traceId}] GET /admin/assinantes total`);
+    });
+
     try {
+      listTimerActive = true;
+      console.time(`[${traceId}] AdminAssinantesController.index listForAdmin`);
       const assinantes = await AssinanteModel.listForAdmin();
+      console.timeEnd(`[${traceId}] AdminAssinantesController.index listForAdmin`);
+      listTimerActive = false;
+
+      console.log(`[${traceId}] AdminAssinantesController.index render start`, {
+        totalAssinantes: assinantes.length
+      });
 
       return res.render('pages/admin/assinantes', {
         title: 'Assinantes',
@@ -82,6 +101,10 @@ class AdminAssinantesController {
         error: req.query.error
       });
     } catch (error) {
+      if (listTimerActive) {
+        console.timeEnd(`[${traceId}] AdminAssinantesController.index listForAdmin`);
+      }
+
       console.error('Erro ao listar assinantes:', error);
       return res.status(500).send('Erro ao listar assinantes.');
     }

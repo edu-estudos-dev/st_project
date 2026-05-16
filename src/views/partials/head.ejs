@@ -572,10 +572,24 @@
             };
 
             window.addEventListener('load', () => {
+                if (window.location.pathname.startsWith('/admin/assinantes')) {
+                    console.log('[navigation-loading] load /admin/assinantes', {
+                        path: window.location.pathname,
+                        search: window.location.search
+                    });
+                }
+
                 hideNavigationLoading();
             });
 
             window.addEventListener('pageshow', () => {
+                if (window.location.pathname.startsWith('/admin/assinantes')) {
+                    console.log('[navigation-loading] pageshow /admin/assinantes', {
+                        path: window.location.pathname,
+                        search: window.location.search
+                    });
+                }
+
                 hideNavigationLoading();
             });
 
@@ -784,6 +798,16 @@
 
                 const copy = getNavigationLoadingCopy(link, url);
                 const delay = getNavigationLoadingDelay(url);
+
+                if (url.pathname.startsWith('/admin/assinantes')) {
+                    console.log('[navigation-loading] click /admin/assinantes', {
+                        href: link.getAttribute('href'),
+                        resolvedPath: url.pathname,
+                        resolvedSearch: url.search,
+                        delay,
+                        title: copy.title
+                    });
+                }
 
                 navigationLoadingTimer = window.setTimeout(() => {
                     window.AppLoading?.show(copy.title, copy.detail);
