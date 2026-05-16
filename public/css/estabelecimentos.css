@@ -1347,10 +1347,21 @@
 .estabelecimento-view-shell
   .estabelecimento-view-actions-buttons
   .btn-modern {
-  color: #ffffff !important;
-  background: #111827 !important;
-  border: 1px solid #111827 !important;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.92) !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18) !important;
+}
+
+.estabelecimento-view-shell
+  .estabelecimento-view-actions-buttons
+  .btn-modern
+  i,
+.estabelecimento-view-shell
+  .estabelecimento-view-actions-buttons
+  .btn-modern
+  span {
+  color: #0f172a !important;
 }
 
 /* Responsivo */
@@ -2315,10 +2326,10 @@
   }
 
   .estabelecimento-view-shell .estabelecimento-view-actions-buttons .btn-modern {
-    color: #ffffff !important;
-    background: #111827 !important;
-    border: 1px solid #111827 !important;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.22) !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(226, 232, 240, 0.92) !important;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18) !important;
   }
 }
 

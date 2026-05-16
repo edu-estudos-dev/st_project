@@ -1588,6 +1588,21 @@ body.route-neighborhood-modal-open {
 }
 
 @media (max-width: 575.98px) {
+  body.list-page-body .list-shell:has(.route-planner-form) {
+    width: calc(100% - 1rem);
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .list-stage {
+    gap: 0.85rem;
+  }
+
+  body.list-page-body .list-shell:has(.route-planner-form) .list-panel,
+  body.list-page-body .list-shell:has(.route-planner-form) .dashboard-panel {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 22px;
+  }
+
   .guided-visit-page .form-shell-modern {
     width: calc(100% - 1rem);
   }
