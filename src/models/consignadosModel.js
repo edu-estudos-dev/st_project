@@ -393,6 +393,33 @@ class ConsignadosModel {
     return Boolean(result.rows[0]?.has_later);
   };
 
+  hasSangriaOnDate = async ({
+    estabelecimentoId,
+    assinanteId,
+    dataSangria,
+    excludeId = null
+  }) => {
+    const query = `
+      SELECT EXISTS (
+        SELECT 1
+        FROM sangrias_consignados
+        WHERE estabelecimento_id = $1
+          AND assinante_id = $2
+          AND data_sangria = $3::date
+          AND id <> COALESCE($4::BIGINT, -1)
+      ) AS exists_on_date
+    `;
+
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId,
+      dataSangria,
+      excludeId
+    ]);
+
+    return Boolean(result.rows[0]?.exists_on_date);
+  };
+
   getMonthlyRevenue = async assinanteId => {
     const query = `
       SELECT

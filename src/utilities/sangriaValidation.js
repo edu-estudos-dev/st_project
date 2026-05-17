@@ -50,7 +50,7 @@ export const parseSangriaDate = value => {
 export const parseNonNegativeDecimal = (
   value,
   fieldLabel,
-  { max = 100000000 } = {}
+  { max = 100000000, maxMessage = null } = {}
 ) => {
   const raw = normalizeDecimalString(value);
 
@@ -60,8 +60,14 @@ export const parseNonNegativeDecimal = (
 
   const parsed = Number(raw);
 
-  if (!Number.isFinite(parsed) || parsed < 0 || parsed > max) {
+  if (!Number.isFinite(parsed) || parsed < 0) {
     throw new SangriaValidationError(`${fieldLabel} deve ser um numero valido e nao negativo.`);
+  }
+
+  if (parsed > max) {
+    throw new SangriaValidationError(
+      maxMessage || `${fieldLabel} deve ser menor ou igual a ${max}.`
+    );
   }
 
   return parsed;
@@ -88,7 +94,10 @@ export const parseNonNegativeInteger = (
 };
 
 export const parseCommissionPercent = value => {
-  const parsed = parseNonNegativeDecimal(value, 'Comissao', { max: 100 });
+  const parsed = parseNonNegativeDecimal(value, 'Comissao', {
+    max: 100,
+    maxMessage: 'Comissao deve estar entre 0 e 100%.'
+  });
 
   if (parsed > 100) {
     throw new SangriaValidationError('Comissao deve estar entre 0 e 100%.');

@@ -336,10 +336,6 @@ class LancamentoModel {
     const SQL = 'SELECT * FROM lancamentos WHERE id = $1 AND assinante_id = $2';
     const result = await connection.query(SQL, [id, assinanteId]);
 
-    if (result.rows.length > 0) {
-      result.rows[0].tipo_de_lancamento = formatarTexto(result.rows[0].tipo_de_lancamento);
-    }
-
     return result.rows[0];
   };
 
@@ -387,8 +383,9 @@ class LancamentoModel {
   }
 
   delete = async (id, assinanteId) => {
-    const SQL = 'DELETE FROM lancamentos WHERE id = $1 AND assinante_id = $2';
-    await connection.query(SQL, [id, assinanteId]);
+    const SQL = 'DELETE FROM lancamentos WHERE id = $1 AND assinante_id = $2 RETURNING *';
+    const result = await connection.query(SQL, [id, assinanteId]);
+    return result.rows[0] || null;
   };
 
   markAsPaid = async (id, assinanteId) => {

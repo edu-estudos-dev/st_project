@@ -102,6 +102,16 @@ class PeluciasController {
           )
         : false;
 
+      const hasSameDate = await peluciasModel.hasSangriaOnDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria
+      });
+
+      if (hasSameDate) {
+        throw new Error('Este ponto ja possui uma sangria de pelucias nesta data. Edite o registro existente ou escolha outra data.');
+      }
+
       if (isAberturaInicial) {
         if (hasHistorico) {
           throw new Error(
@@ -491,6 +501,17 @@ class PeluciasController {
         ? parseNonNegativeInteger(qtde_vendido, 'Quantidade vendida')
         : null;
 
+      const hasSameDate = await peluciasModel.hasSangriaOnDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria,
+        excludeId: id
+      });
+
+      if (hasSameDate) {
+        throw new Error('Este ponto ja possui outra sangria de pelucias nesta data. Edite o registro existente ou escolha outra data.');
+      }
+
       const produtoVinculado = await VisitasModel.findProdutoBySangria({
         sangria_id: id,
         assinante_id: usuario.assinante_id,
@@ -563,7 +584,11 @@ class PeluciasController {
       res.redirect('/pelucias/sangrias?success=Sangria atualizada com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar sangria:', error);
-      res.redirect('/pelucias/sangrias?error=Erro ao atualizar sangria');
+      res.redirect(
+        `/pelucias/sangrias?error=${encodeURIComponent(
+          error.message || 'Erro ao atualizar sangria'
+        )}`
+      );
     }
   };
 
@@ -600,7 +625,7 @@ class PeluciasController {
 
       res.status(500).json({
         success: false,
-        message: 'Erro ao excluir sangria'
+        message: error.message || 'Erro ao excluir sangria'
       });
     }
   };

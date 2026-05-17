@@ -198,10 +198,17 @@ for (const [name, file] of [
   addCheck(
     name,
     file,
-    includesAll('hasLaterSangria', 'getPreviousSangriaBeforeDate', 'estoque futuro'),
+    includesAll('hasLaterSangria', 'getPreviousSangriaBeforeDate', 'hasSangriaOnDate', 'estoque futuro'),
     'Editar sangria antiga nao pode deixar registros futuros de estoque incoerentes.'
   );
 }
+
+addCheck(
+  'Sangrias mostram mensagem especifica do erro ao usuario',
+  'src/controllers/bolinhaController.js',
+  includesAll('encodeURIComponent(', "error.message || 'Erro ao adicionar sangria'", "error.message || 'Erro ao atualizar sangria'"),
+  'O SweetAlert precisa mostrar a causa real do erro, nao apenas uma mensagem generica.'
+);
 
 for (const [name, file] of [
   ['Bolinha recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/bolinhaController.js'],
@@ -238,6 +245,18 @@ addCheck(
 );
 
 addCheck(
+  'Receita consolidada do sistema nao pode ser editada ou excluida em lancamentos',
+  'src/controllers/lancamentoController.js',
+  includesAll(
+    'isSystemConsolidatedRevenue',
+    'MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL',
+    'LancamentoModel.findById',
+    'return res.status(409).json'
+  ),
+  'Receita consolidada nasce das sangrias; apagar o lancamento manualmente quebra o fluxo de caixa sem alterar a tabela de receita.'
+);
+
+addCheck(
   'Receita consolidada usa trava por assinante produto e mes',
   'src/models/lancamentoModel.js',
   includesAll('withConsolidatedRevenueLock', 'pg_advisory_xact_lock', 'receita-consolidada'),
@@ -256,6 +275,16 @@ addCheck(
   'src/views/partials/head.ejs',
   includesAll("form.dataset.submitting === 'true'", 'event.defaultPrevented', "submitter.disabled = true"),
   'Clique duplo no navegador deve ser bloqueado, mas formularios que usam preventDefault precisam continuar funcionando.'
+);
+
+addCheck(
+  'Loading global respeita confirmacoes com preventDefault',
+  'src/views/partials/head.ejs',
+  matchesAll(
+    /form\.addEventListener\('submit', \(event\) => \{/,
+    /window\.setTimeout\(\(\) => \{\s*if \(event\.defaultPrevented\) \{\s*return;\s*\}[\s\S]*window\.AppLoading\?\.show\(copy\.title, copy\.detail\);/
+  ),
+  'SweetAlert de exclusao precisa aparecer antes do spinner; o loading so pode iniciar se o submit nao foi cancelado.'
 );
 
 addCheck(

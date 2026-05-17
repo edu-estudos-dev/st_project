@@ -485,6 +485,12 @@
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async function (event) {
                     event.preventDefault();
+
+                    if (this.dataset.deleting === 'true') {
+                        return;
+                    }
+
+                    this.dataset.deleting = 'true';
                     const idEstabelecimento = this.getAttribute('data-id');
 
                     const confirmed = await window.AppAlerts?.confirm({
@@ -494,9 +500,17 @@
                         cancelButtonText: 'Cancelar'
                     });
 
-                    if (!confirmed) return;
+                    if (!confirmed) {
+                        delete this.dataset.deleting;
+                        return;
+                    }
 
                     try {
+                        window.AppLoading?.show(
+                            'Excluindo estabelecimento...',
+                            'Removendo o ponto selecionado.'
+                        );
+
                         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
                         const response = await fetch(`/estabelecimentos/${idEstabelecimento}`, {
                             method: 'DELETE',
@@ -516,9 +530,12 @@
                             throw new Error(data.message || 'Erro ao excluir estabelecimento');
                         }
 
+                        window.AppLoading?.hide();
                         await window.AppAlerts?.success(data.message || 'Estabelecimento excluído com sucesso');
                         window.location.href = '/estabelecimentos';
                     } catch (error) {
+                        delete this.dataset.deleting;
+                        window.AppLoading?.hide();
                         window.AppAlerts?.error(error.message || 'Erro ao excluir estabelecimento');
                     }
                 });

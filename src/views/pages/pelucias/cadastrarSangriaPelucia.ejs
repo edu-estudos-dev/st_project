@@ -113,7 +113,7 @@
                             <label for="valor_apurado">Valor apurado</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
+                                <input type="number" step="0.01" min="0" class="form-control text-center" id="valor_apurado" name="valor_apurado" required>
                             </div>
                         </div>
 
@@ -121,7 +121,7 @@
                             <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="15" required>
+                                <input type="number" step="0.01" min="0" max="100" class="form-control text-center" id="comissao" name="comissao" value="15" required>
                             </div>
                         </div>
 
@@ -155,7 +155,7 @@
                     <div class="row g-3">
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
                             <label for="leitura_atual">Leitura atual</label>
-                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
+                            <input type="number" min="0" class="form-control text-center" id="leitura_atual" name="leitura_atual" required>
                         </div>
 
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
@@ -165,7 +165,7 @@
 
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
                             <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" required>
+                            <input type="number" min="0" class="form-control text-center" id="abastecido" name="abastecido" required>
                         </div>
 
                         <div class="col-6 col-md-4 col-lg-2 compact-field">
@@ -413,6 +413,11 @@
 
             document.getElementById('peluciaForm').addEventListener('submit', (event) => {
                 const hasHistorico = window.peluciaHasHistorico === true;
+                const valorApurado = Number(valorApuradoInput.value);
+                const comissao = Number(comissaoInput.value);
+                const leituraAtual = Number(leituraAtualInput.value);
+                const abastecido = Number(abastecidoInput.value);
+                const estoquePrevisto = Number(document.getElementById('estoque_previsto').value);
 
                 if (!estabelecimentoSelect.value) {
                     event.preventDefault();
@@ -424,6 +429,28 @@
                     event.preventDefault();
                     window.AppAlerts?.warning('Este ponto ainda não tem dados iniciais de pelúcias. Informe leitura inicial e quantidade inicial na edição do estabelecimento antes de registrar a sangria.');
                     return;
+                }
+                if (!Number.isFinite(valorApurado) || valorApurado < 0) {
+                    event.preventDefault();
+                    window.AppAlerts?.error('Valor apurado deve ser um número válido e não negativo.');
+                    return;
+                }
+
+                if (!Number.isFinite(comissao) || comissao < 0 || comissao > 100) {
+                    event.preventDefault();
+                    window.AppAlerts?.error('Comissão deve estar entre 0 e 100%.');
+                    return;
+                }
+
+                if (!Number.isInteger(leituraAtual) || leituraAtual < 0 || !Number.isInteger(abastecido) || abastecido < 0) {
+                    event.preventDefault();
+                    window.AppAlerts?.error('Leitura atual e abastecido devem ser números inteiros e não negativos.');
+                    return;
+                }
+
+                if (!Number.isFinite(estoquePrevisto) || estoquePrevisto < 0) {
+                    event.preventDefault();
+                    window.AppAlerts?.error('O estoque previsto não pode ficar negativo. Confira leitura atual e abastecido.');
                 }
             });
 

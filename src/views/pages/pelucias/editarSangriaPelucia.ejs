@@ -83,7 +83,7 @@
                             <label for="valor_apurado">Valor apurado</label>
                             <div class="input-group">
                                 <span class="input-group-text">R$</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required>
+                                <input type="number" step="0.01" min="0" class="form-control text-center" id="valor_apurado" name="valor_apurado" value="<%= sangria.valor_apurado %>" required>
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@
                             <label for="comissao">Comissão (%)</label>
                             <div class="input-group">
                                 <span class="input-group-text">%</span>
-                                <input type="number" step="0.01" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required>
+                                <input type="number" step="0.01" min="0" max="100" class="form-control text-center" id="comissao" name="comissao" value="<%= sangria.comissao %>" required>
                             </div>
                         </div>
 
@@ -125,7 +125,7 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="leitura_atual">Leitura atual</label>
-                            <input type="number" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
+                            <input type="number" min="0" class="form-control text-center" id="leitura_atual" name="leitura_atual" value="<%= sangria.leitura_atual %>" required>
                         </div>
 
                         <div class="col-12 col-md-6 col-xl-3">
@@ -135,7 +135,7 @@
 
                         <div class="col-12 col-md-6 col-xl-3">
                             <label for="abastecido">Abastecido</label>
-                            <input type="number" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
+                            <input type="number" min="0" class="form-control text-center" id="abastecido" name="abastecido" value="<%= sangria.abastecido %>">
                         </div>
 
                         <div class="col-12 col-md-6 col-xl-3">
@@ -198,7 +198,36 @@
             document.getElementById('valor_liquido').value = valorLiquido.toFixed(2);
         }
 
+        function validarSangriaPelucias(event) {
+            const valorApurado = Number(document.getElementById('valor_apurado').value);
+            const comissao = Number(document.getElementById('comissao').value);
+            const leituraAtual = Number(document.getElementById('leitura_atual').value);
+            const abastecido = Number(document.getElementById('abastecido').value || 0);
+
+            if (!Number.isFinite(valorApurado) || valorApurado < 0) {
+                event.preventDefault();
+                window.AppAlerts?.error('Valor apurado deve ser um número válido e não negativo.');
+                return false;
+            }
+
+            if (!Number.isFinite(comissao) || comissao < 0 || comissao > 100) {
+                event.preventDefault();
+                window.AppAlerts?.error('Comissão deve estar entre 0 e 100%.');
+                return false;
+            }
+
+            if (!Number.isInteger(leituraAtual) || leituraAtual < 0 || !Number.isInteger(abastecido) || abastecido < 0) {
+                event.preventDefault();
+                window.AppAlerts?.error('Leitura atual e abastecido devem ser números inteiros e não negativos.');
+                return false;
+            }
+
+            return true;
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.pelucias-form')?.addEventListener('submit', validarSangriaPelucias);
+
             ['valor_apurado', 'comissao'].forEach((fieldId) => {
                 document.getElementById(fieldId)?.addEventListener('input', calculateValues);
             });

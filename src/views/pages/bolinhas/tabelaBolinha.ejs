@@ -233,6 +233,11 @@
 
         document.querySelectorAll('.delete-btn').forEach((button) => {
             button.addEventListener('click', async function () {
+                if (this.dataset.deleting === 'true') {
+                    return;
+                }
+
+                this.dataset.deleting = 'true';
                 const idSangria = this.getAttribute('data-id');
 
                 const confirmed = await window.AppAlerts?.confirm({
@@ -243,6 +248,7 @@
                 });
 
                 if (!confirmed) {
+                    delete this.dataset.deleting;
                     return;
                 }
 
@@ -265,6 +271,7 @@
                     window.history.replaceState({}, document.title, window.location.pathname);
                     window.location.reload();
                 } catch (error) {
+                    delete this.dataset.deleting;
                     window.AppLoading?.hide();
                     window.AppAlerts?.error(error.message || 'Erro ao excluir sangria');
                 }

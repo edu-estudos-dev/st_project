@@ -103,6 +103,16 @@ class ConsignadosController {
       const isAberturaInicial = abertura_inicial === 'on';
       const hasHistorico = ultimaSangria.length > 0;
 
+      const hasSameDate = await consignadosModel.hasSangriaOnDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria
+      });
+
+      if (hasSameDate) {
+        throw new Error('Este ponto ja possui uma sangria de consignados nesta data. Edite o registro existente ou escolha outra data.');
+      }
+
       if (isAberturaInicial) {
         if (hasHistorico) {
           throw new Error(
@@ -411,6 +421,17 @@ class ConsignadosController {
       );
       const tipoPagamento = parsePaymentType(tipo_pagamento);
 
+      const hasSameDate = await consignadosModel.hasSangriaOnDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria,
+        excludeId: id
+      });
+
+      if (hasSameDate) {
+        throw new Error('Este ponto ja possui outra sangria de consignados nesta data. Edite o registro existente ou escolha outra data.');
+      }
+
       const produtoVinculado = await VisitasModel.findProdutoBySangria({
         sangria_id: id,
         assinante_id: usuario.assinante_id,
@@ -440,7 +461,11 @@ class ConsignadosController {
       });
       const estoqueAnterior = sangriaAnterior
         ? parseInt(sangriaAnterior.qtde_deixada, 10)
-        : 0;
+        : parseInt(sangriaAtual.estoque, 10);
+
+      if (!Number.isFinite(estoqueAnterior) || estoqueAnterior < 0) {
+        throw new Error('Nao foi possivel calcular o estoque anterior desta sangria. Recarregue a tela e tente novamente.');
+      }
 
       const qtdeDeixada =
         estoqueAnterior -
@@ -519,7 +544,7 @@ class ConsignadosController {
       console.error('Erro ao deletar:', error);
       res.status(500).json({
         success: false,
-        message: 'Erro ao excluir'
+        message: error.message || 'Erro ao excluir'
       });
     }
   };

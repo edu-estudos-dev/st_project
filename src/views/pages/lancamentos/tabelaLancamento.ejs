@@ -84,6 +84,14 @@
                 currency: 'BRL'
             });
         };
+
+        const normalizeCategoriaKey = (value) =>
+            String(value || '').trim().toLowerCase().replace(/\s+/g, '_');
+
+        const isReceitaConsolidadaSistema = (lancamento) =>
+            String(lancamento.usuario || '').trim().toLowerCase() === 'sistema'
+            && lancamento.entrada_saida === 'Entrada'
+            && normalizeCategoriaKey(lancamento.tipo_de_lancamento) === 'receita_dos_pontos';
     %>
 
     <div class="list-shell lancamentos-list-shell">
@@ -214,6 +222,7 @@
                                     const categoriaFormatada = formatCategoria(lancamento.tipo_de_lancamento);
                                     const movimentoFormatado = formatMovimento(lancamento.entrada_saida);
                                     const pagamentoFormatado = formatFormaPagamento(lancamento.forma_de_pagamento);
+                                    const receitaConsolidadaSistema = isReceitaConsolidadaSistema(lancamento);
                                 %>
                                     <tr
                                         id="row-<%= lancamento.id %>"
@@ -269,7 +278,7 @@
                                                     <span>Ver</span>
                                                 </a>
 
-                                                <% if (!isReadOnly) { %>
+                                                <% if (!isReadOnly && !receitaConsolidadaSistema) { %>
                                                     <a href="/lancamentos/<%= lancamento.id %>/edit" class="table-btn table-btn-edit">
                                                         <i class="bi bi-pencil-square"></i>
                                                         <span>Editar</span>
@@ -288,6 +297,8 @@
                                                             <span>Excluir</span>
                                                         </button>
                                                     </form>
+                                                <% } else if (receitaConsolidadaSistema) { %>
+                                                    <span class="table-muted">Gerado pelas sangrias</span>
                                                 <% } %>
                                             </div>
                                         </td>
@@ -336,6 +347,12 @@
                 form.addEventListener('submit', async (event) => {
                     event.preventDefault();
 
+                    if (form.dataset.deleting === 'true') {
+                        return;
+                    }
+
+                    form.dataset.deleting = 'true';
+
                     const confirmed = await window.AppAlerts?.confirm({
                         title: 'Excluir lançamento',
                         text: 'Tem certeza que deseja excluir este lançamento?',
@@ -343,9 +360,17 @@
                         cancelButtonText: 'Cancelar'
                     });
 
-                    if (!confirmed) return;
+                    if (!confirmed) {
+                        delete form.dataset.deleting;
+                        return;
+                    }
 
                     try {
+                        window.AppLoading?.show(
+                            'Excluindo lançamento...',
+                            'Removendo o registro financeiro selecionado.'
+                        );
+
                         const rowId = form.dataset.rowId || '';
                         const launchId = rowId.replace('row-', '').trim();
                         const actionAttr = form.getAttribute('action') || '';
@@ -377,8 +402,11 @@
                         const row = document.getElementById(rowId);
                         row?.remove();
                         syncCounters();
+                        window.AppLoading?.hide();
                         window.AppAlerts?.success(payload.message || 'Lançamento excluído com sucesso.');
                     } catch (error) {
+                        delete form.dataset.deleting;
+                        window.AppLoading?.hide();
                         window.AppAlerts?.error(error.message || 'Erro ao excluir lançamento.');
                     }
                 });

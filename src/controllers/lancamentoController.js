@@ -22,7 +22,21 @@ const FORMAS_PAGAMENTO_PARCELAVEIS = new Set(['boleto', 'credito']);
 const MENSAGEM_MOVIMENTACAO_IMUTAVEL =
   'A movimentação original não pode ser alterada de entrada para saída ou vice-versa. Se o tipo estiver errado, exclua este lançamento e cadastre um novo.';
 
+const MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL =
+  'Esta receita foi gerada automaticamente pelas sangrias. Para alterar este valor, edite ou exclua a sangria de origem; o sistema recalcula a receita consolidada.';
+
 const exigeProdutoPorMovimento = (entradaSaida) => entradaSaida === 'Saida';
+
+const normalizeLancamentoType = (value) =>
+  String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+
+const isSystemConsolidatedRevenue = (lancamento) =>
+  lancamento?.entrada_saida === 'Entrada'
+  && normalizeLancamentoType(lancamento?.tipo_de_lancamento) === 'receita_dos_pontos'
+  && String(lancamento?.usuario || '').trim().toLowerCase() === 'sistema';
 
 const normalizaProdutoPorMovimento = ({ entrada_saida, produto }) => {
   if (!exigeProdutoPorMovimento(entrada_saida)) {
@@ -168,6 +182,8 @@ class LancamentoController {
         pageTitle: 'Lançamentos Cadastrados',
         usuario,
         tipoFiltro,
+        success: req.query.success,
+        error: req.query.error,
         pagination: buildPagination({
           ...pageOptions,
           totalItems: total,
@@ -341,6 +357,12 @@ class LancamentoController {
         return res.status(404).send('Lançamento não encontrado.');
       }
 
+      if (isSystemConsolidatedRevenue(lancamento)) {
+        return res.redirect(
+          `/lancamentos?error=${encodeURIComponent(MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL)}`
+        );
+      }
+
       return res.status(200).render('pages/lancamentos/editarLancamento', {
         title: 'Editar Lançamento',
         lancamento,
@@ -392,6 +414,16 @@ class LancamentoController {
 
       if (!lancamentoAtual) {
         return res.status(404).send('Lançamento não encontrado.');
+      }
+
+      if (isSystemConsolidatedRevenue(lancamentoAtual)) {
+        return res.status(409).render('pages/lancamentos/editarLancamento', {
+          title: 'Editar Lançamento',
+          lancamento: lancamentoAtual,
+          success: null,
+          usuario,
+          error: MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL
+        });
       }
 
       if (entrada_saida !== lancamentoAtual.entrada_saida) {
@@ -475,6 +507,37 @@ class LancamentoController {
       || req.get('accept')?.includes('application/json');
 
     try {
+      const lancamentoAtual = await LancamentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!lancamentoAtual) {
+        const message = 'LanÃ§amento nÃ£o encontrado.';
+
+        if (acceptsJson) {
+          return res.status(404).json({
+            success: false,
+            message
+          });
+        }
+
+        return res.redirect(`/lancamentos?error=${encodeURIComponent(message)}`);
+      }
+
+      if (isSystemConsolidatedRevenue(lancamentoAtual)) {
+        if (acceptsJson) {
+          return res.status(409).json({
+            success: false,
+            message: MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL
+          });
+        }
+
+        return res.redirect(
+          `/lancamentos?error=${encodeURIComponent(MENSAGEM_RECEITA_CONSOLIDADA_IMUTAVEL)}`
+        );
+      }
+
       await LancamentoModel.delete(id, usuario.assinante_id);
 
       if (acceptsJson) {

@@ -118,6 +118,7 @@
                                     id="valor_apurado"
                                     name="valor_apurado"
                                     value="<%= sangria.valor_apurado %>"
+                                    min="0"
                                     required
                                 >
                             </div>
@@ -132,6 +133,7 @@
                                 id="qtde_vendido"
                                 name="qtde_vendido"
                                 value="<%= sangria.qtde_vendido %>"
+                                min="0"
                                 required
                             >
                         </div>
@@ -145,6 +147,7 @@
                                 id="abastecido"
                                 name="abastecido"
                                 value="<%= sangria.abastecido %>"
+                                min="0"
                                 required
                             >
                         </div>
@@ -211,16 +214,47 @@
     <script nonce="<%= cspNonce || '' %>" src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script nonce="<%= cspNonce || '' %>">
+    const estoqueAnterior = Number(<%- JSON.stringify(Number(sangria.estoque || 0)) %>);
+
     function calculateQuantidadeDeixada() {
         const qtdeVendido = parseFloat(document.getElementById('qtde_vendido').value) || 0;
         const abastecido = parseFloat(document.getElementById('abastecido').value) || 0;
-        const qtdeDeixada = abastecido - qtdeVendido;
+        const qtdeDeixada = estoqueAnterior - qtdeVendido + abastecido;
 
         document.getElementById('qtde_deixada').value = qtdeDeixada;
     }
 
+    function validarSangriaConsignados(event) {
+        const valorApurado = Number(document.getElementById('valor_apurado').value);
+        const qtdeVendido = Number(document.getElementById('qtde_vendido').value);
+        const abastecido = Number(document.getElementById('abastecido').value);
+        const qtdeDeixada = Number(document.getElementById('qtde_deixada').value);
+
+        if (!Number.isFinite(valorApurado) || valorApurado < 0) {
+            event.preventDefault();
+            window.AppAlerts?.error('Valor apurado deve ser um número válido e não negativo.');
+            return false;
+        }
+
+        if (!Number.isInteger(qtdeVendido) || qtdeVendido < 0 || !Number.isInteger(abastecido) || abastecido < 0) {
+            event.preventDefault();
+            window.AppAlerts?.error('Vendido e abastecido devem ser números inteiros e não negativos.');
+            return false;
+        }
+
+        if (!Number.isFinite(qtdeDeixada) || qtdeDeixada < 0) {
+            event.preventDefault();
+            window.AppAlerts?.error('A quantidade deixada não pode ficar negativa. Confira vendido e abastecido.');
+            return false;
+        }
+
+        return true;
+    }
+
     document.getElementById('abastecido').addEventListener('input', calculateQuantidadeDeixada);
     document.getElementById('qtde_vendido').addEventListener('input', calculateQuantidadeDeixada);
+    document.querySelector('.consignados-edit-form')?.addEventListener('submit', validarSangriaConsignados);
+    calculateQuantidadeDeixada();
     </script>
 </body>
 </html>

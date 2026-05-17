@@ -95,6 +95,16 @@ addSangria = async (req, res) => {
     const percentualComissao = parseCommissionPercent(comissao);
     const tipoPagamento = parsePaymentType(tipo_pagamento);
 
+    const hasSameDate = await BolinhasSangriaModel.hasSangriaOnDate({
+      estabelecimentoId,
+      assinanteId: usuario.assinante_id,
+      dataSangria
+    });
+
+    if (hasSameDate) {
+      throw new Error('Este ponto ja possui uma sangria de bolinhas nesta data. Edite o registro existente ou escolha outra data.');
+    }
+
     const valorDaComissao = valorApurado * (percentualComissao / 100);
 
     const valorLiquido = valorApurado - valorDaComissao;
@@ -225,7 +235,11 @@ addSangria = async (req, res) => {
     );
   } catch (error) {
     console.error('Erro ao adicionar sangria:', error);
-    return res.redirect('/bolinhas/sangrias?error=Erro ao adicionar sangria');
+    return res.redirect(
+      `/bolinhas/sangrias?error=${encodeURIComponent(
+        error.message || 'Erro ao adicionar sangria'
+      )}`
+    );
   }
 };
   // Método para listar todas as sangrias
@@ -330,6 +344,17 @@ addSangria = async (req, res) => {
         return res.redirect('/bolinhas/sangrias?error=Sangria nao encontrada');
       }
 
+      const hasSameDate = await BolinhasSangriaModel.hasSangriaOnDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria,
+        excludeId: id
+      });
+
+      if (hasSameDate) {
+        throw new Error('Este ponto ja possui outra sangria de bolinhas nesta data. Edite o registro existente ou escolha outra data.');
+      }
+
       const produtoVinculado = await VisitasModel.findProdutoBySangria({
         sangria_id: id,
         assinante_id: usuario.assinante_id,
@@ -365,7 +390,11 @@ addSangria = async (req, res) => {
       res.redirect('/bolinhas/sangrias?success=Sangria atualizada com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar sangria:', error);
-      res.redirect('/bolinhas/sangrias?error=Erro ao atualizar sangria');
+      res.redirect(
+        `/bolinhas/sangrias?error=${encodeURIComponent(
+          error.message || 'Erro ao atualizar sangria'
+        )}`
+      );
     }
   };
 
@@ -400,7 +429,10 @@ addSangria = async (req, res) => {
       console.error('Erro ao deletar sangria:', error);
       res
         .status(500)
-        .json({ success: false, message: 'Erro ao excluir sangria' });
+        .json({
+          success: false,
+          message: error.message || 'Erro ao excluir sangria'
+        });
     }
   };
 
