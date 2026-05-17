@@ -246,7 +246,9 @@ class PeluciasModel {
       observacoes,
       leitura_atual,
       abastecido,
-      qtde_vendido
+      qtde_vendido,
+      ultima_leitura,
+      estoque
     } = sangria;
 
     const query = `
@@ -263,6 +265,8 @@ class PeluciasModel {
         leitura_atual = $9,
         abastecido = $10,
         qtde_vendido = $11,
+        ultima_leitura = COALESCE($14, ultima_leitura),
+        estoque = COALESCE($15, estoque),
         data_atualizacao = CURRENT_TIMESTAMP
       FROM estabelecimentos e
       WHERE s.id = $12
@@ -287,7 +291,9 @@ class PeluciasModel {
       abastecido,
       qtde_vendido,
       id,
-      assinante_id
+      assinante_id,
+      ultima_leitura,
+      estoque
     ]);
 
     if (result.rowCount === 0) {
@@ -396,6 +402,63 @@ class PeluciasModel {
     ]);
 
     return result.rows;
+  };
+
+  getPreviousSangriaBeforeDate = async ({
+    estabelecimentoId,
+    assinanteId,
+    dataSangria,
+    excludeId = null
+  }) => {
+    const query = `
+      SELECT *
+      FROM sangrias_pelucias
+      WHERE estabelecimento_id = $1
+        AND assinante_id = $2
+        AND id <> COALESCE($4::BIGINT, -1)
+        AND data_sangria < $3::date
+      ORDER BY data_sangria DESC, id DESC
+      LIMIT 1
+    `;
+
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId,
+      dataSangria,
+      excludeId
+    ]);
+
+    return result.rows[0] || null;
+  };
+
+  hasLaterSangria = async ({
+    estabelecimentoId,
+    assinanteId,
+    dataSangria,
+    id
+  }) => {
+    const query = `
+      SELECT EXISTS (
+        SELECT 1
+        FROM sangrias_pelucias
+        WHERE estabelecimento_id = $1
+          AND assinante_id = $2
+          AND id <> $4
+          AND (
+            data_sangria > $3::date
+            OR (data_sangria = $3::date AND id > $4)
+          )
+      ) AS has_later
+    `;
+
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId,
+      dataSangria,
+      id
+    ]);
+
+    return Boolean(result.rows[0]?.has_later);
   };
 
   getUltimaDataSangria = async (estabelecimentoId, assinanteId) => {

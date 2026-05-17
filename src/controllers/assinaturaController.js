@@ -1,4 +1,5 @@
 import AssinanteModel from '../models/assinanteModel.js';
+import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 import { isSaasAdminUser } from '../utilities/saasAdmin.js';
 
@@ -13,12 +14,47 @@ const PRODUCT_OPTIONS = [
   { value: 'PELUCIAS', label: 'Pelúcias', className: 'modern-checkbox-violet' }
 ];
 
+const PRODUCT_LABELS = {
+  BOLINHAS: 'Bolinhas',
+  CONSIGNADOS: 'Consignados',
+  PELUCIAS: 'Pelucias'
+};
+
 function canAccessProductSettings(req, res) {
   return Boolean(
     req.user?.status_assinatura === 'trial'
     || res.locals?.isSaasAdmin
     || isSaasAdminUser(req.user)
   );
+}
+
+function assertEnabledProductsPreserveHistory({
+  produtosAtuais,
+  produtosNovos,
+  usageSummary
+}) {
+  const produtosComHistorico = Object.entries(usageSummary)
+    .filter(([, total]) => Number(total || 0) > 0)
+    .map(([produto]) => produto);
+  const produtosProtegidos = [
+    ...new Set([
+      ...normalizeSelectedProdutos(produtosAtuais),
+      ...produtosComHistorico
+    ])
+  ];
+  const removidosComHistorico = produtosProtegidos
+    .filter(produto => !produtosNovos.includes(produto))
+    .filter(produto => Number(usageSummary[produto] || 0) > 0);
+
+  if (removidosComHistorico.length) {
+    const labels = removidosComHistorico
+      .map(produto => PRODUCT_LABELS[produto] || produto)
+      .join(', ');
+
+    throw new Error(
+      `Nao e possivel remover ${labels}, pois ja existe historico cadastrado nessa ferramenta.`
+    );
+  }
 }
 
 class AssinaturaController {
@@ -118,6 +154,22 @@ class AssinaturaController {
       if (!produtos.length) {
         throw new Error('Selecione pelo menos uma ferramenta para a sua operação.');
       }
+
+      const assinante = await AssinanteModel.findById(req.user.assinante_id);
+
+      if (!assinante) {
+        throw new Error('Assinatura nÃ£o encontrada.');
+      }
+
+      const usageSummary = await EstabelecimentoModel.getTenantProductUsageSummary(
+        req.user.assinante_id
+      );
+
+      assertEnabledProductsPreserveHistory({
+        produtosAtuais: assinante.produtos_habilitados,
+        produtosNovos: produtos,
+        usageSummary
+      });
 
       await AssinanteModel.updateFromAdmin(req.user.assinante_id, {
         produtos_habilitados: produtos

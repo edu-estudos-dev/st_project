@@ -203,7 +203,44 @@
 
             if (confirmationMessage && !window.confirm(confirmationMessage)) {
                 event.preventDefault();
+                return;
             }
+
+            const form = event.target;
+
+            if (!form || form.dataset.allowMultipleSubmit === 'true') {
+                return;
+            }
+
+            if (form.dataset.submitting === 'true') {
+                event.preventDefault();
+                return;
+            }
+
+            form.dataset.submitting = 'true';
+
+            window.setTimeout(() => {
+                if (event.defaultPrevented) {
+                    delete form.dataset.submitting;
+                    return;
+                }
+
+                if (form.querySelector(':invalid')) {
+                    delete form.dataset.submitting;
+                    return;
+                }
+
+                const submitter = event.submitter || document.activeElement;
+
+                if (
+                    submitter &&
+                    submitter.matches('button, input[type="submit"]') &&
+                    submitter.dataset.noSubmitLock !== 'true'
+                ) {
+                    submitter.disabled = true;
+                    submitter.setAttribute('aria-busy', 'true');
+                }
+            }, 0);
         }, true);
 
         document.addEventListener('DOMContentLoaded', () => {

@@ -179,6 +179,31 @@ for (const [name, file] of [
 }
 
 for (const [name, file] of [
+  ['Bolinha nao troca estabelecimento de sangria ligada a visita', 'src/controllers/bolinhaController.js'],
+  ['Consignado nao troca estabelecimento de sangria ligada a visita', 'src/controllers/consignadosController.js'],
+  ['Pelucia nao troca estabelecimento de sangria ligada a visita', 'src/controllers/peluciasController.js']
+]) {
+  addCheck(
+    name,
+    file,
+    includesAll('findProdutoBySangria', 'nao pode trocar de estabelecimento'),
+    'Editar sangria vinculada nao pode corromper o historico da visita guiada.'
+  );
+}
+
+for (const [name, file] of [
+  ['Consignado protege estoque futuro ao editar sangria', 'src/controllers/consignadosController.js'],
+  ['Pelucia protege estoque futuro ao editar sangria', 'src/controllers/peluciasController.js']
+]) {
+  addCheck(
+    name,
+    file,
+    includesAll('hasLaterSangria', 'getPreviousSangriaBeforeDate', 'estoque futuro'),
+    'Editar sangria antiga nao pode deixar registros futuros de estoque incoerentes.'
+  );
+}
+
+for (const [name, file] of [
   ['Bolinha recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/bolinhaController.js'],
   ['Consignado recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/consignadosController.js'],
   ['Pelucia recalcula receita consolidada quando mexe em mes antigo', 'src/controllers/peluciasController.js']
@@ -206,10 +231,153 @@ addCheck(
 );
 
 addCheck(
+  'Lancamentos validam datas antes de gravar',
+  'src/controllers/lancamentoController.js',
+  includesAll('normalizeDateOnly', 'dataNormalizada', 'Data de vencimento'),
+  'Data invalida nao pode virar erro 500 nem entrar no banco por POST manual.'
+);
+
+addCheck(
+  'Receita consolidada usa trava por assinante produto e mes',
+  'src/models/lancamentoModel.js',
+  includesAll('withConsolidatedRevenueLock', 'pg_advisory_xact_lock', 'receita-consolidada'),
+  'Duas sangrias simultaneas no mesmo mes nao podem criar duas entradas consolidadas.'
+);
+
+addCheck(
+  'Backend bloqueia submissao duplicada em andamento',
+  'app.js',
+  includesAll('preventDuplicateSubmission', 'app.use(preventDuplicateSubmission())'),
+  'Duplo clique ou POST repetido nao pode criar registros duplicados.'
+);
+
+addCheck(
+  'Formulario global trava reenvio duplo sem quebrar AJAX',
+  'src/views/partials/head.ejs',
+  includesAll("form.dataset.submitting === 'true'", 'event.defaultPrevented', "submitter.disabled = true"),
+  'Clique duplo no navegador deve ser bloqueado, mas formularios que usam preventDefault precisam continuar funcionando.'
+);
+
+addCheck(
+  'Visitas guiadas validam produto pendente antes de criar sangria',
+  'src/models/visitasModel.js',
+  includesAll('findProdutoByVisita', "AND status = 'pendente'", 'pg_advisory_xact_lock'),
+  'Campos ocultos adulterados ou reenvio nao podem criar sangria orfa ou trocar produto ja registrado.'
+);
+
+addCheck(
+  'Inicio de rota valida pontos ativos e remove duplicados',
+  'src/controllers/rotasController.js',
+  includesAll('normalizeRoutePointIds', 'findActiveRoutePointIds', 'pontosNormalizados.length > 100'),
+  'POST manual nao pode iniciar rota com ponto duplicado, inativo ou fora do produto selecionado.'
+);
+
+addCheck(
   'Produtos disponiveis falham fechado se assinatura nao carregar',
   'src/models/estabelecimentoModel.js',
   includesAll('bolinhas: false', 'figurinhas: false', 'pelucias: false'),
   'Erro ao consultar assinatura nao deve liberar todos os modulos por engano.'
+);
+
+addCheck(
+  'Estabelecimento nao remove produto com historico operacional',
+  'src/controllers/estabelecimentoController.js',
+  includesAll('assertProductHistoryIsPreserved', 'getProductUsageSummary', 'jÃ¡ possui histÃ³rico de operaÃ§Ã£o'),
+  'Remover produto de ponto com sangrias faz registros sumirem das telas filtradas pelo produto atual.'
+);
+
+addCheck(
+  'Estabelecimento nao reescreve estoque inicial com historico',
+  'src/controllers/estabelecimentoController.js',
+  includesAll('assertInitialValuesAreNotRewritten', 'quantidade inicial de consignados', 'dados iniciais de pelÃºcias'),
+  'Alterar leitura ou estoque inicial depois de movimentos reais corrompe a base de calculo.'
+);
+
+addCheck(
+  'Assinatura nao remove ferramenta com historico do assinante',
+  'src/controllers/assinaturaController.js',
+  includesAll('assertEnabledProductsPreserveHistory', 'getTenantProductUsageSummary', 'ja existe historico cadastrado'),
+  'Remover ferramenta da assinatura com dados existentes pode esconder modulos e historico do cliente.'
+);
+
+addCheck(
+  'Admin nao remove ferramenta com historico do assinante',
+  'src/controllers/adminAssinantesController.js',
+  includesAll('assertEnabledProductsPreserveHistory', 'getTenantProductUsageSummary', 'ja possui historico nessa ferramenta'),
+  'Mesmo no admin, remover produto contratado com dados existentes pode deixar o assinante sem acesso ao proprio historico.'
+);
+
+addCheck(
+  'Admin valida ID data dinheiro e produtos antes de alterar assinatura',
+  'src/controllers/adminAssinantesController.js',
+  allOf(
+    includesAll('parsePositiveId', 'normalizeSelectedProdutos', 'VALID_PRODUCT_VALUES'),
+    matchesAll(/\\d\{4\}-\\d\{2\}-\\d\{2\}/, /\\d\+\(\\\.\\d\{1,2\}\)\?/)
+  ),
+  'Tela administrativa tambem precisa bloquear POST manual com ID invalido, data impossivel, valor negativo/letras e produto adulterado.'
+);
+
+addCheck(
+  'Busca global valida tamanho e caracteres do termo',
+  'src/controllers/searchController.js',
+  includesAll('normalizeSearchTerm', 'SearchValidationError', 'req.body?.termo'),
+  'Busca com termo vazio, enorme ou com caracteres suspeitos nao deve virar consulta pesada ou erro 500.'
+);
+
+addCheck(
+  'Buscas no banco tem limite de resultados',
+  'src/models/lancamentoModel.js',
+  includesAll('LIMIT 100', 'ORDER BY COALESCE(vencimento, data) DESC'),
+  'Busca ampla nao deve devolver volume sem limite para a tela.'
+);
+
+addCheck(
+  'Pagamentos bloqueiam operacoes simultaneas por assinante',
+  'src/controllers/pagamentoController.js',
+  includesAll('acquirePaymentOperationLock', 'prepare-or-switch', 'Ja existe uma operacao de pagamento em andamento'),
+  'Cliques concorrentes em iniciar/trocar pagamento podem criar ou cancelar cobrancas em ordem confusa.'
+);
+
+addCheck(
+  'Dados de cobranca limitam tamanho e caracteres perigosos',
+  'src/controllers/pagamentoController.js',
+  includesAll('billingNome.length > 150', '/[<>]/.test(billingNome)', 'billingEmail.length > 150'),
+  'Dados de cobranca enviados manualmente nao devem aceitar nomes enormes ou caracteres suspeitos.'
+);
+
+addCheck(
+  'Admin comunidade sanitiza retorno e IDs',
+  'src/controllers/adminComunidadeController.js',
+  includesAll('getRedirectBack', 'new URL', "parsed.pathname.startsWith('/comunidade')", 'parsePositiveId'),
+  'Referer externo nao deve virar redirect de admin, e IDs invalidos nao devem chegar ao model.'
+);
+
+addCheck(
+  'Estabelecimento nao encerra ponto com visita aberta',
+  'src/controllers/estabelecimentoController.js',
+  includesAll('hasOpenOperationalVisit', 'visita em andamento', 'Finalize ou cancele'),
+  'Encerrar ponto durante rota em andamento pode quebrar o fluxo operacional do usuario em campo.'
+);
+
+addCheck(
+  'Banco tem migration com constraints operacionais',
+  'migrations/017_add_operational_safety_constraints.sql',
+  includesAll(
+    'chk_sangrias_bolinha_non_negative_values',
+    'chk_sangrias_consignados_non_negative_values',
+    'chk_sangrias_pelucias_non_negative_values',
+    'chk_lancamentos_safe_numbers',
+    'chk_visitas_status_values',
+    'NOT VALID'
+  ),
+  'Validacao precisa existir tambem no banco para proteger novos dados se algum endpoint falhar.'
+);
+
+addCheck(
+  'Webhook Asaas tem auditoria local de cenarios',
+  'scripts/qa-webhook-normalizer.js',
+  includesAll('PAYMENT_RECEIVED', 'PAYMENT_OVERDUE', 'SUBSCRIPTION_DELETED', 'valor invalido vira nulo'),
+  'Eventos de pagamento precisam de simulacao local para evitar ativacao indevida por evento malformado.'
 );
 
 addCheck(

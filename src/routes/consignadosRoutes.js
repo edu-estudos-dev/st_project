@@ -12,7 +12,6 @@ router.post('/edit', requireWritableSubscription, consignadosController.updateSa
 router.post('/delete/:id', requireWritableSubscription, consignadosController.deleteSangria);
 router.post('/:id/pix-confirmado', requireWritableSubscription, consignadosController.updatePixConfirmado);
 router.get('/recibo/:id', consignadosController.gerarRecibo);
-router.get('/recibo/:id', consignadosController.gerarRecibo);
 router.get('/view/:id', consignadosController.viewSangria);
 router.get('/controle-geral', consignadosController.renderControleGeralConsignados);
 router.get('/receita-consignados', consignadosController.getReceitaConsignados);

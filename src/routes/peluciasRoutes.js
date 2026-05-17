@@ -12,7 +12,6 @@ router.post('/sangrias/edit', requireWritableSubscription, peluciasController.up
 router.post('/sangrias/delete/:id', requireWritableSubscription, peluciasController.deleteSangria);
 router.post('/sangrias/:id/pix-confirmado', requireWritableSubscription, peluciasController.updatePixConfirmado);
 router.get('/sangrias/recibo/:id', peluciasController.gerarRecibo);
-router.get('/sangrias/recibo/:id', peluciasController.gerarRecibo);
 router.get('/sangrias/view/:id', peluciasController.viewSangria);
 router.get('/sangrias/controle-geral', peluciasController.renderControleGeralPelucias);
 router.get('/sangrias/receita-pelucia', peluciasController.getReceitaPelucias);

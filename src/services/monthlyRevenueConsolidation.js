@@ -55,50 +55,58 @@ const buildDescription = (produto, ano, mes) => {
 };
 
 const upsertConsolidatedRevenue = async ({ produto, ano, mes, total, assinanteId }) => {
-  if (!Number(total || 0)) {
-    await LancamentoModel.deleteConsolidatedRevenueEntry(produto, ano, mes, assinanteId);
-    return;
-  }
-
-  const data = getLastDayOfMonth(ano, mes);
-  const descricao = buildDescription(produto, ano, mes);
-  const existentes = await LancamentoModel.findMonthlyConsolidatedRevenue(produto, ano, mes, assinanteId);
-
-  if (existentes.length > 0) {
-    const keepId = existentes[0].id;
-
-    await LancamentoModel.updateConsolidatedRevenueEntry(keepId, {
-      data,
-      valor: total,
-      descricao
-    }, assinanteId);
-
-    if (existentes.length > 1) {
-      await LancamentoModel.deleteConsolidatedRevenueDuplicates(
-        produto,
-        ano,
-        mes,
-        assinanteId,
-        keepId
-      );
-    }
-
-    return;
-  }
-
-  await LancamentoModel.create({
-    assinante_id: assinanteId,
-    entrada_saida: 'Entrada',
-    data,
-    tipo_de_lancamento: 'receita_dos_pontos',
+  return LancamentoModel.withConsolidatedRevenueLock(
     produto,
-    forma_de_pagamento: 'especie',
-    vencimento: null,
-    qtde_de_parcelas: 1,
-    valor: total,
-    descricao,
-    usuario: 'sistema'
-  });
+    ano,
+    mes,
+    assinanteId,
+    async () => {
+      if (!Number(total || 0)) {
+        await LancamentoModel.deleteConsolidatedRevenueEntry(produto, ano, mes, assinanteId);
+        return;
+      }
+
+      const data = getLastDayOfMonth(ano, mes);
+      const descricao = buildDescription(produto, ano, mes);
+      const existentes = await LancamentoModel.findMonthlyConsolidatedRevenue(produto, ano, mes, assinanteId);
+
+      if (existentes.length > 0) {
+        const keepId = existentes[0].id;
+
+        await LancamentoModel.updateConsolidatedRevenueEntry(keepId, {
+          data,
+          valor: total,
+          descricao
+        }, assinanteId);
+
+        if (existentes.length > 1) {
+          await LancamentoModel.deleteConsolidatedRevenueDuplicates(
+            produto,
+            ano,
+            mes,
+            assinanteId,
+            keepId
+          );
+        }
+
+        return;
+      }
+
+      await LancamentoModel.create({
+        assinante_id: assinanteId,
+        entrada_saida: 'Entrada',
+        data,
+        tipo_de_lancamento: 'receita_dos_pontos',
+        produto,
+        forma_de_pagamento: 'especie',
+        vencimento: null,
+        qtde_de_parcelas: 1,
+        valor: total,
+        descricao,
+        usuario: 'sistema'
+      });
+    }
+  );
 };
 
 const MONTHLY_REVENUE_MODELS = {

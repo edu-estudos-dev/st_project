@@ -10,6 +10,14 @@ class VisitasModel {
     latitude_chegada = null,
     longitude_chegada = null
   }) => {
+    const client = await connection.connect();
+
+    try {
+      await client.query('BEGIN');
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        `visita:${assinante_id}:${estabelecimento_id}:${rota_ponto_id || 'sem-rota'}`
+      ]);
+
     const visitaExistenteQuery = `
       SELECT *
       FROM visitas
@@ -25,13 +33,14 @@ class VisitasModel {
       LIMIT 1
     `;
 
-    const visitaExistente = await connection.query(visitaExistenteQuery, [
+    const visitaExistente = await client.query(visitaExistenteQuery, [
       assinante_id,
       estabelecimento_id,
       rota_ponto_id
     ]);
 
     if (visitaExistente.rows.length) {
+      await client.query('COMMIT');
       return visitaExistente.rows[0];
     }
 
@@ -61,7 +70,7 @@ class VisitasModel {
       RETURNING *
     `;
 
-    const novaVisita = await connection.query(criarVisitaQuery, [
+    const novaVisita = await client.query(criarVisitaQuery, [
       rota_id,
       rota_ponto_id,
       assinante_id,
@@ -71,7 +80,14 @@ class VisitasModel {
       longitude_chegada
     ]);
 
+    await client.query('COMMIT');
     return novaVisita.rows[0];
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   };
 
   findVisitaById = async (visitaId, assinanteId) => {
@@ -110,6 +126,48 @@ class VisitasModel {
     return result.rows;
   };
 
+  findProdutoByVisita = async ({ visita_id, assinante_id, produto }) => {
+    const produtoNormalizado = String(produto || '').trim().toUpperCase();
+
+    const query = `
+      SELECT *
+      FROM visita_produtos
+      WHERE visita_id = $1
+        AND assinante_id = $2
+        AND produto = $3
+      LIMIT 1
+    `;
+
+    const result = await connection.query(query, [
+      visita_id,
+      assinante_id,
+      produtoNormalizado
+    ]);
+
+    return result.rows[0] || null;
+  };
+
+  findProdutoBySangria = async ({ sangria_id, assinante_id, produto }) => {
+    const produtoNormalizado = String(produto || '').trim().toUpperCase();
+
+    const query = `
+      SELECT *
+      FROM visita_produtos
+      WHERE sangria_id = $1
+        AND assinante_id = $2
+        AND produto = $3
+      LIMIT 1
+    `;
+
+    const result = await connection.query(query, [
+      sangria_id,
+      assinante_id,
+      produtoNormalizado
+    ]);
+
+    return result.rows[0] || null;
+  };
+
   findVisitaCompletaById = async (visitaId, assinanteId) => {
     const visita = await this.findVisitaById(visitaId, assinanteId);
 
@@ -132,6 +190,13 @@ class VisitasModel {
     status = 'pendente'
   }) => {
     const produtoNormalizado = String(produto || '').trim().toUpperCase();
+    const client = await connection.connect();
+
+    try {
+      await client.query('BEGIN');
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        `visita-produto:${assinante_id}:${visita_id}:${produtoNormalizado}`
+      ]);
 
     const existenteQuery = `
       SELECT *
@@ -142,13 +207,14 @@ class VisitasModel {
       LIMIT 1
     `;
 
-    const existente = await connection.query(existenteQuery, [
+    const existente = await client.query(existenteQuery, [
       visita_id,
       assinante_id,
       produtoNormalizado
     ]);
 
     if (existente.rows.length) {
+      await client.query('COMMIT');
       return existente.rows[0];
     }
 
@@ -163,14 +229,21 @@ class VisitasModel {
       RETURNING *
     `;
 
-    const result = await connection.query(criarQuery, [
+    const result = await client.query(criarQuery, [
       visita_id,
       assinante_id,
       produtoNormalizado,
       status
     ]);
 
+    await client.query('COMMIT');
     return result.rows[0];
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   };
 
   iniciarProdutosDaVisita = async ({
@@ -217,6 +290,7 @@ class VisitasModel {
       WHERE visita_id = $1
         AND assinante_id = $2
         AND produto = $3
+        AND status = 'pendente'
       RETURNING *
     `;
 

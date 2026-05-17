@@ -43,6 +43,28 @@ class LancamentoModel {
     this.paymentColumnReady = false;
   }
 
+  async withConsolidatedRevenueLock(produto, ano, mes, assinanteId, callback) {
+    const client = await connection.connect();
+
+    try {
+      await client.query('BEGIN');
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        `receita-consolidada:${assinanteId}:${produto}:${ano}:${mes}`
+      ]);
+
+      const result = await callback();
+
+      await client.query('COMMIT');
+
+      return result;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
   async ensurePaymentColumn() {
     if (this.paymentColumnReady) return;
 
@@ -398,6 +420,8 @@ class LancamentoModel {
           OR entrada_saida ILIKE $3
           OR descricao ILIKE $4
         )
+      ORDER BY COALESCE(vencimento, data) DESC NULLS LAST, id DESC
+      LIMIT 100
     `;
 
     const likeQuery = `%${query}%`;

@@ -13,6 +13,7 @@ import {
   attachCsrfToken,
   requireCsrfProtection
 } from './src/middleware/csrfMiddleware.js';
+import { preventDuplicateSubmission } from './src/middleware/duplicateSubmissionProtection.js';
 import { attachNavigationContext } from './src/middleware/navigationContext.js';
 import { requireProductAvailable } from './src/middleware/productAvailability.js';
 import {
@@ -133,6 +134,7 @@ app.use(cookieParser());
 app.use(attachAuthenticatedUser);
 app.use(attachCsrfToken);
 app.use(requireCsrfProtection);
+app.use(preventDuplicateSubmission());
 app.use(disableAuthenticatedCache);
 app.use(methodOverride('_method'));
 

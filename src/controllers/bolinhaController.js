@@ -4,6 +4,13 @@ import RotasOperacionaisModel from '../models/rotasOperacionaisModel.js';
 import VisitasModel from '../models/visitasModel.js';
 import { recalculateConsolidatedRevenueForDates } from '../services/monthlyRevenueConsolidation.js';
 import { buildPagination, parsePagination } from '../utilities/pagination.js';
+import {
+  parseCommissionPercent,
+  parseNonNegativeDecimal,
+  parsePaymentType,
+  parsePositiveIntegerId,
+  parseSangriaDate
+} from '../utilities/sangriaValidation.js';
 
 class BolinhasController {
 
@@ -76,30 +83,23 @@ addSangria = async (req, res) => {
       rota_retorno_url
     } = req.body;
 
-    const valorDaComissao =
-      Number(valor_apurado || 0) * (Number(comissao || 0) / 100);
-
-    const valorLiquido = Number(valor_apurado || 0) - valorDaComissao;
-
-    const sangriaResult = await BolinhasSangriaModel.createSangria({
-      assinante_id: usuario.assinante_id,
+    const estabelecimentoId = parsePositiveIntegerId(
       estabelecimento_id,
-      data_sangria,
+      'Estabelecimento'
+    );
+    const dataSangria = parseSangriaDate(data_sangria);
+    const valorApurado = parseNonNegativeDecimal(
       valor_apurado,
-      comissao,
-      valor_comerciante: valorDaComissao,
-      valor_liquido: valorLiquido,
-      tipo_pagamento,
-      observacoes
-    });
+      'Valor apurado'
+    );
+    const percentualComissao = parseCommissionPercent(comissao);
+    const tipoPagamento = parsePaymentType(tipo_pagamento);
 
-    const sangriaId = sangriaResult?.rows?.[0]?.id || null;
+    const valorDaComissao = valorApurado * (percentualComissao / 100);
 
-    await recalculateConsolidatedRevenueForDates({
-      produto: 'bolinhas',
-      assinanteId: usuario.assinante_id,
-      dates: [data_sangria]
-    });
+    const valorLiquido = valorApurado - valorDaComissao;
+
+    let routeContext = null;
 
     if (origem === 'rota' && visita_id && rota_ponto_id) {
       const retornoSeguro =
@@ -119,19 +119,61 @@ addSangria = async (req, res) => {
 
       if (
         !visitaDaRota ||
-        Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimento_id) ||
+        visitaDaRota.status !== 'em_andamento' ||
+        Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimentoId) ||
         Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
       ) {
-        throw new Error('A visita informada nao pertence a este ponto da rota.');
+        throw new Error('A visita informada nao pertence a este ponto da rota ou ja foi finalizada.');
       }
 
-      await VisitasModel.marcarProdutoRegistrado({
+      const produtoDaVisita = await VisitasModel.findProdutoByVisita({
+        visita_id,
+        assinante_id: usuario.assinante_id,
+        produto: 'BOLINHAS'
+      });
+
+      if (!produtoDaVisita || produtoDaVisita.status !== 'pendente') {
+        throw new Error('Bolinhas ja foi registrada ou nao esta pendente nesta visita.');
+      }
+
+      routeContext = {
+        retornoSeguro,
+        rotaRetornoSeguro
+      };
+    }
+
+    const sangriaResult = await BolinhasSangriaModel.createSangria({
+      assinante_id: usuario.assinante_id,
+      estabelecimento_id: estabelecimentoId,
+      data_sangria: dataSangria,
+      valor_apurado: valorApurado,
+      comissao: percentualComissao,
+      valor_comerciante: valorDaComissao,
+      valor_liquido: valorLiquido,
+      tipo_pagamento: tipoPagamento,
+      observacoes
+    });
+
+    const sangriaId = sangriaResult?.rows?.[0]?.id || null;
+
+    await recalculateConsolidatedRevenueForDates({
+      produto: 'bolinhas',
+      assinanteId: usuario.assinante_id,
+      dates: [dataSangria]
+    });
+
+    if (routeContext) {
+      const produtoRegistrado = await VisitasModel.marcarProdutoRegistrado({
         visita_id,
         assinante_id: usuario.assinante_id,
         produto: 'BOLINHAS',
         sangria_id: sangriaId,
         observacoes: observacoes || null
       });
+
+      if (!produtoRegistrado) {
+        throw new Error('Bolinhas ja foi registrada ou nao esta pendente nesta visita.');
+      }
 
       try {
         await VisitasModel.finalizarVisita({
@@ -153,10 +195,10 @@ addSangria = async (req, res) => {
           );
         }
 
-        const separador = rotaRetornoSeguro.includes('?') ? '&' : '?';
+        const separador = routeContext.rotaRetornoSeguro.includes('?') ? '&' : '?';
 
         return res.redirect(
-          `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
+          `${routeContext.rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
             rota_ponto_id
           )}&success=${encodeURIComponent('Visita finalizada com sucesso')}`
         );
@@ -165,10 +207,10 @@ addSangria = async (req, res) => {
           finalizarError.message &&
           finalizarError.message.includes('Ainda existem produtos pendentes')
         ) {
-          const separador = retornoSeguro.includes('?') ? '&' : '?';
+          const separador = routeContext.retornoSeguro.includes('?') ? '&' : '?';
 
           return res.redirect(
-            `${retornoSeguro}${separador}success=${encodeURIComponent(
+            `${routeContext.retornoSeguro}${separador}success=${encodeURIComponent(
               'Bolinhas registrada. Ainda existem produtos pendentes nesta visita.'
             )}`
           );
@@ -265,8 +307,19 @@ addSangria = async (req, res) => {
         observacoes
       } = req.body;
 
-      const valor_da_comissao = valor_apurado * (comissao / 100);
-      const valor_liquido = valor_apurado - valor_da_comissao;
+      const estabelecimentoId = parsePositiveIntegerId(
+        estabelecimento_id,
+        'Estabelecimento'
+      );
+      const dataSangria = parseSangriaDate(data_sangria);
+      const valorApurado = parseNonNegativeDecimal(
+        valor_apurado,
+        'Valor apurado'
+      );
+      const percentualComissao = parseCommissionPercent(comissao);
+      const tipoPagamento = parsePaymentType(tipo_pagamento);
+      const valor_da_comissao = valorApurado * (percentualComissao / 100);
+      const valor_liquido = valorApurado - valor_da_comissao;
 
       const sangriaAtual = await BolinhasSangriaModel.getSangriaById(
         id,
@@ -277,23 +330,36 @@ addSangria = async (req, res) => {
         return res.redirect('/bolinhas/sangrias?error=Sangria nao encontrada');
       }
 
+      const produtoVinculado = await VisitasModel.findProdutoBySangria({
+        sangria_id: id,
+        assinante_id: usuario.assinante_id,
+        produto: 'BOLINHAS'
+      });
+
+      if (
+        produtoVinculado &&
+        Number(sangriaAtual[0].estabelecimento_id) !== Number(estabelecimentoId)
+      ) {
+        throw new Error('Sangria vinculada a visita guiada nao pode trocar de estabelecimento.');
+      }
+
       await BolinhasSangriaModel.updateSangria({
         assinante_id: usuario.assinante_id,
         id,
-        estabelecimento_id,
-        data_sangria,
-        valor_apurado,
-        comissao: parseFloat(comissao),
+        estabelecimento_id: estabelecimentoId,
+        data_sangria: dataSangria,
+        valor_apurado: valorApurado,
+        comissao: percentualComissao,
         valor_comerciante: valor_da_comissao,
         valor_liquido,
-        tipo_pagamento,
+        tipo_pagamento: tipoPagamento,
         observacoes
       });
 
       await recalculateConsolidatedRevenueForDates({
         produto: 'bolinhas',
         assinanteId: usuario.assinante_id,
-        dates: [sangriaAtual[0].data_sangria, data_sangria]
+        dates: [sangriaAtual[0].data_sangria, dataSangria]
       });
 
       res.redirect('/bolinhas/sangrias?success=Sangria atualizada com sucesso');

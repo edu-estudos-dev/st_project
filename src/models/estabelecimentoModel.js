@@ -127,6 +127,8 @@ class EstabelecimentoModel {
         WHERE (estabelecimento ILIKE $1 OR responsavel_nome ILIKE $2 OR bairro ILIKE $3)
           AND status = $4
           AND assinante_id = $5
+        ORDER BY estabelecimento ASC, id ASC
+        LIMIT 100
       `;
 
       const result = await connection.query(SQL, [
@@ -361,6 +363,104 @@ class EstabelecimentoModel {
     return result.rows[0];
   };
 
+  getProductUsageSummary = async (id, assinanteId) => {
+    const result = await connection.query(
+      `
+        SELECT
+          (
+            SELECT COUNT(*)::int
+            FROM sangrias_bolinha sb
+            WHERE sb.estabelecimento_id = $1
+              AND sb.assinante_id = $2
+          ) AS bolinhas,
+          (
+            SELECT COUNT(*)::int
+            FROM sangrias_consignados sc
+            WHERE sc.estabelecimento_id = $1
+              AND sc.assinante_id = $2
+          ) AS consignados,
+          (
+            SELECT COUNT(*)::int
+            FROM sangrias_pelucias sp
+            WHERE sp.estabelecimento_id = $1
+              AND sp.assinante_id = $2
+          ) AS pelucias
+      `,
+      [id, assinanteId]
+    );
+
+    const row = result.rows[0] || {};
+
+    return {
+      BOLINHAS: Number(row.bolinhas || 0),
+      CONSIGNADOS: Number(row.consignados || 0),
+      PELUCIAS: Number(row.pelucias || 0)
+    };
+  };
+
+  getTenantProductUsageSummary = async (assinanteId) => {
+    const result = await connection.query(
+      `
+        SELECT
+          (
+            SELECT COUNT(*)::int
+            FROM estabelecimentos e
+            WHERE e.assinante_id = $1
+              AND UPPER(COALESCE(e.produto, '')) LIKE '%BOLINHAS%'
+          ) + (
+            SELECT COUNT(*)::int
+            FROM sangrias_bolinha sb
+            WHERE sb.assinante_id = $1
+          ) AS bolinhas,
+          (
+            SELECT COUNT(*)::int
+            FROM estabelecimentos e
+            WHERE e.assinante_id = $1
+              AND UPPER(COALESCE(e.produto, '')) LIKE '%CONSIGNADOS%'
+          ) + (
+            SELECT COUNT(*)::int
+            FROM sangrias_consignados sc
+            WHERE sc.assinante_id = $1
+          ) AS consignados,
+          (
+            SELECT COUNT(*)::int
+            FROM estabelecimentos e
+            WHERE e.assinante_id = $1
+              AND UPPER(COALESCE(e.produto, '')) LIKE '%PELUCIAS%'
+          ) + (
+            SELECT COUNT(*)::int
+            FROM sangrias_pelucias sp
+            WHERE sp.assinante_id = $1
+          ) AS pelucias
+      `,
+      [assinanteId]
+    );
+
+    const row = result.rows[0] || {};
+
+    return {
+      BOLINHAS: Number(row.bolinhas || 0),
+      CONSIGNADOS: Number(row.consignados || 0),
+      PELUCIAS: Number(row.pelucias || 0)
+    };
+  };
+
+  hasOpenOperationalVisit = async (id, assinanteId) => {
+    const result = await connection.query(
+      `
+        SELECT 1
+        FROM visitas
+        WHERE estabelecimento_id = $1
+          AND assinante_id = $2
+          AND status = 'em_andamento'
+        LIMIT 1
+      `,
+      [id, assinanteId]
+    );
+
+    return Boolean(result.rows[0]);
+  };
+
   destroy = async (id, assinanteId) => {
     try {
       const sql = `
@@ -487,6 +587,42 @@ class EstabelecimentoModel {
       console.error('Erro ao buscar pontos para rota:', error);
       return [];
     }
+  };
+
+  findActiveRoutePointIds = async ({ ids = [], produto = 'todos', assinanteId }) => {
+    await this.ensureEstabelecimentoColumns();
+
+    const uniqueIds = [...new Set(
+      ids
+        .map(id => Number(id))
+        .filter(id => Number.isSafeInteger(id) && id > 0)
+    )];
+
+    if (!uniqueIds.length) {
+      return new Set();
+    }
+
+    const params = ['ativo', uniqueIds, assinanteId];
+    let productFilter = '';
+
+    if (produto && String(produto).toLowerCase() !== 'todos') {
+      params.push(`%${String(produto).toUpperCase()}%`);
+      productFilter = `AND UPPER(produto) LIKE $${params.length}`;
+    }
+
+    const result = await connection.query(
+      `
+        SELECT id
+        FROM estabelecimentos
+        WHERE status = $1
+          AND id = ANY($2::int[])
+          AND assinante_id = $3
+          ${productFilter}
+      `,
+      params
+    );
+
+    return new Set(result.rows.map(row => Number(row.id)));
   };
 
   getMenuProdutosDisponiveis = async (assinanteId) => {

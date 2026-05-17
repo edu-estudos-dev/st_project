@@ -48,6 +48,39 @@ const filterProdutosByRouteFilter = (produtos, produtoFiltro = 'todos') => {
   return produtos.filter(produto => produto === filtro);
 };
 
+const normalizeRoutePointIds = pontos => {
+  if (!Array.isArray(pontos) || pontos.length === 0) {
+    return [];
+  }
+
+  const seen = new Set();
+
+  return pontos
+    .map((ponto, index) => ({
+      estabelecimento_id: Number(ponto.estabelecimento_id || ponto.id),
+      ordem: Number(ponto.ordem || index + 1)
+    }))
+    .filter(ponto => {
+      if (
+        !Number.isSafeInteger(ponto.estabelecimento_id) ||
+        ponto.estabelecimento_id < 1 ||
+        seen.has(ponto.estabelecimento_id)
+      ) {
+        return false;
+      }
+
+      seen.add(ponto.estabelecimento_id);
+      return true;
+    })
+    .map((ponto, index) => ({
+      ...ponto,
+      ordem:
+        Number.isSafeInteger(ponto.ordem) && ponto.ordem > 0
+          ? ponto.ordem
+          : index + 1
+    }));
+};
+
 const buildGoogleMapsRoute = addresses => {
   if (!addresses.length) return null;
 
@@ -195,10 +228,32 @@ class RotasController {
         pontos = []
       } = req.body;
 
-      if (!Array.isArray(pontos) || pontos.length === 0) {
+      const pontosNormalizados = normalizeRoutePointIds(pontos);
+
+      if (!pontosNormalizados.length) {
         return res.status(400).json({
           success: false,
           message: 'Nenhum ponto foi enviado para iniciar a rota.'
+        });
+      }
+
+      if (pontosNormalizados.length > 100) {
+        return res.status(400).json({
+          success: false,
+          message: 'A rota nao pode ter mais de 100 pontos.'
+        });
+      }
+
+      const pontosAtivos = await EstabelecimentoModel.findActiveRoutePointIds({
+        ids: pontosNormalizados.map(ponto => ponto.estabelecimento_id),
+        produto,
+        assinanteId: usuario.assinante_id
+      });
+
+      if (pontosAtivos.size !== pontosNormalizados.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'A rota contem ponto inativo, inexistente ou fora do produto selecionado.'
         });
       }
 
@@ -216,10 +271,7 @@ class RotasController {
       const pontosDaRota = await RotasOperacionaisModel.createRotaPontos({
         rota_id: rota.id,
         assinante_id: usuario.assinante_id,
-        pontos: pontos.map((ponto, index) => ({
-          estabelecimento_id: ponto.estabelecimento_id || ponto.id,
-          ordem: ponto.ordem || index + 1
-        }))
+        pontos: pontosNormalizados
       });
 
       return res.status(201).json({

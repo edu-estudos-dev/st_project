@@ -2,6 +2,10 @@ import LancamentoModel from '../models/lancamentoModel.js';
 import { addMonths } from 'date-fns';
 import { hasProduto } from '../utilities/produtoUtils.js';
 import { buildPagination, parsePagination } from '../utilities/pagination.js';
+import {
+  normalizeSearchTerm,
+  SearchValidationError
+} from '../utilities/searchValidation.js';
 
 const TIPOS_POR_MOVIMENTO = {
   Entrada: new Set(['receita_dos_pontos', 'incremento_de_capital']),
@@ -40,6 +44,25 @@ const ehLancamentoParceladoComVencimento = (lancamento) =>
   && FORMAS_PAGAMENTO_PARCELAVEIS.has(String(lancamento?.forma_de_pagamento || '').toLowerCase())
   && Number(lancamento?.qtde_de_parcelas || 0) > 1;
 
+const normalizeDateOnly = (value, fieldLabel) => {
+  const raw = String(value || '').trim();
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+    throw new Error(`${fieldLabel} invalida.`);
+  }
+
+  const parsed = new Date(`${raw}T00:00:00`);
+
+  if (
+    Number.isNaN(parsed.getTime()) ||
+    parsed.toISOString().slice(0, 10) !== raw
+  ) {
+    throw new Error(`${fieldLabel} invalida.`);
+  }
+
+  return raw;
+};
+
 const validateLancamentoPayload = ({
   payload,
   usuario,
@@ -51,8 +74,11 @@ const validateLancamentoPayload = ({
     produto,
     forma_de_pagamento,
     qtde_de_parcelas,
+    data,
     valor
   } = payload;
+
+  const dataNormalizada = normalizeDateOnly(data, 'Data');
 
   if (!['Entrada', 'Saida'].includes(entrada_saida)) {
     throw new Error('Entrada ou saída inválida.');
@@ -114,6 +140,7 @@ const validateLancamentoPayload = ({
 
   return {
     parcelas: parcelasNormalizadas,
+    dataNormalizada,
     valorNumerico,
     produtoNormalizado,
     vencimentoObrigatorio: exigeVencimentoParcelado({
@@ -149,6 +176,17 @@ class LancamentoController {
         })
       });
     } catch (error) {
+      if (error instanceof SearchValidationError) {
+        return res.status(400).render('pages/lancamentos/tabelaLancamento', {
+          title: 'Resultados da Pesquisa - Lancamentos',
+          lancamentos: [],
+          search: true,
+          usuario,
+          tipoFiltro: 'todos',
+          error: error.message
+        });
+      }
+
       console.error('Erro ao listar lançamentos:', error);
       return res.status(500).send('Erro ao listar lançamentos.');
     }
@@ -222,6 +260,7 @@ class LancamentoController {
     try {
       const {
         parcelas,
+        dataNormalizada,
         valorNumerico,
         produtoNormalizado,
         vencimentoObrigatorio
@@ -234,9 +273,13 @@ class LancamentoController {
         return res.status(400).send('Informe a data de vencimento da primeira parcela.');
       }
 
+      const vencimentoNormalizado = vencimentoObrigatorio
+        ? normalizeDateOnly(vencimento, 'Data de vencimento')
+        : null;
+
       if (vencimentoObrigatorio) {
         const valorParcela = valorNumerico / parcelas;
-        const baseVencimento = new Date(`${vencimento}T00:00:00`);
+        const baseVencimento = new Date(`${vencimentoNormalizado}T00:00:00`);
 
         for (let i = 0; i < parcelas; i++) {
           const vencimentoParcela = addMonths(baseVencimento, i).toISOString().split('T')[0];
@@ -244,7 +287,7 @@ class LancamentoController {
           await LancamentoModel.create({
             assinante_id: usuario.assinante_id,
             entrada_saida,
-            data,
+            data: dataNormalizada,
             tipo_de_lancamento,
             produto: produtoNormalizado,
             forma_de_pagamento,
@@ -259,7 +302,7 @@ class LancamentoController {
         await LancamentoModel.create({
           assinante_id: usuario.assinante_id,
           entrada_saida,
-          data,
+          data: dataNormalizada,
           tipo_de_lancamento,
           produto: produtoNormalizado,
           forma_de_pagamento,
@@ -363,6 +406,7 @@ class LancamentoController {
 
       const {
         parcelas,
+        dataNormalizada,
         valorNumerico,
         produtoNormalizado,
         vencimentoObrigatorio
@@ -376,11 +420,13 @@ class LancamentoController {
         return res.status(400).send('Informe a data de vencimento da primeira parcela.');
       }
 
-      const vencimentoNormalizado = vencimentoObrigatorio ? vencimento : null;
+      const vencimentoNormalizado = vencimentoObrigatorio
+        ? normalizeDateOnly(vencimento, 'Data de vencimento')
+        : null;
 
       await LancamentoModel.update(id, usuario.assinante_id, {
         entrada_saida,
-        data,
+        data: dataNormalizada,
         tipo_de_lancamento,
         produto: produtoNormalizado,
         forma_de_pagamento,
@@ -395,7 +441,7 @@ class LancamentoController {
         lancamento: {
           id,
           entrada_saida,
-          data,
+          data: dataNormalizada,
           tipo_de_lancamento,
           produto: produtoNormalizado,
           forma_de_pagamento,
@@ -508,8 +554,21 @@ class LancamentoController {
   };
 
   search = async (req, res) => {
-    const { termo } = req.body;
     const usuario = req.user;
+
+    let termo;
+    try {
+      termo = normalizeSearchTerm(req.body?.termo);
+    } catch (error) {
+      return res.status(400).render('pages/lancamentos/tabelaLancamento', {
+        title: 'Resultados da Pesquisa - Lancamentos',
+        lancamentos: [],
+        search: true,
+        usuario,
+        tipoFiltro: 'todos',
+        error: error.message
+      });
+    }
 
     try {
       const lancamentos = await LancamentoModel.search(

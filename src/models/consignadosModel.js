@@ -336,6 +336,63 @@ class ConsignadosModel {
     return result.rows;
   };
 
+  getPreviousSangriaBeforeDate = async ({
+    estabelecimentoId,
+    assinanteId,
+    dataSangria,
+    excludeId = null
+  }) => {
+    const query = `
+      SELECT *
+      FROM sangrias_consignados
+      WHERE estabelecimento_id = $1
+        AND assinante_id = $2
+        AND id <> COALESCE($4::BIGINT, -1)
+        AND data_sangria < $3::date
+      ORDER BY data_sangria DESC, id DESC
+      LIMIT 1
+    `;
+
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId,
+      dataSangria,
+      excludeId
+    ]);
+
+    return result.rows[0] || null;
+  };
+
+  hasLaterSangria = async ({
+    estabelecimentoId,
+    assinanteId,
+    dataSangria,
+    id
+  }) => {
+    const query = `
+      SELECT EXISTS (
+        SELECT 1
+        FROM sangrias_consignados
+        WHERE estabelecimento_id = $1
+          AND assinante_id = $2
+          AND id <> $4
+          AND (
+            data_sangria > $3::date
+            OR (data_sangria = $3::date AND id > $4)
+          )
+      ) AS has_later
+    `;
+
+    const result = await connection.query(query, [
+      estabelecimentoId,
+      assinanteId,
+      dataSangria,
+      id
+    ]);
+
+    return Boolean(result.rows[0]?.has_later);
+  };
+
   getMonthlyRevenue = async assinanteId => {
     const query = `
       SELECT

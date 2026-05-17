@@ -1009,6 +1009,7 @@
 
 .estabelecimentos-list-shell .estabelecimentos-table.is-commercial-view .est-col-location {
   width: 43%;
+  text-align: left;
 }
 
 .estabelecimentos-list-shell .estabelecimentos-table.is-commercial-view .est-col-responsible {
@@ -1997,7 +1998,7 @@
 
   .estabelecimentos-list-shell .estabelecimentos-table td {
     display: grid;
-    grid-template-columns: minmax(94px, 0.42fr) minmax(0, 1fr) !important;
+    grid-template-columns: 118px minmax(0, 1fr) !important;
     align-items: center !important;
     gap: 0.62rem !important;
     min-height: 42px !important;
@@ -2025,6 +2026,7 @@
     letter-spacing: 0.052em;
     text-align: left !important;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .estabelecimentos-list-shell .estabelecimentos-table td > *:not(.table-actions) {
@@ -2078,8 +2080,6 @@
     text-align: left !important;
   }
 
-  .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link,
-  .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link span,
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-responsible .estabelecimento-responsible-stack,
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-product .product-setup-badges,
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-operation-group .estabelecimento-operation-stack,
@@ -2090,23 +2090,31 @@
 
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link {
     display: inline-flex !important;
-    width: auto !important;
+    justify-self: start !important;
+    width: 100% !important;
     max-width: 100% !important;
-    justify-content: flex-end !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
   }
 
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link i {
     flex: 0 0 auto !important;
+    margin-top: 0.06rem !important;
+  }
+
+  .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link span {
+    justify-self: start !important;
+    text-align: left !important;
   }
 
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link strong,
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-location .estabelecimento-address-link small {
     display: block !important;
-    max-width: 160px !important;
+    max-width: 100% !important;
     white-space: normal !important;
     overflow: visible !important;
     text-overflow: clip !important;
-    text-align: right !important;
+    text-align: left !important;
   }
 
   .estabelecimentos-list-shell .estabelecimentos-table .est-col-responsible .estabelecimento-responsible-stack {
@@ -2362,7 +2370,7 @@
   }
 
   .estabelecimentos-list-shell .estabelecimentos-table td {
-    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-columns: 112px minmax(0, 1fr);
     gap: 0.48rem;
   }
 

@@ -15,6 +15,25 @@ import {
 
 const ALLOWED_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
 const ACTIVE_BILLING_TYPES = new Set(['BOLETO', 'PIX', 'CREDIT_CARD']);
+const paymentOperationLocks = new Map();
+
+function acquirePaymentOperationLock(assinanteId, operationName) {
+  const lockKey = `${assinanteId}:${operationName}`;
+
+  if (paymentOperationLocks.has(lockKey)) {
+    const error = new Error(
+      'Ja existe uma operacao de pagamento em andamento. Aguarde alguns segundos e tente novamente.'
+    );
+    error.statusCode = 409;
+    throw error;
+  }
+
+  paymentOperationLocks.set(lockKey, Date.now());
+
+  return () => {
+    paymentOperationLocks.delete(lockKey);
+  };
+}
 
 function onlyDigits(value) {
   return String(value || '').replace(/\D/g, '');
@@ -149,6 +168,14 @@ function validateBillingData(data) {
     errors.push('Informe o nome ou razão social para cobrança.');
   }
 
+  if (billingNome && billingNome.length > 150) {
+    errors.push('Nome ou razao social deve ter no maximo 150 caracteres.');
+  }
+
+  if (billingNome && /[<>]/.test(billingNome)) {
+    errors.push('Nome ou razao social contem caracteres invalidos.');
+  }
+
   if (!billingCpfCnpj) {
     errors.push('Informe o CPF ou CNPJ para cobrança.');
   }
@@ -159,6 +186,10 @@ function validateBillingData(data) {
 
   if (billingEmail && !billingEmail.includes('@')) {
     errors.push('Informe um e-mail de cobrança válido.');
+  }
+
+  if (billingEmail && billingEmail.length > 150) {
+    errors.push('E-mail de cobranca deve ter no maximo 150 caracteres.');
   }
 
   if (
@@ -864,7 +895,7 @@ async function obterDadosCobranca(req, res) {
   } catch (error) {
     console.error('Erro ao obter dados de cobrança:', error);
 
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: 'Erro ao obter dados de cobrança.'
     });
@@ -924,6 +955,12 @@ async function iniciarPagamento(req, res) {
         message: 'Assinante não identificado.'
       });
     }
+
+    const releasePaymentLock = acquirePaymentOperationLock(
+      assinanteId,
+      'prepare-or-switch'
+    );
+    res.once('finish', releasePaymentLock);
 
     const assinante = await AssinanteModel.findById(assinanteId);
 
@@ -1026,9 +1063,11 @@ async function iniciarPagamento(req, res) {
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);
 
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: 'Não foi possível preparar o pagamento. Tente novamente em alguns instantes.'
+      message: error.statusCode
+        ? error.message
+        : 'Não foi possível preparar o pagamento. Tente novamente em alguns instantes.'
     });
   }
 }
@@ -1045,6 +1084,12 @@ async function trocarFormaPagamento(req, res) {
         message: 'Assinante não identificado.'
       });
     }
+
+    const releasePaymentLock = acquirePaymentOperationLock(
+      assinanteId,
+      'prepare-or-switch'
+    );
+    res.once('finish', releasePaymentLock);
 
     const assinante = await AssinanteModel.findById(assinanteId);
 
@@ -1176,9 +1221,11 @@ async function trocarFormaPagamento(req, res) {
   } catch (error) {
     console.error('Erro ao trocar forma de pagamento:', error);
 
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: 'Não foi possível trocar a forma de pagamento. Tente novamente em alguns instantes.'
+      message: error.statusCode
+        ? error.message
+        : 'Não foi possível trocar a forma de pagamento. Tente novamente em alguns instantes.'
     });
   }
 }

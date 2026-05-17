@@ -7,6 +7,14 @@ import {
   gerarReciboPdfBuffer
 } from '../utils/reciboPdf.js';
 import { buildPagination, parsePagination } from '../utilities/pagination.js';
+import {
+  parseCommissionPercent,
+  parseNonNegativeDecimal,
+  parseNonNegativeInteger,
+  parsePaymentType,
+  parsePositiveIntegerId,
+  parseSangriaDate
+} from '../utilities/sangriaValidation.js';
 class PeluciasController {
   addSangriaForm = async (req, res) => {
     const usuario = req.user || null;
@@ -81,19 +89,20 @@ class PeluciasController {
     } = req.body;
 
     try {
+      const estabelecimentoId = parsePositiveIntegerId(
+        estabelecimento_id,
+        'Estabelecimento'
+      );
+      const dataSangria = parseSangriaDate(data_sangria);
       const isAberturaInicial = abertura_inicial === 'on';
-      const hasHistorico = estabelecimento_id
+      const hasHistorico = estabelecimentoId
         ? await peluciasModel.hasSangria(
-            estabelecimento_id,
+            estabelecimentoId,
             usuario.assinante_id
           )
         : false;
 
       if (isAberturaInicial) {
-        if (!estabelecimento_id || !data_sangria) {
-          throw new Error('Estabelecimento e data são obrigatórios.');
-        }
-
         if (hasHistorico) {
           throw new Error(
             'Este estabelecimento já possui histórico de pelúcias. Use o cadastro normal de visita.'
@@ -120,8 +129,14 @@ class PeluciasController {
           );
         }
 
-        const leituraInicial = Number(leitura_inicial);
-        const estoqueInicial = Number(estoque_inicial);
+        const leituraInicial = parseNonNegativeInteger(
+          leitura_inicial,
+          'Leitura inicial'
+        );
+        const estoqueInicial = parseNonNegativeInteger(
+          estoque_inicial,
+          'Estoque inicial'
+        );
 
         if (Number.isNaN(leituraInicial) || leituraInicial < 0) {
           throw new Error('A leitura inicial deve ser um número válido.');
@@ -133,8 +148,8 @@ class PeluciasController {
 
         await peluciasModel.createSangria({
           assinante_id: usuario.assinante_id,
-          estabelecimento_id,
-          data_sangria,
+          estabelecimento_id: estabelecimentoId,
+          data_sangria: dataSangria,
           valor_apurado: 0,
           comissao: 0,
           valor_comerciante: 0,
@@ -162,22 +177,32 @@ class PeluciasController {
       }
 
       const ultimoRegistro = await peluciasModel.getUltimosDados(
-        estabelecimento_id,
+        estabelecimentoId,
         usuario.assinante_id
       );
 
       const ultimaDataSangria = await peluciasModel.getUltimaDataSangria(
-        estabelecimento_id,
+        estabelecimentoId,
         usuario.assinante_id
       );
 
       const leituraAnterior = Number(ultimoRegistro.ultima_leitura || 0);
-      const leituraAtual = Number(leitura_atual || 0);
-      const quantidadeAbastecida = Number(abastecido || 0);
-      const valorApurado = Number(valor_apurado || 0);
-      const percentualComissao = Number(comissao || 0);
+      const leituraAtual = parseNonNegativeInteger(
+        leitura_atual,
+        'Leitura atual'
+      );
+      const quantidadeAbastecida = parseNonNegativeInteger(
+        abastecido,
+        'Quantidade abastecida'
+      );
+      const valorApurado = parseNonNegativeDecimal(
+        valor_apurado,
+        'Valor apurado'
+      );
+      const percentualComissao = parseCommissionPercent(comissao);
+      const tipoPagamento = parsePaymentType(tipo_pagamento);
 
-      if (new Date(data_sangria) <= new Date(ultimaDataSangria.data_sangria)) {
+      if (new Date(dataSangria) <= new Date(ultimaDataSangria.data_sangria)) {
         return res.redirect(
           '/pelucias/sangrias?error=A data do novo cadastro não pode ser anterior ou igual à data da última sangria cadastrada.'
         );
@@ -202,34 +227,7 @@ class PeluciasController {
       const valorDaComissao = valorApurado * (percentualComissao / 100);
       const valorLiquido = valorApurado - valorDaComissao;
 
-      const sangriaResult = await peluciasModel.createSangria({
-        assinante_id: usuario.assinante_id,
-        estabelecimento_id,
-        data_sangria,
-        leitura_atual: leituraAtual,
-        ultima_leitura: leituraAnterior,
-        abastecido: quantidadeAbastecida,
-        qtde_vendido: qtdeVendido,
-        valor_apurado: valorApurado,
-        comissao: percentualComissao,
-        valor_comerciante: valorDaComissao,
-        valor_liquido: valorLiquido,
-        tipo_pagamento,
-        observacoes,
-        estoque
-      });
-
-      const sangriaId = sangriaResult?.rows?.[0]?.id || null;
-
-      const reciboUrl = sangriaId
-        ? `/pelucias/sangrias/recibo/${sangriaId}`
-        : '';
-
-      await recalculateConsolidatedRevenueForDates({
-        produto: 'pelucias',
-        assinanteId: usuario.assinante_id,
-        dates: [data_sangria]
-      });
+      let routeContext = null;
 
       if (origem === 'rota' && visita_id && rota_ponto_id) {
         const retornoSeguro =
@@ -249,19 +247,70 @@ class PeluciasController {
 
         if (
           !visitaDaRota ||
-          Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimento_id) ||
+          visitaDaRota.status !== 'em_andamento' ||
+          Number(visitaDaRota.estabelecimento_id) !== Number(estabelecimentoId) ||
           Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
         ) {
-          throw new Error('A visita informada nao pertence a este ponto da rota.');
+          throw new Error('A visita informada nao pertence a este ponto da rota ou ja foi finalizada.');
         }
 
-        await VisitasModel.marcarProdutoRegistrado({
+        const produtoDaVisita = await VisitasModel.findProdutoByVisita({
+          visita_id,
+          assinante_id: usuario.assinante_id,
+          produto: 'PELUCIAS'
+        });
+
+        if (!produtoDaVisita || produtoDaVisita.status !== 'pendente') {
+          throw new Error('Pelucias ja foi registrada ou nao esta pendente nesta visita.');
+        }
+
+        routeContext = {
+          retornoSeguro,
+          rotaRetornoSeguro
+        };
+      }
+
+      const sangriaResult = await peluciasModel.createSangria({
+        assinante_id: usuario.assinante_id,
+        estabelecimento_id: estabelecimentoId,
+        data_sangria: dataSangria,
+        leitura_atual: leituraAtual,
+        ultima_leitura: leituraAnterior,
+        abastecido: quantidadeAbastecida,
+        qtde_vendido: qtdeVendido,
+        valor_apurado: valorApurado,
+        comissao: percentualComissao,
+        valor_comerciante: valorDaComissao,
+        valor_liquido: valorLiquido,
+        tipo_pagamento: tipoPagamento,
+        observacoes,
+        estoque
+      });
+
+      const sangriaId = sangriaResult?.rows?.[0]?.id || null;
+
+      const reciboUrl = sangriaId
+        ? `/pelucias/sangrias/recibo/${sangriaId}`
+        : '';
+
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'pelucias',
+        assinanteId: usuario.assinante_id,
+        dates: [dataSangria]
+      });
+
+      if (routeContext) {
+        const produtoRegistrado = await VisitasModel.marcarProdutoRegistrado({
           visita_id,
           assinante_id: usuario.assinante_id,
           produto: 'PELUCIAS',
           sangria_id: sangriaId,
           observacoes: observacoes || null
         });
+
+        if (!produtoRegistrado) {
+          throw new Error('Pelucias ja foi registrada ou nao esta pendente nesta visita.');
+        }
 
         try {
           await VisitasModel.finalizarVisita({
@@ -283,10 +332,10 @@ class PeluciasController {
             );
           }
 
-          const separador = rotaRetornoSeguro.includes('?') ? '&' : '?';
+          const separador = routeContext.rotaRetornoSeguro.includes('?') ? '&' : '?';
 
           return res.redirect(
-            `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
+            `${routeContext.rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
               rota_ponto_id
             )}&success=${encodeURIComponent(
               'Visita finalizada com sucesso'
@@ -299,10 +348,10 @@ class PeluciasController {
               'Ainda existem produtos pendentes'
             )
           ) {
-            const separador = retornoSeguro.includes('?') ? '&' : '?';
+            const separador = routeContext.retornoSeguro.includes('?') ? '&' : '?';
 
            return res.redirect(
-              `${retornoSeguro}${separador}success=${encodeURIComponent(
+              `${routeContext.retornoSeguro}${separador}success=${encodeURIComponent(
                 'Pelúcias registrada. Ainda existem produtos pendentes nesta visita.'
               )}&recibo_url=${encodeURIComponent(reciboUrl)}`
             );
@@ -419,29 +468,96 @@ class PeluciasController {
         return res.redirect('/pelucias/sangrias?error=Sangria nao encontrada');
       }
 
-      const valorDaComissao = Number(valor_apurado || 0) * (Number(comissao || 0) / 100);
-      const valorLiquido = Number(valor_apurado || 0) - valorDaComissao;
+      const estabelecimentoId = parsePositiveIntegerId(
+        estabelecimento_id,
+        'Estabelecimento'
+      );
+      const dataSangria = parseSangriaDate(data_sangria);
+      const valorApurado = parseNonNegativeDecimal(
+        valor_apurado,
+        'Valor apurado'
+      );
+      const percentualComissao = parseCommissionPercent(comissao);
+      const tipoPagamento = parsePaymentType(tipo_pagamento);
+      const leituraAtual = parseNonNegativeInteger(
+        leitura_atual,
+        'Leitura atual'
+      );
+      const quantidadeAbastecida = parseNonNegativeInteger(
+        abastecido,
+        'Quantidade abastecida'
+      );
+      const quantidadeVendida = qtde_vendido
+        ? parseNonNegativeInteger(qtde_vendido, 'Quantidade vendida')
+        : null;
+
+      const produtoVinculado = await VisitasModel.findProdutoBySangria({
+        sangria_id: id,
+        assinante_id: usuario.assinante_id,
+        produto: 'PELUCIAS'
+      });
+
+      if (Number(sangriaAtual.estabelecimento_id) !== Number(estabelecimentoId)) {
+        throw new Error('Sangria de pelucias nao pode trocar de estabelecimento para preservar o estoque do ponto.');
+      }
+
+      const hasLaterSangria = await peluciasModel.hasLaterSangria({
+        estabelecimentoId: sangriaAtual.estabelecimento_id,
+        assinanteId: usuario.assinante_id,
+        dataSangria: sangriaAtual.data_sangria,
+        id
+      });
+
+      if (hasLaterSangria) {
+        throw new Error('Edite apenas a sangria mais recente deste ponto para nao quebrar o estoque futuro.');
+      }
+
+      const sangriaAnterior = await peluciasModel.getPreviousSangriaBeforeDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria,
+        excludeId: id
+      });
+      const leituraAnterior = Number(sangriaAnterior?.leitura_atual || 0);
+      const estoqueAnterior = Number(sangriaAnterior?.estoque || 0);
+
+      if (leituraAtual < leituraAnterior) {
+        throw new Error('A leitura atual nao pode ser menor que a leitura anterior.');
+      }
+
+      const quantidadeVendidaCalculada = leituraAtual - leituraAnterior;
+      const estoqueCalculado =
+        estoqueAnterior - quantidadeVendidaCalculada + quantidadeAbastecida;
+
+      if (estoqueCalculado < 0) {
+        throw new Error('O estoque nao pode ficar negativo.');
+      }
+
+      const valorDaComissao = valorApurado * (percentualComissao / 100);
+      const valorLiquido = valorApurado - valorDaComissao;
 
       await peluciasModel.updateSangria({
         assinante_id: usuario.assinante_id,
         id,
-        estabelecimento_id,
-        data_sangria,
-        valor_apurado,
-        comissao: parseFloat(comissao),
+        estabelecimento_id: estabelecimentoId,
+        data_sangria: dataSangria,
+        valor_apurado: valorApurado,
+        comissao: percentualComissao,
         valor_comerciante: valorDaComissao,
         valor_liquido: valorLiquido,
-        tipo_pagamento,
+        tipo_pagamento: tipoPagamento,
         observacoes,
-        leitura_atual,
-        abastecido,
-        qtde_vendido: qtde_vendido ? Number(qtde_vendido) : null
+        leitura_atual: leituraAtual,
+        abastecido: quantidadeAbastecida,
+        qtde_vendido: quantidadeVendidaCalculada,
+        ultima_leitura: leituraAnterior,
+        estoque: estoqueCalculado
       });
 
       await recalculateConsolidatedRevenueForDates({
         produto: 'pelucias',
         assinanteId: usuario.assinante_id,
-        dates: [sangriaAtual.data_sangria, data_sangria]
+        dates: [sangriaAtual.data_sangria, dataSangria]
       });
 
       res.redirect('/pelucias/sangrias?success=Sangria atualizada com sucesso');

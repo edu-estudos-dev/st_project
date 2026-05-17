@@ -1,6 +1,8 @@
 import AssinanteModel from '../models/assinanteModel.js';
+import EstabelecimentoModel from '../models/estabelecimentoModel.js';
 import PaymentEventModel from '../models/paymentEventModel.js';
 import { atualizarStatusContato, listarContatos } from '../models/interessadosModel.js';
+import { normalizeSelectedProdutos } from '../utilities/produtoUtils.js';
 
 const STATUS_OPTIONS = ['trial', 'ativo', 'vencido', 'cancelado', 'bloqueado'];
 const BILLING_OPTIONS = ['', 'mensal', 'anual'];
@@ -12,13 +14,33 @@ const PRODUCT_OPTIONS = [
   { value: 'CONSIGNADOS', label: 'Consignados' },
   { value: 'PELUCIAS', label: 'Pelucias' }
 ];
+const VALID_PRODUCT_VALUES = PRODUCT_OPTIONS.map(option => option.value);
+const PRODUCT_LABELS = {
+  BOLINHAS: 'Bolinhas',
+  CONSIGNADOS: 'Consignados',
+  PELUCIAS: 'Pelucias'
+};
 
 const normalizeDateTime = (value) => {
   const normalized = String(value || '').trim();
   if (!normalized) return null;
 
-  const date = new Date(normalized);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    throw new Error('Informe datas validas.');
+  }
+
+  const [year, month, day] = normalized.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0, 0));
+
   if (Number.isNaN(date.getTime())) {
+    throw new Error('Informe datas validas.');
+  }
+
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
     throw new Error('Informe datas validas.');
   }
 
@@ -35,6 +57,10 @@ const normalizeMoney = (value) => {
 
   if (!normalized) return null;
 
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) {
+    throw new Error('Informe um valor mensal valido.');
+  }
+
   const amount = Number(normalized);
 
   if (!Number.isFinite(amount) || amount < 0) {
@@ -42,6 +68,51 @@ const normalizeMoney = (value) => {
   }
 
   return amount;
+};
+
+const parsePositiveId = (value, fieldLabel = 'ID') => {
+  const normalized = String(value || '').trim();
+
+  if (!/^\d+$/.test(normalized)) {
+    throw new Error(`${fieldLabel} invalido.`);
+  }
+
+  const id = Number(normalized);
+
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    throw new Error(`${fieldLabel} invalido.`);
+  }
+
+  return id;
+};
+
+const assertEnabledProductsPreserveHistory = ({
+  produtosAtuais,
+  produtosNovos,
+  usageSummary
+}) => {
+  const produtosComHistorico = Object.entries(usageSummary)
+    .filter(([, total]) => Number(total || 0) > 0)
+    .map(([produto]) => produto);
+  const produtosProtegidos = [
+    ...new Set([
+      ...normalizeSelectedProdutos(produtosAtuais),
+      ...produtosComHistorico
+    ])
+  ];
+  const removidosComHistorico = produtosProtegidos
+    .filter(produto => !produtosNovos.includes(produto))
+    .filter(produto => Number(usageSummary[produto] || 0) > 0);
+
+  if (removidosComHistorico.length) {
+    const labels = removidosComHistorico
+      .map(produto => PRODUCT_LABELS[produto] || produto)
+      .join(', ');
+
+    throw new Error(
+      `Nao e possivel remover ${labels}: este assinante ja possui historico nessa ferramenta.`
+    );
+  }
 };
 
 const formatDateInput = (value) => {
@@ -137,7 +208,7 @@ class AdminAssinantesController {
 
   update = async (req, res) => {
     try {
-      const id = Number(req.params.id);
+      const id = parsePositiveId(req.params.id, 'Assinante');
       const statusAssinatura = String(req.body.status_assinatura || '').trim();
       const tipoCobranca = String(req.body.tipo_cobranca || '').trim();
       const planoCodigo = String(req.body.plano_codigo || '').trim();
@@ -156,11 +227,15 @@ class AdminAssinantesController {
         throw new Error('Plano invalido.');
       }
 
-      const produtosHabilitados = Array.isArray(req.body.produtos_habilitados)
+      const produtosRecebidos = Array.isArray(req.body.produtos_habilitados)
         ? req.body.produtos_habilitados
         : [req.body.produtos_habilitados].filter(Boolean);
+      const produtosHabilitados = normalizeSelectedProdutos(produtosRecebidos);
+      const produtosInvalidos = produtosRecebidos.filter(
+        produto => !VALID_PRODUCT_VALUES.includes(String(produto || '').trim().toUpperCase())
+      );
 
-      if (!produtosHabilitados.length) {
+      if (produtosInvalidos.length || !produtosHabilitados.length) {
         throw new Error('Selecione pelo menos um produto para este assinante.');
       }
 
@@ -175,6 +250,14 @@ class AdminAssinantesController {
       if (isEditingSelf && statusAssinatura === 'bloqueado') {
         throw new Error('Voce nao pode bloquear o proprio usuario administrador.');
       }
+
+      const usageSummary = await EstabelecimentoModel.getTenantProductUsageSummary(id);
+
+      assertEnabledProductsPreserveHistory({
+        produtosAtuais: assinanteAtual.produtos_habilitados,
+        produtosNovos: produtosHabilitados,
+        usageSummary
+      });
 
       await AssinanteModel.updateFromAdmin(id, {
         status_assinatura: statusAssinatura,
@@ -247,7 +330,7 @@ class AdminAssinantesController {
 
   atualizarStatusInteressado = async (req, res) => {
     try {
-      const id = Number(req.params.id);
+      const id = parsePositiveId(req.params.id, 'Contato');
       const status = String(req.body.status || '').trim().toLowerCase();
 
       const updated = await atualizarStatusContato({ id, status });

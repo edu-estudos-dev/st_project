@@ -14,12 +14,39 @@ function formatarDataForum(data) {
 }
 
 function getRedirectBack(req) {
-  return req.get('referer') || '/admin/comunidade';
+  const referer = String(req.get('referer') || '').trim();
+
+  if (!referer) {
+    return '/admin/comunidade';
+  }
+
+  try {
+    const parsed = new URL(referer, 'https://vendmaster.local');
+
+    if (!parsed.pathname.startsWith('/comunidade') && !parsed.pathname.startsWith('/admin/comunidade')) {
+      return '/admin/comunidade';
+    }
+
+    return `${parsed.pathname}${parsed.search}`;
+  } catch {
+    return '/admin/comunidade';
+  }
 }
 
 function appendQueryParam(url, key, value) {
   const separator = url.includes('?') ? '&' : '?';
   return `${url}${separator}${key}=${encodeURIComponent(value)}`;
+}
+
+function parsePositiveId(value) {
+  const normalized = String(value || '').trim();
+
+  if (!/^\d+$/.test(normalized)) {
+    return null;
+  }
+
+  const id = Number(normalized);
+  return Number.isSafeInteger(id) && id > 0 ? id : null;
 }
 
 const AdminComunidadeController = {
@@ -45,7 +72,11 @@ const AdminComunidadeController = {
 
   async ocultarTopico(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect('/admin/comunidade?error=Topico invalido.');
+      }
 
       const topico = await forumTopicModel.ocultar(id);
 
@@ -65,7 +96,11 @@ const AdminComunidadeController = {
 
   async reexibirTopico(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect('/admin/comunidade?error=Topico invalido.');
+      }
 
       const topico = await forumTopicModel.reexibir(id);
 
@@ -85,7 +120,11 @@ const AdminComunidadeController = {
 
   async excluirTopico(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect('/admin/comunidade?error=Topico invalido.');
+      }
 
       const topico = await forumTopicModel.excluir(id);
 
@@ -105,7 +144,11 @@ const AdminComunidadeController = {
 
   async alternarFixadoTopico(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect('/admin/comunidade?error=Topico invalido.');
+      }
 
       const topico = await forumTopicModel.alternarFixado(id);
 
@@ -125,7 +168,11 @@ const AdminComunidadeController = {
 
   async alternarFechadoTopico(req, res, next) {
     try {
-      const { id } = req.params;
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect('/admin/comunidade?error=Topico invalido.');
+      }
 
       const topico = await forumTopicModel.alternarFechado(id);
 
@@ -145,10 +192,16 @@ const AdminComunidadeController = {
 
   async ocultarResposta(req, res, next) {
     try {
-      const { id } = req.params;
+      const redirectUrl = getRedirectBack(req);
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect(
+          appendQueryParam(redirectUrl, 'error', 'Resposta invalida.')
+        );
+      }
 
       const resposta = await forumReplyModel.ocultar(id);
-      const redirectUrl = getRedirectBack(req);
 
       if (!resposta) {
         return res.redirect(
@@ -166,10 +219,16 @@ const AdminComunidadeController = {
 
   async excluirResposta(req, res, next) {
     try {
-      const { id } = req.params;
+      const redirectUrl = getRedirectBack(req);
+      const id = parsePositiveId(req.params.id);
+
+      if (!id) {
+        return res.redirect(
+          appendQueryParam(redirectUrl, 'error', 'Resposta invalida.')
+        );
+      }
 
       const resposta = await forumReplyModel.excluir(id);
-      const redirectUrl = getRedirectBack(req);
 
       if (!resposta) {
         return res.redirect(

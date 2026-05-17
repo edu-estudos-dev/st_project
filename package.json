@@ -14,6 +14,7 @@
     "kill:8082": "node scripts/free-port.js 8082",
     "start": "node server.js",
     "qa:flow": "node scripts/qa-flow-audit.js",
+    "qa:webhook": "node scripts/qa-webhook-normalizer.js",
     "db:migrate": "npm run db:migrate:dev",
     "db:migrate:dev": "node scripts/run-migrations.js dev",
     "db:migrate:clean": "node scripts/run-migrations.js clean",

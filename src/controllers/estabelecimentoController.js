@@ -9,6 +9,10 @@ import {
   serializeProdutos
 } from '../utilities/produtoUtils.js';
 import { buildPagination, parsePagination } from '../utilities/pagination.js';
+import {
+  normalizeSearchTerm,
+  SearchValidationError
+} from '../utilities/searchValidation.js';
 
 const INITIAL_INTEGER_MAX = 100000;
 
@@ -210,6 +214,74 @@ const getEnabledProductOptions = (req, selectedProdutos = []) => {
   });
 };
 
+const parsePositiveId = (value, fieldLabel = 'ID') => {
+  const raw = normalizeSpacing(value);
+
+  if (!/^\d+$/.test(raw)) {
+    throw new ValidationError(`${fieldLabel} invÃ¡lido.`);
+  }
+
+  const parsed = Number(raw);
+
+  if (!Number.isSafeInteger(parsed) || parsed <= 0) {
+    throw new ValidationError(`${fieldLabel} invÃ¡lido.`);
+  }
+
+  return parsed;
+};
+
+const assertProductHistoryIsPreserved = ({
+  produtosAtuais,
+  produtosSelecionados,
+  usageSummary
+}) => {
+  const removedProducts = normalizeSelectedProdutos(produtosAtuais).filter(
+    produto => !produtosSelecionados.includes(produto)
+  );
+
+  const removedWithHistory = removedProducts.find(
+    produto => Number(usageSummary[produto] || 0) > 0
+  );
+
+  if (removedWithHistory) {
+    throw new ValidationError(
+      'Este produto nÃ£o pode ser removido porque o ponto jÃ¡ possui histÃ³rico de operaÃ§Ã£o.'
+    );
+  }
+};
+
+const assertInitialValuesAreNotRewritten = ({
+  estabelecimentoAtual,
+  usageSummary,
+  consignadoQuantidadeInicial,
+  peluciaLeituraInicial,
+  peluciaAbastecidoInicial
+}) => {
+  if (
+    Number(usageSummary.CONSIGNADOS || 0) > 0 &&
+    Number(estabelecimentoAtual.consignado_quantidade_inicial || 0) !==
+      Number(consignadoQuantidadeInicial || 0)
+  ) {
+    throw new ValidationError(
+      'A quantidade inicial de consignados nÃ£o pode ser alterada depois que o ponto jÃ¡ possui histÃ³rico.'
+    );
+  }
+
+  if (
+    Number(usageSummary.PELUCIAS || 0) > 0 &&
+    (
+      Number(estabelecimentoAtual.pelucia_leitura_inicial || 0) !==
+        Number(peluciaLeituraInicial || 0) ||
+      Number(estabelecimentoAtual.pelucia_abastecido_inicial || 0) !==
+        Number(peluciaAbastecidoInicial || 0)
+    )
+  ) {
+    throw new ValidationError(
+      'Os dados iniciais de pelÃºcias nÃ£o podem ser alterados depois que o ponto jÃ¡ possui histÃ³rico.'
+    );
+  }
+};
+
 const validateProdutosEnabled = (req, produtos) => {
   const enabledValues = getEnabledProductOptions(req).map(
     option => option.value
@@ -280,7 +352,10 @@ class EstabelecimentoController {
     const usuario = req.user;
 
     try {
-      const query = req.body.estabelecimento;
+      const query = normalizeSearchTerm(
+        req.body.estabelecimento,
+        'termo de pesquisa'
+      );
 
       const estabelecimentos = await EstabelecimentoModel.search(
         query,
@@ -296,6 +371,17 @@ class EstabelecimentoController {
         error: null
       });
     } catch (error) {
+      if (error instanceof SearchValidationError) {
+        return res.status(400).render('pages/estabelecimentos/tabelaEstabelecimentos', {
+          title: 'Resultados da Pesquisa',
+          estabelecimentos: [],
+          search: true,
+          usuario,
+          success: null,
+          error: error.message
+        });
+      }
+
       console.error('Erro ao obter estabelecimento.', error);
 
       res.status(500).json({ message: 'Erro ao obter estabelecimento.' });
@@ -519,7 +605,17 @@ class EstabelecimentoController {
     const usuario = req.user;
 
     try {
-      const id = req.params.id;
+      const id = parsePositiveId(req.params.id, 'Estabelecimento');
+      const estabelecimentoAtual = await EstabelecimentoModel.findById(
+        id,
+        usuario.assinante_id
+      );
+
+      if (!estabelecimentoAtual) {
+        return res
+          .status(404)
+          .render('pages/404', { title: 'Estabelecimento Nao Encontrado' });
+      }
 
       const produtosSelecionados = validateProdutosEnabled(
         req,
@@ -594,6 +690,25 @@ class EstabelecimentoController {
             'Abastecido inicial de pelúcias'
           )
         : null;
+
+      const usageSummary = await EstabelecimentoModel.getProductUsageSummary(
+        id,
+        usuario.assinante_id
+      );
+
+      assertProductHistoryIsPreserved({
+        produtosAtuais: estabelecimentoAtual.produto,
+        produtosSelecionados,
+        usageSummary
+      });
+
+      assertInitialValuesAreNotRewritten({
+        estabelecimentoAtual,
+        usageSummary,
+        consignadoQuantidadeInicial,
+        peluciaLeituraInicial,
+        peluciaAbastecidoInicial
+      });
 
       const estabelecimento = {
         id,
@@ -790,6 +905,18 @@ class EstabelecimentoController {
       );
 
       if (estabelecimento) {
+        const hasOpenVisit = await EstabelecimentoModel.hasOpenOperationalVisit(
+          id,
+          usuario.assinante_id
+        );
+
+        if (hasOpenVisit) {
+          return res.status(409).json({
+            message:
+              'Este estabelecimento possui uma visita em andamento. Finalize ou cancele a visita antes de encerrar o ponto.'
+          });
+        }
+
         await EstabelecimentoModel.destroy(id, usuario.assinante_id);
 
         return res
@@ -810,10 +937,10 @@ class EstabelecimentoController {
   };
 
   search = async (req, res) => {
-    const { termo } = req.body;
     const usuario = req.user;
 
     try {
+      const termo = normalizeSearchTerm(req.body?.termo);
       const estabelecimentos = await EstabelecimentoModel.search(
         termo,
         usuario.assinante_id
@@ -830,6 +957,17 @@ class EstabelecimentoController {
           error: null
         });
     } catch (error) {
+      if (error instanceof SearchValidationError) {
+        return res.status(400).render('pages/estabelecimentos/tabelaEstabelecimentos', {
+          title: 'Resultados da Pesquisa',
+          estabelecimentos: [],
+          search: true,
+          usuario,
+          success: null,
+          error: error.message
+        });
+      }
+
       console.error('Erro ao buscar estabelecimentos:', error);
 
       return res.status(500).send('Erro ao buscar estabelecimentos.');

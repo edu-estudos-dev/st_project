@@ -7,6 +7,13 @@ import {
   gerarReciboPdfBuffer
 } from '../utils/reciboPdf.js';
 import { buildPagination, parsePagination } from '../utilities/pagination.js';
+import {
+  parseNonNegativeDecimal,
+  parseNonNegativeInteger,
+  parsePaymentType,
+  parsePositiveIntegerId,
+  parseSangriaDate
+} from '../utilities/sangriaValidation.js';
 
 class ConsignadosController {
   addSangriaForm = async (req, res) => {
@@ -82,8 +89,14 @@ class ConsignadosController {
         throw new Error('Dados obrigatórios faltando.');
       }
 
-      const ultimaSangria = await consignadosModel.getUltimaSangria(
+      const estabelecimentoId = parsePositiveIntegerId(
         estabelecimento_id,
+        'Estabelecimento'
+      );
+      const dataSangria = parseSangriaDate(data_sangria);
+
+      const ultimaSangria = await consignadosModel.getUltimaSangria(
+        estabelecimentoId,
         usuario.assinante_id
       );
 
@@ -97,16 +110,15 @@ class ConsignadosController {
           );
         }
 
-        const quantidadeInicial = parseInt(quantidade_inicial || 0, 10);
-
-        if (Number.isNaN(quantidadeInicial) || quantidadeInicial < 0) {
-          throw new Error('A quantidade inicial deve ser um número válido.');
-        }
+        const quantidadeInicial = parseNonNegativeInteger(
+          quantidade_inicial,
+          'Quantidade inicial'
+        );
 
         await consignadosModel.createSangria({
           assinante_id: usuario.assinante_id,
-          estabelecimento_id,
-          data_sangria,
+          estabelecimento_id: estabelecimentoId,
+          data_sangria: dataSangria,
           qtde_deixada: quantidadeInicial,
           abastecido: quantidadeInicial,
           estoque: 0,
@@ -130,9 +142,19 @@ class ConsignadosController {
 
       const estoqueAnterior = parseInt(ultimaSangria[0].qtde_deixada, 10);
 
-      const quantidadeVendida = parseInt(qtde_vendido || 0, 10);
-      const quantidadeAbastecida = parseInt(abastecido || 0, 10);
-      const valorApurado = parseFloat(valor_apurado || 0);
+      const quantidadeVendida = parseNonNegativeInteger(
+        qtde_vendido,
+        'Quantidade vendida'
+      );
+      const quantidadeAbastecida = parseNonNegativeInteger(
+        abastecido,
+        'Quantidade abastecida'
+      );
+      const valorApurado = parseNonNegativeDecimal(
+        valor_apurado,
+        'Valor apurado'
+      );
+      const tipoPagamento = parsePaymentType(tipo_pagamento);
 
       const qtdeDeixada =
         estoqueAnterior - quantidadeVendida + quantidadeAbastecida;
@@ -141,30 +163,7 @@ class ConsignadosController {
         throw new Error('O estoque não pode ficar negativo.');
       }
 
-      const sangriaResult = await consignadosModel.createSangria({
-        assinante_id: usuario.assinante_id,
-        estabelecimento_id,
-        data_sangria,
-        qtde_deixada: qtdeDeixada,
-        abastecido: quantidadeAbastecida,
-        estoque: estoqueAnterior,
-        qtde_vendido: quantidadeVendida,
-        valor_apurado: valorApurado,
-        tipo_pagamento,
-        observacoes: observacoes || ''
-      });
-
-      const sangriaId = sangriaResult?.rows?.[0]?.id || null;
-
-      const reciboUrl = sangriaId
-        ? `/consignados/sangrias/recibo/${sangriaId}`
-        : '';
-
-      await recalculateConsolidatedRevenueForDates({
-        produto: 'consignados',
-        assinanteId: usuario.assinante_id,
-        dates: [data_sangria]
-      });
+      let routeContext = null;
 
       if (origem === 'rota' && visita_id && rota_ponto_id) {
         const retornoSeguro =
@@ -184,22 +183,73 @@ class ConsignadosController {
 
         if (
           !visitaDaRota ||
+          visitaDaRota.status !== 'em_andamento' ||
           Number(visitaDaRota.estabelecimento_id) !==
-            Number(estabelecimento_id) ||
+            Number(estabelecimentoId) ||
           Number(visitaDaRota.rota_ponto_id) !== Number(rota_ponto_id)
         ) {
           throw new Error(
-            'A visita informada nao pertence a este ponto da rota.'
+            'A visita informada nao pertence a este ponto da rota ou ja foi finalizada.'
           );
         }
 
-        await VisitasModel.marcarProdutoRegistrado({
+        const produtoDaVisita = await VisitasModel.findProdutoByVisita({
+          visita_id,
+          assinante_id: usuario.assinante_id,
+          produto: 'CONSIGNADOS'
+        });
+
+        if (!produtoDaVisita || produtoDaVisita.status !== 'pendente') {
+          throw new Error(
+            'Consignados ja foi registrado ou nao esta pendente nesta visita.'
+          );
+        }
+
+        routeContext = {
+          retornoSeguro,
+          rotaRetornoSeguro
+        };
+      }
+
+      const sangriaResult = await consignadosModel.createSangria({
+        assinante_id: usuario.assinante_id,
+        estabelecimento_id: estabelecimentoId,
+        data_sangria: dataSangria,
+        qtde_deixada: qtdeDeixada,
+        abastecido: quantidadeAbastecida,
+        estoque: estoqueAnterior,
+        qtde_vendido: quantidadeVendida,
+        valor_apurado: valorApurado,
+        tipo_pagamento: tipoPagamento,
+        observacoes: observacoes || ''
+      });
+
+      const sangriaId = sangriaResult?.rows?.[0]?.id || null;
+
+      const reciboUrl = sangriaId
+        ? `/consignados/sangrias/recibo/${sangriaId}`
+        : '';
+
+      await recalculateConsolidatedRevenueForDates({
+        produto: 'consignados',
+        assinanteId: usuario.assinante_id,
+        dates: [dataSangria]
+      });
+
+      if (routeContext) {
+        const produtoRegistrado = await VisitasModel.marcarProdutoRegistrado({
           visita_id,
           assinante_id: usuario.assinante_id,
           produto: 'CONSIGNADOS',
           sangria_id: sangriaId,
           observacoes: observacoes || null
         });
+
+        if (!produtoRegistrado) {
+          throw new Error(
+            'Consignados ja foi registrado ou nao esta pendente nesta visita.'
+          );
+        }
 
         try {
           await VisitasModel.finalizarVisita({
@@ -221,10 +271,10 @@ class ConsignadosController {
             );
           }
 
-          const separador = rotaRetornoSeguro.includes('?') ? '&' : '?';
+          const separador = routeContext.rotaRetornoSeguro.includes('?') ? '&' : '?';
 
           return res.redirect(
-            `${rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
+            `${routeContext.rotaRetornoSeguro}${separador}rota_ponto_finalizado=${encodeURIComponent(
               rota_ponto_id
             )}&success=${encodeURIComponent(
               'Visita finalizada com sucesso'
@@ -235,10 +285,10 @@ class ConsignadosController {
             finalizarError.message &&
             finalizarError.message.includes('Ainda existem produtos pendentes')
           ) {
-            const separador = retornoSeguro.includes('?') ? '&' : '?';
+            const separador = routeContext.retornoSeguro.includes('?') ? '&' : '?';
 
             return res.redirect(
-              `${retornoSeguro}${separador}success=${encodeURIComponent(
+              `${routeContext.retornoSeguro}${separador}success=${encodeURIComponent(
                 'Consignados registrado. Ainda existem produtos pendentes nesta visita.'
               )}&recibo_url=${encodeURIComponent(reciboUrl)}`
             );
@@ -342,19 +392,60 @@ class ConsignadosController {
         );
       }
 
-      const ultimaSangria = await consignadosModel.getUltimaSangria(
+      const estabelecimentoId = parsePositiveIntegerId(
         estabelecimento_id,
-        usuario.assinante_id
+        'Estabelecimento'
       );
-      const estoqueAnterior =
-        ultimaSangria.length > 0
-          ? parseInt(ultimaSangria[0].qtde_deixada, 10)
-          : 0;
+      const dataSangria = parseSangriaDate(data_sangria);
+      const quantidadeVendida = parseNonNegativeInteger(
+        qtde_vendido,
+        'Quantidade vendida'
+      );
+      const quantidadeAbastecida = parseNonNegativeInteger(
+        abastecido,
+        'Quantidade abastecida'
+      );
+      const valorApurado = parseNonNegativeDecimal(
+        valor_apurado,
+        'Valor apurado'
+      );
+      const tipoPagamento = parsePaymentType(tipo_pagamento);
+
+      const produtoVinculado = await VisitasModel.findProdutoBySangria({
+        sangria_id: id,
+        assinante_id: usuario.assinante_id,
+        produto: 'CONSIGNADOS'
+      });
+
+      if (Number(sangriaAtual.estabelecimento_id) !== Number(estabelecimentoId)) {
+        throw new Error('Sangria de consignados nao pode trocar de estabelecimento para preservar o estoque do ponto.');
+      }
+
+      const hasLaterSangria = await consignadosModel.hasLaterSangria({
+        estabelecimentoId: sangriaAtual.estabelecimento_id,
+        assinanteId: usuario.assinante_id,
+        dataSangria: sangriaAtual.data_sangria,
+        id
+      });
+
+      if (hasLaterSangria) {
+        throw new Error('Edite apenas a sangria mais recente deste ponto para nao quebrar o estoque futuro.');
+      }
+
+      const sangriaAnterior = await consignadosModel.getPreviousSangriaBeforeDate({
+        estabelecimentoId,
+        assinanteId: usuario.assinante_id,
+        dataSangria,
+        excludeId: id
+      });
+      const estoqueAnterior = sangriaAnterior
+        ? parseInt(sangriaAnterior.qtde_deixada, 10)
+        : 0;
 
       const qtdeDeixada =
         estoqueAnterior -
-        parseInt(qtde_vendido || 0, 10) +
-        parseInt(abastecido || 0, 10);
+        quantidadeVendida +
+        quantidadeAbastecida;
 
       if (qtdeDeixada < 0) {
         throw new Error('O estoque não pode ficar negativo.');
@@ -363,21 +454,21 @@ class ConsignadosController {
       await consignadosModel.updateSangria({
         assinante_id: usuario.assinante_id,
         id,
-        estabelecimento_id,
-        data_sangria,
+        estabelecimento_id: estabelecimentoId,
+        data_sangria: dataSangria,
         qtde_deixada: qtdeDeixada,
-        abastecido: parseInt(abastecido || 0, 10),
+        abastecido: quantidadeAbastecida,
         estoque: estoqueAnterior,
-        qtde_vendido: parseInt(qtde_vendido || 0, 10),
-        valor_apurado: parseFloat(valor_apurado || 0),
-        tipo_pagamento,
+        qtde_vendido: quantidadeVendida,
+        valor_apurado: valorApurado,
+        tipo_pagamento: tipoPagamento,
         observacoes: observacoes || ''
       });
 
       await recalculateConsolidatedRevenueForDates({
         produto: 'consignados',
         assinanteId: usuario.assinante_id,
-        dates: [sangriaAtual.data_sangria, data_sangria]
+        dates: [sangriaAtual.data_sangria, dataSangria]
       });
 
       res.redirect('/consignados/sangrias?success=Atualizado com sucesso');
