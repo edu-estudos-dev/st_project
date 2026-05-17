@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,8 +25,27 @@ jobs:
         run: |
           ssh root@161.35.142.196 << 'EOF'
             set -e
+
             cd /root/st_project
-            git pull origin main
+
+            echo "==> Atualizando código"
+            git fetch origin main
+            git pull --ff-only origin main
+
+            echo "==> Instalando dependências"
             npm ci --omit=dev
+
+            echo "==> Aplicando migrations"
+            npm run db:migrate
+
+            echo "==> Reiniciando aplicação"
             pm2 restart server --update-env
+
+            echo "==> Conferindo status do PM2"
+            pm2 status server
+
+            echo "==> Conferindo resposta do login"
+            curl -fsS --max-time 20 https://vendmaster.com.br/login > /dev/null
+
+            echo "Deploy concluído com sucesso"
           EOF
