@@ -410,16 +410,41 @@
           <span class="vm-kicker vm-kicker-light">Frentes da operação</span>
 
           <h2 class="titulo-servicos">
-            Gestão completa para máquinas recreativas e produtos consignados.
+            Gestão completa para máquinas de pelúcias, bolinhas e produtos consignados.
           </h2>
 
           <p class="vm-products-intro">
-            Controle bolinhas, pelúcias e consignados com histórico, reposição,
+            Controle pelúcias, bolinhas e consignados com histórico, reposição,
             acertos e desempenho por ponto — tudo em um único sistema.
           </p>
         </div>
 
         <div class="vm-grid vm-product-grid">
+          <article class="vm-product-card vm-product-card--featured">
+            <div class="vm-product-image-box">
+              <img src="/images/home/pelucias.webp" width="416" height="540"
+                alt="Ícone de máquina de pelúcias e gruas - controle de capturas, estoque e faturamento no VendMaster"
+                loading="lazy" decoding="async">
+            </div>
+
+            <h3 class="fw-bold">Máquinas de Pelúcias</h3>
+
+            <p>
+              Veja quais gruas est&atilde;o performando melhor, onde falta reposi&ccedil;&atilde;o e onde a
+              m&aacute;quina pode estar perdendo rendimento antes de virar preju&iacute;zo.
+            </p>
+
+            <ul class="vm-product-points">
+              <li>Reposi&ccedil;&atilde;o de pr&ecirc;mios por ponto</li>
+              <li>Leitura de desempenho por m&aacute;quina</li>
+              <li>Decis&atilde;o melhor sobre onde refor&ccedil;ar estoque</li>
+            </ul>
+
+            <a href="/sistema-para-maquinas-de-pelucias" class="vm-product-card-link">
+              <span>Ver sistema para pelúcias</span>
+            </a>
+          </article>
+
           <article class="vm-product-card">
             <div class="vm-product-image-box">
               <img src="/images/home/bolinhas.webp" width="396" height="623"
@@ -443,32 +468,6 @@
 
             <a href="/controle-sangria-maquinas-bolinhas" class="vm-product-card-link">
               <span>Ver controle de sangria</span>
-            </a>
-          </article>
-
-          <article class="vm-product-card">
-            <div class="vm-product-image-box">
-              <img src="/images/home/pelucias.webp" width="416" height="540"
-                alt="Ícone de máquina de pelúcias e gruas - controle de capturas, estoque e faturamento no VendMaster"
-                loading="lazy" decoding="async">
-            </div>
-
-            <h3 class="fw-bold">Máquinas de Pelúcias</h3>
-
-            <p>
-              Veja quais gruas est&atilde;o performando melhor, onde falta reposi&ccedil;&atilde;o e onde a
-              m&aacute;quina
-              pode estar perdendo rendimento antes de virar preju&iacute;zo.
-            </p>
-
-            <ul class="vm-product-points">
-              <li>Reposi&ccedil;&atilde;o de pr&ecirc;mios por ponto</li>
-              <li>Leitura de desempenho por m&aacute;quina</li>
-              <li>Decis&atilde;o melhor sobre onde refor&ccedil;ar estoque</li>
-            </ul>
-
-            <a href="/sistema-para-maquinas-de-pelucias" class="vm-product-card-link">
-              <span>Ver sistema para pelúcias</span>
             </a>
           </article>
 
@@ -622,7 +621,7 @@
 
             <div class="vm-founder-tags">
               <span class="vm-founder-tag">Operador ativo</span>
-              <span class="vm-founder-tag">Bolinhas · Pelúcias · Consignados</span>
+              <span class="vm-founder-tag">Pelúcias · Bolinhas · Consignados</span>
               <span class="vm-founder-tag">Ceará / Brasil</span>
             </div>
 
@@ -860,26 +859,27 @@
 
           <%
             const postsPorSlide = 2;
-            const slidesBlog = [];
-            const postsCarrossel = [...postsRecentes];
+            const slidesBlogDesktop = [];
+            const slidesBlogMobile = postsRecentes.map((post) => [post]);
+            const postsCarrosselDesktop = [...postsRecentes];
 
-            if (postsCarrossel.length === 1) {
-              postsCarrossel.push(postsCarrossel[0]);
-            } else if (postsCarrossel.length % postsPorSlide !== 0) {
-              postsCarrossel.push(postsCarrossel[0]);
+            if (postsCarrosselDesktop.length === 1) {
+              postsCarrosselDesktop.push(postsCarrosselDesktop[0]);
+            } else if (postsCarrosselDesktop.length % postsPorSlide !== 0) {
+              postsCarrosselDesktop.push(postsCarrosselDesktop[0]);
             }
 
-            for (let i = 0; i < postsCarrossel.length; i += postsPorSlide) {
-              slidesBlog.push(postsCarrossel.slice(i, i + postsPorSlide));
+            for (let i = 0; i < postsCarrosselDesktop.length; i += postsPorSlide) {
+              slidesBlogDesktop.push(postsCarrosselDesktop.slice(i, i + postsPorSlide));
             }
           %>
 
           <div id="vmBlogPreviewCarousel" class="carousel slide vm-blog-preview-carousel"
             data-bs-ride="carousel" data-bs-interval="5600" data-bs-pause="hover" data-bs-touch="true">
 
-            <% if (slidesBlog.length > 1) { %>
+            <% if (slidesBlogDesktop.length > 1) { %>
               <div class="carousel-indicators vm-blog-preview-indicators">
-                <% slidesBlog.forEach((slide, index) => { %>
+                <% slidesBlogDesktop.forEach((slide, index) => { %>
                   <button type="button" data-bs-target="#vmBlogPreviewCarousel" data-bs-slide-to="<%= index %>"
                     class="<%= index === 0 ? 'active' : '' %>" <%= index === 0 ? 'aria-current="true"' : '' %>
                     aria-label="Grupo de artigos <%= index + 1 %>"></button>
@@ -888,7 +888,7 @@
             <% } %>
 
             <div class="carousel-inner vm-blog-preview-carousel-inner">
-              <% slidesBlog.forEach((slide, slideIndex) => { %>
+              <% slidesBlogDesktop.forEach((slide, slideIndex) => { %>
                 <div class="carousel-item <%= slideIndex === 0 ? 'active' : '' %>">
                   <div class="vm-blog-preview-grid">
                     <% slide.forEach((post) => { %>
@@ -924,7 +924,7 @@
               <% }) %>
             </div>
 
-            <% if (slidesBlog.length > 1) { %>
+            <% if (slidesBlogDesktop.length > 1) { %>
               <button class="carousel-control-prev vm-blog-preview-control" type="button"
                 data-bs-target="#vmBlogPreviewCarousel" data-bs-slide="prev" aria-label="Artigos anteriores">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -932,6 +932,69 @@
 
               <button class="carousel-control-next vm-blog-preview-control" type="button"
                 data-bs-target="#vmBlogPreviewCarousel" data-bs-slide="next" aria-label="Próximos artigos">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              </button>
+            <% } %>
+          </div>
+
+          <div id="vmBlogPreviewCarouselMobile" class="carousel slide vm-blog-preview-carousel vm-blog-preview-carousel-mobile"
+            data-bs-ride="carousel" data-bs-interval="5600" data-bs-pause="hover" data-bs-touch="true">
+
+            <% if (slidesBlogMobile.length > 1) { %>
+              <div class="carousel-indicators vm-blog-preview-indicators">
+                <% slidesBlogMobile.forEach((slide, index) => { %>
+                  <button type="button" data-bs-target="#vmBlogPreviewCarouselMobile" data-bs-slide-to="<%= index %>"
+                    class="<%= index === 0 ? 'active' : '' %>" <%= index === 0 ? 'aria-current="true"' : '' %>
+                    aria-label="Artigo <%= index + 1 %>"></button>
+                <% }) %>
+              </div>
+            <% } %>
+
+            <div class="carousel-inner vm-blog-preview-carousel-inner">
+              <% slidesBlogMobile.forEach((slide, slideIndex) => { %>
+                <div class="carousel-item <%= slideIndex === 0 ? 'active' : '' %>">
+                  <div class="vm-blog-preview-grid">
+                    <% slide.forEach((post) => { %>
+                      <article class="vm-blog-preview-card">
+                        <a href="/blog/<%= post.slug %>" class="vm-blog-preview-image-link">
+                          <img src="<%= post.imagem %>" width="640" height="420" alt="<%= post.titulo %>"
+                            loading="lazy" decoding="async">
+                        </a>
+
+                        <div class="vm-blog-preview-content">
+                          <span class="vm-blog-preview-category">
+                            <%= post.categoria %>
+                          </span>
+
+                          <h3>
+                            <a href="/blog/<%= post.slug %>">
+                              <%= post.titulo %>
+                            </a>
+                          </h3>
+
+                          <p>
+                            <%= post.resumo %>
+                          </p>
+
+                          <a href="/blog/<%= post.slug %>" class="vm-blog-preview-link">
+                            Ler artigo
+                          </a>
+                        </div>
+                      </article>
+                    <% }) %>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <% if (slidesBlogMobile.length > 1) { %>
+              <button class="carousel-control-prev vm-blog-preview-control" type="button"
+                data-bs-target="#vmBlogPreviewCarouselMobile" data-bs-slide="prev" aria-label="Artigo anterior">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              </button>
+
+              <button class="carousel-control-next vm-blog-preview-control" type="button"
+                data-bs-target="#vmBlogPreviewCarouselMobile" data-bs-slide="next" aria-label="PrÃ³ximo artigo">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
               </button>
             <% } %>
@@ -963,7 +1026,7 @@
           </details>
 
           <details>
-            <summary>Serve para bolinhas, pelúcias e consignados?</summary>
+            <summary>Serve para pelúcias, bolinhas e consignados?</summary>
             <p>Sim. Cada frente pode ter controles próprios, mantendo uma visão geral da operação.</p>
           </details>
 
@@ -1297,9 +1360,8 @@
             }
 
             const blogPreviewSection = document.querySelector('#blog-preview.vm-blog-preview-section');
-            const blogPreviewGrid = blogPreviewSection?.querySelector('.vm-blog-preview-grid');
 
-            if (blogPreviewSection && blogPreviewGrid) {
+            if (blogPreviewSection) {
               const showBlogAnimation = () => {
                 blogPreviewSection.classList.add('is-blog-visible');
               };
@@ -1320,7 +1382,7 @@
                   }
                 );
 
-                blogObserver.observe(blogPreviewGrid);
+                blogObserver.observe(blogPreviewSection);
               } else {
                 showBlogAnimation();
               }

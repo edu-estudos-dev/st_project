@@ -369,8 +369,11 @@ body.homepage-body {
   }
 
   .homepage-body .vm-section {
+    width: min(var(--home-section-width), calc(100% - 1rem)) !important;
+    max-width: var(--home-section-width) !important;
     margin: 0 auto var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0 !important;
+    padding: var(--vm-mobile-section-padding-y) 0.82rem !important;
+    border-radius: 26px !important;
   }
 
   .homepage-body .vm-section + .vm-section {
@@ -456,8 +459,10 @@ body.homepage-body {
   }
 
   .homepage-body .vm-section {
+    width: min(var(--home-section-width), calc(100% - 0.75rem)) !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding: var(--vm-mobile-section-padding-y) 0 !important;
+    padding: var(--vm-mobile-section-padding-y) 0.72rem !important;
+    border-radius: 24px !important;
   }
 
   .homepage-body .vm-section-heading {
@@ -2740,7 +2745,7 @@ html:has(.homepage-body) {
 
 .homepage-body #solucao .vm-dashboard-image-card {
   width: 100% !important;
-  min-height: 600px !important;
+  min-height: 520px !important;
   padding: 0.28rem !important;
   display: flex !important;
   align-items: stretch !important;
@@ -2760,7 +2765,7 @@ html:has(.homepage-body) {
 
 .homepage-body #solucao .vm-dashboard-carousel {
   width: 100% !important;
-  min-height: 600px !important;
+  min-height: 520px !important;
   position: relative !important;
   overflow: hidden !important;
   border-radius: 24px !important;
@@ -2771,7 +2776,7 @@ html:has(.homepage-body) {
 .homepage-body #solucao .vm-dashboard-carousel .carousel-item {
   width: 100% !important;
   height: 100% !important;
-  min-height: 600px !important;
+  min-height: 520px !important;
 }
 
 .homepage-body #solucao .vm-dashboard-carousel .carousel-item {
@@ -2791,7 +2796,7 @@ html:has(.homepage-body) {
 .homepage-body #solucao .vm-dashboard-slide {
   width: 100% !important;
   height: 100% !important;
-  min-height: 600px !important;
+  min-height: 520px !important;
   position: relative !important;
   overflow: hidden !important;
   border-radius: 24px !important;
@@ -3087,7 +3092,7 @@ html:has(.homepage-body) {
 
   .homepage-body #solucao .vm-dashboard-image-card {
     max-width: 720px !important;
-    min-height: 540px !important;
+    min-height: 460px !important;
     justify-self: center !important;
   }
 
@@ -3095,11 +3100,11 @@ html:has(.homepage-body) {
   .homepage-body #solucao .vm-dashboard-carousel-inner,
   .homepage-body #solucao .vm-dashboard-carousel .carousel-item,
   .homepage-body #solucao .vm-dashboard-slide {
-    min-height: 540px !important;
+    min-height: 460px !important;
   }
 
   .homepage-body #solucao .vm-dashboard-print-frame {
-    inset: 0.95rem 0.95rem 4.25rem 0.95rem !important;
+    inset: 0.85rem 0.85rem 4rem 0.85rem !important;
   }
 
   .homepage-body #solucao .vm-dashboard-integrated-cta {
@@ -3126,17 +3131,17 @@ html:has(.homepage-body) {
 
 @media (max-width: 575.98px) {
   .homepage-body #solucao.vm-section.vm-dashboard-showcase {
-    width: 100% !important;
-    max-width: none !important;
-    margin-inline: 0 !important;
+    width: calc(100% - 0.75rem) !important;
+    max-width: 720px !important;
+    margin-inline: auto !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
-    padding-top: 2.82rem !important;
-    padding-bottom: 2.58rem !important;
-    padding-left: 0.88rem !important;
-    padding-right: 0.88rem !important;
-    padding-inline: 0.88rem !important;
-    border-radius: 0 !important;
+    padding-top: 2.45rem !important;
+    padding-bottom: 2.15rem !important;
+    padding-left: 0.72rem !important;
+    padding-right: 0.72rem !important;
+    padding-inline: 0.72rem !important;
+    border-radius: 24px !important;
   }
 
   .homepage-body #solucao .vm-section-heading {
@@ -3238,26 +3243,26 @@ html:has(.homepage-body) {
 
   .homepage-body #solucao .vm-dashboard-image-card {
     max-width: 100% !important;
-    min-height: 372px !important;
+    min-height: 350px !important;
     padding: 0.7rem !important;
     border-radius: 18px !important;
     justify-self: stretch !important;
   }
 
   .homepage-body #solucao .vm-dashboard-carousel {
-    min-height: 356px !important;
+    min-height: 334px !important;
     border-radius: 16px !important;
   }
 
   .homepage-body #solucao .vm-dashboard-carousel-inner,
   .homepage-body #solucao .vm-dashboard-carousel .carousel-item,
   .homepage-body #solucao .vm-dashboard-slide {
-    min-height: 356px !important;
+    min-height: 334px !important;
     border-radius: 16px !important;
   }
 
   .homepage-body #solucao .vm-dashboard-slide-wide-panel {
-    min-height: 625px !important;
+    min-height: 334px !important;
     padding-top: 0 !important;
   }
 
@@ -3272,8 +3277,8 @@ html:has(.homepage-body) {
     position: relative !important;
     inset: auto !important;
     width: 100% !important;
-    height: 225px !important;
-    min-height: 225px !important;
+    height: 212px !important;
+    min-height: 212px !important;
     margin: 0 auto 0 !important;
     padding: 0.18rem !important;
     border-radius: 14px !important;
@@ -3311,11 +3316,11 @@ html:has(.homepage-body) {
     .vm-dashboard-print-frame {
     position: relative !important;
     inset: auto !important;
-    width: min(86vw, 275px) !important;
-    height: auto !important;
-    min-height: 0 !important;
-    aspect-ratio: 335 / 650 !important;
-    max-height: none !important;
+    width: 100% !important;
+    height: 212px !important;
+    min-height: 212px !important;
+    aspect-ratio: auto !important;
+    max-height: 212px !important;
     margin: 0 auto 0 !important;
     background: #eef5ff !important;
   }
@@ -3327,7 +3332,7 @@ html:has(.homepage-body) {
     img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
     object-position: center top !important;
     transform: none !important;
   }
@@ -3347,10 +3352,10 @@ html:has(.homepage-body) {
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
-    width: calc(100% - 0.9rem) !important;
-    min-height: 84px !important;
-    margin: 0.72rem auto 0 !important;
-    padding: 0.66rem 0.72rem !important;
+    width: 100% !important;
+    min-height: 74px !important;
+    margin: 0.62rem auto 0 !important;
+    padding: 0.58rem 0.66rem !important;
     border-radius: 14px !important;
     align-items: flex-start !important;
   }
@@ -3449,11 +3454,13 @@ html:has(.homepage-body) {
 
 @media (max-width: 390px) {
   .homepage-body #solucao.vm-section.vm-dashboard-showcase {
-    padding-top: 2.62rem !important;
-    padding-bottom: 2.46rem !important;
-    padding-left: 0.72rem !important;
-    padding-right: 0.72rem !important;
-    padding-inline: 0.72rem !important;
+    width: calc(100% - 0.5rem) !important;
+    padding-top: 2.3rem !important;
+    padding-bottom: 2.05rem !important;
+    padding-left: 0.66rem !important;
+    padding-right: 0.66rem !important;
+    padding-inline: 0.66rem !important;
+    border-radius: 22px !important;
   }
 
   .homepage-body #solucao .titulo-servicos {
@@ -3503,7 +3510,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #solucao .vm-dashboard-image-card {
-    min-height: 356px !important;
+    min-height: 334px !important;
     padding: 0.66rem !important;
   }
 
@@ -3705,11 +3712,11 @@ html:has(.homepage-body) {
 }
 
 .homepage-body #solucao .vm-dashboard-copy {
-  transform: translate3d(-115vw, 0, 0) !important;
+  transform: translate3d(-56px, 0, 0) !important;
 }
 
 .homepage-body #solucao .vm-dashboard-image-card {
-  transform: translate3d(115vw, 0, 0) !important;
+  transform: translate3d(56px, 0, 0) !important;
 }
 
 .homepage-body
@@ -3730,11 +3737,11 @@ html:has(.homepage-body) {
 
 @media (max-width: 991.98px) {
   .homepage-body #solucao .vm-dashboard-copy {
-    transform: translate3d(-90vw, 0, 0) !important;
+    transform: translate3d(-36px, 0, 0) !important;
   }
 
   .homepage-body #solucao .vm-dashboard-image-card {
-    transform: translate3d(90vw, 0, 0) !important;
+    transform: translate3d(36px, 0, 0) !important;
   }
 
   .homepage-body
@@ -3765,8 +3772,8 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 .homepage-body .vm-products-section {
-  padding-top: clamp(3.15rem, 5vw, 4.35rem) !important;
-  padding-bottom: clamp(3.15rem, 5vw, 4.35rem) !important;
+  padding-top: clamp(3rem, 4.5vw, 4rem) !important;
+  padding-bottom: clamp(3rem, 4.5vw, 4rem) !important;
   padding-left: clamp(1.4rem, 3vw, 2.4rem) !important;
   padding-right: clamp(1.4rem, 3vw, 2.4rem) !important;
   padding-inline: clamp(1.4rem, 3vw, 2.4rem) !important;
@@ -4206,7 +4213,7 @@ html:has(.homepage-body) {
 @media (max-width: 767.98px) {
   .homepage-body .vm-section.vm-products-section {
     display: block !important;
-    width: calc(100% - 0.75rem) !important;
+    width: calc(100% - 1rem) !important;
     max-width: 100% !important;
     margin-top: 0 !important;
     margin-bottom: var(--vm-mobile-section-gap) !important;
@@ -4345,7 +4352,7 @@ html:has(.homepage-body) {
 
 @media (max-width: 479.98px) {
   .homepage-body .vm-section.vm-products-section {
-    width: calc(100% - 0.5rem) !important;
+    width: calc(100% - 0.75rem) !important;
     max-width: 100% !important;
     margin-top: 0 !important;
     margin-inline: auto !important;
@@ -7045,6 +7052,10 @@ html:has(.homepage-body) {
   padding-bottom: 3.2rem !important;
 }
 
+.homepage-body #blog-preview .vm-blog-preview-carousel-mobile {
+  display: none !important;
+}
+
 .homepage-body #blog-preview .vm-blog-preview-carousel-inner {
   overflow: hidden !important;
   border-radius: 24px !important;
@@ -7069,6 +7080,7 @@ html:has(.homepage-body) {
 .homepage-body #blog-preview .vm-blog-preview-card {
   position: relative !important;
   overflow: hidden !important;
+  height: 100% !important;
   min-height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
@@ -7182,6 +7194,10 @@ html:has(.homepage-body) {
   color: #475569 !important;
   font-size: var(--vm-font-body) !important;
   line-height: 1.55 !important;
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
 }
 
 .homepage-body #blog-preview .vm-blog-preview-link {
@@ -7211,8 +7227,12 @@ html:has(.homepage-body) {
 
 .homepage-body #blog-preview .vm-blog-preview-indicators [data-bs-target] {
   width: 9px !important;
+  min-width: 0 !important;
   height: 9px !important;
+  min-height: 0 !important;
   margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
   border: 0 !important;
   border-radius: 999px !important;
   background-color: rgba(37, 99, 235, 0.28) !important;
@@ -7221,6 +7241,8 @@ html:has(.homepage-body) {
 
 .homepage-body #blog-preview .vm-blog-preview-indicators .active {
   width: 26px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   background-color: #22c55e !important;
 }
 
@@ -7368,6 +7390,14 @@ html:has(.homepage-body) {
 /* ========================================================================== */
 
 @media (max-width: 767.98px) {
+  .homepage-body #blog-preview #vmBlogPreviewCarousel {
+    display: none !important;
+  }
+
+  .homepage-body #blog-preview .vm-blog-preview-carousel-mobile {
+    display: block !important;
+  }
+
   .homepage-body #blog-preview.vm-blog-preview-section {
     width: calc(100% - 1rem) !important;
     max-width: none !important;
@@ -7422,7 +7452,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #blog-preview .vm-blog-preview-carousel {
-    width: min(100%, 440px) !important;
+    width: min(100%, 390px) !important;
     margin-top: 0.9rem !important;
     padding-bottom: 2.8rem !important;
   }
@@ -7437,6 +7467,7 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #blog-preview .vm-blog-preview-card {
+    min-height: auto !important;
     border-radius: 18px !important;
   }
 
@@ -7445,8 +7476,8 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #blog-preview .vm-blog-preview-image-link {
-    height: 150px !important;
-    min-height: 150px !important;
+    height: 142px !important;
+    min-height: 142px !important;
     aspect-ratio: auto !important;
     border-radius: 0 !important;
   }
@@ -7482,6 +7513,10 @@ html:has(.homepage-body) {
     font-size: var(--vm-font-card-title) !important;
     line-height: 1.16 !important;
     letter-spacing: -0.035em !important;
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
   }
 
   .homepage-body #blog-preview .vm-blog-preview-content p {
@@ -7489,6 +7524,7 @@ html:has(.homepage-body) {
     color: #475569 !important;
     font-size: var(--vm-font-body) !important;
     line-height: 1.46 !important;
+    -webkit-line-clamp: 3 !important;
   }
 
   .homepage-body #blog-preview .vm-blog-preview-link {
@@ -7500,8 +7536,21 @@ html:has(.homepage-body) {
 
   .homepage-body #blog-preview .vm-blog-preview-control {
     width: 36px !important;
+    min-width: 36px !important;
     height: 36px !important;
+    min-height: 36px !important;
     top: 106px !important;
+  }
+
+  .homepage-body #blog-preview .vm-blog-preview-indicators [data-bs-target] {
+    width: 8px !important;
+    min-width: 0 !important;
+    height: 8px !important;
+    min-height: 0 !important;
+  }
+
+  .homepage-body #blog-preview .vm-blog-preview-indicators .active {
+    width: 22px !important;
   }
 
   .homepage-body #blog-preview .vm-blog-preview-control.carousel-control-prev {
@@ -7576,12 +7625,13 @@ html:has(.homepage-body) {
   }
 
   .homepage-body #blog-preview .vm-blog-preview-card {
+    min-height: auto !important;
     border-radius: 17px !important;
   }
 
   .homepage-body #blog-preview .vm-blog-preview-image-link {
-    height: 138px !important;
-    min-height: 138px !important;
+    height: 132px !important;
+    min-height: 132px !important;
   }
 
   .homepage-body #blog-preview .vm-blog-preview-content {
