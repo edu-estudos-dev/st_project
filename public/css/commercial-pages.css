@@ -82,6 +82,15 @@ html:has(.commercial-page) {
 }
 
 /* ========================================================================== */
+
+.commercial-page .brand-vend {
+  color: #2563eb;
+}
+
+.commercial-page .brand-master {
+  color: #16a34a;
+}
+
 /* 01 — ELEMENTOS COMUNS                                                      */
 /* ========================================================================== */
 

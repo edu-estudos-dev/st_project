@@ -4,6 +4,15 @@
     Ajuste incluído: correção criteriosa dos espaçamentos mobile entre seções, mantendo as regras no lugar correto e sem bloco final de sobrescrita.
     ========================================================================== */
 
+.homepage-body .brand-vend {
+  color: var(--home-blue);
+}
+
+.homepage-body .brand-master {
+  color: var(--home-green);
+}
+
+
 /* ========================================================================== */
 /* BASE / VARIÁVEIS / RESET DA HOMEPAGE                                       */
 /* ========================================================================== */

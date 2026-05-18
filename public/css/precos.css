@@ -87,6 +87,15 @@ html:has(.pricing-page) {
 }
 
 /* ========================================================================== */
+
+.pricing-page .brand-vend {
+  color: var(--pricing-blue);
+}
+
+.pricing-page .brand-master {
+  color: var(--pricing-green-dark);
+}
+
 /* 01 — ELEMENTOS COMUNS                                                      */
 /* ========================================================================== */
 

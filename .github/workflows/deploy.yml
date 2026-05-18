@@ -41,11 +41,27 @@ jobs:
             echo "==> Reiniciando aplicação"
             pm2 restart server --update-env
 
+            echo "==> Aguardando aplicação estabilizar"
+            sleep 8
+
             echo "==> Conferindo status do PM2"
             pm2 status server
 
             echo "==> Conferindo resposta do login"
-            curl -fsS --max-time 20 https://vendmaster.com.br/login > /dev/null
+            for tentativa in 1 2 3 4 5; do
+              if curl -fsS --max-time 20 https://vendmaster.com.br/login > /dev/null; then
+                echo "Login respondeu com sucesso na tentativa ${tentativa}"
+                break
+              fi
+
+              if [ "$tentativa" -eq 5 ]; then
+                echo "A página de login não respondeu após 5 tentativas"
+                exit 1
+              fi
+
+              echo "Login ainda não respondeu. Nova tentativa em 8 segundos..."
+              sleep 8
+            done
 
             echo "Deploy concluído com sucesso"
           EOF

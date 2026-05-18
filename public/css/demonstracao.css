@@ -5,7 +5,7 @@
    ========================================================================== */
 
 /* ========================================================================== */
-/* BASE / VARIÁVEIS / RESET DA PÁGINA DE PREÇOS                               */
+/* BASE / VARIÁVEIS / RESET DA PÁGINA DE DEMONSTRAÇÃO                         */
 /* ========================================================================== */
 
 .demo-page {
@@ -40,6 +40,7 @@
   --demo-blue-dark: #0d2144;
   --demo-green: #22c55e;
   --demo-green-dark: #16a34a;
+  --demo-violet: #7c3aed;
   --demo-card: #ffffff;
   --demo-dark: #071225;
   --demo-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
@@ -89,6 +90,14 @@ html:has(.demo-page) {
 /* ========================================================================== */
 /* 01 — ELEMENTOS COMUNS                                                      */
 /* ========================================================================== */
+
+.brand-vend {
+  color: var(--demo-blue);
+}
+
+.brand-master {
+  color: var(--demo-green-dark);
+}
 
 .demo-kicker {
   display: inline-flex;
@@ -315,7 +324,7 @@ html:has(.demo-page) {
 }
 
 /* ========================================================================== */
-/* 03 — CARDS DE PLANOS                                                       */
+/* 03 — CARDS DE FUNCIONAMENTO                                                */
 /* ========================================================================== */
 
 .demo-grid {
@@ -527,8 +536,163 @@ html:has(.demo-page) {
 }
 
 /* ========================================================================== */
-/* 04 — FERRAMENTAS DISPONÍVEIS                                               */
+/* 04 — FERRAMENTAS, PRODUTOS E FORMULÁRIO                                    */
 /* ========================================================================== */
+
+.demo-tools-section {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(96, 165, 250, 0.18),
+      transparent 20%
+    ),
+    linear-gradient(135deg, #081326 0%, #0d2144 55%, #15386d 100%);
+  color: #f8fafc;
+}
+
+.demo-tools-section .demo-kicker {
+  color: #dbeafe;
+  background: rgba(147, 197, 253, 0.14);
+  border-color: rgba(147, 197, 253, 0.32);
+}
+
+.demo-tools-section .demo-section-heading h2 {
+  color: #f8fafc;
+}
+
+.demo-tools-section .demo-section-heading p {
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.demo-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.demo-tools-grid article {
+  min-height: 240px;
+  padding: clamp(1.25rem, 2.4vw, 1.7rem);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(96, 165, 250, 0.12),
+      transparent 32%
+    ),
+    rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(147, 197, 253, 0.22);
+  box-shadow: 0 22px 46px rgba(2, 6, 23, 0.2);
+}
+
+.demo-tools-grid article span {
+  display: inline-flex;
+  margin-bottom: 0.9rem;
+  padding: 0.4rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-tools-grid article h3 {
+  margin: 0 0 0.8rem;
+  color: #f8fafc;
+  font-size: var(--demo-font-card-title);
+  font-weight: 950;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+}
+
+.demo-tools-grid article p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.9);
+  font-size: var(--demo-font-body);
+  line-height: 1.68;
+}
+
+/* Cards claros que usam .demo-tools-grid fora da seção escura */
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.08),
+      transparent 32%
+    ),
+    #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article h3 {
+  color: var(--demo-text);
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article p {
+  color: var(--demo-muted);
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article span {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+/* Cores por produto nos cards claros:
+   Bolinhas = verde | Consignados = azul | Pelúcias = violeta */
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(1) {
+  border-color: rgba(34, 197, 94, 0.24);
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(34, 197, 94, 0.08),
+      transparent 32%
+    ),
+    #ffffff;
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(1) span {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(2) {
+  border-color: rgba(37, 99, 235, 0.24);
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.08),
+      transparent 32%
+    ),
+    #ffffff;
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(2) span {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(3) {
+  border-color: rgba(124, 58, 237, 0.24);
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(124, 58, 237, 0.08),
+      transparent 32%
+    ),
+    #ffffff;
+}
+
+.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(3) span {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+/* Contato */
 
 .demo-contact-section {
   background:
@@ -621,25 +785,99 @@ html:has(.demo-page) {
 }
 
 .demo-form-products label {
-  min-height: 48px;
-  padding: 0.75rem;
+  min-height: 54px;
+  padding: 0.82rem 0.9rem;
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.62rem;
   border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
   background: #ffffff;
   color: #334155;
-  font-size: 0.9rem;
-  font-weight: 850;
+  font-size: 0.92rem;
+  font-weight: 900;
   line-height: 1.2;
   cursor: pointer;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.demo-form-products label:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
 }
 
 .demo-form-products input {
   width: 16px;
   height: 16px;
   flex: 0 0 16px;
-  accent-color: var(--demo-green-dark);
+  cursor: pointer;
+}
+
+/* Opção — Bolinhas */
+
+.demo-form-products label:has(input[value="Bolinhas"]) {
+  border-color: rgba(34, 197, 94, 0.34);
+  background:
+    linear-gradient(135deg, rgba(34, 197, 94, 0.17), rgba(34, 197, 94, 0.06)),
+    #ffffff;
+}
+
+.demo-form-products label:has(input[value="Bolinhas"]) input {
+  accent-color: #16a34a;
+}
+
+.demo-form-products label:has(input[value="Bolinhas"]:checked) {
+  border-color: rgba(34, 197, 94, 0.72);
+  background:
+    linear-gradient(135deg, rgba(34, 197, 94, 0.26), rgba(34, 197, 94, 0.11)),
+    #ffffff;
+  box-shadow: 0 12px 26px rgba(34, 197, 94, 0.16);
+}
+
+/* Opção — Pelúcias */
+
+.demo-form-products label:has(input[value="Pelucias"]) {
+  border-color: rgba(124, 58, 237, 0.34);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.17), rgba(124, 58, 237, 0.06)),
+    #ffffff;
+}
+
+.demo-form-products label:has(input[value="Pelucias"]) input {
+  accent-color: #7c3aed;
+}
+
+.demo-form-products label:has(input[value="Pelucias"]:checked) {
+  border-color: rgba(124, 58, 237, 0.72);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.26), rgba(124, 58, 237, 0.11)),
+    #ffffff;
+  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.16);
+}
+
+/* Opção — Consignados */
+
+.demo-form-products label:has(input[value="Consignados"]) {
+  border-color: rgba(37, 99, 235, 0.34);
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.17), rgba(37, 99, 235, 0.06)),
+    #ffffff;
+}
+
+.demo-form-products label:has(input[value="Consignados"]) input {
+  accent-color: #2563eb;
+}
+
+.demo-form-products label:has(input[value="Consignados"]:checked) {
+  border-color: rgba(37, 99, 235, 0.72);
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.26), rgba(37, 99, 235, 0.11)),
+    #ffffff;
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.16);
 }
 
 .demo-form-status {
@@ -696,81 +934,6 @@ html:has(.demo-page) {
   color: rgba(226, 232, 240, 0.88);
   font-size: 1rem;
   line-height: 1.65;
-}
-
-.demo-tools-section {
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(96, 165, 250, 0.18),
-      transparent 20%
-    ),
-    linear-gradient(135deg, #081326 0%, #0d2144 55%, #15386d 100%);
-  color: #f8fafc;
-}
-
-.demo-tools-section .demo-kicker {
-  color: #dbeafe;
-  background: rgba(147, 197, 253, 0.14);
-  border-color: rgba(147, 197, 253, 0.32);
-}
-
-.demo-tools-section .demo-section-heading h2 {
-  color: #f8fafc;
-}
-
-.demo-tools-section .demo-section-heading p {
-  color: rgba(226, 232, 240, 0.9);
-}
-
-.demo-tools-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.demo-tools-grid article {
-  min-height: 240px;
-  padding: clamp(1.25rem, 2.4vw, 1.7rem);
-  border-radius: 22px;
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(96, 165, 250, 0.12),
-      transparent 32%
-    ),
-    rgba(255, 255, 255, 0.075);
-  border: 1px solid rgba(147, 197, 253, 0.22);
-  box-shadow: 0 22px 46px rgba(2, 6, 23, 0.2);
-}
-
-.demo-tools-grid article span {
-  display: inline-flex;
-  margin-bottom: 0.9rem;
-  padding: 0.4rem 0.72rem;
-  border-radius: 999px;
-  background: rgba(34, 197, 94, 0.12);
-  color: #86efac;
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.demo-tools-grid article h3 {
-  margin: 0 0 0.8rem;
-  color: #f8fafc;
-  font-size: var(--demo-font-card-title);
-  font-weight: 950;
-  line-height: 1.16;
-  letter-spacing: -0.03em;
-}
-
-.demo-tools-grid article p {
-  margin: 0;
-  color: rgba(226, 232, 240, 0.9);
-  font-size: var(--demo-font-body);
-  line-height: 1.68;
 }
 
 /* ========================================================================== */
@@ -948,12 +1111,12 @@ html:has(.demo-page) {
 
 @media (max-width: 575.98px) {
   .demo-page {
-    --demo-font-label: 0.68rem;
-    --demo-font-body: 0.94rem;
-    --demo-font-section-text: 0.96rem;
-    --demo-font-section-title: clamp(1.82rem, 8vw, 2.18rem);
-    --demo-font-hero-title: clamp(2.02rem, 10vw, 2.52rem);
-    --demo-font-card-title: clamp(1.08rem, 4.8vw, 1.18rem);
+    --demo-font-label: 0.875rem;
+    --demo-font-body: 1.0625rem;
+    --demo-font-section-text: 1.0625rem;
+    --demo-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
+    --demo-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
+    --demo-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
     --demo-font-price: clamp(1.78rem, 9vw, 2.15rem);
   }
 
@@ -983,8 +1146,8 @@ html:has(.demo-page) {
   .demo-hero p {
     max-width: 31ch;
     margin-top: 0.9rem;
-    font-size: 0.96rem;
-    line-height: 1.58;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-hero-actions {
@@ -1000,6 +1163,8 @@ html:has(.demo-page) {
   .demo-btn-secondary {
     width: 100%;
     min-height: 52px;
+    padding: 0.88rem 1.05rem;
+    font-size: 1.0625rem;
     white-space: normal;
     text-align: center;
     line-height: 1.15;
@@ -1022,7 +1187,8 @@ html:has(.demo-page) {
 
   .demo-section-heading p {
     margin-top: 0.8rem;
-    line-height: 1.66;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-kicker {
@@ -1063,7 +1229,8 @@ html:has(.demo-page) {
 
   .demo-card > p {
     margin-bottom: 1rem;
-    line-height: 1.58;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-card ul {
@@ -1072,14 +1239,15 @@ html:has(.demo-page) {
   }
 
   .demo-card li {
-    font-size: 0.9rem;
-    line-height: 1.45;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-card-cta {
     width: 100%;
-    min-height: 50px;
-    font-size: 0.9rem;
+    min-height: 52px;
+    padding: 0.88rem 1.05rem;
+    font-size: 1.0625rem;
     color: #ffffff !important;
     white-space: normal;
     line-height: 1.15;
@@ -1102,7 +1270,8 @@ html:has(.demo-page) {
   }
 
   .demo-tools-grid article p {
-    line-height: 1.58;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-contact-layout {
@@ -1115,14 +1284,21 @@ html:has(.demo-page) {
     border-radius: 20px;
   }
 
+  .demo-form-field input {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
   .demo-form-products {
     grid-template-columns: 1fr;
     padding: 0.82rem;
   }
 
   .demo-form-products label {
-    min-height: 46px;
-    padding: 0.68rem;
+    min-height: 54px;
+    padding: 0.78rem 0.85rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-contact-aside {
@@ -1142,8 +1318,8 @@ html:has(.demo-page) {
 
   .demo-faq-list details p {
     padding: 0 1rem 1rem;
-    font-size: 0.92rem;
-    line-height: 1.62;
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
 
   .demo-final-cta {
@@ -1155,7 +1331,14 @@ html:has(.demo-page) {
 
   .demo-final-cta p {
     margin: 0.85rem auto 1.25rem;
-    line-height: 1.62;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .demo-page :is(.demo-kicker, .demo-badge, .demo-tools-grid article span) {
+    font-size: 0.875rem;
+    line-height: 1.16;
+    white-space: normal;
   }
 }
 
@@ -1165,10 +1348,11 @@ html:has(.demo-page) {
 
 @media (max-width: 390px) {
   .demo-page {
-    --demo-font-body: 0.9rem;
-    --demo-font-section-text: 0.9rem;
-    --demo-font-section-title: clamp(1.66rem, 7.8vw, 1.98rem);
-    --demo-font-hero-title: clamp(1.92rem, 10vw, 2.32rem);
+    --demo-font-label: 0.875rem;
+    --demo-font-body: 1.0625rem;
+    --demo-font-section-text: 1.0625rem;
+    --demo-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
+    --demo-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
     --demo-font-price: clamp(1.62rem, 8vw, 1.95rem);
   }
 
@@ -1199,7 +1383,7 @@ html:has(.demo-page) {
     width: 100%;
     min-height: 50px;
     color: #ffffff !important;
-    font-size: 0.88rem;
+    font-size: 1.0625rem;
   }
 
   .demo-tools-grid article {
@@ -1207,143 +1391,13 @@ html:has(.demo-page) {
     border-radius: 18px;
   }
 
+  .demo-form-products label {
+    min-height: 54px;
+    padding: 0.75rem 0.8rem;
+  }
+
   .demo-final-cta {
     padding: 2rem 0.86rem;
     border-radius: 22px;
-  }
-}
-/* ==========================================================================
-   AJUSTE — CONTRASTE DOS CARDS CLAROS DA PÁGINA DE DEMONSTRAÇÃO
-   ========================================================================== */
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article {
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(37, 99, 235, 0.08),
-      transparent 32%
-    ),
-    #ffffff;
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article h3 {
-  color: var(--demo-text);
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article p {
-  color: var(--demo-muted);
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article span {
-  background: rgba(34, 197, 94, 0.12);
-  color: #16a34a;
-}
-
-/* ==========================================================================
-   AJUSTE — PADRÃO DE CORES DOS PRODUTOS
-   Bolinhas = verde | Consignados = azul | Pelúcias = violeta
-   ========================================================================== */
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(1) {
-  border-color: rgba(34, 197, 94, 0.24);
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(34, 197, 94, 0.08),
-      transparent 32%
-    ),
-    #ffffff;
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(1) span {
-  background: rgba(34, 197, 94, 0.12);
-  color: #16a34a;
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(2) {
-  border-color: rgba(37, 99, 235, 0.24);
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(37, 99, 235, 0.08),
-      transparent 32%
-    ),
-    #ffffff;
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(2) span {
-  background: rgba(37, 99, 235, 0.12);
-  color: #2563eb;
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(3) {
-  border-color: rgba(124, 58, 237, 0.24);
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(124, 58, 237, 0.08),
-      transparent 32%
-    ),
-    #ffffff;
-}
-
-.demo-section:not(.demo-tools-section) .demo-tools-grid article:nth-child(3) span {
-  background: rgba(124, 58, 237, 0.12);
-  color: #7c3aed;
-}
-
-/* ==========================================================================
-   AJUSTE MOBILE — LEITURA MAIS CONFORTÁVEL
-   ========================================================================== */
-
-@media (max-width: 575.98px) {
-  .demo-page {
-    --demo-font-label: 0.875rem;
-    --demo-font-body: 1.0625rem;
-    --demo-font-section-text: 1.0625rem;
-    --demo-font-card-title: clamp(1.14rem, 5vw, 1.28rem);
-    --demo-font-section-title: clamp(1.95rem, 8vw, 2.38rem);
-    --demo-font-hero-title: clamp(2rem, 9.2vw, 2.45rem);
-  }
-
-  .demo-hero p,
-  .demo-section-heading p,
-  .demo-card > p,
-  .demo-card li,
-  .demo-tools-grid article p,
-  .demo-faq-list details p,
-  .demo-final-cta p,
-  .demo-form-field input,
-  .demo-form-products label {
-    font-size: 1.0625rem !important;
-    line-height: 1.6 !important;
-  }
-
-  .demo-btn,
-  .demo-btn-primary,
-  .demo-btn-secondary,
-  .demo-card-cta {
-    min-height: 52px !important;
-    padding: 0.88rem 1.05rem !important;
-    font-size: 1.0625rem !important;
-    line-height: 1.15 !important;
-  }
-
-  .demo-page :is(.demo-kicker, .demo-badge, .demo-tools-grid article span) {
-    font-size: 0.875rem !important;
-    line-height: 1.16 !important;
-    white-space: normal !important;
-  }
-}
-
-@media (max-width: 390px) {
-  .demo-page {
-    --demo-font-label: 0.875rem;
-    --demo-font-body: 1.0625rem;
-    --demo-font-section-text: 1.0625rem;
-    --demo-font-section-title: clamp(1.84rem, 8vw, 2.15rem);
-    --demo-font-hero-title: clamp(1.9rem, 9vw, 2.22rem);
   }
 }
